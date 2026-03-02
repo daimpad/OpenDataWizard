@@ -1,0 +1,18 @@
+{
+    "name": "daimpad/open-data-wizard",
+    "description": "WordPress Plugin für DCAT-AP 3.0 konforme Open Data Metadaten",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1",
+        "htmlburger/carbon-fields": "^3.6"
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "scripts": {
+        "install-plugin": [
+            "composer install --no-dev --optimize-autoloader"
+        ]
+    }
+}
