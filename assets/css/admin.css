@@ -1,0 +1,184 @@
+/**
+ * Open Data Wizard — Admin Styles
+ */
+
+/* =========================================================================
+   Tab Navigation
+   ========================================================================= */
+
+.cf-container__tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0 0 0 -1px;
+    padding: 0;
+    list-style: none;
+    border-bottom: 2px solid #2271b1;
+}
+
+.cf-container__tabs-nav li {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.cf-container__tabs-nav li .cf-tab__label {
+    display: block;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #50575e;
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.15s, color 0.15s;
+    user-select: none;
+}
+
+.cf-container__tabs-nav li:hover .cf-tab__label {
+    background: #fff;
+    color: #1d2327;
+}
+
+.cf-container__tabs-nav li.cf-tab--active .cf-tab__label {
+    background: #fff;
+    color: #2271b1;
+    font-weight: 600;
+    border-bottom: 2px solid #fff;
+    margin-bottom: -2px;
+    z-index: 1;
+}
+
+.cf-container__tabs-nav li:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+/* =========================================================================
+   Tab Content
+   ========================================================================= */
+
+.cf-container__tab {
+    padding: 20px 0;
+}
+
+/* =========================================================================
+   Required field indicators
+   ========================================================================= */
+
+.cf-field--required > label::after,
+.cf-field--required > .cf-field__label::after {
+    content: ' *';
+    color: #d63638;
+    font-weight: 700;
+}
+
+/* =========================================================================
+   JSON-LD Preview
+   ========================================================================= */
+
+.odw-preview-wrapper {
+    padding: 4px 0;
+}
+
+.odw-jsonld-code {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 16px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    max-height: 480px;
+    border: 1px solid #3c3c3c;
+    white-space: pre;
+}
+
+/* =========================================================================
+   Admin list table columns
+   ========================================================================= */
+
+.column-odw_license,
+.column-odw_theme {
+    width: 140px;
+}
+
+.column-odw_status {
+    width: 100px;
+}
+
+.column-odw_modified {
+    width: 130px;
+}
+
+/* Status badges */
+.odw-status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.odw-status-badge--published {
+    background: #d1e7dd;
+    color: #0a5c36;
+}
+
+.odw-status-badge--draft {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* =========================================================================
+   Validation Admin Notice
+   ========================================================================= */
+
+.odw-validation-notice {
+    border-left-color: #d63638;
+}
+
+.odw-validation-notice .odw-missing-fields {
+    margin: 6px 0 0 20px;
+    padding: 0;
+}
+
+.odw-validation-notice .odw-missing-fields li {
+    list-style: disc;
+    font-weight: 500;
+}
+
+/* =========================================================================
+   Distribution Complex Field
+   ========================================================================= */
+
+.cf-complex .cf-complex__actions {
+    margin-top: 10px;
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+
+@media screen and (max-width: 782px) {
+    .cf-container__tabs-nav {
+        flex-direction: column;
+        border-bottom: none;
+    }
+
+    .cf-container__tabs-nav li .cf-tab__label {
+        border-radius: 4px;
+        border: 1px solid #c3c4c7;
+        margin-bottom: 4px;
+    }
+
+    .cf-container__tabs-nav li.cf-tab--active .cf-tab__label {
+        border: 2px solid #2271b1;
+        margin-bottom: 4px;
+    }
+}
