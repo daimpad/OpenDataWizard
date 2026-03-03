@@ -34,10 +34,8 @@ class ODW_Fields {
             ->add_tab(
                 __( '1 — Pflichtangaben', 'open-data-wizard' ),
                 [
-                    Field::make( 'text', 'odw_description_tab1_hint', '' )
-                        ->set_default_value( '' )
-                        ->set_attribute( 'disabled', true )
-                        ->set_help_text( __( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) ),
+                    Field::make( 'html', 'odw_description_tab1_hint' )
+                        ->set_html( '<p class="description">' . esc_html__( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) . '</p>' ),
 
                     Field::make( 'text', 'odw_publisher', __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' ) )
                         ->set_required( true )
@@ -63,7 +61,10 @@ class ODW_Fields {
                             'en' => __( 'Englisch (EN)', 'open-data-wizard' ),
                         ] ),
 
-                    Field::make( 'tags', 'odw_keywords', __( 'Schlagworte (dcat:keyword)', 'open-data-wizard' ) ),
+                    Field::make( 'textarea', 'odw_keywords', __( 'Schlagworte (dcat:keyword)', 'open-data-wizard' ) )
+                        ->set_rows( 3 )
+                        ->set_attribute( 'placeholder', __( 'z.B. Umwelt', 'open-data-wizard' ) )
+                        ->set_help_text( __( 'Geben Sie jedes Schlagwort in einer eigenen Zeile ein.', 'open-data-wizard' ) ),
 
                     Field::make( 'select', 'odw_theme', __( 'Thema (dcat:theme)', 'open-data-wizard' ) )
                         ->add_options( self::get_theme_options() ),
@@ -268,8 +269,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
         $dataset['dct:language'] = $language;
     }
 
-    if ( ! empty( $keywords ) && is_array( $keywords ) ) {
-        $dataset['dcat:keyword'] = array_values( array_filter( $keywords ) );
+    if ( ! empty( $keywords ) && is_string( $keywords ) ) {
+        $keyword_list = array_values( array_filter( array_map( 'trim', explode( "\n", $keywords ) ) ) );
+        if ( ! empty( $keyword_list ) ) {
+            $dataset['dcat:keyword'] = $keyword_list;
+        }
     }
 
     if ( ! empty( $theme ) ) {
