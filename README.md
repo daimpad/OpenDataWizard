@@ -10,7 +10,7 @@ Open Data Wizard ermöglicht es Organisationen und Einzelpersonen, Datensätze d
 
 Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Wer Daten auf einer Open-Data-Plattform einstellen will, landet schnell vor komplexen Formularen, unbekannten Fachbegriffen oder muss sich auf eine externe Infrastruktur verlassen, über die keine Kontrolle besteht.
 
-Dabei besitzen viele Organisationen bereits eine WordPress-Website — und damit eine Infrastruktur, die sie kennen und kontrollieren.
+Dabei besitzen viele Organisationen bereits eine WordPress-Website und damit eine Infrastruktur, die sie kennen und die sie kontrollieren.
 
 **Open Data Wizard setzt genau hier an.**
 
@@ -18,7 +18,7 @@ Dabei besitzen viele Organisationen bereits eine WordPress-Website — und damit
 
 ## Die Idee
 
-Das Plugin bringt einen geführten Metadaten-Wizard ins WordPress-Backend. Organisationen beschreiben ihre Datensätze dort, wo sie ohnehin arbeiten. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard **DCAT-AP 3.0** — und stellt sie unter einer stabilen URL bereit.
+Das Plugin bringt einen geführten Metadaten-Wizard ins WordPress-Backend. Organisationen beschreiben ihre Datensätze dort, wo sie ohnehin arbeiten. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard **DCAT-AP 3.0** und stellt sie unter einer persistenten URL bereit.
 
 Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln. **Die Daten bleiben bei der Organisation. Die Plattform kommt zu ihr.**
 
@@ -28,7 +28,7 @@ Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Met
 
 DCAT-AP (Data Catalog Vocabulary — Application Profile) ist ein europäischer Standard zur Beschreibung von Datensätzen und Datenkatalogen. Er definiert, welche Angaben ein Datensatz braucht, damit er von Plattformen, Suchmaschinen und Anwendungen einheitlich gelesen und verarbeitet werden kann — Titel, Beschreibung, Lizenz, Format, Herausgeber und mehr.
 
-Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Ausgaben, die direkt von kompatiblen Harvesting-Systemen (z.B. Piveau/Civora) verarbeitet werden können.
+Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Ausgaben, die direkt von kompatiblen Harvesting-Systemen (z.B. Piveau/CKANN) verarbeitet werden können.
 
 ---
 
