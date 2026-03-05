@@ -1,11 +1,11 @@
 # 🧙 Open Data Wizard
 
-![License](https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=blue)
+![Lizenz](https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=blue&label=Lizenz)
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-MVP%20in%20Entwicklung-orange?style=flat-square)
-![Last Commit](https://img.shields.io/github/last-commit/daimpad/OpenDataWizard?style=flat-square)
+![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
 
