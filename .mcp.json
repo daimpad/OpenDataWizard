@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "GitLab": {
-      "type": "http",
-      "url": "https://gitlab.ruhr-uni-bochum.de/api/v4/mcp"
-    }
-  }
-}
