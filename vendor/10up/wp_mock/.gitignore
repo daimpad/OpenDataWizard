@@ -1,0 +1,32 @@
+# OSX
+**/.DS_Store
+
+# IDEs
+.project/
+.settings/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+*.iml
+.vscode/
+
+# dotfiles
+*.env
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# Logs
+*.log
+
+# Dependencies
+**/node_modules/**
+**/vendor
+
+# Tests
+/build/**
+.phpunit.cache
+coverage.xml
+phpunit.local.xml
+.phpunit.local.xml
+/html
