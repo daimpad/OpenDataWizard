@@ -7,6 +7,21 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.0] — 2026-04-21
+
+### Hinzugefügt
+- **Qualitätsindikatoren / Ampellogik** (`includes/class-quality.php`): Automatische Bewertung der Metadaten-Vollständigkeit (0–100 Punkte, 3 Levels: Gut/Mittel/Verbesserungsbedarf)
+  - 10 Indikatoren in 3 Gruppen: Pflichtfelder (55 Pkt.), Empfohlene Felder (40 Pkt.), Optionale Angaben (5 Pkt.)
+  - Automatische Neuberechnung nach jedem Speichern (`save_post_odw_dataset`, Priorität 30)
+  - Persistenz in 4 Meta-Keys: `_odw_quality_score`, `_odw_quality_level`, `_odw_quality_indicators`, `_odw_quality_calculated_at`
+- **Qualitätsspalte in der Admin-Listenansicht**: Farbiger Badge (● 85) mit Tooltip; sortierbar
+- **Qualitätsbericht-Meta-Box** auf dem Edit-Screen: Fortschrittsbalken, Ampel-Badge, gruppierte Indikator-Tabelle (✓/✗) mit Punkten, Zeitstempel der letzten Berechnung
+- **`odw:qualityScore` im JSON-LD**: Qualitätsdaten werden via `odw_dataset_jsonld` Filter an den REST-API Output angehängt (`odw:score`, `odw:maxScore`, `odw:level`, `odw:calculatedAt`)
+- **`odw:` JSON-LD Namespace** (`https://github.com/daimpad/OpenDataWizard/ns#`) in `JSONLD_CONTEXT`
+- **CSS Qualitäts-Styles**: `--odw-color-quality-*` Custom Properties; `.odw-quality-badge`, `.odw-quality-gauge`, `.odw-quality-table` Komponenten
+
+---
+
 ## [1.2.0] — 2026-04-21
 
 ### Hinzugefügt

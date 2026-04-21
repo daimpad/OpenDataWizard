@@ -20,6 +20,19 @@
     --odw-color-code-text:   #d4d4d4;
     --odw-color-code-border: #3c3c3c;
 
+    /* Qualitäts-Ampel */
+    --odw-color-quality-high-dot:   #1a7f37;
+    --odw-color-quality-high-bg:    #dafbe1;
+    --odw-color-quality-high-text:  #0f5323;
+
+    --odw-color-quality-medium-dot:  #9a6700;
+    --odw-color-quality-medium-bg:   #fff3cd;
+    --odw-color-quality-medium-text: #6a4500;
+
+    --odw-color-quality-low-dot:    #c1272d;
+    --odw-color-quality-low-bg:     #ffd7d5;
+    --odw-color-quality-low-text:   #7d1212;
+
     --odw-radius:            4px;
     --odw-transition:        0.15s ease;
 }
@@ -156,6 +169,153 @@
 .odw-status-badge--draft {
     background: var(--odw-color-draft-bg);
     color: var(--odw-color-draft-text);
+}
+
+/* =========================================================================
+   Qualitätsbadge (Listenansicht)
+   ========================================================================= */
+
+.column-odw_quality {
+    width: 80px;
+    text-align: center;
+}
+
+.odw-quality-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: default;
+}
+
+.odw-quality-badge .odw-quality-dot {
+    font-size: 10px;
+    line-height: 1;
+}
+
+.odw-quality--high   { background: var(--odw-color-quality-high-bg);   color: var(--odw-color-quality-high-text); }
+.odw-quality--medium { background: var(--odw-color-quality-medium-bg); color: var(--odw-color-quality-medium-text); }
+.odw-quality--low    { background: var(--odw-color-quality-low-bg);    color: var(--odw-color-quality-low-text); }
+.odw-quality--unknown { color: var(--odw-color-text-muted); }
+
+.odw-quality--high   .odw-quality-dot { color: var(--odw-color-quality-high-dot); }
+.odw-quality--medium .odw-quality-dot { color: var(--odw-color-quality-medium-dot); }
+.odw-quality--low    .odw-quality-dot { color: var(--odw-color-quality-low-dot); }
+
+/* =========================================================================
+   Qualitätsprüfungs-Meta-Box (Edit-Screen)
+   ========================================================================= */
+
+.odw-quality-report {
+    padding: 4px 0;
+}
+
+/* Zusammenfassung: Balken + Score + Ampel-Badge */
+.odw-quality-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0 16px;
+    border-bottom: 1px solid var(--odw-color-border);
+    margin-bottom: 16px;
+}
+
+.odw-quality-gauge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.odw-quality-gauge {
+    flex: 1;
+    max-width: 220px;
+    height: 10px;
+    background: var(--odw-color-border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.odw-quality-bar {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.4s ease;
+}
+
+.odw-quality-bar--high   { background: var(--odw-color-quality-high-dot); }
+.odw-quality-bar--medium { background: var(--odw-color-quality-medium-dot); }
+.odw-quality-bar--low    { background: var(--odw-color-quality-low-dot); }
+
+.odw-quality-score-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--odw-color-text);
+    white-space: nowrap;
+}
+
+.odw-quality-level-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.odw-quality-level-badge.odw-quality--high   { background: var(--odw-color-quality-high-bg);   color: var(--odw-color-quality-high-text); }
+.odw-quality-level-badge.odw-quality--medium { background: var(--odw-color-quality-medium-bg); color: var(--odw-color-quality-medium-text); }
+.odw-quality-level-badge.odw-quality--low    { background: var(--odw-color-quality-low-bg);    color: var(--odw-color-quality-low-text); }
+
+/* Indikator-Tabelle */
+.odw-quality-table {
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.odw-quality-table th,
+.odw-quality-table td {
+    padding: 6px 10px;
+    vertical-align: middle;
+}
+
+.odw-quality-section-row th {
+    background: var(--odw-color-bg-light);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--odw-color-text-muted);
+    border-top: 1px solid var(--odw-color-border);
+}
+
+.odw-quality-col-pts {
+    width: 80px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--odw-color-text-muted);
+}
+
+.odw-quality-col-status {
+    width: 44px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.odw-quality-pass .odw-quality-col-status { color: var(--odw-color-quality-high-dot); }
+.odw-quality-fail .odw-quality-col-status { color: var(--odw-color-quality-low-dot); }
+.odw-quality-fail                          { color: var(--odw-color-text-muted); }
+
+/* Footer */
+.odw-quality-footer {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--odw-color-text-muted);
 }
 
 /* =========================================================================

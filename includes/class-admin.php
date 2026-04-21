@@ -32,12 +32,13 @@ class ODW_Admin {
     public static function set_columns( array $columns ): array {
         $new_columns = [];
 
-        $new_columns['cb']           = $columns['cb'] ?? '<input type="checkbox">';
-        $new_columns['title']        = __( 'Titel', 'open-data-wizard' );
-        $new_columns['odw_license']  = __( 'Lizenz', 'open-data-wizard' );
-        $new_columns['odw_theme']    = __( 'Thema', 'open-data-wizard' );
-        $new_columns['odw_status']   = __( 'Status', 'open-data-wizard' );
-        $new_columns['odw_modified'] = __( 'Änderungsdatum', 'open-data-wizard' );
+        $new_columns['cb']            = $columns['cb'] ?? '<input type="checkbox">';
+        $new_columns['title']         = __( 'Titel', 'open-data-wizard' );
+        $new_columns['odw_license']   = __( 'Lizenz', 'open-data-wizard' );
+        $new_columns['odw_theme']     = __( 'Thema', 'open-data-wizard' );
+        $new_columns['odw_quality']   = __( 'Qualität', 'open-data-wizard' );
+        $new_columns['odw_status']    = __( 'Status', 'open-data-wizard' );
+        $new_columns['odw_modified']  = __( 'Änderungsdatum', 'open-data-wizard' );
 
         return $new_columns;
     }
@@ -68,6 +69,25 @@ class ODW_Admin {
                 }
                 break;
 
+            case 'odw_quality':
+                $quality = ODW_Quality::get( $post_id );
+
+                if ( '' === $quality['level'] ) {
+                    echo '<span class="odw-quality-badge odw-quality--unknown" title="' . esc_attr__( 'Noch nicht berechnet', 'open-data-wizard' ) . '">—</span>';
+                } else {
+                    $level       = $quality['level'];
+                    $score       = $quality['score'];
+                    $label       = ODW_Quality::get_level_label( $level );
+                    $title_attr  = sprintf( '%s · %d/100 %s', $label, $score, __( 'Punkte', 'open-data-wizard' ) );
+                    printf(
+                        '<span class="odw-quality-badge odw-quality--%s" title="%s"><span class="odw-quality-dot" aria-hidden="true">●</span> %d</span>',
+                        esc_attr( $level ),
+                        esc_attr( $title_attr ),
+                        (int) $score
+                    );
+                }
+                break;
+
             case 'odw_modified':
                 $modified = get_post_meta( $post_id, '_odw_modified', true );
                 echo esc_html( $modified ?: '—' );
@@ -81,6 +101,7 @@ class ODW_Admin {
     public static function sortable_columns( array $columns ): array {
         $columns['odw_modified'] = 'modified';
         $columns['odw_theme']    = 'odw_theme';
+        $columns['odw_quality']  = 'odw_quality';
         return $columns;
     }
 
@@ -99,6 +120,11 @@ class ODW_Admin {
         if ( 'odw_theme' === $query->get( 'orderby' ) ) {
             $query->set( 'meta_key', '_odw_theme' );
             $query->set( 'orderby', 'meta_value' );
+        }
+
+        if ( 'odw_quality' === $query->get( 'orderby' ) ) {
+            $query->set( 'meta_key', '_odw_quality_score' );
+            $query->set( 'orderby', 'meta_value_num' );
         }
     }
 

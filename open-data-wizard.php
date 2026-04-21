@@ -3,7 +3,7 @@
  * Plugin Name:       Open Data Wizard
  * Plugin URI:        https://github.com/daimpad/OpenDataWizard
  * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für zivilgesellschaftliche Organisationen. Bereitstellung als maschinenlesbarer Endpoint für Civora/Piveau-Harvesting.
- * Version:           1.1.0
+ * Version:           1.3.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            Datenatlas Zivilgesellschaft
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'ODW_VERSION', '1.1.0' );
+define( 'ODW_VERSION', '1.3.0' );
 define( 'ODW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ODW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ODW_PLUGIN_FILE', __FILE__ );
@@ -108,12 +108,14 @@ function odw_bootstrap(): void {
     require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
     require_once ODW_PLUGIN_DIR . 'includes/class-rest-api.php';
     require_once ODW_PLUGIN_DIR . 'includes/class-validation.php';
+    require_once ODW_PLUGIN_DIR . 'includes/class-quality.php';
     require_once ODW_PLUGIN_DIR . 'includes/class-admin.php';
 
     ODW_Post_Types::init();
     ODW_Fields::init();
     ODW_Rest_API::init();
     ODW_Validation::init();
+    ODW_Quality::init();
     ODW_Admin::init();
 }
 add_action( 'after_setup_theme', 'odw_bootstrap' );

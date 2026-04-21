@@ -22,13 +22,14 @@ class ODW_Rest_API {
     private const CACHE_TTL = 300;
 
     /**
-     * DCAT-AP 3.0 JSON-LD @context
+     * DCAT-AP 3.0 JSON-LD @context inkl. Plugin-eigenem odw:-Namespace für Qualitätsdaten.
      */
     private const JSONLD_CONTEXT = [
         'dcat' => 'https://www.w3.org/ns/dcat#',
         'dct'  => 'http://purl.org/dc/terms/',
         'foaf' => 'http://xmlns.com/foaf/0.1/',
         'xsd'  => 'http://www.w3.org/2001/XMLSchema#',
+        'odw'  => 'https://github.com/daimpad/OpenDataWizard/ns#',
     ];
 
     public static function init(): void {
