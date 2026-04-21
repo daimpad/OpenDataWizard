@@ -140,6 +140,24 @@ class ODW_Fields {
     }
 
     // -------------------------------------------------------------------------
+    // Required fields registry — single source of truth for validation
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the required scalar fields definition used by both form rendering
+     * and the validation class. Each entry: [meta_key, label].
+     *
+     * @return array<int, array{meta_key: string, label: string}>
+     */
+    public static function get_required_fields(): array {
+        return [
+            [ 'meta_key' => '_odw_description', 'label' => __( 'Beschreibung (dct:description)', 'open-data-wizard' ) ],
+            [ 'meta_key' => '_odw_publisher',   'label' => __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' ) ],
+            [ 'meta_key' => '_odw_license',     'label' => __( 'Lizenz (dct:license)', 'open-data-wizard' ) ],
+        ];
+    }
+
+    // -------------------------------------------------------------------------
     // Controlled vocabulary options
     // -------------------------------------------------------------------------
 

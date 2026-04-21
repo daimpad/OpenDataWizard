@@ -40,6 +40,12 @@ class ODW_Rest_API {
     }
 
     public static function register_routes(): void {
+        $format_arg = [
+            'default'           => 'jsonld',
+            'sanitize_callback' => 'sanitize_text_field',
+            'validate_callback' => fn( $v ) => in_array( $v, [ 'json', 'jsonld' ], true ),
+        ];
+
         register_rest_route(
             self::NAMESPACE,
             '/catalog',
@@ -66,6 +72,7 @@ class ODW_Rest_API {
                         'default'           => '',
                         'sanitize_callback' => 'sanitize_text_field',
                     ],
+                    'format'   => $format_arg,
                 ],
             ]
         );
@@ -78,11 +85,12 @@ class ODW_Rest_API {
                 'callback'            => [ self::class, 'get_dataset' ],
                 'permission_callback' => '__return_true',
                 'args'                => [
-                    'id' => [
+                    'id'     => [
                         'required'          => true,
                         'sanitize_callback' => 'absint',
                         'validate_callback' => fn( $v ) => is_numeric( $v ) && $v > 0,
                     ],
+                    'format' => $format_arg,
                 ],
             ]
         );
@@ -101,8 +109,9 @@ class ODW_Rest_API {
         $cached    = get_transient( $cache_key );
 
         if ( false !== $cached && is_array( $cached ) ) {
-            $response = new WP_REST_Response( $cached['body'], 200 );
-            $response->header( 'Content-Type', 'application/ld+json; charset=UTF-8' );
+            $content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
+            $response     = new WP_REST_Response( $cached['body'], 200 );
+            $response->header( 'Content-Type', $content_type );
             $response->header( 'X-WP-Total', (string) $cached['total'] );
             $response->header( 'X-WP-TotalPages', (string) $cached['pages'] );
             $response->header( 'X-ODW-Cache', 'HIT' );
@@ -182,8 +191,10 @@ class ODW_Rest_API {
             'pages' => $pages,
         ], self::CACHE_TTL );
 
+        $content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
+
         $response = new WP_REST_Response( $catalog, 200 );
-        $response->header( 'Content-Type', 'application/ld+json; charset=UTF-8' );
+        $response->header( 'Content-Type', $content_type );
         $response->header( 'X-WP-Total', (string) $total );
         $response->header( 'X-WP-TotalPages', (string) $pages );
         $response->header( 'X-ODW-Cache', 'MISS' );
@@ -218,8 +229,9 @@ class ODW_Rest_API {
         $cached    = get_transient( $cache_key );
 
         if ( false !== $cached && is_array( $cached ) ) {
-            $response = new WP_REST_Response( $cached, 200 );
-            $response->header( 'Content-Type', 'application/ld+json; charset=UTF-8' );
+            $content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
+            $response     = new WP_REST_Response( $cached, 200 );
+            $response->header( 'Content-Type', $content_type );
             $response->header( 'X-ODW-Cache', 'HIT' );
             return $response;
         }
@@ -241,8 +253,10 @@ class ODW_Rest_API {
 
         set_transient( $cache_key, $body, self::CACHE_TTL );
 
+        $content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
+
         $response = new WP_REST_Response( $body, 200 );
-        $response->header( 'Content-Type', 'application/ld+json; charset=UTF-8' );
+        $response->header( 'Content-Type', $content_type );
         $response->header( 'X-ODW-Cache', 'MISS' );
 
         return $response;
@@ -288,6 +302,20 @@ class ODW_Rest_API {
                 '_transient_timeout_odw_catalog_%'
             )
         );
+    }
+
+    /**
+     * Resolve Content-Type header from ?format= parameter.
+     *
+     * ?format=jsonld (default) → application/ld+json
+     * ?format=json            → application/json
+     *
+     * Foundation for future Turtle/RDF-XML content negotiation.
+     */
+    private static function resolve_content_type( string $format ): string {
+        return 'json' === $format
+            ? 'application/json; charset=UTF-8'
+            : 'application/ld+json; charset=UTF-8';
     }
 
     /**

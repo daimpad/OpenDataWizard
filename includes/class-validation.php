@@ -86,28 +86,18 @@ class ODW_Validation {
         // Carbon Fields stores compact input in a JSON blob during save.
         $cf_input = self::get_carbon_input( $postarr );
 
-        // --- Titel ---
+        // --- Titel (WP-native, nicht in Carbon Fields) ---
         $title = trim( (string) ( $postarr['post_title'] ?? '' ) );
         if ( '' === $title ) {
             $errors[] = __( 'Titel (dct:title)', 'open-data-wizard' );
         }
 
-        // --- Beschreibung ---
-        $description = self::get_field_value( $post_id, $cf_input, '_odw_description', 'odw_description' );
-        if ( '' === trim( (string) $description ) ) {
-            $errors[] = __( 'Beschreibung (dct:description)', 'open-data-wizard' );
-        }
-
-        // --- Publisher ---
-        $publisher = self::get_field_value( $post_id, $cf_input, '_odw_publisher', 'odw_publisher' );
-        if ( '' === trim( (string) $publisher ) ) {
-            $errors[] = __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' );
-        }
-
-        // --- Lizenz ---
-        $license = self::get_field_value( $post_id, $cf_input, '_odw_license', 'odw_license' );
-        if ( '' === trim( (string) $license ) ) {
-            $errors[] = __( 'Lizenz (dct:license)', 'open-data-wizard' );
+        // --- Pflichtfelder aus zentraler Registry (ODW_Fields::get_required_fields) ---
+        foreach ( ODW_Fields::get_required_fields() as $field ) {
+            $value = self::get_field_value( $post_id, $cf_input, $field['meta_key'] );
+            if ( '' === trim( (string) $value ) ) {
+                $errors[] = $field['label'];
+            }
         }
 
         // --- Mindestens 1 Distribution mit Zugriffs-URL ---
@@ -122,19 +112,16 @@ class ODW_Validation {
     /**
      * Get a field value: prefer CF compact input (new save), fall back to existing meta.
      *
-     * @param int                  $post_id    Post ID.
-     * @param array<string, mixed> $cf_input   Decoded Carbon Fields compact input.
-     * @param string               $meta_key   DB meta key (with underscore prefix).
-     * @param string               $cf_key     Carbon Fields key (without underscore).
+     * @param int                  $post_id   Post ID.
+     * @param array<string, mixed> $cf_input  Decoded Carbon Fields compact input.
+     * @param string               $meta_key  DB meta key (underscore-prefixed, e.g. _odw_publisher).
      * @return mixed
      */
-    private static function get_field_value( int $post_id, array $cf_input, string $meta_key, string $cf_key ): mixed {
-        // Prefer new POST data from Carbon Fields.
+    private static function get_field_value( int $post_id, array $cf_input, string $meta_key ): mixed {
         if ( isset( $cf_input[ $meta_key ] ) ) {
             return $cf_input[ $meta_key ];
         }
 
-        // Fall back to existing meta (already saved).
         return get_post_meta( $post_id, $meta_key, true );
     }
 
