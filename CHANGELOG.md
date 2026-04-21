@@ -7,6 +7,23 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.6.0] — 2026-04-21
+
+### Hinzugefügt
+- **Settings-Seite** unter *Datensätze → Einstellungen* mit vier Sektionen:
+  - **Katalog**: Katalog-Titel (überschreibt den Standardwert im REST API), Herausgebende Organisation
+  - **Standardwerte**: Standard-Lizenz und Standard-Sprache — werden bei neuen Datensätzen automatisch vorausgefüllt (via `set_default_value()` in Carbon Fields)
+  - **REST API**: Cache-Laufzeit konfigurierbar (60–86400 s, Standard 300 s)
+  - **Deinstallation**: Checkbox für opt-in Datenlöschung (ersetzt separate Option)
+- **„Alle Qualitätsscores neu berechnen"**-Button auf der Settings-Seite (nonce-gesichert, zeigt Anzahl aktualisierter Datensätze)
+- **`ODW_Settings::get()`** — zentrale API für Einstellungszugriff in anderen Klassen
+- **`ODW_Rest_API::delete_catalog_transients_public()`** — öffentlicher Alias für Cache-Invalidierung nach Einstellungsänderungen
+
+### Geändert
+- `uninstall.php`: liest jetzt `odw_settings[delete_on_uninstall]` statt separater Option; löscht auch `odw_settings`, `odw_demo_post_id`, `odw_show_welcome`
+
+---
+
 ## [1.5.0] — 2026-04-21
 
 ### Hinzugefügt

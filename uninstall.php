@@ -13,7 +13,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Nur löschen wenn die Option gesetzt ist (Opt-in Datenlöschung).
-if ( ! get_option( 'odw_delete_data_on_uninstall', false ) ) {
+$odw_settings = (array) get_option( 'odw_settings', [] );
+if ( empty( $odw_settings['delete_on_uninstall'] ) ) {
     return;
 }
 
@@ -39,7 +40,9 @@ foreach ( $posts as $post_id ) {
 }
 
 // Plugin-Optionen löschen.
-delete_option( 'odw_delete_data_on_uninstall' );
+delete_option( 'odw_settings' );
+delete_option( 'odw_demo_post_id' );
+delete_option( 'odw_show_welcome' );
 
 // Transients bereinigen.
 global $wpdb;

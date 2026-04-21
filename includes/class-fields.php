@@ -39,6 +39,7 @@ class ODW_Fields {
 
                     Field::make( 'text', 'odw_publisher', __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' ) )
                         ->set_required( true )
+                        ->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_publisher' ) : '' )
                         ->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) ),
 
                     Field::make( 'textarea', 'odw_description', __( 'Beschreibung (dct:description)', 'open-data-wizard' ) )
@@ -48,6 +49,7 @@ class ODW_Fields {
 
                     Field::make( 'select', 'odw_license', __( 'Lizenz (dct:license)', 'open-data-wizard' ) )
                         ->set_required( true )
+                        ->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
                         ->add_options( self::get_license_options() ),
                 ]
             )
@@ -55,6 +57,7 @@ class ODW_Fields {
                 __( '2 — Optionale Angaben', 'open-data-wizard' ),
                 [
                     Field::make( 'select', 'odw_language', __( 'Sprache (dct:language)', 'open-data-wizard' ) )
+                        ->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
                         ->add_options( [
                             ''   => __( '— Bitte wählen —', 'open-data-wizard' ),
                             'de' => __( 'Deutsch (DE)', 'open-data-wizard' ),

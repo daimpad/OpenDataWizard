@@ -291,7 +291,12 @@ class ODW_Rest_API {
 
     /**
      * Delete all catalog transients using a direct DB query (no viable alternative for pattern delete).
+     * Public alias used by ODW_Settings when cache TTL changes.
      */
+    public static function delete_catalog_transients_public(): void {
+        self::delete_catalog_transients();
+    }
+
     private static function delete_catalog_transients(): void {
         global $wpdb;
 
