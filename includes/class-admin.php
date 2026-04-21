@@ -262,8 +262,10 @@ class ODW_Admin {
         </ul>
         <h3><?php esc_html_e( 'Distribution', 'open-data-wizard' ); ?></h3>
         <p><?php esc_html_e( 'Jeder Datensatz benötigt mindestens eine Distribution mit einer Zugriffs-URL (dcat:accessURL). Mehrere Distributionen (z.B. CSV + JSON) können hinzugefügt werden.', 'open-data-wizard' ); ?></p>
+        <h3><?php esc_html_e( 'Erweiterte Angaben', 'open-data-wizard' ); ?></h3>
+        <p><?php esc_html_e( 'Tab 4 enthält optionale DCAT-AP Felder: Projektseite (dcat:landingPage), Aktualisierungsfrequenz (dct:accrualPeriodicity), geographische und zeitliche Abdeckung sowie einen Kontaktpunkt (dcat:contactPoint).', 'open-data-wizard' ); ?></p>
         <h3><?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?></h3>
-        <p><?php esc_html_e( 'Tab 4 zeigt das generierte JSON-LD nach dem Speichern. Dort finden Sie auch den direkten Link zum REST-Endpoint.', 'open-data-wizard' ); ?></p>
+        <p><?php esc_html_e( 'Tab 5 zeigt das generierte JSON-LD nach dem Speichern. Dort finden Sie auch den direkten Link zum REST-Endpoint.', 'open-data-wizard' ); ?></p>
         <?php
         return ob_get_clean();
     }

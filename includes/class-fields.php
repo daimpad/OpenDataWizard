@@ -108,7 +108,54 @@ class ODW_Fields {
                 ]
             )
             ->add_tab(
-                __( '4 — Vorschau', 'open-data-wizard' ),
+                __( '4 — Erweiterte Angaben', 'open-data-wizard' ),
+                [
+                    // --- Projektseite & Aktualität ---
+                    Field::make( 'html', 'odw_ext_hint_landing' )
+                        ->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
+
+                    Field::make( 'text', 'odw_landing_page', __( 'Projektseite (dcat:landingPage)', 'open-data-wizard' ) )
+                        ->set_attribute( 'type', 'url' )
+                        ->set_attribute( 'placeholder', 'https://beispiel.de/projekt' )
+                        ->set_help_text( __( 'URL der Projektwebsite oder des Datenportals, auf der weitere Informationen zum Datensatz zu finden sind.', 'open-data-wizard' ) ),
+
+                    Field::make( 'select', 'odw_accrual_periodicity', __( 'Aktualisierungsfrequenz (dct:accrualPeriodicity)', 'open-data-wizard' ) )
+                        ->add_options( self::get_periodicity_options() ),
+
+                    // --- Abdeckung ---
+                    Field::make( 'html', 'odw_ext_hint_coverage' )
+                        ->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
+
+                    Field::make( 'text', 'odw_spatial', __( 'Geographische Abdeckung (dct:spatial)', 'open-data-wizard' ) )
+                        ->set_attribute( 'placeholder', __( 'z.B. Deutschland, Berlin oder GeoNames-URI', 'open-data-wizard' ) )
+                        ->set_help_text( __( 'Freitext oder URI (z.B. https://sws.geonames.org/2950159/).', 'open-data-wizard' ) ),
+
+                    Field::make( 'date', 'odw_temporal_start', __( 'Zeitlicher Bezug — Start (dct:temporal)', 'open-data-wizard' ) )
+                        ->set_storage_format( 'Y-m-d' )
+                        ->set_picker_options( [ 'dateFormat' => 'Y-m-d' ] ),
+
+                    Field::make( 'date', 'odw_temporal_end', __( 'Zeitlicher Bezug — Ende (dct:temporal)', 'open-data-wizard' ) )
+                        ->set_storage_format( 'Y-m-d' )
+                        ->set_picker_options( [ 'dateFormat' => 'Y-m-d' ] ),
+
+                    // --- Kontaktpunkt ---
+                    Field::make( 'html', 'odw_ext_hint_contact' )
+                        ->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
+
+                    Field::make( 'text', 'odw_contact_name', __( 'Name / Organisation', 'open-data-wizard' ) )
+                        ->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) ),
+
+                    Field::make( 'text', 'odw_contact_email', __( 'E-Mail-Adresse', 'open-data-wizard' ) )
+                        ->set_attribute( 'type', 'email' )
+                        ->set_attribute( 'placeholder', 'opendata@beispiel.de' ),
+
+                    Field::make( 'text', 'odw_contact_url', __( 'Website', 'open-data-wizard' ) )
+                        ->set_attribute( 'type', 'url' )
+                        ->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' ),
+                ]
+            )
+            ->add_tab(
+                __( '5 — Vorschau', 'open-data-wizard' ),
                 [
                     Field::make( 'html', 'odw_preview_html' )
                         ->set_html( self::get_preview_html() ),
@@ -204,6 +251,21 @@ class ODW_Fields {
         return (array) apply_filters( 'odw_theme_options', $options );
     }
 
+    public static function get_periodicity_options(): array {
+        $base = 'http://publications.europa.eu/resource/authority/frequency/';
+        return [
+            ''                  => __( '— Bitte wählen —', 'open-data-wizard' ),
+            $base . 'DAILY'     => __( 'Täglich', 'open-data-wizard' ),
+            $base . 'WEEKLY'    => __( 'Wöchentlich', 'open-data-wizard' ),
+            $base . 'MONTHLY'   => __( 'Monatlich', 'open-data-wizard' ),
+            $base . 'QUARTERLY' => __( 'Vierteljährlich', 'open-data-wizard' ),
+            $base . 'ANNUAL'    => __( 'Jährlich', 'open-data-wizard' ),
+            $base . 'BIENNIAL'  => __( 'Zweijährlich', 'open-data-wizard' ),
+            $base . 'IRREG'     => __( 'Unregelmäßig', 'open-data-wizard' ),
+            $base . 'UNKNOWN'   => __( 'Unbekannt', 'open-data-wizard' ),
+        ];
+    }
+
     public static function get_format_options(): array {
         return [
             ''        => __( '— Bitte wählen —', 'open-data-wizard' ),
@@ -291,6 +353,16 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
     $modified    = get_post_meta( $post_id, '_odw_modified', true );
     $distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
 
+    // Erweiterte DCAT-AP Felder (Tab 4)
+    $landing_page         = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
+    $accrual_periodicity  = (string) carbon_get_post_meta( $post_id, 'odw_accrual_periodicity' );
+    $spatial              = (string) carbon_get_post_meta( $post_id, 'odw_spatial' );
+    $temporal_start       = (string) carbon_get_post_meta( $post_id, 'odw_temporal_start' );
+    $temporal_end         = (string) carbon_get_post_meta( $post_id, 'odw_temporal_end' );
+    $contact_name         = (string) carbon_get_post_meta( $post_id, 'odw_contact_name' );
+    $contact_email        = (string) carbon_get_post_meta( $post_id, 'odw_contact_email' );
+    $contact_url          = (string) carbon_get_post_meta( $post_id, 'odw_contact_url' );
+
     $dataset = [
         '@type'            => 'dcat:Dataset',
         '@id'              => rest_url( 'datenatlas/v1/datasets/' . $post_id ),
@@ -358,6 +430,48 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
         if ( ! empty( $dist_list ) ) {
             $dataset['dcat:distribution'] = $dist_list;
         }
+    }
+
+    // --- Erweiterte Felder ---
+
+    if ( ! empty( $landing_page ) ) {
+        $dataset['dcat:landingPage'] = [ '@id' => $landing_page ];
+    }
+
+    if ( ! empty( $accrual_periodicity ) ) {
+        $dataset['dct:accrualPeriodicity'] = [ '@id' => $accrual_periodicity ];
+    }
+
+    if ( ! empty( $spatial ) ) {
+        $dataset['dct:spatial'] = [
+            '@type'          => 'dct:Location',
+            'skos:prefLabel' => $spatial,
+        ];
+    }
+
+    if ( ! empty( $temporal_start ) || ! empty( $temporal_end ) ) {
+        $period = [ '@type' => 'dct:PeriodOfTime' ];
+        if ( ! empty( $temporal_start ) ) {
+            $period['dcat:startDate'] = [ '@type' => 'xsd:date', '@value' => $temporal_start ];
+        }
+        if ( ! empty( $temporal_end ) ) {
+            $period['dcat:endDate'] = [ '@type' => 'xsd:date', '@value' => $temporal_end ];
+        }
+        $dataset['dct:temporal'] = $period;
+    }
+
+    if ( ! empty( $contact_name ) || ! empty( $contact_email ) ) {
+        $contact = [ '@type' => 'vcard:Organization' ];
+        if ( ! empty( $contact_name ) ) {
+            $contact['vcard:fn'] = $contact_name;
+        }
+        if ( ! empty( $contact_email ) ) {
+            $contact['vcard:hasEmail'] = 'mailto:' . $contact_email;
+        }
+        if ( ! empty( $contact_url ) ) {
+            $contact['vcard:hasURL'] = [ '@id' => $contact_url ];
+        }
+        $dataset['dcat:contactPoint'] = $contact;
     }
 
     /**

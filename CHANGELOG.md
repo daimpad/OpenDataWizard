@@ -7,6 +7,24 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.7.0] — 2026-04-21
+
+### Hinzugefügt
+- **Tab 4 — Erweiterte Angaben** im Datensatz-Formular mit 8 neuen DCAT-AP 3.0 Feldern:
+  - `dcat:landingPage` — URL der Projektwebsite
+  - `dct:accrualPeriodicity` — Aktualisierungsfrequenz (EU Publications Office Vokabular: täglich bis zweijährlich)
+  - `dct:spatial` — Geographische Abdeckung (Freitext oder URI, z.B. GeoNames)
+  - `dct:temporal` — Zeitlicher Bezug mit Start- und Enddatum (`dcat:startDate`, `dcat:endDate`)
+  - `dcat:contactPoint` — Kontaktpunkt mit Name, E-Mail (`mailto:`-Prefix) und Website (`vcard:Organization`)
+- **`vcard` und `skos` Namespaces** im JSON-LD `@context` der REST API
+- **`ODW_Fields::get_periodicity_options()`** — Kontrolliertes Vokabular für Aktualisierungsfrequenzen
+
+### Geändert
+- Vorschau-Tab umbenannt von „4" auf „5" (Erweiterte Angaben ist jetzt Tab 4)
+- Help Tab Beschreibung aktualisiert
+
+---
+
 ## [1.6.0] — 2026-04-21
 
 ### Hinzugefügt
