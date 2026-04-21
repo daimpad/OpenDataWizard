@@ -12,8 +12,8 @@
         "szepeviktor/phpstan-wordpress": "^2.0",
         "wp-coding-standards/wpcs": "^3.1",
         "phpcsstandards/phpcsutils": "^1.0",
-        "phpunit/phpunit": "^10.5",
-        "10up/wp_mock": "^0.5"
+        "phpunit/phpunit": "^9.6",
+        "10up/wp_mock": "^1.0"
     },
     "config": {
         "optimize-autoloader": true,

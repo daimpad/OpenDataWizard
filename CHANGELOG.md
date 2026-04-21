@@ -7,6 +7,41 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.7.0] — 2026-04-21
+
+### Hinzugefügt
+- **Tab 4 — Erweiterte Angaben** im Datensatz-Formular mit 8 neuen DCAT-AP 3.0 Feldern:
+  - `dcat:landingPage` — URL der Projektwebsite
+  - `dct:accrualPeriodicity` — Aktualisierungsfrequenz (EU Publications Office Vokabular: täglich bis zweijährlich)
+  - `dct:spatial` — Geographische Abdeckung (Freitext oder URI, z.B. GeoNames)
+  - `dct:temporal` — Zeitlicher Bezug mit Start- und Enddatum (`dcat:startDate`, `dcat:endDate`)
+  - `dcat:contactPoint` — Kontaktpunkt mit Name, E-Mail (`mailto:`-Prefix) und Website (`vcard:Organization`)
+- **`vcard` und `skos` Namespaces** im JSON-LD `@context` der REST API
+- **`ODW_Fields::get_periodicity_options()`** — Kontrolliertes Vokabular für Aktualisierungsfrequenzen
+
+### Geändert
+- Vorschau-Tab umbenannt von „4" auf „5" (Erweiterte Angaben ist jetzt Tab 4)
+- Help Tab Beschreibung aktualisiert
+
+---
+
+## [1.6.0] — 2026-04-21
+
+### Hinzugefügt
+- **Settings-Seite** unter *Datensätze → Einstellungen* mit vier Sektionen:
+  - **Katalog**: Katalog-Titel (überschreibt den Standardwert im REST API), Herausgebende Organisation
+  - **Standardwerte**: Standard-Lizenz und Standard-Sprache — werden bei neuen Datensätzen automatisch vorausgefüllt (via `set_default_value()` in Carbon Fields)
+  - **REST API**: Cache-Laufzeit konfigurierbar (60–86400 s, Standard 300 s)
+  - **Deinstallation**: Checkbox für opt-in Datenlöschung (ersetzt separate Option)
+- **„Alle Qualitätsscores neu berechnen"**-Button auf der Settings-Seite (nonce-gesichert, zeigt Anzahl aktualisierter Datensätze)
+- **`ODW_Settings::get()`** — zentrale API für Einstellungszugriff in anderen Klassen
+- **`ODW_Rest_API::delete_catalog_transients_public()`** — öffentlicher Alias für Cache-Invalidierung nach Einstellungsänderungen
+
+### Geändert
+- `uninstall.php`: liest jetzt `odw_settings[delete_on_uninstall]` statt separater Option; löscht auch `odw_settings`, `odw_demo_post_id`, `odw_show_welcome`
+
+---
+
 ## [1.5.0] — 2026-04-21
 
 ### Hinzugefügt

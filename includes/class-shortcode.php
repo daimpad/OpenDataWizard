@@ -71,11 +71,20 @@ class ODW_Shortcode {
         if ( $file_id > 0 ) {
             $url = wp_get_attachment_url( $file_id );
             if ( $url ) {
-                $file_url    = $url;
-                $file_format = strtoupper( (string) pathinfo( $url, PATHINFO_EXTENSION ) );
-                $file_path   = get_attached_file( $file_id );
-                if ( $file_path && is_readable( $file_path ) ) {
-                    $file_size = self::format_bytes( (int) filesize( $file_path ) );
+                $file_url = $url;
+
+                // Use pre-computed meta (set on save) — fall back to runtime on old entries.
+                $stored_format = (string) get_post_meta( $post_id, '_odw_file_format', true );
+                $file_format   = $stored_format ?: strtoupper( (string) pathinfo( $url, PATHINFO_EXTENSION ) );
+
+                $stored_size = get_post_meta( $post_id, '_odw_file_size', true );
+                if ( $stored_size !== '' && is_numeric( $stored_size ) ) {
+                    $file_size = self::format_bytes( (int) $stored_size );
+                } else {
+                    $file_path = get_attached_file( $file_id );
+                    if ( $file_path && is_readable( $file_path ) ) {
+                        $file_size = self::format_bytes( (int) filesize( $file_path ) );
+                    }
                 }
             }
         }

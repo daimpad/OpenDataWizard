@@ -361,6 +361,63 @@
 }
 
 /* =========================================================================
+   Download-Datei Meta Box
+   ========================================================================= */
+
+.odw-file-upload {
+    padding: 4px 0;
+}
+
+/* Preview area */
+.odw-file-preview {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--odw-color-border);
+    border-radius: var(--odw-radius);
+    background: var(--odw-color-bg-light);
+    margin-bottom: 10px;
+    min-height: 42px;
+}
+
+.odw-file-preview .odw-file-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    color: var(--odw-color-text-muted);
+    margin-top: 1px;
+}
+
+.odw-file-preview--has-file .odw-file-icon {
+    color: var(--odw-color-primary);
+}
+
+.odw-file-name {
+    font-size: 13px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.odw-file-preview--empty .odw-file-name {
+    color: var(--odw-color-text-muted);
+    font-style: italic;
+}
+
+/* Action buttons */
+.odw-file-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.odw-file-actions .button .dashicons {
+    vertical-align: middle;
+    margin-top: -2px;
+    font-size: 16px;
+}
+
+/* =========================================================================
    Responsive — WordPress admin breakpoint (782px)
    ========================================================================= */
 

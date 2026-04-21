@@ -25,11 +25,13 @@ class ODW_Rest_API {
      * DCAT-AP 3.0 JSON-LD @context inkl. Plugin-eigenem odw:-Namespace für Qualitätsdaten.
      */
     private const JSONLD_CONTEXT = [
-        'dcat' => 'https://www.w3.org/ns/dcat#',
-        'dct'  => 'http://purl.org/dc/terms/',
-        'foaf' => 'http://xmlns.com/foaf/0.1/',
-        'xsd'  => 'http://www.w3.org/2001/XMLSchema#',
-        'odw'  => 'https://github.com/daimpad/OpenDataWizard/ns#',
+        'dcat'  => 'https://www.w3.org/ns/dcat#',
+        'dct'   => 'http://purl.org/dc/terms/',
+        'foaf'  => 'http://xmlns.com/foaf/0.1/',
+        'xsd'   => 'http://www.w3.org/2001/XMLSchema#',
+        'vcard' => 'http://www.w3.org/2006/vcard/ns#',
+        'skos'  => 'http://www.w3.org/2004/02/skos/core#',
+        'odw'   => 'https://github.com/daimpad/OpenDataWizard/ns#',
     ];
 
     public static function init(): void {
@@ -291,7 +293,12 @@ class ODW_Rest_API {
 
     /**
      * Delete all catalog transients using a direct DB query (no viable alternative for pattern delete).
+     * Public alias used by ODW_Settings when cache TTL changes.
      */
+    public static function delete_catalog_transients_public(): void {
+        self::delete_catalog_transients();
+    }
+
     private static function delete_catalog_transients(): void {
         global $wpdb;
 
