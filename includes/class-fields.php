@@ -96,7 +96,8 @@ class ODW_Fields {
 
                             Field::make( 'text', 'byte_size', __( 'Dateigröße in Bytes (dcat:byteSize)', 'open-data-wizard' ) )
                                 ->set_attribute( 'placeholder', __( 'optional, z.B. 204800', 'open-data-wizard' ) )
-                                ->set_attribute( 'type', 'number' ),
+                                ->set_attribute( 'type', 'number' )
+                                ->set_attribute( 'min', '0' ),
                         ] ),
                 ]
             )
@@ -133,7 +134,7 @@ class ODW_Fields {
         // Update without triggering infinite loop
         remove_action( 'save_post_odw_dataset', [ self::class, 'set_modified_date' ], 10 );
 
-        update_post_meta( $post_id, '_odw_modified', gmdate( 'Y-m-d' ) );
+        update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
 
         add_action( 'save_post_odw_dataset', [ self::class, 'set_modified_date' ], 10, 2 );
     }
@@ -143,27 +144,40 @@ class ODW_Fields {
     // -------------------------------------------------------------------------
 
     public static function get_license_options(): array {
-        return [
-            ''                                                  => __( '— Bitte wählen —', 'open-data-wizard' ),
+        $options = [
+            ''                                                   => __( '— Bitte wählen —', 'open-data-wizard' ),
             'https://creativecommons.org/publicdomain/zero/1.0/' => 'CC0 1.0',
             'https://creativecommons.org/licenses/by/4.0/'       => 'CC-BY 4.0',
             'https://creativecommons.org/licenses/by-sa/4.0/'    => 'CC-BY-SA 4.0',
             'https://www.govdata.de/dl-de/by-2-0'                => 'Datenlizenz Deutschland Namensnennung 2.0',
         ];
+
+        return (array) apply_filters( 'odw_license_options', $options );
+    }
+
+    /**
+     * Translate a license URI to its human-readable label.
+     * Single source of truth — used by Fields and Admin classes.
+     */
+    public static function get_license_label( string $uri ): string {
+        $options = self::get_license_options();
+        return $options[ $uri ] ?? $uri;
     }
 
     public static function get_theme_options(): array {
-        return [
-            ''          => __( '— Bitte wählen —', 'open-data-wizard' ),
-            'Bildung'   => __( 'Bildung', 'open-data-wizard' ),
+        $options = [
+            ''           => __( '— Bitte wählen —', 'open-data-wizard' ),
+            'Bildung'    => __( 'Bildung', 'open-data-wizard' ),
             'Gesundheit' => __( 'Gesundheit', 'open-data-wizard' ),
-            'Soziales'  => __( 'Soziales', 'open-data-wizard' ),
-            'Umwelt'    => __( 'Umwelt', 'open-data-wizard' ),
+            'Soziales'   => __( 'Soziales', 'open-data-wizard' ),
+            'Umwelt'     => __( 'Umwelt', 'open-data-wizard' ),
             'Wirtschaft' => __( 'Wirtschaft', 'open-data-wizard' ),
-            'Kultur'    => __( 'Kultur', 'open-data-wizard' ),
-            'Sport'     => __( 'Sport', 'open-data-wizard' ),
-            'Sonstiges' => __( 'Sonstiges', 'open-data-wizard' ),
+            'Kultur'     => __( 'Kultur', 'open-data-wizard' ),
+            'Sport'      => __( 'Sport', 'open-data-wizard' ),
+            'Sonstiges'  => __( 'Sonstiges', 'open-data-wizard' ),
         ];
+
+        return (array) apply_filters( 'odw_theme_options', $options );
     }
 
     public static function get_format_options(): array {
@@ -310,7 +324,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
                 $dist_item['dct:format'] = ODW_Fields::get_format_mime( $dist['format'] );
             }
 
-            if ( isset( $dist['byte_size'] ) && '' !== $dist['byte_size'] ) {
+            if ( isset( $dist['byte_size'] ) && '' !== $dist['byte_size'] && is_numeric( $dist['byte_size'] ) && (int) $dist['byte_size'] >= 0 ) {
                 $dist_item['dcat:byteSize'] = (int) $dist['byte_size'];
             }
 
@@ -322,5 +336,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
         }
     }
 
-    return $dataset;
+    /**
+     * Filters the complete DCAT-AP JSON-LD array before output.
+     *
+     * @param array<string, mixed> $dataset  The JSON-LD dataset array.
+     * @param int                  $post_id  The dataset post ID.
+     */
+    return (array) apply_filters( 'odw_dataset_jsonld', $dataset, $post_id );
 }

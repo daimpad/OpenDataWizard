@@ -63,7 +63,7 @@ class ODW_Validation {
         set_transient(
             self::TRANSIENT_PREFIX . $post_id,
             $errors,
-            60 // seconds
+            300 // 5 Minuten
         );
 
         return $data;
@@ -202,7 +202,8 @@ class ODW_Validation {
             return;
         }
 
-        $post_id = (int) ( $_GET['post'] ?? $_POST['post_ID'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : ( isset( $_POST['post_ID'] ) ? absint( $_POST['post_ID'] ) : 0 );
 
         if ( ! $post_id ) {
             return;
