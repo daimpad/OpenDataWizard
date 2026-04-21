@@ -24,6 +24,8 @@ class ODW_Admin {
         add_action( 'add_meta_boxes', [ self::class, 'register_help_tabs' ] );
         add_action( 'load-post.php', [ self::class, 'register_help_tabs' ] );
         add_action( 'load-post-new.php', [ self::class, 'register_help_tabs' ] );
+        add_action( 'add_meta_boxes', [ self::class, 'register_file_meta_box' ] );
+        add_action( 'save_post_odw_dataset', [ self::class, 'save_file_attachment' ], 20, 2 );
     }
 
     /**
@@ -218,6 +220,147 @@ class ODW_Admin {
                 ODW_VERSION,
                 true
             );
+
+            wp_enqueue_media();
+
+            wp_enqueue_script(
+                'odw-file-upload',
+                ODW_PLUGIN_URL . 'assets/js/odw-file-upload.js',
+                [ 'jquery' ],
+                ODW_VERSION,
+                true
+            );
+
+            global $post;
+            $file_id   = $post ? (int) get_post_meta( $post->ID, '_odw_file_id', true ) : 0;
+            $file_name = '';
+            if ( $file_id > 0 ) {
+                $attachment = get_post( $file_id );
+                $file_name  = $attachment instanceof \WP_Post ? $attachment->post_title : '';
+            }
+
+            wp_localize_script( 'odw-file-upload', 'odwFileUpload', [
+                'currentId'   => $file_id,
+                'currentName' => $file_name,
+                'labels'      => [
+                    'frameTitle'  => __( 'Datei auswählen oder hochladen', 'open-data-wizard' ),
+                    'frameButton' => __( 'Auswählen', 'open-data-wizard' ),
+                    'noFile'      => __( 'Keine Datei ausgewählt', 'open-data-wizard' ),
+                ],
+            ] );
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Download-Datei — Native Media Library Meta Box
+    // -------------------------------------------------------------------------
+
+    /**
+     * Register the file-upload meta box on the dataset edit screen.
+     */
+    public static function register_file_meta_box(): void {
+        add_meta_box(
+            'odw-file-upload',
+            __( 'Download-Datei (Mediathek)', 'open-data-wizard' ),
+            [ self::class, 'render_file_meta_box' ],
+            'odw_dataset',
+            'side',
+            'default'
+        );
+    }
+
+    /**
+     * Render the file-upload meta box.
+     */
+    public static function render_file_meta_box( \WP_Post $post ): void {
+        $file_id  = (int) get_post_meta( $post->ID, '_odw_file_id', true );
+        $has_file = $file_id > 0;
+
+        $file_name = '';
+        if ( $has_file ) {
+            $attachment = get_post( $file_id );
+            $file_name  = $attachment instanceof \WP_Post ? $attachment->post_title : '';
+        }
+
+        wp_nonce_field( 'odw_save_file_attachment', 'odw_file_upload_nonce' );
+        ?>
+        <div class="odw-file-upload">
+
+            <input
+                type="hidden"
+                id="odw-file-id-input"
+                name="_odw_file_id"
+                value="<?php echo esc_attr( (string) ( $has_file ? $file_id : 0 ) ); ?>"
+            >
+
+            <div id="odw-file-preview" class="odw-file-preview <?php echo $has_file ? 'odw-file-preview--has-file' : 'odw-file-preview--empty'; ?>">
+                <span class="dashicons dashicons-media-document odw-file-icon" aria-hidden="true"></span>
+                <span id="odw-file-name" class="odw-file-name">
+                    <?php echo $has_file ? esc_html( $file_name ) : esc_html__( 'Keine Datei ausgewählt', 'open-data-wizard' ); ?>
+                </span>
+            </div>
+
+            <div class="odw-file-actions">
+                <button type="button" id="odw-file-select-btn" class="button">
+                    <span class="dashicons dashicons-upload" aria-hidden="true"></span>
+                    <?php esc_html_e( 'Datei auswählen / hochladen', 'open-data-wizard' ); ?>
+                </button>
+                <button
+                    type="button"
+                    id="odw-file-remove-btn"
+                    class="button button-link-delete"
+                    <?php echo $has_file ? '' : 'disabled'; ?>
+                >
+                    <?php esc_html_e( 'Entfernen', 'open-data-wizard' ); ?>
+                </button>
+            </div>
+
+            <p class="description">
+                <?php esc_html_e( 'Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt.', 'open-data-wizard' ); ?>
+            </p>
+
+        </div>
+        <?php
+    }
+
+    /**
+     * Save the selected attachment ID and pre-compute size + format meta.
+     */
+    public static function save_file_attachment( int $post_id, \WP_Post $post ): void {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
+
+        if ( ! isset( $_POST['odw_file_upload_nonce'] ) ||
+            ! wp_verify_nonce(
+                sanitize_text_field( wp_unslash( $_POST['odw_file_upload_nonce'] ) ),
+                'odw_save_file_attachment'
+            )
+        ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+
+        $file_id = isset( $_POST['_odw_file_id'] ) ? absint( $_POST['_odw_file_id'] ) : 0;
+
+        update_post_meta( $post_id, '_odw_file_id', $file_id );
+
+        if ( $file_id > 0 ) {
+            $file_path = get_attached_file( $file_id );
+            if ( $file_path && file_exists( $file_path ) ) {
+                update_post_meta( $post_id, '_odw_file_size', (int) filesize( $file_path ) );
+                update_post_meta( $post_id, '_odw_file_format', strtoupper( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) ) );
+            }
+        } else {
+            delete_post_meta( $post_id, '_odw_file_size' );
+            delete_post_meta( $post_id, '_odw_file_format' );
         }
     }
 

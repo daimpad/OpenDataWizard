@@ -103,8 +103,6 @@ class ODW_Fields {
                                 ->set_attribute( 'min', '0' ),
                         ] ),
 
-                    Field::make( 'file', 'odw_file_id', __( 'Download-Datei (Mediathek)', 'open-data-wizard' ) )
-                        ->set_help_text( __( 'Datei aus der WordPress-Mediathek verknüpfen. Dateigröße und Format werden automatisch aus der Datei ermittelt und vom [odw_dataset]-Shortcode als Download-Button verwendet.', 'open-data-wizard' ) ),
                 ]
             )
             ->add_tab(
