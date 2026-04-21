@@ -1,6 +1,13 @@
 <?php
 /**
- * Admin: Listenansicht, Spalten, Assets, Help Tabs
+ * Admin: Listenansicht, Spalten, Assets, Help Tabs, Download-Datei Meta Box
+ *
+ * Verantwortlichkeiten:
+ *  - Listenansicht (Spalten, Sortierung, Status-Filter)
+ *  - Admin-Assets (CSS + wizard-tabs.js + odw-file-upload.js)
+ *  - Download-Datei Sidebar-Meta-Box: nativer wp.media Upload-Button,
+ *    Nonce-gesichertes Speichern, Auto-Berechnung _odw_file_size/_odw_file_format
+ *  - Help Tabs auf dem Edit-Screen (DCAT-AP Feldbeschreibungen, API-Doku)
  *
  * @package OpenDataWizard
  */

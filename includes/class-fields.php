@@ -212,6 +212,11 @@ class ODW_Fields {
     // Controlled vocabulary options
     // -------------------------------------------------------------------------
 
+    /**
+     * Lizenzen als URI → Label Map für Select-Felder und den `odw_license_options`-Filter.
+     *
+     * @return array<string, string> Erweiterbar via `add_filter('odw_license_options', ...)`.
+     */
     public static function get_license_options(): array {
         $options = [
             ''                                                   => __( '— Bitte wählen —', 'open-data-wizard' ),
@@ -233,6 +238,11 @@ class ODW_Fields {
         return $options[ $uri ] ?? $uri;
     }
 
+    /**
+     * Themen-Vokabular als Label → Label Map für das DCAT-AP `dcat:theme`-Feld.
+     *
+     * @return array<string, string> Erweiterbar via `add_filter('odw_theme_options', ...)`.
+     */
     public static function get_theme_options(): array {
         $options = [
             ''           => __( '— Bitte wählen —', 'open-data-wizard' ),
@@ -249,6 +259,14 @@ class ODW_Fields {
         return (array) apply_filters( 'odw_theme_options', $options );
     }
 
+    /**
+     * Aktualisierungsfrequenzen aus dem EU Publications Office Frequency Vocabulary.
+     *
+     * Basis-URI: http://publications.europa.eu/resource/authority/frequency/
+     * Vollständige URI wird als Wert gespeichert und im JSON-LD als `@id` ausgegeben.
+     *
+     * @return array<string, string>
+     */
     public static function get_periodicity_options(): array {
         $base = 'http://publications.europa.eu/resource/authority/frequency/';
         return [
@@ -264,6 +282,12 @@ class ODW_Fields {
         ];
     }
 
+    /**
+     * Dateiformate als Kurzbezeichnung → Kurzbezeichnung Map für das Distribution-Feld.
+     * Die Kurzbezeichnung wird via `get_format_mime()` in den MIME-Typ für JSON-LD übersetzt.
+     *
+     * @return array<string, string>
+     */
     public static function get_format_options(): array {
         return [
             ''        => __( '— Bitte wählen —', 'open-data-wizard' ),

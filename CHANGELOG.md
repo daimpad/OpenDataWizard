@@ -7,6 +7,25 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.8.0] — 2026-04-21
+
+### Hinzugefügt
+- **Native wp.media Upload-Widget** als Sidebar-Meta-Box auf dem Datensatz-Edit-Screen:
+  - Button „Datei auswählen / hochladen" öffnet den nativen WordPress Media Library Frame
+  - Dateivorschau zeigt den Dateinamen (oder „Keine Datei ausgewählt") mit Dokumenten-Icon
+  - „Entfernen"-Button löscht die Verknüpfung und leert alle abhängigen Meta-Felder
+- **Automatische Meta-Berechnung beim Speichern**: Nach jeder Dateiauswahl werden `_odw_file_size` (Bytes als Integer) und `_odw_file_format` (z.B. „CSV") direkt aus der Mediathek-Datei ausgelesen und gespeichert — kein Runtime-`filesize()`-Aufruf mehr beim Shortcode-Rendering nötig
+- **`assets/js/odw-file-upload.js`** — jQuery + wp.media Integration; UI-Zustand wird serverseitig via `wp_localize_script` initialisiert; Media-Frame-Instanz wird wiederverwendet
+
+### Geändert
+- **Shortcode** `[odw_dataset]` liest `_odw_file_size` und `_odw_file_format` jetzt aus vorberechnetem Post-Meta (mit Fallback auf Runtime-Berechnung für ältere Datensätze)
+- Carbon Fields `Field::make('file', 'odw_file_id')` in Tab 3 entfernt — ersetzt durch die native Meta-Box-Implementierung in der Sidebar
+
+### Sicherheit
+- `save_file_attachment()` prüft `wp_verify_nonce('odw_save_file_attachment')` und `current_user_can('edit_post')` vor jeder Speicherung
+
+---
+
 ## [1.7.0] — 2026-04-21
 
 ### Hinzugefügt

@@ -13,10 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class ODW_Post_Types {
 
+    /** Registriert den `init`-Hook für den CPT. */
     public static function init(): void {
         add_action( 'init', [ self::class, 'register' ] );
     }
 
+    /**
+     * Registriert den Custom Post Type `odw_dataset`.
+     *
+     * Der CPT ist nicht öffentlich (kein Frontend-Permalink), wird aber im
+     * Admin-Bereich angezeigt und über eigene REST-Endpoints ausgeliefert
+     * (`show_in_rest => false`, da wir `/datenatlas/v1/` verwenden).
+     */
     public static function register(): void {
         $labels = [
             'name'                  => _x( 'Datensätze', 'Post Type General Name', 'open-data-wizard' ),

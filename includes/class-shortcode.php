@@ -4,6 +4,14 @@
  *
  * Liest Metadaten direkt via get_post_meta(); keine Carbon Fields Abhängigkeit.
  *
+ * Datei-Metadaten (_odw_file_size, _odw_file_format) werden seit v1.8.0 beim
+ * Speichern vorberechnet (ODW_Admin::save_file_attachment) und hier direkt
+ * gelesen. Für ältere Datensätze ohne diese Meta-Einträge greift ein Fallback
+ * auf filesize()/pathinfo() zur Laufzeit.
+ *
+ * CSS wird lazy per wp_register_style / wp_enqueue_style eingebunden:
+ * assets/css/frontend.css wird nur auf Seiten geladen, die den Shortcode rendern.
+ *
  * @package OpenDataWizard
  */
 
@@ -156,6 +164,12 @@ class ODW_Shortcode {
         return (string) ob_get_clean();
     }
 
+    /**
+     * Formatiert eine Byte-Anzahl als lesbare Größenangabe (B / KB / MB / GB).
+     *
+     * @param int $bytes Rohe Byte-Anzahl (aus _odw_file_size oder filesize()).
+     * @return string    Formatierter String, z.B. "2.5 MB".
+     */
     private static function format_bytes( int $bytes ): string {
         if ( $bytes >= 1_073_741_824 ) {
             return round( $bytes / 1_073_741_824, 1 ) . ' GB';

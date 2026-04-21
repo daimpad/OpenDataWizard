@@ -54,12 +54,40 @@ Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Au
 Eigener Bereich im WordPress-Backend mit Übersicht, Filterung und Statusverwaltung (Entwurf / Veröffentlicht).
 
 ### 🧭 Geführter Wizard
-Vier-Schritt-Assistent mit Pflichtfeldprüfung, Hilfetexten und Inline-Validierung:
+Fünf-Tab-Assistent mit Pflichtfeldprüfung, Hilfetexten und Inline-Validierung:
 
 1. **Pflichtangaben** — Titel, Beschreibung, Herausgeber, Lizenz
 2. **Optionale Angaben** — Sprache, Schlagworte, Thema, Zeitraum
-3. **Distribution** — Zugriffs-URL, Format, Dateigröße
-4. **Vorschau** — generiertes JSON-LD live einsehen
+3. **Distribution** — Zugriffs-URL, Format, Dateigröße (wiederholbar)
+4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geograph. Abdeckung, Zeitraum, Kontaktpunkt
+5. **Vorschau** — generiertes JSON-LD live einsehen
+
+### 📎 Download-Datei (nativer wp.media Upload)
+Sidebar-Meta-Box auf dem Edit-Screen — vollständig unabhängig von Carbon Fields:
+- **„Datei auswählen / hochladen"**-Button öffnet den nativen WordPress Media Library Frame (`wp.media`)
+- Dateivorschau zeigt den Attachment-Titel mit Dokumenten-Icon; „Entfernen"-Button mit Capability-Check
+- Beim Speichern werden `_odw_file_size` (Bytes) und `_odw_file_format` (z.B. „CSV") automatisch aus der Datei berechnet und gespeichert — kein Runtime-I/O beim Shortcode-Rendering nötig
+- JavaScript (`assets/js/odw-file-upload.js`, jQuery): Media-Frame-Instanz wird wiederverwendet; aktueller Dateiname via `wp_localize_script` aus PHP initialisiert
+- Sicherheit: `wp_verify_nonce` + `current_user_can('edit_post')` im PHP-Save-Handler
+
+### ⚙️ Einstellungsseite
+Untermenü unter *Datensätze → Einstellungen* mit vier Bereichen:
+- **Katalog** — Titel (überschreibt DCAT-AP `dct:title` im Catalog-Endpoint) und Herausgebende Organisation
+- **Standardwerte** — Standard-Lizenz und -Sprache (werden bei neuen Datensätzen vorausgefüllt)
+- **REST API** — Cache-Laufzeit (60–86400 Sekunden)
+- **Deinstallation** — Opt-in Checkbox für vollständige Datenlöschung
+
+### 📊 Qualitätsindikatoren
+Automatische Metadaten-Vollständigkeitsprüfung nach DCAT-AP 3.0 (0–100 Punkte, Ampellogik):
+- **Grün** (≥ 80 Pkt.) · **Gelb** (50–79 Pkt.) · **Rot** (< 50 Pkt.)
+- Berechnung nach jedem Speichern; Ergebnis in der Admin-Listenansicht und als Meta-Box sichtbar
+- Score wird im JSON-LD als `odw:qualityScore` mitgeliefert
+
+### 📥 Download-Card Shortcode
+```
+[odw_dataset id="123"]
+```
+Rendert eine strukturierte Download-Card im Frontend: Titel, Thema-Badge, Lizenz, DCAT-Qualitätsscore, Dateigröße/-format und Download-Button. CSS (`assets/css/frontend.css`) wird nur auf Seiten geladen, die den Shortcode enthalten.
 
 ### 🔗 Maschinenlesbarer Endpoint
 Das Plugin stellt einen öffentlichen REST API Endpoint bereit:
@@ -130,44 +158,91 @@ Infrastruktur   →   REST API, JSON-LD Serialisierung, Custom Post Type
 
 ```
 open-data-wizard/
-├── open-data-wizard.php          # Plugin-Header & Bootstrap
-├── uninstall.php                 # Opt-in Datenlöschung bei Deinstallation
+├── open-data-wizard.php              # Plugin-Header & Bootstrap (v1.8.0)
+├── uninstall.php                     # Opt-in Datenlöschung
 ├── composer.json
-├── phpstan.neon
-├── phpunit.xml
-├── vendor/                       # Carbon Fields (gebündelt)
+├── phpstan.neon                      # Statische Analyse Level 6
+├── phpunit.xml                       # PHPUnit 9 Konfiguration
+├── vendor/                           # Carbon Fields + Dev-Dependencies (gebündelt)
 ├── includes/
-│   ├── class-post-types.php      # CPT-Registrierung: odw_dataset
-│   ├── class-fields.php          # Carbon Fields, DCAT-AP Mapping, Pflichtfeld-Registry
-│   ├── class-rest-api.php        # REST Endpoints mit Transient-Cache
-│   ├── class-validation.php      # Pflichtfeldprüfung
-│   └── class-admin.php           # Listenansicht, Help Tabs, Assets
+│   ├── class-post-types.php          # CPT-Registrierung: odw_dataset
+│   ├── class-fields.php              # Carbon Fields (5 Tabs), DCAT-AP Mapping, JSON-LD Builder
+│   ├── class-rest-api.php            # REST Endpoints /catalog + /datasets/<id>, Transient-Cache
+│   ├── class-validation.php          # Pflichtfeldprüfung vor Veröffentlichung
+│   ├── class-quality.php             # Qualitätsindikatoren (0–100 Punkte, Ampellogik)  [v1.3.0]
+│   ├── class-admin.php               # Listenansicht, wp.media Meta-Box, Help Tabs, Assets
+│   ├── class-shortcode.php           # [odw_dataset]-Shortcode, Download-Card             [v1.4.0]
+│   ├── class-setup.php               # Demo-Datensatz bei Aktivierung, Willkommens-Notice [v1.5.0]
+│   └── class-settings.php            # Einstellungsseite (Catalog, Defaults, API, Cleanup) [v1.6.0]
 ├── assets/
-│   ├── js/wizard-tabs.js         # Tab-Navigation (Vanilla JS)
-│   └── css/admin.css             # Admin-Styles (CSS Custom Properties)
+│   ├── js/
+│   │   ├── wizard-tabs.js            # Tab-Navigation (Vanilla JS, kein jQuery)
+│   │   └── odw-file-upload.js        # wp.media Upload-Widget (jQuery)                   [v1.8.0]
+│   ├── css/
+│   │   ├── admin.css                 # Admin-Styles (CSS Custom Properties)
+│   │   └── frontend.css              # Shortcode Download-Card (strukturell, kein Theme-Overhead)
+│   └── sample/
+│       └── beispiel-datensatz.csv    # Demo-Datensatz für die Aktivierungs-Installation
 ├── tests/
-│   ├── bootstrap.php
-│   └── test-fields.php
-├── .github/workflows/ci.yml
+│   ├── bootstrap.php                 # PHPUnit + WP_Mock Bootstrap
+│   ├── test-fields.php               # Tests: ODW_Fields (Lizenz, Format, Pflichtfelder)
+│   ├── test-settings.php             # Tests: ODW_Settings (get(), filter_catalog_title())
+│   ├── test-quality.php              # Tests: ODW_Quality (Scoring, Level, Meta)
+│   ├── test-shortcode.php            # Tests: ODW_Shortcode (format_bytes, render edge cases)
+│   └── test-fields-extended.php      # Tests: JSON-LD Builder v1.7.0 Felder
+├── .github/workflows/ci.yml          # CI: PHPCS + PHPStan + PHPUnit (PHP 8.1–8.3)
 └── languages/
 ```
 
 ### Feldmapping DCAT-AP 3.0
 
+#### Tab 1 — Pflichtangaben
+
 | Feld | DCAT-AP Prädikat | Pflicht |
 |---|---|---|
 | Titel | `dct:title` | ✓ |
 | Beschreibung | `dct:description` | ✓ |
-| Herausgeber | `dct:publisher` | ✓ |
-| Lizenz | `dct:license` | ✓ |
+| Herausgeber | `dct:publisher` → `foaf:Organization` | ✓ |
+| Lizenz | `dct:license` (URI) | ✓ |
+
+#### Tab 2 — Optionale Angaben
+
+| Feld | DCAT-AP Prädikat | Pflicht |
+|---|---|---|
 | Sprache | `dct:language` | — |
-| Schlagworte | `dcat:keyword` | — |
+| Schlagworte (eine pro Zeile) | `dcat:keyword` | — |
 | Thema | `dcat:theme` | — |
 | Veröffentlichungsdatum | `dct:issued` | — |
-| Änderungsdatum | `dct:modified` | — |
-| Zugriffs-URL (Distribution) | `dcat:accessURL` | ✓ (min. 1) |
-| Format (Distribution) | `dct:format` | — |
-| Dateigröße (Distribution) | `dcat:byteSize` | — |
+| Änderungsdatum | `dct:modified` (auto) | — |
+
+#### Tab 3 — Distribution
+
+| Feld | DCAT-AP Prädikat | Pflicht |
+|---|---|---|
+| Zugriffs-URL | `dcat:accessURL` | ✓ (min. 1) |
+| Format | `dct:format` (MIME) | — |
+| Dateigröße in Bytes | `dcat:byteSize` | — |
+
+#### Tab 4 — Erweiterte Angaben
+
+| Feld | DCAT-AP Prädikat | Pflicht |
+|---|---|---|
+| Projektseite | `dcat:landingPage` (`@id`) | — |
+| Aktualisierungsfrequenz | `dct:accrualPeriodicity` (EU-URI) | — |
+| Geographische Abdeckung | `dct:spatial` → `dct:Location` + `skos:prefLabel` | — |
+| Zeitlicher Bezug Start | `dct:temporal` → `dcat:startDate` | — |
+| Zeitlicher Bezug Ende | `dct:temporal` → `dcat:endDate` | — |
+| Kontaktpunkt Name | `dcat:contactPoint` → `vcard:fn` | — |
+| Kontaktpunkt E-Mail | `vcard:hasEmail` (mit `mailto:`-Prefix) | — |
+| Kontaktpunkt Website | `vcard:hasURL` (`@id`) | — |
+
+#### Sidebar — Download-Datei
+
+| Feld | Interner Meta-Key | Beschreibung |
+|---|---|---|
+| Attachment-ID | `_odw_file_id` | Mediathek-Datei (wird als Download-Button im Shortcode verwendet) |
+| Dateigröße (auto) | `_odw_file_size` | Bytes, auto-berechnet beim Speichern |
+| Dateiformat (auto) | `_odw_file_format` | Großbuchstaben-Extension (z.B. „CSV"), auto-berechnet |
 
 ### REST API
 
@@ -197,28 +272,37 @@ GET /wp-json/datenatlas/v1/datasets/<id>
 ```json
 {
   "@context": {
-    "dcat": "https://www.w3.org/ns/dcat#",
-    "dct": "http://purl.org/dc/terms/",
-    "foaf": "http://xmlns.com/foaf/0.1/"
+    "dcat":  "https://www.w3.org/ns/dcat#",
+    "dct":   "http://purl.org/dc/terms/",
+    "foaf":  "http://xmlns.com/foaf/0.1/",
+    "xsd":   "http://www.w3.org/2001/XMLSchema#",
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "skos":  "http://www.w3.org/2004/02/skos/core#",
+    "odw":   "https://github.com/daimpad/OpenDataWizard/ns#"
   },
   "@type": "dcat:Catalog",
+  "dct:title": "Mein Datenkatalog",
   "dcat:dataset": [
     {
       "@type": "dcat:Dataset",
       "dct:title": "Mitgliederdaten 2023",
       "dct:description": "Anonymisierte Mitgliederstatistik.",
-      "dct:publisher": {
-        "@type": "foaf:Organization",
-        "foaf:name": "Musterorganisation e.V."
-      },
+      "dct:publisher": { "@type": "foaf:Organization", "foaf:name": "Musterorganisation e.V." },
       "dct:license": "https://creativecommons.org/licenses/by/4.0/",
       "dcat:distribution": [
         {
           "@type": "dcat:Distribution",
           "dcat:accessURL": "https://organisation.de/daten/mitglieder.csv",
-          "dct:format": "text/csv"
+          "dct:format": "text/csv",
+          "dcat:byteSize": 20480
         }
-      ]
+      ],
+      "dcat:contactPoint": {
+        "@type": "vcard:Organization",
+        "vcard:fn": "Open Data Team",
+        "vcard:hasEmail": "mailto:opendata@organisation.de"
+      },
+      "odw:qualityScore": { "odw:score": 85, "odw:maxScore": 100, "odw:level": "high" }
     }
   ]
 }
@@ -251,19 +335,22 @@ add_filter( 'odw_dataset_jsonld', function( array $jsonld, int $post_id ): array
 
 ### Abhängigkeiten
 
-| Paket | Version | Lizenz |
+| Paket | Version | Zweck |
 |---|---|---|
-| [Carbon Fields](https://carbonfields.net/) | ^3.6 | MIT |
+| [Carbon Fields](https://carbonfields.net/) | ^3.6 | Admin-Formular (5-Tab-Wizard) |
+| [PHPUnit](https://phpunit.de/) | ^9.6 | Unit-Tests (dev) |
+| [WP_Mock](https://github.com/10up/wp_mock) | ^1.0 | WordPress-Stubs für Tests (dev) |
+| [PHPStan](https://phpstan.org/) + WordPress-Stubs | ^2.0 | Statische Analyse Level 6 (dev) |
+| [WPCS](https://github.com/WordPress/WordPress-Coding-Standards) | ^3.1 | Coding Standards (dev) |
 
 ---
 
 ## Roadmap
 
 - [ ] Delta-Harvesting Endpoint (`/changes?since=<timestamp>`)
-- [ ] Push/Webhook bei Statusänderung
-- [ ] Content Negotiation: Turtle / RDF-XML
-- [ ] Automatische Metadatenextraktion aus hochgeladenen Dateien
-- [ ] Qualitätsindikatoren (Vollständigkeit, Lizenzklarheit)
+- [ ] Push/Webhook bei Statusänderung an Civora/Piveau
+- [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
+- [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
 - [ ] CESSDA-Felder als optionales Profil
 
@@ -285,13 +372,9 @@ git push origin feature/mein-feature
 
 ## Deinstallation
 
-Das Plugin löscht bei Deinstallation standardmäßig **keine** Daten (Opt-in). Um alle Plugin-Daten zu löschen, die Option `odw_delete_data_on_uninstall` auf `true` setzen:
+Das Plugin löscht bei Deinstallation standardmäßig **keine** Daten (Opt-in).
 
-```php
-update_option( 'odw_delete_data_on_uninstall', true );
-```
-
-Danach das Plugin im WordPress-Backend deinstallieren.
+Um alle Plugin-Daten zu löschen, die Checkbox unter **Datensätze → Einstellungen → Deinstallation** aktivieren und dann das Plugin im WordPress-Backend deinstallieren. `uninstall.php` entfernt in diesem Fall alle `odw_dataset`-Posts, alle `_odw_*`-Metafelder sowie die Plugin-Optionen (`odw_settings`, `odw_demo_post_id`, `odw_show_welcome`).
 
 ---
 
