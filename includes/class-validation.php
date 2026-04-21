@@ -136,7 +136,7 @@ class ODW_Validation {
         foreach ( $cf_input as $key => $value ) {
             // CF compact keys for complex fields look like: _odw_distributions[0][access_url]
             if ( str_contains( (string) $key, '_odw_distributions' ) && str_contains( (string) $key, 'access_url' ) ) {
-                if ( ! empty( $value ) ) {
+                if ( ! empty( $value ) && self::is_valid_url( (string) $value ) ) {
                     return true;
                 }
             }
@@ -150,12 +150,25 @@ class ODW_Validation {
         }
 
         foreach ( $distributions as $dist ) {
-            if ( ! empty( $dist['access_url'] ) ) {
+            if ( ! empty( $dist['access_url'] ) && self::is_valid_url( (string) $dist['access_url'] ) ) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Validate that a string is a safe HTTP(S) URL.
+     * Blocks javascript:, data:, and other non-HTTP schemes.
+     */
+    private static function is_valid_url( string $url ): bool {
+        if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+            return false;
+        }
+
+        $scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+        return in_array( $scheme, [ 'http', 'https', 'ftp', 'ftps' ], true );
     }
 
     /**
