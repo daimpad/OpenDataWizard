@@ -150,6 +150,22 @@
     width: 130px;
 }
 
+.column-odw_shortcode {
+    width: 210px;
+}
+
+.odw-shortcode-input {
+    width: 100%;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 11px;
+    cursor: text;
+    background: var(--odw-color-bg-light);
+    border: 1px solid var(--odw-color-border);
+    border-radius: var(--odw-radius);
+    padding: 3px 6px;
+    color: var(--odw-color-text);
+}
+
 /* Status badges */
 .odw-status-badge {
     display: inline-block;

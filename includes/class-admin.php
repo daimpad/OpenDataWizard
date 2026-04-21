@@ -36,9 +36,10 @@ class ODW_Admin {
         $new_columns['title']         = __( 'Titel', 'open-data-wizard' );
         $new_columns['odw_license']   = __( 'Lizenz', 'open-data-wizard' );
         $new_columns['odw_theme']     = __( 'Thema', 'open-data-wizard' );
-        $new_columns['odw_quality']   = __( 'Qualität', 'open-data-wizard' );
+        $new_columns['odw_quality']    = __( 'Qualität', 'open-data-wizard' );
         $new_columns['odw_status']    = __( 'Status', 'open-data-wizard' );
         $new_columns['odw_modified']  = __( 'Änderungsdatum', 'open-data-wizard' );
+        $new_columns['odw_shortcode'] = __( 'Shortcode', 'open-data-wizard' );
 
         return $new_columns;
     }
@@ -91,6 +92,15 @@ class ODW_Admin {
             case 'odw_modified':
                 $modified = get_post_meta( $post_id, '_odw_modified', true );
                 echo esc_html( $modified ?: '—' );
+                break;
+
+            case 'odw_shortcode':
+                $shortcode = '[odw_dataset id="' . $post_id . '"]';
+                printf(
+                    '<input type="text" class="odw-shortcode-input" readonly value="%s" onclick="this.select();" title="%s">',
+                    esc_attr( $shortcode ),
+                    esc_attr__( 'Klicken zum Markieren', 'open-data-wizard' )
+                );
                 break;
         }
     }

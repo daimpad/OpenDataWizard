@@ -7,6 +7,16 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.0] — 2026-04-21
+
+### Hinzugefügt
+- **Shortcode `[odw_dataset id="…"]`** — gibt eine Download-Card im Frontend aus mit Titel, Thema-Badge, Lizenz, DCAT-Qualität, Dateigröße/Format und Download-Button
+- **Download-Datei über Mediathek** (`_odw_file_id`): Neues File-Feld in Tab 3 verknüpft eine Datei aus der WordPress-Mediathek; Dateigröße und Format werden automatisch ermittelt
+- **Shortcode-Spalte in der Admin-Übersicht**: Zeigt `[odw_dataset id="123"]` als klickbares, schreibgeschütztes Textfeld (Klick = Markierung für Copy-Paste)
+- **`assets/css/frontend.css`**: Strukturelles Layout der Download-Card (Flexbox/Grid, Abstände, Rahmen) ohne feste Farben — erbt vollständig vom aktiven Theme
+
+---
+
 ## [1.3.0] — 2026-04-21
 
 ### Hinzugefügt
