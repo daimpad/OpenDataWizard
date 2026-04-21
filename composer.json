@@ -25,8 +25,8 @@
         }
     },
     "scripts": {
-        "phpcs":   "phpcs --standard=WordPress --extensions=php --ignore=vendor/ .",
-        "phpcbf":  "phpcbf --standard=WordPress --extensions=php --ignore=vendor/ .",
+        "phpcs":   "phpcs --standard=phpcs.xml",
+        "phpcbf":  "phpcbf --standard=phpcs.xml",
         "phpstan": "phpstan analyse --configuration=phpstan.neon",
         "test":    "phpunit --configuration=phpunit.xml"
     }
