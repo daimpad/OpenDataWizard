@@ -63,7 +63,7 @@ class ODW_Validation {
         set_transient(
             self::TRANSIENT_PREFIX . $post_id,
             $errors,
-            60 // seconds
+            300 // 5 Minuten
         );
 
         return $data;
@@ -86,28 +86,18 @@ class ODW_Validation {
         // Carbon Fields stores compact input in a JSON blob during save.
         $cf_input = self::get_carbon_input( $postarr );
 
-        // --- Titel ---
+        // --- Titel (WP-native, nicht in Carbon Fields) ---
         $title = trim( (string) ( $postarr['post_title'] ?? '' ) );
         if ( '' === $title ) {
             $errors[] = __( 'Titel (dct:title)', 'open-data-wizard' );
         }
 
-        // --- Beschreibung ---
-        $description = self::get_field_value( $post_id, $cf_input, '_odw_description', 'odw_description' );
-        if ( '' === trim( (string) $description ) ) {
-            $errors[] = __( 'Beschreibung (dct:description)', 'open-data-wizard' );
-        }
-
-        // --- Publisher ---
-        $publisher = self::get_field_value( $post_id, $cf_input, '_odw_publisher', 'odw_publisher' );
-        if ( '' === trim( (string) $publisher ) ) {
-            $errors[] = __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' );
-        }
-
-        // --- Lizenz ---
-        $license = self::get_field_value( $post_id, $cf_input, '_odw_license', 'odw_license' );
-        if ( '' === trim( (string) $license ) ) {
-            $errors[] = __( 'Lizenz (dct:license)', 'open-data-wizard' );
+        // --- Pflichtfelder aus zentraler Registry (ODW_Fields::get_required_fields) ---
+        foreach ( ODW_Fields::get_required_fields() as $field ) {
+            $value = self::get_field_value( $post_id, $cf_input, $field['meta_key'] );
+            if ( '' === trim( (string) $value ) ) {
+                $errors[] = $field['label'];
+            }
         }
 
         // --- Mindestens 1 Distribution mit Zugriffs-URL ---
@@ -122,19 +112,16 @@ class ODW_Validation {
     /**
      * Get a field value: prefer CF compact input (new save), fall back to existing meta.
      *
-     * @param int                  $post_id    Post ID.
-     * @param array<string, mixed> $cf_input   Decoded Carbon Fields compact input.
-     * @param string               $meta_key   DB meta key (with underscore prefix).
-     * @param string               $cf_key     Carbon Fields key (without underscore).
+     * @param int                  $post_id   Post ID.
+     * @param array<string, mixed> $cf_input  Decoded Carbon Fields compact input.
+     * @param string               $meta_key  DB meta key (underscore-prefixed, e.g. _odw_publisher).
      * @return mixed
      */
-    private static function get_field_value( int $post_id, array $cf_input, string $meta_key, string $cf_key ): mixed {
-        // Prefer new POST data from Carbon Fields.
+    private static function get_field_value( int $post_id, array $cf_input, string $meta_key ): mixed {
         if ( isset( $cf_input[ $meta_key ] ) ) {
             return $cf_input[ $meta_key ];
         }
 
-        // Fall back to existing meta (already saved).
         return get_post_meta( $post_id, $meta_key, true );
     }
 
@@ -149,7 +136,7 @@ class ODW_Validation {
         foreach ( $cf_input as $key => $value ) {
             // CF compact keys for complex fields look like: _odw_distributions[0][access_url]
             if ( str_contains( (string) $key, '_odw_distributions' ) && str_contains( (string) $key, 'access_url' ) ) {
-                if ( ! empty( $value ) ) {
+                if ( ! empty( $value ) && self::is_valid_url( (string) $value ) ) {
                     return true;
                 }
             }
@@ -163,12 +150,25 @@ class ODW_Validation {
         }
 
         foreach ( $distributions as $dist ) {
-            if ( ! empty( $dist['access_url'] ) ) {
+            if ( ! empty( $dist['access_url'] ) && self::is_valid_url( (string) $dist['access_url'] ) ) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Validate that a string is a safe HTTP(S) URL.
+     * Blocks javascript:, data:, and other non-HTTP schemes.
+     */
+    private static function is_valid_url( string $url ): bool {
+        if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+            return false;
+        }
+
+        $scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+        return in_array( $scheme, [ 'http', 'https', 'ftp', 'ftps' ], true );
     }
 
     /**
@@ -202,7 +202,8 @@ class ODW_Validation {
             return;
         }
 
-        $post_id = (int) ( $_GET['post'] ?? $_POST['post_ID'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : ( isset( $_POST['post_ID'] ) ? absint( $_POST['post_ID'] ) : 0 );
 
         if ( ! $post_id ) {
             return;

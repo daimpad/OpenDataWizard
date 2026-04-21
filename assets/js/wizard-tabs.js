@@ -7,7 +7,33 @@
 (function () {
     'use strict';
 
-    var SESSION_KEY = 'odw_active_tab';
+    // Post-ID aus URL für post-spezifischen Storage-Schlüssel.
+    var postId = (function () {
+        var match = window.location.search.match(/[?&]post=(\d+)/);
+        return match ? match[1] : 'new';
+    })();
+
+    var SESSION_KEY = 'odw_active_tab_' + postId;
+
+    /**
+     * sessionStorage-Wrapper mit Fehlerbehandlung für Private-Browsing-Modus.
+     */
+    var storage = {
+        get: function (key) {
+            try {
+                return sessionStorage.getItem(key);
+            } catch (e) {
+                return null;
+            }
+        },
+        set: function (key, value) {
+            try {
+                sessionStorage.setItem(key, value);
+            } catch (e) {
+                // Quota exceeded oder Private-Browsing — stumm ignorieren.
+            }
+        }
+    };
 
     /**
      * Warte auf Carbon Fields Tab-Rendering.
@@ -29,7 +55,7 @@
      * Initialisiert Tab-Zustand aus sessionStorage.
      */
     function restoreTab(tabs) {
-        var savedLabel = sessionStorage.getItem(SESSION_KEY);
+        var savedLabel = storage.get(SESSION_KEY);
         if (!savedLabel) {
             return;
         }
@@ -43,33 +69,35 @@
     }
 
     /**
-     * Speichert aktiven Tab-Namen in sessionStorage.
+     * Speichert aktiven Tab-Namen in sessionStorage beim Klick.
      */
     function persistTab(tabs) {
         tabs.forEach(function (tab) {
             tab.addEventListener('click', function () {
                 var labelEl = tab.querySelector('.cf-tab__label');
                 if (labelEl) {
-                    sessionStorage.setItem(SESSION_KEY, labelEl.textContent.trim());
+                    storage.set(SESSION_KEY, labelEl.textContent.trim());
                 }
             });
         });
     }
 
     /**
-     * Fügt aktive Klasse für visuelle Hervorhebung hinzu.
+     * Setzt aria-selected Attribut via MutationObserver.
+     * Gibt den Observer zurück damit er beim Entladen getrennt werden kann.
      */
     function enhanceActiveStyle(tabs) {
         var observer = new MutationObserver(function () {
             tabs.forEach(function (tab) {
-                var isActive = tab.classList.contains('cf-tab--active');
-                tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                tab.setAttribute('aria-selected', tab.classList.contains('cf-tab--active') ? 'true' : 'false');
             });
         });
 
         tabs.forEach(function (tab) {
             observer.observe(tab, { attributes: true, attributeFilter: ['class'] });
         });
+
+        return observer;
     }
 
     /**
@@ -104,9 +132,14 @@
         waitForTabs(function (tabs) {
             var tabsArray = Array.prototype.slice.call(tabs);
             persistTab(tabsArray);
-            enhanceActiveStyle(tabsArray);
+            var observer = enhanceActiveStyle(tabsArray);
             addKeyboardNav(tabsArray);
             restoreTab(tabsArray);
+
+            // Observer beim Verlassen der Seite trennen (Speicherleck vermeiden).
+            window.addEventListener('beforeunload', function () {
+                observer.disconnect();
+            }, { once: true });
         });
     }
 

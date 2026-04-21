@@ -1,0 +1,23 @@
+parameters:
+    level: 6
+    paths:
+        - open-data-wizard.php
+        - uninstall.php
+        - includes/
+    excludePaths:
+        - vendor/
+    bootstrapFiles:
+        - vendor/autoload.php
+    extensions:
+        - szepeviktor/phpstan-wordpress
+
+    # WordPress stubs werden via szepeviktor/phpstan-wordpress bereitgestellt.
+    # Eigene Globals deklarieren damit PHPStan sie kennt.
+    dynamicConstantNames:
+        - ABSPATH
+        - WP_UNINSTALL_PLUGIN
+        - DOING_AUTOSAVE
+        - ODW_VERSION
+        - ODW_PLUGIN_DIR
+        - ODW_PLUGIN_URL
+        - ODW_PLUGIN_FILE

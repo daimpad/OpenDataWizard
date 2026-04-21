@@ -66,9 +66,12 @@ Das Plugin stellt einen öffentlichen REST API Endpoint bereit:
 
 ```
 GET https://deine-website.de/wp-json/datenatlas/v1/catalog
+GET https://deine-website.de/wp-json/datenatlas/v1/datasets/<id>
 ```
 
 Diese URL kann bei einer Open-Data-Plattform als Harvest-Quelle eingetragen werden — einmalig, ohne weiteren Aufwand.
+
+Parameter: `page`, `per_page`, `theme`, `license`, `format` (`jsonld` oder `json`)
 
 ### ✅ DCAT-AP 3.0 Konformität
 Alle Ausgaben sind DCAT-AP 3.0 konform und in JSON-LD serialisiert.
@@ -90,15 +93,26 @@ Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich.
 ```bash
 git clone https://github.com/daimpad/OpenDataWizard.git
 cd OpenDataWizard
-composer install
+composer install   # inkl. PHPStan, WPCS, PHPUnit
 ```
 
 Den Plugin-Ordner in eine lokale WordPress-Instanz einbinden (z.B. via [LocalWP](https://localwp.com)).
 
 **Systemvoraussetzungen:**
-- WordPress ≥ aktuelle LTS-Version
+- WordPress ≥ 6.4
 - PHP ≥ 8.1
 - Composer (nur für Entwicklung)
+
+**Dev-Tools:**
+
+```bash
+composer phpcs      # WordPress Coding Standards prüfen
+composer phpcbf     # Automatisch korrigieren
+composer phpstan    # Statische Analyse (Level 6)
+composer test       # PHPUnit-Tests ausführen
+```
+
+CI läuft via GitHub Actions (`.github/workflows/ci.yml`) auf PHP 8.1, 8.2 und 8.3.
 
 ---
 
@@ -117,17 +131,24 @@ Infrastruktur   →   REST API, JSON-LD Serialisierung, Custom Post Type
 ```
 open-data-wizard/
 ├── open-data-wizard.php          # Plugin-Header & Bootstrap
+├── uninstall.php                 # Opt-in Datenlöschung bei Deinstallation
 ├── composer.json
+├── phpstan.neon
+├── phpunit.xml
 ├── vendor/                       # Carbon Fields (gebündelt)
 ├── includes/
 │   ├── class-post-types.php      # CPT-Registrierung: odw_dataset
-│   ├── class-fields.php          # Carbon Fields + DCAT-AP Mapping
-│   ├── class-rest-api.php        # REST Endpoints
+│   ├── class-fields.php          # Carbon Fields, DCAT-AP Mapping, Pflichtfeld-Registry
+│   ├── class-rest-api.php        # REST Endpoints mit Transient-Cache
 │   ├── class-validation.php      # Pflichtfeldprüfung
-│   └── class-admin.php           # Listenansicht & Admin-Notices
+│   └── class-admin.php           # Listenansicht, Help Tabs, Assets
 ├── assets/
-│   ├── js/wizard-tabs.js
-│   └── css/admin.css
+│   ├── js/wizard-tabs.js         # Tab-Navigation (Vanilla JS)
+│   └── css/admin.css             # Admin-Styles (CSS Custom Properties)
+├── tests/
+│   ├── bootstrap.php
+│   └── test-fields.php
+├── .github/workflows/ci.yml
 └── languages/
 ```
 
@@ -154,7 +175,17 @@ open-data-wizard/
 ```
 GET /wp-json/datenatlas/v1/catalog
 ```
-Liefert alle veröffentlichten Datasets als `dcat:Catalog` in JSON-LD. Parameter: `page`, `per_page`, `theme`, `license`.
+Liefert alle veröffentlichten Datasets als `dcat:Catalog` in JSON-LD.
+
+| Parameter  | Standard | Beschreibung                                       |
+|------------|----------|----------------------------------------------------|
+| `page`     | 1        | Seitennummer                                       |
+| `per_page` | 20       | Einträge pro Seite (max. 100)                      |
+| `theme`    | –        | Filter nach Thema (z.B. `Bildung`)                |
+| `license`  | –        | Filter: Kurzform (`cc-by`) oder volle URI          |
+| `format`   | `jsonld` | `jsonld` → `application/ld+json`, `json` → `application/json` |
+
+Response-Header: `X-WP-Total`, `X-WP-TotalPages`, `X-ODW-Cache` (`HIT`/`MISS`)
 
 #### Einzel-Dataset
 ```
@@ -195,25 +226,34 @@ GET /wp-json/datenatlas/v1/datasets/<id>
 
 ### Erweiterbarkeit
 
-Das Plugin stellt Hooks für eigene Felder und Profile bereit:
+Das Plugin stellt folgende WordPress-Filter zur Erweiterung bereit:
+
+| Hook                  | Beschreibung                                      |
+|-----------------------|---------------------------------------------------|
+| `odw_license_options` | Weitere Lizenz-Optionen hinzufügen                |
+| `odw_theme_options`   | Weitere Thema-Optionen hinzufügen                 |
+| `odw_dataset_jsonld`  | JSON-LD Array vor Ausgabe anpassen                |
+| `odw_catalog_title`   | Catalog-Titel anpassen                            |
 
 ```php
-// Eigene Felder hinzufügen
-add_filter('odw_extra_fields', function($fields) {
-    return $fields;
-});
+// Eigene Lizenz hinzufügen
+add_filter( 'odw_license_options', function( array $options ): array {
+    $options['https://example.com/custom-license'] = 'Custom License 1.0';
+    return $options;
+} );
 
-// JSON-LD Output anpassen
-add_filter('odw_jsonld_dataset', function($jsonld, $post_id) {
+// JSON-LD Dataset anpassen
+add_filter( 'odw_dataset_jsonld', function( array $jsonld, int $post_id ): array {
+    $jsonld['dct:spatial'] = 'https://sws.geonames.org/2921044/'; // Deutschland
     return $jsonld;
-}, 10, 2);
+}, 10, 2 );
 ```
 
 ### Abhängigkeiten
 
 | Paket | Version | Lizenz |
 |---|---|---|
-| [Carbon Fields](https://carbonfields.net/) | ^3.0 | MIT |
+| [Carbon Fields](https://carbonfields.net/) | ^3.6 | MIT |
 
 ---
 
@@ -243,6 +283,18 @@ git push origin feature/mein-feature
 
 ---
 
+## Deinstallation
+
+Das Plugin löscht bei Deinstallation standardmäßig **keine** Daten (Opt-in). Um alle Plugin-Daten zu löschen, die Option `odw_delete_data_on_uninstall` auf `true` setzen:
+
+```php
+update_option( 'odw_delete_data_on_uninstall', true );
+```
+
+Danach das Plugin im WordPress-Backend deinstallieren.
+
+---
+
 ## Lizenz
 
-MIT License — siehe [`LICENSE`](./LICENSE)
+GPL-2.0-or-later — siehe [`LICENSE`](./LICENSE)
