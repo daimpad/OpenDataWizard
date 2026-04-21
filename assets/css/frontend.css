@@ -1,0 +1,133 @@
+/**
+ * Open Data Wizard — Frontend Styles (Download-Card)
+ *
+ * Nur strukturelle Styles (Abstände, Layout, Rahmen).
+ * Farben und Schriften werden vom aktiven Theme geerbt.
+ */
+
+/* =========================================================================
+   Download-Card
+   ========================================================================= */
+
+.odw-download-card {
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    opacity: 0.99; /* Stacking context für border-color inherit */
+}
+
+/* Header: Titel + Thema-Badge nebeneinander */
+.odw-download-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.875rem;
+}
+
+.odw-download-card__title {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    line-height: 1.3;
+    flex: 1 1 auto;
+}
+
+.odw-download-card__theme {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 0.2em 0.65em;
+    border: 1px solid currentColor;
+    border-radius: 99px;
+    font-size: 0.8em;
+    opacity: 0.65;
+    white-space: nowrap;
+}
+
+/* Metadaten-Liste */
+.odw-download-card__meta {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.3rem 1rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+.odw-download-card__meta-row {
+    display: contents;
+}
+
+.odw-download-card__meta dt {
+    font-weight: 500;
+    opacity: 0.65;
+}
+
+.odw-download-card__meta dd {
+    margin: 0;
+}
+
+/* Footer: Download-Button + Datei-Info */
+.odw-download-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid currentColor;
+    opacity: inherit;
+}
+
+.odw-download-card__button {
+    display: inline-block;
+    padding: 0.45em 1.1em;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-decoration: none;
+    line-height: 1.4;
+}
+
+.odw-download-card__button:hover {
+    opacity: 0.8;
+}
+
+.odw-download-card__file-info {
+    font-size: 0.85em;
+    opacity: 0.65;
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+
+@media screen and (max-width: 480px) {
+    .odw-download-card__header {
+        flex-direction: column;
+    }
+
+    .odw-download-card__meta {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .odw-download-card__meta-row {
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .odw-download-card__meta dt {
+        display: inline;
+    }
+
+    .odw-download-card__meta dt::after {
+        content: ': ';
+    }
+
+    .odw-download-card__meta dd {
+        display: inline;
+    }
+}
