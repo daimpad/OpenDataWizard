@@ -312,6 +312,28 @@ To add a new filter to `/catalog`:
 3. Pass to `WP_Query` constructor
 4. Update transient cache key to include filter in MD5
 
+### Adding a WP-CLI Command
+
+WP-CLI commands are registered in `class-cli.php` (only if WP-CLI is defined).
+
+Pattern:
+```php
+public static function my_command( array $args, array $assoc_args ): void {
+    // $args: positional arguments (e.g. 'filter-value')
+    // $assoc_args: named arguments (e.g. --all, --format=json)
+    
+    \WP_CLI::success( 'Operation completed.' );
+    // or: \WP_CLI::error( 'Something went wrong.' );
+}
+```
+
+To register:
+1. Add method to `ODW_CLI` class
+2. In `init()`, call: `\WP_CLI::add_command( 'open-data-wizard subcommand', array( self::class, 'my_command' ) );`
+3. Add docblock with `## OPTIONS`, `## EXAMPLES` sections (WP-CLI standard)
+4. Add tests in `tests/test-cli.php` (stub WP_CLI classes at file-level if needed)
+5. Update README.md § "WP-CLI Befehle"
+
 ---
 
 ## Debugging Tips

@@ -179,7 +179,8 @@ open-data-wizard/
 │   ├── class-admin.php               # Listenansicht, wp.media Meta-Box, Help Tabs, Assets
 │   ├── class-shortcode.php           # [odw_dataset]-Shortcode, Download-Card             [v1.4.0]
 │   ├── class-setup.php               # Demo-Datensatz bei Aktivierung, Willkommens-Notice [v1.5.0]
-│   └── class-settings.php            # Einstellungsseite (Catalog, Defaults, API, Cleanup) [v1.6.0]
+│   ├── class-settings.php            # Einstellungsseite (Catalog, Defaults, API, Cleanup) [v1.6.0]
+│   └── class-cli.php                 # WP-CLI Befehle (Massenoperationen)                  [v2.0.0]
 ├── assets/
 │   ├── js/
 │   │   ├── wizard-tabs.js            # Tab-Navigation (Vanilla JS, kein jQuery)
@@ -357,6 +358,28 @@ add_filter( 'odw_dataset_jsonld', function( array $jsonld, int $post_id ): array
     return $jsonld;
 }, 10, 2 );
 ```
+
+### WP-CLI Befehle
+
+Das Plugin stellt WP-CLI Befehle für Massenoperationen bereit:
+
+```bash
+# Qualitätsscores für alle veröffentlichten Datasets neu berechnen
+wp open-data-wizard quality recalculate
+
+# Alle Datasets einschließlich Entwürfe und Trash berechnen
+wp open-data-wizard quality recalculate --all
+
+# Alle REST API Transient-Caches löschen
+wp open-data-wizard cache clear
+```
+
+Diese Befehle sind nützlich für:
+- Regelmäßige Qualitäts-Neubewertung nach Massenänderungen
+- Cache-Invalidierung nach manuellen DB-Eingriffen oder Migrationen
+- Automatisierung via Cron-Jobs oder CI/CD-Pipelines
+
+---
 
 ### Abhängigkeiten
 

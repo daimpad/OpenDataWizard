@@ -134,6 +134,7 @@ function odw_bootstrap(): void {
 	require_once ODW_PLUGIN_DIR . 'includes/class-quality.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-admin.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-shortcode.php';
+	require_once ODW_PLUGIN_DIR . 'includes/class-cli.php';
 
 	ODW_Settings::init();
 	ODW_Post_Types::init();
@@ -144,6 +145,7 @@ function odw_bootstrap(): void {
 	ODW_Admin::init();
 	ODW_Shortcode::init();
 	ODW_Setup::init();
+	ODW_CLI::init();
 }
 add_action( 'after_setup_theme', 'odw_bootstrap' );
 

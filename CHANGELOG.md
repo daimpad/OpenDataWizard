@@ -7,6 +7,18 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0] — TBD (In Entwicklung)
+
+### Hinzugefügt
+- **WP-CLI Befehle für Massenoperationen** (`includes/class-cli.php`):
+  - `wp open-data-wizard quality recalculate` — Qualitätsscores für alle (oder gefilterte) Datasets neu berechnen
+  - `wp open-data-wizard quality recalculate --all` — Einschließlich Draft und Trash-Posts
+  - `wp open-data-wizard cache clear` — Alle REST API Transient-Caches (Catalog, Delta, Dataset) löschen
+  - Nützlich für Massenänderungen, Migrationen, Cron-Jobs und CI/CD-Automatisierung
+  - 4 neue PHPUnit-Tests für CLI-Funktionalität
+
+---
+
 ## [1.9.0] — 2026-04-22
 
 ### Hinzugefügt
