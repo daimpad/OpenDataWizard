@@ -51,26 +51,29 @@ class ODW_Fields {
 					Field::make( 'html', 'odw_description_tab1_hint' )
 						->set_html( '<p class="description">' . esc_html__( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) . '</p>' ),
 
-					Field::make( 'text', 'odw_publisher', __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_publisher', __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_publisher' ) : '' )
-						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) ),
+						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) )
+						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V.', 'open-data-wizard' ) ),
 
-					Field::make( 'textarea', 'odw_description', __( 'Beschreibung (dct:description)', 'open-data-wizard' ) )
+					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_rows( 5 )
-						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) ),
+						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
+						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_license', __( 'Lizenz (dct:license)', 'open-data-wizard' ) )
+					Field::make( 'select', 'odw_license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
-						->add_options( self::get_license_options() ),
+						->add_options( self::get_license_options() )
+						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
 				)
 			)
 			->add_tab(
 				__( '2 — Optionale Angaben', 'open-data-wizard' ),
 				array(
-					Field::make( 'select', 'odw_language', __( 'Sprache (dct:language)', 'open-data-wizard' ) )
+					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
 						->add_options(
 							array(
@@ -78,48 +81,55 @@ class ODW_Fields {
 								'de' => __( 'Deutsch (DE)', 'open-data-wizard' ),
 								'en' => __( 'Englisch (EN)', 'open-data-wizard' ),
 							)
-						),
+						)
+						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
 
-					Field::make( 'textarea', 'odw_keywords', __( 'Schlagworte (dcat:keyword)', 'open-data-wizard' ) )
+					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Stichworten finde ich diese Daten?', 'open-data-wizard' ) )
 						->set_rows( 3 )
 						->set_attribute( 'placeholder', __( 'z.B. Umwelt', 'open-data-wizard' ) )
-						->set_help_text( __( 'Geben Sie jedes Schlagwort in einer eigenen Zeile ein.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( 'Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_theme', __( 'Thema (dcat:theme)', 'open-data-wizard' ) )
-						->add_options( self::get_theme_options() ),
+					Field::make( 'select', 'odw_theme', __( 'In welche Kategorie gehört dieser Datensatz?', 'open-data-wizard' ) )
+						->add_options( self::get_theme_options() )
+						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_issued', __( 'Veröffentlichungsdatum (dct:issued)', 'open-data-wizard' ) )
-						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) ),
-
-					Field::make( 'date', 'odw_modified', __( 'Änderungsdatum (dct:modified)', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
 						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
-						->set_help_text( __( 'Wird automatisch bei jeder Speicherung aktualisiert.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
+
+					Field::make( 'date', 'odw_modified', __( 'Wann wurden diese Daten zuletzt aktualisiert?', 'open-data-wizard' ) )
+						->set_storage_format( 'Y-m-d' )
+						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22', 'open-data-wizard' ) ),
 				)
 			)
 			->add_tab(
 				__( '3 — Distribution', 'open-data-wizard' ),
 				array(
-					Field::make( 'complex', 'odw_distributions', __( 'Distributionen (dcat:distribution)', 'open-data-wizard' ) )
+					Field::make( 'complex', 'odw_distributions', __( 'Wo können die Daten heruntergeladen werden?', 'open-data-wizard' ) )
 						->set_min( 1 )
 						->set_collapsed( false )
 						->add_fields(
 							array(
-								Field::make( 'text', 'access_url', __( 'Zugriffs-URL (dcat:accessURL)', 'open-data-wizard' ) )
+								Field::make( 'text', 'access_url', __( 'Wo kann ich die Datei herunterladen?', 'open-data-wizard' ) )
 									->set_required( true )
 									->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
-									->set_attribute( 'type', 'url' ),
+									->set_attribute( 'type', 'url' )
+									->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/daten/datei.csv', 'open-data-wizard' ) ),
 
-								Field::make( 'select', 'format', __( 'Format (dct:format)', 'open-data-wizard' ) )
-									->add_options( self::get_format_options() ),
+								Field::make( 'select', 'format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
+									->add_options( self::get_format_options() )
+									->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
 
-								Field::make( 'text', 'byte_size', __( 'Dateigröße in Bytes (dcat:byteSize)', 'open-data-wizard' ) )
+								Field::make( 'text', 'byte_size', __( 'Wie groß ist die Datei (in Bytes)?', 'open-data-wizard' ) )
 									->set_attribute( 'placeholder', __( 'optional, z.B. 204800', 'open-data-wizard' ) )
 									->set_attribute( 'type', 'number' )
-									->set_attribute( 'min', '0' ),
+									->set_attribute( 'min', '0' )
+									->set_help_text( __( 'DATEIGRÖSSE IN BYTES (dcat:byteSize)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 204800 (ca. 200 KB). Optional.', 'open-data-wizard' ) ),
 							)
-						),
+						)
+						->set_help_text( __( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Sie können mehrere Dateiformate (z.B. CSV und JSON) als separate Distributionen anbieten.', 'open-data-wizard' ) ),
 
 				)
 			)
@@ -130,44 +140,50 @@ class ODW_Fields {
 					Field::make( 'html', 'odw_ext_hint_landing' )
 						->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
 
-					Field::make( 'text', 'odw_landing_page', __( 'Projektseite (dcat:landingPage)', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_landing_page', __( 'Wo finde ich mehr Informationen zu diesem Projekt?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/projekt' )
-						->set_help_text( __( 'URL der Projektwebsite oder des Datenportals, auf der weitere Informationen zum Datensatz zu finden sind.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'PROJEKTSEITE (dcat:landingPage)', 'open-data-wizard' ) . "\n\n" . __( 'URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_accrual_periodicity', __( 'Aktualisierungsfrequenz (dct:accrualPeriodicity)', 'open-data-wizard' ) )
-						->add_options( self::get_periodicity_options() ),
+					Field::make( 'select', 'odw_accrual_periodicity', __( 'Wie oft werden diese Daten aktualisiert?', 'open-data-wizard' ) )
+						->add_options( self::get_periodicity_options() )
+						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
 
 					// --- Abdeckung ---
 					Field::make( 'html', 'odw_ext_hint_coverage' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
 
-					Field::make( 'text', 'odw_spatial', __( 'Geographische Abdeckung (dct:spatial)', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Deutschland, Berlin oder GeoNames-URI', 'open-data-wizard' ) )
-						->set_help_text( __( 'Freitext oder URI (z.B. https://sws.geonames.org/2950159/).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext oder URI. Beispiel: Deutschland, Berlin, https://sws.geonames.org/2950159/', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_temporal_start', __( 'Zeitlicher Bezug — Start (dct:temporal)', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann sind diese Daten gültig?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) ),
+						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-01', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_temporal_end', __( 'Zeitlicher Bezug — Ende (dct:temporal)', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann sind diese Daten gültig?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) ),
+						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-12-31', 'open-data-wizard' ) ),
 
 					// --- Kontaktpunkt ---
 					Field::make( 'html', 'odw_ext_hint_contact' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
 
-					Field::make( 'text', 'odw_contact_name', __( 'Name / Organisation', 'open-data-wizard' ) )
-						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) ),
+					Field::make( 'text', 'odw_contact_name', __( 'Wer ist Ansprechperson für Fragen zu diesen Daten?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
+						->set_help_text( __( 'NAME / ORGANISATION (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
 
-					Field::make( 'text', 'odw_contact_email', __( 'E-Mail-Adresse', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_contact_email', __( 'Unter welcher E-Mail-Adresse kann ich Fragen stellen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
-						->set_attribute( 'placeholder', 'opendata@beispiel.de' ),
+						->set_attribute( 'placeholder', 'opendata@beispiel.de' )
+						->set_help_text( __( 'E-MAIL-ADRESSE (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: opendata@beispiel.de', 'open-data-wizard' ) ),
 
-					Field::make( 'text', 'odw_contact_url', __( 'Website', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_contact_url', __( 'Auf welcher Website finde ich weitere Kontaktinformationen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
-						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' ),
+						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
+						->set_help_text( __( 'WEBSITE (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
 				)
 			)
 			->add_tab(
@@ -230,15 +246,15 @@ class ODW_Fields {
 		return array(
 			array(
 				'meta_key' => '_odw_description',
-				'label'    => __( 'Beschreibung (dct:description)', 'open-data-wizard' ),
+				'label'    => __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ),
 			),
 			array(
 				'meta_key' => '_odw_publisher',
-				'label'    => __( 'Herausgebende Organisation (dct:publisher)', 'open-data-wizard' ),
+				'label'    => __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ),
 			),
 			array(
 				'meta_key' => '_odw_license',
-				'label'    => __( 'Lizenz (dct:license)', 'open-data-wizard' ),
+				'label'    => __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ),
 			),
 		);
 	}

@@ -10,6 +10,15 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 ## [2.0.0] — TBD (In Entwicklung)
 
 ### Hinzugefügt
+- **Benutzerfreundlicher Wizard-Form (Phase 1+2 UX-Verbesserung)**:
+  - Alle 19 Form-Felder mit **benutzergerechten Fragen statt technischen Begriffen**:
+    - Tab 1: „Wer gibt diese Daten heraus?" statt „Herausgebende Organisation (dct:publisher)"
+    - Tab 2: „In welche Kategorie gehört dieser Datensatz?" statt „Thema (dcat:theme)"
+    - Tab 3: „Wo können die Daten heruntergeladen werden?" statt „Distributionen (dcat:distribution)"
+    - Tab 4: „Wie oft werden diese Daten aktualisiert?" statt „Aktualisierungsfrequenz (dct:accrualPeriodicity)"
+  - **Hilftexte mit Beispielen** für alle Felder (Format: Original-Label + DCAT-AP Bezeichnung klein + praktisches Beispiel)
+  - **Validierungsmeldungen** verwenden jetzt neue, verständliche Labels
+  - Reduziert Anfängerhürde drastisch: Admins verstehen sofort, was in welches Feld gehört
 - **WP-CLI Befehle für Massenoperationen** (`includes/class-cli.php`):
   - `wp open-data-wizard quality recalculate` — Qualitätsscores für alle (oder gefilterte) Datasets neu berechnen
   - `wp open-data-wizard quality recalculate --all` — Einschließlich Draft und Trash-Posts
