@@ -15,11 +15,32 @@ if ( ! class_exists( 'WP_Query' ) ) {
 	 */
 	class WP_Query {
 		/**
+		 * Preset result sets for testing (used by test-rest-delta.php).
+		 *
+		 * @var array<int, array<string,mixed>>
+		 */
+		public static array $mock_queue = array();
+
+		/**
 		 * Array of post IDs.
 		 *
 		 * @var array<int>
 		 */
 		public array $posts = array();
+
+		/**
+		 * Total number of found posts.
+		 *
+		 * @var int
+		 */
+		public int $found_posts = 0;
+
+		/**
+		 * Total number of result pages.
+		 *
+		 * @var int
+		 */
+		public int $max_num_pages = 0;
 
 		/**
 		 * Constructor.
