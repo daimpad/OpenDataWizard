@@ -31,6 +31,10 @@ class ODW_Post_Types {
 	 * Der CPT ist nicht öffentlich (kein Frontend-Permalink), wird aber im
 	 * Admin-Bereich angezeigt und über eigene REST-Endpoints ausgeliefert
 	 * (`show_in_rest => false`, da wir `/datenatlas/v1/` verwenden).
+	 *
+	 * Alle schreibenden Operationen (erstellen, bearbeiten, löschen) erfordern
+	 * die Capability `manage_open_data`, die Admins und Editoren bei Aktivierung
+	 * zugewiesen wird.
 	 */
 	public static function register(): void {
 		$labels = array(
@@ -59,6 +63,25 @@ class ODW_Post_Types {
 			'filter_items_list'     => __( 'Datensatzliste filtern', 'open-data-wizard' ),
 		);
 
+		// Map all CPT capabilities to manage_open_data so only admins/editors
+		// (who receive the cap on activation) can create or modify datasets.
+		$capabilities = array(
+			'edit_post'              => 'manage_open_data',
+			'read_post'              => 'read',
+			'delete_post'            => 'manage_open_data',
+			'edit_posts'             => 'manage_open_data',
+			'edit_others_posts'      => 'manage_open_data',
+			'publish_posts'          => 'manage_open_data',
+			'read_private_posts'     => 'manage_open_data',
+			'delete_posts'           => 'manage_open_data',
+			'delete_private_posts'   => 'manage_open_data',
+			'delete_published_posts' => 'manage_open_data',
+			'delete_others_posts'    => 'manage_open_data',
+			'edit_private_posts'     => 'manage_open_data',
+			'edit_published_posts'   => 'manage_open_data',
+			'create_posts'           => 'manage_open_data',
+		);
+
 		$args = array(
 			'label'              => __( 'Datensatz', 'open-data-wizard' ),
 			'labels'             => $labels,
@@ -71,7 +94,9 @@ class ODW_Post_Types {
 			'show_in_rest'       => false, // REST is handled by custom endpoints in class-rest-api.php.
 			'query_var'          => false,
 			'rewrite'            => false,
-			'capability_type'    => 'post',
+			'capability_type'    => 'odw_dataset',
+			'map_meta_cap'       => true,
+			'capabilities'       => $capabilities,
 			'has_archive'        => false,
 			'hierarchical'       => false,
 			'menu_position'      => 20,

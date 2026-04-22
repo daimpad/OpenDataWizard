@@ -479,13 +479,15 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( ! empty( $distributions ) && is_array( $distributions ) ) {
 		$dist_list = array();
 		foreach ( $distributions as $dist ) {
-			if ( empty( $dist['access_url'] ) ) {
+			// esc_url_raw() strips javascript:, data:, and other non-HTTP schemes.
+			$access_url = esc_url_raw( (string) ( $dist['access_url'] ?? '' ) );
+			if ( empty( $access_url ) ) {
 				continue;
 			}
 
 			$dist_item = array(
 				'@type'          => 'dcat:Distribution',
-				'dcat:accessURL' => $dist['access_url'],
+				'dcat:accessURL' => $access_url,
 			);
 
 			if ( ! empty( $dist['format'] ) ) {
