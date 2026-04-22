@@ -19,11 +19,14 @@
         "optimize-autoloader": true,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "8.1.0"
         }
     },
     "scripts": {
-        "phpcs":   "phpcs --standard=WordPress --extensions=php --ignore=vendor/ .",
-        "phpcbf":  "phpcbf --standard=WordPress --extensions=php --ignore=vendor/ .",
+        "phpcs":   "phpcs --standard=phpcs.xml",
+        "phpcbf":  "phpcbf --standard=phpcs.xml",
         "phpstan": "phpstan analyse --configuration=phpstan.neon",
         "test":    "phpunit --configuration=phpunit.xml"
     }

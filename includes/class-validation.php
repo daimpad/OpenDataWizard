@@ -11,223 +11,234 @@
 declare(strict_types=1);
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
+/**
+ * Blocks publishing of odw_dataset posts that fail required-field validation.
+ *
+ * @package OpenDataWizard
+ */
 class ODW_Validation {
 
-    /** Transient-Prefix für Validierungsfehler (per Post-ID). */
-    private const TRANSIENT_PREFIX = 'odw_validation_errors_';
+	/** Transient-Prefix für Validierungsfehler (per Post-ID). */
+	private const TRANSIENT_PREFIX = 'odw_validation_errors_';
 
-    public static function init(): void {
-        add_filter( 'wp_insert_post_data', [ self::class, 'intercept_publish' ], 10, 2 );
-        add_action( 'admin_notices', [ self::class, 'show_validation_notice' ] );
-    }
+	/**
+	 * Registers WordPress hooks.
+	 */
+	public static function init(): void {
+		add_filter( 'wp_insert_post_data', array( self::class, 'intercept_publish' ), 10, 2 );
+		add_action( 'admin_notices', array( self::class, 'show_validation_notice' ) );
+	}
 
-    /**
-     * Intercept the post save and prevent publishing if required fields are missing.
-     * Runs before post is written to DB.
-     *
-     * @param array<string, mixed> $data    Sanitised post data to be inserted.
-     * @param array<string, mixed> $postarr Raw $_POST data.
-     * @return array<string, mixed>
-     */
-    public static function intercept_publish( array $data, array $postarr ): array {
-        // Only act on odw_dataset posts being set to publish.
-        if ( 'odw_dataset' !== $data['post_type'] ) {
-            return $data;
-        }
+	/**
+	 * Intercept the post save and prevent publishing if required fields are missing.
+	 * Runs before post is written to DB.
+	 *
+	 * @param array<string, mixed> $data    Sanitised post data to be inserted.
+	 * @param array<string, mixed> $postarr Raw $_POST data.
+	 * @return array<string, mixed>
+	 */
+	public static function intercept_publish( array $data, array $postarr ): array {
+		// Only act on odw_dataset posts being set to publish.
+		if ( 'odw_dataset' !== $data['post_type'] ) {
+			return $data;
+		}
 
-        if ( 'publish' !== $data['post_status'] ) {
-            return $data;
-        }
+		if ( 'publish' !== $data['post_status'] ) {
+			return $data;
+		}
 
-        $post_id = (int) ( $postarr['ID'] ?? 0 );
+		$post_id = (int) ( $postarr['ID'] ?? 0 );
 
-        if ( ! $post_id ) {
-            return $data;
-        }
+		if ( ! $post_id ) {
+			return $data;
+		}
 
-        // Skip if prior status was already publish (re-saving a published post is OK
-        // as long as fields aren't removed — validated below).
-        $errors = self::validate( $post_id, $postarr );
+		// Skip if prior status was already publish (re-saving a published post is OK
+		// as long as fields aren't removed — validated below).
+		$errors = self::validate( $post_id, $postarr );
 
-        if ( empty( $errors ) ) {
-            return $data;
-        }
+		if ( empty( $errors ) ) {
+			return $data;
+		}
 
-        // Revert status to draft.
-        $data['post_status'] = 'draft';
+		// Revert status to draft.
+		$data['post_status'] = 'draft';
 
-        // Store errors so the admin notice can display them.
-        set_transient(
-            self::TRANSIENT_PREFIX . $post_id,
-            $errors,
-            300 // 5 Minuten
-        );
+		// Store errors so the admin notice can display them.
+		set_transient(
+			self::TRANSIENT_PREFIX . $post_id,
+			$errors,
+			300 // 5 Minuten
+		);
 
-        return $data;
-    }
+		return $data;
+	}
 
-    /**
-     * Validate required fields.
-     *
-     * Carbon Fields saves to post_meta directly before/during save_post.
-     * At wp_insert_post_data time, the CF values may not yet be in the DB,
-     * so we additionally look at $_POST['carbon_fields_compact_input'].
-     *
-     * @param int                  $post_id  Post ID.
-     * @param array<string, mixed> $postarr  Raw $_POST data.
-     * @return string[]  Array of human-readable error messages (empty = valid).
-     */
-    private static function validate( int $post_id, array $postarr ): array {
-        $errors = [];
+	/**
+	 * Validate required fields.
+	 *
+	 * Carbon Fields saves to post_meta directly before/during save_post.
+	 * At wp_insert_post_data time, the CF values may not yet be in the DB,
+	 * so we additionally look at $_POST['carbon_fields_compact_input'].
+	 *
+	 * @param int                  $post_id  Post ID.
+	 * @param array<string, mixed> $postarr  Raw $_POST data.
+	 * @return string[]  Array of human-readable error messages (empty = valid).
+	 */
+	private static function validate( int $post_id, array $postarr ): array {
+		$errors = array();
 
-        // Carbon Fields stores compact input in a JSON blob during save.
-        $cf_input = self::get_carbon_input( $postarr );
+		// Carbon Fields stores compact input in a JSON blob during save.
+		$cf_input = self::get_carbon_input( $postarr );
 
-        // --- Titel (WP-native, nicht in Carbon Fields) ---
-        $title = trim( (string) ( $postarr['post_title'] ?? '' ) );
-        if ( '' === $title ) {
-            $errors[] = __( 'Titel (dct:title)', 'open-data-wizard' );
-        }
+		// --- Titel (WP-native, nicht in Carbon Fields) ---
+		$title = trim( (string) ( $postarr['post_title'] ?? '' ) );
+		if ( '' === $title ) {
+			$errors[] = __( 'Titel (dct:title)', 'open-data-wizard' );
+		}
 
-        // --- Pflichtfelder aus zentraler Registry (ODW_Fields::get_required_fields) ---
-        foreach ( ODW_Fields::get_required_fields() as $field ) {
-            $value = self::get_field_value( $post_id, $cf_input, $field['meta_key'] );
-            if ( '' === trim( (string) $value ) ) {
-                $errors[] = $field['label'];
-            }
-        }
+		// --- Pflichtfelder aus zentraler Registry (ODW_Fields::get_required_fields) ---
+		foreach ( ODW_Fields::get_required_fields() as $field ) {
+			$value = self::get_field_value( $post_id, $cf_input, $field['meta_key'] );
+			if ( '' === trim( (string) $value ) ) {
+				$errors[] = $field['label'];
+			}
+		}
 
-        // --- Mindestens 1 Distribution mit Zugriffs-URL ---
-        $has_distribution = self::has_valid_distribution( $post_id, $cf_input );
-        if ( ! $has_distribution ) {
-            $errors[] = __( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', 'open-data-wizard' );
-        }
+		// --- Mindestens 1 Distribution mit Zugriffs-URL ---
+		$has_distribution = self::has_valid_distribution( $post_id, $cf_input );
+		if ( ! $has_distribution ) {
+			$errors[] = __( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', 'open-data-wizard' );
+		}
 
-        return $errors;
-    }
+		return $errors;
+	}
 
-    /**
-     * Get a field value: prefer CF compact input (new save), fall back to existing meta.
-     *
-     * @param int                  $post_id   Post ID.
-     * @param array<string, mixed> $cf_input  Decoded Carbon Fields compact input.
-     * @param string               $meta_key  DB meta key (underscore-prefixed, e.g. _odw_publisher).
-     * @return mixed
-     */
-    private static function get_field_value( int $post_id, array $cf_input, string $meta_key ): mixed {
-        if ( isset( $cf_input[ $meta_key ] ) ) {
-            return $cf_input[ $meta_key ];
-        }
+	/**
+	 * Get a field value: prefer CF compact input (new save), fall back to existing meta.
+	 *
+	 * @param int                  $post_id   Post ID.
+	 * @param array<string, mixed> $cf_input  Decoded Carbon Fields compact input.
+	 * @param string               $meta_key  DB meta key (underscore-prefixed, e.g. _odw_publisher).
+	 * @return mixed
+	 */
+	private static function get_field_value( int $post_id, array $cf_input, string $meta_key ): mixed {
+		if ( isset( $cf_input[ $meta_key ] ) ) {
+			return $cf_input[ $meta_key ];
+		}
 
-        return get_post_meta( $post_id, $meta_key, true );
-    }
+		return get_post_meta( $post_id, $meta_key, true );
+	}
 
-    /**
-     * Check whether the post has at least one distribution with a non-empty access_url.
-     *
-     * @param int                  $post_id  Post ID.
-     * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
-     */
-    private static function has_valid_distribution( int $post_id, array $cf_input ): bool {
-        // Check CF compact input for new distributions.
-        foreach ( $cf_input as $key => $value ) {
-            // CF compact keys for complex fields look like: _odw_distributions[0][access_url]
-            if ( str_contains( (string) $key, '_odw_distributions' ) && str_contains( (string) $key, 'access_url' ) ) {
-                if ( ! empty( $value ) && self::is_valid_url( (string) $value ) ) {
-                    return true;
-                }
-            }
-        }
+	/**
+	 * Check whether the post has at least one distribution with a non-empty access_url.
+	 *
+	 * @param int                  $post_id  Post ID.
+	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
+	 */
+	private static function has_valid_distribution( int $post_id, array $cf_input ): bool {
+		// Check CF compact input for new distributions.
+		foreach ( $cf_input as $key => $value ) {
+			// CF compact keys for complex fields look like: _odw_distributions[0][access_url].
+			if ( str_contains( (string) $key, '_odw_distributions' ) && str_contains( (string) $key, 'access_url' ) ) {
+				if ( ! empty( $value ) && self::is_valid_url( (string) $value ) ) {
+					return true;
+				}
+			}
+		}
 
-        // Fall back to existing meta.
-        $distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
+		// Fall back to existing meta.
+		$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
 
-        if ( ! is_array( $distributions ) ) {
-            return false;
-        }
+		if ( ! is_array( $distributions ) ) {
+			return false;
+		}
 
-        foreach ( $distributions as $dist ) {
-            if ( ! empty( $dist['access_url'] ) && self::is_valid_url( (string) $dist['access_url'] ) ) {
-                return true;
-            }
-        }
+		foreach ( $distributions as $dist ) {
+			if ( ! empty( $dist['access_url'] ) && self::is_valid_url( (string) $dist['access_url'] ) ) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * Validate that a string is a safe HTTP(S) URL.
-     * Blocks javascript:, data:, and other non-HTTP schemes.
-     */
-    private static function is_valid_url( string $url ): bool {
-        if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-            return false;
-        }
+	/**
+	 * Validate that a string is a safe HTTP(S) URL.
+	 * Blocks javascript:, data:, and other non-HTTP schemes.
+	 *
+	 * @param string $url URL to validate.
+	 * @return bool True when scheme is http, https, ftp, or ftps.
+	 */
+	private static function is_valid_url( string $url ): bool {
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			return false;
+		}
 
-        $scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
-        return in_array( $scheme, [ 'http', 'https', 'ftp', 'ftps' ], true );
-    }
+		$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+		return in_array( $scheme, array( 'http', 'https', 'ftp', 'ftps' ), true );
+	}
 
-    /**
-     * Parse the Carbon Fields compact JSON input from $_POST.
-     *
-     * @param array<string, mixed> $postarr
-     * @return array<string, mixed>
-     */
-    private static function get_carbon_input( array $postarr ): array {
-        $raw = $postarr['carbon_fields_compact_input'] ?? '';
+	/**
+	 * Parse the Carbon Fields compact JSON input from $_POST.
+	 *
+	 * @param array<string, mixed> $postarr Raw $_POST data passed to wp_insert_post_data.
+	 * @return array<string, mixed> Decoded field map, empty array on failure.
+	 */
+	private static function get_carbon_input( array $postarr ): array {
+		$raw = $postarr['carbon_fields_compact_input'] ?? '';
 
-        if ( empty( $raw ) ) {
-            return [];
-        }
+		if ( empty( $raw ) ) {
+			return array();
+		}
 
-        if ( is_array( $raw ) ) {
-            return $raw;
-        }
+		if ( is_array( $raw ) ) {
+			return $raw;
+		}
 
-        $decoded = json_decode( (string) $raw, true );
-        return is_array( $decoded ) ? $decoded : [];
-    }
+		$decoded = json_decode( (string) $raw, true );
+		return is_array( $decoded ) ? $decoded : array();
+	}
 
-    /**
-     * Display Admin Notice if validation errors are stored for the current post.
-     */
-    public static function show_validation_notice(): void {
-        $screen = get_current_screen();
+	/**
+	 * Display Admin Notice if validation errors are stored for the current post.
+	 */
+	public static function show_validation_notice(): void {
+		$screen = get_current_screen();
 
-        if ( ! $screen || ! in_array( $screen->base, [ 'post', 'post-new' ], true ) ) {
-            return;
-        }
+		if ( ! $screen || ! in_array( $screen->base, array( 'post', 'post-new' ), true ) ) {
+			return;
+		}
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : ( isset( $_POST['post_ID'] ) ? absint( $_POST['post_ID'] ) : 0 );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.NonceVerification.Missing -- read-only: used only to look up stored transient errors.
+		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : ( isset( $_POST['post_ID'] ) ? absint( $_POST['post_ID'] ) : 0 );
 
-        if ( ! $post_id ) {
-            return;
-        }
+		if ( ! $post_id ) {
+			return;
+		}
 
-        $errors = get_transient( self::TRANSIENT_PREFIX . $post_id );
+		$errors = get_transient( self::TRANSIENT_PREFIX . $post_id );
 
-        if ( ! is_array( $errors ) || empty( $errors ) ) {
-            return;
-        }
+		if ( ! is_array( $errors ) || empty( $errors ) ) {
+			return;
+		}
 
-        delete_transient( self::TRANSIENT_PREFIX . $post_id );
+		delete_transient( self::TRANSIENT_PREFIX . $post_id );
 
-        echo '<div class="notice notice-error odw-validation-notice is-dismissible">';
-        echo '<p><strong>' . esc_html__( 'Open Data Wizard: Veröffentlichung blockiert', 'open-data-wizard' ) . '</strong></p>';
-        echo '<p>' . esc_html__( 'Folgende Pflichtfelder fehlen oder sind leer:', 'open-data-wizard' ) . '</p>';
-        echo '<ul class="odw-missing-fields">';
+		echo '<div class="notice notice-error odw-validation-notice is-dismissible">';
+		echo '<p><strong>' . esc_html__( 'Open Data Wizard: Veröffentlichung blockiert', 'open-data-wizard' ) . '</strong></p>';
+		echo '<p>' . esc_html__( 'Folgende Pflichtfelder fehlen oder sind leer:', 'open-data-wizard' ) . '</p>';
+		echo '<ul class="odw-missing-fields">';
 
-        foreach ( $errors as $field_label ) {
-            echo '<li>' . esc_html( $field_label ) . '</li>';
-        }
+		foreach ( $errors as $field_label ) {
+			echo '<li>' . esc_html( $field_label ) . '</li>';
+		}
 
-        echo '</ul>';
-        echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen.', 'open-data-wizard' ) . '</p>';
-        echo '</div>';
-    }
+		echo '</ul>';
+		echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen.', 'open-data-wizard' ) . '</p>';
+		echo '</div>';
+	}
 }

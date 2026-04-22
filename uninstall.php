@@ -9,34 +9,36 @@
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
 // Nur löschen wenn die Option gesetzt ist (Opt-in Datenlöschung).
-$odw_settings = (array) get_option( 'odw_settings', [] );
+$odw_settings = (array) get_option( 'odw_settings', array() );
 if ( empty( $odw_settings['delete_on_uninstall'] ) ) {
-    return;
+	return;
 }
 
 // Capabilities entfernen.
-$roles = [ 'administrator', 'editor' ];
-foreach ( $roles as $role_name ) {
-    $role = get_role( $role_name );
-    if ( $role ) {
-        $role->remove_cap( 'manage_open_data' );
-    }
+$odw_roles = array( 'administrator', 'editor' );
+foreach ( $odw_roles as $odw_role_name ) {
+	$odw_role = get_role( $odw_role_name );
+	if ( $odw_role ) {
+		$odw_role->remove_cap( 'manage_open_data' );
+	}
 }
 
 // Alle odw_dataset Posts inkl. Postmeta löschen.
-$posts = get_posts( [
-    'post_type'      => 'odw_dataset',
-    'post_status'    => 'any',
-    'posts_per_page' => -1,
-    'fields'         => 'ids',
-] );
+$odw_post_ids = get_posts(
+	array(
+		'post_type'      => 'odw_dataset',
+		'post_status'    => 'any',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+	)
+);
 
-foreach ( $posts as $post_id ) {
-    wp_delete_post( (int) $post_id, true );
+foreach ( $odw_post_ids as $odw_pid ) {
+	wp_delete_post( (int) $odw_pid, true );
 }
 
 // Plugin-Optionen löschen.
@@ -48,15 +50,15 @@ delete_option( 'odw_show_welcome' );
 global $wpdb;
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
-    $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-        '_transient_odw_%'
-    )
+	$wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+		'_transient_odw_%'
+	)
 );
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
-    $wpdb->prepare(
-        "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-        '_transient_timeout_odw_%'
-    )
+	$wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+		'_transient_timeout_odw_%'
+	)
 );

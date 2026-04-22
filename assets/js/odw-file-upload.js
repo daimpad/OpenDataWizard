@@ -51,6 +51,11 @@
         _setEmpty();
     } );
 
+    /**
+     * Setzt die UI in den „Datei ausgewählt"-Zustand.
+     *
+     * @param {string} name Dateiname oder Attachment-Titel aus der Mediathek.
+     */
     function _setHasFile( name ) {
         $fileName.text( name );
         $preview
@@ -59,6 +64,10 @@
         $removeBtn.prop( 'disabled', false );
     }
 
+    /**
+     * Setzt die UI in den leeren Zustand (keine Datei ausgewählt).
+     * Wird beim Klick auf „Entfernen" aufgerufen.
+     */
     function _setEmpty() {
         $fileName.text( odwFileUpload.labels.noFile );
         $preview
