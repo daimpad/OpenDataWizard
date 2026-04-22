@@ -21,6 +21,3 @@ parameters:
         - ODW_PLUGIN_DIR
         - ODW_PLUGIN_URL
         - ODW_PLUGIN_FILE
-
-includes:
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
