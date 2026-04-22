@@ -7,6 +7,60 @@ Versionierung folgt [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0] — TBD (In Entwicklung)
+
+### Hinzugefügt
+- **Benutzerfreundlicher Wizard-Form (Phase 1+2 UX-Verbesserung)**:
+  - Alle 19 Form-Felder mit **benutzergerechten Fragen statt technischen Begriffen**:
+    - Tab 1: „Wer gibt diese Daten heraus?" statt „Herausgebende Organisation (dct:publisher)"
+    - Tab 2: „In welche Kategorie gehört dieser Datensatz?" statt „Thema (dcat:theme)"
+    - Tab 3: „Wo können die Daten heruntergeladen werden?" statt „Distributionen (dcat:distribution)"
+    - Tab 4: „Wie oft werden diese Daten aktualisiert?" statt „Aktualisierungsfrequenz (dct:accrualPeriodicity)"
+  - **Hilftexte mit Beispielen** für alle Felder (Format: Original-Label + DCAT-AP Bezeichnung klein + praktisches Beispiel)
+  - **Validierungsmeldungen** verwenden jetzt neue, verständliche Labels
+  - Reduziert Anfängerhürde drastisch: Admins verstehen sofort, was in welches Feld gehört
+- **WP-CLI Befehle für Massenoperationen** (`includes/class-cli.php`):
+  - `wp open-data-wizard quality recalculate` — Qualitätsscores für alle (oder gefilterte) Datasets neu berechnen
+  - `wp open-data-wizard quality recalculate --all` — Einschließlich Draft und Trash-Posts
+  - `wp open-data-wizard cache clear` — Alle REST API Transient-Caches (Catalog, Delta, Dataset) löschen
+  - Nützlich für Massenänderungen, Migrationen, Cron-Jobs und CI/CD-Automatisierung
+  - 4 neue PHPUnit-Tests für CLI-Funktionalität
+
+---
+
+## [1.9.0] — 2026-04-22
+
+### Hinzugefügt
+- **Delta-Harvesting Endpoint** (`GET /wp-json/datenatlas/v1/delta?since=<ISO8601>`):
+  - Inkrementelles Harvesting für externe Datenportale (z.B. Civora, Piveau)
+  - Liefert nur Datasets, die nach einem Zeitstempel geändert wurden
+  - Tombstone-Einträge für gelöschte/verschobene Datasets (`odw:removed` Array)
+  - ISO 8601 Zeitformat-Unterstützung (YYYY-MM-DD, YYYY-MM-DDTHH:MM:SS, ISO-offsets)
+  - Response-Header: `X-ODW-Delta-Since`, `X-ODW-Generated-At` (für nächsten `since` Wert)
+  - 13 neue PHPUnit-Tests für Validierung, Caching, Tombstones
+- **CLAUDE.md** — Umfassender Entwicklerleitfaden für zukünftige Claude Code Instanzen:
+  - Architektur-Übersicht, Klassen-Hierarchie
+  - Wichtigste Patterns (Capabilities, JSON-LD, Caching, Validierung, Companion Functions)
+  - Debugging-Tipps, Testing-Anleitung, Security-Noten
+  - Erweiterbarkeit via Filters und Hooks
+
+### Geändert
+- **WordPress Coding Standards** vollständig implementiert (PHPCS Level):
+  - 178 Violations → 0 Violations (alle Docblocks, @param/@return Tags, Kommentar-Zeichensetzung)
+  - `phpcs.xml` Konfiguration zur Ausgrenzung praktischer Sniffs (Carbon Fields, Tests)
+  - Yoda Conditions, Short Ternaries, WordPress Globals-Konflikte behoben
+
+### Sicherheit
+- **`access_url` Sanitisierung**: Alle Distribution-URLs werden in der JSON-LD Ausgabe durch `esc_url_raw()` geführt (strippt `javascript:`, `data:` etc. vor Ausgabe)
+- **Capability-basierte Zugriffssteuerung**: CPT `capability_type` auf `odw_dataset` mit explizitem Mapping aller Schreib-Operationen (create, edit, delete, publish) auf `manage_open_data` Capability; effektiv: nur Admins/Editoren können Datasets anlegen
+
+### Behoben
+- PHPStan 2.x Konfiguration (extensions zu includes migriert)
+- Nonce-Verification Warnings in class-validation.php konsolidiert
+- Dokumentation in README.md mit Delta-Endpoint erweitert
+
+---
+
 ## [1.8.0] — 2026-04-21
 
 ### Hinzugefügt

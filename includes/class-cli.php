@@ -1,0 +1,147 @@
+<?php
+/**
+ * WP-CLI Commands for Open Data Wizard
+ *
+ * Provides command-line utilities for bulk operations:
+ * - wp open-data-wizard quality recalculate
+ * - wp open-data-wizard cache clear
+ *
+ * @package OpenDataWizard
+ */
+
+declare(strict_types=1);
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * WP-CLI commands for Open Data Wizard.
+ *
+ * @package OpenDataWizard
+ */
+class ODW_CLI {
+
+	/**
+	 * Registers WP-CLI commands if WP-CLI is available.
+	 */
+	public static function init(): void {
+		if ( ! defined( 'WP_CLI' ) ) {
+			return;
+		}
+		\WP_CLI::add_command( 'open-data-wizard quality recalculate', array( self::class, 'quality_recalculate' ) );
+		\WP_CLI::add_command( 'open-data-wizard cache clear', array( self::class, 'cache_clear' ) );
+	}
+
+	/**
+	 * Recalculates quality scores for all published datasets.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--all]
+	 * : Include draft and trashed datasets (default: only published)
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard quality recalculate
+	 *     wp open-data-wizard quality recalculate --all
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments (--all, etc).
+	 */
+	public static function quality_recalculate( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		// Determine which datasets to process.
+		$post_status = isset( $assoc_args['all'] ) ? array( 'publish', 'draft', 'trash' ) : 'publish';
+
+		$query = new \WP_Query(
+			array(
+				'post_type'      => 'odw_dataset',
+				'post_status'    => $post_status,
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
+
+		$post_ids = $query->posts;
+
+		if ( empty( $post_ids ) ) {
+			\WP_CLI::success( 'No datasets found.' );
+			return;
+		}
+
+		$count    = 0;
+		$progress = \WP_CLI\Utils\make_progress_bar( 'Recalculating quality scores', count( $post_ids ) );
+
+		foreach ( $post_ids as $post_id ) {
+			if ( class_exists( 'ODW_Quality' ) ) {
+				ODW_Quality::calculate( $post_id );
+			}
+			$progress->tick();
+			++$count;
+		}
+
+		$progress->finish();
+
+		\WP_CLI::success(
+			sprintf(
+				/* translators: %d = number of datasets processed */
+				__( 'Recalculated quality scores for %d dataset(s).', 'open-data-wizard' ),
+				$count
+			)
+		);
+	}
+
+	/**
+	 * Clears all REST API transient caches.
+	 *
+	 * Removes cached responses for:
+	 * - Catalog endpoints (all pages and filters)
+	 * - Individual dataset endpoints
+	 * - Delta endpoint (all since values)
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard cache clear
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments.
+	 */
+	public static function cache_clear( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		global $wpdb;
+
+		// Delete all odw_catalog_* transients.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$catalog_transients = $wpdb->get_col(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_catalog_%'"
+		);
+
+		// Delete all odw_delta_* transients.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$delta_transients = $wpdb->get_col(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_delta_%'"
+		);
+
+		// Delete all odw_dataset_* transients.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$dataset_transients = $wpdb->get_col(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_dataset_%'"
+		);
+
+		$all_transients = array_merge( $catalog_transients, $delta_transients, $dataset_transients );
+		$count          = count( $all_transients );
+
+		foreach ( $all_transients as $transient ) {
+			// Remove 'transient_' or 'transient_timeout_' prefix.
+			$key = str_replace( array( 'transient_', 'transient_timeout_' ), '', $transient );
+			delete_transient( $key );
+		}
+
+		\WP_CLI::success(
+			sprintf(
+				/* translators: %d = number of transients cleared */
+				__( 'Cleared %d transient cache(s).', 'open-data-wizard' ),
+				$count
+			)
+		);
+	}
+}

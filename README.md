@@ -89,17 +89,21 @@ Automatische Metadaten-Vollständigkeitsprüfung nach DCAT-AP 3.0 (0–100 Punkt
 ```
 Rendert eine strukturierte Download-Card im Frontend: Titel, Thema-Badge, Lizenz, DCAT-Qualitätsscore, Dateigröße/-format und Download-Button. CSS (`assets/css/frontend.css`) wird nur auf Seiten geladen, die den Shortcode enthalten.
 
-### 🔗 Maschinenlesbarer Endpoint
-Das Plugin stellt einen öffentlichen REST API Endpoint bereit:
+### 🔗 REST API Endpoints
+
+Das Plugin stellt öffentliche REST API Endpoints bereit:
 
 ```
 GET https://deine-website.de/wp-json/datenatlas/v1/catalog
 GET https://deine-website.de/wp-json/datenatlas/v1/datasets/<id>
+GET https://deine-website.de/wp-json/datenatlas/v1/delta?since=<ISO8601>
 ```
 
-Diese URL kann bei einer Open-Data-Plattform als Harvest-Quelle eingetragen werden — einmalig, ohne weiteren Aufwand.
+Diese URLs können bei einer Open-Data-Plattform als Harvest-Quelle eingetragen werden — einmalig, ohne weiteren Aufwand.
 
-Parameter: `page`, `per_page`, `theme`, `license`, `format` (`jsonld` oder `json`)
+**Catalog-Parameter:** `page`, `per_page`, `theme`, `license`, `format` (`jsonld` oder `json`)
+
+**Delta-Parameter:** `since` (erforderlich, ISO 8601), `page`, `per_page`, `format` — liefert nur Datensätze, die nach dem angegebenen Zeitstempel geändert wurden, plus Tombstones für gelöschte Datensätze (ideal für inkrementelles Harvesting)
 
 ### ✅ DCAT-AP 3.0 Konformität
 Alle Ausgaben sind DCAT-AP 3.0 konform und in JSON-LD serialisiert.
@@ -142,6 +146,8 @@ composer test       # PHPUnit-Tests ausführen
 
 CI läuft via GitHub Actions (`.github/workflows/ci.yml`) auf PHP 8.1, 8.2 und 8.3.
 
+**Für Entwickler:** Siehe [`CLAUDE.md`](./CLAUDE.md) für Architektur-Übersicht, Patterns, Debugging-Tipps und Workflows.
+
 ---
 
 ## Technische Dokumentation
@@ -158,7 +164,7 @@ Infrastruktur   →   REST API, JSON-LD Serialisierung, Custom Post Type
 
 ```
 open-data-wizard/
-├── open-data-wizard.php              # Plugin-Header & Bootstrap (v1.8.0)
+├── open-data-wizard.php              # Plugin-Header & Bootstrap (v1.9.0)
 ├── uninstall.php                     # Opt-in Datenlöschung
 ├── composer.json
 ├── phpstan.neon                      # Statische Analyse Level 6
@@ -167,13 +173,14 @@ open-data-wizard/
 ├── includes/
 │   ├── class-post-types.php          # CPT-Registrierung: odw_dataset
 │   ├── class-fields.php              # Carbon Fields (5 Tabs), DCAT-AP Mapping, JSON-LD Builder
-│   ├── class-rest-api.php            # REST Endpoints /catalog + /datasets/<id>, Transient-Cache
+│   ├── class-rest-api.php            # REST Endpoints /catalog + /datasets/<id> + /delta, Transient-Cache [v1.9.0]
 │   ├── class-validation.php          # Pflichtfeldprüfung vor Veröffentlichung
 │   ├── class-quality.php             # Qualitätsindikatoren (0–100 Punkte, Ampellogik)  [v1.3.0]
 │   ├── class-admin.php               # Listenansicht, wp.media Meta-Box, Help Tabs, Assets
 │   ├── class-shortcode.php           # [odw_dataset]-Shortcode, Download-Card             [v1.4.0]
 │   ├── class-setup.php               # Demo-Datensatz bei Aktivierung, Willkommens-Notice [v1.5.0]
-│   └── class-settings.php            # Einstellungsseite (Catalog, Defaults, API, Cleanup) [v1.6.0]
+│   ├── class-settings.php            # Einstellungsseite (Catalog, Defaults, API, Cleanup) [v1.6.0]
+│   └── class-cli.php                 # WP-CLI Befehle (Massenoperationen)                  [v2.0.0]
 ├── assets/
 │   ├── js/
 │   │   ├── wizard-tabs.js            # Tab-Navigation (Vanilla JS, kein jQuery)
@@ -267,6 +274,25 @@ Response-Header: `X-WP-Total`, `X-WP-TotalPages`, `X-ODW-Cache` (`HIT`/`MISS`)
 GET /wp-json/datenatlas/v1/datasets/<id>
 ```
 
+#### Delta-Harvesting (inkrementell)
+```
+GET /wp-json/datenatlas/v1/delta?since=2024-01-01T00:00:00Z
+```
+Liefert nur Datensätze, die nach dem `since`-Zeitstempel geändert wurden, plus Tombstone-Einträge für gelöschte Datensätze.
+
+| Parameter  | Standard | Beschreibung                                       |
+|------------|----------|----------------------------------------------------|
+| `since`    | erforderlich | ISO 8601 Datetime (z.B. `2024-01-01`, `2024-06-15T12:30:00Z`) — nur Änderungen nach dieser Zeit |
+| `page`     | 1        | Seitennummer (für geänderte Datasets)             |
+| `per_page` | 20       | Einträge pro Seite (max. 100); gilt nur für geänderte Datasets, nicht für Tombstones |
+| `format`   | `jsonld` | `jsonld` → `application/ld+json`, `json` → `application/json` |
+
+Response-Header: `X-ODW-Delta-Since` (echo des Parameters), `X-ODW-Generated-At` (aktueller Zeitstempel — nutze ihn als nächster `since` Wert), `X-WP-Total`, `X-WP-TotalPages`, `X-ODW-Cache`
+
+Response-Body enthält:
+- `dcat:dataset` — Array mit vollständigen JSON-LD Objekten aller geänderten Datasets
+- `odw:removed` — Array mit Tombstone-Objekten (`@id`, `@type`, `odw:removedAt`) für gelöschte Datasets
+
 #### Beispiel-Response
 
 ```json
@@ -333,6 +359,28 @@ add_filter( 'odw_dataset_jsonld', function( array $jsonld, int $post_id ): array
 }, 10, 2 );
 ```
 
+### WP-CLI Befehle
+
+Das Plugin stellt WP-CLI Befehle für Massenoperationen bereit:
+
+```bash
+# Qualitätsscores für alle veröffentlichten Datasets neu berechnen
+wp open-data-wizard quality recalculate
+
+# Alle Datasets einschließlich Entwürfe und Trash berechnen
+wp open-data-wizard quality recalculate --all
+
+# Alle REST API Transient-Caches löschen
+wp open-data-wizard cache clear
+```
+
+Diese Befehle sind nützlich für:
+- Regelmäßige Qualitäts-Neubewertung nach Massenänderungen
+- Cache-Invalidierung nach manuellen DB-Eingriffen oder Migrationen
+- Automatisierung via Cron-Jobs oder CI/CD-Pipelines
+
+---
+
 ### Abhängigkeiten
 
 | Paket | Version | Zweck |
@@ -347,12 +395,13 @@ add_filter( 'odw_dataset_jsonld', function( array $jsonld, int $post_id ): array
 
 ## Roadmap
 
-- [ ] Delta-Harvesting Endpoint (`/changes?since=<timestamp>`)
+- [x] Delta-Harvesting Endpoint (`/delta?since=<timestamp>`) — seit v1.9.0
 - [ ] Push/Webhook bei Statusänderung an Civora/Piveau
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
 - [ ] CESSDA-Felder als optionales Profil
+- [ ] WP-CLI Befehle für Massenoperationen (z.B. Qualitätsscores neu berechnen)
 
 ---
 
