@@ -1,16 +1,16 @@
 includes:
-    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - ../vendor/szepeviktor/phpstan-wordpress/extension.neon
 
 parameters:
     level: 6
     paths:
-        - open-data-wizard.php
-        - uninstall.php
-        - includes/
+        - ../open-data-wizard.php
+        - ../uninstall.php
+        - ../includes/
     excludePaths:
-        - vendor/
+        - ../vendor/
     bootstrapFiles:
-        - vendor/autoload.php
+        - ../vendor/autoload.php
 
     # WordPress stubs werden via szepeviktor/phpstan-wordpress bereitgestellt.
     # Eigene Globals deklarieren damit PHPStan sie kennt.

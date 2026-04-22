@@ -25,9 +25,9 @@
         }
     },
     "scripts": {
-        "phpcs":   "phpcs --standard=phpcs.xml",
-        "phpcbf":  "phpcbf --standard=phpcs.xml",
-        "phpstan": "phpstan analyse --configuration=phpstan.neon",
-        "test":    "phpunit --configuration=phpunit.xml"
+        "phpcs":   "phpcs --standard=config/phpcs.xml",
+        "phpcbf":  "phpcbf --standard=config/phpcs.xml",
+        "phpstan": "phpstan analyse --configuration=config/phpstan.neon",
+        "test":    "phpunit --configuration=config/phpunit.xml"
     }
 }

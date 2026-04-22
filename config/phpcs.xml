@@ -2,8 +2,8 @@
 <ruleset name="OpenDataWizard">
 	<description>WordPress Coding Standards for Open Data Wizard plugin.</description>
 
-	<file>.</file>
-	<exclude-pattern>vendor/*</exclude-pattern>
+	<file>..</file>
+	<exclude-pattern>../vendor/*</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<arg name="colors"/>
@@ -12,26 +12,26 @@
 
 	<!-- File names follow the existing convention (class-fields.php etc.) -->
 	<rule ref="WordPress.Files.FileName">
-		<exclude-pattern>includes/*</exclude-pattern>
+		<exclude-pattern>../includes/*</exclude-pattern>
 	</rule>
 
 	<!-- Meta key queries are intentional in this plugin -->
 	<rule ref="WordPress.DB.SlowDBQuery">
-		<exclude-pattern>includes/*</exclude-pattern>
+		<exclude-pattern>../includes/*</exclude-pattern>
 	</rule>
 
 	<!-- serialize() is used only for cache keys, not user data -->
 	<rule ref="WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize">
-		<exclude-pattern>includes/class-rest-api.php</exclude-pattern>
+		<exclude-pattern>../includes/class-rest-api.php</exclude-pattern>
 	</rule>
 
 	<!-- Test files: class name does not match filename (PSR-4 test naming) -->
 	<rule ref="WordPress.Files.FileName">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>../tests/*</exclude-pattern>
 	</rule>
 
 	<!-- Test stubs file legitimately defines multiple classes per file -->
 	<rule ref="Generic.Files.OneObjectStructurePerFile">
-		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>../tests/*</exclude-pattern>
 	</rule>
 </ruleset>
