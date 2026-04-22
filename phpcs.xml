@@ -29,4 +29,9 @@
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
+
+	<!-- Test stubs file legitimately defines multiple classes per file -->
+	<rule ref="Generic.Files.OneObjectStructurePerFile">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 </ruleset>
