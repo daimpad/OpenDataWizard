@@ -34,4 +34,14 @@
 	<rule ref="Generic.Files.OneObjectStructurePerFile">
 		<exclude-pattern>../tests/*</exclude-pattern>
 	</rule>
+
+	<!-- Test stubs intentionally define duplicate class names (WP_Query, WP_CLI etc.) -->
+	<rule ref="Generic.Classes.DuplicateClassName">
+		<exclude-pattern>../tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Test stub constructors intentionally accept but ignore args -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<exclude-pattern>../tests/*</exclude-pattern>
+	</rule>
 </ruleset>
