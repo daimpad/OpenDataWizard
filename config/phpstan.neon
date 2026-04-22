@@ -21,3 +21,39 @@ parameters:
         - ODW_PLUGIN_DIR
         - ODW_PLUGIN_URL
         - ODW_PLUGIN_FILE
+
+    ignoreErrors:
+        # Carbon Fields stubs are incomplete; these are known false positives
+        - identifier: method.notFound
+          path: ../includes/class-fields.php
+          message: '/Call to an undefined method Carbon_Fields/'
+
+        # WP_CLI not in stubs during unit tests
+        - identifier: class.notFound
+          path: ../includes/class-cli.php
+          message: '/Call to static method.*on an unknown class WP_CLI/'
+
+        # WP_CLI and progress bar not in stubs
+        - identifier: function.notFound
+          message: '/Function WP_CLI.*not found|Function carbon_get_post_meta not found/'
+
+        # Plugin constants are defined at runtime, not recognized by static analysis
+        - identifier: constant.notFound
+          message: '/Constant ODW_PLUGIN_(DIR|URL) not found/'
+
+        # Missing return type in filter callback is intentional (WordPress pattern)
+        - identifier: return.missing
+          path: ../includes/class-admin.php
+
+        # Missing iterable value types in return statements (PHP array typing)
+        - identifier: missingType.iterableValue
+
+        # WordPress functions with @return mixed in stubs cause false positives
+        - identifier: argument.type
+          message: '/Parameter #3 \$callback of function add_settings_section/'
+
+        # PHPDoc type strictness causes false positives with WordPress types
+        - identifier: function.impossibleType
+          message: '/Call to function is_wp_error.*will always evaluate/'
+
+        - identifier: identical.alwaysTrue
