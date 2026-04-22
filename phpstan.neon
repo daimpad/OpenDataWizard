@@ -8,11 +8,8 @@ parameters:
         - vendor/
     bootstrapFiles:
         - vendor/autoload.php
-includes: # In PHPStan 2.x nutzt man meistens includes für Extensions
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
 
-    # WordPress stubs werden via szepeviktor/phpstan-wordpress bereitgestellt.
-    # Eigene Globals deklarieren damit PHPStan sie kennt.
+    # Diese müssen UNTER parameters eingerückt sein:
     dynamicConstantNames:
         - ABSPATH
         - WP_UNINSTALL_PLUGIN
@@ -21,3 +18,6 @@ includes: # In PHPStan 2.x nutzt man meistens includes für Extensions
         - ODW_PLUGIN_DIR
         - ODW_PLUGIN_URL
         - ODW_PLUGIN_FILE
+
+includes:
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
