@@ -146,6 +146,25 @@ This avoids **runtime I/O** in the shortcode rendering (`get_filesize()` is slow
 - Pagination applies only to modified datasets; all tombstones always included
 - Used by harvesters to sync only changes, not re-fetch entire catalog
 
+### 9. **UX-First Form Design (v2.0.0+)**
+
+As of v2.0.0, all form fields prioritize **user experience over technical accuracy** in labels:
+
+- **Main label** (Carbon Fields `Field::make()` second parameter): User-friendly question, not DCAT-AP term
+  - ✅ Good: "Wer gibt diese Daten heraus?" 
+  - ❌ Bad: "Herausgebende Organisation (dct:publisher)"
+  
+- **Help text** (`set_help_text()`): Preserves all technical context in a structured format:
+  - Original technical label (uppercase, DCAT-AP term in parentheses)
+  - Blank line
+  - Concrete, realistic example(s)
+  - Format: `"LABEL (dcat:term)\n\nExample: instance, example, item"`
+
+- **Validation labels** (`ODW_Fields::get_required_fields()`): Use the same user-friendly question as the field label
+  - Error messages show: "Worum geht es in diesem Datensatz?" not "Beschreibung (dct:description)"
+
+**Rationale:** Most admins don't know DCAT-AP. The form should be self-documenting with examples. Technical details remain visible for reference but don't obstruct the primary user flow.
+
 ---
 
 ## Important Context
@@ -160,6 +179,8 @@ The plugin tracks features by version in `CHANGELOG.md`. Key versions:
 - **v1.6** — Settings page
 - **v1.7** — Extended DCAT-AP Tab 4 (landingPage, accrualPeriodicity, spatial, temporal, contactPoint)
 - **v1.8** — Native wp.media upload widget in sidebar
+- **v1.9** — Delta-Harvesting endpoint (`/delta?since=<ISO8601>` for incremental harvesting), comprehensive CLAUDE.md
+- **v2.0.0** — **Phase 1+2 UX improvements**: All 19 form field labels rewritten with user-friendly questions + practical examples; WP-CLI commands for batch operations
 
 ### Constants (Defined in `open-data-wizard.php`)
 
@@ -267,9 +288,11 @@ CI will re-run these checks; don't waste CI time on violations.
 
 1. **Define in Carbon Fields** (`class-fields.php`, appropriate tab):
    ```php
-   Field::make( 'text', 'odw_my_field', __( 'Label', 'open-data-wizard' ) )
-       ->set_help_text( __( 'Help text', 'open-data-wizard' ) ),
+   Field::make( 'text', 'odw_my_field', __( 'User-friendly question here?', 'open-data-wizard' ) )
+       ->set_help_text( __( 'ORIGINAL TECHNICAL LABEL (dcat:property)', 'open-data-wizard' ) . "\n\n" . __( 'Example: concrete example text here', 'open-data-wizard' ) ),
    ```
+   
+   **Important (v2.0.0+):** Field labels use **user-friendly questions** instead of technical DCAT-AP terms. The original label and DCAT-AP term go in the help text. Format: `ORIGINAL LABEL (dcat:term)` + newlines + `Example: practical example`
 
 2. **Add to JSON-LD builder** (`odw_build_dataset_jsonld()` in same file):
    ```php
@@ -281,7 +304,8 @@ CI will re-run these checks; don't waste CI time on violations.
 
 3. **Update validation** (`class-validation.php`) if required:
    ```php
-   // Add to REQUIRED_FIELDS or check in validate()
+   // Add to ODW_Fields::get_required_fields()
+   // Use the user-friendly label from the field definition, not the technical one
    ```
 
 4. **Add tests** (`test-fields-extended.php`):

@@ -4,7 +4,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Status](https://img.shields.io/badge/Status-MVP%20in%20Entwicklung-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-v2.0.0%20in%20Entwicklung-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -53,14 +53,23 @@ Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Au
 ### 🗂 Datensätze verwalten
 Eigener Bereich im WordPress-Backend mit Übersicht, Filterung und Statusverwaltung (Entwurf / Veröffentlicht).
 
-### 🧭 Geführter Wizard
-Fünf-Tab-Assistent mit Pflichtfeldprüfung, Hilfetexten und Inline-Validierung:
+### 😊 Benutzerfreundliche Formularsprache
+**Neu in v2.0.0:** Das Wizard-Formular wurde komplett überarbeitet, um es auch ohne DCAT-AP-Kenntnisse intuitiv zu machen:
+- **Klare Fragen statt technischer Begriffe:** Statt „Herausgebende Organisation (dct:publisher)" fragt das Plugin jetzt: „Wer gibt diese Daten heraus?"
+- **Hilfreiche Beispiele:** Jedes Feld hat konkrete, praxisnahe Beispiele (z.B. „Beispiel: Musterstadt Statistikamt, Umweltbundesamt")
+- **Ursprüngliche Labels in Hilfetexten:** DCAT-AP Bezeichnungen und technische Details bleiben in den Hilfetexten sichtbar — nichts geht verloren
+- **Validierungsmeldungen in Klartext:** Fehler zeigen neue, verständliche Feldnamen statt technischer Ausdrücke
 
-1. **Pflichtangaben** — Titel, Beschreibung, Herausgeber, Lizenz
-2. **Optionale Angaben** — Sprache, Schlagworte, Thema, Zeitraum
-3. **Distribution** — Zugriffs-URL, Format, Dateigröße (wiederholbar)
-4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geograph. Abdeckung, Zeitraum, Kontaktpunkt
+### 🧭 Geführter Wizard
+Fünf-Tab-Assistent mit Pflichtfeldprüfung, benutzerfreundlichen Frageformulierungen und praktischen Beispielen:
+
+1. **Pflichtangaben** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „Unter welcher Lizenz sind diese Daten verfügbar?"
+2. **Optionale Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Stichworten finde ich diese Daten?", „In welche Kategorie gehört dieser Datensatz?", Zeitangaben, Änderungsdatum (auto)
+3. **Distribution** — „Wo können die Daten heruntergeladen werden?" (wiederholbar): Zugriffs-URL, Format, Dateigröße mit Inline-Hilfe und Beispielen
+4. **Erweiterte Angaben** — „Wo finde ich mehr Informationen?", „Wie oft werden diese Daten aktualisiert?", geografische und zeitliche Abdeckung, Kontaktinformationen
 5. **Vorschau** — generiertes JSON-LD live einsehen
+
+**Phase 1+2 UX-Verbesserungen (v2.0.0):** Alle 19 Formularfelder wurden mit benutzergerechten Frageformulierungen statt technischen DCAT-AP-Begriffen neugestaltet. Jedes Feld hat Hilfetexte mit dem Original-Label, der DCAT-AP Bezeichnung und praktischen Beispielen. Dies macht das Plugin auch für Anfänger ohne DCAT-AP-Kenntnisse intuitiv bedienbar.
 
 ### 📎 Download-Datei (nativer wp.media Upload)
 Sidebar-Meta-Box auf dem Edit-Screen — vollständig unabhängig von Carbon Fields:
@@ -395,13 +404,26 @@ Diese Befehle sind nützlich für:
 
 ## Roadmap
 
-- [x] Delta-Harvesting Endpoint (`/delta?since=<timestamp>`) — seit v1.9.0
+**Abgeschlossen (v1.0 — v2.0.0):**
+- [x] Custom Post Type `odw_dataset` mit vollständiger DCAT-AP 3.0 Unterstützung — v1.0.0
+- [x] Five-Tab Wizard-Formular mit Validierung und Hilfetexten — v1.0.0
+- [x] REST API Endpoints: `/catalog`, `/datasets/<id>`, `/delta?since=<timestamp>` — v1.9.0
+- [x] Qualitätsindikatoren / Ampellogik (0–100 Punkte) — v1.3.0
+- [x] Download-Card Shortcode `[odw_dataset]` — v1.4.0
+- [x] Demo-Datensatz bei Aktivierung — v1.5.0
+- [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup) — v1.6.0
+- [x] Erweiterte DCAT-AP Felder (Tab 4) — v1.7.0
+- [x] Nativer wp.media Upload-Widget — v1.8.0
+- [x] **Benutzerfreundliche UX-Überarbeitung (Phase 1+2)** — v2.0.0
+- [x] WP-CLI Befehle für Massenoperationen — v2.0.0
+
+**In Planung (v2.1+):**
 - [ ] Push/Webhook bei Statusänderung an Civora/Piveau
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
 - [ ] CESSDA-Felder als optionales Profil
-- [ ] WP-CLI Befehle für Massenoperationen (z.B. Qualitätsscores neu berechnen)
+- [ ] Phase 3 UX: Tooltip-Popups, Video-Tutorials, Wizard-Vorschau
 
 ---
 
