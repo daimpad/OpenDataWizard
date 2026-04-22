@@ -1,3 +1,6 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
 parameters:
     level: 6
     paths:
@@ -8,8 +11,6 @@ parameters:
         - vendor/
     bootstrapFiles:
         - vendor/autoload.php
-    extensions:
-        - szepeviktor/phpstan-wordpress
 
     # WordPress stubs werden via szepeviktor/phpstan-wordpress bereitgestellt.
     # Eigene Globals deklarieren damit PHPStan sie kennt.
