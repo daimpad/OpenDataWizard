@@ -70,7 +70,7 @@ function odw_add_capabilities(): void {
 
 /**
  * Ensure manage_open_data capability exists — auto-repairs if activation hook was missed.
- * Runs on admin_init to avoid front-end overhead.
+ * Runs on init so the cap is present before any admin capability check fires.
  */
 function odw_maybe_add_capabilities(): void {
 	$admin = get_role( 'administrator' );
@@ -78,7 +78,7 @@ function odw_maybe_add_capabilities(): void {
 		odw_add_capabilities();
 	}
 }
-add_action( 'admin_init', 'odw_maybe_add_capabilities' );
+add_action( 'init', 'odw_maybe_add_capabilities' );
 
 /**
  * Minimal CPT registration used during activation (before theme is set up).
