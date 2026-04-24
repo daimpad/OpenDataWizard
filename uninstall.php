@@ -18,15 +18,6 @@ if ( empty( $odw_settings['delete_on_uninstall'] ) ) {
 	return;
 }
 
-// Capabilities entfernen.
-$odw_roles = array( 'administrator', 'editor' );
-foreach ( $odw_roles as $odw_role_name ) {
-	$odw_role = get_role( $odw_role_name );
-	if ( $odw_role ) {
-		$odw_role->remove_cap( 'manage_open_data' );
-	}
-}
-
 // Alle odw_dataset Posts inkl. Postmeta löschen.
 $odw_post_ids = get_posts(
 	array(

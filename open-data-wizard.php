@@ -38,12 +38,11 @@ register_activation_hook( __FILE__, 'odw_activate' );
 register_deactivation_hook( __FILE__, 'odw_deactivate' );
 
 /**
- * Runs on plugin activation: registers CPT, flushes rewrite rules, grants capabilities.
+ * Runs on plugin activation: registers CPT and flushes rewrite rules.
  */
 function odw_activate(): void {
 	odw_register_cpt_static();
 	flush_rewrite_rules();
-	odw_add_capabilities();
 	ODW_Setup::on_activation();
 }
 
@@ -53,32 +52,6 @@ function odw_activate(): void {
 function odw_deactivate(): void {
 	flush_rewrite_rules();
 }
-
-/**
- * Grant manage_open_data capability to administrator and editor roles.
- * Called on activation; removed by uninstall.php.
- */
-function odw_add_capabilities(): void {
-	$roles = array( 'administrator', 'editor' );
-	foreach ( $roles as $role_name ) {
-		$role = get_role( $role_name );
-		if ( $role ) {
-			$role->add_cap( 'manage_open_data' );
-		}
-	}
-}
-
-/**
- * Ensure manage_open_data capability exists — auto-repairs if activation hook was missed.
- * Runs on init so the cap is present before any admin capability check fires.
- */
-function odw_maybe_add_capabilities(): void {
-	$admin = get_role( 'administrator' );
-	if ( $admin && ! $admin->has_cap( 'manage_open_data' ) ) {
-		odw_add_capabilities();
-	}
-}
-add_action( 'init', 'odw_maybe_add_capabilities' );
 
 /**
  * Minimal CPT registration used during activation (before theme is set up).
