@@ -418,7 +418,7 @@ Diese Befehle sind nützlich für:
 - [x] WP-CLI Befehle für Massenoperationen — v2.0.0
 
 **In Planung (v2.1+):**
-- [ ] Push/Webhook bei Statusänderung an Civora/Piveau
+- [ ] Push/Webhook bei Statusänderung an Piveau
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
