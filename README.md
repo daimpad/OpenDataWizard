@@ -19,7 +19,7 @@ Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Wer Daten 
 
 Dabei besitzen viele Organisationen bereits eine WordPress-Website und damit eine Infrastruktur, die sie kennen und die sie kontrollieren.
 
-**Open Data Wizard setzt genau hier an.**
+**Hier kann der Open Data Wizard helfen.**
 
 ---
 
