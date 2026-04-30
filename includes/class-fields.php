@@ -75,13 +75,7 @@ class ODW_Fields {
 				array(
 					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
-						->add_options(
-							array(
-								''   => __( '— Bitte wählen —', 'open-data-wizard' ),
-								'de' => __( 'Deutsch (DE)', 'open-data-wizard' ),
-								'en' => __( 'Englisch (EN)', 'open-data-wizard' ),
-							)
-						)
+						->add_options( self::get_language_options() )
 						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
 
 					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Stichworten finde ich diese Daten?', 'open-data-wizard' ) )
@@ -127,6 +121,10 @@ class ODW_Fields {
 									->set_attribute( 'type', 'number' )
 									->set_attribute( 'min', '0' )
 									->set_help_text( __( 'DATEIGRÖSSE IN BYTES (dcat:byteSize)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 204800 (ca. 200 KB). Optional.', 'open-data-wizard' ) ),
+
+								Field::make( 'text', 'attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
+									->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
+									->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) ),
 							)
 						)
 						->set_help_text( __( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Sie können mehrere Dateiformate (z.B. CSV und JSON) als separate Distributionen anbieten.', 'open-data-wizard' ) ),
@@ -152,6 +150,10 @@ class ODW_Fields {
 					// --- Abdeckung ---
 					Field::make( 'html', 'odw_ext_hint_coverage' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'select', 'odw_political_geocoding_level', __( 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?', 'open-data-wizard' ) )
+						->add_options( self::get_political_geocoding_level_options() )
+						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Gemeinde, Landkreis, Land, Bund', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Deutschland, Berlin oder GeoNames-URI', 'open-data-wizard' ) )
@@ -293,21 +295,28 @@ class ODW_Fields {
 	}
 
 	/**
-	 * Themen-Vokabular als Label → Label Map für das DCAT-AP `dcat:theme`-Feld.
+	 * Themen-Vokabular als EU-Vocabulary-URI → Label Map für das DCAT-AP `dcat:theme`-Feld.
+	 * URIs entstammen dem EU Publications Office Data Theme Vocabulary.
 	 *
 	 * @return array<string, string> Erweiterbar via `add_filter('odw_theme_options', ...)`.
 	 */
 	public static function get_theme_options(): array {
+		$base    = 'http://publications.europa.eu/resource/authority/data-theme/';
 		$options = array(
-			''           => __( '— Bitte wählen —', 'open-data-wizard' ),
-			'Bildung'    => __( 'Bildung', 'open-data-wizard' ),
-			'Gesundheit' => __( 'Gesundheit', 'open-data-wizard' ),
-			'Soziales'   => __( 'Soziales', 'open-data-wizard' ),
-			'Umwelt'     => __( 'Umwelt', 'open-data-wizard' ),
-			'Wirtschaft' => __( 'Wirtschaft', 'open-data-wizard' ),
-			'Kultur'     => __( 'Kultur', 'open-data-wizard' ),
-			'Sport'      => __( 'Sport', 'open-data-wizard' ),
-			'Sonstiges'  => __( 'Sonstiges', 'open-data-wizard' ),
+			''             => __( '— Bitte wählen —', 'open-data-wizard' ),
+			$base . 'EDUC' => __( 'Bildung, Kultur & Sport', 'open-data-wizard' ),
+			$base . 'HEAL' => __( 'Gesundheit', 'open-data-wizard' ),
+			$base . 'SOCI' => __( 'Bevölkerung & Gesellschaft', 'open-data-wizard' ),
+			$base . 'ENVI' => __( 'Umwelt', 'open-data-wizard' ),
+			$base . 'ECON' => __( 'Wirtschaft & Finanzen', 'open-data-wizard' ),
+			$base . 'GOVE' => __( 'Verwaltung & öffentlicher Sektor', 'open-data-wizard' ),
+			$base . 'TECH' => __( 'Wissenschaft & Technologie', 'open-data-wizard' ),
+			$base . 'TRAN' => __( 'Verkehr', 'open-data-wizard' ),
+			$base . 'AGRI' => __( 'Landwirtschaft & Ernährung', 'open-data-wizard' ),
+			$base . 'ENER' => __( 'Energie', 'open-data-wizard' ),
+			$base . 'JUST' => __( 'Justiz & Sicherheit', 'open-data-wizard' ),
+			$base . 'REGI' => __( 'Regionen & Städte', 'open-data-wizard' ),
+			$base . 'INTR' => __( 'Internationale Themen', 'open-data-wizard' ),
 		);
 
 		return (array) apply_filters( 'odw_theme_options', $options );
@@ -372,6 +381,59 @@ class ODW_Fields {
 		);
 
 		return $map[ $format ] ?? $format;
+	}
+
+	/**
+	 * Maps a short format label to its EU Publications Office file-type URI.
+	 * Used in dct:format for DCAT-AP.de / Civora compliance.
+	 *
+	 * @param string $format Short format label (e.g. "CSV").
+	 * @return string EU file-type URI, or the original string if unknown.
+	 */
+	public static function get_format_eu_uri( string $format ): string {
+		$base = 'http://publications.europa.eu/resource/authority/file-type/';
+		$map  = array(
+			'CSV'     => $base . 'CSV',
+			'JSON'    => $base . 'JSON',
+			'XLSX'    => $base . 'XLSX',
+			'PDF'     => $base . 'PDF',
+			'GeoJSON' => $base . 'GEOJSON',
+			'XML'     => $base . 'XML',
+		);
+
+		return $map[ $format ] ?? $format;
+	}
+
+	/**
+	 * Language options as EU Publications Office language URI → label map.
+	 * Used in dct:language for DCAT-AP.de / Civora compliance.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_language_options(): array {
+		$base = 'http://publications.europa.eu/resource/authority/language/';
+		return array(
+			''            => __( '— Bitte wählen —', 'open-data-wizard' ),
+			$base . 'DEU' => __( 'Deutsch (DE)', 'open-data-wizard' ),
+			$base . 'ENG' => __( 'Englisch (EN)', 'open-data-wizard' ),
+		);
+	}
+
+	/**
+	 * Administrative geocoding level options from the DCAT-AP.de political geocoding vocabulary.
+	 * Used in dcatde:politicalGeocodingLevelURI for Civora compliance.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_political_geocoding_level_options(): array {
+		$base = 'http://dcat-ap.de/def/politicalGeocoding/Level/';
+		return array(
+			''                               => __( '— Bitte wählen —', 'open-data-wizard' ),
+			$base . 'federal'                => __( 'Bund (Federal)', 'open-data-wizard' ),
+			$base . 'state'                  => __( 'Land (Bundesland)', 'open-data-wizard' ),
+			$base . 'administrativeDistrict' => __( 'Landkreis', 'open-data-wizard' ),
+			$base . 'municipality'           => __( 'Gemeinde', 'open-data-wizard' ),
+		);
 	}
 
 	/**
@@ -442,14 +504,15 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
 
 	// Extended DCAT-AP fields (Tab 4).
-	$landing_page        = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
-	$accrual_periodicity = (string) carbon_get_post_meta( $post_id, 'odw_accrual_periodicity' );
-	$spatial             = (string) carbon_get_post_meta( $post_id, 'odw_spatial' );
-	$temporal_start      = (string) carbon_get_post_meta( $post_id, 'odw_temporal_start' );
-	$temporal_end        = (string) carbon_get_post_meta( $post_id, 'odw_temporal_end' );
-	$contact_name        = (string) carbon_get_post_meta( $post_id, 'odw_contact_name' );
-	$contact_email       = (string) carbon_get_post_meta( $post_id, 'odw_contact_email' );
-	$contact_url         = (string) carbon_get_post_meta( $post_id, 'odw_contact_url' );
+	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
+	$accrual_periodicity       = (string) carbon_get_post_meta( $post_id, 'odw_accrual_periodicity' );
+	$political_geocoding_level = (string) carbon_get_post_meta( $post_id, 'odw_political_geocoding_level' );
+	$spatial                   = (string) carbon_get_post_meta( $post_id, 'odw_spatial' );
+	$temporal_start            = (string) carbon_get_post_meta( $post_id, 'odw_temporal_start' );
+	$temporal_end              = (string) carbon_get_post_meta( $post_id, 'odw_temporal_end' );
+	$contact_name              = (string) carbon_get_post_meta( $post_id, 'odw_contact_name' );
+	$contact_email             = (string) carbon_get_post_meta( $post_id, 'odw_contact_email' );
+	$contact_url               = (string) carbon_get_post_meta( $post_id, 'odw_contact_url' );
 
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
@@ -460,11 +523,21 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			'@type'     => 'foaf:Organization',
 			'foaf:name' => $publisher,
 		),
-		'dct:license'     => $license,
 	);
 
+	if ( ! empty( $license ) ) {
+		$dataset['dct:license'] = array( '@id' => (string) $license );
+	}
+
 	if ( ! empty( $language ) ) {
-		$dataset['dct:language'] = $language;
+		// Normalize legacy ISO codes ('de', 'en') to EU language URIs.
+		$lang_base               = 'http://publications.europa.eu/resource/authority/language/';
+		$lang_legacy             = array(
+			'de' => $lang_base . 'DEU',
+			'en' => $lang_base . 'ENG',
+		);
+		$lang_uri                = $lang_legacy[ (string) $language ] ?? (string) $language;
+		$dataset['dct:language'] = array( '@id' => $lang_uri );
 	}
 
 	if ( ! empty( $keywords ) && is_string( $keywords ) ) {
@@ -475,7 +548,19 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	}
 
 	if ( ! empty( $theme ) ) {
-		$dataset['dcat:theme'] = $theme;
+		// Normalize legacy text labels to EU data-theme URIs.
+		$theme_base            = 'http://publications.europa.eu/resource/authority/data-theme/';
+		$theme_legacy          = array(
+			'Bildung'    => $theme_base . 'EDUC',
+			'Gesundheit' => $theme_base . 'HEAL',
+			'Soziales'   => $theme_base . 'SOCI',
+			'Umwelt'     => $theme_base . 'ENVI',
+			'Wirtschaft' => $theme_base . 'ECON',
+			'Kultur'     => $theme_base . 'EDUC',
+			'Sport'      => $theme_base . 'EDUC',
+			'Sonstiges'  => $theme_base . 'GOVE',
+		);
+		$dataset['dcat:theme'] = array( '@id' => $theme_legacy[ (string) $theme ] ?? (string) $theme );
 	}
 
 	if ( ! empty( $issued ) ) {
@@ -507,11 +592,19 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			);
 
 			if ( ! empty( $dist['format'] ) ) {
-				$dist_item['dct:format'] = ODW_Fields::get_format_mime( $dist['format'] );
+				$dist_item['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $dist['format'] ) );
 			}
 
 			if ( isset( $dist['byte_size'] ) && '' !== $dist['byte_size'] && is_numeric( $dist['byte_size'] ) && (int) $dist['byte_size'] >= 0 ) {
 				$dist_item['dcat:byteSize'] = (int) $dist['byte_size'];
+			}
+
+			if ( ! empty( $license ) ) {
+				$dist_item['dct:license'] = array( '@id' => (string) $license );
+			}
+
+			if ( ! empty( $dist['attribution_text'] ) ) {
+				$dist_item['dcatde:licenseAttributionByText'] = (string) $dist['attribution_text'];
 			}
 
 			$dist_list[] = $dist_item;
@@ -530,6 +623,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 
 	if ( ! empty( $accrual_periodicity ) ) {
 		$dataset['dct:accrualPeriodicity'] = array( '@id' => $accrual_periodicity );
+	}
+
+	if ( ! empty( $political_geocoding_level ) ) {
+		$dataset['dcatde:politicalGeocodingLevelURI'] = array( '@id' => $political_geocoding_level );
 	}
 
 	if ( ! empty( $spatial ) ) {

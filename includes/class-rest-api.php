@@ -27,16 +27,17 @@ class ODW_Rest_API {
 	private const CACHE_TTL = 300;
 
 	/**
-	 * DCAT-AP 3.0 JSON-LD @context inkl. Plugin-eigenem odw:-Namespace für Qualitätsdaten.
+	 * DCAT-AP 3.0 / DCAT-AP.de JSON-LD @context inkl. Plugin-eigenem odw:-Namespace.
 	 */
 	private const JSONLD_CONTEXT = array(
-		'dcat'  => 'https://www.w3.org/ns/dcat#',
-		'dct'   => 'http://purl.org/dc/terms/',
-		'foaf'  => 'http://xmlns.com/foaf/0.1/',
-		'xsd'   => 'http://www.w3.org/2001/XMLSchema#',
-		'vcard' => 'http://www.w3.org/2006/vcard/ns#',
-		'skos'  => 'http://www.w3.org/2004/02/skos/core#',
-		'odw'   => 'https://github.com/daimpad/OpenDataWizard/ns#',
+		'dcat'   => 'https://www.w3.org/ns/dcat#',
+		'dct'    => 'http://purl.org/dc/terms/',
+		'foaf'   => 'http://xmlns.com/foaf/0.1/',
+		'xsd'    => 'http://www.w3.org/2001/XMLSchema#',
+		'vcard'  => 'http://www.w3.org/2006/vcard/ns#',
+		'skos'   => 'http://www.w3.org/2004/02/skos/core#',
+		'dcatde' => 'http://dcat-ap.de/def/dcatde/',
+		'odw'    => 'https://github.com/daimpad/OpenDataWizard/ns#',
 	);
 
 	/**
@@ -219,6 +220,13 @@ class ODW_Rest_API {
 			get_bloginfo( 'name' ) . ' — Datenkatalog'
 		);
 
+		/**
+		 * Filters the catalog description in the JSON-LD output.
+		 *
+		 * @param string $description The catalog description (empty by default).
+		 */
+		$catalog_description = (string) apply_filters( 'odw_catalog_description', '' );
+
 		$catalog = array(
 			'@context'      => self::JSONLD_CONTEXT,
 			'@type'         => 'dcat:Catalog',
@@ -229,6 +237,10 @@ class ODW_Rest_API {
 			),
 			'dcat:dataset'  => $datasets,
 		);
+
+		if ( '' !== $catalog_description ) {
+			$catalog['dct:description'] = $catalog_description;
+		}
 
 		set_transient(
 			$cache_key,

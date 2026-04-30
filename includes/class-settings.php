@@ -7,6 +7,7 @@
  *
  * Verfügbare Einstellungen:
  *   catalog_title       — Titel des Datenkatalogs (REST API dct:title)
+ *   catalog_description — Beschreibung des Datenkatalogs (REST API dct:description)
  *   default_publisher   — Vorausgefüllter Herausgeber für neue Datensätze
  *   default_license     — Vorausgewählte Lizenz für neue Datensätze
  *   default_language    — Vorausgewählte Sprache für neue Datensätze
@@ -39,6 +40,7 @@ class ODW_Settings {
 		add_action( 'admin_init', array( self::class, 'register_settings' ) );
 		add_action( 'admin_post_odw_recalculate_quality', array( self::class, 'handle_recalculate_quality' ) );
 		add_filter( 'odw_catalog_title', array( self::class, 'filter_catalog_title' ) );
+		add_filter( 'odw_catalog_description', array( self::class, 'filter_catalog_description' ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -138,6 +140,7 @@ class ODW_Settings {
 		);
 
 		add_settings_field( 'catalog_title', __( 'Katalog-Titel', 'open-data-wizard' ), array( self::class, 'field_catalog_title' ), 'odw-settings', 'odw_section_catalog' );
+		add_settings_field( 'catalog_description', __( 'Katalog-Beschreibung', 'open-data-wizard' ), array( self::class, 'field_catalog_description' ), 'odw-settings', 'odw_section_catalog' );
 		add_settings_field( 'default_publisher', __( 'Herausgebende Organisation', 'open-data-wizard' ), array( self::class, 'field_default_publisher' ), 'odw-settings', 'odw_section_catalog' );
 
 		// --- Standardwerte ---
@@ -197,6 +200,21 @@ class ODW_Settings {
 	}
 
 	/**
+	 * Renders the catalog description settings field.
+	 */
+	public static function field_catalog_description(): void {
+		$value = self::get( 'catalog_description' );
+		?>
+		<textarea
+			name="<?php echo esc_attr( self::OPTION_KEY . '[catalog_description]' ); ?>"
+			rows="3"
+			class="large-text"
+		><?php echo esc_textarea( $value ); ?></textarea>
+		<p class="description"><?php esc_html_e( 'Kurze Beschreibung des Katalogs — erscheint als dct:description in der REST-API-Antwort (Pflichtfeld gemäß DCAT-AP.de).', 'open-data-wizard' ); ?></p>
+		<?php
+	}
+
+	/**
 	 * Renders the default publisher settings field.
 	 */
 	public static function field_default_publisher(): void {
@@ -236,10 +254,9 @@ class ODW_Settings {
 	 */
 	public static function field_default_language(): void {
 		$current = self::get( 'default_language' );
-		$options = array(
-			''   => __( '— Kein Standard —', 'open-data-wizard' ),
-			'de' => __( 'Deutsch (DE)', 'open-data-wizard' ),
-			'en' => __( 'Englisch (EN)', 'open-data-wizard' ),
+		$options = array_merge(
+			array( '' => __( '— Kein Standard —', 'open-data-wizard' ) ),
+			array_slice( ODW_Fields::get_language_options(), 1 )
 		);
 		?>
 		<select name="<?php echo esc_attr( self::OPTION_KEY . '[default_language]' ); ?>">
@@ -306,10 +323,18 @@ class ODW_Settings {
 
 		$output                        = array();
 		$output['catalog_title']       = sanitize_text_field( $input['catalog_title'] ?? '' );
+		$output['catalog_description'] = sanitize_textarea_field( $input['catalog_description'] ?? '' );
 		$output['default_publisher']   = sanitize_text_field( $input['default_publisher'] ?? '' );
 		$output['default_license']     = sanitize_text_field( $input['default_license'] ?? '' );
-		$output['default_language']    = sanitize_text_field( $input['default_language'] ?? '' );
 		$output['delete_on_uninstall'] = ! empty( $input['delete_on_uninstall'] ) ? '1' : '0';
+
+		// Migrate legacy ISO language codes to EU language URIs.
+		$lang_raw                   = sanitize_text_field( $input['default_language'] ?? '' );
+		$lang_map                   = array(
+			'de' => 'http://publications.europa.eu/resource/authority/language/DEU',
+			'en' => 'http://publications.europa.eu/resource/authority/language/ENG',
+		);
+		$output['default_language'] = $lang_map[ $lang_raw ] ?? $lang_raw;
 
 		$ttl                 = (int) ( $input['cache_ttl'] ?? $defaults['cache_ttl'] );
 		$output['cache_ttl'] = max( 60, min( 86400, $ttl ) );
@@ -376,6 +401,17 @@ class ODW_Settings {
 		return '' !== $custom ? $custom : $odw_default;
 	}
 
+	/**
+	 * Filter callback for `odw_catalog_description`: returns stored catalog description.
+	 *
+	 * @param string $fallback Fallback empty string provided by the caller.
+	 * @return string Catalog description when set, otherwise fallback.
+	 */
+	public static function filter_catalog_description( string $fallback ): string {
+		$stored = trim( (string) self::get( 'catalog_description' ) );
+		return '' !== $stored ? $stored : $fallback;
+	}
+
 	// -------------------------------------------------------------------------
 	// Datenzugriff
 	// -------------------------------------------------------------------------
@@ -405,6 +441,7 @@ class ODW_Settings {
 	private static function get_defaults(): array {
 		return array(
 			'catalog_title'       => '',
+			'catalog_description' => '',
 			'default_publisher'   => '',
 			'default_license'     => '',
 			'default_language'    => '',

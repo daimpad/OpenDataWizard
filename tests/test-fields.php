@@ -89,4 +89,95 @@ class Test_ODW_Fields extends TestCase {
 
 		$this->assertSame( 'CUSTOM', ODW_Fields::get_format_mime( 'CUSTOM' ) );
 	}
+
+	/**
+	 * All non-empty theme option keys use EU Publications Office data-theme URIs.
+	 */
+	public function test_get_theme_options_uses_eu_vocabulary_uris(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$base    = 'http://publications.europa.eu/resource/authority/data-theme/';
+		$options = ODW_Fields::get_theme_options();
+
+		foreach ( array_keys( $options ) as $key ) {
+			if ( '' === $key ) {
+				continue;
+			}
+			$this->assertStringStartsWith( $base, $key );
+		}
+	}
+
+	/**
+	 * Maps "CSV" to the EU Publications Office file-type URI.
+	 */
+	public function test_get_format_eu_uri_maps_csv(): void {
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$this->assertSame(
+			'http://publications.europa.eu/resource/authority/file-type/CSV',
+			ODW_Fields::get_format_eu_uri( 'CSV' )
+		);
+	}
+
+	/**
+	 * Returns the format string unchanged when the format is not in the EU vocabulary.
+	 */
+	public function test_get_format_eu_uri_returns_format_for_unknown(): void {
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$this->assertSame( 'CUSTOM', ODW_Fields::get_format_eu_uri( 'CUSTOM' ) );
+	}
+
+	/**
+	 * All non-empty language option keys use EU Publications Office language URIs.
+	 */
+	public function test_get_language_options_uses_eu_uris(): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$base    = 'http://publications.europa.eu/resource/authority/language/';
+		$options = ODW_Fields::get_language_options();
+
+		foreach ( array_keys( $options ) as $key ) {
+			if ( '' === $key ) {
+				continue;
+			}
+			$this->assertStringStartsWith( $base, $key );
+		}
+	}
+
+	/**
+	 * The political geocoding level options include the federal-level URI.
+	 */
+	public function test_get_political_geocoding_level_options_has_federal(): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$options = ODW_Fields::get_political_geocoding_level_options();
+		$this->assertArrayHasKey( 'http://dcat-ap.de/def/politicalGeocoding/Level/federal', $options );
+	}
+
+	/**
+	 * All non-empty political geocoding level keys use the dcatde geocoding URI base.
+	 */
+	public function test_get_political_geocoding_level_options_all_use_correct_base(): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$base    = 'http://dcat-ap.de/def/politicalGeocoding/Level/';
+		$options = ODW_Fields::get_political_geocoding_level_options();
+
+		foreach ( array_keys( $options ) as $key ) {
+			if ( '' === $key ) {
+				continue;
+			}
+			$this->assertStringStartsWith( $base, $key );
+		}
+	}
 }

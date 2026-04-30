@@ -157,6 +157,9 @@ class Test_ODW_Fields_Extended extends TestCase {
 				}
 			);
 
+		\WP_Mock::userFunction( 'esc_url_raw' )
+			->andReturnArg( 0 );
+
 		\WP_Mock::userFunction( 'apply_filters' )
 			->andReturnArg( 1 );
 	}
@@ -405,5 +408,194 @@ class Test_ODW_Fields_Extended extends TestCase {
 
 		$this->assertIsArray( $result );
 		$this->assertArrayNotHasKey( 'dcat:contactPoint', $result );
+	}
+
+	// -------------------------------------------------------------------------
+	// Civora / DCAT-AP.de compliance tests
+	// -------------------------------------------------------------------------
+
+	/**
+	 * The dcat:theme key is emitted as an @id object referencing the EU data-theme URI.
+	 */
+	public function test_build_theme_is_emitted_as_id_reference(): void {
+		$this->load_fields();
+
+		$uri = 'http://publications.europa.eu/resource/authority/data-theme/ENVI';
+		$this->setup_jsonld_mocks( 20, 'odw_dataset', array( 'odw_theme' => $uri ) );
+
+		$result = odw_build_dataset_jsonld( 20 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dcat:theme', $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dcat:theme'] );
+	}
+
+	/**
+	 * Legacy text theme labels are mapped to their EU data-theme URI equivalents.
+	 */
+	public function test_build_theme_maps_legacy_text_to_eu_uri(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks( 21, 'odw_dataset', array( 'odw_theme' => 'Umwelt' ) );
+
+		$result = odw_build_dataset_jsonld( 21 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array( '@id' => 'http://publications.europa.eu/resource/authority/data-theme/ENVI' ),
+			$result['dcat:theme']
+		);
+	}
+
+	/**
+	 * The dct:language key is emitted as an @id object referencing the EU language URI.
+	 */
+	public function test_build_language_is_emitted_as_id_reference(): void {
+		$this->load_fields();
+
+		$uri = 'http://publications.europa.eu/resource/authority/language/DEU';
+		$this->setup_jsonld_mocks( 22, 'odw_dataset', array( 'odw_language' => $uri ) );
+
+		$result = odw_build_dataset_jsonld( 22 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dct:language', $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dct:language'] );
+	}
+
+	/**
+	 * Legacy 'de' language code is migrated to the EU language URI for German.
+	 */
+	public function test_build_language_maps_legacy_de_code(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks( 23, 'odw_dataset', array( 'odw_language' => 'de' ) );
+
+		$result = odw_build_dataset_jsonld( 23 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array( '@id' => 'http://publications.europa.eu/resource/authority/language/DEU' ),
+			$result['dct:language']
+		);
+	}
+
+	/**
+	 * The dct:format in a distribution uses the EU file-type URI (not a MIME type).
+	 */
+	public function test_build_distribution_format_uses_eu_uri(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			24,
+			'odw_dataset',
+			array(
+				'odw_distributions' => array(
+					array(
+						'access_url' => 'https://example.com/data.csv',
+						'format'     => 'CSV',
+						'byte_size'  => '',
+					),
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 24 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame(
+			array( '@id' => 'http://publications.europa.eu/resource/authority/file-type/CSV' ),
+			$dist['dct:format']
+		);
+	}
+
+	/**
+	 * Each distribution carries the dataset-level license as dct:license @id.
+	 */
+	public function test_build_distribution_inherits_license(): void {
+		$this->load_fields();
+
+		$license_uri = 'https://creativecommons.org/publicdomain/zero/1.0/';
+		$this->setup_jsonld_mocks(
+			25,
+			'odw_dataset',
+			array(
+				'odw_license'       => $license_uri,
+				'odw_distributions' => array(
+					array(
+						'access_url' => 'https://example.com/data.csv',
+						'format'     => 'CSV',
+						'byte_size'  => '',
+					),
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 25 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame( array( '@id' => $license_uri ), $dist['dct:license'] );
+	}
+
+	/**
+	 * The dcatde:licenseAttributionByText is included in distribution when set.
+	 */
+	public function test_build_distribution_attribution_text(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			26,
+			'odw_dataset',
+			array(
+				'odw_distributions' => array(
+					array(
+						'access_url'       => 'https://example.com/data.csv',
+						'format'           => 'CSV',
+						'byte_size'        => '',
+						'attribution_text' => 'Daten von Musterorganisation e.V.',
+					),
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 26 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame( 'Daten von Musterorganisation e.V.', $dist['dcatde:licenseAttributionByText'] );
+	}
+
+	/**
+	 * The dcatde:politicalGeocodingLevelURI is emitted as an @id reference.
+	 */
+	public function test_build_includes_political_geocoding_level_uri(): void {
+		$this->load_fields();
+
+		$uri = 'http://dcat-ap.de/def/politicalGeocoding/Level/municipality';
+		$this->setup_jsonld_mocks( 27, 'odw_dataset', array( 'odw_political_geocoding_level' => $uri ) );
+
+		$result = odw_build_dataset_jsonld( 27 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dcatde:politicalGeocodingLevelURI', $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dcatde:politicalGeocodingLevelURI'] );
+	}
+
+	/**
+	 * The dct:license at dataset level is emitted as an @id reference.
+	 */
+	public function test_build_dataset_license_is_id_reference(): void {
+		$this->load_fields();
+
+		$license_uri = 'https://creativecommons.org/licenses/by/4.0/';
+		$this->setup_jsonld_mocks( 28, 'odw_dataset', array( 'odw_license' => $license_uri ) );
+
+		$result = odw_build_dataset_jsonld( 28 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dct:license', $result );
+		$this->assertSame( array( '@id' => $license_uri ), $result['dct:license'] );
 	}
 }
