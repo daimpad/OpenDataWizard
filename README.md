@@ -1,4 +1,5 @@
-<img width="6408" height="2002" alt="Vector-Logo-of-Open-Data-Wizard" src="https://github.com/user-attachments/assets/24adf4f5-ec4a-4b19-a9e9-c02d55da00c5" />
+<img width="6408" height="2002" alt="Vector-Logo-of-Open-Data-Wizard_white" src="https://github.com/user-attachments/assets/a6296bc2-2952-4c27-84c9-a6d531886335" />
+
 
 # Open Data Wizard 🧙 
 
