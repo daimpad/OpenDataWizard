@@ -1,4 +1,6 @@
-# 🧙 Open Data Wizard
+<img width="6408" height="2002" alt="Vector-Logo-of-Open-Data-Wizard" src="https://github.com/user-attachments/assets/24adf4f5-ec4a-4b19-a9e9-c02d55da00c5" />
+
+# Open Data Wizard 🧙 
 
 ![Lizenz](https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=blue&label=Lizenz)
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
