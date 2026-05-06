@@ -94,7 +94,7 @@ class ODW_Setup {
 				'open-data-wizard'
 			)
 		);
-		update_post_meta( $post_id, '_odw_publisher', __( 'Datenatlas Zivilgesellschaft e.V.', 'open-data-wizard' ) );
+		update_post_meta( $post_id, '_odw_publisher', __( 'Musterorganisation e.V.', 'open-data-wizard' ) );
 		update_post_meta( $post_id, '_odw_license', 'https://creativecommons.org/publicdomain/zero/1.0/' );
 		update_post_meta( $post_id, '_odw_language', 'de' );
 		update_post_meta( $post_id, '_odw_keywords', "Zivilgesellschaft\nEngagement\nOrganisationen\nDemo" );

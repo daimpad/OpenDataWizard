@@ -170,7 +170,7 @@ xgettext \
 **Dateiformat:**
 ```
 # Open Data Wizard Translations
-# Copyright (C) 2026 Datenatlas Zivilgesellschaft
+# Copyright (C) 2026 nozilla
 # This file is distributed under the same license as the Open Data Wizard package.
 #
 msgid ""
@@ -244,7 +244,7 @@ grep -c '^msgid ' languages/open-data-wizard.pot
 
 ```po
 # English translation for Open Data Wizard
-# Copyright (C) 2026 Datenatlas Zivilgesellschaft
+# Copyright (C) 2026 nozilla
 # This file is distributed under the same license as the Open Data Wizard package.
 #
 msgid ""

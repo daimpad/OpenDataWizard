@@ -30,7 +30,7 @@ class ODW_Post_Types {
 	 *
 	 * Der CPT ist nicht öffentlich (kein Frontend-Permalink), wird aber im
 	 * Admin-Bereich angezeigt und über eigene REST-Endpoints ausgeliefert
-	 * (`show_in_rest => false`, da wir `/datenatlas/v1/` verwenden).
+	 * (`show_in_rest => false`, da wir einen eigenen REST-Namespace verwenden).
 	 *
 	 * Zugriffssteuerung über Standard-WordPress-Capabilities (edit_posts etc.),
 	 * sodass alle Rollen mit Backend-Zugriff Datensätze anlegen können.

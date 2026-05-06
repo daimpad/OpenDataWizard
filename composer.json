@@ -1,6 +1,6 @@
 {
     "name": "daimpad/open-data-wizard",
-    "description": "DCAT-AP 3.0 Open Data Plugin für WordPress — maschinenlesbarer Endpoint für Civora/Piveau-Harvesting",
+    "description": "DCAT-AP 3.0 Open Data Plugin für WordPress — maschinenlesbarer JSON-LD-Endpoint für offene Daten",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {

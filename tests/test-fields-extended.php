@@ -411,7 +411,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// Civora / DCAT-AP.de compliance tests
+	// DCAT-AP.de compliance tests
 	// -------------------------------------------------------------------------
 
 	/**

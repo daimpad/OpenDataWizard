@@ -134,7 +134,7 @@ class ODW_Settings {
 			'odw_section_catalog',
 			__( 'Katalog', 'open-data-wizard' ),
 			static function (): void {
-				echo '<p class="description">' . esc_html__( 'Metadaten des Datenkatalogs — erscheinen in der REST-API-Antwort von /wp-json/datenatlas/v1/catalog.', 'open-data-wizard' ) . '</p>';
+				echo '<p class="description">' . esc_html__( 'Metadaten des Datenkatalogs — erscheinen in der REST-API-Antwort des Catalog-Endpoints.', 'open-data-wizard' ) . '</p>';
 			},
 			'odw-settings'
 		);

@@ -2,7 +2,7 @@
 /**
  * REST API Endpoints für Open Data Wizard
  *
- * Namespace:  /wp-json/datenatlas/v1/
+ * Namespace:  /wp-json/odw/v1/ (alias: /wp-json/datenatlas/v1/)
  * Endpoints:  GET /catalog, GET /datasets/<id>
  *
  * @package OpenDataWizard
