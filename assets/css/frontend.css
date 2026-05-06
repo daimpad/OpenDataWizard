@@ -100,6 +100,34 @@
     opacity: 0.65;
 }
 
+.odw-download-card__button--meta {
+    margin-left: auto;
+    font-weight: normal;
+    opacity: 0.75;
+    font-size: 0.85em;
+}
+
+.odw-download-card__button--meta:hover {
+    opacity: 1;
+}
+
+/* Keywords */
+.odw-download-card__keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.odw-download-card__keyword {
+    display: inline-block;
+    padding: 0.15em 0.6em;
+    border: 1px solid currentColor;
+    border-radius: 99px;
+    font-size: 0.8em;
+    opacity: 0.6;
+}
+
 /* =========================================================================
    Responsive
    ========================================================================= */

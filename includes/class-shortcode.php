@@ -72,13 +72,28 @@ class ODW_Shortcode {
 		wp_enqueue_style( 'odw-frontend' );
 
 		// --- Metadaten ---
-		$title         = get_the_title( $post );
-		$theme         = (string) get_post_meta( $post_id, '_odw_theme', true );
-		$license_uri   = (string) get_post_meta( $post_id, '_odw_license', true );
-		$license_label = ODW_Fields::get_license_label( $license_uri );
-		$quality_level = (string) get_post_meta( $post_id, '_odw_quality_level', true );
-		$quality_score = (int) get_post_meta( $post_id, '_odw_quality_score', true );
-		$file_id       = (int) get_post_meta( $post_id, '_odw_file_id', true );
+		$title   = get_the_title( $post );
+		$theme   = (string) get_post_meta( $post_id, '_odw_theme', true );
+		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
+
+		// License from first distribution (per-distribution architecture).
+		$license_label = '';
+		if ( function_exists( 'carbon_get_post_meta' ) ) {
+			$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
+			if ( is_array( $distributions ) && ! empty( $distributions ) ) {
+				$first_dist  = $distributions[0];
+				$license_uri = isset( $first_dist['license'] ) ? (string) $first_dist['license'] : '';
+				if ( 'sonstige' === $license_uri && ! empty( $first_dist['license_custom'] ) ) {
+					$license_label = (string) $first_dist['license_custom'];
+				} elseif ( '' !== $license_uri ) {
+					$license_label = ODW_Fields::get_license_label( $license_uri );
+				}
+			}
+		}
+
+		// Keywords: newline-separated string → array of trimmed, non-empty values.
+		$keywords_raw = (string) get_post_meta( $post_id, '_odw_keywords', true );
+		$keywords     = array_filter( array_map( 'trim', explode( "\n", $keywords_raw ) ) );
 
 		// --- Datei-Informationen aus der Mediathek ---
 		$file_url    = '';
@@ -106,14 +121,7 @@ class ODW_Shortcode {
 			}
 		}
 
-		// --- Qualitätslabel ---
-		$quality_label = '';
-		if ( '' !== $quality_level ) {
-			$quality_label = ODW_Quality::get_level_label( $quality_level );
-			if ( $quality_score > 0 ) {
-				$quality_label .= ' (' . $quality_score . '/100)';
-			}
-		}
+		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
 
 		// --- HTML aufbauen ---
 		ob_start();
@@ -127,28 +135,25 @@ class ODW_Shortcode {
 				<?php endif; ?>
 			</div>
 
-			<?php if ( $license_label || $quality_label ) : ?>
+			<?php if ( $license_label ) : ?>
 			<dl class="odw-download-card__meta">
-
-				<?php if ( $license_label ) : ?>
 				<div class="odw-download-card__meta-row">
 					<dt><?php esc_html_e( 'Lizenz', 'open-data-wizard' ); ?></dt>
 					<dd><?php echo esc_html( $license_label ); ?></dd>
 				</div>
-				<?php endif; ?>
-
-				<?php if ( $quality_label ) : ?>
-				<div class="odw-download-card__meta-row">
-					<dt><?php esc_html_e( 'DCAT-Qualität', 'open-data-wizard' ); ?></dt>
-					<dd><?php echo esc_html( $quality_label ); ?></dd>
-				</div>
-				<?php endif; ?>
-
 			</dl>
 			<?php endif; ?>
 
-			<?php if ( '' !== $file_url ) : ?>
+			<?php if ( ! empty( $keywords ) ) : ?>
+			<div class="odw-download-card__keywords">
+				<?php foreach ( $keywords as $keyword ) : ?>
+					<span class="odw-download-card__keyword"><?php echo esc_html( $keyword ); ?></span>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+
 			<div class="odw-download-card__footer">
+				<?php if ( '' !== $file_url ) : ?>
 				<a
 					href="<?php echo esc_url( $file_url ); ?>"
 					class="odw-download-card__button"
@@ -157,16 +162,25 @@ class ODW_Shortcode {
 					<?php esc_html_e( 'Herunterladen', 'open-data-wizard' ); ?>
 				</a>
 
-				<?php
-				$file_info_parts = array_filter( array( $file_format, $file_size ) );
-				if ( ! empty( $file_info_parts ) ) :
-					?>
+					<?php
+					$file_info_parts = array_filter( array( $file_format, $file_size ) );
+					if ( ! empty( $file_info_parts ) ) :
+						?>
 				<span class="odw-download-card__file-info">
-					<?php echo esc_html( implode( ' · ', $file_info_parts ) ); ?>
+						<?php echo esc_html( implode( ' · ', $file_info_parts ) ); ?>
 				</span>
+					<?php endif; ?>
 				<?php endif; ?>
+
+				<a
+					href="<?php echo esc_url( $metadata_url ); ?>"
+					class="odw-download-card__button odw-download-card__button--meta"
+					target="_blank"
+					rel="noopener"
+				>
+					<?php esc_html_e( 'Metadaten (JSON-LD)', 'open-data-wizard' ); ?>
+				</a>
 			</div>
-			<?php endif; ?>
 
 		</article>
 		<?php

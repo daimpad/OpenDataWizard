@@ -520,7 +520,7 @@ class ODW_Admin {
 
 		ob_start();
 		?>
-		<h3><?php esc_html_e( 'Catalog-Endpoint (für Civora/Piveau)', 'open-data-wizard' ); ?></h3>
+		<h3><?php esc_html_e( 'Catalog-Endpoint (REST API)', 'open-data-wizard' ); ?></h3>
 		<p><code><?php echo esc_html( $catalog_url ); ?></code></p>
 		<p><?php esc_html_e( 'Liefert alle veröffentlichten Datensätze als dcat:Catalog (JSON-LD). Unterstützt:', 'open-data-wizard' ); ?></p>
 		<ul>

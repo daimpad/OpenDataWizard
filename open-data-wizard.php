@@ -2,11 +2,12 @@
 /**
  * Plugin Name:       Open Data Wizard
  * Plugin URI:        https://github.com/daimpad/OpenDataWizard
- * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für zivilgesellschaftliche Organisationen. Bereitstellung als maschinenlesbarer Endpoint für Civora/Piveau-Harvesting.
+ * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für WordPress. Bereitstellung als maschinenlesbarer JSON-LD-Endpoint für offene Daten.
  * Version:           1.9.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
- * Author:            Datenatlas Zivilgesellschaft
+ * Author:            nozilla
+ * Author URI:        https://github.com/daimpad/OpenDataWizard
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       open-data-wizard
