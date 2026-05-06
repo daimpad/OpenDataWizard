@@ -306,6 +306,14 @@ class ODW_Admin {
 				array(
 					'licenseOptions' => $license_file_options,
 					'cessdaOptions'  => $cessda_options,
+					'fileSizeWidget' => array(
+						'label'       => __( 'Dateigröße', 'open-data-wizard' ),
+						'optional'    => __( '(optional)', 'open-data-wizard' ),
+						'placeholder' => __( 'z. B. 2.5', 'open-data-wizard' ),
+						'ariaNumber'  => __( 'Dateigröße Zahlenwert', 'open-data-wizard' ),
+						'ariaUnit'    => __( 'Einheit', 'open-data-wizard' ),
+						'helpText'    => __( 'Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB', 'open-data-wizard' ),
+					),
 				)
 			);
 

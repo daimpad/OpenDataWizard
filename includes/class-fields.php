@@ -143,9 +143,6 @@ class ODW_Fields {
 									->add_options( self::get_format_options() )
 									->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
 
-								Field::make( 'html', 'byte_size_ui' )
-									->set_html( self::get_filesize_widget_html() ),
-
 								Field::make( 'text', 'byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
 									->set_attribute( 'type', 'number' )
 									->set_attribute( 'min', '0' )
@@ -630,38 +627,6 @@ class ODW_Fields {
 	 *
 	 * @return string HTML markup.
 	 */
-	private static function get_filesize_widget_html(): string {
-		ob_start();
-		?>
-		<div class="odw-filesize-widget">
-			<label class="odw-filesize-label">
-				<?php esc_html_e( 'Dateigröße', 'open-data-wizard' ); ?>
-				<span class="odw-filesize-optional"><?php esc_html_e( '(optional)', 'open-data-wizard' ); ?></span>
-			</label>
-			<div class="odw-filesize-row">
-				<input
-					type="number"
-					class="odw-filesize-number"
-					min="0"
-					step="0.1"
-					placeholder="<?php esc_attr_e( 'z. B. 2.5', 'open-data-wizard' ); ?>"
-					aria-label="<?php esc_attr_e( 'Dateigröße Zahlenwert', 'open-data-wizard' ); ?>"
-				>
-				<select class="odw-filesize-unit" aria-label="<?php esc_attr_e( 'Einheit', 'open-data-wizard' ); ?>">
-					<option value="KB">KB</option>
-					<option value="MB" selected="selected">MB</option>
-					<option value="GB">GB</option>
-				</select>
-				<span class="odw-filesize-hint description"></span>
-			</div>
-			<p class="odw-filesize-helptext description">
-				<?php esc_html_e( 'Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB', 'open-data-wizard' ); ?>
-			</p>
-		</div>
-		<?php
-		return ob_get_clean();
-	}
-
 	/**
 	 * Generates the HTML for the JSON-LD preview tab.
 	 *
