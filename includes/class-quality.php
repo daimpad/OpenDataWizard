@@ -26,9 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ODW_Quality {
 
-	public const LEVEL_HIGH   = 'high';
-	public const LEVEL_MEDIUM = 'medium';
-	public const LEVEL_LOW    = 'low';
+	public const LEVEL_PERFECT    = 'perfect';
+	public const LEVEL_HIGH       = 'high';
+	public const LEVEL_SUFFICIENT = 'sufficient';
+	public const LEVEL_LOW        = 'low';
+
+	/** Score at which all required fields are exactly fulfilled (no optional). */
+	private const REQUIRED_ONLY_SCORE = 55;
 
 	/**
 	 * Registers WordPress hooks.
@@ -50,12 +54,20 @@ class ODW_Quality {
 
 	/**
 	 * Gibt alle Qualitätsindikatoren mit Punktewertung zurück.
+	 * Geladen aus config/dcat-ap-fields.php via ODW_Fields::load_field_definitions().
 	 *
 	 * @return array<int, array{key: string, label: string, points: int, required: bool}>
 	 */
 	public static function get_indicators(): array {
+		if ( class_exists( 'ODW_Fields' ) ) {
+			$defs = ODW_Fields::load_field_definitions();
+			if ( ! empty( $defs ) ) {
+				return $defs;
+			}
+		}
+
+		// Fallback when ODW_Fields is not available (e.g. unit tests).
 		return array(
-			// Pflichtfelder (DCAT-AP 3.0 mandatory) — 55 Punkte.
 			array(
 				'key'      => 'title',
 				'label'    => __( 'Titel (dct:title)', 'open-data-wizard' ),
@@ -86,8 +98,6 @@ class ODW_Quality {
 				'points'   => 15,
 				'required' => true,
 			),
-
-			// Empfohlene Felder (DCAT-AP 3.0 recommended) — 40 Punkte.
 			array(
 				'key'      => 'language',
 				'label'    => __( 'Sprache (dct:language)', 'open-data-wizard' ),
@@ -112,8 +122,6 @@ class ODW_Quality {
 				'points'   => 10,
 				'required' => false,
 			),
-
-			// Optionale Angaben — 5 Punkte.
 			array(
 				'key'      => 'dist_format',
 				'label'    => __( 'Format der Distribution (dct:format)', 'open-data-wizard' ),
@@ -121,7 +129,6 @@ class ODW_Quality {
 				'required' => false,
 			),
 		);
-		// Summe: 55 + 40 + 5 = 100.
 	}
 
 	// -------------------------------------------------------------------------
@@ -185,7 +192,21 @@ class ODW_Quality {
 				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_publisher' ) );
 
 			case 'license':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_license' ) );
+				// License is now per-distribution (Änderung 7).
+				$dists = carbon_get_post_meta( $post->ID, 'odw_distributions' );
+				if ( ! is_array( $dists ) ) {
+					return false;
+				}
+				foreach ( $dists as $dist ) {
+					$lic = (string) ( $dist['license'] ?? '' );
+					if ( '' !== $lic && 'sonstige' !== $lic ) {
+						return true;
+					}
+					if ( 'sonstige' === $lic && ! empty( $dist['license_custom'] ) ) {
+						return true;
+					}
+				}
+				return false;
 
 			case 'distribution':
 				$dists = carbon_get_post_meta( $post->ID, 'odw_distributions' );
@@ -230,17 +251,25 @@ class ODW_Quality {
 	}
 
 	/**
-	 * Ermittelt das Ampel-Level aus dem Score.
+	 * Ermittelt das Qualitätslevel aus dem Score.
+	 *
+	 * 100           → Perfekt     (alle Felder ausgefüllt)
+	 * 56–99         → Gut         (alle Pflichtfelder + einige optionale)
+	 * REQUIRED_ONLY → Ausreichend (genau alle Pflichtfelder, keine optionalen)
+	 * < REQUIRED    → Verbesserungsbedarf (Pflichtfelder fehlen)
 	 *
 	 * @param int $score Numeric score 0–100.
-	 * @return string One of LEVEL_HIGH, LEVEL_MEDIUM, LEVEL_LOW.
+	 * @return string One of LEVEL_PERFECT, LEVEL_HIGH, LEVEL_SUFFICIENT, LEVEL_LOW.
 	 */
 	public static function get_level( int $score ): string {
-		if ( $score >= 80 ) {
+		if ( 100 === $score ) {
+			return self::LEVEL_PERFECT;
+		}
+		if ( $score > self::REQUIRED_ONLY_SCORE ) {
 			return self::LEVEL_HIGH;
 		}
-		if ( $score >= 50 ) {
-			return self::LEVEL_MEDIUM;
+		if ( self::REQUIRED_ONLY_SCORE === $score ) {
+			return self::LEVEL_SUFFICIENT;
 		}
 		return self::LEVEL_LOW;
 	}
@@ -367,7 +396,8 @@ class ODW_Quality {
 		$score       = $quality['score'];
 		$level       = $quality['level'];
 		$level_label = self::get_level_label( $level );
-		$level_class = 'odw-quality--' . $level;
+		// Map 'perfect' to 'high' CSS class so existing styles apply.
+		$level_class = 'odw-quality--' . ( 'perfect' === $level ? 'high' : $level );
 		$stored      = $quality['indicators'];
 		?>
 		<div class="odw-quality-report">
@@ -467,9 +497,10 @@ class ODW_Quality {
 	 */
 	public static function get_level_label( string $level ): string {
 		return array(
-			self::LEVEL_HIGH   => __( 'Gut', 'open-data-wizard' ),
-			self::LEVEL_MEDIUM => __( 'Mittel', 'open-data-wizard' ),
-			self::LEVEL_LOW    => __( 'Verbesserungsbedarf', 'open-data-wizard' ),
+			self::LEVEL_PERFECT    => __( 'Perfekt', 'open-data-wizard' ),
+			self::LEVEL_HIGH       => __( 'Gut', 'open-data-wizard' ),
+			self::LEVEL_SUFFICIENT => __( 'Ausreichend', 'open-data-wizard' ),
+			self::LEVEL_LOW        => __( 'Verbesserungsbedarf', 'open-data-wizard' ),
 		)[ $level ] ?? __( 'Unbekannt', 'open-data-wizard' );
 	}
 

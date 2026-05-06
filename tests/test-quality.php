@@ -52,27 +52,35 @@ class Test_ODW_Quality extends TestCase {
 	}
 
 	/**
-	 * Score 100 maps to LEVEL_HIGH.
+	 * Score 100 maps to LEVEL_PERFECT.
 	 */
-	public function test_get_level_returns_high_at_100(): void {
+	public function test_get_level_returns_perfect_at_100(): void {
 		$this->load_class();
-		$this->assertSame( ODW_Quality::LEVEL_HIGH, ODW_Quality::get_level( 100 ) );
+		$this->assertSame( ODW_Quality::LEVEL_PERFECT, ODW_Quality::get_level( 100 ) );
 	}
 
 	/**
-	 * Score 50 maps to LEVEL_MEDIUM.
+	 * Score 56 maps to LEVEL_HIGH (some optional fields filled).
 	 */
-	public function test_get_level_returns_medium_at_50(): void {
+	public function test_get_level_returns_high_at_56(): void {
 		$this->load_class();
-		$this->assertSame( ODW_Quality::LEVEL_MEDIUM, ODW_Quality::get_level( 50 ) );
+		$this->assertSame( ODW_Quality::LEVEL_HIGH, ODW_Quality::get_level( 56 ) );
 	}
 
 	/**
-	 * Score 79 is still LEVEL_MEDIUM (boundary check).
+	 * Score 55 maps to LEVEL_SUFFICIENT (exactly required fields only).
 	 */
-	public function test_get_level_returns_medium_at_79(): void {
+	public function test_get_level_returns_sufficient_at_55(): void {
 		$this->load_class();
-		$this->assertSame( ODW_Quality::LEVEL_MEDIUM, ODW_Quality::get_level( 79 ) );
+		$this->assertSame( ODW_Quality::LEVEL_SUFFICIENT, ODW_Quality::get_level( 55 ) );
+	}
+
+	/**
+	 * Score 99 maps to LEVEL_HIGH (boundary check below perfect).
+	 */
+	public function test_get_level_returns_high_at_99(): void {
+		$this->load_class();
+		$this->assertSame( ODW_Quality::LEVEL_HIGH, ODW_Quality::get_level( 99 ) );
 	}
 
 	/**
@@ -107,14 +115,25 @@ class Test_ODW_Quality extends TestCase {
 	}
 
 	/**
-	 * LEVEL_MEDIUM maps to label "Mittel".
+	 * LEVEL_PERFECT maps to label "Perfekt".
 	 */
-	public function test_get_level_label_medium(): void {
+	public function test_get_level_label_perfect(): void {
 		$this->load_class();
 
 		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
 
-		$this->assertSame( 'Mittel', ODW_Quality::get_level_label( ODW_Quality::LEVEL_MEDIUM ) );
+		$this->assertSame( 'Perfekt', ODW_Quality::get_level_label( ODW_Quality::LEVEL_PERFECT ) );
+	}
+
+	/**
+	 * LEVEL_SUFFICIENT maps to label "Ausreichend".
+	 */
+	public function test_get_level_label_sufficient(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$this->assertSame( 'Ausreichend', ODW_Quality::get_level_label( ODW_Quality::LEVEL_SUFFICIENT ) );
 	}
 
 	/**

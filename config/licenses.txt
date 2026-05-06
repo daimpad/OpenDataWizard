@@ -1,0 +1,18 @@
+# Open Data Lizenzen — eine Lizenz pro Zeile
+# Format: URI | Anzeigename
+# Kommentarzeilen beginnen mit #
+
+https://creativecommons.org/publicdomain/zero/1.0/ | CC0 1.0 (Public Domain)
+https://creativecommons.org/licenses/by/4.0/ | CC-BY 4.0 (Namensnennung)
+https://creativecommons.org/licenses/by-sa/4.0/ | CC-BY-SA 4.0 (Namensnennung, Weitergabe unter gleichen Bedingungen)
+https://creativecommons.org/licenses/by-nc/4.0/ | CC-BY-NC 4.0 (Namensnennung, nicht kommerziell)
+https://creativecommons.org/licenses/by-nd/4.0/ | CC-BY-ND 4.0 (Namensnennung, keine Bearbeitung)
+https://creativecommons.org/licenses/by-nc-sa/4.0/ | CC-BY-NC-SA 4.0 (Namensnennung, nicht kommerziell, Weitergabe)
+https://creativecommons.org/licenses/by-nc-nd/4.0/ | CC-BY-NC-ND 4.0 (Namensnennung, nicht kommerziell, keine Bearbeitung)
+https://www.govdata.de/dl-de/by-2-0 | Datenlizenz Deutschland – Namensnennung 2.0
+https://www.govdata.de/dl-de/zero-2-0 | Datenlizenz Deutschland – Zero 2.0
+https://opendatacommons.org/licenses/odbl/1-0/ | ODbL 1.0 (Open Database License)
+https://opendatacommons.org/licenses/pddl/1-0/ | PDDL 1.0 (Public Domain Dedication and License)
+https://opendatacommons.org/licenses/by/1-0/ | ODC-BY 1.0 (Open Data Commons Attribution)
+https://opensource.org/licenses/MIT | MIT License
+https://www.apache.org/licenses/LICENSE-2.0 | Apache License 2.0

@@ -114,6 +114,11 @@ class ODW_Validation {
 			$errors[] = __( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', 'open-data-wizard' );
 		}
 
+		// --- Lizenz in jeder Distribution (Änderung 7) ---
+		if ( $has_distribution && ! self::all_distributions_have_license( $post_id, $cf_input ) ) {
+			$errors[] = __( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', 'open-data-wizard' );
+		}
+
 		return $errors;
 	}
 
@@ -164,6 +169,67 @@ class ODW_Validation {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check that every distribution with an access_url also has a license.
+	 *
+	 * @param int                  $post_id  Post ID.
+	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
+	 */
+	private static function all_distributions_have_license( int $post_id, array $cf_input ): bool {
+		// Collect licenses from CF compact input.
+		$url_keys     = array();
+		$license_keys = array();
+
+		foreach ( $cf_input as $key => $value ) {
+			$key = (string) $key;
+			if ( str_contains( $key, '_odw_distributions' ) && str_contains( $key, 'access_url' ) && ! empty( $value ) ) {
+				// Extract group index from key like _odw_distributions[0][access_url].
+				preg_match( '/\[(\d+)\]/', $key, $matches );
+				if ( isset( $matches[1] ) ) {
+					$url_keys[] = $matches[1];
+				}
+			}
+			if ( str_contains( $key, '_odw_distributions' ) && str_contains( $key, '][license]' ) && ! empty( $value ) ) {
+				preg_match( '/\[(\d+)\]/', $key, $matches );
+				if ( isset( $matches[1] ) ) {
+					$license_keys[] = $matches[1];
+				}
+			}
+		}
+
+		// If we found distribution data in CF compact input, check it.
+		if ( ! empty( $url_keys ) ) {
+			foreach ( $url_keys as $idx ) {
+				if ( ! in_array( $idx, $license_keys, true ) ) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		// Fall back to existing meta.
+		$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
+
+		if ( ! is_array( $distributions ) ) {
+			return true;
+		}
+
+		foreach ( $distributions as $dist ) {
+			if ( empty( $dist['access_url'] ) ) {
+				continue;
+			}
+			$lic = (string) ( $dist['license'] ?? '' );
+			if ( '' === $lic ) {
+				return false;
+			}
+			if ( 'sonstige' === $lic && empty( $dist['license_custom'] ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

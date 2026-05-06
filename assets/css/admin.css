@@ -438,3 +438,102 @@
         margin-bottom: 4px;
     }
 }
+
+/* =========================================================================
+   Qualitätslevel — Perfekt (maps onto high-color) + Ausreichend
+   ========================================================================= */
+
+.odw-quality--perfect .odw-quality-dot,
+.odw-quality-bar--perfect {
+    background-color: var(--odw-color-quality-high-dot);
+}
+
+.odw-quality--perfect {
+    color:            var(--odw-color-quality-high-text);
+    background-color: var(--odw-color-quality-high-bg);
+}
+
+.odw-quality--sufficient .odw-quality-dot,
+.odw-quality-bar--sufficient {
+    background-color: #b45309;
+}
+
+.odw-quality--sufficient {
+    color:            #6a3800;
+    background-color: #fef3c7;
+}
+
+/* =========================================================================
+   Distribution intro text
+   ========================================================================= */
+
+.odw-distribution-intro {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: var(--odw-color-bg-light);
+    border-left: 4px solid var(--odw-color-primary);
+    border-radius: 0 var(--odw-radius) var(--odw-radius) 0;
+}
+
+.odw-distribution-intro h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+}
+
+/* =========================================================================
+   Composite file-size widget (Änderung 8)
+   ========================================================================= */
+
+.odw-filesize-widget {
+    margin: 4px 0 8px;
+}
+
+.odw-filesize-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.odw-filesize-optional {
+    font-weight: normal;
+    color: var(--odw-color-text-muted);
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+.odw-filesize-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.odw-filesize-number {
+    width: 120px;
+    min-width: 80px;
+}
+
+.odw-filesize-unit {
+    width: 80px;
+}
+
+.odw-filesize-hint {
+    color: var(--odw-color-text-muted);
+    font-size: 12px;
+}
+
+.odw-filesize-helptext {
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+/* Hide the backing CF byte_size input; JS syncs to it */
+.odw-byte-size-backing {
+    display: none !important;
+}
+
+/* Also hide the entire CF field wrapper for the backing field */
+.cf-field:has(.odw-byte-size-backing) {
+    display: none !important;
+}

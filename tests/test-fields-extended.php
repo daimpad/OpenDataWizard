@@ -511,9 +511,9 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * Each distribution carries the dataset-level license as dct:license @id.
+	 * Distribution carries its own per-distribution license as dct:license @id.
 	 */
-	public function test_build_distribution_inherits_license(): void {
+	public function test_build_distribution_has_own_license(): void {
 		$this->load_fields();
 
 		$license_uri = 'https://creativecommons.org/publicdomain/zero/1.0/';
@@ -521,12 +521,12 @@ class Test_ODW_Fields_Extended extends TestCase {
 			25,
 			'odw_dataset',
 			array(
-				'odw_license'       => $license_uri,
 				'odw_distributions' => array(
 					array(
 						'access_url' => 'https://example.com/data.csv',
 						'format'     => 'CSV',
 						'byte_size'  => '',
+						'license'    => $license_uri,
 					),
 				),
 			)
@@ -584,18 +584,33 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * The dct:license at dataset level is emitted as an @id reference.
+	 * The dct:license is emitted per distribution (not at dataset level).
+	 * A distribution with license 'sonstige' + license_custom uses the custom URI.
 	 */
-	public function test_build_dataset_license_is_id_reference(): void {
+	public function test_build_distribution_sonstige_license_uses_custom_uri(): void {
 		$this->load_fields();
 
-		$license_uri = 'https://creativecommons.org/licenses/by/4.0/';
-		$this->setup_jsonld_mocks( 28, 'odw_dataset', array( 'odw_license' => $license_uri ) );
+		$custom_uri = 'https://example.org/my-custom-license';
+		$this->setup_jsonld_mocks(
+			28,
+			'odw_dataset',
+			array(
+				'odw_distributions' => array(
+					array(
+						'access_url'     => 'https://example.com/data.csv',
+						'format'         => 'CSV',
+						'byte_size'      => '',
+						'license'        => 'sonstige',
+						'license_custom' => $custom_uri,
+					),
+				),
+			)
+		);
 
 		$result = odw_build_dataset_jsonld( 28 );
 
 		$this->assertIsArray( $result );
-		$this->assertArrayHasKey( 'dct:license', $result );
-		$this->assertSame( array( '@id' => $license_uri ), $result['dct:license'] );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame( array( '@id' => $custom_uri ), $dist['dct:license'] );
 	}
 }
