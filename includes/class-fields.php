@@ -40,15 +40,25 @@ class ODW_Fields {
 
 	/**
 	 * Registers the tabbed meta container with all dataset fields.
+	 * Tab structure (v2.1+):
+	 *   1 — Grundlegende Informationen
+	 *   2 — Inhaltliche Angaben
+	 *   3 — Datenbereitstellung (Lizenz + Distribution)
+	 *   4 — Erweiterte Angaben
+	 *   5 — Vorschau
 	 */
 	private static function register_required_fields(): void {
 		Container::make( 'post_meta', __( 'Pflichtangaben', 'open-data-wizard' ) )
 			->where( 'post_type', '=', 'odw_dataset' )
 			->set_priority( 'high' )
+
+			// -----------------------------------------------------------------
+			// Tab 1 — Grundlegende Informationen
+			// -----------------------------------------------------------------
 			->add_tab(
-				__( '1 — Pflichtangaben', 'open-data-wizard' ),
+				__( '1 — Grundlegende Informationen', 'open-data-wizard' ),
 				array(
-					Field::make( 'html', 'odw_description_tab1_hint' )
+					Field::make( 'html', 'odw_tab1_hint' )
 						->set_html( '<p class="description">' . esc_html__( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) . '</p>' ),
 
 					Field::make( 'text', 'odw_publisher', __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ) )
@@ -57,21 +67,23 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) )
 						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V.', 'open-data-wizard' ) ),
 
+					Field::make( 'select', 'odw_theme', __( 'In welche Kategorie gehört dieser Datensatz?', 'open-data-wizard' ) )
+						->add_options( self::get_theme_options() )
+						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
+
 					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_rows( 5 )
 						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
 						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
-
-					Field::make( 'select', 'odw_license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
-						->set_required( true )
-						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
-						->add_options( self::get_license_options() )
-						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
 				)
 			)
+
+			// -----------------------------------------------------------------
+			// Tab 2 — Inhaltliche Angaben
+			// -----------------------------------------------------------------
 			->add_tab(
-				__( '2 — Optionale Angaben', 'open-data-wizard' ),
+				__( '2 — Inhaltliche Angaben', 'open-data-wizard' ),
 				array(
 					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
@@ -83,10 +95,6 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', __( 'z.B. Umwelt', 'open-data-wizard' ) )
 						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( 'Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_theme', __( 'In welche Kategorie gehört dieser Datensatz?', 'open-data-wizard' ) )
-						->add_options( self::get_theme_options() )
-						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
-
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
 						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
@@ -96,11 +104,30 @@ class ODW_Fields {
 						->set_storage_format( 'Y-m-d' )
 						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
 						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_cessda_topic', __( 'CESSDA Themenklassifikation', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'Thema eintippen oder URI eingeben…', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-autosuggest', 'cessda' )
+						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (cessda:topic)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 				)
 			)
+
+			// -----------------------------------------------------------------
+			// Tab 3 — Datenbereitstellung (Lizenz + Distribution)
+			// -----------------------------------------------------------------
 			->add_tab(
-				__( '3 — Distribution', 'open-data-wizard' ),
+				__( '3 — Datenbereitstellung', 'open-data-wizard' ),
 				array(
+					Field::make( 'html', 'odw_dist_intro' )
+						->set_html(
+							'<div class="odw-distribution-intro">' .
+							'<h4>' . esc_html__( 'Was ist eine Distribution?', 'open-data-wizard' ) . '</h4>' .
+							'<p class="description">' .
+							esc_html__( 'Eine Distribution beschreibt eine konkrete Bereitstellungsform Ihrer Daten — zum Beispiel eine CSV-Datei, eine JSON-API oder ein PDF-Dokument. Ein Datensatz kann mehrere Distributionen in verschiedenen Formaten haben. Jede Distribution erhält eine eigene Lizenz.', 'open-data-wizard' ) .
+							'</p>' .
+							'</div>'
+						),
+
 					Field::make( 'complex', 'odw_distributions', __( 'Wo können die Daten heruntergeladen werden?', 'open-data-wizard' ) )
 						->set_min( 1 )
 						->set_collapsed( false )
@@ -116,11 +143,34 @@ class ODW_Fields {
 									->add_options( self::get_format_options() )
 									->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
 
-								Field::make( 'text', 'byte_size', __( 'Wie groß ist die Datei (in Bytes)?', 'open-data-wizard' ) )
-									->set_attribute( 'placeholder', __( 'optional, z.B. 204800', 'open-data-wizard' ) )
+								Field::make( 'html', 'byte_size_ui' )
+									->set_html( self::get_filesize_widget_html() ),
+
+								Field::make( 'text', 'byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
 									->set_attribute( 'type', 'number' )
 									->set_attribute( 'min', '0' )
-									->set_help_text( __( 'DATEIGRÖSSE IN BYTES (dcat:byteSize)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 204800 (ca. 200 KB). Optional.', 'open-data-wizard' ) ),
+									->set_attribute( 'data-odw-backing', 'byte_size' )
+									->set_attribute( 'class', 'odw-byte-size-backing' ),
+
+								Field::make( 'select', 'license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
+									->set_required( true )
+									->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
+									->add_options( self::get_license_options() )
+									->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
+
+								Field::make( 'text', 'license_custom', __( 'Lizenz-URI eingeben oder auswählen', 'open-data-wizard' ) )
+									->set_attribute( 'placeholder', __( 'https://example.org/meine-lizenz', 'open-data-wizard' ) )
+									->set_attribute( 'data-odw-autosuggest', 'license_custom' )
+									->set_help_text( __( 'EIGENE LIZENZ-URI', 'open-data-wizard' ) . "\n\n" . __( 'Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/', 'open-data-wizard' ) )
+									->set_conditional_logic(
+										array(
+											array(
+												'field'   => 'license',
+												'value'   => 'sonstige',
+												'compare' => '=',
+											),
+										)
+									),
 
 								Field::make( 'text', 'attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
 									->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
@@ -128,13 +178,15 @@ class ODW_Fields {
 							)
 						)
 						->set_help_text( __( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Sie können mehrere Dateiformate (z.B. CSV und JSON) als separate Distributionen anbieten.', 'open-data-wizard' ) ),
-
 				)
 			)
+
+			// -----------------------------------------------------------------
+			// Tab 4 — Erweiterte Angaben (unverändert)
+			// -----------------------------------------------------------------
 			->add_tab(
 				__( '4 — Erweiterte Angaben', 'open-data-wizard' ),
 				array(
-					// --- Projektseite & Aktualität ---
 					Field::make( 'html', 'odw_ext_hint_landing' )
 						->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
 
@@ -147,7 +199,6 @@ class ODW_Fields {
 						->add_options( self::get_periodicity_options() )
 						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
 
-					// --- Abdeckung ---
 					Field::make( 'html', 'odw_ext_hint_coverage' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
 
@@ -169,7 +220,6 @@ class ODW_Fields {
 						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
 						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-12-31', 'open-data-wizard' ) ),
 
-					// --- Kontaktpunkt ---
 					Field::make( 'html', 'odw_ext_hint_contact' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
 
@@ -188,6 +238,10 @@ class ODW_Fields {
 						->set_help_text( __( 'WEBSITE (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
 				)
 			)
+
+			// -----------------------------------------------------------------
+			// Tab 5 — Vorschau
+			// -----------------------------------------------------------------
 			->add_tab(
 				__( '5 — Vorschau', 'open-data-wizard' ),
 				array(
@@ -226,11 +280,8 @@ class ODW_Fields {
 			return;
 		}
 
-		// Update without triggering an infinite loop.
 		remove_action( 'save_post_odw_dataset', array( self::class, 'set_modified_date' ), 10 );
-
 		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
-
 		add_action( 'save_post_odw_dataset', array( self::class, 'set_modified_date' ), 10, 2 );
 	}
 
@@ -241,24 +292,171 @@ class ODW_Fields {
 	/**
 	 * Returns the required scalar fields definition used by both form rendering
 	 * and the validation class. Each entry: [meta_key, label].
+	 * Loaded from config/dcat-ap-fields.php.
 	 *
 	 * @return array<int, array{meta_key: string, label: string}>
 	 */
 	public static function get_required_fields(): array {
-		return array(
-			array(
-				'meta_key' => '_odw_description',
-				'label'    => __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ),
-			),
-			array(
-				'meta_key' => '_odw_publisher',
-				'label'    => __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ),
-			),
-			array(
-				'meta_key' => '_odw_license',
-				'label'    => __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ),
-			),
-		);
+		$all = self::load_field_definitions();
+
+		$required = array();
+		foreach ( $all as $field ) {
+			// Only scalar fields (with a meta_key) are validated here.
+			// Distribution and title are handled separately in ODW_Validation.
+			if ( $field['required'] && ! empty( $field['meta_key'] ) ) {
+				$required[] = array(
+					'meta_key' => $field['meta_key'],
+					'label'    => $field['label'],
+				);
+			}
+		}
+
+		return $required;
+	}
+
+	// -------------------------------------------------------------------------
+	// Config file loaders
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Load field definitions from config/dcat-ap-fields.php.
+	 * Used by ODW_Fields::get_required_fields() and ODW_Quality::get_indicators().
+	 *
+	 * @return array<int, array{key: string, meta_key: string, dcat_prop: string, label: string, points: int, required: bool}>
+	 */
+	public static function load_field_definitions(): array {
+		$file = ODW_PLUGIN_DIR . 'config/dcat-ap-fields.php';
+
+		if ( ! file_exists( $file ) ) {
+			return array();
+		}
+
+		$data = require $file;
+		return is_array( $data ) ? $data : array();
+	}
+
+	/**
+	 * Load format definitions from config/dct-format-list.php.
+	 *
+	 * @return array<string, array{mime: string, eu_uri: string}>
+	 */
+	private static function load_format_list(): array {
+		$file = ODW_PLUGIN_DIR . 'config/dct-format-list.php';
+
+		if ( ! file_exists( $file ) ) {
+			return array();
+		}
+
+		$data = require $file;
+		return is_array( $data ) ? $data : array();
+	}
+
+	/**
+	 * Load license options from config/licenses.txt.
+	 * Format: URI | Label (one per line; lines starting with # are comments).
+	 *
+	 * @return array<string, string> URI => Label map (excludes the Sonstige entry).
+	 */
+	public static function load_license_list(): array {
+		$file = ODW_PLUGIN_DIR . 'config/licenses.txt';
+
+		if ( ! file_exists( $file ) ) {
+			return array();
+		}
+
+		$lines   = file( $file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+		$options = array();
+
+		if ( ! is_array( $lines ) ) {
+			return array();
+		}
+
+		foreach ( $lines as $line ) {
+			$line = trim( $line );
+
+			if ( '' === $line || str_starts_with( $line, '#' ) ) {
+				continue;
+			}
+
+			$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+
+			if ( 2 === count( $parts ) && '' !== $parts[0] && '' !== $parts[1] ) {
+				$options[ $parts[0] ] = $parts[1];
+			}
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Parse CESSDA SKOS/RDF file and return concept URI => German label map.
+	 * Result is cached in a transient (24h TTL).
+	 *
+	 * @return array<string, string> URI => German label.
+	 */
+	public static function load_cessda_options(): array {
+		$cache_key = 'odw_cessda_options';
+		$cached    = get_transient( $cache_key );
+
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$file = ODW_PLUGIN_DIR . 'config/TopicClassification-4.2.3_de-4.2.3.rdf';
+
+		if ( ! file_exists( $file ) ) {
+			return array();
+		}
+
+		$options = array();
+
+		// Suppress XML warnings; file is valid RDF/XML from CESSDA.
+		libxml_use_internal_errors( true );
+		$xml = simplexml_load_file( $file );
+		libxml_clear_errors();
+
+		if ( false === $xml ) {
+			return array();
+		}
+
+		$xml->registerXPathNamespace( 'rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' );
+		$xml->registerXPathNamespace( 'skos', 'http://www.w3.org/2004/02/skos/core#' );
+
+		$descriptions = $xml->xpath( '//rdf:Description' );
+
+		if ( ! is_array( $descriptions ) ) {
+			return array();
+		}
+
+		foreach ( $descriptions as $desc ) {
+			$attrs = $desc->attributes( 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' );
+			$uri   = (string) ( $attrs['about'] ?? '' );
+
+			// Skip ConceptScheme root and entries without a #fragment identifier.
+			if ( '' === $uri || ! str_contains( $uri, '#' ) ) {
+				continue;
+			}
+
+			// Get German prefLabel.
+			$labels = $desc->children( 'http://www.w3.org/2004/02/skos/core#' );
+			foreach ( $labels as $name => $node ) {
+				if ( 'prefLabel' !== $name ) {
+					continue;
+				}
+				$xml_attrs = $node->attributes( 'http://www.w3.org/XML/1998/namespace' );
+				if ( 'de' === (string) ( $xml_attrs['lang'] ?? '' ) ) {
+					$options[ $uri ] = (string) $node;
+					break;
+				}
+			}
+		}
+
+		// Sort by label for a better auto-suggest experience.
+		asort( $options );
+
+		set_transient( $cache_key, $options, DAY_IN_SECONDS );
+
+		return $options;
 	}
 
 	// -------------------------------------------------------------------------
@@ -267,6 +465,7 @@ class ODW_Fields {
 
 	/**
 	 * Lizenzen als URI → Label Map für Select-Felder und den `odw_license_options`-Filter.
+	 * Lädt Standard-Optionen aus dem Formular; vollständige Liste via licenses.txt.
 	 *
 	 * @return array<string, string> Erweiterbar via `add_filter('odw_license_options', ...)`.
 	 */
@@ -276,7 +475,7 @@ class ODW_Fields {
 			'https://creativecommons.org/publicdomain/zero/1.0/' => 'CC0 1.0',
 			'https://creativecommons.org/licenses/by/4.0/' => 'CC-BY 4.0',
 			'https://creativecommons.org/licenses/by-sa/4.0/' => 'CC-BY-SA 4.0',
-			'https://www.govdata.de/dl-de/by-2-0'          => 'Datenlizenz Deutschland Namensnennung 2.0',
+			'sonstige'                                     => __( 'Sonstige…', 'open-data-wizard' ),
 		);
 
 		return (array) apply_filters( 'odw_license_options', $options );
@@ -284,21 +483,27 @@ class ODW_Fields {
 
 	/**
 	 * Translate a license URI to its human-readable label.
-	 * Single source of truth — used by Fields and Admin classes.
+	 * Checks known options first, then the external licenses.txt list.
 	 *
-	 * @param string $uri License URI.
+	 * @param string $uri License URI (or 'sonstige').
 	 * @return string Human-readable label, or the URI itself if not found.
 	 */
 	public static function get_license_label( string $uri ): string {
 		$options = self::get_license_options();
-		return $options[ $uri ] ?? $uri;
+
+		if ( isset( $options[ $uri ] ) ) {
+			return $options[ $uri ];
+		}
+
+		$extended = self::load_license_list();
+
+		return $extended[ $uri ] ?? $uri;
 	}
 
 	/**
-	 * Themen-Vokabular als EU-Vocabulary-URI → Label Map für das DCAT-AP `dcat:theme`-Feld.
-	 * URIs entstammen dem EU Publications Office Data Theme Vocabulary.
+	 * Themen-Vokabular als EU-Vocabulary-URI → Label Map.
 	 *
-	 * @return array<string, string> Erweiterbar via `add_filter('odw_theme_options', ...)`.
+	 * @return array<string, string>
 	 */
 	public static function get_theme_options(): array {
 		$base    = 'http://publications.europa.eu/resource/authority/data-theme/';
@@ -323,10 +528,7 @@ class ODW_Fields {
 	}
 
 	/**
-	 * Aktualisierungsfrequenzen aus dem EU Publications Office Frequency Vocabulary.
-	 *
-	 * Basis-URI: http://publications.europa.eu/resource/authority/frequency/
-	 * Vollständige URI wird als Wert gespeichert und im JSON-LD als `@id` ausgegeben.
+	 * Aktualisierungsfrequenzen.
 	 *
 	 * @return array<string, string>
 	 */
@@ -346,67 +548,51 @@ class ODW_Fields {
 	}
 
 	/**
-	 * Dateiformate als Kurzbezeichnung → Kurzbezeichnung Map für das Distribution-Feld.
-	 * Die Kurzbezeichnung wird via `get_format_mime()` in den MIME-Typ für JSON-LD übersetzt.
+	 * Dateiformate aus config/dct-format-list.php.
 	 *
 	 * @return array<string, string>
 	 */
 	public static function get_format_options(): array {
-		return array(
-			''          => __( '— Bitte wählen —', 'open-data-wizard' ),
-			'CSV'       => 'CSV',
-			'JSON'      => 'JSON',
-			'XLSX'      => 'XLSX',
-			'PDF'       => 'PDF',
-			'GeoJSON'   => 'GeoJSON',
-			'XML'       => 'XML',
-			'Sonstiges' => __( 'Sonstiges', 'open-data-wizard' ),
-		);
+		$list    = self::load_format_list();
+		$options = array( '' => __( '— Bitte wählen —', 'open-data-wizard' ) );
+
+		foreach ( array_keys( $list ) as $key ) {
+			$options[ $key ] = $key;
+		}
+
+		return $options;
 	}
 
 	/**
-	 * Format MIME-type mapping for JSON-LD output.
+	 * Format MIME-type mapping — loaded from config/dct-format-list.php.
 	 *
 	 * @param string $format Short format label (e.g. "CSV").
 	 * @return string MIME type, or the original format string if unknown.
 	 */
 	public static function get_format_mime( string $format ): string {
-		$map = array(
-			'CSV'     => 'text/csv',
-			'JSON'    => 'application/json',
-			'XLSX'    => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-			'PDF'     => 'application/pdf',
-			'GeoJSON' => 'application/geo+json',
-			'XML'     => 'application/xml',
-		);
-
-		return $map[ $format ] ?? $format;
+		$list = self::load_format_list();
+		return $list[ $format ]['mime'] ?? $format;
 	}
 
 	/**
 	 * Maps a short format label to its EU Publications Office file-type URI.
-	 * Used in dct:format for DCAT-AP.de / Civora compliance.
 	 *
 	 * @param string $format Short format label (e.g. "CSV").
 	 * @return string EU file-type URI, or the original string if unknown.
 	 */
 	public static function get_format_eu_uri( string $format ): string {
-		$base = 'http://publications.europa.eu/resource/authority/file-type/';
-		$map  = array(
-			'CSV'     => $base . 'CSV',
-			'JSON'    => $base . 'JSON',
-			'XLSX'    => $base . 'XLSX',
-			'PDF'     => $base . 'PDF',
-			'GeoJSON' => $base . 'GEOJSON',
-			'XML'     => $base . 'XML',
-		);
+		$list    = self::load_format_list();
+		$eu_code = $list[ $format ]['eu_uri'] ?? '';
 
-		return $map[ $format ] ?? $format;
+		if ( '' === $eu_code ) {
+			return $format;
+		}
+
+		return 'http://publications.europa.eu/resource/authority/file-type/' . $eu_code;
 	}
 
 	/**
-	 * Language options as EU Publications Office language URI → label map.
-	 * Used in dct:language for DCAT-AP.de / Civora compliance.
+	 * Language options.
 	 *
 	 * @return array<string, string>
 	 */
@@ -420,8 +606,7 @@ class ODW_Fields {
 	}
 
 	/**
-	 * Administrative geocoding level options from the DCAT-AP.de political geocoding vocabulary.
-	 * Used in dcatde:politicalGeocodingLevelURI for Civora compliance.
+	 * Administrative geocoding level options.
 	 *
 	 * @return array<string, string>
 	 */
@@ -434,6 +619,48 @@ class ODW_Fields {
 			$base . 'administrativeDistrict' => __( 'Landkreis', 'open-data-wizard' ),
 			$base . 'municipality'           => __( 'Gemeinde', 'open-data-wizard' ),
 		);
+	}
+
+	// -------------------------------------------------------------------------
+	// HTML helpers
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Renders the HTML for the composite file-size widget (Änderung 8).
+	 * The backing byte_size field is hidden via CSS; JS syncs the two.
+	 *
+	 * @return string HTML markup.
+	 */
+	private static function get_filesize_widget_html(): string {
+		ob_start();
+		?>
+		<div class="odw-filesize-widget">
+			<label class="odw-filesize-label">
+				<?php esc_html_e( 'Dateigröße', 'open-data-wizard' ); ?>
+				<span class="odw-filesize-optional"><?php esc_html_e( '(optional)', 'open-data-wizard' ); ?></span>
+			</label>
+			<div class="odw-filesize-row">
+				<input
+					type="number"
+					class="odw-filesize-number"
+					min="0"
+					step="0.1"
+					placeholder="<?php esc_attr_e( 'z. B. 2.5', 'open-data-wizard' ); ?>"
+					aria-label="<?php esc_attr_e( 'Dateigröße Zahlenwert', 'open-data-wizard' ); ?>"
+				>
+				<select class="odw-filesize-unit" aria-label="<?php esc_attr_e( 'Einheit', 'open-data-wizard' ); ?>">
+					<option value="KB">KB</option>
+					<option value="MB" selected="selected">MB</option>
+					<option value="GB">GB</option>
+				</select>
+				<span class="odw-filesize-hint description"></span>
+			</div>
+			<p class="odw-filesize-helptext description">
+				<?php esc_html_e( 'Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB', 'open-data-wizard' ); ?>
+			</p>
+		</div>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -495,13 +722,13 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$title         = $post->post_title;
 	$description   = carbon_get_post_meta( $post_id, 'odw_description' );
 	$publisher     = carbon_get_post_meta( $post_id, 'odw_publisher' );
-	$license       = carbon_get_post_meta( $post_id, 'odw_license' );
 	$language      = carbon_get_post_meta( $post_id, 'odw_language' );
 	$keywords      = carbon_get_post_meta( $post_id, 'odw_keywords' );
 	$theme         = carbon_get_post_meta( $post_id, 'odw_theme' );
 	$issued        = carbon_get_post_meta( $post_id, 'odw_issued' );
 	$modified      = get_post_meta( $post_id, '_odw_modified', true );
 	$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
+	$cessda_topic  = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
 
 	// Extended DCAT-AP fields (Tab 4).
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
@@ -525,12 +752,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		),
 	);
 
-	if ( ! empty( $license ) ) {
-		$dataset['dct:license'] = array( '@id' => (string) $license );
-	}
-
 	if ( ! empty( $language ) ) {
-		// Normalize legacy ISO codes ('de', 'en') to EU language URIs.
 		$lang_base               = 'http://publications.europa.eu/resource/authority/language/';
 		$lang_legacy             = array(
 			'de' => $lang_base . 'DEU',
@@ -548,7 +770,6 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	}
 
 	if ( ! empty( $theme ) ) {
-		// Normalize legacy text labels to EU data-theme URIs.
 		$theme_base            = 'http://publications.europa.eu/resource/authority/data-theme/';
 		$theme_legacy          = array(
 			'Bildung'    => $theme_base . 'EDUC',
@@ -561,6 +782,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			'Sonstiges'  => $theme_base . 'GOVE',
 		);
 		$dataset['dcat:theme'] = array( '@id' => $theme_legacy[ (string) $theme ] ?? (string) $theme );
+	}
+
+	if ( ! empty( $cessda_topic ) ) {
+		$dataset['cessda:topic'] = array( '@id' => $cessda_topic );
 	}
 
 	if ( ! empty( $issued ) ) {
@@ -579,9 +804,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 
 	if ( ! empty( $distributions ) && is_array( $distributions ) ) {
 		$dist_list = array();
+
 		foreach ( $distributions as $dist ) {
-			// esc_url_raw() strips javascript:, data:, and other non-HTTP schemes.
 			$access_url = esc_url_raw( (string) ( $dist['access_url'] ?? '' ) );
+
 			if ( empty( $access_url ) ) {
 				continue;
 			}
@@ -595,12 +821,19 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 				$dist_item['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $dist['format'] ) );
 			}
 
-			if ( isset( $dist['byte_size'] ) && '' !== $dist['byte_size'] && is_numeric( $dist['byte_size'] ) && (int) $dist['byte_size'] >= 0 ) {
-				$dist_item['dcat:byteSize'] = (int) $dist['byte_size'];
+			// File size: prefer new composite fields (byte_size_value + unit), fall back to legacy byte_size.
+			$byte_size = odw_compute_byte_size( $dist );
+			if ( $byte_size > 0 ) {
+				$dist_item['dcat:byteSize'] = $byte_size;
 			}
 
-			if ( ! empty( $license ) ) {
-				$dist_item['dct:license'] = array( '@id' => (string) $license );
+			// Lizenz pro Distribution (Änderung 7).
+			$dist_license = (string) ( $dist['license'] ?? '' );
+			if ( 'sonstige' === $dist_license && ! empty( $dist['license_custom'] ) ) {
+				$dist_license = (string) $dist['license_custom'];
+			}
+			if ( ! empty( $dist_license ) && 'sonstige' !== $dist_license ) {
+				$dist_item['dct:license'] = array( '@id' => $dist_license );
 			}
 
 			if ( ! empty( $dist['attribution_text'] ) ) {
@@ -674,4 +907,34 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	 * @param int                  $post_id  The dataset post ID.
 	 */
 	return (array) apply_filters( 'odw_dataset_jsonld', $dataset, $post_id );
+}
+
+/**
+ * Compute byte size from a distribution array.
+ * Supports the legacy single-field format (byte_size in bytes)
+ * and the new composite format (byte_size_value + byte_size_unit).
+ *
+ * @param array<string, mixed> $dist Distribution sub-array from Carbon Fields.
+ * @return int Byte count, or 0 if not set.
+ */
+function odw_compute_byte_size( array $dist ): int {
+	// New composite format.
+	$value = $dist['byte_size_value'] ?? '';
+	if ( '' !== $value && is_numeric( $value ) && (float) $value > 0 ) {
+		$unit    = (string) ( $dist['byte_size_unit'] ?? 'MB' );
+		$factors = array(
+			'KB' => 1024,
+			'MB' => 1048576,
+			'GB' => 1073741824,
+		);
+		return (int) round( (float) $value * ( $factors[ $unit ] ?? 1048576 ) );
+	}
+
+	// Legacy: raw byte count.
+	$legacy = $dist['byte_size'] ?? '';
+	if ( '' !== $legacy && is_numeric( $legacy ) && (int) $legacy >= 0 ) {
+		return (int) $legacy;
+	}
+
+	return 0;
 }

@@ -73,8 +73,21 @@ class ODW_Admin {
 	public static function render_column( string $column, int $post_id ): void {
 		switch ( $column ) {
 			case 'odw_license':
-				$license = (string) carbon_get_post_meta( $post_id, 'odw_license' );
-				echo esc_html( ODW_Fields::get_license_label( $license ) );
+				// License is now stored per distribution (Änderung 7); show label from first distribution.
+				$dists = carbon_get_post_meta( $post_id, 'odw_distributions' );
+				$lic   = '';
+				if ( is_array( $dists ) ) {
+					foreach ( $dists as $dist ) {
+						$candidate = (string) ( $dist['license'] ?? '' );
+						if ( '' !== $candidate ) {
+							$lic = ( 'sonstige' === $candidate && ! empty( $dist['license_custom'] ) )
+								? (string) $dist['license_custom']
+								: $candidate;
+							break;
+						}
+					}
+				}
+				echo esc_html( '' !== $lic ? ODW_Fields::get_license_label( $lic ) : '—' );
 				break;
 
 			case 'odw_theme':
@@ -259,6 +272,41 @@ class ODW_Admin {
 				array( 'jquery' ),
 				ODW_VERSION,
 				true
+			);
+
+			wp_enqueue_script(
+				'odw-admin-fields',
+				ODW_PLUGIN_URL . 'assets/js/odw-admin-fields.js',
+				array(),
+				ODW_VERSION,
+				true
+			);
+
+			// Build license auto-suggest options from config/licenses.txt.
+			$license_file_options = array();
+			foreach ( ODW_Fields::load_license_list() as $uri => $label ) {
+				$license_file_options[] = array(
+					'value' => $uri,
+					'label' => $label,
+				);
+			}
+
+			// Build CESSDA auto-suggest options from SKOS file.
+			$cessda_options = array();
+			foreach ( ODW_Fields::load_cessda_options() as $uri => $label ) {
+				$cessda_options[] = array(
+					'value' => $uri,
+					'label' => $label,
+				);
+			}
+
+			wp_localize_script(
+				'odw-admin-fields',
+				'odwAdminFields',
+				array(
+					'licenseOptions' => $license_file_options,
+					'cessdaOptions'  => $cessda_options,
+				)
 			);
 
 			global $post;

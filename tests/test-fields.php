@@ -17,7 +17,8 @@ use PHPUnit\Framework\TestCase;
 class Test_ODW_Fields extends TestCase {
 
 	/**
-	 * Returns a non-empty array with the three required meta keys.
+	 * Returns scalar required meta keys (description + publisher).
+	 * License is now per-distribution and not included as a scalar field.
 	 */
 	public function test_get_required_fields_returns_expected_keys(): void {
 		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
@@ -25,12 +26,12 @@ class Test_ODW_Fields extends TestCase {
 		$fields = ODW_Fields::get_required_fields();
 
 		$this->assertIsArray( $fields );
-		$this->assertCount( 3, $fields );
 
 		$meta_keys = array_column( $fields, 'meta_key' );
 		$this->assertContains( '_odw_description', $meta_keys );
 		$this->assertContains( '_odw_publisher', $meta_keys );
-		$this->assertContains( '_odw_license', $meta_keys );
+		// License is now per-distribution; no longer a scalar dataset-level field.
+		$this->assertNotContains( '_odw_license', $meta_keys );
 	}
 
 	/**
