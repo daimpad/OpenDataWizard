@@ -149,8 +149,7 @@ class ODW_Fields {
 								Field::make( 'text', 'byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
 									->set_attribute( 'type', 'number' )
 									->set_attribute( 'min', '0' )
-									->set_attribute( 'data-odw-backing', 'byte_size' )
-									->set_attribute( 'class', 'odw-byte-size-backing' ),
+									->set_attribute( 'data-odw-backing', 'byte_size' ),
 
 								Field::make( 'select', 'license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
 									->set_required( true )

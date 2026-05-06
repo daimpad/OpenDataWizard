@@ -12,7 +12,7 @@ composer install                # Install all dev dependencies (PHPUnit, PHPStan
 composer phpcs                  # Run WordPress Coding Standards checks
 composer phpcbf                 # Auto-fix PHPCS violations
 composer phpstan                # Static analysis (Level 6) — false positives expected from Carbon Fields stubs
-composer test                   # Run PHPUnit (all 69 tests)
+composer test                   # Run PHPUnit (all 90 tests)
 composer test -- tests/test-fields.php      # Run a single test file
 composer test -- --filter testMethodName    # Run specific test by name
 ```
@@ -33,7 +33,7 @@ Open Data Wizard is a **WordPress plugin** that bridges the gap between WordPres
 3. On publish, **validation hooks** block publishing if required fields are missing
 4. Metadata is **persisted as post meta** + **JSON-LD cached in transients**
 5. **REST API endpoints** expose published datasets as machine-readable JSON-LD
-6. External **Harvesting systems** (Civora, Piveau, CKANN) can fetch the `/catalog` endpoint and automatically ingest datasets
+6. External **harvesting systems** can fetch the `/catalog` endpoint and automatically ingest datasets
 
 ### Class Hierarchy
 
@@ -60,7 +60,7 @@ ODW_Something::init();  // Called in odw_bootstrap()
 | `ODW_Post_Types` | Registers the `odw_dataset` CPT with capability mapping | `register()` — maps all write ops to `manage_open_data` cap |
 | `ODW_Fields` | Defines the 5-tab Carbon Fields form + JSON-LD builder | `register()`, `register_required_fields()`, `odw_build_dataset_jsonld()` (companion function) |
 | `ODW_Validation` | Blocks publishing if required fields missing; stores errors as transients | `intercept_publish()`, `validate()` |
-| `ODW_Quality` | Auto-calculates DCAT-AP completeness (0–100 score, 3 levels) after save | `calculate()`, `check_indicator()`, `get_level()` |
+| `ODW_Quality` | Auto-calculates DCAT-AP completeness (0–100 score, 4 levels) after save | `calculate()`, `check_indicator()`, `get_level()` |
 | `ODW_Admin` | Admin UI: list columns, sortable columns, help tabs, wp.media upload meta-box | `render_column()`, `handle_meta_orderby()` (for sortable theme column via `pre_get_posts`) |
 | `ODW_Rest_API` | `/catalog` and `/datasets/<id>` + `/delta?since=<ISO8601>` endpoints | `get_catalog()`, `get_dataset()`, `get_delta()` — all with transient caching (5 min TTL) |
 | `ODW_Shortcode` | `[odw_dataset id="123"]` renders download card in frontend | `render()` |
@@ -181,11 +181,13 @@ The plugin tracks features by version in `CHANGELOG.md`. Key versions:
 - **v1.8** — Native wp.media upload widget in sidebar
 - **v1.9** — Delta-Harvesting endpoint (`/delta?since=<ISO8601>` for incremental harvesting), comprehensive CLAUDE.md
 - **v2.0.0** — **Phase 1+2 UX improvements**: All 19 form field labels rewritten with user-friendly questions + practical examples; WP-CLI commands for batch operations
+- **v2.1.0** — Per-distribution license, CESSDA topic classification, 4-level quality scoring, external config files (`config/licenses.txt`, `config/dct-format-list.php`, `config/dcat-ap-fields.php`), composite file size widget, shortcode overhaul (keywords + metadata download), plugin rebrand to nozilla
+- **v2.1.1** — Bugfix: remove invalid `class` attribute from CF5 input (use `[data-odw-backing]` CSS selector)
 
 ### Constants (Defined in `open-data-wizard.php`)
 
 ```php
-define( 'ODW_VERSION', '1.8.0' );           // Current version
+define( 'ODW_VERSION', '2.1.0' );           // Current version
 define( 'ODW_PLUGIN_DIR', dirname( __FILE__ ) . '/' );  // /path/to/plugin/
 define( 'ODW_PLUGIN_URL', plugins_url( '', __FILE__ ) ); // https://site.com/wp-content/plugins/open-data-wizard/
 define( 'ODW_PLUGIN_FILE', __FILE__ );      // /path/to/plugin/open-data-wizard.php
@@ -230,7 +232,7 @@ private function load_class(): void {
 ### Running Tests
 
 ```bash
-composer test                          # All 69 tests
+composer test                          # All 90 tests
 composer test -- tests/test-fields.php # Single file
 composer test -- --filter testMethodName  # Single test
 composer test -- --verbose              # Show test names
@@ -239,10 +241,11 @@ composer test -- --verbose              # Show test names
 **Test files:**
 - `test-fields.php` — `ODW_Fields` static methods (license labels, format MIME types, required fields)
 - `test-fields-extended.php` — JSON-LD builder (`odw_build_dataset_jsonld()`)
-- `test-quality.php` — `ODW_Quality` scoring and caching
+- `test-quality.php` — `ODW_Quality` scoring and caching (4 levels)
 - `test-settings.php` — `ODW_Settings` get/filter methods
 - `test-shortcode.php` — `ODW_Shortcode` rendering and utilities
 - `test-rest-delta.php` — Delta endpoint validation, caching, tombstones
+- `test-cli.php` — WP-CLI commands
 
 ---
 

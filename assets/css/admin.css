@@ -529,11 +529,11 @@
 }
 
 /* Hide the backing CF byte_size input; JS syncs to it */
-.odw-byte-size-backing {
+[data-odw-backing] {
     display: none !important;
 }
 
 /* Also hide the entire CF field wrapper for the backing field */
-.cf-field:has(.odw-byte-size-backing) {
+.cf-field:has([data-odw-backing]) {
     display: none !important;
 }
