@@ -467,18 +467,7 @@
    Distribution intro text
    ========================================================================= */
 
-.odw-distribution-intro {
-    margin-bottom: 16px;
-    padding: 12px 16px;
-    background: var(--odw-color-bg-light);
-    border-left: 4px solid var(--odw-color-primary);
-    border-radius: 0 var(--odw-radius) var(--odw-radius) 0;
-}
 
-.odw-distribution-intro h4 {
-    margin: 0 0 6px;
-    font-size: 13px;
-}
 
 /* =========================================================================
    Composite file-size widget (Änderung 8)

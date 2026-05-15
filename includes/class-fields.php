@@ -118,16 +118,6 @@ class ODW_Fields {
 			->add_tab(
 				__( '3 — Datenbereitstellung', 'open-data-wizard' ),
 				array(
-					Field::make( 'html', 'odw_dist_intro' )
-						->set_html(
-							'<div class="odw-distribution-intro">' .
-							'<h4>' . esc_html__( 'Was ist eine Distribution?', 'open-data-wizard' ) . '</h4>' .
-							'<p class="description">' .
-							esc_html__( 'Eine Distribution beschreibt eine konkrete Bereitstellungsform Ihrer Daten — zum Beispiel eine CSV-Datei, eine JSON-API oder ein PDF-Dokument. Ein Datensatz kann mehrere Distributionen in verschiedenen Formaten haben. Jede Distribution erhält eine eigene Lizenz.', 'open-data-wizard' ) .
-							'</p>' .
-							'</div>'
-						),
-
 					Field::make( 'complex', 'odw_distributions', __( 'Wo können die Daten heruntergeladen werden?', 'open-data-wizard' ) )
 						->set_min( 1 )
 						->set_collapsed( false )
@@ -173,7 +163,10 @@ class ODW_Fields {
 									->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) ),
 							)
 						)
-						->set_help_text( __( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Sie können mehrere Dateiformate (z.B. CSV und JSON) als separate Distributionen anbieten.', 'open-data-wizard' ) ),
+						->set_help_text(
+							__( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" .
+							__( 'Eine Distribution beschreibt eine konkrete Bereitstellungsform — z.B. eine CSV-Datei, eine JSON-API oder ein PDF. Ein Datensatz kann mehrere Distributionen in verschiedenen Formaten haben. Jede Distribution erhält eine eigene Lizenz.', 'open-data-wizard' )
+						),
 				)
 			)
 
