@@ -12,6 +12,9 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       open-data-wizard
  * Domain Path:       /languages
+ * GitHub Plugin URI: daimpad/OpenDataWizard
+ * GitHub Branch:     main
+ * Release Asset:     false
  *
  * @package OpenDataWizard
  */
