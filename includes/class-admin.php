@@ -282,6 +282,14 @@ class ODW_Admin {
 				true
 			);
 
+			wp_enqueue_script(
+				'odw-complex-fix',
+				ODW_PLUGIN_URL . 'assets/js/odw-complex-fix.js',
+				array(),
+				ODW_VERSION,
+				true
+			);
+
 			// Build license auto-suggest options from config/licenses.txt.
 			$license_file_options = array();
 			foreach ( ODW_Fields::load_license_list() as $uri => $label ) {
