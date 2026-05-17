@@ -120,7 +120,6 @@ class ODW_Fields {
 				array(
 					Field::make( 'complex', 'odw_distributions', __( 'Wo können die Daten heruntergeladen werden?', 'open-data-wizard' ) )
 						->set_min( 1 )
-						->set_initial_rows( 1 )
 						->set_collapsed( false )
 						->add_fields(
 							array(
