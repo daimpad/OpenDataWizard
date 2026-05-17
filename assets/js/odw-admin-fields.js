@@ -220,45 +220,6 @@
 	}
 
 	// -------------------------------------------------------------------------
-	// Auto-show distribution fields when Tab 3 is activated
-	// -------------------------------------------------------------------------
-	function autoShowDistributionFields() {
-		// Only run once per page load
-		var ran = false;
-
-		function tryClickAddEntry() {
-			if ( ran ) {
-				return;
-			}
-
-			// The placeholder is only visible when there are no entries yet
-			var placeholder = document.querySelector( '.cf-complex__placeholder' );
-			if ( ! placeholder ) {
-				return;
-			}
-
-			// Find the "Add Entry" inserter button next to or after the placeholder
-			var inserterButton = document.querySelector( '.cf-complex__inserter-button' );
-			if ( ! inserterButton ) {
-				return;
-			}
-
-			ran = true;
-			inserterButton.click();
-		}
-
-		// Watch for Carbon Fields rendering the placeholder (lazy tab render)
-		var observer = new MutationObserver( function () {
-			tryClickAddEntry();
-		} );
-
-		observer.observe( document.body, { childList: true, subtree: true } );
-
-		// Also try immediately in case tab is already active
-		tryClickAddEntry();
-	}
-
-	// -------------------------------------------------------------------------
 	// Boot on DOMContentLoaded
 	// -------------------------------------------------------------------------
 	document.addEventListener( 'DOMContentLoaded', function () {
@@ -266,9 +227,6 @@
 		initCessdaAutosuggest();
 		initFileSizeWidgets();
 		observeNewGroups();
-
-		// Auto-show distribution fields if no entries exist
-		setTimeout( autoShowDistributionFields, 500 );
 	} );
 
 } )();
