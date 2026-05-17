@@ -1,32 +1,19 @@
 /**
- * Open Data Wizard — Complex Field Collapse Fix
+ * Open Data Wizard — Complex Field Fix
  *
- * Verhindert, dass beim Klick auf "Add Entry" in Complex Fields
- * das Collapse-Toggle versehentlich mit ausgelöst wird (Event-Bubbling-Problem).
+ * Entfernt den zu aggressiven stopPropagation()-Handler, der Carbon Fields
+ * Event-Handling blockierte und zu unerwartetem Tab-Wechsel führte.
+ *
+ * Carbon Fields 3.6.9 verwaltet Complex Fields korrekt, wenn wir nicht
+ * seine Event-Propagation blockieren.
  */
 (function () {
 	'use strict';
 
-	function preventCollapseOnAddEntry() {
-		// Beobachte alle Carbon Fields Complex Field action buttons.
-		// "Add Entry" Button sitzt in .cf-complex__actions
-		document.addEventListener( 'click', function ( e ) {
-			// Suche nach dem direkten Button-Element (Add Entry Button)
-			var button = e.target.closest( '.cf-complex__actions button' );
-			if ( ! button ) {
-				return;
-			}
-
-			// Stoppe Event-Bubbling, damit der Click nicht zu
-			// einem Collapse-Toggle bubbelt
-			e.stopPropagation();
-		}, true ); // Use capture phase, damit es vor anderen Listenern läuft
-	}
-
-	// Starte sobald DOM ready ist
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', preventCollapseOnAddEntry );
-	} else {
-		preventCollapseOnAddEntry();
-	}
+	// Dieser File ist jetzt leer und dient nur der Dokumentation.
+	// Die stopPropagation()-Lösung war zu aggressiv und verursachte
+	// den Tab-Wechsel zu Tab 5 (Vorschau), wenn "Add Entry" geklickt wurde.
+	//
+	// Carbon Fields kann seine eigenen Events korrekt verwalten, wenn wir
+	// nicht interferieren.
 })();
