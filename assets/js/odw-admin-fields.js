@@ -220,27 +220,42 @@
 	}
 
 	// -------------------------------------------------------------------------
-	// Auto-show distribution fields by clicking "Add Entry" on load
+	// Auto-show distribution fields when Tab 3 is activated
 	// -------------------------------------------------------------------------
 	function autoShowDistributionFields() {
-		// Find the distributions complex field container
-		var distributionsContainer = document.querySelector( '[data-carbon-field="odw_distributions"]' );
-		if ( ! distributionsContainer ) {
-			return;
+		// Only run once per page load
+		var ran = false;
+
+		function tryClickAddEntry() {
+			if ( ran ) {
+				return;
+			}
+
+			// The placeholder is only visible when there are no entries yet
+			var placeholder = document.querySelector( '.cf-complex__placeholder' );
+			if ( ! placeholder ) {
+				return;
+			}
+
+			// Find the "Add Entry" inserter button next to or after the placeholder
+			var inserterButton = document.querySelector( '.cf-complex__inserter-button' );
+			if ( ! inserterButton ) {
+				return;
+			}
+
+			ran = true;
+			inserterButton.click();
 		}
 
-		// Check if there are any existing entries (groups)
-		var existingGroups = distributionsContainer.querySelectorAll( '.cf-complex__group' );
-		if ( existingGroups.length > 0 ) {
-			// Entries already exist, no need to auto-add
-			return;
-		}
+		// Watch for Carbon Fields rendering the placeholder (lazy tab render)
+		var observer = new MutationObserver( function () {
+			tryClickAddEntry();
+		} );
 
-		// No entries exist, click "Add Entry" to show empty form
-		var addButton = distributionsContainer.querySelector( '.cf-complex__actions button' );
-		if ( addButton ) {
-			addButton.click();
-		}
+		observer.observe( document.body, { childList: true, subtree: true } );
+
+		// Also try immediately in case tab is already active
+		tryClickAddEntry();
 	}
 
 	// -------------------------------------------------------------------------
