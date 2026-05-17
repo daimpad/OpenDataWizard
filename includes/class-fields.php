@@ -42,7 +42,6 @@ class ODW_Fields {
 	/**
 	 * Registers the tabbed meta container with all dataset fields.
 	 * Tab structure (v2.1+):
-	 *   0 — Einstieg
 	 *   1 — Grundlegende Informationen
 	 *   2 — Inhaltliche Angaben
 	 *   3 — Datenbereitstellung (Lizenz + Distribution)
@@ -53,17 +52,6 @@ class ODW_Fields {
 		Container::make( 'post_meta', __( 'Pflichtangaben', 'open-data-wizard' ) )
 			->where( 'post_type', '=', 'odw_dataset' )
 			->set_priority( 'high' )
-
-		// -----------------------------------------------------------------
-		// Tab 0 — Einstieg
-		// -----------------------------------------------------------------
-			->add_tab(
-				__( '0 — Einstieg', 'open-data-wizard' ),
-				array(
-					Field::make( 'html', 'odw_introduction_html' )
-					->set_html( self::get_introduction_html() ),
-				)
-			)
 
 		// -----------------------------------------------------------------
 		// Tab 1 — Grundlegende Informationen
@@ -620,95 +608,6 @@ class ODW_Fields {
 	 *
 	 * @return string HTML markup.
 	 */
-	/**
-	 * Generates the HTML for the introduction tab.
-	 *
-	 * @return string HTML output.
-	 */
-	private static function get_introduction_html(): string {
-		ob_start();
-		?>
-		<div class="odw-introduction-wrapper">
-			<h2><?php esc_html_e( 'Willkommen im Open Data Wizard', 'open-data-wizard' ); ?></h2>
-
-			<p class="description">
-		<?php esc_html_e( 'Der Open Data Wizard ermöglicht es Ihnen, Datensätze direkt in WordPress zu beschreiben und als maschinenlesbare, standardkonforme Metadaten bereitzustellen — ohne technische Vorkenntnisse.', 'open-data-wizard' ); ?>
-			</p>
-
-			<h3><?php esc_html_e( 'Das Problem', 'open-data-wizard' ); ?></h3>
-			<p>
-		<?php esc_html_e( 'Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt.', 'open-data-wizard' ); ?>
-			</p>
-
-			<h3><?php esc_html_e( 'Die Idee', 'open-data-wizard' ); ?></h3>
-			<p>
-		<?php esc_html_e( 'Beschreiben Sie Ihre Datensätze dort, wo Sie ohnehin arbeiten – direkt in WordPress. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard DCAT-AP 3.0 und stellt sie unter einer persistenten URL bereit.', 'open-data-wizard' ); ?>
-		<?php esc_html_e( 'Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln.', 'open-data-wizard' ); ?>
-			</p>
-
-			<h3><?php esc_html_e( 'Wie funktioniert es?', 'open-data-wizard' ); ?></h3>
-			<p><?php esc_html_e( 'Das Wizard-Formular ist in fünf einfache Schritte unterteilt:', 'open-data-wizard' ); ?></p>
-			<ol>
-				<li>
-					<strong><?php esc_html_e( '1 — Grundlegende Informationen', 'open-data-wizard' ); ?></strong><br>
-			<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? In welche Kategorie gehört der Datensatz?', 'open-data-wizard' ); ?>
-				</li>
-				<li>
-					<strong><?php esc_html_e( '2 — Inhaltliche Angaben', 'open-data-wizard' ); ?></strong><br>
-			<?php esc_html_e( 'Sprache, Schlagworte, Veröffentlichungs- und Änderungsdatum, Themenklassifikation.', 'open-data-wizard' ); ?>
-				</li>
-				<li>
-					<strong><?php esc_html_e( '3 — Datenbereitstellung', 'open-data-wizard' ); ?></strong><br>
-			<?php esc_html_e( 'Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext.', 'open-data-wizard' ); ?>
-				</li>
-				<li>
-					<strong><?php esc_html_e( '4 — Erweiterte Angaben', 'open-data-wizard' ); ?></strong><br>
-			<?php esc_html_e( 'Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen.', 'open-data-wizard' ); ?>
-				</li>
-				<li>
-					<strong><?php esc_html_e( '5 — Vorschau', 'open-data-wizard' ); ?></strong><br>
-			<?php esc_html_e( 'Generiertes JSON-LD live einsehen und über die REST-API abrufen.', 'open-data-wizard' ); ?>
-				</li>
-			</ol>
-
-			<h3><?php esc_html_e( 'Erste Schritte', 'open-data-wizard' ); ?></h3>
-			<p>
-		<?php esc_html_e( 'Füllen Sie die Pflichtfelder aus (mit * gekennzeichnet) und speichern Sie den Datensatz. Sie können ihn später noch bearbeiten. Jedes Feld hat hilfreiche Beispiele – schauen Sie in den Hilfetexten vorbei!', 'open-data-wizard' ); ?>
-			</p>
-
-			<style>
-				.odw-introduction-wrapper {
-					padding: 20px 0;
-					line-height: 1.6;
-					color: var(--odw-color-text);
-				}
-				.odw-introduction-wrapper h2 {
-					margin-top: 0;
-					color: var(--odw-color-primary);
-				}
-				.odw-introduction-wrapper h3 {
-					margin-top: 24px;
-					color: var(--odw-color-primary);
-					font-size: 16px;
-				}
-				.odw-introduction-wrapper ol {
-					list-style-position: inside;
-					padding-left: 0;
-				}
-				.odw-introduction-wrapper li {
-					margin-bottom: 12px;
-					padding-left: 0;
-				}
-				.odw-introduction-wrapper .description {
-					font-size: 15px;
-					color: var(--odw-color-text);
-				}
-			</style>
-		</div>
-		<?php
-		return ob_get_clean();
-	}
-
 	/**
 	 * Generates the HTML for the JSON-LD preview tab.
 	 *
