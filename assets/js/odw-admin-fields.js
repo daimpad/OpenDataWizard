@@ -220,6 +220,30 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// Auto-show distribution fields by clicking "Add Entry" on load
+	// -------------------------------------------------------------------------
+	function autoShowDistributionFields() {
+		// Find the distributions complex field container
+		var distributionsContainer = document.querySelector( '[data-carbon-field="odw_distributions"]' );
+		if ( ! distributionsContainer ) {
+			return;
+		}
+
+		// Check if there are any existing entries (groups)
+		var existingGroups = distributionsContainer.querySelectorAll( '.cf-complex__group' );
+		if ( existingGroups.length > 0 ) {
+			// Entries already exist, no need to auto-add
+			return;
+		}
+
+		// No entries exist, click "Add Entry" to show empty form
+		var addButton = distributionsContainer.querySelector( '.cf-complex__actions button' );
+		if ( addButton ) {
+			addButton.click();
+		}
+	}
+
+	// -------------------------------------------------------------------------
 	// Boot on DOMContentLoaded
 	// -------------------------------------------------------------------------
 	document.addEventListener( 'DOMContentLoaded', function () {
@@ -227,6 +251,9 @@
 		initCessdaAutosuggest();
 		initFileSizeWidgets();
 		observeNewGroups();
+
+		// Auto-show distribution fields if no entries exist
+		setTimeout( autoShowDistributionFields, 500 );
 	} );
 
 } )();
