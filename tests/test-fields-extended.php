@@ -490,13 +490,9 @@ class Test_ODW_Fields_Extended extends TestCase {
 			24,
 			'odw_dataset',
 			array(
-				'odw_distributions' => array(
-					array(
-						'access_url' => 'https://example.com/data.csv',
-						'format'     => 'CSV',
-						'byte_size'  => '',
-					),
-				),
+				'odw_access_url' => 'https://example.com/data.csv',
+				'odw_format'     => 'CSV',
+				'odw_byte_size'  => '',
 			)
 		);
 
@@ -511,7 +507,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * Distribution carries its own per-distribution license as dct:license @id.
+	 * Distribution carries a license as dct:license @id.
 	 */
 	public function test_build_distribution_has_own_license(): void {
 		$this->load_fields();
@@ -521,14 +517,10 @@ class Test_ODW_Fields_Extended extends TestCase {
 			25,
 			'odw_dataset',
 			array(
-				'odw_distributions' => array(
-					array(
-						'access_url' => 'https://example.com/data.csv',
-						'format'     => 'CSV',
-						'byte_size'  => '',
-						'license'    => $license_uri,
-					),
-				),
+				'odw_access_url' => 'https://example.com/data.csv',
+				'odw_format'     => 'CSV',
+				'odw_byte_size'  => '',
+				'odw_license'    => $license_uri,
 			)
 		);
 
@@ -549,14 +541,10 @@ class Test_ODW_Fields_Extended extends TestCase {
 			26,
 			'odw_dataset',
 			array(
-				'odw_distributions' => array(
-					array(
-						'access_url'       => 'https://example.com/data.csv',
-						'format'           => 'CSV',
-						'byte_size'        => '',
-						'attribution_text' => 'Daten von Musterorganisation e.V.',
-					),
-				),
+				'odw_access_url'      => 'https://example.com/data.csv',
+				'odw_format'          => 'CSV',
+				'odw_byte_size'       => '',
+				'odw_attribution_text' => 'Daten von Musterorganisation e.V.',
 			)
 		);
 
@@ -595,15 +583,11 @@ class Test_ODW_Fields_Extended extends TestCase {
 			28,
 			'odw_dataset',
 			array(
-				'odw_distributions' => array(
-					array(
-						'access_url'     => 'https://example.com/data.csv',
-						'format'         => 'CSV',
-						'byte_size'      => '',
-						'license'        => 'sonstige',
-						'license_custom' => $custom_uri,
-					),
-				),
+				'odw_access_url'      => 'https://example.com/data.csv',
+				'odw_format'          => 'CSV',
+				'odw_byte_size'       => '',
+				'odw_license'         => 'sonstige',
+				'odw_license_custom'  => $custom_uri,
 			)
 		);
 

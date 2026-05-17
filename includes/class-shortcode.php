@@ -76,18 +76,14 @@ class ODW_Shortcode {
 		$theme   = (string) get_post_meta( $post_id, '_odw_theme', true );
 		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
 
-		// License from first distribution (per-distribution architecture).
+		// License from post meta.
 		$license_label = '';
 		if ( function_exists( 'carbon_get_post_meta' ) ) {
-			$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
-			if ( is_array( $distributions ) && ! empty( $distributions ) ) {
-				$first_dist  = $distributions[0];
-				$license_uri = isset( $first_dist['license'] ) ? (string) $first_dist['license'] : '';
-				if ( 'sonstige' === $license_uri && ! empty( $first_dist['license_custom'] ) ) {
-					$license_label = (string) $first_dist['license_custom'];
-				} elseif ( '' !== $license_uri ) {
-					$license_label = ODW_Fields::get_license_label( $license_uri );
-				}
+			$license_uri = (string) carbon_get_post_meta( $post_id, 'odw_license' );
+			if ( 'sonstige' === $license_uri ) {
+				$license_label = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
+			} elseif ( '' !== $license_uri ) {
+				$license_label = ODW_Fields::get_license_label( $license_uri );
 			}
 		}
 
