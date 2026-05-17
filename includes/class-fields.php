@@ -118,55 +118,44 @@ class ODW_Fields {
 			->add_tab(
 				__( '3 — Datenbereitstellung', 'open-data-wizard' ),
 				array(
-					Field::make( 'complex', 'odw_distributions', __( 'Wo können die Daten heruntergeladen werden?', 'open-data-wizard' ) )
-						->set_min( 1 )
-						->set_collapsed( false )
-						->add_fields(
+					Field::make( 'text', 'odw_access_url', __( 'Wo kann ich die Datei herunterladen?', 'open-data-wizard' ) )
+						->set_required( true )
+						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
+						->set_attribute( 'type', 'url' )
+						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/daten/datei.csv', 'open-data-wizard' ) ),
+
+					Field::make( 'select', 'odw_format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
+						->add_options( self::get_format_options() )
+						->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'number' )
+						->set_attribute( 'min', '0' )
+						->set_attribute( 'data-odw-backing', 'byte_size' ),
+
+					Field::make( 'select', 'odw_license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
+						->set_required( true )
+						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
+						->add_options( self::get_license_options() )
+						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_license_custom', __( 'Lizenz-URI eingeben oder auswählen', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'https://example.org/meine-lizenz', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-autosuggest', 'license_custom' )
+						->set_help_text( __( 'EIGENE LIZENZ-URI', 'open-data-wizard' ) . "\n\n" . __( 'Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/', 'open-data-wizard' ) )
+						->set_conditional_logic(
 							array(
-								Field::make( 'text', 'access_url', __( 'Wo kann ich die Datei herunterladen?', 'open-data-wizard' ) )
-									->set_required( true )
-									->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
-									->set_attribute( 'type', 'url' )
-									->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/daten/datei.csv', 'open-data-wizard' ) ),
-
-								Field::make( 'select', 'format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
-									->add_options( self::get_format_options() )
-									->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
-
-								Field::make( 'text', 'byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
-									->set_attribute( 'type', 'number' )
-									->set_attribute( 'min', '0' )
-									->set_attribute( 'data-odw-backing', 'byte_size' ),
-
-								Field::make( 'select', 'license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
-									->set_required( true )
-									->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
-									->add_options( self::get_license_options() )
-									->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
-
-								Field::make( 'text', 'license_custom', __( 'Lizenz-URI eingeben oder auswählen', 'open-data-wizard' ) )
-									->set_attribute( 'placeholder', __( 'https://example.org/meine-lizenz', 'open-data-wizard' ) )
-									->set_attribute( 'data-odw-autosuggest', 'license_custom' )
-									->set_help_text( __( 'EIGENE LIZENZ-URI', 'open-data-wizard' ) . "\n\n" . __( 'Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/', 'open-data-wizard' ) )
-									->set_conditional_logic(
-										array(
-											array(
-												'field'   => 'license',
-												'value'   => 'sonstige',
-												'compare' => '=',
-											),
-										)
-									),
-
-								Field::make( 'text', 'attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
-									->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
-									->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) ),
+								array(
+									'field'   => 'odw_license',
+									'value'   => 'sonstige',
+									'compare' => '=',
+								),
 							)
-						)
-						->set_help_text(
-							__( 'DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" .
-							__( 'Eine Distribution beschreibt eine konkrete Bereitstellungsform — z.B. eine CSV-Datei, eine JSON-API oder ein PDF. Ein Datensatz kann mehrere Distributionen in verschiedenen Formaten haben. Jede Distribution erhält eine eigene Lizenz.', 'open-data-wizard' )
 						),
+
+					Field::make( 'text', 'odw_attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
+						->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -684,7 +673,12 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$theme         = carbon_get_post_meta( $post_id, 'odw_theme' );
 	$issued        = carbon_get_post_meta( $post_id, 'odw_issued' );
 	$modified      = get_post_meta( $post_id, '_odw_modified', true );
-	$distributions = carbon_get_post_meta( $post_id, 'odw_distributions' );
+	$dist_access_url      = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
+	$dist_format          = (string) carbon_get_post_meta( $post_id, 'odw_format' );
+	$dist_byte_size       = (string) carbon_get_post_meta( $post_id, 'odw_byte_size' );
+	$dist_license         = (string) carbon_get_post_meta( $post_id, 'odw_license' );
+	$dist_license_custom  = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
+	$dist_attribution     = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
 	$cessda_topic  = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
 
 	// Extended DCAT-AP fields (Tab 4).
@@ -759,50 +753,35 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		);
 	}
 
-	if ( ! empty( $distributions ) && is_array( $distributions ) ) {
-		$dist_list = array();
+	$dist_access_url_safe = esc_url_raw( $dist_access_url );
+	if ( ! empty( $dist_access_url_safe ) ) {
+		$dist_item = array(
+			'@type'          => 'dcat:Distribution',
+			'dcat:accessURL' => $dist_access_url_safe,
+		);
 
-		foreach ( $distributions as $dist ) {
-			$access_url = esc_url_raw( (string) ( $dist['access_url'] ?? '' ) );
-
-			if ( empty( $access_url ) ) {
-				continue;
-			}
-
-			$dist_item = array(
-				'@type'          => 'dcat:Distribution',
-				'dcat:accessURL' => $access_url,
-			);
-
-			if ( ! empty( $dist['format'] ) ) {
-				$dist_item['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $dist['format'] ) );
-			}
-
-			// File size: prefer new composite fields (byte_size_value + unit), fall back to legacy byte_size.
-			$byte_size = odw_compute_byte_size( $dist );
-			if ( $byte_size > 0 ) {
-				$dist_item['dcat:byteSize'] = $byte_size;
-			}
-
-			// Lizenz pro Distribution (Änderung 7).
-			$dist_license = (string) ( $dist['license'] ?? '' );
-			if ( 'sonstige' === $dist_license && ! empty( $dist['license_custom'] ) ) {
-				$dist_license = (string) $dist['license_custom'];
-			}
-			if ( ! empty( $dist_license ) && 'sonstige' !== $dist_license ) {
-				$dist_item['dct:license'] = array( '@id' => $dist_license );
-			}
-
-			if ( ! empty( $dist['attribution_text'] ) ) {
-				$dist_item['dcatde:licenseAttributionByText'] = (string) $dist['attribution_text'];
-			}
-
-			$dist_list[] = $dist_item;
+		if ( ! empty( $dist_format ) ) {
+			$dist_item['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $dist_format ) );
 		}
 
-		if ( ! empty( $dist_list ) ) {
-			$dataset['dcat:distribution'] = $dist_list;
+		$byte_size_int = (int) $dist_byte_size;
+		if ( $byte_size_int > 0 ) {
+			$dist_item['dcat:byteSize'] = $byte_size_int;
 		}
+
+		$effective_license = $dist_license;
+		if ( 'sonstige' === $dist_license && ! empty( $dist_license_custom ) ) {
+			$effective_license = $dist_license_custom;
+		}
+		if ( ! empty( $effective_license ) && 'sonstige' !== $effective_license ) {
+			$dist_item['dct:license'] = array( '@id' => $effective_license );
+		}
+
+		if ( ! empty( $dist_attribution ) ) {
+			$dist_item['dcatde:licenseAttributionByText'] = $dist_attribution;
+		}
+
+		$dataset['dcat:distribution'] = array( $dist_item );
 	}
 
 	// Extended DCAT-AP fields (Tab 4).

@@ -73,19 +73,9 @@ class ODW_Admin {
 	public static function render_column( string $column, int $post_id ): void {
 		switch ( $column ) {
 			case 'odw_license':
-				// License is now stored per distribution (Änderung 7); show label from first distribution.
-				$dists = carbon_get_post_meta( $post_id, 'odw_distributions' );
-				$lic   = '';
-				if ( is_array( $dists ) ) {
-					foreach ( $dists as $dist ) {
-						$candidate = (string) ( $dist['license'] ?? '' );
-						if ( '' !== $candidate ) {
-							$lic = ( 'sonstige' === $candidate && ! empty( $dist['license_custom'] ) )
-								? (string) $dist['license_custom']
-								: $candidate;
-							break;
-						}
-					}
+				$lic = (string) carbon_get_post_meta( $post_id, 'odw_license' );
+				if ( 'sonstige' === $lic ) {
+					$lic = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
 				}
 				echo esc_html( '' !== $lic ? ODW_Fields::get_license_label( $lic ) : '—' );
 				break;

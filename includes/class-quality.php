@@ -192,33 +192,17 @@ class ODW_Quality {
 				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_publisher' ) );
 
 			case 'license':
-				// License is now per-distribution (Änderung 7).
-				$dists = carbon_get_post_meta( $post->ID, 'odw_distributions' );
-				if ( ! is_array( $dists ) ) {
-					return false;
+				$lic = (string) carbon_get_post_meta( $post->ID, 'odw_license' );
+				if ( '' !== $lic && 'sonstige' !== $lic ) {
+					return true;
 				}
-				foreach ( $dists as $dist ) {
-					$lic = (string) ( $dist['license'] ?? '' );
-					if ( '' !== $lic && 'sonstige' !== $lic ) {
-						return true;
-					}
-					if ( 'sonstige' === $lic && ! empty( $dist['license_custom'] ) ) {
-						return true;
-					}
+				if ( 'sonstige' === $lic ) {
+					return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_license_custom' );
 				}
 				return false;
 
 			case 'distribution':
-				$dists = carbon_get_post_meta( $post->ID, 'odw_distributions' );
-				if ( ! is_array( $dists ) ) {
-					return false;
-				}
-				foreach ( $dists as $dist ) {
-					if ( ! empty( $dist['access_url'] ) ) {
-						return true;
-					}
-				}
-				return false;
+				return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_access_url' );
 
 			case 'language':
 				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_language' ) );
@@ -235,16 +219,7 @@ class ODW_Quality {
 				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_issued' ) );
 
 			case 'dist_format':
-				$dists = carbon_get_post_meta( $post->ID, 'odw_distributions' );
-				if ( ! is_array( $dists ) ) {
-					return false;
-				}
-				foreach ( $dists as $dist ) {
-					if ( ! empty( $dist['format'] ) ) {
-						return true;
-					}
-				}
-				return false;
+				return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_format' );
 		}
 
 		return false;
