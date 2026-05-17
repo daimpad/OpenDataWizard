@@ -541,9 +541,9 @@ class Test_ODW_Fields_Extended extends TestCase {
 			26,
 			'odw_dataset',
 			array(
-				'odw_access_url'      => 'https://example.com/data.csv',
-				'odw_format'          => 'CSV',
-				'odw_byte_size'       => '',
+				'odw_access_url'       => 'https://example.com/data.csv',
+				'odw_format'           => 'CSV',
+				'odw_byte_size'        => '',
 				'odw_attribution_text' => 'Daten von Musterorganisation e.V.',
 			)
 		);
@@ -583,11 +583,11 @@ class Test_ODW_Fields_Extended extends TestCase {
 			28,
 			'odw_dataset',
 			array(
-				'odw_access_url'      => 'https://example.com/data.csv',
-				'odw_format'          => 'CSV',
-				'odw_byte_size'       => '',
-				'odw_license'         => 'sonstige',
-				'odw_license_custom'  => $custom_uri,
+				'odw_access_url'     => 'https://example.com/data.csv',
+				'odw_format'         => 'CSV',
+				'odw_byte_size'      => '',
+				'odw_license'        => 'sonstige',
+				'odw_license_custom' => $custom_uri,
 			)
 		);
 

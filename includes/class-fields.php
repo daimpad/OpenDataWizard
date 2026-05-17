@@ -21,6 +21,7 @@ use Carbon_Fields\Field;
  */
 class ODW_Fields {
 
+
 	/**
 	 * Registers WordPress hooks.
 	 */
@@ -52,14 +53,14 @@ class ODW_Fields {
 			->where( 'post_type', '=', 'odw_dataset' )
 			->set_priority( 'high' )
 
-			// -----------------------------------------------------------------
-			// Tab 1 — Grundlegende Informationen
-			// -----------------------------------------------------------------
+		// -----------------------------------------------------------------
+		// Tab 1 — Grundlegende Informationen
+		// -----------------------------------------------------------------
 			->add_tab(
 				__( '1 — Grundlegende Informationen', 'open-data-wizard' ),
 				array(
 					Field::make( 'html', 'odw_tab1_hint' )
-						->set_html( '<p class="description">' . esc_html__( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) . '</p>' ),
+					->set_html( '<p class="description">' . esc_html__( 'Pflichtfelder gemäß DCAT-AP 3.0. Ohne diese Angaben kann der Datensatz nicht veröffentlicht werden.', 'open-data-wizard' ) . '</p>' ),
 
 					Field::make( 'text', 'odw_publisher', __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ) )
 						->set_required( true )
@@ -79,9 +80,9 @@ class ODW_Fields {
 				)
 			)
 
-			// -----------------------------------------------------------------
-			// Tab 2 — Inhaltliche Angaben
-			// -----------------------------------------------------------------
+		// -----------------------------------------------------------------
+		// Tab 2 — Inhaltliche Angaben
+		// -----------------------------------------------------------------
 			->add_tab(
 				__( '2 — Inhaltliche Angaben', 'open-data-wizard' ),
 				array(
@@ -112,9 +113,9 @@ class ODW_Fields {
 				)
 			)
 
-			// -----------------------------------------------------------------
-			// Tab 3 — Datenbereitstellung (Lizenz + Distribution)
-			// -----------------------------------------------------------------
+		// -----------------------------------------------------------------
+		// Tab 3 — Datenbereitstellung (Lizenz + Distribution)
+		// -----------------------------------------------------------------
 			->add_tab(
 				__( '3 — Datenbereitstellung', 'open-data-wizard' ),
 				array(
@@ -159,14 +160,14 @@ class ODW_Fields {
 				)
 			)
 
-			// -----------------------------------------------------------------
-			// Tab 4 — Erweiterte Angaben (unverändert)
-			// -----------------------------------------------------------------
+		// -----------------------------------------------------------------
+		// Tab 4 — Erweiterte Angaben (unverändert)
+		// -----------------------------------------------------------------
 			->add_tab(
 				__( '4 — Erweiterte Angaben', 'open-data-wizard' ),
 				array(
 					Field::make( 'html', 'odw_ext_hint_landing' )
-						->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
+					->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'text', 'odw_landing_page', __( 'Wo finde ich mehr Informationen zu diesem Projekt?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
@@ -178,7 +179,7 @@ class ODW_Fields {
 						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_coverage' )
-						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'select', 'odw_political_geocoding_level', __( 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?', 'open-data-wizard' ) )
 						->add_options( self::get_political_geocoding_level_options() )
@@ -199,7 +200,7 @@ class ODW_Fields {
 						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-12-31', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_contact' )
-						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'text', 'odw_contact_name', __( 'Wer ist Ansprechperson für Fragen zu diesen Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
@@ -217,14 +218,14 @@ class ODW_Fields {
 				)
 			)
 
-			// -----------------------------------------------------------------
-			// Tab 5 — Vorschau
-			// -----------------------------------------------------------------
+		// -----------------------------------------------------------------
+		// Tab 5 — Vorschau
+		// -----------------------------------------------------------------
 			->add_tab(
 				__( '5 — Vorschau', 'open-data-wizard' ),
 				array(
 					Field::make( 'html', 'odw_preview_html' )
-						->set_html( self::get_preview_html() ),
+					->set_html( self::get_preview_html() ),
 				)
 			);
 	}
@@ -309,7 +310,7 @@ class ODW_Fields {
 			return array();
 		}
 
-		$data = require $file;
+		$data = include $file;
 		return is_array( $data ) ? $data : array();
 	}
 
@@ -325,7 +326,7 @@ class ODW_Fields {
 			return array();
 		}
 
-		$data = require $file;
+		$data = include $file;
 		return is_array( $data ) ? $data : array();
 	}
 
@@ -463,7 +464,7 @@ class ODW_Fields {
 	 * Translate a license URI to its human-readable label.
 	 * Checks known options first, then the external licenses.txt list.
 	 *
-	 * @param string $uri License URI (or 'sonstige').
+	 * @param  string $uri License URI (or 'sonstige').
 	 * @return string Human-readable label, or the URI itself if not found.
 	 */
 	public static function get_license_label( string $uri ): string {
@@ -544,7 +545,7 @@ class ODW_Fields {
 	/**
 	 * Format MIME-type mapping — loaded from config/dct-format-list.php.
 	 *
-	 * @param string $format Short format label (e.g. "CSV").
+	 * @param  string $format Short format label (e.g. "CSV").
 	 * @return string MIME type, or the original format string if unknown.
 	 */
 	public static function get_format_mime( string $format ): string {
@@ -555,7 +556,7 @@ class ODW_Fields {
 	/**
 	 * Maps a short format label to its EU Publications Office file-type URI.
 	 *
-	 * @param string $format Short format label (e.g. "CSV").
+	 * @param  string $format Short format label (e.g. "CSV").
 	 * @return string EU file-type URI, or the original string if unknown.
 	 */
 	public static function get_format_eu_uri( string $format ): string {
@@ -619,31 +620,31 @@ class ODW_Fields {
 		?>
 		<div class="odw-preview-wrapper">
 			<p class="description">
-				<?php esc_html_e( 'Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespeicherten Feldinhalten.', 'open-data-wizard' ); ?>
-				<?php esc_html_e( 'Speichern Sie den Datensatz, um die Vorschau zu aktualisieren.', 'open-data-wizard' ); ?>
+		<?php esc_html_e( 'Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespeicherten Feldinhalten.', 'open-data-wizard' ); ?>
+		<?php esc_html_e( 'Speichern Sie den Datensatz, um die Vorschau zu aktualisieren.', 'open-data-wizard' ); ?>
 			</p>
 			<div id="odw-jsonld-preview">
-				<?php
-				$post_id = get_the_ID();
-				if ( $post_id ) {
-					$json = odw_build_dataset_jsonld( (int) $post_id );
-					if ( $json ) {
-						echo '<pre class="odw-jsonld-code">';
-						echo esc_html( wp_json_encode( $json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
-						echo '</pre>';
-					} else {
-						echo '<p>' . esc_html__( 'Noch keine Daten vorhanden. Bitte erst Pflichtfelder befüllen und speichern.', 'open-data-wizard' ) . '</p>';
-					}
-				}
-				?>
+		<?php
+		$post_id = get_the_ID();
+		if ( $post_id ) {
+			$json = odw_build_dataset_jsonld( (int) $post_id );
+			if ( $json ) {
+				echo '<pre class="odw-jsonld-code">';
+				echo esc_html( wp_json_encode( $json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) );
+				echo '</pre>';
+			} else {
+					echo '<p>' . esc_html__( 'Noch keine Daten vorhanden. Bitte erst Pflichtfelder befüllen und speichern.', 'open-data-wizard' ) . '</p>';
+			}
+		}
+		?>
 			</div>
-			<?php if ( $post_id ) : ?>
+		<?php if ( $post_id ) : ?>
 				<p>
 					<a href="<?php echo esc_url( rest_url( 'datenatlas/v1/datasets/' . $post_id ) ); ?>" target="_blank" class="button">
-						<?php esc_html_e( 'REST-Endpoint öffnen', 'open-data-wizard' ); ?>
+			<?php esc_html_e( 'REST-Endpoint öffnen', 'open-data-wizard' ); ?>
 					</a>
 				</p>
-			<?php endif; ?>
+		<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -655,7 +656,7 @@ class ODW_Fields {
  * Build DCAT-AP 3.0 JSON-LD array for a single dataset.
  * Used by both the REST API and the preview tab.
  *
- * @param int $post_id Dataset post ID.
+ * @param  int $post_id Dataset post ID.
  * @return array<string, mixed>|null JSON-LD array, or null when the post is not a valid dataset.
  */
 function odw_build_dataset_jsonld( int $post_id ): ?array {
@@ -665,21 +666,21 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		return null;
 	}
 
-	$title         = $post->post_title;
-	$description   = carbon_get_post_meta( $post_id, 'odw_description' );
-	$publisher     = carbon_get_post_meta( $post_id, 'odw_publisher' );
-	$language      = carbon_get_post_meta( $post_id, 'odw_language' );
-	$keywords      = carbon_get_post_meta( $post_id, 'odw_keywords' );
-	$theme         = carbon_get_post_meta( $post_id, 'odw_theme' );
-	$issued        = carbon_get_post_meta( $post_id, 'odw_issued' );
-	$modified      = get_post_meta( $post_id, '_odw_modified', true );
-	$dist_access_url      = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
-	$dist_format          = (string) carbon_get_post_meta( $post_id, 'odw_format' );
-	$dist_byte_size       = (string) carbon_get_post_meta( $post_id, 'odw_byte_size' );
-	$dist_license         = (string) carbon_get_post_meta( $post_id, 'odw_license' );
-	$dist_license_custom  = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
-	$dist_attribution     = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
-	$cessda_topic  = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
+	$title               = $post->post_title;
+	$description         = carbon_get_post_meta( $post_id, 'odw_description' );
+	$publisher           = carbon_get_post_meta( $post_id, 'odw_publisher' );
+	$language            = carbon_get_post_meta( $post_id, 'odw_language' );
+	$keywords            = carbon_get_post_meta( $post_id, 'odw_keywords' );
+	$theme               = carbon_get_post_meta( $post_id, 'odw_theme' );
+	$issued              = carbon_get_post_meta( $post_id, 'odw_issued' );
+	$modified            = get_post_meta( $post_id, '_odw_modified', true );
+	$dist_access_url     = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
+	$dist_format         = (string) carbon_get_post_meta( $post_id, 'odw_format' );
+	$dist_byte_size      = (string) carbon_get_post_meta( $post_id, 'odw_byte_size' );
+	$dist_license        = (string) carbon_get_post_meta( $post_id, 'odw_license' );
+	$dist_license_custom = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
+	$dist_attribution    = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
+	$cessda_topic        = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
 
 	// Extended DCAT-AP fields (Tab 4).
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
@@ -850,7 +851,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
  * Supports the legacy single-field format (byte_size in bytes)
  * and the new composite format (byte_size_value + byte_size_unit).
  *
- * @param array<string, mixed> $dist Distribution sub-array from Carbon Fields.
+ * @param  array<string, mixed> $dist Distribution sub-array from Carbon Fields.
  * @return int Byte count, or 0 if not set.
  */
 function odw_compute_byte_size( array $dist ): int {
