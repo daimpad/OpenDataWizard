@@ -99,6 +99,23 @@
     padding: 20px 0;
 }
 
+.cf-field {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Consistent spacing for all form fields */
+.cf-container__tab .cf-field {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Specific spacing for the file size field */
+[data-odw-backing="byte_size"] {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 /* =========================================================================
    Required field indicators
    ========================================================================= */
