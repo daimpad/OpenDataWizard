@@ -1,46 +1,134 @@
-# CLAUDE.md
+# CLAUDE.md — Open Data Wizard Projekt-Dokumentation
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Umfassende Dokumentation für die Fortentwicklung des Open Data Wizard WordPress-Plugins. Enthält Architektur, Entwicklungsworkflows, Testing-Strategien und Sicherheitsrichtlinien.
 
 ---
 
-## Quick Commands
+## 🚀 Quick Start
 
-### Development & Testing
+### Installation & Setup
 ```bash
-composer install                # Install all dev dependencies (PHPUnit, PHPStan, WPCS)
-composer phpcs                  # Run WordPress Coding Standards checks
-composer phpcbf                 # Auto-fix PHPCS violations
-composer phpstan                # Static analysis (Level 6) — false positives expected from Carbon Fields stubs
-composer test                   # Run PHPUnit (all 90 tests)
-composer test -- tests/test-fields.php      # Run a single test file
-composer test -- --filter testMethodName    # Run specific test by name
+# Clone und Dependencies installieren
+git clone https://github.com/daimpad/OpenDataWizard.git
+cd OpenDataWizard
+composer install
+
+# WordPress aktivieren (requires `wp` CLI)
+wp plugin activate open-data-wizard
 ```
 
-CI runs on **PHP 8.1, 8.2, 8.3** via GitHub Actions (`.github/workflows/ci.yml`).
+### Schnelle Befehle
+```bash
+# Entwicklung & Testing
+./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
+./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (90 Tests)
+./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
+
+# Spezifische Tests
+./vendor/bin/phpunit --configuration=config/phpunit.xml tests/test-fields.php
+./vendor/bin/phpunit --configuration=config/phpunit.xml --filter testMethodName
+```
+
+### CI/CD Pipeline
+- Runs auf **PHP 8.1, 8.2, 8.3** via GitHub Actions (`.github/workflows/ci.yml`)
+- **Jeder Push zu `main`** triggert: PHPCS + PHPStan + PHPUnit auf allen PHP-Versionen
+- **Pull Requests** werden geblocked, wenn CI fehlschlägt
 
 ---
 
-## Architecture Overview
+## 📐 Projekt-Struktur
 
-### High-Level Design
+```
+open-data-wizard/
+├── open-data-wizard.php              # Plugin-Header & Bootstrap
+├── uninstall.php                     # Deinstallations-Hook
+├── includes/
+│   ├── class-setup.php              # Activation/Demo-Dataset
+│   ├── class-post-types.php         # CPT: odw_dataset
+│   ├── class-fields.php             # Carbon Fields Formular (5 Tabs)
+│   ├── class-validation.php         # Publishing-Validation
+│   ├── class-quality.php            # Qualitäts-Scoring (0-100)
+│   ├── class-admin.php              # Admin UI, Spalten, Intro-Seite
+│   ├── class-rest-api.php           # REST Endpoints (/catalog, /datasets/<id>, /delta)
+│   ├── class-settings.php           # Einstellungsseite
+│   ├── class-shortcode.php          # [odw_dataset id="123"] Frontend-Card
+│   └── class-cli.php                # WP-CLI Befehle
+├── assets/
+│   ├── css/
+│   │   ├── admin.css               # Admin-UI Styling (Tabs, Badges, etc.)
+│   │   └── frontend.css            # Frontend Download-Card Styling
+│   ├── js/
+│   │   ├── wizard-tabs.js          # Tab-Navigation mit SessionStorage
+│   │   ├── odw-admin-fields.js     # Field-Initialization, Autosuggest
+│   │   └── odw-file-upload.js      # File-Upload Handler (wp.media)
+│   └── images/                      # Icons, Logos
+├── config/
+│   ├── phpcs.xml                   # WordPress Coding Standards
+│   ├── phpstan.neon                # Static Analysis Konfiguration
+│   ├── phpunit.xml                 # Unit-Test Konfiguration
+│   ├── licenses.txt                # Lizenz-Liste (URI | Label)
+│   ├── dct-format-list.php         # Format-Mapping (MIME → DCAT-AP URI)
+│   └── dcat-ap-fields.php          # Feld-Definitionen (Meta-Key, Label, Required)
+├── tests/
+│   ├── test-fields.php             # ODW_Fields Methoden-Tests
+│   ├── test-fields-extended.php    # JSON-LD Builder Tests
+│   ├── test-quality.php            # Qualitäts-Scoring Tests
+│   ├── test-settings.php           # Settings-Filter Tests
+│   ├── test-shortcode.php          # Shortcode Rendering Tests
+│   ├── test-rest-delta.php         # Delta Endpoint Tests
+│   ├── test-cli.php                # CLI Commands Tests
+│   └── class-stubs.php             # WP_Mock Stubs
+├── languages/
+│   └── open-data-wizard.pot        # i18n Translation Template
+├── README.md                        # User-facing Dokumentation (DE)
+├── CHANGELOG.md                     # Version-History
+├── composer.json                    # PHP Dependencies
+└── CLAUDE.md                        # Diese Datei
+```
 
-Open Data Wizard is a **WordPress plugin** that bridges the gap between WordPress (where organizations already manage content) and Open Data standards (DCAT-AP 3.0, which machines can understand).
+---
 
-**Core Flow:**
-1. Admin creates/edits a **Dataset Post** (CPT: `odw_dataset`) using a guided **Carbon Fields 5-tab form**
-2. Form collects DCAT-AP 3.0 metadata (title, license, distributions, etc.)
-3. On publish, **validation hooks** block publishing if required fields are missing
-4. Metadata is **persisted as post meta** + **JSON-LD cached in transients**
-5. **REST API endpoints** expose published datasets as machine-readable JSON-LD
-6. External **harvesting systems** can fetch the `/catalog` endpoint and automatically ingest datasets
+## 🏗️ Architektur-Überblick
 
-### Class Hierarchy
+### Kern-Flow
 
-All plugin classes use **static methods** (no instantiation) and follow a **hook-based initialization pattern**:
+```
+Admin erstellt Dataset (CPT: odw_dataset)
+    ↓
+Carbon Fields Formular (5 Tabs) erfasst DCAT-AP 3.0 Metadaten
+    ↓
+Validation-Hook prüft Pflichtfelder vor Publishing
+    ↓
+Post Meta speichert: _odw_publisher, _odw_description, _odw_license, etc.
+    ↓
+Quality-Hook berechnet Vollständigkeits-Score (0-100)
+    ↓
+REST-API baut JSON-LD & cached in Transients (5 min TTL)
+    ↓
+Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
+```
 
+### Klassen & Verantwortlichkeiten
+
+| Klasse | Zweck | Haupt-Methoden |
+|--------|-------|----------------|
+| **ODW_Setup** | Activation: Demo-Dataset erstellen, Welcome Notice | `on_activation()`, `maybe_create_demo()` |
+| **ODW_Post_Types** | CPT Registrierung mit Capabilities | `register()` |
+| **ODW_Fields** | Carbon Fields Formular (5 Tabs) + JSON-LD Builder | `register_required_fields()`, `odw_build_dataset_jsonld()` |
+| **ODW_Validation** | Publish-Blocking bei fehlenden Pflichtfeldern | `intercept_publish()`, `validate()` |
+| **ODW_Quality** | Qualitäts-Scoring & Caching | `calculate()`, `get_level()` |
+| **ODW_Admin** | Admin UI (Spalten, Intro-Seite, File-Upload Meta-Box) | `register_introduction_page()`, `render_column()`, `save_file_attachment()` |
+| **ODW_Rest_API** | REST Endpoints mit Transient-Caching | `get_catalog()`, `get_dataset()`, `get_delta()` |
+| **ODW_Settings** | Plugin-Einstellungsseite | `get()`, `filter_catalog_title()` |
+| **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()` |
+| **ODW_CLI** | WP-CLI Befehle (Batch-Operationen) | `export_json()`, `validate_all()` |
+
+### Design Patterns
+
+#### 1. **Statische Methoden ohne Instantiierung**
+Alle Klassen verwenden **nur statische Methoden** — keine `new`-Operationen:
 ```php
-// Typical pattern:
 class ODW_Something {
     public static function init(): void {
         add_action( 'hook_name', array( self::class, 'handler_method' ) );
@@ -48,256 +136,458 @@ class ODW_Something {
     
     public static function handler_method(): void { ... }
 }
-
-// Bootstrap in open-data-wizard.php:
-ODW_Something::init();  // Called in odw_bootstrap()
 ```
 
-### Key Classes & Responsibilities
+#### 2. **JSON-LD als Single Source of Truth**
+Die `odw_build_dataset_jsonld()` Funktion erzeugt die **kanonische JSON-LD Darstellung**:
+- Verwendet Carbon Fields + Post Meta
+- Wird in Transients gecacht (keyed by post_id)
+- Output sanitized mit `esc_url_raw()`, `esc_attr()`, etc.
+- Erweiterbar via `odw_dataset_jsonld` Filter
 
-| Class | Role | Key Methods |
-|-------|------|-----------|
-| `ODW_Post_Types` | Registers the `odw_dataset` CPT with capability mapping | `register()` — maps all write ops to `manage_open_data` cap |
-| `ODW_Fields` | Defines the 5-tab Carbon Fields form + JSON-LD builder | `register()`, `register_required_fields()`, `odw_build_dataset_jsonld()` (companion function) |
-| `ODW_Validation` | Blocks publishing if required fields missing; stores errors as transients | `intercept_publish()`, `validate()` |
-| `ODW_Quality` | Auto-calculates DCAT-AP completeness (0–100 score, 4 levels) after save | `calculate()`, `check_indicator()`, `get_level()` |
-| `ODW_Admin` | Admin UI: list columns, sortable columns, help tabs, wp.media upload meta-box | `render_column()`, `handle_meta_orderby()` (for sortable theme column via `pre_get_posts`) |
-| `ODW_Rest_API` | `/catalog` and `/datasets/<id>` + `/delta?since=<ISO8601>` endpoints | `get_catalog()`, `get_dataset()`, `get_delta()` — all with transient caching (5 min TTL) |
-| `ODW_Shortcode` | `[odw_dataset id="123"]` renders download card in frontend | `render()` |
-| `ODW_Settings` | Settings page (catalog title, defaults, cache TTL, cleanup checkbox) | `get()`, `filter_catalog_title()` |
-| `ODW_Setup` | Activation: create demo dataset, show welcome notice | `maybe_create_demo()`, `create_demo_dataset()` |
+#### 3. **Post Meta für Business-Logic**
+Auch wenn Carbon Fields UI bietet — intern arbeiten wir mit **Post Meta**:
+- CF Field `odw_description` → Post Meta Key `_odw_description`
+- Decoupling von CF internals
+- Einfaches Testing (keine CF Dependencies)
+
+#### 4. **Transient Caching für Performance**
+Alle REST-Responses werden gecacht:
+- **Catalog**: `odw_catalog_` + MD5(page, per_page, filters)
+- **Dataset**: `odw_dataset_` + post_id
+- **Delta**: `odw_delta_` + MD5(since, page)
+- **TTL**: 5 Minuten (in Einstellungen konfigurierbar)
+- **Invalidation**: Automatisch auf `save_post_odw_dataset` + `trashed_post`
+
+#### 5. **Validation = Publish-Blocking**
+Validation greift nicht bei Save ein — nur bei **Publish-Attempt**:
+1. `wp_insert_post_data` Filter prüft Publish-Status
+2. Fehler? → Post zurück zu Draft + Error-Transient (300s TTL)
+3. Admin Notice zeigt Fehler
+→ Erlaubt Drafts, erzwingt Vollständigkeit für Public
+
+#### 6. **Companion Functions außerhalb Klassen**
+Zwei Funktionen stehen **außerhalb** class-Definitionen (absichtlich):
+
+```php
+// In class-fields.php, nach class-Definition:
+function odw_build_dataset_jsonld( int $post_id ): ?array { ... }
+
+// In class-shortcode.php:
+function odw_format_bytes( int $bytes, int $precision = 2 ): string { ... }
+```
+Grund: Hohe Sichtbarkeit, mehrere Klassen verwenden sie, kein `self::`-Overhead.
 
 ---
 
-## Key Patterns & Architecture Decisions
+## 📋 Formular-Struktur (Carbon Fields, 5 Tabs)
 
-### 1. **Capability-Based Access Control**
-
-The plugin restricts dataset creation/editing to users with `manage_open_data` capability (granted to admins + editors on activation).
-
-- **CPT Setup** (`class-post-types.php`): Uses `capability_type => 'odw_dataset'` + explicit `capabilities` map (all write ops → `manage_open_data`)
-- **Activation** (`open-data-wizard.php`): `odw_add_capabilities()` grants cap to roles on activation
-- **Uninstall** (`uninstall.php`): Removes cap from roles on deinstallation (if opt-in checkbox enabled)
-
-This means **contributors and authors cannot create datasets** without explicitly receiving the cap.
-
-### 2. **JSON-LD as Single Source of Truth**
-
-The JSON-LD object (returned by `odw_build_dataset_jsonld()`) is the **canonical representation** of a dataset for external consumption.
-
-- Populated from **both** Carbon Fields (tabs 1–4) and **post meta** (`_odw_modified`, `_odw_quality_*`, `_odw_file_*`)
-- Cached as transients keyed by post ID to avoid rebuilding on every REST request
-- Sanitized at **output time**: `access_url` values are run through `esc_url_raw()` to strip dangerous schemes (`javascript:`, `data:`)
-- Extensible via the `odw_dataset_jsonld` filter before cache
-
-### 3. **Carbon Fields for Admin UI, Post Meta for Storage**
-
-**Why this split?**
-- Carbon Fields (`class-fields.php`) provides a beautiful, translatable UI with validation, but **serializes everything as post meta**
-- Directly working with post meta in business logic (`class-validation.php`, `class-quality.php`, JSON builder) keeps the code decoupled from CF's internal APIs
-
-**Key difference:** CF field names like `odw_description` become post meta keys `_odw_description` after save.
-
-### 4. **Transient Caching for REST API**
-
-All REST endpoints cache their responses in transients:
-- **Catalog** cache key: `odw_catalog_` + MD5(page, per_page, filters)
-- **Dataset** cache key: `odw_dataset_` + post_id
-- **Delta** cache key: `odw_delta_` + MD5(since, page, per_page)
-- **TTL:** 5 minutes (configurable in settings)
-
-Cache is **invalidated on save/trash** via `save_post_odw_dataset` and `trashed_post` hooks in `class-rest-api.php`.
-
-### 5. **Validation as a Gating Mechanism**
-
-Validation (`class-validation.php`) doesn't prevent saves — it **prevents publishing**:
-1. `wp_insert_post_data` filter intercepts publish attempts
-2. Runs `validate()` against required fields
-3. If errors, **reverts status to draft** and stores errors in a transient (300s TTL)
-4. Admin notice (`admin_notices` hook) displays the transient errors
-
-This allows drafts with incomplete data but forces completeness before public visibility.
-
-### 6. **Companion Functions at File Level**
-
-Two companion functions live **outside** class definitions in their respective files:
-
-- `odw_build_dataset_jsonld( int $post_id ): ?array` in `class-fields.php`
-  - Used by both REST API and JSON-LD preview tab
-  - Not a method because it's called from multiple classes and needs high visibility
-  - PHPCS ignores the "mixed declarations" sniff here
-
-- `odw_format_bytes( int $bytes, int $precision = 2 ): string` in `class-shortcode.php`
-  - Utility for human-readable file size in download card
-
-### 7. **Pre-Computed File Metadata**
-
-When a file is attached via the wp.media upload meta-box (`odw-file-upload.js`), the **save handler** (`save_file_attachment()` in `class-admin.php`) immediately computes and stores:
-- `_odw_file_size` (as integer, bytes)
-- `_odw_file_format` (as uppercase string, e.g. "CSV")
-
-This avoids **runtime I/O** in the shortcode rendering (`get_filesize()` is slow).
-
-### 8. **Delta Endpoint for Incremental Harvesting**
-
-`GET /wp-json/datenatlas/v1/delta?since=<ISO8601>` returns only datasets **modified after** a timestamp, plus tombstones for deleted ones.
-
-- Uses `post_modified_gmt` (UTC) for comparison to avoid timezone drift
-- Pagination applies only to modified datasets; all tombstones always included
-- Used by harvesters to sync only changes, not re-fetch entire catalog
-
-### 9. **UX-First Form Design (v2.0.0+)**
-
-As of v2.0.0, all form fields prioritize **user experience over technical accuracy** in labels:
-
-- **Main label** (Carbon Fields `Field::make()` second parameter): User-friendly question, not DCAT-AP term
-  - ✅ Good: "Wer gibt diese Daten heraus?" 
-  - ❌ Bad: "Herausgebende Organisation (dct:publisher)"
+### Tab 1: Grundlegende Informationen
+```php
+- odw_publisher (REQUIRED)
+  → Herausgebende Organisation (dct:publisher)
   
-- **Help text** (`set_help_text()`): Preserves all technical context in a structured format:
-  - Original technical label (uppercase, DCAT-AP term in parentheses)
-  - Blank line
-  - Concrete, realistic example(s)
-  - Format: `"LABEL (dcat:term)\n\nExample: instance, example, item"`
-
-- **Validation labels** (`ODW_Fields::get_required_fields()`): Use the same user-friendly question as the field label
-  - Error messages show: "Worum geht es in diesem Datensatz?" not "Beschreibung (dct:description)"
-
-**Rationale:** Most admins don't know DCAT-AP. The form should be self-documenting with examples. Technical details remain visible for reference but don't obstruct the primary user flow.
-
----
-
-## Important Context
-
-### Version & Feature Matrix
-
-The plugin tracks features by version in `CHANGELOG.md`. Key versions:
-- **v1.0** — MVP (CPT, Carbon Fields form, REST `/catalog` + `/datasets/<id>`)
-- **v1.3** — Quality indicators (ampellogik, scoring)
-- **v1.4** — Shortcode download card
-- **v1.5** — Demo dataset on activation
-- **v1.6** — Settings page
-- **v1.7** — Extended DCAT-AP Tab 4 (landingPage, accrualPeriodicity, spatial, temporal, contactPoint)
-- **v1.8** — Native wp.media upload widget in sidebar
-- **v1.9** — Delta-Harvesting endpoint (`/delta?since=<ISO8601>` for incremental harvesting), comprehensive CLAUDE.md
-- **v2.0.0** — **Phase 1+2 UX improvements**: All 19 form field labels rewritten with user-friendly questions + practical examples; WP-CLI commands for batch operations
-- **v2.1.0** — Per-distribution license, CESSDA topic classification, 4-level quality scoring, external config files (`config/licenses.txt`, `config/dct-format-list.php`, `config/dcat-ap-fields.php`), composite file size widget, shortcode overhaul (keywords + metadata download), plugin rebrand to nozilla
-- **v2.1.1** — Bugfix: remove invalid `class` attribute from CF5 input (use `[data-odw-backing]` CSS selector)
-
-### Constants (Defined in `open-data-wizard.php`)
-
-```php
-define( 'ODW_VERSION', '2.1.0' );           // Current version
-define( 'ODW_PLUGIN_DIR', dirname( __FILE__ ) . '/' );  // /path/to/plugin/
-define( 'ODW_PLUGIN_URL', plugins_url( '', __FILE__ ) ); // https://site.com/wp-content/plugins/open-data-wizard/
-define( 'ODW_PLUGIN_FILE', __FILE__ );      // /path/to/plugin/open-data-wizard.php
+- odw_theme
+  → In welche Kategorie gehört dieser Datensatz? (dcat:theme)
+  
+- odw_description (REQUIRED)
+  → Worum geht es in diesem Datensatz? (dct:description)
 ```
 
-These are used throughout for asset loading (`wp_enqueue_script( ..., ODW_PLUGIN_URL . 'assets/...' )`).
+### Tab 2: Inhaltliche Angaben
+```php
+- odw_language
+  → In welcher Sprache sind die Daten? (dct:language)
+  
+- odw_keywords
+  → Mit welchen Stichworten finde ich diese Daten? (dcat:keyword)
+  
+- odw_issued
+  → Veröffentlichungsdatum (dct:issued)
+  
+- odw_modified (Auto-Update!)
+  → Änderungsdatum (dct:modified) — wird bei jedem Save aktualisiert
+  
+- odw_cessda_topic
+  → CESSDA Topic Classification (Auto-Suggest aus CDV 4.2.3)
+```
 
-### REST API Namespace
+### Tab 3: Datenbereitstellung (SIMPLIFIED v2.1.4!)
+```php
+- odw_access_url (REQUIRED)
+  → Wo kann ich die Datei herunterladen? (dcat:accessURL)
+  
+- odw_format
+  → In welchem Format ist die Datei? (dct:format) — EU-URI
+  
+- odw_byte_size
+  → Dateigröße in Bytes (dcat:byteSize) — nur Zahl
+  
+- odw_license (REQUIRED)
+  → Unter welcher Lizenz sind die Daten? (dct:license)
+  
+- odw_license_custom (Conditional!)
+  → Nur sichtbar wenn odw_license == 'sonstige'
+  → Custom Lizenz-URI eingeben/auswählen
+  
+- odw_attribution_text
+  → Namensnennungstext (dcatde:licenseAttributionByText) — nur bei CC-BY
+```
 
-All custom endpoints use the `/wp-json/datenatlas/v1/` namespace (not `/wp-json/wp/v2/...`).
+**v2.1.4 CHANGE:** Keine komplexen/repeater Felder mehr! Zuvor gab es:
+- `odw_distributions[]` (repeater mit sub-fields: access_url, format, byte_size, license)
+- → **Simplify zu Singular**: Eine Distribution pro Dataset (UI UX improvement)
+- Validation + Quality-Scoring angepasst
 
-This allows **independent versioning** from WordPress REST API and keeps plugin routes in a custom namespace.
+### Tab 4: Erweiterte Angaben
+```php
+- odw_landing_page
+  → Projektseite (dcat:landingPage)
+  
+- odw_accrual_periodicity
+  → Aktualisierungsfrequenz (dct:accrualPeriodicity)
+  
+- odw_political_geocoding_level
+  → Verwaltungsebene (dcatde:politicalGeocodingLevelURI)
+  
+- odw_spatial
+  → Geografische Region (dct:spatial) — Freitext oder URI
+  
+- odw_temporal_start, odw_temporal_end
+  → Zeitlicher Bezug (dct:temporal)
+  
+- odw_contact_name, odw_contact_email, odw_contact_url
+  → Kontaktpunkt (dcat:contactPoint)
+```
+
+### Tab 5: Vorschau
+```php
+- Live JSON-LD Preview (Read-Only HTML Field)
+- REST Endpoint URL zum Abrufen
+- Wird bei jedem Save regeneriert
+```
 
 ---
 
-## Testing
+## 🎨 Admin Interface
 
-### Unit Test Structure
+### Menü-Struktur
+```
+WordPress Admin → Datensätze
+├── Alle Datensätze (List View mit Spalten)
+├── Einstieg (neu in v2.1.4!)
+│   └── Welcome/Intro Page mit:
+│       - What is Open Data Wizard?
+│       - How it works (5-step overview)
+│       - Link: "Neuen Datensatz erstellen"
+├── Neue Datensatz (Create Form)
+├── Einstellungen (Settings Page)
+│   ├── Katalog (Title, Publisher)
+│   ├── Standardwerte (Default Language, License)
+│   ├── REST API (Cache TTL)
+│   └── Deinstallation (Cleanup Checkbox)
+```
 
-Tests use **WP_Mock** (mocks WordPress functions) + **PHPUnit**. No database needed.
+### List View Spalten
+```
+[Checkbox] | Titel | Lizenz | Thema | Qualität | Status | Änderungsdatum | Shortcode
+```
 
-Each test class loads its target class once and stubs all WordPress functions:
+- **Lizenz**: Zeigt `odw_license` Label; wenn 'sonstige', zeigt `odw_license_custom`
+- **Qualität**: Badge mit Score (0-100) + 4-Level Ampel (Grün/Gelb/Rot/Grau)
+- **Status**: Badge "Veröffentlicht" oder "Entwurf"
+- **Shortcode**: `[odw_dataset id="123"]` — klickbar zum Auswählen
 
+### Einstiegsseite (neu v2.1.4)
+In `class-admin.php` Methode `register_introduction_page()`:
+- Submenu unter "Datensätze"
+- Welcome Content mit Step-by-Step Erklärung
+- Button: "Neuen Datensatz erstellen"
+- Styling via inline `<style>` im HTML
+
+---
+
+## 🔐 Sicherheit & Capabilities
+
+### Capability System
+- **`manage_open_data`** — Custom Capability für Dataset-Operations
+- Automatisch an **Admins + Editors** vergeben bei Activation
+- Entfernt bei Deinstallation (wenn Checkbox aktiviert)
+
+### Kontrollpunkte
 ```php
-protected function setUp(): void {
-    \WP_Mock::setUp();
-}
+// CPT: Alle Write-Ops require manage_open_data
+'capability_type' => 'odw_dataset',
+'capabilities' => [
+    'create_posts' => 'manage_open_data',
+    'edit_posts' => 'manage_open_data',
+    'delete_posts' => 'manage_open_data',
+]
 
-protected function tearDown(): void {
-    \WP_Mock::tearDown();
-}
+// File Upload: wp_verify_nonce() + current_user_can('edit_post')
+// Settings Update: wp_verify_nonce() + current_user_can('manage_options')
+```
 
-private function load_class(): void {
-    if ( ! class_exists( 'ODW_Fields' ) ) {
-        \WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+### Input Sanitization
+- `$_GET`/`$_POST`: `sanitize_text_field()`, `absint()`
+- URLs: `esc_url_raw()` vor Output (blockt `javascript:`, `data:`)
+- Meta Values: `esc_attr()`, `esc_html()` bei Output
+
+---
+
+## 🌍 Internationalisierung (i18n)
+
+### Text Domain: `open-data-wizard`
+```php
+__( 'Translatable Text', 'open-data-wizard' )
+esc_html__( 'User-facing Text', 'open-data-wizard' )
+esc_attr__( 'Attribute Text', 'open-data-wizard' )
+```
+
+### Translation Files
+- **POT Template**: `languages/open-data-wizard.pot`
+- **PO/MO Files**: `languages/de_DE.po`, `de_DE.mo` (optional)
+- Loaded via `load_plugin_textdomain()` on `init` hook
+
+### Praktiken
+- Alle UI-Texte translatable
+- Technische Labels (DCAT-AP) in Help-Text nicht-translatable oder extra markiert
+- Form Labels: User-friendly Frage → Hilftext hat technisches Label
+
+---
+
+## 🧪 Testing & Quality Assurance
+
+### Test-Suite Struktur
+**PHPUnit + WP_Mock** (keine Datenbank nötig)
+
+#### Test Files
+- **test-fields.php** — ODW_Fields: License Labels, Format MIME, Required Fields
+- **test-fields-extended.php** — JSON-LD Builder: Complete JSON-LD output validation
+- **test-quality.php** — Quality Scoring: 0-100 Score calculation, 4-level mapping
+- **test-settings.php** — Settings get/filter methods
+- **test-shortcode.php** — Shortcode rendering, byte formatting
+- **test-rest-delta.php** — Delta endpoint validation, cache logic
+- **test-cli.php** — WP-CLI commands
+
+#### Running Tests
+```bash
+# Alle 90 Tests
+./vendor/bin/phpunit --configuration=config/phpunit.xml
+
+# Spezifische Test-Datei
+./vendor/bin/phpunit --configuration=config/phpunit.xml tests/test-fields.php
+
+# Einzelner Test
+./vendor/bin/phpunit --configuration=config/phpunit.xml --filter testMethodName
+
+# Mit Details
+./vendor/bin/phpunit --configuration=config/phpunit.xml --verbose
+```
+
+#### Test-Pattern
+```php
+class Test_ODW_Fields extends \WP_Mock\Tools\TestCase {
+    protected function setUp(): void {
+        \WP_Mock::setUp();
+    }
+    
+    protected function tearDown(): void {
+        \WP_Mock::tearDown();
+    }
+    
+    public function test_something(): void {
         \WP_Mock::userFunction( '__' )->andReturnArg( 0 );
-        require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+        \WP_Mock::userFunction( 'esc_html__' )->andReturnArg( 0 );
+        
+        // require_once if needed
+        // assertions
     }
 }
 ```
 
-### Running Tests
-
+### Code Quality Tools
 ```bash
-composer test                          # All 90 tests
-composer test -- tests/test-fields.php # Single file
-composer test -- --filter testMethodName  # Single test
-composer test -- --verbose              # Show test names
-```
+# WordPress Coding Standards
+./vendor/bin/phpcs --standard=config/phpcs.xml
+./vendor/bin/phpcbf --standard=config/phpcs.xml includes/
 
-**Test files:**
-- `test-fields.php` — `ODW_Fields` static methods (license labels, format MIME types, required fields)
-- `test-fields-extended.php` — JSON-LD builder (`odw_build_dataset_jsonld()`)
-- `test-quality.php` — `ODW_Quality` scoring and caching (4 levels)
-- `test-settings.php` — `ODW_Settings` get/filter methods
-- `test-shortcode.php` — `ODW_Shortcode` rendering and utilities
-- `test-rest-delta.php` — Delta endpoint validation, caching, tombstones
-- `test-cli.php` — WP-CLI commands
+# Static Analysis (PHP 8.1+ Type Hints)
+./vendor/bin/phpstan analyse --configuration=config/phpstan.neon
+
+# Expected: 0 PHPCS violations, PHPStan Level 6
+```
 
 ---
 
-## Git Workflow & Commits
+## 📦 REST API Endpoints
 
-### Branch Naming
+### Base Namespace
+All endpoints unter `/wp-json/datenatlas/v1/`
 
-All development happens on branches starting with `claude/`:
-```
-claude/feature-name-<SESSION_ID>
-```
+### GET /catalog
+**Alle veröffentlichten Datasets als dcat:Catalog (JSON-LD)**
 
-The session ID (last part) is **required** for push to succeed.
+Query-Parameter:
+- `page=1`, `per_page=20` — Pagination
+- `theme=Bildung` — Filter by theme
+- `license=cc-by` — Filter by license short code
+- `format=json|jsonld` — Response format
 
-### Commit Message Format
-
-Include a reference at the end:
-```
-git commit -m "Add feature X
-
-Description with details.
-
-https://claude.ai/code/session_<SESSION_ID>"
-```
-
-This links commits back to the Claude Code session for traceability.
-
-### Before Pushing
-
-Always run:
-```bash
-composer phpcs        # Must be 0 violations
-composer test         # Must pass all tests
+Response (JSON-LD):
+```json
+{
+  "@context": "https://www.w3.org/ns/dcat",
+  "@type": "dcat:Catalog",
+  "dct:title": "...",
+  "dcat:dataset": [ { ... }, { ... } ]
+}
 ```
 
-CI will re-run these checks; don't waste CI time on violations.
+Caching: `odw_catalog_` + MD5 key, TTL 5 min
+
+### GET /datasets/{id}
+**Einzelner Dataset als dcat:Dataset (JSON-LD)**
+
+Response:
+```json
+{
+  "@context": "...",
+  "@type": "dcat:Dataset",
+  "dct:title": "...",
+  "dct:description": "...",
+  "dcat:distribution": { ... }
+}
+```
+
+Caching: `odw_dataset_{post_id}`, TTL 5 min
+
+### GET /delta?since={ISO8601}
+**Inkrementelles Harvesting: Nur Änderungen seit Timestamp**
+
+Query-Parameter:
+- `since=2026-01-01T00:00:00Z` (ISO 8601)
+- `page=1`, `per_page=20` — Pagination
+
+Response:
+```json
+{
+  "datasets": [ { ... } ],          // Geänderte Datasets
+  "tombstones": [                    // Gelöschte Datasets
+    { "id": "post-id", "deleted": true }
+  ]
+}
+```
+
+Caching: `odw_delta_` + MD5 key, TTL 5 min
 
 ---
 
-## Common Development Tasks
+## 🎯 CSS Spacing & Styling
 
-### Adding a New DCAT-AP Field
+### Admin Interface Spacing
+```css
+/* Formularfelder: Konsistente Abstände */
+.cf-field {
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
-1. **Define in Carbon Fields** (`class-fields.php`, appropriate tab):
+/* Tab-Inhalte */
+.cf-container__tab {
+    padding: 20px 0;
+}
+
+/* Spezifische Fields mit data-Attribut */
+[data-odw-backing="byte_size"] {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+```
+
+### CSS Variables (Admin)
+```css
+:root {
+    --odw-color-primary:     #2271b1;
+    --odw-color-primary-bg:  #fff;
+    --odw-color-border:      #c3c4c7;
+    --odw-color-bg-light:    #f6f7f7;
+    --odw-color-text:        #1d2327;
+    --odw-color-text-muted:  #50575e;
+    /* + Quality Colors */
+    --odw-color-quality-high-dot: #1a7f37;
+    /* + More... */
+}
+```
+
+### Responsiveness
+- **Admin**: Keine spezielle Responsive-Styles (WordPress Admin-Standard)
+- **Frontend Shortcode**: Responsive Download-Card (Flexbox)
+
+---
+
+## 📝 Git Workflow & Commits
+
+### Branch Strategy
+**WICHTIG (ab v2.1.4):** Alle Commits gehen **direkt zu `main`**
+
+```bash
+# Lokal entwickeln
+git checkout main
+git pull origin main
+
+# Änderungen machen
+# ... edit files ...
+
+# Testen
+./vendor/bin/phpcs --standard=config/phpcs.xml
+./vendor/bin/phpunit --configuration=config/phpunit.xml
+
+# Commit (mit Session-URL)
+git commit -m "Feature/Fix: Beschreibung
+
+Detaillierte Erklärung was sich ändert und warum.
+
+https://claude.ai/code/session_01JB1xUQM892bVZ4Yv3MZjvq"
+
+# Pushen zu main
+git push origin main
+```
+
+### Commit Message Conventions
+```
+<Type>: <Kurzbeschreibung (max 70 chars)>
+
+<Detaillierte Erklärung:>
+- Was hat sich geändert
+- Warum war diese Änderung nötig
+- Betroffene Komponenten
+- Breaking Changes (falls relevant)
+
+https://claude.ai/code/session_<SESSION_ID>
+```
+
+Typen:
+- `feat:` — Neue Feature
+- `fix:` — Bug Fix
+- `refactor:` — Code Umstrukturierung (keine neue Funktionalität)
+- `style:` — PHPCS/Formatting Fixes
+- `test:` — Test-Updates
+- `docs:` — Dokumentation
+- `chore:` — Maintenance, Dependencies
+
+---
+
+## 🔧 Häufige Development Tasks
+
+### Adding a DCAT-AP Field
+1. **Define in Carbon Fields** (`includes/class-fields.php`, appropriate tab)
    ```php
-   Field::make( 'text', 'odw_my_field', __( 'User-friendly question here?', 'open-data-wizard' ) )
-       ->set_help_text( __( 'ORIGINAL TECHNICAL LABEL (dcat:property)', 'open-data-wizard' ) . "\n\n" . __( 'Example: concrete example text here', 'open-data-wizard' ) ),
+   Field::make( 'text', 'odw_my_field', __( 'User Question?', 'open-data-wizard' ) )
+       ->set_help_text( __( 'TECHNICAL LABEL (dcat:term)', 'open-data-wizard' ) . "\n\n" . __( 'Example: ...', 'open-data-wizard' ) )
    ```
-   
-   **Important (v2.0.0+):** Field labels use **user-friendly questions** instead of technical DCAT-AP terms. The original label and DCAT-AP term go in the help text. Format: `ORIGINAL LABEL (dcat:term)` + newlines + `Example: practical example`
 
-2. **Add to JSON-LD builder** (`odw_build_dataset_jsonld()` in same file):
+2. **Add to JSON-LD Builder** (same file, `odw_build_dataset_jsonld()`)
    ```php
    $my_field = (string) carbon_get_post_meta( $post_id, 'odw_my_field' );
    if ( ! empty( $my_field ) ) {
@@ -305,161 +595,187 @@ CI will re-run these checks; don't waste CI time on violations.
    }
    ```
 
-3. **Update validation** (`class-validation.php`) if required:
+3. **Update Validation** (`includes/class-validation.php`) if required
    ```php
-   // Add to ODW_Fields::get_required_fields()
-   // Use the user-friendly label from the field definition, not the technical one
+   // Add to get_required_fields() if mandatory
    ```
 
-4. **Add tests** (`test-fields-extended.php`):
+4. **Write Tests** (`tests/test-fields-extended.php`)
    ```php
    public function test_build_includes_my_field(): void {
-       $this->load_fields();
        // Mock setup + assertions
    }
    ```
 
-### Modifying the Admin List View
+5. **Update Quality Indicators** (`includes/class-quality.php`) if applicable
 
-Edit `class-admin.php`:
-- **Columns**: `add_columns()` + `render_column()`
-- **Sortable columns**: `sortable_columns()` + `handle_meta_orderby()` (for meta-based sorting via `pre_get_posts`)
-- **Filters/Dropdowns**: `add_filters()` method (uses `parse_request_args()` from `class-admin.php` to read `$_GET`)
+### Adding Admin List Column
+In `class-admin.php`:
+1. Add to `set_columns()` array
+2. Implement in `render_column()` switch-case
+3. Optional: Add to `sortable_columns()` + `handle_meta_orderby()`
 
-### Adding a REST API Filter
+### Adding REST API Filter
+In `class-rest-api.php` `get_catalog()`:
+1. Add parameter to `register_routes()`
+2. Build `$meta_query` if meta-based
+3. Update transient cache key to include filter in MD5
 
-All REST endpoints support:
-- `page` / `per_page` — pagination
-- `format` — `json` or `jsonld` (controls Content-Type header)
-- Custom filters like `theme`, `license` (added as `$meta_query` in `get_catalog()`)
-
-To add a new filter to `/catalog`:
-1. Add parameter definition in `register_routes()`
-2. Build `$meta_query` clause if filter is a meta field
-3. Pass to `WP_Query` constructor
-4. Update transient cache key to include filter in MD5
-
-### Adding a WP-CLI Command
-
-WP-CLI commands are registered in `class-cli.php` (only if WP-CLI is defined).
-
-Pattern:
-```php
-public static function my_command( array $args, array $assoc_args ): void {
-    // $args: positional arguments (e.g. 'filter-value')
-    // $assoc_args: named arguments (e.g. --all, --format=json)
-    
-    \WP_CLI::success( 'Operation completed.' );
-    // or: \WP_CLI::error( 'Something went wrong.' );
-}
-```
-
-To register:
-1. Add method to `ODW_CLI` class
-2. In `init()`, call: `\WP_CLI::add_command( 'open-data-wizard subcommand', array( self::class, 'my_command' ) );`
-3. Add docblock with `## OPTIONS`, `## EXAMPLES` sections (WP-CLI standard)
-4. Add tests in `tests/test-cli.php` (stub WP_CLI classes at file-level if needed)
-5. Update README.md § "WP-CLI Befehle"
+### Adding WP-CLI Command
+In `class-cli.php`:
+1. Define method with `array $args, array $assoc_args` params
+2. Register in `init()`: `\WP_CLI::add_command( 'open-data-wizard cmd', ... )`
+3. Add docblock with `## OPTIONS`, `## EXAMPLES`
+4. Add tests in `tests/test-cli.php`
 
 ---
 
-## Debugging Tips
+## 🐛 Debugging & Troubleshooting
 
-### Transient Cache Issues
-
-If REST API seems outdated, check:
+### Cache Issues
 ```php
-// Clear all caches
-delete_transient( 'odw_catalog_...' );
-delete_transient( 'odw_delta_...' );
-delete_transient( 'odw_dataset_...' );
+// Clear ALL transients
+delete_transient( 'odw_catalog_*' );
+delete_transient( 'odw_dataset_*' );
+delete_transient( 'odw_delta_*' );
 
-// Or programmatically
-do_action( 'odw_clear_caches' ); // If you add this action
+// Or via Action (if implemented)
+do_action( 'odw_clear_caches' );
 ```
 
-Cache is **automatically invalidated** on `save_post_odw_dataset` and `trashed_post`.
-
-### JSON-LD Output Validation
-
-Use https://validator.schema.org/ to test JSON-LD responses.
-
-Common issues:
-- Missing `@context` — check REST endpoint response wrapping in `get_catalog()` / `get_dataset()`
-- Invalid URLs in `accessURL` — should be stripped by `esc_url_raw()` in JSON builder
-- Missing required fields — check `odw_build_dataset_jsonld()` for null checks
+### JSON-LD Validation
+- Test via https://validator.schema.org/
+- Check `odw_build_dataset_jsonld()` for null values
+- Ensure `access_url` is clean (no `javascript:` schemes)
 
 ### PHPCS False Positives
+Already excluded in `config/phpcs.xml`:
+- `WordPress.Files.FileName` — tests use different naming
+- `Generic.Files.OneObjectStructurePerFile` — test stubs
+- `WordPress.DB.SlowDBQuery` — meta queries intentional
+- `WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize` — cache keys only
 
-The project uses `phpcs.xml` to exclude noisy sniffs:
-- `WordPress.Files.FileName` — tests have different naming convention
-- `Generic.Files.OneObjectStructurePerFile` — tests have stub classes in one file
-- `WordPress.DB.SlowDBQuery` — meta queries are intentional here
-- `WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize` — used only for cache keys
-
-If you get unexpected violations, check `phpcs.xml` before adding ignores.
-
-### PHPStan False Positives
-
-Many errors are false positives from **missing Carbon Fields stubs**. Ignore them unless they're about your new code.
-
-Known false positives:
-- `Function carbon_get_post_meta not found` — CF function not in stubs
-- `Method XYZ not found` on Carbon_Fields classes — incomplete stubs
-- `Constant ODW_PLUGIN_DIR not found` — dynamic constant, defined at runtime
+### PHPStan Ignores
+Known false positives from incomplete Carbon Fields stubs:
+- `Function carbon_get_post_meta not found`
+- `Method XYZ not found` on Carbon_Fields classes
+- `Constant ODW_PLUGIN_DIR not found` — defined at runtime
 
 ---
 
-## Extensibility (Filters & Hooks)
+## 🚀 Version Management
 
-The plugin provides **WordPress filters** for extension by other plugins:
+### Version Bumping
+Update **both** locations:
+1. Plugin header in `open-data-wizard.php`
+   ```php
+   /**
+    * Version: 2.1.5
+    */
+   ```
 
-```php
-// Add custom license options
-add_filter( 'odw_license_options', function( $options ) {
-    $options['https://custom.license'] = 'Custom License 1.0';
-    return $options;
-});
+2. Constant definition
+   ```php
+   define( 'ODW_VERSION', '2.1.5' );
+   ```
 
-// Modify JSON-LD before output
-add_filter( 'odw_dataset_jsonld', function( $jsonld, $post_id ) {
-    $jsonld['custom:field'] = 'value';
-    return $jsonld;
-}, 10, 2 );
+3. Update `CHANGELOG.md` with:
+   - New features
+   - Bug fixes
+   - Breaking changes
+   - Security updates
 
-// Change catalog title in REST response
-add_filter( 'odw_catalog_title', function( $title ) {
-    return 'My Custom Catalog Title';
-});
-```
+### Semantic Versioning
+- **MAJOR.MINOR.PATCH**
+- MAJOR: Breaking API changes
+- MINOR: New features (backward-compatible)
+- PATCH: Bug fixes only
 
-See `README.md` § "Erweiterbarkeit" for the full list of available hooks.
-
----
-
-## Performance Considerations
-
-1. **Never call `odw_build_dataset_jsonld()` in loops** without caching — it queries post meta multiple times
-2. **Transient caching reduces DB load** — 5 min default TTL is good for most sites (configurable in settings)
-3. **WP_Query with `meta_query` is slow** — But unavoidable for filtering by theme/license; transients help
-4. **File size computation** (`filesize()`) is slow — That's why we pre-compute and store in `_odw_file_size`
+Current: **v2.1.4**
 
 ---
 
-## Security Notes
+## 📚 Resources & External Links
 
-- All `$_GET` / `$_POST` access is sanitized with `sanitize_text_field()` + `absint()` where appropriate
-- URL validation: `access_url` is run through `esc_url_raw()` before output (strips `javascript:`, `data:`)
-- Nonce checks: Upload handler and settings updates use `wp_verify_nonce()`
-- Capability checks: All post modifications require `manage_open_data` cap (or `edit_posts` for standard WP operations)
+### Standards & Specifications
+- [DCAT-AP 3.0 Specification](https://data.europa.eu/api/hub/store/dataset/dcat-ap)
+- [JSON-LD 1.1 Spec](https://www.w3.org/TR/json-ld11/)
+- [DCAT Vocabulary](https://www.w3.org/TR/vocab-dcat-3/)
+- [DCT (Dublin Core Terms)](https://purl.org/dc/terms/)
+
+### WordPress/PHP
+- [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/)
+- [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/)
+- [WordPress Security](https://developer.wordpress.org/plugins/security/)
+- [PHP 8.1+ Type Hints](https://www.php.net/manual/en/language.types.type-hints.php)
+
+### Libraries
+- [Carbon Fields Docs](https://carbonfields.net/)
+- [PHPUnit Documentation](https://phpunit.de/)
+- [WP-Mock for Mocking](https://github.com/10up/wp_mock)
+- [WPCS Standards](https://github.com/WordPress/WordPress-Coding-Standards)
+
+### Project Files
+- `README.md` — User-facing documentation (DE)
+- `CHANGELOG.md` — Complete version history & features
+- `LICENSE` — GPL-2.0-or-later
+- `composer.json` — PHP dependencies
+- `.github/workflows/ci.yml` — GitHub Actions CI/CD
 
 ---
 
-## Resources
+## 🎓 Best Practices
 
-- [DCAT-AP 3.0 Spec](https://data.europa.eu/api/hub/store/dataset/dcat-ap)
-- [JSON-LD Documentation](https://json-ld.org/)
-- [Carbon Fields](https://carbonfields.net/)
-- [WordPress REST API](https://developer.wordpress.org/rest-api/)
-- Project README: `README.md`
-- Changelog: `CHANGELOG.md`
+### Code Quality
+1. **Always run PHPCS before committing**
+   ```bash
+   ./vendor/bin/phpcs --standard=config/phpcs.xml
+   ```
+
+2. **All public methods must have type hints**
+   ```php
+   public static function my_method( string $param ): string { ... }
+   ```
+
+3. **Use strict types at file top**
+   ```php
+   declare(strict_types=1);
+   ```
+
+4. **Avoid deeply nested conditionals** — use early returns
+
+5. **Document complex logic** — single-line comments explaining "why"
+
+### Security
+1. **Always sanitize user input** — `sanitize_text_field()`, `absint()`
+2. **Always escape output** — `esc_html()`, `esc_attr()`, `esc_url_raw()`
+3. **Verify nonces** — `wp_verify_nonce()` for form submissions
+4. **Check capabilities** — `current_user_can()` for all write operations
+5. **No serialize() user data** — only for cache keys
+
+### Testing
+1. **Write tests for new features** — Aim for >80% coverage
+2. **Mock all WordPress functions** — WP_Mock does the heavy lifting
+3. **Test edge cases** — null values, empty strings, large datasets
+4. **Run full test suite before pushing** — 90 tests must pass
+
+### Performance
+1. **Never call `odw_build_dataset_jsonld()` in loops** — expensive, cache it
+2. **Use transients for expensive operations** — 5 min TTL is standard
+3. **Index meta_key queries** — add `meta_query` indexes if searching large datasets
+4. **Pre-compute file metadata** — store file size & format, don't calculate at render
+
+---
+
+## 📞 Support & Contact
+
+- **GitHub Issues**: Bug reports & feature requests
+- **README.md**: User documentation
+- **Code Comments**: Complex logic explanation
+- **This CLAUDE.md**: Developer guidance
+
+---
+
+**Zuletzt aktualisiert**: Version 2.1.4 (Mai 2026)
+**Autor**: Open Data Wizard Team (nozilla)
+**License**: GPL-2.0-or-later
