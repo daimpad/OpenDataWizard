@@ -1,0 +1,31 @@
+{
+  "name": "open-data-wizard",
+  "version": "2.1.4",
+  "description": "WordPress plugin for publishing open data as DCAT-AP 3.0 compliant metadata",
+  "author": "Open Data Wizard Team",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "open-data",
+    "dcat-ap",
+    "metadata",
+    "json-ld"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daimpad/OpenDataWizard.git"
+  },
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:chrome": "playwright test --project=chromium",
+    "test:e2e:firefox": "playwright test --project=firefox",
+    "test:e2e:webkit": "playwright test --project=webkit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}
