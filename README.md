@@ -80,7 +80,33 @@ Fünf-Tab-Assistent mit Pflichtfeldprüfung und praktischen Beispielen:
 ### 🎓 CESSDA-Themenklassifikation
 Auto-Suggest-Feld aus der CESSDA Topic Classification 4.2.3 (95 deutsche Konzepte, SKOS/RDF, 24h Cache).
 
-### 📎 Download-Datei (nativer wp.media Upload)
+### 📥 Batch-Import (CSV & JSON)
+```
+Datensätze → Batch-Import
+```
+Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-Wizard zeigt eine Vorschau aller gültigen Zeilen, markiert Fehler, und lässt dich auswählen, welche Datensätze importiert werden. Alle importierten Datensätze werden als **Entwürfe** erstellt — zur Bearbeitung vor Publishing bereit.
+
+**Unterstützte Formate:**
+- **CSV**: Spaltenköpfe = Feldnamen (title, publisher, description, access_url, license, theme, language, format, issued, keywords, byte_size, attribution)
+- **JSON**: Array von Objekten oder einzelnes Objekt mit gleichen Feldnamen
+
+**Pflichtfelder beim Import:**
+- `title` — Datensatztitel
+- `publisher` — Herausgebende Organisation
+- `description` — Beschreibung (Mindestens 10 Zeichen)
+- `access_url` — Download-URL (muss mit http/https beginnen)
+- `license` — Lizenz (short code wie `cc-by` oder volle URI)
+
+**Optionale Felder:**
+- `theme` — Datenkategorie (z.B. SOCI, ECON, EDUC)
+- `language` — Sprache (z.B. de, en)
+- `format` — Dateiformat (z.B. CSV, JSON, PDF)
+- `issued` — Veröffentlichungsdatum
+- `keywords` — Schlagworte (komma-getrennt)
+- `byte_size` — Dateigröße in Bytes
+- `attribution` — Namensnennungstext
+
+[📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
 Sidebar-Meta-Box — vollständig unabhängig von Carbon Fields:
 - „Datei auswählen / hochladen"-Button öffnet den nativen WordPress Media Library Frame
 - Beim Speichern werden `_odw_file_size` (Bytes) und `_odw_file_format` (z.B. „CSV") automatisch berechnet
