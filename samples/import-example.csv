@@ -1,0 +1,6 @@
+title,publisher,description,access_url,license,theme,language,format,issued,keywords
+"Bevölkerungszahlen 2024","Statistisches Amt","Bevölkerungszahlen nach Stadt und Jahr für 2024","https://example.com/data/population-2024.csv","cc-by","SOCI","de","CSV","2024-01-15","Demografie, Statistik"
+"Arbeitslosenquoten 2024","Arbeitsamt","Monatliche Arbeitslosenquoten nach Bundesland","https://example.com/data/unemployment.xlsx","cc0","ECON","de","XLSX","2024-02-01","Beschäftigung, Wirtschaft"
+"Schulstandorte","Bildungsministerium","Verzeichnis aller öffentlichen Schulen mit Adressen","https://example.com/data/schools.geojson","cc-by-sa","EDUC","de","GeoJSON","2024-01-01","Schulen, Bildung, Geolocation"
+"Breitbandverfügbarkeit","Telekommunikationsbehörde","Verfügbarkeit von Breitbandanbindung nach Postleitzahl","https://example.com/data/broadband.csv","cc0","TECH","de","CSV","2024-03-01","Internet, Infrastruktur"
+"Energieverbrauch nach Sektor 2023","Energieamt","Jährlicher Energieverbrauch nach Wirtschaftssektor","https://example.com/data/energy.json","cc-by","ENVI","de","JSON","2023-12-31","Energie, Umwelt, Statistik"

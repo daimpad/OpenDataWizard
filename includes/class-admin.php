@@ -36,12 +36,15 @@ class ODW_Admin {
 		add_action( 'restrict_manage_posts', array( self::class, 'status_filter_dropdown' ) );
 		add_filter( 'parse_query', array( self::class, 'apply_status_filter' ) );
 		add_action( 'admin_menu', array( self::class, 'register_introduction_page' ), 5 );
+		add_action( 'admin_menu', array( self::class, 'register_batch_import_page' ), 6 );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
 		add_action( 'add_meta_boxes', array( self::class, 'register_help_tabs' ) );
 		add_action( 'load-post.php', array( self::class, 'register_help_tabs' ) );
 		add_action( 'load-post-new.php', array( self::class, 'register_help_tabs' ) );
 		add_action( 'add_meta_boxes', array( self::class, 'register_file_meta_box' ) );
 		add_action( 'save_post_odw_dataset', array( self::class, 'save_file_attachment' ), 20, 2 );
+		add_action( 'wp_ajax_odw_batch_import_preview', array( self::class, 'ajax_batch_import_preview' ) );
+		add_action( 'wp_ajax_odw_batch_import_execute', array( self::class, 'ajax_batch_import_execute' ) );
 	}
 
 	/**
@@ -652,5 +655,340 @@ class ODW_Admin {
 			}
 		</style>
 		<?php
+	}
+
+	/**
+	 * Register the batch import submenu page.
+	 */
+	public static function register_batch_import_page(): void {
+		add_submenu_page(
+			'edit.php?post_type=odw_dataset',
+			__( 'Batch-Import', 'open-data-wizard' ),
+			__( 'Batch-Import', 'open-data-wizard' ),
+			'manage_open_data',
+			'odw-batch-import',
+			array( self::class, 'render_batch_import_page' )
+		);
+	}
+
+	/**
+	 * Render the batch import page.
+	 */
+	public static function render_batch_import_page(): void {
+		if ( ! current_user_can( 'manage_open_data' ) ) {
+			wp_die( esc_html__( 'Zugriff verweigert.', 'open-data-wizard' ) );
+		}
+
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Batch-Import', 'open-data-wizard' ); ?></h1>
+
+			<div class="odw-batch-import-container" style="max-width: 800px; margin-top: 20px;">
+
+				<!-- Upload Section -->
+				<div id="odw-upload-section" class="odw-section" style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+					<h2><?php esc_html_e( 'Datei hochladen', 'open-data-wizard' ); ?></h2>
+
+					<form id="odw-import-form" method="post" enctype="multipart/form-data">
+						<?php wp_nonce_field( 'odw_batch_import' ); ?>
+
+						<div style="margin-bottom: 15px;">
+							<label for="odw-import-file" style="display: block; margin-bottom: 8px; font-weight: 600;">
+								<?php esc_html_e( 'CSV oder JSON Datei', 'open-data-wizard' ); ?>
+							</label>
+							<input type="file" id="odw-import-file" name="import_file" accept=".csv,.json" required style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%; max-width: 400px;">
+							<p class="description" style="margin-top: 8px;">
+								<?php esc_html_e( 'Unterstützte Formate: CSV, JSON (max. 10MB)', 'open-data-wizard' ); ?>
+							</p>
+						</div>
+
+						<button type="button" id="odw-preview-btn" class="button button-primary" style="margin-right: 10px;">
+							<?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?>
+						</button>
+
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=odw-batch-import&sample=csv' ) ); ?>" class="button">
+							<?php esc_html_e( 'CSV-Beispiel', 'open-data-wizard' ); ?>
+						</a>
+					</form>
+				</div>
+
+				<!-- Preview Section (hidden until preview is clicked) -->
+				<div id="odw-preview-section" class="odw-section" style="display: none; border: 1px solid #ddd; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+					<h2><?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?></h2>
+
+					<div id="odw-preview-loading" style="display: none; text-align: center; padding: 40px;">
+						<span class="spinner" style="float: none; visibility: visible;"></span>
+						<p><?php esc_html_e( 'Datei wird analysiert…', 'open-data-wizard' ); ?></p>
+					</div>
+
+					<div id="odw-preview-content" style="display: none;">
+						<div style="margin-bottom: 15px;">
+							<strong><?php esc_html_e( 'Gültige Datensätze:', 'open-data-wizard' ); ?></strong>
+							<span id="odw-preview-count" style="font-size: 18px; color: #1a7f37; font-weight: 600;">0</span>
+						</div>
+
+						<table id="odw-preview-table" class="wp-list-table widefat striped" style="margin-bottom: 15px;">
+							<thead>
+								<tr>
+									<th style="width: 30px;"><input type="checkbox" id="odw-select-all" checked></th>
+									<th><?php esc_html_e( 'Titel', 'open-data-wizard' ); ?></th>
+									<th><?php esc_html_e( 'Herausgeber', 'open-data-wizard' ); ?></th>
+									<th><?php esc_html_e( 'Lizenz', 'open-data-wizard' ); ?></th>
+									<th><?php esc_html_e( 'Status', 'open-data-wizard' ); ?></th>
+								</tr>
+							</thead>
+							<tbody id="odw-preview-rows"></tbody>
+						</table>
+
+						<div id="odw-errors-section" style="display: none; margin-bottom: 15px;">
+							<strong style="color: #c1272d;">
+								<?php esc_html_e( 'Fehler:', 'open-data-wizard' ); ?>
+							</strong>
+							<ul id="odw-errors-list" style="margin-top: 10px; color: #7d1212;"></ul>
+						</div>
+					</div>
+
+					<div id="odw-preview-error" style="display: none; color: #c1272d; padding: 15px; background: #ffd7d5; border-radius: 4px;"></div>
+				</div>
+
+				<!-- Import Section (hidden until preview is successful) -->
+				<div id="odw-import-section" class="odw-section" style="display: none; border: 1px solid #ddd; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+					<h2><?php esc_html_e( 'Datensätze importieren', 'open-data-wizard' ); ?></h2>
+
+					<p><?php esc_html_e( 'Bereit zum Importieren! Klicke auf den Button unten, um alle Datensätze als Entwürfe zu erstellen.', 'open-data-wizard' ); ?></p>
+
+					<button type="button" id="odw-import-btn" class="button button-success" style="margin-right: 10px; padding: 10px 20px; font-size: 14px;">
+						<?php esc_html_e( 'Importieren', 'open-data-wizard' ); ?>
+					</button>
+					<button type="button" id="odw-import-cancel-btn" class="button">
+						<?php esc_html_e( 'Abbrechen', 'open-data-wizard' ); ?>
+					</button>
+
+					<div id="odw-import-progress" style="display: none; margin-top: 20px;">
+						<div style="margin-bottom: 10px;">
+							<span id="odw-import-status"><?php esc_html_e( 'Import läuft…', 'open-data-wizard' ); ?></span>
+						</div>
+						<progress id="odw-import-progress-bar" value="0" max="100" style="width: 100%; height: 25px; border-radius: 4px;"></progress>
+					</div>
+
+					<div id="odw-import-result" style="display: none; margin-top: 20px; padding: 15px; border-radius: 4px;">
+						<h3><?php esc_html_e( 'Import abgeschlossen!', 'open-data-wizard' ); ?></h3>
+						<p>
+							<?php esc_html_e( 'Erstellt:', 'open-data-wizard' ); ?>
+							<strong id="odw-import-result-created" style="color: #1a7f37;">0</strong>
+						</p>
+						<p>
+							<?php esc_html_e( 'Fehler:', 'open-data-wizard' ); ?>
+							<strong id="odw-import-result-failed" style="color: #c1272d;">0</strong>
+						</p>
+						<p style="margin-top: 15px;">
+							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=odw_dataset' ) ); ?>" class="button button-primary">
+								<?php esc_html_e( 'Zur Datensatzliste', 'open-data-wizard' ); ?>
+							</a>
+						</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script>
+			(function($) {
+				var previewData = [];
+
+				$('#odw-preview-btn').on('click', function() {
+					var fileInput = document.getElementById('odw-import-file');
+					if (!fileInput.files.length) {
+						alert('<?php esc_html_e( 'Bitte wähle eine Datei aus.', 'open-data-wizard' ); ?>');
+						return;
+					}
+
+					previewData = [];
+					$('#odw-preview-content').hide();
+					$('#odw-preview-error').hide();
+					$('#odw-preview-loading').show();
+					$('#odw-import-section').hide();
+
+					var formData = new FormData();
+					formData.append('action', 'odw_batch_import_preview');
+					formData.append('nonce', '<?php echo esc_js( wp_create_nonce( 'odw_batch_import' ) ); ?>');
+					formData.append('file', fileInput.files[0]);
+
+					$.ajax({
+						url: '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>',
+						type: 'POST',
+						data: formData,
+						processData: false,
+						contentType: false,
+						success: function(response) {
+							$('#odw-preview-loading').hide();
+							if (response.success) {
+								previewData = response.data.records;
+								displayPreview(response.data);
+								$('#odw-preview-content').show();
+								$('#odw-import-section').show();
+							} else {
+								$('#odw-preview-error').text(response.data.error).show();
+							}
+						},
+						error: function() {
+							$('#odw-preview-loading').hide();
+							$('#odw-preview-error').text('<?php esc_html_e( 'Ein Fehler ist aufgetreten.', 'open-data-wizard' ); ?>').show();
+						}
+					});
+				});
+
+				function displayPreview(data) {
+					$('#odw-preview-count').text(data.records.length);
+					var rows = '';
+					$.each(data.records, function(idx, record) {
+						rows += '<tr>';
+						rows += '<td><input type="checkbox" class="odw-row-select" value="' + idx + '" checked></td>';
+						rows += '<td>' + (record.title || '-') + '</td>';
+						rows += '<td>' + (record.publisher || '-') + '</td>';
+						rows += '<td>' + (record.license || '-') + '</td>';
+						rows += '<td><span class="odw-status-badge odw-status-badge--draft"><?php esc_html_e( 'Entwurf', 'open-data-wizard' ); ?></span></td>';
+						rows += '</tr>';
+					});
+					$('#odw-preview-rows').html(rows);
+
+					if (data.errors && data.errors.length > 0) {
+						var errorHtml = '';
+						$.each(data.errors, function(idx, error) {
+							errorHtml += '<li>' + error + '</li>';
+						});
+						$('#odw-errors-list').html(errorHtml);
+						$('#odw-errors-section').show();
+					} else {
+						$('#odw-errors-section').hide();
+					}
+				}
+
+				$('#odw-select-all').on('change', function() {
+					$('.odw-row-select').prop('checked', $(this).is(':checked'));
+				});
+
+				$('#odw-import-btn').on('click', function() {
+					var selected = [];
+					$('.odw-row-select:checked').each(function() {
+						selected.push(parseInt($(this).val()));
+					});
+
+					if (!selected.length) {
+						alert('<?php esc_html_e( 'Keine Datensätze ausgewählt.', 'open-data-wizard' ); ?>');
+						return;
+					}
+
+					$('#odw-import-section').hide();
+					$('#odw-import-progress').show();
+
+					var records = selected.map(function(idx) {
+						return previewData[idx];
+					});
+
+					$.ajax({
+						url: '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							action: 'odw_batch_import_execute',
+							nonce: '<?php echo esc_js( wp_create_nonce( 'odw_batch_import' ) ); ?>',
+							records: JSON.stringify(records)
+						},
+						success: function(response) {
+							$('#odw-import-progress').hide();
+							if (response.success) {
+								$('#odw-import-result-created').text(response.data.created);
+								$('#odw-import-result-failed').text(response.data.failed);
+								$('#odw-import-result').show();
+							} else {
+								alert('Error: ' + response.data.error);
+							}
+						},
+						error: function() {
+							$('#odw-import-progress').hide();
+							alert('<?php esc_html_e( 'Ein Fehler ist aufgetreten.', 'open-data-wizard' ); ?>');
+						}
+					});
+				});
+
+				$('#odw-import-cancel-btn').on('click', function() {
+					location.reload();
+				});
+			})(jQuery);
+		</script>
+		<?php
+	}
+
+	/**
+	 * AJAX: Preview batch import file.
+	 */
+	public static function ajax_batch_import_preview(): void {
+		check_ajax_referer( 'odw_batch_import' );
+
+		if ( ! current_user_can( 'manage_open_data' ) ) {
+			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );
+		}
+
+		if ( ! isset( $_FILES['file'] ) ) {
+			wp_send_json_error( array( 'error' => __( 'Keine Datei hochgeladen.', 'open-data-wizard' ) ) );
+		}
+
+		$file = $_FILES['file'];
+
+		// Validate file
+		$allowed_types = array( 'text/csv', 'application/json', 'text/plain' );
+		if ( ! in_array( $file['type'], $allowed_types, true ) ) {
+			wp_send_json_error( array( 'error' => __( 'Ungültiger Dateityp.', 'open-data-wizard' ) ) );
+		}
+
+		// Move to temp
+		$temp_file = wp_tempnam();
+		if ( ! move_uploaded_file( $file['tmp_name'], $temp_file ) ) {
+			wp_send_json_error( array( 'error' => __( 'Datei konnte nicht hochgeladen werden.', 'open-data-wizard' ) ) );
+		}
+
+		// Parse file
+		$result = ODW_Batch_Import::parse_file( $temp_file );
+		unlink( $temp_file );
+
+		if ( ! $result['success'] ) {
+			wp_send_json_error( array( 'error' => $result['error'] ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'records' => $result['data'],
+				'errors'  => array(),
+			)
+		);
+	}
+
+	/**
+	 * AJAX: Execute batch import.
+	 */
+	public static function ajax_batch_import_execute(): void {
+		check_ajax_referer( 'odw_batch_import' );
+
+		if ( ! current_user_can( 'manage_open_data' ) ) {
+			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );
+		}
+
+		$records_json = sanitize_text_field( wp_unslash( $_POST['records'] ?? '[]' ) );
+		$records      = json_decode( $records_json, true );
+
+		if ( ! is_array( $records ) || empty( $records ) ) {
+			wp_send_json_error( array( 'error' => __( 'Keine Datensätze zum Importieren.', 'open-data-wizard' ) ) );
+		}
+
+		$result = ODW_Batch_Import::import_records( $records );
+
+		wp_send_json_success(
+			array(
+				'created' => $result['created'],
+				'failed'  => $result['failed'],
+				'errors'  => $result['errors'],
+			)
+		);
 	}
 }

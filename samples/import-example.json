@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Bevölkerungszahlen 2024",
+    "publisher": "Statistisches Amt",
+    "description": "Bevölkerungszahlen nach Stadt und Jahr für 2024",
+    "access_url": "https://example.com/data/population-2024.csv",
+    "license": "cc-by",
+    "theme": "SOCI",
+    "language": "de",
+    "format": "CSV",
+    "issued": "2024-01-15",
+    "keywords": "Demografie, Statistik"
+  },
+  {
+    "title": "Arbeitslosenquoten 2024",
+    "publisher": "Arbeitsamt",
+    "description": "Monatliche Arbeitslosenquoten nach Bundesland",
+    "access_url": "https://example.com/data/unemployment.xlsx",
+    "license": "cc0",
+    "theme": "ECON",
+    "language": "de",
+    "format": "XLSX",
+    "issued": "2024-02-01",
+    "keywords": "Beschäftigung, Wirtschaft"
+  },
+  {
+    "title": "Schulstandorte",
+    "publisher": "Bildungsministerium",
+    "description": "Verzeichnis aller öffentlichen Schulen mit Adressen",
+    "access_url": "https://example.com/data/schools.geojson",
+    "license": "cc-by-sa",
+    "theme": "EDUC",
+    "language": "de",
+    "format": "GeoJSON",
+    "issued": "2024-01-01",
+    "keywords": "Schulen, Bildung, Geolocation"
+  },
+  {
+    "title": "Breitbandverfügbarkeit",
+    "publisher": "Telekommunikationsbehörde",
+    "description": "Verfügbarkeit von Breitbandanbindung nach Postleitzahl",
+    "access_url": "https://example.com/data/broadband.csv",
+    "license": "cc0",
+    "theme": "TECH",
+    "language": "de",
+    "format": "CSV",
+    "issued": "2024-03-01",
+    "keywords": "Internet, Infrastruktur"
+  },
+  {
+    "title": "Energieverbrauch nach Sektor 2023",
+    "publisher": "Energieamt",
+    "description": "Jährlicher Energieverbrauch nach Wirtschaftssektor",
+    "access_url": "https://example.com/data/energy.json",
+    "license": "cc-by",
+    "theme": "ENVI",
+    "language": "de",
+    "format": "JSON",
+    "issued": "2023-12-31",
+    "keywords": "Energie, Umwelt, Statistik"
+  }
+]

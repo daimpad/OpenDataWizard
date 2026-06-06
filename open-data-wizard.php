@@ -122,6 +122,7 @@ function odw_bootstrap(): void {
 	require_once ODW_PLUGIN_DIR . 'includes/class-validation.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-quality.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-admin.php';
+	require_once ODW_PLUGIN_DIR . 'includes/class-batch-import.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-shortcode.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-cli.php';
 
