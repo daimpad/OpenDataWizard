@@ -24,19 +24,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ODW_Batch_Import {
 
-	/** Session key for import state. */
-	private const SESSION_KEY = 'odw_import_session_';
-
 	/** Maximum file size: 10MB. */
 	private const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-	/** Required field mapping. */
+	/**
+	 * Required import columns.
+	 *
+	 * Mapped on insert to: title => post_title, publisher => _odw_publisher,
+	 * description => _odw_description, access_url => _odw_access_url,
+	 * license => _odw_license.
+	 */
 	private const REQUIRED_FIELDS = array(
-		'title',       // Post title
-		'publisher',   // _odw_publisher
-		'description', // _odw_description
-		'access_url',  // _odw_access_url
-		'license',     // _odw_license
+		'title',
+		'publisher',
+		'description',
+		'access_url',
+		'license',
 	);
 
 	/** Optional field mapping (CSV column → meta key). */
@@ -53,7 +56,13 @@ class ODW_Batch_Import {
 	/**
 	 * Parse uploaded file and return parsed data.
 	 *
-	 * @param string $file_path Path to uploaded file.
+	 * The format is determined by the file extension. When the file on disk has
+	 * no meaningful extension (e.g. a temporary upload such as foo.tmp), the
+	 * original client filename can be supplied via $original_name so the real
+	 * extension is still detected.
+	 *
+	 * @param string $file_path     Path to the file on disk.
+	 * @param string $original_name Optional original filename used for extension detection.
 	 * @return array{
 	 *   success: bool,
 	 *   data: array<int, array<string, mixed>>,
@@ -61,7 +70,7 @@ class ODW_Batch_Import {
 	 *   count: int
 	 * }
 	 */
-	public static function parse_file( string $file_path ): array {
+	public static function parse_file( string $file_path, string $original_name = '' ): array {
 		if ( ! file_exists( $file_path ) ) {
 			return self::error_response( __( 'Datei nicht gefunden.', 'open-data-wizard' ) );
 		}
@@ -70,7 +79,10 @@ class ODW_Batch_Import {
 			return self::error_response( __( 'Datei zu groß (max. 10MB).', 'open-data-wizard' ) );
 		}
 
-		$extension = strtolower( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) );
+		// Prefer the original filename for extension detection so temporary
+		// upload files (e.g. foo.tmp) are still recognised as CSV or JSON.
+		$name_for_extension = '' !== $original_name ? $original_name : $file_path;
+		$extension          = strtolower( (string) pathinfo( $name_for_extension, PATHINFO_EXTENSION ) );
 
 		if ( 'csv' === $extension ) {
 			return self::parse_csv( $file_path );
@@ -113,6 +125,7 @@ class ODW_Batch_Import {
 
 			if ( count( $row_data ) !== count( $header ) ) {
 				$errors[] = sprintf(
+					/* translators: %d: CSV row number. */
 					__( 'Zeile %d: Spaltenanzahl stimmt nicht überein.', 'open-data-wizard' ),
 					$row
 				);
@@ -120,18 +133,11 @@ class ODW_Batch_Import {
 			}
 
 			$record = array_combine( $header, $row_data );
-			if ( ! is_array( $record ) ) {
-				$errors[] = sprintf(
-					__( 'Zeile %d: Konnte Daten nicht verarbeiten.', 'open-data-wizard' ),
-					$row
-				);
-				continue;
-			}
 
-			// Trim values
+			// Trim values.
 			$record = array_map( 'trim', $record );
 
-			// Validate row
+			// Validate row.
 			$validation = self::validate_row( $record, $row );
 			if ( ! $validation['valid'] ) {
 				$errors = array_merge( $errors, $validation['errors'] );
@@ -180,7 +186,7 @@ class ODW_Batch_Import {
 			return self::error_response( __( 'JSON-Format ist ungültig.', 'open-data-wizard' ) );
 		}
 
-		// If single object, wrap in array
+		// If single object, wrap in array.
 		if ( isset( $data['title'] ) && ! isset( $data[0] ) ) {
 			$data = array( $data );
 		}
@@ -191,6 +197,7 @@ class ODW_Batch_Import {
 		foreach ( $data as $idx => $record ) {
 			if ( ! is_array( $record ) ) {
 				$errors[] = sprintf(
+					/* translators: %d: element number in the JSON array. */
 					__( 'Element %d: Erwarte Objekt.', 'open-data-wizard' ),
 					$idx + 1
 				);
@@ -231,11 +238,12 @@ class ODW_Batch_Import {
 	private static function validate_row( array $record, int $row_index ): array {
 		$errors = array();
 
-		// Check required fields
+		// Check required fields.
 		foreach ( self::REQUIRED_FIELDS as $field ) {
 			$value = $record[ $field ] ?? '';
 			if ( '' === trim( (string) $value ) ) {
 				$errors[] = sprintf(
+					/* translators: 1: row number, 2: required field name. */
 					__( 'Zeile %1$d: Pflichtfeld "%2$s" fehlt.', 'open-data-wizard' ),
 					$row_index,
 					$field
@@ -243,10 +251,11 @@ class ODW_Batch_Import {
 			}
 		}
 
-		// Validate URL format
+		// Validate URL format.
 		if ( isset( $record['access_url'] ) && ! empty( $record['access_url'] ) ) {
 			if ( ! self::is_valid_url( (string) $record['access_url'] ) ) {
 				$errors[] = sprintf(
+					/* translators: 1: row number, 2: invalid URL. */
 					__( 'Zeile %1$d: Ungültige URL: %2$s', 'open-data-wizard' ),
 					$row_index,
 					$record['access_url']
@@ -254,12 +263,12 @@ class ODW_Batch_Import {
 			}
 		}
 
-		// Validate license
+		// Validate license. Accept both short codes (cc-by) and full URIs.
 		if ( isset( $record['license'] ) && ! empty( $record['license'] ) ) {
 			$license_value = (string) $record['license'];
-			// Accept both short codes (cc-by) and full URIs
 			if ( ! self::is_valid_license( $license_value ) ) {
 				$errors[] = sprintf(
+					/* translators: 1: row number, 2: invalid license value. */
 					__( 'Zeile %1$d: Ungültige Lizenz: %2$s', 'open-data-wizard' ),
 					$row_index,
 					$license_value
@@ -295,21 +304,21 @@ class ODW_Batch_Import {
 	 * @return bool
 	 */
 	private static function is_valid_license( string $license ): bool {
-		// Get available licenses
+		// Get available licenses.
 		$options = ODW_Fields::get_license_options();
 
-		// Check if it's a known URI
+		// Check if it's a known URI.
 		if ( isset( $options[ $license ] ) ) {
 			return true;
 		}
 
-		// Check if it's a short code that maps to a URI
+		// Check if it's a short code that maps to a URI.
 		$license_map = self::get_license_alias_map();
 		if ( isset( $license_map[ strtolower( $license ) ] ) ) {
 			return true;
 		}
 
-		// Accept any non-empty string for "sonstige" (custom)
+		// Accept any non-empty string for "sonstige" (custom).
 		return ! empty( $license );
 	}
 
@@ -373,7 +382,7 @@ class ODW_Batch_Import {
 	 * @return array{success: bool, error?: string, post_id?: int}
 	 */
 	private static function create_dataset_from_record( array $record, int $row_index ): array {
-		// Create post
+		// Create post.
 		$post_id = wp_insert_post(
 			array(
 				'post_type'    => 'odw_dataset',
@@ -387,24 +396,25 @@ class ODW_Batch_Import {
 			return array(
 				'success' => false,
 				'error'   => sprintf(
+					/* translators: %d: row number. */
 					__( 'Zeile %d: Konnte Post nicht erstellen.', 'open-data-wizard' ),
 					$row_index
 				),
 			);
 		}
 
-		// Save meta fields
+		// Save meta fields.
 		update_post_meta( $post_id, '_odw_publisher', sanitize_text_field( (string) ( $record['publisher'] ?? '' ) ) );
 		update_post_meta( $post_id, '_odw_description', sanitize_textarea_field( (string) ( $record['description'] ?? '' ) ) );
 		update_post_meta( $post_id, '_odw_access_url', esc_url_raw( (string) ( $record['access_url'] ?? '' ) ) );
 
-		// License - map short code to URI if needed
+		// License: map short code to URI if needed.
 		$license     = (string) ( $record['license'] ?? '' );
 		$license_map = self::get_license_alias_map();
 		$license_uri = $license_map[ strtolower( $license ) ] ?? $license;
 		update_post_meta( $post_id, '_odw_license', sanitize_text_field( $license_uri ) );
 
-		// Optional fields
+		// Optional fields.
 		foreach ( self::OPTIONAL_FIELD_MAP as $field => $meta_key ) {
 			if ( isset( $record[ $field ] ) && ! empty( $record[ $field ] ) ) {
 				$value = (string) $record[ $field ];
@@ -421,7 +431,7 @@ class ODW_Batch_Import {
 			}
 		}
 
-		// Set import tracking
+		// Set import tracking.
 		update_post_meta( $post_id, '_odw_imported', current_time( 'mysql' ) );
 
 		return array(
