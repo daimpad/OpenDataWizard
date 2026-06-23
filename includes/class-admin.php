@@ -1004,27 +1004,34 @@ class ODW_Admin {
 			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );
 		}
 
-		if ( ! isset( $_FILES['file'] ) ) {
+		if ( ! isset( $_FILES['file']['name'], $_FILES['file']['tmp_name'] ) ) {
 			wp_send_json_error( array( 'error' => __( 'Keine Datei hochgeladen.', 'open-data-wizard' ) ) );
 		}
 
-		$file = $_FILES['file'];
+		// The MIME type reported by the browser is not trustworthy, so the
+		// format is validated by the file extension of the original filename.
+		$original_name = sanitize_file_name( wp_unslash( $_FILES['file']['name'] ) );
+		$tmp_name      = sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) );
+		$extension     = strtolower( (string) pathinfo( $original_name, PATHINFO_EXTENSION ) );
 
-		// Validate file
-		$allowed_types = array( 'text/csv', 'application/json', 'text/plain' );
-		if ( ! in_array( $file['type'], $allowed_types, true ) ) {
-			wp_send_json_error( array( 'error' => __( 'Ungültiger Dateityp.', 'open-data-wizard' ) ) );
+		if ( ! in_array( $extension, array( 'csv', 'json' ), true ) ) {
+			wp_send_json_error( array( 'error' => __( 'Ungültiger Dateityp (nur CSV oder JSON).', 'open-data-wizard' ) ) );
 		}
 
-		// Move to temp
-		$temp_file = wp_tempnam();
-		if ( ! move_uploaded_file( $file['tmp_name'], $temp_file ) ) {
+		if ( '' === $tmp_name || ! is_uploaded_file( $tmp_name ) ) {
+			wp_send_json_error( array( 'error' => __( 'Keine gültige Upload-Datei.', 'open-data-wizard' ) ) );
+		}
+
+		// Move to a temporary location for parsing.
+		$temp_file = wp_tempnam( $original_name );
+		if ( ! move_uploaded_file( $tmp_name, $temp_file ) ) {
 			wp_send_json_error( array( 'error' => __( 'Datei konnte nicht hochgeladen werden.', 'open-data-wizard' ) ) );
 		}
 
-		// Parse file
-		$result = ODW_Batch_Import::parse_file( $temp_file );
-		unlink( $temp_file );
+		// Parse the file. The original name is passed so the format is detected
+		// even though the temporary file has a .tmp extension.
+		$result = ODW_Batch_Import::parse_file( $temp_file, $original_name );
+		wp_delete_file( $temp_file );
 
 		if ( ! $result['success'] ) {
 			wp_send_json_error( array( 'error' => $result['error'] ) );
