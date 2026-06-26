@@ -25,6 +25,34 @@
 		<exclude-pattern>../includes/class-rest-api.php</exclude-pattern>
 	</rule>
 
+	<!-- manage_open_data is a custom capability registered at activation (ODW_Setup) -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="manage_open_data"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!--
+		The batch importer parses a locally-moved, is_uploaded_file()-validated upload.
+		Direct fopen()/fgetcsv()/file_get_contents() are required here — WP_Filesystem
+		offers no streaming CSV equivalent — so these specific sniffs are excluded for
+		this file only.
+	-->
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_operations_fopen">
+		<exclude-pattern>../includes/class-batch-import.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_operations_fclose">
+		<exclude-pattern>../includes/class-batch-import.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents">
+		<exclude-pattern>../includes/class-batch-import.php</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition">
+		<exclude-pattern>../includes/class-batch-import.php</exclude-pattern>
+	</rule>
+
 	<!-- Test files: class name does not match filename (PSR-4 test naming) -->
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>../tests/*</exclude-pattern>

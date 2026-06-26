@@ -916,13 +916,13 @@ class ODW_Admin {
 					$('#odw-preview-count').text(data.records.length);
 					var rows = '';
 					$.each(data.records, function(idx, record) {
-						rows += '<tr>';
-						rows += '<td><input type="checkbox" class="odw-row-select" value="' + idx + '" checked></td>';
-						rows += '<td>' + (record.title || '-') + '</td>';
-						rows += '<td>' + (record.publisher || '-') + '</td>';
-						rows += '<td>' + (record.license || '-') + '</td>';
-						rows += '<td><span class="odw-status-badge odw-status-badge--draft"><?php esc_html_e( 'Entwurf', 'open-data-wizard' ); ?></span></td>';
-						rows += '</tr>';
+						var row = $('<tr></tr>');
+						row.append($('<td></td>').append($('<input type="checkbox" class="odw-row-select" value="' + idx + '" checked>')));
+						row.append($('<td></td>').text(record.title || '-'));
+						row.append($('<td></td>').text(record.publisher || '-'));
+						row.append($('<td></td>').text(record.license || '-'));
+						row.append($('<td></td>').html('<span class="odw-status-badge odw-status-badge--draft"><?php esc_html_e( 'Entwurf', 'open-data-wizard' ); ?></span>'));
+						rows += row[0].outerHTML;
 					});
 					$('#odw-preview-rows').html(rows);
 
@@ -1011,8 +1011,9 @@ class ODW_Admin {
 		// The MIME type reported by the browser is not trustworthy, so the
 		// format is validated by the file extension of the original filename.
 		$original_name = sanitize_file_name( wp_unslash( $_FILES['file']['name'] ) );
-		$tmp_name      = sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) );
-		$extension     = strtolower( (string) pathinfo( $original_name, PATHINFO_EXTENSION ) );
+		// phpcs:ignore WordPress.Security
+		$tmp_name  = wp_unslash( $_FILES['file']['tmp_name'] );
+		$extension = strtolower( (string) pathinfo( $original_name, PATHINFO_EXTENSION ) );
 
 		if ( ! in_array( $extension, array( 'csv', 'json' ), true ) ) {
 			wp_send_json_error( array( 'error' => __( 'Ungültiger Dateityp (nur CSV oder JSON).', 'open-data-wizard' ) ) );
