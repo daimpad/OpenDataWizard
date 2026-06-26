@@ -91,6 +91,14 @@ class Test_ODW_Shortcode extends TestCase {
 	}
 
 	/**
+	 * Negative byte counts are clamped to "0 B" rather than rendering "-5 B".
+	 */
+	public function test_format_bytes_negative_is_clamped(): void {
+		$this->load_class();
+		$this->assertSame( '0 B', $this->call_format_bytes( -5 ) );
+	}
+
+	/**
 	 * 2048 bytes formats to "2 KB".
 	 */
 	public function test_format_bytes_kb_range(): void {

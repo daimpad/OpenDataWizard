@@ -190,6 +190,9 @@ class ODW_Shortcode {
 	 * @return string    Formatierter String, z.B. "2.5 MB".
 	 */
 	private static function format_bytes( int $bytes ): string {
+		if ( $bytes < 0 ) {
+			$bytes = 0;
+		}
 		if ( $bytes >= 1_073_741_824 ) {
 			return round( $bytes / 1_073_741_824, 1 ) . ' GB';
 		}

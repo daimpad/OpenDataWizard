@@ -27,6 +27,9 @@ class ODW_Batch_Import {
 	/** Maximum file size: 10MB. */
 	private const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
+	/** Maximum number of records processed per import (DoS / memory guard). */
+	private const MAX_RECORDS = 2000;
+
 	/**
 	 * Required import columns.
 	 *
@@ -128,6 +131,20 @@ class ODW_Batch_Import {
 		while ( ( $row_data = fgetcsv( $handle ) ) !== false ) {
 			++$row;
 
+			// Skip fully empty lines (e.g. a trailing newline at end of file).
+			if ( '' === trim( implode( '', array_map( 'strval', $row_data ) ) ) ) {
+				continue;
+			}
+
+			if ( count( $data ) >= self::MAX_RECORDS ) {
+				$errors[] = sprintf(
+					/* translators: %d: maximum number of records allowed per import. */
+					__( 'Maximale Anzahl von %d Datensätzen erreicht — weitere Zeilen wurden ignoriert.', 'open-data-wizard' ),
+					self::MAX_RECORDS
+				);
+				break;
+			}
+
 			if ( count( $row_data ) !== count( $header ) ) {
 				$errors[] = sprintf(
 					/* translators: %d: CSV row number. */
@@ -191,8 +208,11 @@ class ODW_Batch_Import {
 			return self::error_response( __( 'JSON-Format ist ungültig.', 'open-data-wizard' ) );
 		}
 
-		// If single object, wrap in array.
-		if ( isset( $data['title'] ) && ! isset( $data[0] ) ) {
+		// If a single object (associative array, not a list), wrap it in an array.
+		// array_is_list() is false for associative arrays, including ones missing
+		// the "title" key — so a single record without a title is still detected
+		// as one object instead of being iterated over its properties.
+		if ( ! array_is_list( $data ) ) {
 			$data = array( $data );
 		}
 
@@ -200,6 +220,15 @@ class ODW_Batch_Import {
 		$errors  = array();
 
 		foreach ( $data as $idx => $record ) {
+			if ( count( $records ) >= self::MAX_RECORDS ) {
+				$errors[] = sprintf(
+					/* translators: %d: maximum number of records allowed per import. */
+					__( 'Maximale Anzahl von %d Datensätzen erreicht — weitere Elemente wurden ignoriert.', 'open-data-wizard' ),
+					self::MAX_RECORDS
+				);
+				break;
+			}
+
 			if ( ! is_array( $record ) ) {
 				$errors[] = sprintf(
 					/* translators: %d: element number in the JSON array. */
@@ -281,6 +310,18 @@ class ODW_Batch_Import {
 			}
 		}
 
+		// Validate byte_size is a plain integer (avoid silent truncation of e.g. "1,5").
+		if ( isset( $record['byte_size'] ) && '' !== trim( (string) $record['byte_size'] ) ) {
+			if ( ! ctype_digit( trim( (string) $record['byte_size'] ) ) ) {
+				$errors[] = sprintf(
+					/* translators: 1: row number, 2: invalid byte size value. */
+					__( 'Zeile %1$d: Dateigröße muss eine ganze Zahl in Bytes sein: %2$s', 'open-data-wizard' ),
+					$row_index,
+					(string) $record['byte_size']
+				);
+			}
+		}
+
 		return array(
 			'valid'  => empty( $errors ),
 			'errors' => $errors,
@@ -357,6 +398,10 @@ class ODW_Batch_Import {
 		$failed  = 0;
 		$errors  = array();
 
+		// Cap the number of records as a defence-in-depth guard: the execute
+		// request comes from the client and could bypass the preview limit.
+		$records = array_slice( $records, 0, self::MAX_RECORDS );
+
 		foreach ( $records as $idx => $record ) {
 			$result = self::create_dataset_from_record( $record, $idx + 1 );
 
@@ -391,7 +436,7 @@ class ODW_Batch_Import {
 		$post_id = wp_insert_post(
 			array(
 				'post_type'    => 'odw_dataset',
-				'post_title'   => sanitize_text_field( (string) ( $record['title'] ?? '' ) ),
+				'post_title'   => sanitize_text_field( self::neutralize_formula( (string) ( $record['title'] ?? '' ) ) ),
 				'post_content' => '',
 				'post_status'  => 'draft',
 			)
@@ -409,8 +454,8 @@ class ODW_Batch_Import {
 		}
 
 		// Save meta fields.
-		update_post_meta( $post_id, '_odw_publisher', sanitize_text_field( (string) ( $record['publisher'] ?? '' ) ) );
-		update_post_meta( $post_id, '_odw_description', sanitize_textarea_field( (string) ( $record['description'] ?? '' ) ) );
+		update_post_meta( $post_id, '_odw_publisher', sanitize_text_field( self::neutralize_formula( (string) ( $record['publisher'] ?? '' ) ) ) );
+		update_post_meta( $post_id, '_odw_description', sanitize_textarea_field( self::neutralize_formula( (string) ( $record['description'] ?? '' ) ) ) );
 		update_post_meta( $post_id, '_odw_access_url', esc_url_raw( (string) ( $record['access_url'] ?? '' ) ) );
 
 		// License: map short code to URI if needed.
@@ -427,9 +472,9 @@ class ODW_Batch_Import {
 				if ( 'byte_size' === $field ) {
 					$value = (string) absint( $value );
 				} elseif ( '_odw_attribution_text' === $meta_key ) {
-					$value = sanitize_textarea_field( $value );
+					$value = sanitize_textarea_field( self::neutralize_formula( $value ) );
 				} else {
-					$value = sanitize_text_field( $value );
+					$value = sanitize_text_field( self::neutralize_formula( $value ) );
 				}
 
 				update_post_meta( $post_id, $meta_key, $value );
@@ -443,6 +488,35 @@ class ODW_Batch_Import {
 			'success' => true,
 			'post_id' => $post_id,
 		);
+	}
+
+	/**
+	 * Neutralise CSV/formula-injection in an imported cell value.
+	 *
+	 * Spreadsheet software interprets cells beginning with = + @ (or a tab/CR) as
+	 * formulas. Prefixing such values with an apostrophe renders them inert if the
+	 * data is ever re-exported and opened in Excel/LibreOffice. A leading "-" is
+	 * only neutralised when the value is not a plain number, to preserve negatives.
+	 *
+	 * @param string $value Raw cell value.
+	 * @return string Safe value.
+	 */
+	private static function neutralize_formula( string $value ): string {
+		if ( '' === $value ) {
+			return $value;
+		}
+
+		$first = $value[0];
+
+		if ( in_array( $first, array( '=', '+', '@', "\t", "\r" ), true ) ) {
+			return "'" . $value;
+		}
+
+		if ( '-' === $first && ! is_numeric( $value ) ) {
+			return "'" . $value;
+		}
+
+		return $value;
 	}
 
 	/**

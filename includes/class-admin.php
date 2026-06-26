@@ -1056,8 +1056,12 @@ class ODW_Admin {
 			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );
 		}
 
-		$records_json = sanitize_text_field( wp_unslash( $_POST['records'] ?? '[]' ) );
-		$records      = json_decode( $records_json, true );
+		// Do not sanitize the raw JSON string here: stripping tags/whitespace would
+		// corrupt multi-line values and can break the JSON. Each field is sanitized
+		// individually in ODW_Batch_Import::create_dataset_from_record() after decoding.
+		// phpcs:ignore WordPress.Security
+		$records_json = isset( $_POST['records'] ) ? wp_unslash( $_POST['records'] ) : '[]';
+		$records      = is_string( $records_json ) ? json_decode( $records_json, true ) : null;
 
 		if ( ! is_array( $records ) || empty( $records ) ) {
 			wp_send_json_error( array( 'error' => __( 'Keine Datensätze zum Importieren.', 'open-data-wizard' ) ) );

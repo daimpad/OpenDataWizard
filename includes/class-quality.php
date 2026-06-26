@@ -5,10 +5,11 @@
  * Berechnet einen Qualitätsscore (0–100) aus DCAT-AP 3.0 Feldvollständigkeit,
  * speichert ihn in Post-Meta und stellt ihn im Admin und REST API bereit.
  *
- * Ampellogik:
- *   Grün  (high)   — 80–100 Punkte
- *   Gelb  (medium) — 50–79 Punkte
- *   Rot   (low)    — 0–49 Punkte
+ * Level-Logik (siehe get_level()):
+ *   perfect    — 100 Punkte (alle Felder ausgefüllt)
+ *   high       — über der Pflichtfeld-Schwelle, aber < 100
+ *   sufficient — genau die Pflichtfeld-Schwelle (alle Pflichtfelder, keine optionalen)
+ *   low        — unter der Pflichtfeld-Schwelle (Pflichtfelder fehlen)
  *
  * @package OpenDataWizard
  */
@@ -31,7 +32,7 @@ class ODW_Quality {
 	public const LEVEL_SUFFICIENT = 'sufficient';
 	public const LEVEL_LOW        = 'low';
 
-	/** Score at which all required fields are exactly fulfilled (no optional). */
+	/** Fallback score at which all required fields are fulfilled when indicators are unavailable. */
 	private const REQUIRED_ONLY_SCORE = 55;
 
 	/**
@@ -165,12 +166,34 @@ class ODW_Quality {
 			);
 		}
 
+		// Clamp into the documented 0–100 range so a changed config can never
+		// produce an out-of-range score.
+		$total = max( 0, min( 100, $total ) );
+
 		return array(
 			'score'         => $total,
 			'level'         => self::get_level( $total ),
 			'indicators'    => $breakdown,
 			'calculated_at' => current_time( 'Y-m-d H:i:s' ),
 		);
+	}
+
+	/**
+	 * Sum of points for all required indicators — the score reached when exactly
+	 * the required fields are filled. Computed from the active config so the level
+	 * thresholds stay correct if the point values change.
+	 *
+	 * @return int Required-only score threshold.
+	 */
+	private static function get_required_only_score(): int {
+		$sum = 0;
+		foreach ( self::get_indicators() as $indicator ) {
+			if ( ! empty( $indicator['required'] ) ) {
+				$sum += (int) $indicator['points'];
+			}
+		}
+
+		return $sum > 0 ? $sum : self::REQUIRED_ONLY_SCORE;
 	}
 
 	/**
@@ -237,13 +260,15 @@ class ODW_Quality {
 	 * @return string One of LEVEL_PERFECT, LEVEL_HIGH, LEVEL_SUFFICIENT, LEVEL_LOW.
 	 */
 	public static function get_level( int $score ): string {
+		$required_only = self::get_required_only_score();
+
 		if ( 100 === $score ) {
 			return self::LEVEL_PERFECT;
 		}
-		if ( $score > self::REQUIRED_ONLY_SCORE ) {
+		if ( $score > $required_only ) {
 			return self::LEVEL_HIGH;
 		}
-		if ( self::REQUIRED_ONLY_SCORE === $score ) {
+		if ( $required_only === $score ) {
 			return self::LEVEL_SUFFICIENT;
 		}
 		return self::LEVEL_LOW;

@@ -507,7 +507,14 @@ class ODW_Rest_API {
 
 		foreach ( $formats as $format ) {
 			$dt = DateTimeImmutable::createFromFormat( $format, $value, $utc );
-			if ( false !== $dt ) {
+
+			// createFromFormat() silently normalises overflow values (e.g. month 13
+			// or day 45), so reject any input that produced warnings or errors.
+			$last_errors = DateTimeImmutable::getLastErrors();
+			$has_problem = is_array( $last_errors )
+				&& ( $last_errors['warning_count'] > 0 || $last_errors['error_count'] > 0 );
+
+			if ( false !== $dt && ! $has_problem ) {
 				return $dt->setTimezone( $utc );
 			}
 		}
