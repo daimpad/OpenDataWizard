@@ -294,6 +294,14 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertFalse( ODW_Rest_API::validate_since_param( '2024-06' ) );
 	}
 
+	/**
+	 * Rejects an overflow date that createFromFormat() would silently normalise.
+	 */
+	public function test_validate_since_rejects_overflow_date(): void {
+		$this->load_class();
+		$this->assertFalse( ODW_Rest_API::validate_since_param( '2024-13-45' ) );
+	}
+
 	// -------------------------------------------------------------------------
 	// get_delta() — cache hit
 	// -------------------------------------------------------------------------

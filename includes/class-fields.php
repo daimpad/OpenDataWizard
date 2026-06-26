@@ -651,6 +651,25 @@ class ODW_Fields {
 
 // phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- intentional companion function to the class above.
 /**
+ * Sanitise a value used as a JSON-LD "@id" (IRI).
+ *
+ * Values that carry a URI scheme are passed through esc_url_raw() so dangerous
+ * schemes such as javascript: or data: are stripped. Bare codes or labels (e.g.
+ * "de" or "Soziales") have no scheme and would be blanked by esc_url_raw(), so
+ * they are returned unchanged.
+ *
+ * @param  string $value Raw @id value.
+ * @return string Sanitised @id value.
+ */
+function odw_sanitize_jsonld_id( string $value ): string {
+	if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.\-]*:#', $value ) ) {
+		return esc_url_raw( $value );
+	}
+
+	return $value;
+}
+
+/**
  * Build DCAT-AP 3.0 JSON-LD array for a single dataset.
  * Used by both the REST API and the preview tab.
  *
@@ -709,7 +728,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			'en' => $lang_base . 'ENG',
 		);
 		$lang_uri                = $lang_legacy[ (string) $language ] ?? (string) $language;
-		$dataset['dct:language'] = array( '@id' => $lang_uri );
+		$dataset['dct:language'] = array( '@id' => odw_sanitize_jsonld_id( $lang_uri ) );
 	}
 
 	if ( ! empty( $keywords ) && is_string( $keywords ) ) {
@@ -731,11 +750,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			'Sport'      => $theme_base . 'EDUC',
 			'Sonstiges'  => $theme_base . 'GOVE',
 		);
-		$dataset['dcat:theme'] = array( '@id' => $theme_legacy[ (string) $theme ] ?? (string) $theme );
+		$dataset['dcat:theme'] = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
 	}
 
 	if ( ! empty( $cessda_topic ) ) {
-		$dataset['cessda:topic'] = array( '@id' => $cessda_topic );
+		$dataset['cessda:topic'] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
 	}
 
 	if ( ! empty( $issued ) ) {
@@ -773,7 +792,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$effective_license = $dist_license_custom;
 		}
 		if ( ! empty( $effective_license ) && 'sonstige' !== $effective_license ) {
-			$dist_item['dct:license'] = array( '@id' => $effective_license );
+			$dist_item['dct:license'] = array( '@id' => odw_sanitize_jsonld_id( (string) $effective_license ) );
 		}
 
 		if ( ! empty( $dist_attribution ) ) {
@@ -786,15 +805,15 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	// Extended DCAT-AP fields (Tab 4).
 
 	if ( ! empty( $landing_page ) ) {
-		$dataset['dcat:landingPage'] = array( '@id' => $landing_page );
+		$dataset['dcat:landingPage'] = array( '@id' => odw_sanitize_jsonld_id( (string) $landing_page ) );
 	}
 
 	if ( ! empty( $accrual_periodicity ) ) {
-		$dataset['dct:accrualPeriodicity'] = array( '@id' => $accrual_periodicity );
+		$dataset['dct:accrualPeriodicity'] = array( '@id' => odw_sanitize_jsonld_id( (string) $accrual_periodicity ) );
 	}
 
 	if ( ! empty( $political_geocoding_level ) ) {
-		$dataset['dcatde:politicalGeocodingLevelURI'] = array( '@id' => $political_geocoding_level );
+		$dataset['dcatde:politicalGeocodingLevelURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $political_geocoding_level ) );
 	}
 
 	if ( ! empty( $spatial ) ) {
@@ -830,7 +849,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$contact['vcard:hasEmail'] = 'mailto:' . $contact_email;
 		}
 		if ( ! empty( $contact_url ) ) {
-			$contact['vcard:hasURL'] = array( '@id' => $contact_url );
+			$contact['vcard:hasURL'] = array( '@id' => odw_sanitize_jsonld_id( (string) $contact_url ) );
 		}
 		$dataset['dcat:contactPoint'] = $contact;
 	}
