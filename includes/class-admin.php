@@ -1012,8 +1012,8 @@ class ODW_Admin {
 		// format is validated by the file extension of the original filename.
 		$original_name = sanitize_file_name( wp_unslash( $_FILES['file']['name'] ) );
 		// phpcs:ignore WordPress.Security
-		$tmp_name      = wp_unslash( $_FILES['file']['tmp_name'] );
-		$extension     = strtolower( (string) pathinfo( $original_name, PATHINFO_EXTENSION ) );
+		$tmp_name  = wp_unslash( $_FILES['file']['tmp_name'] );
+		$extension = strtolower( (string) pathinfo( $original_name, PATHINFO_EXTENSION ) );
 
 		if ( ! in_array( $extension, array( 'csv', 'json' ), true ) ) {
 			wp_send_json_error( array( 'error' => __( 'Ungültiger Dateityp (nur CSV oder JSON).', 'open-data-wizard' ) ) );
