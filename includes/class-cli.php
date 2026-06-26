@@ -109,30 +109,30 @@ class ODW_CLI {
 	public static function cache_clear( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 		global $wpdb;
 
-		// Delete all odw_catalog_* transients.
+		// Delete all odw_catalog_* transients (only main entries, not timeouts).
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$catalog_transients = $wpdb->get_col(
-			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_catalog_%'"
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_odw_catalog_%' AND option_name NOT LIKE '_transient_timeout%'"
 		);
 
-		// Delete all odw_delta_* transients.
+		// Delete all odw_delta_* transients (only main entries, not timeouts).
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$delta_transients = $wpdb->get_col(
-			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_delta_%'"
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_odw_delta_%' AND option_name NOT LIKE '_transient_timeout%'"
 		);
 
-		// Delete all odw_dataset_* transients.
+		// Delete all odw_dataset_* transients (only main entries, not timeouts).
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$dataset_transients = $wpdb->get_col(
-			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '%transient%odw_dataset_%'"
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_odw_dataset_%' AND option_name NOT LIKE '_transient_timeout%'"
 		);
 
 		$all_transients = array_merge( $catalog_transients, $delta_transients, $dataset_transients );
 		$count          = count( $all_transients );
 
 		foreach ( $all_transients as $transient ) {
-			// Remove 'transient_' or 'transient_timeout_' prefix.
-			$key = str_replace( array( 'transient_', 'transient_timeout_' ), '', $transient );
+			// Remove '_transient_' prefix to get the cache key.
+			$key = str_replace( '_transient_', '', $transient );
 			delete_transient( $key );
 		}
 

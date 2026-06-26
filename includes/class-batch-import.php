@@ -116,6 +116,11 @@ class ODW_Batch_Import {
 			return self::error_response( __( 'CSV-Datei ist leer oder ungültig.', 'open-data-wizard' ) );
 		}
 
+		// Remove UTF-8 BOM from first header if present (common in Excel-exported CSVs).
+		if ( ! empty( $header[0] ) ) {
+			$header[0] = ltrim( (string) $header[0], "\xEF\xBB\xBF" );
+		}
+
 		$data   = array();
 		$row    = 0;
 		$errors = array();

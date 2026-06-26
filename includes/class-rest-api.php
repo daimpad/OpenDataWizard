@@ -23,9 +23,6 @@ class ODW_Rest_API {
 
 	private const NAMESPACE = 'datenatlas/v1';
 
-	/** Cache-TTL in Sekunden (5 Minuten). */
-	private const CACHE_TTL = 300;
-
 	/**
 	 * DCAT-AP 3.0 / DCAT-AP.de JSON-LD @context inkl. Plugin-eigenem odw:-Namespace.
 	 */
@@ -39,6 +36,21 @@ class ODW_Rest_API {
 		'dcatde' => 'http://dcat-ap.de/def/dcatde/',
 		'odw'    => 'https://github.com/daimpad/OpenDataWizard/ns#',
 	);
+
+	/**
+	 * Get the configured cache TTL in seconds. Falls back to 5 minutes if not configured.
+	 *
+	 * @return int Cache TTL in seconds.
+	 */
+	private static function get_cache_ttl(): int {
+		if ( class_exists( 'ODW_Settings' ) ) {
+			$ttl = (int) ODW_Settings::get( 'cache_ttl' );
+			if ( 0 !== $ttl ) {
+				return $ttl;
+			}
+		}
+		return 300;
+	}
 
 	/**
 	 * Registers WordPress hooks.
@@ -249,7 +261,7 @@ class ODW_Rest_API {
 				'total' => $total,
 				'pages' => $pages,
 			),
-			self::CACHE_TTL
+			self::get_cache_ttl()
 		);
 
 		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
@@ -315,7 +327,7 @@ class ODW_Rest_API {
 			$dataset
 		);
 
-		set_transient( $cache_key, $body, self::CACHE_TTL );
+		set_transient( $cache_key, $body, self::get_cache_ttl() );
 
 		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
 
@@ -447,7 +459,7 @@ class ODW_Rest_API {
 				'pages'        => $pages,
 				'generated_at' => $generated_at,
 			),
-			self::CACHE_TTL
+			self::get_cache_ttl()
 		);
 
 		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );

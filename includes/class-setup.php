@@ -108,23 +108,11 @@ class ODW_Setup {
 		if ( $file_id ) {
 			update_post_meta( $post_id, '_odw_file_id', $file_id );
 
-			// Distribution via Carbon Fields API setzen, damit JSON-LD und
-			// Qualitätsprüfung korrekte Daten lesen.
-			if ( function_exists( 'carbon_set_post_meta' ) ) {
-				$file_url = wp_get_attachment_url( $file_id );
-				if ( $file_url ) {
-					carbon_set_post_meta(
-						$post_id,
-						'odw_distributions',
-						array(
-							array(
-								'access_url' => $file_url,
-								'format'     => 'CSV',
-								'byte_size'  => '',
-							),
-						)
-					);
-				}
+			$file_url = wp_get_attachment_url( $file_id );
+			if ( $file_url ) {
+				// Save singular distribution fields (v2.1.4: odw_distributions repeater removed).
+				update_post_meta( $post_id, '_odw_access_url', esc_url_raw( $file_url ) );
+				update_post_meta( $post_id, '_odw_format', 'CSV' );
 			}
 		}
 
