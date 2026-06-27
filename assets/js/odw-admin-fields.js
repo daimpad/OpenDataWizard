@@ -67,14 +67,147 @@
 	}
 
 	// -------------------------------------------------------------------------
-	// 2. CESSDA topic auto-suggest (standalone field)
+	// 2. CESSDA topic widget — visible field shows the human-readable label,
+	//    the hidden backing CF field stores the concept URI (DCAT-AP compliant).
 	// -------------------------------------------------------------------------
-	function initCessdaAutosuggest() {
-		if ( ! data.cessdaOptions || ! data.cessdaOptions.length ) {
+	function initCessdaWidget() {
+		var opts = data.cessdaOptions || [];
+		if ( ! opts.length ) {
 			return;
 		}
-		document.querySelectorAll( 'input[data-odw-autosuggest="cessda"]' ).forEach( function ( input ) {
-			attachDatalist( input, 'odw-cessda-datalist', data.cessdaOptions );
+
+		var w         = data.cessdaWidget || {};
+		var labelToUri = {};
+		var uriToLabel = {};
+		opts.forEach( function ( o ) {
+			labelToUri[ o.label ] = o.value;
+			uriToLabel[ o.value ] = o.label;
+		} );
+
+		// Shared datalist of human-readable labels.
+		var listId = 'odw-cessda-label-datalist';
+		if ( ! document.getElementById( listId ) ) {
+			var dl = document.createElement( 'datalist' );
+			dl.id  = listId;
+			opts.forEach( function ( o ) {
+				var el   = document.createElement( 'option' );
+				el.value = o.label;
+				dl.appendChild( el );
+			} );
+			document.body.appendChild( dl );
+		}
+
+		document.querySelectorAll( 'input[data-odw-backing="cessda"]' ).forEach( function ( backing ) {
+			if ( backing.dataset.odwCessdaInit ) {
+				return;
+			}
+			backing.dataset.odwCessdaInit = '1';
+
+			var fieldWrapper = backing.closest( '.cf-field' ) || backing.parentElement;
+			if ( ! fieldWrapper || ! fieldWrapper.parentNode ) {
+				return;
+			}
+
+			var wrap   = document.createElement( 'div' );
+			wrap.className = 'odw-cessda-widget';
+
+			var lbl = document.createElement( 'label' );
+			lbl.className   = 'odw-cessda-label';
+			lbl.textContent = w.label || '';
+
+			var input = document.createElement( 'input' );
+			input.type        = 'text';
+			input.className    = 'odw-cessda-input';
+			input.placeholder  = w.placeholder || '';
+			input.setAttribute( 'list', listId );
+
+			var hint = document.createElement( 'span' );
+			hint.className = 'odw-cessda-hint description';
+
+			wrap.appendChild( lbl );
+			wrap.appendChild( input );
+			wrap.appendChild( hint );
+			fieldWrapper.parentNode.insertBefore( wrap, fieldWrapper );
+
+			function showHint( uri ) {
+				hint.textContent = uri ? ( ( w.linkLabel || '' ) + ' ' + uri ) : '';
+			}
+
+			// Restore the label from the stored URI on load.
+			if ( backing.value ) {
+				input.value = uriToLabel[ backing.value ] || backing.value;
+				showHint( uriToLabel[ backing.value ] ? backing.value : '' );
+			}
+
+			function sync() {
+				var label = input.value.trim();
+				var uri   = labelToUri[ label ] || '';
+				if ( ! uri && /^https?:\/\//.test( label ) ) {
+					uri = label;
+				}
+				setInputValue( backing, uri );
+				showHint( uri );
+			}
+
+			input.addEventListener( 'input',  sync );
+			input.addEventListener( 'change', sync );
+		} );
+	}
+
+	// -------------------------------------------------------------------------
+	// 2b. License description — show a plain-language explanation under the
+	//     license <select> whenever a license is chosen.
+	// -------------------------------------------------------------------------
+	function initLicenseInfo() {
+		var descriptions = data.licenseDescriptions || {};
+
+		document.querySelectorAll( '[data-odw-license-info]' ).forEach( function ( info ) {
+			if ( info.dataset.odwLicenseInit ) {
+				return;
+			}
+			var field = info.closest( '.cf-field' );
+			if ( ! field ) {
+				return;
+			}
+
+			// The license <select> sits in the preceding .cf-field.
+			var select = null;
+			var prev   = field.previousElementSibling;
+			while ( prev && ! select ) {
+				select = prev.querySelector ? prev.querySelector( 'select' ) : null;
+				prev   = prev.previousElementSibling;
+			}
+			if ( ! select ) {
+				return;
+			}
+
+			info.dataset.odwLicenseInit = '1';
+
+			function update() {
+				var text = descriptions[ select.value ];
+				if ( text ) {
+					info.textContent = text;
+					info.hidden      = false;
+				} else {
+					info.textContent = '';
+					info.hidden      = true;
+				}
+			}
+
+			select.addEventListener( 'change', update );
+			update();
+		} );
+	}
+
+	// -------------------------------------------------------------------------
+	// 2c. Spatial (dct:spatial) auto-suggest — curated GeoNames region names.
+	// -------------------------------------------------------------------------
+	function initSpatialAutosuggest() {
+		if ( ! data.spatialOptions || ! data.spatialOptions.length ) {
+			return;
+		}
+		document.querySelectorAll( 'input[data-odw-autosuggest="spatial"]' ).forEach( function ( input ) {
+			attachDatalist( input, 'odw-spatial-datalist', data.spatialOptions );
 		} );
 	}
 
@@ -224,9 +357,25 @@
 	// -------------------------------------------------------------------------
 	document.addEventListener( 'DOMContentLoaded', function () {
 		initLicenseAutosuggest();
-		initCessdaAutosuggest();
+		initLicenseInfo();
+		initCessdaWidget();
+		initSpatialAutosuggest();
 		initFileSizeWidgets();
 		observeNewGroups();
+
+		// Carbon Fields mounts fields asynchronously; re-run widget inits a few
+		// times so they attach once the inputs exist in the DOM.
+		var passes = 0;
+		var rerun  = setInterval( function () {
+			passes++;
+			initLicenseInfo();
+			initCessdaWidget();
+			initSpatialAutosuggest();
+			initFileSizeWidgets();
+			if ( passes > 10 ) {
+				clearInterval( rerun );
+			}
+		}, 400 );
 	} );
 
 } )();

@@ -96,17 +96,26 @@ class ODW_Fields {
 
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_picker_options(
+							array(
+								'dateFormat' => 'Y-m-d',
+								'locale'     => 'de',
+							)
+						)
 						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_modified', __( 'Wann wurden diese Daten zuletzt aktualisiert?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_picker_options(
+							array(
+								'dateFormat' => 'Y-m-d',
+								'locale'     => 'de',
+							)
+						)
 						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_cessda_topic', __( 'CESSDA Themenklassifikation', 'open-data-wizard' ) )
-						->set_attribute( 'placeholder', __( 'Thema eintippen oder URI eingeben…', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-autosuggest', 'cessda' )
+						->set_attribute( 'data-odw-backing', 'cessda' )
 						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (cessda:topic)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 				)
 			)
@@ -137,6 +146,9 @@ class ODW_Fields {
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
 						->add_options( self::get_license_options() )
 						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
+
+					Field::make( 'html', 'odw_license_info' )
+						->set_html( '<div class="odw-license-info" data-odw-license-info hidden></div>' ),
 
 					Field::make( 'text', 'odw_license_custom', __( 'Lizenz-URI eingeben oder auswählen', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'https://example.org/meine-lizenz', 'open-data-wizard' ) )
@@ -184,35 +196,46 @@ class ODW_Fields {
 						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Gemeinde, Landkreis, Land, Bund', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
-						->set_attribute( 'placeholder', __( 'z.B. Deutschland, Berlin oder GeoNames-URI', 'open-data-wizard' ) )
-						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext oder URI. Beispiel: Deutschland, Berlin, https://sws.geonames.org/2950159/', 'open-data-wizard' ) ),
+						->set_attribute( 'placeholder', __( 'Region aus der Liste wählen oder eintippen…', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-autosuggest', 'spatial' )
+						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) . "\n\n" . __( 'Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann sind diese Daten gültig?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_picker_options(
+							array(
+								'dateFormat' => 'Y-m-d',
+								'locale'     => 'de',
+							)
+						)
 						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-01', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann sind diese Daten gültig?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options( array( 'dateFormat' => 'Y-m-d' ) )
+						->set_picker_options(
+							array(
+								'dateFormat' => 'Y-m-d',
+								'locale'     => 'de',
+							)
+						)
 						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-12-31', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_contact' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontaktpunkt (dcat:contactPoint)', 'open-data-wizard' ) . '</h4>' ),
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontakt', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'text', 'odw_contact_name', __( 'Wer ist Ansprechperson für Fragen zu diesen Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
-						->set_help_text( __( 'NAME / ORGANISATION (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'Name oder Organisation der Ansprechperson.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_contact_email', __( 'Unter welcher E-Mail-Adresse kann ich Fragen stellen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
 						->set_attribute( 'placeholder', 'opendata@beispiel.de' )
-						->set_help_text( __( 'E-MAIL-ADRESSE (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: opendata@beispiel.de', 'open-data-wizard' ) ),
+						->set_help_text( __( 'E-Mail-Adresse für Rückfragen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: opendata@beispiel.de', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_contact_url', __( 'Auf welcher Website finde ich weitere Kontaktinformationen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
-						->set_help_text( __( 'WEBSITE (dcat:contactPoint)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -449,13 +472,70 @@ class ODW_Fields {
 	public static function get_license_options(): array {
 		$options = array(
 			''                                             => __( '— Bitte wählen —', 'open-data-wizard' ),
-			'https://creativecommons.org/publicdomain/zero/1.0/' => 'CC0 1.0',
-			'https://creativecommons.org/licenses/by/4.0/' => 'CC-BY 4.0',
-			'https://creativecommons.org/licenses/by-sa/4.0/' => 'CC-BY-SA 4.0',
-			'sonstige'                                     => __( 'Sonstige…', 'open-data-wizard' ),
+			'https://creativecommons.org/publicdomain/zero/1.0/' => __( 'CC0 1.0 — Gemeinfreiheit (keine Rechte vorbehalten)', 'open-data-wizard' ),
+			'https://creativecommons.org/licenses/by/4.0/' => __( 'CC BY 4.0 — Namensnennung', 'open-data-wizard' ),
+			'https://creativecommons.org/licenses/by-sa/4.0/' => __( 'CC BY-SA 4.0 — Namensnennung, Weitergabe unter gleichen Bedingungen', 'open-data-wizard' ),
+			'sonstige'                                     => __( 'Sonstige Lizenz…', 'open-data-wizard' ),
 		);
 
 		return (array) apply_filters( 'odw_license_options', $options );
+	}
+
+	/**
+	 * Kurze, allgemeinverständliche Erklärung je Lizenz (URI → Beschreibungstext).
+	 * Wird unter dem Lizenz-Auswahlfeld angezeigt, sobald eine Lizenz gewählt ist.
+	 *
+	 * @return array<string, string> URI => Beschreibung.
+	 */
+	public static function get_license_descriptions(): array {
+		$descriptions = array(
+			'https://creativecommons.org/publicdomain/zero/1.0/' => __( 'Die Daten sind gemeinfrei. Sie dürfen ohne Einschränkungen und ohne Namensnennung kopiert, verändert und – auch kommerziell – weiterverwendet werden.', 'open-data-wizard' ),
+			'https://creativecommons.org/licenses/by/4.0/' => __( 'Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle (Namensnennung) angegeben wird.', 'open-data-wizard' ),
+			'https://creativecommons.org/licenses/by-sa/4.0/' => __( 'Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden.', 'open-data-wizard' ),
+		);
+
+		return (array) apply_filters( 'odw_license_descriptions', $descriptions );
+	}
+
+	/**
+	 * Kuratierte Liste geografischer Regionen (Name → GeoNames-URI) für das
+	 * dct:spatial-Feld. Deckt Deutschland, die 16 Bundesländer und größere Städte ab.
+	 * Erweiterbar via `odw_spatial_options`-Filter.
+	 *
+	 * @return array<string, string> Regionsname => GeoNames-URI.
+	 */
+	public static function get_spatial_options(): array {
+		$base    = 'https://sws.geonames.org/';
+		$options = array(
+			'Deutschland'            => $base . '2921044/',
+			'Baden-Württemberg'      => $base . '2953481/',
+			'Bayern'                 => $base . '2951839/',
+			'Berlin'                 => $base . '2950157/',
+			'Brandenburg'            => $base . '2945356/',
+			'Bremen'                 => $base . '2944387/',
+			'Hamburg'                => $base . '2911297/',
+			'Hessen'                 => $base . '2905330/',
+			'Mecklenburg-Vorpommern' => $base . '2872567/',
+			'Niedersachsen'          => $base . '2862926/',
+			'Nordrhein-Westfalen'    => $base . '2861876/',
+			'Rheinland-Pfalz'        => $base . '2847618/',
+			'Saarland'               => $base . '2842635/',
+			'Sachsen'                => $base . '2842566/',
+			'Sachsen-Anhalt'         => $base . '2842565/',
+			'Schleswig-Holstein'     => $base . '2838632/',
+			'Thüringen'              => $base . '2822542/',
+			'München'                => $base . '2867714/',
+			'Köln'                   => $base . '2886242/',
+			'Frankfurt am Main'      => $base . '2925533/',
+			'Stuttgart'              => $base . '2825297/',
+			'Düsseldorf'             => $base . '2934246/',
+			'Leipzig'                => $base . '2879139/',
+			'Dresden'                => $base . '2935022/',
+			'Hannover'               => $base . '2910831/',
+			'Nürnberg'               => $base . '2861650/',
+		);
+
+		return (array) apply_filters( 'odw_spatial_options', $options );
 	}
 
 	/**
@@ -817,10 +897,22 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	}
 
 	if ( ! empty( $spatial ) ) {
-		$dataset['dct:spatial'] = array(
+		$location = array(
 			'@type'          => 'dct:Location',
 			'skos:prefLabel' => $spatial,
 		);
+
+		// Link to GeoNames when the value matches a curated region name; if the
+		// value is itself a URI, use it directly as @id.
+		$spatial_map = ODW_Fields::get_spatial_options();
+		if ( isset( $spatial_map[ $spatial ] ) ) {
+			$location['@id'] = odw_sanitize_jsonld_id( (string) $spatial_map[ $spatial ] );
+		} elseif ( preg_match( '#^https?://#', (string) $spatial ) ) {
+			$location['@id'] = odw_sanitize_jsonld_id( (string) $spatial );
+			unset( $location['skos:prefLabel'] );
+		}
+
+		$dataset['dct:spatial'] = $location;
 	}
 
 	if ( ! empty( $temporal_start ) || ! empty( $temporal_end ) ) {

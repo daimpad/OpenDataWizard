@@ -7,6 +7,28 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.2.0] — 2026-06-27
+
+Formular- und Bedienbarkeits-Release. Verbessert die Verständlichkeit der Eingabemaske und verknüpft geografische Angaben mit GeoNames.
+
+### 🎉 Added
+- **GeoNames-Verknüpfung (dct:spatial):** Das Feld „Geografische Region" bietet jetzt eine kuratierte Auswahlliste (Deutschland, alle 16 Bundesländer, größere Städte). Die Auswahl wird im JSON-LD automatisch mit der passenden GeoNames-URI (`@id`) verknüpft; Freitext/eigene URIs bleiben weiterhin möglich.
+- **Lizenz-Erklärungen:** Unter der Lizenzauswahl erscheint eine allgemeinverständliche Beschreibung, was die gewählte Lizenz erlaubt (CC0, CC BY, CC BY-SA).
+
+### ✨ Improvements
+- **Deutscher Kalender:** Die Datumsauswahl (Veröffentlichungs-, Änderungs- und Gültigkeitsdaten) zeigt Monatsnamen, Wochentage und Platzhalter nun auf Deutsch.
+- **CESSDA-Themenklassifikation:** Im Eingabefeld wird jetzt das sprechende Label (z. B. „Bildung") angezeigt statt der URI. Die URI wird im Hintergrund gespeichert und zusätzlich als Hinweis eingeblendet — das JSON-LD bleibt DCAT-AP-konform.
+- **Ausgeschriebene Lizenznamen:** Die Lizenzauswahl nennt die Lizenzen vollständig (z. B. „CC BY 4.0 — Namensnennung").
+- **Kontakt-Abschnitt:** Überschrift „Kontaktpunkt (dcat:contactPoint)" zu „Kontakt" vereinfacht; technische Feldbezeichnungen ausgeblendet.
+
+### 🐛 Fixed
+- **Abstände:** Das Dateigröße-Widget wird nun mit demselben linken Einzug (20 px) wie die übrigen Formularfelder dargestellt.
+
+### 🧪 Tests & Qualität
+- **94 PHPUnit-Tests** (zuvor 92), PHPStan Level 6, PHPCS sauber (Exit 0)
+
+---
+
 ## [2.1.5] — 2026-06-27
 
 Wartungs- und Sicherheits-Release. Behebt einen kritischen Batch-Import-Bug aus 2.1.4 und härtet Datei-Upload, REST-API, Qualitäts-Scoring und JSON-LD-Ausgabe.

@@ -293,7 +293,7 @@ class ODW_Admin {
 				);
 			}
 
-			// Build CESSDA auto-suggest options from SKOS file.
+			// Build CESSDA auto-suggest options from SKOS file (value = URI, label = German term).
 			$cessda_options = array();
 			foreach ( ODW_Fields::load_cessda_options() as $uri => $label ) {
 				$cessda_options[] = array(
@@ -302,13 +302,29 @@ class ODW_Admin {
 				);
 			}
 
+			// Build curated GeoNames spatial options (value = region name, uri = GeoNames URI).
+			$spatial_options = array();
+			foreach ( ODW_Fields::get_spatial_options() as $name => $uri ) {
+				$spatial_options[] = array(
+					'value' => $name,
+					'uri'   => $uri,
+				);
+			}
+
 			wp_localize_script(
 				'odw-admin-fields',
 				'odwAdminFields',
 				array(
-					'licenseOptions' => $license_file_options,
-					'cessdaOptions'  => $cessda_options,
-					'fileSizeWidget' => array(
+					'licenseOptions'      => $license_file_options,
+					'licenseDescriptions' => (object) ODW_Fields::get_license_descriptions(),
+					'cessdaOptions'       => $cessda_options,
+					'spatialOptions'      => $spatial_options,
+					'cessdaWidget'        => array(
+						'label'       => __( 'CESSDA Themenklassifikation', 'open-data-wizard' ),
+						'placeholder' => __( 'Thema eintippen oder auswählen…', 'open-data-wizard' ),
+						'linkLabel'   => __( 'Verknüpfte URI:', 'open-data-wizard' ),
+					),
+					'fileSizeWidget'      => array(
 						'label'       => __( 'Dateigröße', 'open-data-wizard' ),
 						'optional'    => __( '(optional)', 'open-data-wizard' ),
 						'placeholder' => __( 'z. B. 2.5', 'open-data-wizard' ),
@@ -317,6 +333,14 @@ class ODW_Admin {
 						'helpText'    => __( 'Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB', 'open-data-wizard' ),
 					),
 				)
+			);
+
+			wp_enqueue_script(
+				'odw-datepicker-de',
+				ODW_PLUGIN_URL . 'assets/js/odw-datepicker-de.js',
+				array(),
+				ODW_VERSION,
+				true
 			);
 
 			global $post;

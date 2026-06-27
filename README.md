@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.1.5-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.2.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -73,12 +73,16 @@ Fünf-Tab-Assistent mit Pflichtfeldprüfung und praktischen Beispielen:
 5. **Vorschau** — generiertes JSON-LD live einsehen
 
 ### 🏷 Lizenz-Auswahl
-- Vordefinierte Auswahlliste mit gängigen offenen Lizenzen (CC0, CC-BY, ODbL u.v.m.) aus `config/licenses.txt`
-- Option „Sonstige" öffnet ein Freitextfeld mit Auto-Suggest aus der Lizenzdatei
+- Vordefinierte Auswahlliste mit ausgeschriebenen Lizenznamen (z. B. „CC BY 4.0 — Namensnennung")
+- Unter der Auswahl erscheint eine allgemeinverständliche Erklärung, was die gewählte Lizenz erlaubt
+- Option „Sonstige" öffnet ein Freitextfeld mit Auto-Suggest aus `config/licenses.txt`
 - Lizenz ist **Pflichtfeld pro Distribution** (nicht am Datensatz selbst)
 
 ### 🎓 CESSDA-Themenklassifikation
-Auto-Suggest-Feld aus der CESSDA Topic Classification 4.2.3 (95 deutsche Konzepte, SKOS/RDF, 24h Cache).
+Auswahlfeld aus der CESSDA Topic Classification 4.2.3 (95 deutsche Konzepte, SKOS/RDF, 24h Cache). Im Feld wird das sprechende Label (z. B. „Bildung") angezeigt; die zugehörige URI wird im Hintergrund gespeichert und als Hinweis eingeblendet.
+
+### 🗺 Geografische Region (GeoNames)
+Kuratierte Auswahlliste (Deutschland, alle 16 Bundesländer, größere Städte). Die Auswahl wird im JSON-LD automatisch mit der passenden GeoNames-URI verknüpft; Freitext und eigene URIs bleiben möglich.
 
 ### 📥 Batch-Import (CSV & JSON)
 ```
