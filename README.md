@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.3.1-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.3.2-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -293,7 +293,7 @@ open-data-wizard/
 | Format | `dct:format` (MIME) | — |
 | Dateigröße | `dcat:byteSize` | — |
 | Lizenz | `dct:license` (URI) | ✓ pro Distribution |
-| Zuschreibungstext | `odrl:attribution` | — |
+| Zuschreibungstext | `dcatde:licenseAttributionByText` | — |
 
 #### Tab 4 — Erweiterte Angaben
 
@@ -512,8 +512,8 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 | `access-right` | `http://publications.europa.eu/resource/authority/access-right/` | `dct:accessRights` | ❌ |
 | `licence` | `http://dcat-ap.de/def/licenses/` | `dct:license` | ✅ (`licenses.txt`) |
 | `planned-availability` | `http://dcat-ap.de/def/plannedAvailability/` | `dcatap:availability` | ❌ |
-| `political-geocoding-level` | `http://dcat-ap.de/def/politicalGeocoding/Level/` | `dcatde:politicalGeocodingLevelURI` | ❌ |
-| `eurovoc` | `http://eurovoc.europa.eu/` | `dct:subject` | ❌ (CESSDA stattdessen) |
+| `political-geocoding-level` | `http://dcat-ap.de/def/politicalGeocoding/Level/` | `dcatde:politicalGeocodingLevelURI` | ✅ (Auswahl) |
+| `eurovoc` | `http://eurovoc.europa.eu/` | `dct:subject` | ⚠️ (via CESSDA, nicht EuroVoc) |
 | `corporate-body` | `http://publications.europa.eu/resource/authority/corporate-body/` | `dct:publisher` | ⚠️ Freitext |
 | `iana-media-types` | `https://www.iana.org/assignments/media-types/` | `dcat:mediaType` | ❌ |
 
@@ -538,14 +538,14 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcat:distribution` | `dcat:Distribution` | AP | R (0..n) | ⚠️ genau 1 |
 | `dcat:keyword` | lang-Literal | AP | R (0..n) | ✅ |
 | `dcat:theme` | URI (`data-theme`) | AP | R (0..n) | ⚠️ Freitext |
-| `dct:spatial` | `dct:Location` | AP | O (0..n) | ⚠️ |
+| `dct:spatial` | `dct:Location` | AP | O (0..n) | ✅ (GeoNames) |
 | `dct:temporal` | `dct:PeriodOfTime` | AP | O (0..n) | ✅ start/end |
 | `dct:issued` / `dct:modified` | Datum | AP | O (0..1) | ✅ |
 | `dct:accessRights` | URI (`access-right`) | AP | O (0..1) | ❌ |
 | `dct:accrualPeriodicity` | URI (`frequency`) | AP | O (0..1) | ✅ |
 | `dct:language` | URI (`language`) | AP | O (0..n) | ⚠️ Freitext |
 | `dct:identifier` / `adms:identifier` | Literal / Node | AP | O (0..n) | ❌ |
-| `dct:subject` | URI (`eurovoc`) | AP | O (0..n) | ❌ |
+| `dct:subject` | URI (`eurovoc`) | AP | O (0..n) | ✅ (via CESSDA-Thema) |
 | `dct:creator` | `foaf:Agent` | AP | O (0..n) | ❌ |
 | `dct:type` | URI (`dataset-type`) | AP | O (0..1) | ❌ |
 | `dcat:landingPage` | `foaf:Document` | AP | O (0..n) | ✅ |
@@ -554,7 +554,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcat:spatialResolutionInMeters` | Dezimal | AP | O | ❌ |
 | `dcat:temporalResolution` | Duration | AP | O | ❌ |
 | `prov:qualifiedAttribution`, `dcat:qualifiedRelation`, `prov:wasGeneratedBy` | Node | AP | O | ❌ |
-| `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ❌ |
+| `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
 | `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ❌ |
 | `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
 | `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ❌ |
@@ -584,11 +584,11 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `odrl:hasPolicy` | Node | AP | O | ❌ |
 | `dcat:compressFormat` / `packageFormat` | URI (`iana`) | AP | O | ❌ |
 | `foaf:page` | `foaf:Document` | AP | O | ❌ |
-| `dcatde:licenseAttributionByText` | lang-Literal | DE | O (bei CC-BY) | ⚠️ siehe Hinweis |
+| `dcatde:licenseAttributionByText` | lang-Literal | DE | O (bei CC-BY) | ✅ |
 
-> **Korrektheitshinweis:** Der ODW-Zuschreibungstext wird derzeit als `odrl:attribution` ausgegeben
-> (siehe Feldmapping Tab 3). DCAT-AP.de-konform ist `dcatde:licenseAttributionByText` (sprachgetaggtes Literal).
-> Diese Abweichung sollte in Phase A korrigiert werden.
+> **Erledigt (v2.3):** Der Zuschreibungstext wird konform als `dcatde:licenseAttributionByText` ausgegeben
+> (zuvor fälschlich `odrl:attribution`). Das CESSDA-Thema wird als `dct:subject` ausgegeben (zuvor undeklariertes
+> `cessda:`-Präfix → ungültiges JSON-LD), und der `dcat`-Namespace nutzt die kanonische `http://`-Form.
 
 #### 4.3 Catalogue (`dcat:Catalog`)
 
@@ -652,10 +652,12 @@ array(
 Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 
 #### Phase A — Fundament & Korrekturen (v2.2, nicht brechend)
-- Namespace-Registry (Abschnitt 2) vollständig in `@context` von `odw_build_dataset_jsonld()` aufnehmen.
-- Feld-Registry-Schema (Abschnitt 5) um die neuen optionalen Schlüssel erweitern; bestehende Einträge anreichern.
-- Korrektur: Zuschreibungstext `odrl:attribution` → `dcatde:licenseAttributionByText` (lang-Literal).
-- Neuer Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt vorbereitet (Grundgerüst).
+- ✅ Korrektur: Zuschreibungstext `odrl:attribution` → `dcatde:licenseAttributionByText` (erledigt v2.3).
+- ✅ Korrektur: CESSDA-Thema als `dct:subject` statt undeklariertem `cessda:`-Präfix (gültiges JSON-LD).
+- ✅ Korrektur: `dcat`-Namespace auf kanonisches `http://www.w3.org/ns/dcat#`.
+- ☐ Namespace-Registry (Abschnitt 2) vollständig in `@context` aufnehmen (offen: `dcatap`, `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`).
+- ☐ Feld-Registry-Schema (Abschnitt 5) um die neuen optionalen Schlüssel erweitern; bestehende Einträge anreichern.
+- ☐ Neuer Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt vorbereitet (Grundgerüst).
 - _Betroffen:_ `class-fields.php`, `class-rest-api.php`/JSON-LD-Builder, `config/dcat-ap-fields.php`.
 
 #### Phase B — DCAT-AP.de & Vokabulare (v2.3)

@@ -230,6 +230,31 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * The CESSDA topic is emitted as DCAT-AP conformant dct:subject (with @id),
+	 * never under an undeclared cessda: prefix that would invalidate the JSON-LD.
+	 */
+	public function test_build_emits_cessda_topic_as_dct_subject(): void {
+		$this->load_fields();
+
+		$uri = 'https://vocabularies.cessda.eu/urn/urn:ddi:int.cessda.cv:TopicClassification:4.2.3:de:1.0';
+
+		$this->setup_jsonld_mocks(
+			13,
+			'odw_dataset',
+			array(
+				'odw_cessda_topic' => $uri,
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 13 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dct:subject', $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dct:subject'] );
+		$this->assertArrayNotHasKey( 'cessda:topic', $result );
+	}
+
+	/**
 	 * The dct:accrualPeriodicity is included as an @id object when the field is set.
 	 */
 	public function test_build_includes_accrual_periodicity_when_set(): void {

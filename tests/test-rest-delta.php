@@ -235,6 +235,26 @@ class Test_ODW_Rest_Delta extends TestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// JSON-LD @context
+	// -------------------------------------------------------------------------
+
+	/**
+	 * The dcat namespace must use the canonical http:// IRI. Using https:// would
+	 * expand dcat:Dataset to a different IRI than the registered DCAT vocabulary,
+	 * breaking type/property matching for harvesters.
+	 */
+	public function test_jsonld_context_dcat_namespace_is_canonical_http(): void {
+		$this->load_class();
+
+		$reflection = new \ReflectionClass( 'ODW_Rest_API' );
+		$context    = $reflection->getConstant( 'JSONLD_CONTEXT' );
+
+		$this->assertIsArray( $context );
+		$this->assertArrayHasKey( 'dcat', $context );
+		$this->assertSame( 'http://www.w3.org/ns/dcat#', $context['dcat'] );
+	}
+
+	// -------------------------------------------------------------------------
 	// validate_since_param()
 	// -------------------------------------------------------------------------
 

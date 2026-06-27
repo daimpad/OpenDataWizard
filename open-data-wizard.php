@@ -3,7 +3,7 @@
  * Plugin Name:       Open Data Wizard
  * Plugin URI:        https://github.com/daimpad/OpenDataWizard
  * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für WordPress. Bereitstellung als maschinenlesbarer JSON-LD-Endpoint für offene Daten.
- * Version:           2.3.1
+ * Version:           2.3.2
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            nozilla
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ODW_VERSION', '2.3.1' );
+define( 'ODW_VERSION', '2.3.2' );
 define( 'ODW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ODW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ODW_PLUGIN_FILE', __FILE__ );

@@ -27,7 +27,7 @@ class ODW_Rest_API {
 	 * DCAT-AP 3.0 / DCAT-AP.de JSON-LD @context inkl. Plugin-eigenem odw:-Namespace.
 	 */
 	private const JSONLD_CONTEXT = array(
-		'dcat'   => 'https://www.w3.org/ns/dcat#',
+		'dcat'   => 'http://www.w3.org/ns/dcat#',
 		'dct'    => 'http://purl.org/dc/terms/',
 		'foaf'   => 'http://xmlns.com/foaf/0.1/',
 		'xsd'    => 'http://www.w3.org/2001/XMLSchema#',
