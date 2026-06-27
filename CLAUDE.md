@@ -22,7 +22,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (92 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (94 Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -81,7 +81,9 @@ open-data-wizard/
 │   ├── test-cli.php                # CLI Commands Tests
 │   └── class-stubs.php             # WP_Mock Stubs
 ├── languages/
-│   └── open-data-wizard.pot        # i18n Translation Template
+│   ├── open-data-wizard.pot        # i18n Translation Template
+│   ├── open-data-wizard-en_US.po   # Englische Übersetzung (Quelle)
+│   └── open-data-wizard-en_US.mo   # Englische Übersetzung (kompiliert)
 ├── README.md                        # User-facing Dokumentation (DE)
 ├── CHANGELOG.md                     # Version-History
 ├── composer.json                    # PHP Dependencies
@@ -347,9 +349,13 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 ```
 
 ### Translation Files
+- **Source language**: German (the `__()` default strings are German)
 - **POT Template**: `languages/open-data-wizard.pot`
-- **PO/MO Files**: `languages/de_DE.po`, `de_DE.mo` (optional)
+- **English**: `languages/open-data-wizard-en_US.po` / `.mo` — overrides the German
+  source strings on `en_US` installs (336 strings)
 - Loaded via `load_plugin_textdomain()` on `init` hook
+- The `.mo` is generated without gettext tooling; if strings change, regenerate
+  the `.po`/`.mo` (see the generator approach in the v2.3.0 PR)
 
 ### Praktiken
 - Alle UI-Texte translatable
@@ -374,7 +380,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 
 #### Running Tests
 ```bash
-# Alle 92 Tests
+# Alle 94 Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -693,7 +699,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.2.0**
+Current: **v2.3.0**
 
 ---
 
@@ -759,7 +765,7 @@ Current: **v2.2.0**
 1. **Write tests for new features** — Aim for >80% coverage
 2. **Mock all WordPress functions** — WP_Mock does the heavy lifting
 3. **Test edge cases** — null values, empty strings, large datasets
-4. **Run full test suite before pushing** — 92 tests must pass
+4. **Run full test suite before pushing** — 94 tests must pass
 
 ### Performance
 1. **Never call `odw_build_dataset_jsonld()` in loops** — expensive, cache it
@@ -778,6 +784,6 @@ Current: **v2.2.0**
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.2.0 (Juni 2026)
+**Zuletzt aktualisiert**: Version 2.3.0 (Juni 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
