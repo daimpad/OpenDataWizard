@@ -1,0 +1,868 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 69,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "Deutsches Patent- und Markenamt"
+        },
+        "index": "vocabulary",
+        "id": "deutschesPatentUndMarkenamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/deutschesPatentUndMarkenamt",
+        "alt_label": {
+          "de": "deutschesPatentUndMarkenamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "open bydata"
+        },
+        "index": "vocabulary",
+        "id": "openDataBayern",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openDataBayern",
+        "alt_label": {
+          "de": "openDataBayern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadt Oldenburg"
+        },
+        "index": "vocabulary",
+        "id": "stadtOldenburg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/stadtOldenburg",
+        "alt_label": {
+          "de": "stadtOldenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "OpenGovernmentDataPortal RheinlandPfalz"
+        },
+        "index": "vocabulary",
+        "id": "openGovernmentDataPortalRheinlandPfalz",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openGovernmentDataPortalRheinlandPfalz",
+        "alt_label": {
+          "de": "openGovernmentDataPortalRheinlandPfalz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für Familie, Senioren, Frauen und Jugend"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerFamilieSeniorenFrauenUndJugend",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerFamilieSeniorenFrauenUndJugend",
+        "alt_label": {
+          "de": "bundesministeriumFuerFamilieSeniorenFrauenUndJugend"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "OpenAgrar Repositorium der Forschungseinrichtungen des BMEL"
+        },
+        "index": "vocabulary",
+        "id": "openAgrarRepositoriumDerForschungseinrichtungenDesBMEL",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openAgrarRepositoriumDerForschungseinrichtungenDesBMEL",
+        "alt_label": {
+          "de": "openAgrarRepositoriumDerForschungseinrichtungenDesBMEL"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Metropolregion Rhein-Neckar"
+        },
+        "index": "vocabulary",
+        "id": "metropolregionRheinNeckar",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/metropolregionRheinNeckar",
+        "alt_label": {
+          "de": "metropolregionRheinNeckar"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium des Innern und Heimat"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumDesInnernUndHeimat",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumDesInnernUndHeimat",
+        "alt_label": {
+          "de": "bundesministeriumDesInnernUndHeimat"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für Ernährung und Landwirtschaft"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerErnaehrungUndLandwirtschaft",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerErnaehrungUndLandwirtschaft",
+        "alt_label": {
+          "de": "bundesministeriumFuerErnaehrungUndLandwirtschaft"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Open Data Bund"
+        },
+        "index": "vocabulary",
+        "id": "openDataBund",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openDataBund",
+        "alt_label": {
+          "de": "openDataBund"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Auswärtiges Amt"
+        },
+        "index": "vocabulary",
+        "id": "auswaertigesAmt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/auswaertigesAmt",
+        "alt_label": {
+          "de": "auswaertigesAmt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesversicherungsamt"
+        },
+        "index": "vocabulary",
+        "id": "bundesversicherungsamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesversicherungsamt",
+        "alt_label": {
+          "de": "bundesversicherungsamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung\n        "
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerWirtschaftlicheZusammenarbeitUndEntwicklung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerWirtschaftlicheZusammenarbeitUndEntwicklung",
+        "alt_label": {
+          "de": "bundesministeriumFuerWirtschaftlicheZusammenarbeitUndEntwicklung"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Mobilithek des Bundesministeriums für Digitales und Verkehr"
+        },
+        "index": "vocabulary",
+        "id": "mobilithek",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/mobilithek",
+        "alt_label": {
+          "de": "mobilithek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesanstalt für Arbeitsschutz und Arbeitsmedizin"
+        },
+        "index": "vocabulary",
+        "id": "bundesanstaltFuerArbeitsschutzUndArbeitsmedizin",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesanstaltFuerArbeitsschutzUndArbeitsmedizin",
+        "alt_label": {
+          "de": "bundesanstaltFuerArbeitsschutzUndArbeitsmedizin"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesverwaltungsamt"
+        },
+        "index": "vocabulary",
+        "id": "bundesverwaltungsamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesverwaltungsamt",
+        "alt_label": {
+          "de": "bundesverwaltungsamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Land Niedersachsen"
+        },
+        "index": "vocabulary",
+        "id": "landNiedersachsen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/landNiedersachsen",
+        "alt_label": {
+          "de": "landNiedersachsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesamt für Verbraucherschutz und Lebensmittelsicherheit"
+        },
+        "index": "vocabulary",
+        "id": "bundesamtFuerVerbraucherschutzUndLebensmittelsicherheit",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesamtFuerVerbraucherschutzUndLebensmittelsicherheit",
+        "alt_label": {
+          "de": "bundesamtFuerVerbraucherschutzUndLebensmittelsicherheit"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Transparenzportal Bremen"
+        },
+        "index": "vocabulary",
+        "id": "transparenzportalBremen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/transparenzportalBremen",
+        "alt_label": {
+          "de": "transparenzportalBremen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Paul-Ehrlich-Institut"
+        },
+        "index": "vocabulary",
+        "id": "paulEhrlichInstitut",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/paulEhrlichInstitut",
+        "alt_label": {
+          "de": "paulEhrlichInstitut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Berlin Open Data"
+        },
+        "index": "vocabulary",
+        "id": "berlinOpenData",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/berlinOpenData",
+        "alt_label": {
+          "de": "berlinOpenData"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesanstalt für Materialforschung und -prüfung (BAM)"
+        },
+        "index": "vocabulary",
+        "id": "bundesanstaltFuerMaterialforschungUndPruefung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesanstaltFuerMaterialforschungUndPruefung",
+        "alt_label": {
+          "de": "bundesanstaltFuerMaterialforschungUndPruefung"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Statistisches Bundesamt"
+        },
+        "index": "vocabulary",
+        "id": "destatis",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/destatis",
+        "alt_label": {
+          "de": "destatis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesamt für Justiz"
+        },
+        "index": "vocabulary",
+        "id": "bundesamtFuerJustiz",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesamtFuerJustiz",
+        "alt_label": {
+          "de": "bundesamtFuerJustiz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundessortenamt"
+        },
+        "index": "vocabulary",
+        "id": "bundessortenamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundessortenamt",
+        "alt_label": {
+          "de": "bundessortenamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "mCloud"
+        },
+        "index": "vocabulary",
+        "id": "mCloud",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/mCloud",
+        "alt_label": {
+          "de": "mCloud"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "ITZ-Bund"
+        },
+        "index": "vocabulary",
+        "id": "itzBund",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/itzBund",
+        "alt_label": {
+          "de": "itzBund"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Die Regionaldatenbank Deutschland"
+        },
+        "index": "vocabulary",
+        "id": "regionalstatistik",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/regionalstatistik",
+        "alt_label": {
+          "de": "regionalstatistik"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium der Finanzen"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumDerFinanzen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumDerFinanzen",
+        "alt_label": {
+          "de": "bundesministeriumDerFinanzen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Land Schleswig-Holstein"
+        },
+        "index": "vocabulary",
+        "id": "schleswigHolstein",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/schleswigHolstein",
+        "alt_label": {
+          "de": "schleswigHolstein"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Open-Data-Portal der Hanse- und Universitätsstadt Rostock"
+        },
+        "index": "vocabulary",
+        "id": "openDataHRO",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openDataHRO",
+        "alt_label": {
+          "de": "openDataHRO"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesausgleichsamt"
+        },
+        "index": "vocabulary",
+        "id": "bundesausgleichsamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesausgleichsamt",
+        "alt_label": {
+          "de": "bundesausgleichsamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für Arbeit und Soziales"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerArbeitUndSoziales",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerArbeitUndSoziales",
+        "alt_label": {
+          "de": "bundesministeriumFuerArbeitUndSoziales"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Hessen"
+        },
+        "index": "vocabulary",
+        "id": "hessen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/hessen",
+        "alt_label": {
+          "de": "hessen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Max Rubner Institut"
+        },
+        "index": "vocabulary",
+        "id": "maxRubnerInstitut",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/maxRubnerInstitut",
+        "alt_label": {
+          "de": "maxRubnerInstitut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Open.NRW"
+        },
+        "index": "vocabulary",
+        "id": "openNRW",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openNRW",
+        "alt_label": {
+          "de": "openNRW"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Statistisches Bundesamt"
+        },
+        "index": "vocabulary",
+        "id": "genesisDestatis",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/genesisDestatis",
+        "alt_label": {
+          "de": "genesisDestatis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Open Data Brandenburg"
+        },
+        "index": "vocabulary",
+        "id": "openDataBrandenburg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/openDataBrandenburg",
+        "alt_label": {
+          "de": "openDataBrandenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadtwerke Osnabrück"
+        },
+        "index": "vocabulary",
+        "id": "SWONetzGmbH",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/SWONetzGmbH",
+        "alt_label": {
+          "de": "SWONetzGmbH"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesamt für Wirtschaft und Ausfuhrkontrolle"
+        },
+        "index": "vocabulary",
+        "id": "bundesamtFuerWirtschaftUndAusfuhrkontrolle",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesamtFuerWirtschaftUndAusfuhrkontrolle",
+        "alt_label": {
+          "de": "bundesamtFuerWirtschaftUndAusfuhrkontrolle"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Transparenzportal Hamburg"
+        },
+        "index": "vocabulary",
+        "id": "transparenzportalHamburg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/transparenzportalHamburg",
+        "alt_label": {
+          "de": "transparenzportalHamburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Friedrich Loeffler Institut"
+        },
+        "index": "vocabulary",
+        "id": "friedrichLoefflerInstitut",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/friedrichLoefflerInstitut",
+        "alt_label": {
+          "de": "friedrichLoefflerInstitut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesamt für Bauwesen und Raumordnung (BBR)"
+        },
+        "index": "vocabulary",
+        "id": "bundesamtFuerBauwesenUndRaumordnung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesamtFuerBauwesenUndRaumordnung",
+        "alt_label": {
+          "de": "bundesamtFuerBauwesenUndRaumordnung"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für Bildung und Forschung"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerBildungUndForschung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerBildungUndForschung",
+        "alt_label": {
+          "de": "bundesministeriumFuerBildungUndForschung"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Daten.BW"
+        },
+        "index": "vocabulary",
+        "id": "datenBW",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/datenBW",
+        "alt_label": {
+          "de": "datenBW"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundeszentralamt für Steuern"
+        },
+        "index": "vocabulary",
+        "id": "bundeszentralamtFuerSteuern",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundeszentralamtFuerSteuern",
+        "alt_label": {
+          "de": "bundeszentralamtFuerSteuern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadt Freiburg im Breisgau"
+        },
+        "index": "vocabulary",
+        "id": "stadtFreiburgImBreisgau",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/stadtFreiburgImBreisgau",
+        "alt_label": {
+          "de": "stadtFreiburgImBreisgau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Land Mecklenburg-Vorpommern"
+        },
+        "index": "vocabulary",
+        "id": "mecklenburgVorpommern",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/mecklenburgVorpommern",
+        "alt_label": {
+          "de": "mecklenburgVorpommern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadt Augsburg"
+        },
+        "index": "vocabulary",
+        "id": "stadtAugsburg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/stadtAugsburg",
+        "alt_label": {
+          "de": "stadtAugsburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesinstitut für Bau-, Stadt- und Raumforschung (BBSR) im Bundesamt für Bauwesen\n            und Raumordnung (BBR)\n        "
+        },
+        "index": "vocabulary",
+        "id": "bundesinstitutFuerBauStadtUndRaumforschungImBundesamtFuerBauwesenundRaumordnung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesinstitutFuerBauStadtUndRaumforschungImBundesamtFuerBauwesenundRaumordnung",
+        "alt_label": {
+          "de": "bundesinstitutFuerBauStadtUndRaumforschungImBundesamtFuerBauwesenundRaumordnung\n        "
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium der Verteidigung"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumDerVerteidigung",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumDerVerteidigung",
+        "alt_label": {
+          "de": "bundesministeriumDerVerteidigung"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Deutsche Rentenversicherung Bund"
+        },
+        "index": "vocabulary",
+        "id": "deutscheRentenversicherungBund",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/deutscheRentenversicherungBund",
+        "alt_label": {
+          "de": "deutscheRentenversicherungBund"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Robert Koch-Institut"
+        },
+        "index": "vocabulary",
+        "id": "robertKochInstitut",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/robertKochInstitut",
+        "alt_label": {
+          "de": "robertKochInstitut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Die Beauftragte der Bundesregierung für Kultur und Medien"
+        },
+        "index": "vocabulary",
+        "id": "dieBeauftragteDerBundesregierungFuerKulturUndMedien",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/dieBeauftragteDerBundesregierungFuerKulturUndMedien",
+        "alt_label": {
+          "de": "dieBeauftragteDerBundesregierungFuerKulturUndMedien"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadt Frankfurt am Main"
+        },
+        "index": "vocabulary",
+        "id": "stadtFrankfurtAmMain",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/stadtFrankfurtAmMain",
+        "alt_label": {
+          "de": "stadtFrankfurtAmMain"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Land Brandenburg"
+        },
+        "index": "vocabulary",
+        "id": "landBrandenburg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/landBrandenburg",
+        "alt_label": {
+          "de": "landBrandenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Stadt Nürnberg"
+        },
+        "index": "vocabulary",
+        "id": "stadtNuernberg",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/stadtNuernberg",
+        "alt_label": {
+          "de": "stadtNuernberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Umweltbundesamt"
+        },
+        "index": "vocabulary",
+        "id": "umweltbundesamt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/umweltbundesamt",
+        "alt_label": {
+          "de": "umweltbundesamt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Der Bundesbeauftragte für den Datenschutz und die Informationsfreiheit\n        "
+        },
+        "index": "vocabulary",
+        "id": "derBundesbeauftragteFuerDenDatenschutzUndDieInformationsfreiheit",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/derBundesbeauftragteFuerDenDatenschutzUndDieInformationsfreiheit",
+        "alt_label": {
+          "de": "derBundesbeauftragteFuerDenDatenschutzUndDieInformationsfreiheit"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesministerium für Wirtschaft und Energie"
+        },
+        "index": "vocabulary",
+        "id": "bundesministeriumFuerWirtschaftUndEnergie",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesministeriumFuerWirtschaftUndEnergie",
+        "alt_label": {
+          "de": "bundesministeriumFuerWirtschaftUndEnergie"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Deutsche Nationalbibliothek"
+        },
+        "index": "vocabulary",
+        "id": "deutscheNationalbibliothek",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/deutscheNationalbibliothek",
+        "alt_label": {
+          "de": "deutscheNationalbibliothek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "GovData – das Datenportal für Deutschland"
+        },
+        "index": "vocabulary",
+        "id": "govData",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/govData",
+        "alt_label": {
+          "de": "govData"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Bundesarchiv"
+        },
+        "index": "vocabulary",
+        "id": "bundesarchiv",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/bundesarchiv",
+        "alt_label": {
+          "de": "bundesarchiv"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Geodateninfrastruktur Deutschland"
+        },
+        "index": "vocabulary",
+        "id": "gdiDE",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/gdiDE",
+        "alt_label": {
+          "de": "gdiDE"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Generalzolldirektion"
+        },
+        "index": "vocabulary",
+        "id": "generalzolldirektion",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/generalzolldirektion",
+        "alt_label": {
+          "de": "generalzolldirektion"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Land Sachsen-Anhalt"
+        },
+        "index": "vocabulary",
+        "id": "landSachsenAnhalt",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/landSachsenAnhalt",
+        "alt_label": {
+          "de": "landSachsenAnhalt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "FITKO (Föderale IT-Kooperation)"
+        },
+        "index": "vocabulary",
+        "id": "fitko",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/fitko",
+        "alt_label": {
+          "de": "fitko"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Landeshauptstadt München"
+        },
+        "index": "vocabulary",
+        "id": "landeshauptstadtMuenchen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/landeshauptstadtMuenchen",
+        "alt_label": {
+          "de": "landeshauptstadtMuenchen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "Freistaat Sachsen"
+        },
+        "index": "vocabulary",
+        "id": "freistaatSachsen",
+        "in_scheme": "http://dcat-ap.de/def/contributors",
+        "resource": "http://dcat-ap.de/def/contributors/freistaatSachsen",
+        "alt_label": {
+          "de": "freistaatSachsen"
+        }
+      }
+    ]
+  }
+}

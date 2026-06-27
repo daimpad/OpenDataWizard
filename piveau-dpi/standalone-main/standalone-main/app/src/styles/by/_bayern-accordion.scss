@@ -1,0 +1,37 @@
+
+.by-accordion {
+  @extend .by-copy-small-semibold;
+  padding: 0.25rem 0rem;
+  cursor: pointer;
+}
+
+.by-accordion-light {
+  @extend .by-accordion;
+  color: $by-blue-80;
+
+  path {
+    color: $by-blue-80;
+  }
+
+  &:hover {
+    color: $by-blue-100;
+
+    path {
+      color: $by-blue-100;
+    }
+  }
+
+  &:active {
+    color: $by-blue-60;
+
+    path {
+      color: $by-blue-60;
+    }
+  }
+
+  .by-accordion-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.5rem;
+  }
+}

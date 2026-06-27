@@ -1,0 +1,59 @@
+
+.bayern-catalog-page {
+
+  .catalog-header-title-title {
+    @extend .by-heading-3;
+  }
+
+  .catalog-header-title-subtitle a {
+    @extend .by-copy-small-regular;
+    color: #000 !important;
+  }
+
+  .catalog-card {
+    border-radius: 0;
+  }
+
+  .card-header-tabs .nav-link {
+    @extend .by-copy-large-regular;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
+
+    &:hover {
+      margin-left: 0 !important;
+    }
+  }
+
+  .card-header-tabs .nav-link.active {
+    @extend .by-copy-large-bold;
+  }
+
+  .catalog-about-tab .markdown-content {
+    @extend .by-copy-small-regular;
+  }
+
+  .catalog-about-tab .markdown-content h1,
+  .catalog-about-tab .markdown-content h2,
+  .catalog-about-tab .markdown-content h3,
+  .catalog-about-tab .markdown-content h4,
+  .catalog-about-tab .markdown-content h5 {
+    @extend .by-heading-5;
+  }
+
+  @media (min-width: map-get($grid-breakpoints, xl)) {
+    #dataset-selections .tab-content:first-child .d-flex:first-child {
+      flex-wrap: nowrap !important;
+    }
+  }
+
+  .cp-dataset-card {
+    min-width: 240px;
+    max-width: 320px;
+    width: fit-content;
+  }
+
+  .tab-content > .primary-button {
+    display: none;
+  }
+
+}

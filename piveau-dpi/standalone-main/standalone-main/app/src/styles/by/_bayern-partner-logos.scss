@@ -1,0 +1,67 @@
+
+.partner-image-container {
+  padding-top: 2.5rem;
+
+  @media (max-width: map-get($grid-breakpoints, xl)) {
+    & > div.vertical-margin {
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+  }
+
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+    & > div.bottom-margin img {
+      margin-bottom: 3rem;
+    }
+  }
+
+  img {
+    max-width: 200px;
+    max-height: 4rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: saturate(0);
+  }
+
+  img:hover {
+    filter: saturate(100%);
+  }
+
+  .byte-logo {
+    max-width: 100%;
+    height: 80px;
+    max-height: 80px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-image: url("../assets/img/partnerpage/Logo_bw_byte.svg");
+
+  }
+
+  .byte-logo:hover {
+    background-image: url("../assets/img/partnerpage/Logo_col_byte.svg");
+  }
+
+  .stmd-logo {
+    max-width: 336px;
+    height: 5rem;
+    max-height: 5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-image: url("../assets/img/partnerpage/Logo_bw_StMD@2x.png");
+
+  }
+
+  .stmd-logo:hover {
+    background-image: url("../assets/img/partnerpage/Logo_col_StMD@2x.png");
+  }
+}
+

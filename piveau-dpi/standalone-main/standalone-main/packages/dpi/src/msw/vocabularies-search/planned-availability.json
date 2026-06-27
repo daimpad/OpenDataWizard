@@ -1,0 +1,248 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 9,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "Daten können jederzeit verschwinden."
+        },
+        "index": "vocabulary",
+        "id": "temporary",
+        "in_scheme": "http://dcat-ap.de/def/plannedAvailability",
+        "resource": "http://dcat-ap.de/def/plannedAvailability/temporary"
+      },
+      {
+        "pref_label": {
+          "de": "Daten werden langfristig erhältlich bleiben."
+        },
+        "index": "vocabulary",
+        "id": "stable",
+        "in_scheme": "http://dcat-ap.de/def/plannedAvailability",
+        "resource": "http://dcat-ap.de/def/plannedAvailability/stable"
+      },
+      {
+        "pref_label": {
+          "de": "Daten sind für einige Jahre verfügbar, mittelfristige Planung"
+        },
+        "index": "vocabulary",
+        "id": "available",
+        "in_scheme": "http://dcat-ap.de/def/plannedAvailability",
+        "resource": "http://dcat-ap.de/def/plannedAvailability/available"
+      },
+      {
+        "pref_label": {
+          "de": "Daten versuchsweise verfügbar, sind aber noch etwa ein Jahr erreichbar."
+        },
+        "index": "vocabulary",
+        "id": "experimental",
+        "in_scheme": "http://dcat-ap.de/def/plannedAvailability",
+        "resource": "http://dcat-ap.de/def/plannedAvailability/experimental"
+      },
+      {
+        "pref_label": {
+          "bg": "налични",
+          "hr": "dostupan",
+          "sl": "na voljo",
+          "no": "tilgjengelig",
+          "sk": "dostupné",
+          "fr": "disponible",
+          "mt": "disponibbli",
+          "lv": "pieejams",
+          "ga": "ar fáil",
+          "it": "disponibile",
+          "hu": "elérhető",
+          "et": "kättesaadav",
+          "es": "disponible",
+          "de": "verfügbar",
+          "fi": "saatavilla",
+          "nn": "tilgjengeleg",
+          "pl": "dostępne",
+          "en": "available",
+          "el": "διαθέσιμα",
+          "pt": "disponível",
+          "nl": "beschikbaar",
+          "nb": "tilgjengelig",
+          "ro": "disponibil",
+          "sv": "tillgänglig",
+          "cs": "k dispozici",
+          "da": "til rådighed",
+          "lt": "yra"
+        },
+        "index": "vocabulary",
+        "id": "AVAILABLE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+        "resource": "http://publications.europa.eu/resource/authority/planned-availability/AVAILABLE"
+      },
+      {
+        "pref_label": {
+          "nl": "Voorlopige gegevens",
+          "sk": "Predbežné údaje",
+          "ro": "Date provizorii",
+          "lv": "Provizoriski dati",
+          "es": "Datos provisionales",
+          "cs": "Předběžné údaje",
+          "mt": "Dejta provviżorja",
+          "de": "Vorläufige Daten",
+          "et": "Esialgsed andmed",
+          "en": "Provisional data",
+          "pt": "Dados provisórios",
+          "hr": "Privremeni podaci",
+          "it": "Dati provvisori",
+          "ga": "Sonraí sealadacha",
+          "fi": "Alustavat tiedot",
+          "lt": "Laikinieji duomenys",
+          "pl": "Dane tymczasowe",
+          "sv": "Tillfälliga uppgifter",
+          "el": "Προσωρινά δεδομένα",
+          "da": "Midlertidige data",
+          "fr": "Données provisoires",
+          "sl": "Začasni podatki",
+          "hu": "Ideiglenes adatok",
+          "bg": "Неокончателни данни"
+        },
+        "index": "vocabulary",
+        "id": "OP_DATPRO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+        "resource": "http://publications.europa.eu/resource/authority/planned-availability/OP_DATPRO"
+      },
+      {
+        "pref_label": {
+          "ro": "temporar",
+          "sv": "temporär",
+          "nb": "midlertidig",
+          "el": "προσωρινά",
+          "hu": "ideiglenes",
+          "it": "temporaneo",
+          "nl": "tijdelijk",
+          "nn": "midlertidig",
+          "ga": "sealadach",
+          "pt": "temporário",
+          "de": "temporär",
+          "lv": "pagaidu",
+          "da": "midlertidig",
+          "es": "temporal",
+          "mt": "temporanju",
+          "cs": "přechodný",
+          "sk": "dočasné",
+          "fi": "väliaikainen",
+          "pl": "tymczasowe",
+          "lt": "laikini",
+          "et": "ajutine",
+          "hr": "privremen",
+          "no": "midlertidig",
+          "en": "temporary",
+          "sl": "začasno",
+          "fr": "temporaire",
+          "bg": "временни"
+        },
+        "index": "vocabulary",
+        "id": "TEMPORARY",
+        "in_scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+        "resource": "http://publications.europa.eu/resource/authority/planned-availability/TEMPORARY"
+      },
+      {
+        "pref_label": {
+          "sl": "poskusno",
+          "pt": "experimental",
+          "fr": "expérimental",
+          "bg": "експериментални",
+          "de": "experimentell",
+          "lv": "eksperimentāls",
+          "no": "eksperimentell",
+          "el": "πειραματικά",
+          "et": "eksperimentaalne",
+          "sk": "experimentálne",
+          "sv": "experimentell",
+          "es": "experimental",
+          "cs": "experimentální",
+          "ro": "experimental",
+          "nb": "eksperimentell",
+          "pl": "eksperymentalne",
+          "da": "eksperimentel",
+          "nn": "eksperimentell",
+          "en": "experimental",
+          "hr": "eksperimentalan",
+          "ga": "turgnamhach",
+          "hu": "kísérleti",
+          "it": "sperimentale",
+          "fi": "kokeellinen",
+          "lt": "eksperimentiniai",
+          "mt": "sperimentali",
+          "nl": "experimenteel"
+        },
+        "index": "vocabulary",
+        "id": "EXPERIMENTAL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+        "resource": "http://publications.europa.eu/resource/authority/planned-availability/EXPERIMENTAL"
+      },
+      {
+        "pref_label": {
+          "mt": "stabbli",
+          "sk": "stabilné",
+          "da": "stabil",
+          "de": "stabil",
+          "lv": "stabils",
+          "es": "estable",
+          "ga": "cobhsaí",
+          "en": "stable",
+          "ro": "stabil",
+          "bg": "стабилни",
+          "hu": "stabil",
+          "hr": "stabilan",
+          "lt": "stabilūs",
+          "et": "püsiv",
+          "nb": "stabil",
+          "it": "stabile",
+          "el": "σταθερά",
+          "sv": "stabil",
+          "pt": "estável",
+          "nl": "stabiel",
+          "no": "stabil",
+          "sl": "stabilen",
+          "nn": "stabil",
+          "fi": "vakaa",
+          "pl": "stabilne",
+          "fr": "stable",
+          "cs": "stabilní"
+        },
+        "index": "vocabulary",
+        "id": "STABLE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/planned-availability",
+        "resource": "http://publications.europa.eu/resource/authority/planned-availability/STABLE"
+      }
+    ]
+  }
+}

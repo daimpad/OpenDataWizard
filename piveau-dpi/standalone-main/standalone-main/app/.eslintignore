@@ -1,0 +1,5 @@
+build/*.js
+config/*.js
+docs/*.js
+guides/*.js
+src/components/echarts/*

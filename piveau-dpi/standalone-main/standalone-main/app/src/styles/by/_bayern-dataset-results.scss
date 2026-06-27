@@ -1,0 +1,175 @@
+$description-line-clamp: 6;
+
+@mixin data-info-box-caption {
+  @extend .by-caption;
+  line-height: 1.5rem!important;
+}
+
+#bayern-dataset-results {
+  display: flex;
+  flex-direction: column;
+
+  .bayern-data-info-box:not(:first-child) {
+    min-height: 402px;
+    margin-top: 2rem;
+  }
+  
+  .bayern-data-info-box {
+    margin: 0;
+    min-height: calc(408px - 2.5rem);
+    border-radius: 0;
+    overflow-y: auto;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    border: 0!important;
+    @include generate-bottom-border(1px, #e6e7e9);
+
+    &__header {
+      @extend .by-heading-4;
+      color: $secondary!important;
+
+      .card-title {
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 2.25rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+      }
+
+      h2 {
+        @extend .by-heading-4;
+        color: $secondary;
+      }
+
+      padding-top: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-bottom: 0;
+      margin-bottom: 2.5rem;
+
+      @media (min-width: map-get($grid-breakpoints, md)) {
+        padding-right: 2.5rem;
+        padding-left: 2.5rem;
+      }
+    }
+
+    &__footer {
+      @extend .by-copy-small-regular;
+      color: $by-neutral-100 !important;
+
+      &-caption {
+        @include data-info-box-caption;
+      }
+
+      &-data-value {
+        @extend .by-copy-small-regular;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      display: grid;
+      // grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto;
+      row-gap: 2.5rem;
+
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-bottom: 0;
+      font-size: .75rem;
+      line-height: 1rem;
+
+      @media (min-width: map-get($grid-breakpoints, md)) {
+        padding-right: 2.5rem;
+        padding-left: 2.5rem;
+      }
+
+      @media (min-width: map-get($grid-breakpoints, sm)) {
+        // three columns, two rows; 4th element spans all rows
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: auto auto;
+
+        .bayern-data-info-box__metadata--license {
+          // Place license info in the 2nd row, spanning all columns
+          grid-column: 1 / span 3;
+          grid-row: 2;
+        }
+      }
+
+      @media (min-width: map-get($grid-breakpoints, lg)) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: auto;
+
+        .bayern-data-info-box__metadata--license {
+          grid-column: auto;
+          grid-row: auto;
+        }
+      }
+    }
+
+    &:hover {
+      @include generate-bottom-border(3px, $primary);
+
+      .bayern-data-info-box__header > h2 {
+        color: $primary!important;
+        font-weight: 700;
+      }
+    }
+
+    .dataset-info-box-body {
+      padding-top: 0;
+      padding-right: 1.5rem;
+      padding-left: 1.5rem;
+      padding-bottom: 1rem;
+      color: $by-neutral-60;
+      line-height: 1.5rem;
+      font-weight: 400;
+      min-height: auto;
+      font-size: 0.9375rem;
+      margin-left: 15px;
+      margin-right: 15px;
+
+
+      @media (min-width: map-get($grid-breakpoints, md)) {
+        padding-right: 2.5rem;
+        padding-left: 2.5rem;
+      }
+    }
+
+    .dataset-info-box-description {
+      @extend .by-copy-small-regular;
+      word-break: normal;
+      overflow-wrap: anywhere;
+      -webkit-line-clamp: $description-line-clamp;
+      line-clamp: $description-line-clamp;
+    }
+
+    .dataset-info-box-badge-container {
+      small {
+        @include data-info-box-caption;
+        color: $by-neutral-100!important;
+      }
+      .pv-badge {
+        @extend .by-copy-small-regular;
+        color: $by-neutral-100!important;
+        padding: .25rem 1rem;
+        margin: .25rem;
+        border-radius: 1.5rem;
+        line-height: 1.25rem;
+      }
+    }
+
+    .flex-even {
+      flex: 1 1 0;
+    }
+    
+  }
+}

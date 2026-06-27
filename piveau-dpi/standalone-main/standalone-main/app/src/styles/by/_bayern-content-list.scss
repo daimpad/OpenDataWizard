@@ -1,0 +1,35 @@
+ul.content-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+
+  li {
+    @extend .by-copy-small-regular;
+    @extend .text-by-neutral-60;
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
+    vertical-align: middle;
+  }
+
+  li::before {
+    content: '';
+    vertical-align: middle;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5em;
+    left: 0;
+    background-repeat: no-repeat;
+    background-image: url("../assets/icon/icon-covered.svg");
+
+    @media (min-width: map-get($grid-breakpoints, md)) {
+      left: 24px;
+    }
+    @media (min-width: map-get($grid-breakpoints, xl)) {
+      left: 0;
+    }
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+}

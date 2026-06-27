@@ -1,0 +1,496 @@
+  #landing-page {
+    color: var(--bayern);
+    font-display: 'Noto Sans';
+    /*
+    top: -154px;
+    position: relative;
+    */
+  }
+  .lp-first-layer {
+    z-index: 1;
+  }
+
+  .fl-container-left {
+   /*
+    position: relative;
+    top: 120px;
+    */
+    transition: ease all .5s;
+    margin-top: 90px;
+    margin-left: 120px;
+    z-index: 100;
+  }
+
+  .fl-banner {
+    font-size: 60px;
+    font-family: 'Noto Sans Bold';
+    line-height: 125%;
+    color: var(--bayern);
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+
+  .fl-banner > .top-line {
+    color: var(--byte);
+  }
+
+  .fl-subtitle {
+    font-size: 1.25rem;
+    line-height: 150%;
+    margin-bottom: 60px;
+    margin-top: 5px;
+    padding-right: 5em;
+  }
+
+  .fl-btns-container {
+    margin-bottom: 90px;
+  }
+
+  .fl-main-btn:hover {
+    color: white !important;
+  }
+
+  .fl-side-image {
+    top: -106px;
+    position: relative;
+    z-index: 0;
+    padding-left: 60px !important;
+    padding-right: 0 !important;
+    text-align: end;
+    height: calc(100% + 106px);
+    max-height: 550px;
+  }
+
+  .fl-side-image img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lp-second-layer {
+    background-color: #F0F8FF;
+    height: 547px;
+    max-height: fit-content;
+    /* width: 100%; */
+    position: relative;
+    z-index: 2;
+  }
+
+  .sl-side-image {
+    align-self: end;
+  }
+
+  .sl-side-image img {
+    /* width: 450px; */
+    left: -390px;
+    bottom: -390px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .sl-text {
+    z-index: 10;
+    margin-top: 100px;
+    margin-left: -250px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    line-height: 150%;
+    z-index: 4;
+  }
+
+  .sl-banner {
+    font-size: clamp(32px, 4vw, 56px);
+    font-family: 'Noto Sans Bold';
+    line-height: 125%;
+    color: var(--bayern);
+    margin-top: 30px;
+    margin-bottom: 30px;
+    hyphens: manual;
+  }
+
+  .sl-banner span:nth-child(2) {
+    display: inline-block !important;
+  }
+
+  .sl-banner span:nth-child(3) {
+    display: inline-block !important;
+  }
+
+  .sl-banner span {
+    display: block !important;
+  }
+
+  .sl-subtitle {
+    size: 22px;
+    line-height: 150%;
+  }
+
+  .lp-third-layer {
+    height: 772px;
+    color: white;
+    background-color: var(--bayern);
+    background-image: url('../assets/img/landing_page/illus-arrowedpath.png');
+    background-repeat: no-repeat;
+    background-position: bottom 0 right 30%;
+    z-index: 4;
+    position: relative;
+  }
+
+  .tl-text-left {
+    margin-left: 90px;
+    padding-top: 100px;
+  }
+
+  .tl-image {
+    position: relative;
+    top: 100px;
+    justify-self: end;
+
+  }
+
+  .tl-banner {
+    font-size: 56px;
+    font-family: 'Noto Sans Bold';
+    line-height: 125%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    z-index: 4;
+  }
+
+  .tl-subtitle {
+    font-size: 22px;
+    line-height: 150%;
+    margin-bottom: 40px;
+    z-index: 4;
+  }
+
+  .tl-text-right {
+    text-align: end;
+    margin-right: 90px;
+    size: 16px;
+    line-height: 150%;
+  }
+
+  .lp-third-layer a {
+    color: white;
+  }
+
+  .lp-fourth-layer {
+    /* height: 885px; */
+    padding-bottom: 100px;
+  }
+
+  .fol-container {
+    margin-top: 110px;
+  }
+
+  .fol-header {
+    font-size: 42px;
+    font-family: 'Noto Sans Bold';
+    line-height: 125%;
+    padding-bottom: 45px;
+  }
+
+  .fol-cards {
+    margin: 15px;
+    margin-bottom: 50px;
+  }
+
+  .fol-card {
+    padding: 25px;
+    margin: 10px;
+    height: 480px;
+    width: 300px;
+    border-radius: 12px;
+  }
+  .fol-card-image {
+    margin-bottom: 70px;
+  }
+  .fol-card.blue {
+    background-color: #E4F5FF;
+  }
+  .fol-card.yellow {
+    background-color: #FFF9D0;
+  }
+  .fol-card.pink {
+    background-color: #F0EDED;
+  }
+
+  .fol-card-text {
+    /* margin-top: 60px; */
+  }
+
+  .fol-card-header {
+    font-family: 'Noto Sans Bold';
+    font-size: 24px;
+    line-height: 125%;
+  }
+
+  .fol-card-subheader {
+    font-family: 'Noto Sans Italic';
+    font-size: 13px;
+    line-height: 150%;
+  }
+
+  .fol-card-subtitle {
+    font-size: 16px;
+  }
+
+  .fol-card-icon {
+    align-self: flex-end;
+  
+  }
+  .fol-card-icon img {
+    width: 150%;
+    filter: invert(15%) sepia(70%) saturate(2488%) hue-rotate(188deg) brightness(95%) contrast(102%);
+  }
+
+  .lp-fifth-layer {
+    height: 431px;
+    background-color: #F0F8FF;
+  }
+
+  .fil-header, .sil-header {
+    font-family: 'Noto Sans Bold';
+    font-size: 42px;
+    line-height: 125%;
+    padding-top: 100px;
+  }
+
+  .fil-logos-container {
+    margin-top: 55px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fil-logos-container img {
+    /* height: 100px; */
+    max-height: 100px;
+    min-height: auto;
+    min-width: 150px;
+    width: auto;
+    margin: 10px;
+  }
+  .fil-logos-container .fraunhofer-logo {
+    max-height: 55px;
+    margin-left: 5px
+  }
+  .fil-logos-container .geoportal-log {
+    padding-bottom: 22px;
+    margin-left: 5px
+  }
+  .fil-logos-container .stmfh-logo {
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+  .fil-logos-container .gdiby-logo {
+    padding: 15px 20px 15px 30px;
+  }
+
+  .lp-sixth-layer {
+    /* height: 832px; */
+    width: 100%;
+    padding-bottom: 80px;
+  }
+
+  .sil-quote {
+    background-color: #FFF9D0;
+    font-size: 22px;
+    align-self: end;
+    padding: 40px 15% 40px 50px !important;
+    font-family: 'Noto Sans Bold';
+    line-height: 150%;
+    margin: 40px 0;
+  }
+  .sil-quote span {
+    font-family: 'Noto Sans Italic';
+    font-size: 16px;
+  }
+
+  .sil-logo {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .sil-logo img{
+    max-height: 80px;
+    min-height: auto;
+    min-width: 100px;
+    width: auto;
+    /* position: relative; */
+  }
+
+  .sil-text {
+    margin-left: 40px;
+    padding-right: 15% !important;
+  }
+
+  .lp-sixth-layer .primary-button {
+    margin-top: 60px;
+  }
+  .col-8, .col-9 {
+    flex: auto;
+  }
+  .primary-button {
+    color: white;
+    background-color: var(--bayern);
+    border: 1.5px solid var(--bayern);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    letter-spacing: 4%;
+    width: fit-content;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .primary-button.inverted {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--bayern);
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .primary-button.underlined {
+    text-decoration: underline;
+  }
+
+  .primary-button.byte {
+    background-color: var(--byte);
+    border-color: var(--byte);
+    color: white;
+  }
+
+  .byte-color {
+    color: var(--byte);
+  }
+
+  .layer {
+    transition: ease all .5s;
+  }
+
+  .fraunhofer-logo {
+    height: 40fpx;
+  }
+
+  @media screen and (max-width:991px) {
+    #landing-page {
+    top: 0;
+    position: relative;
+  }
+    .responsive-remove {
+      display: none;
+    }
+    .layer {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      text-align: center;
+      margin: 0;
+      height: fit-content;
+      background-image: none;
+      padding: 60px 60px;
+      /* padding-bottom: 60px; */
+    }
+
+    .fl-subtitle {
+      padding-right: 0;
+    }
+
+    .fl-container-left {
+      margin: 0;
+    }
+
+    .fl-btns-container {
+      justify-content: center !important;
+      height: fit-content;
+      margin: 0;
+    }
+
+    .fl-banner, .sl-text, .tl-text-left, .fol-container, .fil-header, .sil-header {
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .anchor {
+      width: 100%;
+    }
+
+    .fl-side-image {
+      display: none;
+    }
+
+    .sl-banner span {
+      display: inline !important;
+    }
+
+    .sl-text {
+      margin-left: 0;
+    }
+
+    .tl-text-left, .tl-text-right {
+      margin: 0;
+      text-align: center;
+      align-items: center;
+    }
+
+    .tl-text-left {
+      margin-bottom: 40px;
+    }
+
+    .fol-cards {
+      justify-content: center !important;
+    }
+
+    .fol-card-icon {
+      align-self: center;
+      position: relative;
+      left: -9px;
+    }
+
+    .lp-sixth-layer .col-8, .lp-sixth-layer .col-9 {
+      max-width: 100%;
+    }
+
+    .sil-quote {
+      padding: 40px 25px;
+    }
+
+    .sil-logo-text {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .sil-text {
+      margin-left: 0;
+      margin-top: 20px;
+      padding: 40px 25px !important;
+    }
+
+    .sil-text a {
+      align-self: center !important;
+      margin-bottom: 60px;
+    }
+  }
+
+
+  @media screen and (max-height:550px) {
+    .lp-first-layer {
+      align-items: flex-start !important;
+    }
+
+    .fl-container-left {
+      margin-top: 20px;
+    }
+
+    .fl-btns-container {
+      margin-bottom: 20px;
+    }
+  }

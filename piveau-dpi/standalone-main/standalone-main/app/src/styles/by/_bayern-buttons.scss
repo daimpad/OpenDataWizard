@@ -1,0 +1,90 @@
+
+$by-btn-background-colors: (
+  "primary-light": $by-blue-100,
+  "primary-light-hover": $by-blue-80,
+  "primary-light-pressed": $by-blue-70,
+  "primary-dark": $by-neutral-5,
+  "primary-dark-hover": $by-blue-30,
+  "primary-dark-pressed": $by-blue-20,
+
+  "secondary-light": $by-blue-20,
+  "secondary-light-hover": $by-blue-30,
+  "secondary-light-pressed": $by-blue-20,
+  "secondary-dark": $by-blue-100,
+  "secondary-dark-hover": $by-blue-80,
+  "secondary-dark-pressed": $by-blue-70,
+
+  "tertiary-light": transparent,
+  "tertiary-light-hover": $by-blue-20,
+  "tertiary-light-pressed": $by-blue-10,
+  "tertiary-dark": transparent,
+  "tertiary-dark-hover": $by-blue-100,
+  "tertiary-dark-pressed": $by-blue-110,
+);
+
+$by-btn-text-colors: (
+  "primary-light": $by-neutral-0,
+  "primary-dark": $by-neutral-100,
+  "secondary-light": $by-neutral-100,
+  "secondary-dark": $by-neutral-5,
+  "tertiary-light": $by-blue-80,
+  "tertiary-dark": $by-blue-40,
+);
+
+$by-btn-paddings: (
+  "large": 11px 24px 11px 24px,
+  "medium": 7px 20px 7px 20px,
+  "small": 4px 16px 4px 16px
+);
+
+@mixin by-btn($type, $size, $theme) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  padding: map-get($map: $by-btn-paddings, $key: $size) !important;
+  color: map-get($map: $by-btn-text-colors, $key: "#{$type}-#{$theme}") !important;
+  background-color: map-get($map: $by-btn-background-colors, $key: "#{$type}-#{$theme}") !important;
+  z-index: 1;
+
+  &:disabled {
+    opacity: 60% !important;
+  }
+
+  &:hover {
+    background-color: map-get($map: $by-btn-background-colors, $key: "#{$type}-#{$theme}-hover") !important;
+    color: map-get($map: $by-btn-text-colors, $key: "#{$type}-#{$theme}") !important;
+    text-decoration: none !important;
+  }
+
+  &:active {
+    background-color: map-get($map: $by-btn-background-colors, $key: "#{$type}-#{$theme}-pressed") !important;
+    color: map-get($map: $by-btn-text-colors, $key: "#{$type}-#{$theme}") !important;
+    text-decoration: none !important;
+  }
+
+  @if $size == "large" {
+    @extend .by-copy-large-semibold;
+  }
+  @if $size == "medium" {
+    @extend .by-copy-large-semibold;
+  }
+  @if $size == "small" {
+    @extend .by-copy-small-bold;
+  }
+}
+
+$by-btn-types: "primary", "secondary", "tertiary";
+$by-btn-sizes: "large", "medium", "small";
+$by-btn-themes: "light", "dark";
+
+@each $type in $by-btn-types {
+  @each $size in $by-btn-sizes {
+    @each $theme in $by-btn-themes {
+      .by-btn-#{$type}-#{$size}-#{$theme} {
+        @include by-btn($type, $size, $theme);
+      }
+    }
+  }
+}

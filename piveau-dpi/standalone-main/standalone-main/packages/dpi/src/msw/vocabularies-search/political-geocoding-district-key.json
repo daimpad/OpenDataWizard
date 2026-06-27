@@ -1,0 +1,6244 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 517,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "16077"
+        },
+        "index": "vocabulary",
+        "id": "16077",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16077",
+        "alt_label": {
+          "de": "Altenburger Land"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16076"
+        },
+        "index": "vocabulary",
+        "id": "16076",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16076",
+        "alt_label": {
+          "de": "Greiz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16075"
+        },
+        "index": "vocabulary",
+        "id": "16075",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16075",
+        "alt_label": {
+          "de": "Saale-Orla-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16074"
+        },
+        "index": "vocabulary",
+        "id": "16074",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16074",
+        "alt_label": {
+          "de": "Saale-Holzland-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16073"
+        },
+        "index": "vocabulary",
+        "id": "16073",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16073",
+        "alt_label": {
+          "de": "Saalfeld-Rudolstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16072"
+        },
+        "index": "vocabulary",
+        "id": "16072",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16072",
+        "alt_label": {
+          "de": "Sonneberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08327"
+        },
+        "index": "vocabulary",
+        "id": "08327",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08327",
+        "alt_label": {
+          "de": "Tuttlingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16071"
+        },
+        "index": "vocabulary",
+        "id": "16071",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16071",
+        "alt_label": {
+          "de": "Weimarer Land"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09779"
+        },
+        "index": "vocabulary",
+        "id": "09779",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09779",
+        "alt_label": {
+          "de": "Donau-Ries"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16070"
+        },
+        "index": "vocabulary",
+        "id": "16070",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16070",
+        "alt_label": {
+          "de": "Ilm-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09778"
+        },
+        "index": "vocabulary",
+        "id": "09778",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09778",
+        "alt_label": {
+          "de": "Unterallgäu"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08325"
+        },
+        "index": "vocabulary",
+        "id": "08325",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08325",
+        "alt_label": {
+          "de": "Rottweil"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08326"
+        },
+        "index": "vocabulary",
+        "id": "08326",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08326",
+        "alt_label": {
+          "de": "Schwarzwald-Baar-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09777"
+        },
+        "index": "vocabulary",
+        "id": "09777",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09777",
+        "alt_label": {
+          "de": "Ostallgäu"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09776"
+        },
+        "index": "vocabulary",
+        "id": "09776",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09776",
+        "alt_label": {
+          "de": "Lindau (Bodensee)"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07235"
+        },
+        "index": "vocabulary",
+        "id": "07235",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07235",
+        "alt_label": {
+          "de": "Trier-Saarburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09775"
+        },
+        "index": "vocabulary",
+        "id": "09775",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09775",
+        "alt_label": {
+          "de": "Neu-Ulm"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07111"
+        },
+        "index": "vocabulary",
+        "id": "07111",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07111",
+        "alt_label": {
+          "de": "Koblenz, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07232"
+        },
+        "index": "vocabulary",
+        "id": "07232",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07232",
+        "alt_label": {
+          "de": "Eifelkreis Bitburg-Prüm"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09774"
+        },
+        "index": "vocabulary",
+        "id": "09774",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09774",
+        "alt_label": {
+          "de": "Günzburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09773"
+        },
+        "index": "vocabulary",
+        "id": "09773",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09773",
+        "alt_label": {
+          "de": "Dillingen a.d.Donau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07233"
+        },
+        "index": "vocabulary",
+        "id": "07233",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07233",
+        "alt_label": {
+          "de": "Vulkaneifel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09772"
+        },
+        "index": "vocabulary",
+        "id": "09772",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09772",
+        "alt_label": {
+          "de": "Augsburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07231"
+        },
+        "index": "vocabulary",
+        "id": "07231",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07231",
+        "alt_label": {
+          "de": "Bernkastel-Wittlich"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09771"
+        },
+        "index": "vocabulary",
+        "id": "09771",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09771",
+        "alt_label": {
+          "de": "Aichach-Friedberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05170"
+        },
+        "index": "vocabulary",
+        "id": "05170",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05170",
+        "alt_label": {
+          "de": "Wesel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08437"
+        },
+        "index": "vocabulary",
+        "id": "08437",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08437",
+        "alt_label": {
+          "de": "Sigmaringen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08316"
+        },
+        "index": "vocabulary",
+        "id": "08316",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08316",
+        "alt_label": {
+          "de": "Emmendingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08317"
+        },
+        "index": "vocabulary",
+        "id": "08317",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08317",
+        "alt_label": {
+          "de": "Ortenaukreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08435"
+        },
+        "index": "vocabulary",
+        "id": "08435",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08435",
+        "alt_label": {
+          "de": "Bodenseekreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08436"
+        },
+        "index": "vocabulary",
+        "id": "08436",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08436",
+        "alt_label": {
+          "de": "Ravensburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08315"
+        },
+        "index": "vocabulary",
+        "id": "08315",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08315",
+        "alt_label": {
+          "de": "Breisgau-Hochschwarzwald"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05166"
+        },
+        "index": "vocabulary",
+        "id": "05166",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05166",
+        "alt_label": {
+          "de": "Viersen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09764"
+        },
+        "index": "vocabulary",
+        "id": "09764",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09764",
+        "alt_label": {
+          "de": "Memmingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09763"
+        },
+        "index": "vocabulary",
+        "id": "09763",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09763",
+        "alt_label": {
+          "de": "Kempten (Allgäu)"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09762"
+        },
+        "index": "vocabulary",
+        "id": "09762",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09762",
+        "alt_label": {
+          "de": "Kaufbeuren"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05162"
+        },
+        "index": "vocabulary",
+        "id": "05162",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05162",
+        "alt_label": {
+          "de": "Rhein-Kreis Neuss"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08311"
+        },
+        "index": "vocabulary",
+        "id": "08311",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08311",
+        "alt_label": {
+          "de": "Freiburg im Breisgau, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09761"
+        },
+        "index": "vocabulary",
+        "id": "09761",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09761",
+        "alt_label": {
+          "de": "Augsburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07340"
+        },
+        "index": "vocabulary",
+        "id": "07340",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07340",
+        "alt_label": {
+          "de": "Südwestpfalz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15087"
+        },
+        "index": "vocabulary",
+        "id": "15087",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15087",
+        "alt_label": {
+          "de": "Mansfeld-Südharz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16055"
+        },
+        "index": "vocabulary",
+        "id": "16055",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16055",
+        "alt_label": {
+          "de": "Weimar, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15086"
+        },
+        "index": "vocabulary",
+        "id": "15086",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15086",
+        "alt_label": {
+          "de": "Jerichower Land"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16054"
+        },
+        "index": "vocabulary",
+        "id": "16054",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16054",
+        "alt_label": {
+          "de": "Suhl, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15085"
+        },
+        "index": "vocabulary",
+        "id": "15085",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15085",
+        "alt_label": {
+          "de": "Harz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16053"
+        },
+        "index": "vocabulary",
+        "id": "16053",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16053",
+        "alt_label": {
+          "de": "Jena, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15084"
+        },
+        "index": "vocabulary",
+        "id": "15084",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15084",
+        "alt_label": {
+          "de": "Burgenlandkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16052"
+        },
+        "index": "vocabulary",
+        "id": "16052",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16052",
+        "alt_label": {
+          "de": "Gera, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15089"
+        },
+        "index": "vocabulary",
+        "id": "15089",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15089",
+        "alt_label": {
+          "de": "Salzlandkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15088"
+        },
+        "index": "vocabulary",
+        "id": "15088",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15088",
+        "alt_label": {
+          "de": "Saalekreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15083"
+        },
+        "index": "vocabulary",
+        "id": "15083",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15083",
+        "alt_label": {
+          "de": "Börde"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16051"
+        },
+        "index": "vocabulary",
+        "id": "16051",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16051",
+        "alt_label": {
+          "de": "Erfurt, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15082"
+        },
+        "index": "vocabulary",
+        "id": "15082",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15082",
+        "alt_label": {
+          "de": "Anhalt-Bitterfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15081"
+        },
+        "index": "vocabulary",
+        "id": "15081",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15081",
+        "alt_label": {
+          "de": "Altmarkkreis Salzwedel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09679"
+        },
+        "index": "vocabulary",
+        "id": "09679",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09679",
+        "alt_label": {
+          "de": "Würzburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08226"
+        },
+        "index": "vocabulary",
+        "id": "08226",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08226",
+        "alt_label": {
+          "de": "Rhein-Neckar-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07137"
+        },
+        "index": "vocabulary",
+        "id": "07137",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07137",
+        "alt_label": {
+          "de": "Mayen-Koblenz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07138"
+        },
+        "index": "vocabulary",
+        "id": "07138",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07138",
+        "alt_label": {
+          "de": "Neuwied"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09678"
+        },
+        "index": "vocabulary",
+        "id": "09678",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09678",
+        "alt_label": {
+          "de": "Schweinfurt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09677"
+        },
+        "index": "vocabulary",
+        "id": "09677",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09677",
+        "alt_label": {
+          "de": "Main-Spessart"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07135"
+        },
+        "index": "vocabulary",
+        "id": "07135",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07135",
+        "alt_label": {
+          "de": "Cochem-Zell"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08225"
+        },
+        "index": "vocabulary",
+        "id": "08225",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08225",
+        "alt_label": {
+          "de": "Neckar-Odenwald-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09676"
+        },
+        "index": "vocabulary",
+        "id": "09676",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09676",
+        "alt_label": {
+          "de": "Miltenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08222"
+        },
+        "index": "vocabulary",
+        "id": "08222",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08222",
+        "alt_label": {
+          "de": "Mannheim, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07133"
+        },
+        "index": "vocabulary",
+        "id": "07133",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07133",
+        "alt_label": {
+          "de": "Bad Kreuznach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09675"
+        },
+        "index": "vocabulary",
+        "id": "09675",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09675",
+        "alt_label": {
+          "de": "Kitzingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09674"
+        },
+        "index": "vocabulary",
+        "id": "09674",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09674",
+        "alt_label": {
+          "de": "Haßberge"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07134"
+        },
+        "index": "vocabulary",
+        "id": "07134",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07134",
+        "alt_label": {
+          "de": "Birkenfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09673"
+        },
+        "index": "vocabulary",
+        "id": "09673",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09673",
+        "alt_label": {
+          "de": "Rhön-Grabfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07131"
+        },
+        "index": "vocabulary",
+        "id": "07131",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07131",
+        "alt_label": {
+          "de": "Ahrweiler"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07132"
+        },
+        "index": "vocabulary",
+        "id": "07132",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07132",
+        "alt_label": {
+          "de": "Altenkirchen (Westerwald)"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08221"
+        },
+        "index": "vocabulary",
+        "id": "08221",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08221",
+        "alt_label": {
+          "de": "Heidelberg, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09672"
+        },
+        "index": "vocabulary",
+        "id": "09672",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09672",
+        "alt_label": {
+          "de": "Bad Kissingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09671"
+        },
+        "index": "vocabulary",
+        "id": "09671",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09671",
+        "alt_label": {
+          "de": "Aschaffenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16066"
+        },
+        "index": "vocabulary",
+        "id": "16066",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16066",
+        "alt_label": {
+          "de": "Schmalkalden-Meiningen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16065"
+        },
+        "index": "vocabulary",
+        "id": "16065",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16065",
+        "alt_label": {
+          "de": "Kyffhäuserkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16064"
+        },
+        "index": "vocabulary",
+        "id": "16064",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16064",
+        "alt_label": {
+          "de": "Unstrut-Hainich-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16063"
+        },
+        "index": "vocabulary",
+        "id": "16063",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16063",
+        "alt_label": {
+          "de": "Wartburgkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16069"
+        },
+        "index": "vocabulary",
+        "id": "16069",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16069",
+        "alt_label": {
+          "de": "Hildburghausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16068"
+        },
+        "index": "vocabulary",
+        "id": "16068",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16068",
+        "alt_label": {
+          "de": "Sömmerda"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16067"
+        },
+        "index": "vocabulary",
+        "id": "16067",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16067",
+        "alt_label": {
+          "de": "Gotha"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15090"
+        },
+        "index": "vocabulary",
+        "id": "15090",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15090",
+        "alt_label": {
+          "de": "Stendal"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16062"
+        },
+        "index": "vocabulary",
+        "id": "16062",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16062",
+        "alt_label": {
+          "de": "Nordhausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16061"
+        },
+        "index": "vocabulary",
+        "id": "16061",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/16061",
+        "alt_label": {
+          "de": "Eichsfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15091"
+        },
+        "index": "vocabulary",
+        "id": "15091",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15091",
+        "alt_label": {
+          "de": "Wittenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08336"
+        },
+        "index": "vocabulary",
+        "id": "08336",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08336",
+        "alt_label": {
+          "de": "Lörrach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08215"
+        },
+        "index": "vocabulary",
+        "id": "08215",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08215",
+        "alt_label": {
+          "de": "Karlsruhe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08337"
+        },
+        "index": "vocabulary",
+        "id": "08337",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08337",
+        "alt_label": {
+          "de": "Waldshut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08216"
+        },
+        "index": "vocabulary",
+        "id": "08216",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08216",
+        "alt_label": {
+          "de": "Rastatt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08335"
+        },
+        "index": "vocabulary",
+        "id": "08335",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08335",
+        "alt_label": {
+          "de": "Konstanz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08211"
+        },
+        "index": "vocabulary",
+        "id": "08211",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08211",
+        "alt_label": {
+          "de": "Baden-Baden, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09663"
+        },
+        "index": "vocabulary",
+        "id": "09663",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09663",
+        "alt_label": {
+          "de": "Würzburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08212"
+        },
+        "index": "vocabulary",
+        "id": "08212",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08212",
+        "alt_label": {
+          "de": "Karlsruhe, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09662"
+        },
+        "index": "vocabulary",
+        "id": "09662",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09662",
+        "alt_label": {
+          "de": "Schweinfurt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09661"
+        },
+        "index": "vocabulary",
+        "id": "09661",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09661",
+        "alt_label": {
+          "de": "Aschaffenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09780"
+        },
+        "index": "vocabulary",
+        "id": "09780",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09780",
+        "alt_label": {
+          "de": "Oberallgäu"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07319"
+        },
+        "index": "vocabulary",
+        "id": "07319",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07319",
+        "alt_label": {
+          "de": "Worms, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07317"
+        },
+        "index": "vocabulary",
+        "id": "07317",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07317",
+        "alt_label": {
+          "de": "Pirmasens, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07318"
+        },
+        "index": "vocabulary",
+        "id": "07318",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07318",
+        "alt_label": {
+          "de": "Speyer, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07315"
+        },
+        "index": "vocabulary",
+        "id": "07315",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07315",
+        "alt_label": {
+          "de": "Mainz, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07316"
+        },
+        "index": "vocabulary",
+        "id": "07316",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07316",
+        "alt_label": {
+          "de": "Neustadt an der Weinstraße, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07313"
+        },
+        "index": "vocabulary",
+        "id": "07313",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07313",
+        "alt_label": {
+          "de": "Landau in der Pfalz, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07314"
+        },
+        "index": "vocabulary",
+        "id": "07314",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07314",
+        "alt_label": {
+          "de": "Ludwigshafen am Rhein, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05378"
+        },
+        "index": "vocabulary",
+        "id": "05378",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05378",
+        "alt_label": {
+          "de": "Rheinisch-Bergischer Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07311"
+        },
+        "index": "vocabulary",
+        "id": "07311",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07311",
+        "alt_label": {
+          "de": "Frankenthal (Pfalz), kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07312"
+        },
+        "index": "vocabulary",
+        "id": "07312",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07312",
+        "alt_label": {
+          "de": "Kaiserslautern, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05374"
+        },
+        "index": "vocabulary",
+        "id": "05374",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05374",
+        "alt_label": {
+          "de": "Oberbergischer Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05370"
+        },
+        "index": "vocabulary",
+        "id": "05370",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05370",
+        "alt_label": {
+          "de": "Heinsberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05122"
+        },
+        "index": "vocabulary",
+        "id": "05122",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05122",
+        "alt_label": {
+          "de": "Solingen, Klingenstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05124"
+        },
+        "index": "vocabulary",
+        "id": "05124",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05124",
+        "alt_label": {
+          "de": "Wuppertal, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05366"
+        },
+        "index": "vocabulary",
+        "id": "05366",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05366",
+        "alt_label": {
+          "de": "Euskirchen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05120"
+        },
+        "index": "vocabulary",
+        "id": "05120",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05120",
+        "alt_label": {
+          "de": "Remscheid, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05362"
+        },
+        "index": "vocabulary",
+        "id": "05362",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05362",
+        "alt_label": {
+          "de": "Rhein-Erft-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07339"
+        },
+        "index": "vocabulary",
+        "id": "07339",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07339",
+        "alt_label": {
+          "de": "Mainz-Bingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08426"
+        },
+        "index": "vocabulary",
+        "id": "08426",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08426",
+        "alt_label": {
+          "de": "Biberach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07337"
+        },
+        "index": "vocabulary",
+        "id": "07337",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07337",
+        "alt_label": {
+          "de": "Südliche Weinstraße"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07338"
+        },
+        "index": "vocabulary",
+        "id": "07338",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07338",
+        "alt_label": {
+          "de": "Rhein-Pfalz-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07335"
+        },
+        "index": "vocabulary",
+        "id": "07335",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07335",
+        "alt_label": {
+          "de": "Kaiserslautern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07336"
+        },
+        "index": "vocabulary",
+        "id": "07336",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07336",
+        "alt_label": {
+          "de": "Kusel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08425"
+        },
+        "index": "vocabulary",
+        "id": "08425",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08425",
+        "alt_label": {
+          "de": "Alb-Donau-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05158"
+        },
+        "index": "vocabulary",
+        "id": "05158",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05158",
+        "alt_label": {
+          "de": "Mettmann"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07333"
+        },
+        "index": "vocabulary",
+        "id": "07333",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07333",
+        "alt_label": {
+          "de": "Donnersbergkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07334"
+        },
+        "index": "vocabulary",
+        "id": "07334",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07334",
+        "alt_label": {
+          "de": "Germersheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07331"
+        },
+        "index": "vocabulary",
+        "id": "07331",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07331",
+        "alt_label": {
+          "de": "Alzey-Worms"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07211"
+        },
+        "index": "vocabulary",
+        "id": "07211",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07211",
+        "alt_label": {
+          "de": "Trier, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07332"
+        },
+        "index": "vocabulary",
+        "id": "07332",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07332",
+        "alt_label": {
+          "de": "Bad Dürkheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08421"
+        },
+        "index": "vocabulary",
+        "id": "08421",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08421",
+        "alt_label": {
+          "de": "Ulm, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05154"
+        },
+        "index": "vocabulary",
+        "id": "05154",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05154",
+        "alt_label": {
+          "de": "Kleve"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08417"
+        },
+        "index": "vocabulary",
+        "id": "08417",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08417",
+        "alt_label": {
+          "de": "Zollernalbkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08415"
+        },
+        "index": "vocabulary",
+        "id": "08415",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08415",
+        "alt_label": {
+          "de": "Reutlingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08416"
+        },
+        "index": "vocabulary",
+        "id": "08416",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08416",
+        "alt_label": {
+          "de": "Tübingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07320"
+        },
+        "index": "vocabulary",
+        "id": "07320",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07320",
+        "alt_label": {
+          "de": "Zweibrücken, kreisfreie Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05382"
+        },
+        "index": "vocabulary",
+        "id": "05382",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05382",
+        "alt_label": {
+          "de": "Rhein-Sieg-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02508"
+        },
+        "index": "vocabulary",
+        "id": "02508",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02508",
+        "alt_label": {
+          "de": "Steilshoop"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02507"
+        },
+        "index": "vocabulary",
+        "id": "02507",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02507",
+        "alt_label": {
+          "de": "Bramfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02506"
+        },
+        "index": "vocabulary",
+        "id": "02506",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02506",
+        "alt_label": {
+          "de": "Farmsen-Berne"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02505"
+        },
+        "index": "vocabulary",
+        "id": "02505",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02505",
+        "alt_label": {
+          "de": "Tonndorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02509"
+        },
+        "index": "vocabulary",
+        "id": "02509",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02509",
+        "alt_label": {
+          "de": "Wellingsbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02504"
+        },
+        "index": "vocabulary",
+        "id": "02504",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02504",
+        "alt_label": {
+          "de": "Jenfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02503"
+        },
+        "index": "vocabulary",
+        "id": "02503",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02503",
+        "alt_label": {
+          "de": "Marienthal"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02502"
+        },
+        "index": "vocabulary",
+        "id": "02502",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02502",
+        "alt_label": {
+          "de": "Wandsbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02501"
+        },
+        "index": "vocabulary",
+        "id": "02501",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02501",
+        "alt_label": {
+          "de": "Eilbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09377"
+        },
+        "index": "vocabulary",
+        "id": "09377",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09377",
+        "alt_label": {
+          "de": "Tirschenreuth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09376"
+        },
+        "index": "vocabulary",
+        "id": "09376",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09376",
+        "alt_label": {
+          "de": "Schwandorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09375"
+        },
+        "index": "vocabulary",
+        "id": "09375",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09375",
+        "alt_label": {
+          "de": "Regensburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09374"
+        },
+        "index": "vocabulary",
+        "id": "09374",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09374",
+        "alt_label": {
+          "de": "Neustadt a.d.Waldnaab"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09373"
+        },
+        "index": "vocabulary",
+        "id": "09373",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09373",
+        "alt_label": {
+          "de": "Neumarkt i.d.OPf."
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09372"
+        },
+        "index": "vocabulary",
+        "id": "09372",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09372",
+        "alt_label": {
+          "de": "Cham"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14730"
+        },
+        "index": "vocabulary",
+        "id": "14730",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14730",
+        "alt_label": {
+          "de": "Nordsachsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09371"
+        },
+        "index": "vocabulary",
+        "id": "09371",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09371",
+        "alt_label": {
+          "de": "Amberg-Sulzbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14612"
+        },
+        "index": "vocabulary",
+        "id": "14612",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14612",
+        "alt_label": {
+          "de": "Dresden, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02610"
+        },
+        "index": "vocabulary",
+        "id": "02610",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02610",
+        "alt_label": {
+          "de": "Billwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02614"
+        },
+        "index": "vocabulary",
+        "id": "02614",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02614",
+        "alt_label": {
+          "de": "Neuallermöhe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02613"
+        },
+        "index": "vocabulary",
+        "id": "02613",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02613",
+        "alt_label": {
+          "de": "Spadenland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02612"
+        },
+        "index": "vocabulary",
+        "id": "02612",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02612",
+        "alt_label": {
+          "de": "Tatenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02611"
+        },
+        "index": "vocabulary",
+        "id": "02611",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02611",
+        "alt_label": {
+          "de": "Moorfleet"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14627"
+        },
+        "index": "vocabulary",
+        "id": "14627",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14627",
+        "alt_label": {
+          "de": "Meißen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14628"
+        },
+        "index": "vocabulary",
+        "id": "14628",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14628",
+        "alt_label": {
+          "de": "Sächsische Schweiz-Osterzgebirge"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09363"
+        },
+        "index": "vocabulary",
+        "id": "09363",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09363",
+        "alt_label": {
+          "de": "Weiden i.d.OPf."
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09362"
+        },
+        "index": "vocabulary",
+        "id": "09362",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09362",
+        "alt_label": {
+          "de": "Regensburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09361"
+        },
+        "index": "vocabulary",
+        "id": "09361",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09361",
+        "alt_label": {
+          "de": "Amberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14625"
+        },
+        "index": "vocabulary",
+        "id": "14625",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14625",
+        "alt_label": {
+          "de": "Bautzen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14626"
+        },
+        "index": "vocabulary",
+        "id": "14626",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14626",
+        "alt_label": {
+          "de": "Görlitz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02409"
+        },
+        "index": "vocabulary",
+        "id": "02409",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02409",
+        "alt_label": {
+          "de": "Dulsberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02408"
+        },
+        "index": "vocabulary",
+        "id": "02408",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02408",
+        "alt_label": {
+          "de": "Barmbek-Süd"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02407"
+        },
+        "index": "vocabulary",
+        "id": "02407",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02407",
+        "alt_label": {
+          "de": "Hohenfelde"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02406"
+        },
+        "index": "vocabulary",
+        "id": "02406",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02406",
+        "alt_label": {
+          "de": "Uhlenhorst"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05916"
+        },
+        "index": "vocabulary",
+        "id": "05916",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05916",
+        "alt_label": {
+          "de": "Herne, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05915"
+        },
+        "index": "vocabulary",
+        "id": "05915",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05915",
+        "alt_label": {
+          "de": "Hamm, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02401"
+        },
+        "index": "vocabulary",
+        "id": "02401",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02401",
+        "alt_label": {
+          "de": "Hoheluft-Ost"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05911"
+        },
+        "index": "vocabulary",
+        "id": "05911",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05911",
+        "alt_label": {
+          "de": "Bochum, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05914"
+        },
+        "index": "vocabulary",
+        "id": "05914",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05914",
+        "alt_label": {
+          "de": "Hagen, Stadt der FernUniversität"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05913"
+        },
+        "index": "vocabulary",
+        "id": "05913",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05913",
+        "alt_label": {
+          "de": "Dortmund, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02405"
+        },
+        "index": "vocabulary",
+        "id": "02405",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02405",
+        "alt_label": {
+          "de": "Winterhude"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02404"
+        },
+        "index": "vocabulary",
+        "id": "02404",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02404",
+        "alt_label": {
+          "de": "Alsterdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02403"
+        },
+        "index": "vocabulary",
+        "id": "02403",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02403",
+        "alt_label": {
+          "de": "Gross-Borstel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02402"
+        },
+        "index": "vocabulary",
+        "id": "02402",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02402",
+        "alt_label": {
+          "de": "Eppendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09279"
+        },
+        "index": "vocabulary",
+        "id": "09279",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09279",
+        "alt_label": {
+          "de": "Dingolfing-Landau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09278"
+        },
+        "index": "vocabulary",
+        "id": "09278",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09278",
+        "alt_label": {
+          "de": "Straubing-Bogen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09277"
+        },
+        "index": "vocabulary",
+        "id": "09277",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09277",
+        "alt_label": {
+          "de": "Rottal-Inn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09276"
+        },
+        "index": "vocabulary",
+        "id": "09276",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09276",
+        "alt_label": {
+          "de": "Regen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09275"
+        },
+        "index": "vocabulary",
+        "id": "09275",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09275",
+        "alt_label": {
+          "de": "Passau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09274"
+        },
+        "index": "vocabulary",
+        "id": "09274",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09274",
+        "alt_label": {
+          "de": "Landshut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09273"
+        },
+        "index": "vocabulary",
+        "id": "09273",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09273",
+        "alt_label": {
+          "de": "Kelheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09272"
+        },
+        "index": "vocabulary",
+        "id": "09272",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09272",
+        "alt_label": {
+          "de": "Freyung-Grafenau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09271"
+        },
+        "index": "vocabulary",
+        "id": "09271",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09271",
+        "alt_label": {
+          "de": "Deggendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14713"
+        },
+        "index": "vocabulary",
+        "id": "14713",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14713",
+        "alt_label": {
+          "de": "Leipzig, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02518"
+        },
+        "index": "vocabulary",
+        "id": "02518",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02518",
+        "alt_label": {
+          "de": "Rahlstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02517"
+        },
+        "index": "vocabulary",
+        "id": "02517",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02517",
+        "alt_label": {
+          "de": "Volksdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02516"
+        },
+        "index": "vocabulary",
+        "id": "02516",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02516",
+        "alt_label": {
+          "de": "Bergstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02511"
+        },
+        "index": "vocabulary",
+        "id": "02511",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02511",
+        "alt_label": {
+          "de": "Poppenbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02510"
+        },
+        "index": "vocabulary",
+        "id": "02510",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02510",
+        "alt_label": {
+          "de": "Sasel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02515"
+        },
+        "index": "vocabulary",
+        "id": "02515",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02515",
+        "alt_label": {
+          "de": "Wohldorf-Ohlstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02514"
+        },
+        "index": "vocabulary",
+        "id": "02514",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02514",
+        "alt_label": {
+          "de": "Duvenstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02513"
+        },
+        "index": "vocabulary",
+        "id": "02513",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02513",
+        "alt_label": {
+          "de": "Lemsahl-Mellingstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02512"
+        },
+        "index": "vocabulary",
+        "id": "02512",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02512",
+        "alt_label": {
+          "de": "Hummelsbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14729"
+        },
+        "index": "vocabulary",
+        "id": "14729",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14729",
+        "alt_label": {
+          "de": "Leipzig"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09263"
+        },
+        "index": "vocabulary",
+        "id": "09263",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09263",
+        "alt_label": {
+          "de": "Straubing"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09262"
+        },
+        "index": "vocabulary",
+        "id": "09262",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09262",
+        "alt_label": {
+          "de": "Passau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09261"
+        },
+        "index": "vocabulary",
+        "id": "09261",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09261",
+        "alt_label": {
+          "de": "Landshut"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02706"
+        },
+        "index": "vocabulary",
+        "id": "02706",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02706",
+        "alt_label": {
+          "de": "Langenbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02705"
+        },
+        "index": "vocabulary",
+        "id": "02705",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02705",
+        "alt_label": {
+          "de": "Rönneburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02704"
+        },
+        "index": "vocabulary",
+        "id": "02704",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02704",
+        "alt_label": {
+          "de": "Wilstorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02703"
+        },
+        "index": "vocabulary",
+        "id": "02703",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02703",
+        "alt_label": {
+          "de": "Gut Moor"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02709"
+        },
+        "index": "vocabulary",
+        "id": "02709",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02709",
+        "alt_label": {
+          "de": "Eißendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02708"
+        },
+        "index": "vocabulary",
+        "id": "02708",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02708",
+        "alt_label": {
+          "de": "Marmstorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02707"
+        },
+        "index": "vocabulary",
+        "id": "02707",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02707",
+        "alt_label": {
+          "de": "Sinstorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02702"
+        },
+        "index": "vocabulary",
+        "id": "02702",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02702",
+        "alt_label": {
+          "de": "Neuland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02701"
+        },
+        "index": "vocabulary",
+        "id": "02701",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02701",
+        "alt_label": {
+          "de": "Harburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08127"
+        },
+        "index": "vocabulary",
+        "id": "08127",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08127",
+        "alt_label": {
+          "de": "Schwäbisch Hall"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08128"
+        },
+        "index": "vocabulary",
+        "id": "08128",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08128",
+        "alt_label": {
+          "de": "Main-Tauber-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08125"
+        },
+        "index": "vocabulary",
+        "id": "08125",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08125",
+        "alt_label": {
+          "de": "Heilbronn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08126"
+        },
+        "index": "vocabulary",
+        "id": "08126",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08126",
+        "alt_label": {
+          "de": "Hohenlohekreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09577"
+        },
+        "index": "vocabulary",
+        "id": "09577",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09577",
+        "alt_label": {
+          "de": "Weißenburg-Gunzenhausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09576"
+        },
+        "index": "vocabulary",
+        "id": "09576",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09576",
+        "alt_label": {
+          "de": "Roth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09575"
+        },
+        "index": "vocabulary",
+        "id": "09575",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09575",
+        "alt_label": {
+          "de": "Neustadt a.d.Aisch-Bad Windsheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09574"
+        },
+        "index": "vocabulary",
+        "id": "09574",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09574",
+        "alt_label": {
+          "de": "Nürnberger Land"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08121"
+        },
+        "index": "vocabulary",
+        "id": "08121",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08121",
+        "alt_label": {
+          "de": "Heilbronn, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09573"
+        },
+        "index": "vocabulary",
+        "id": "09573",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09573",
+        "alt_label": {
+          "de": "Fürth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09572"
+        },
+        "index": "vocabulary",
+        "id": "09572",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09572",
+        "alt_label": {
+          "de": "Erlangen-Höchstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09571"
+        },
+        "index": "vocabulary",
+        "id": "09571",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09571",
+        "alt_label": {
+          "de": "Ansbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08118"
+        },
+        "index": "vocabulary",
+        "id": "08118",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08118",
+        "alt_label": {
+          "de": "Ludwigsburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08119"
+        },
+        "index": "vocabulary",
+        "id": "08119",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08119",
+        "alt_label": {
+          "de": "Rems-Murr-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08116"
+        },
+        "index": "vocabulary",
+        "id": "08116",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08116",
+        "alt_label": {
+          "de": "Esslingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08237"
+        },
+        "index": "vocabulary",
+        "id": "08237",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08237",
+        "alt_label": {
+          "de": "Freudenstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08117"
+        },
+        "index": "vocabulary",
+        "id": "08117",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08117",
+        "alt_label": {
+          "de": "Göppingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08235"
+        },
+        "index": "vocabulary",
+        "id": "08235",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08235",
+        "alt_label": {
+          "de": "Calw"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08115"
+        },
+        "index": "vocabulary",
+        "id": "08115",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08115",
+        "alt_label": {
+          "de": "Böblingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08236"
+        },
+        "index": "vocabulary",
+        "id": "08236",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08236",
+        "alt_label": {
+          "de": "Enzkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09565"
+        },
+        "index": "vocabulary",
+        "id": "09565",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09565",
+        "alt_label": {
+          "de": "Schwabach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09564"
+        },
+        "index": "vocabulary",
+        "id": "09564",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09564",
+        "alt_label": {
+          "de": "Nürnberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09563"
+        },
+        "index": "vocabulary",
+        "id": "09563",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09563",
+        "alt_label": {
+          "de": "Fürth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08231"
+        },
+        "index": "vocabulary",
+        "id": "08231",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08231",
+        "alt_label": {
+          "de": "Pforzheim, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07143"
+        },
+        "index": "vocabulary",
+        "id": "07143",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07143",
+        "alt_label": {
+          "de": "Westerwaldkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08111"
+        },
+        "index": "vocabulary",
+        "id": "08111",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08111",
+        "alt_label": {
+          "de": "Stuttgart, Stadtkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09562"
+        },
+        "index": "vocabulary",
+        "id": "09562",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09562",
+        "alt_label": {
+          "de": "Erlangen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09561"
+        },
+        "index": "vocabulary",
+        "id": "09561",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09561",
+        "alt_label": {
+          "de": "Ansbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07140"
+        },
+        "index": "vocabulary",
+        "id": "07140",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07140",
+        "alt_label": {
+          "de": "Rhein-Hunsrück-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07141"
+        },
+        "index": "vocabulary",
+        "id": "07141",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/07141",
+        "alt_label": {
+          "de": "Rhein-Lahn-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02607"
+        },
+        "index": "vocabulary",
+        "id": "02607",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02607",
+        "alt_label": {
+          "de": "Ochsenwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02606"
+        },
+        "index": "vocabulary",
+        "id": "02606",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02606",
+        "alt_label": {
+          "de": "Kirchwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02605"
+        },
+        "index": "vocabulary",
+        "id": "02605",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02605",
+        "alt_label": {
+          "de": "Neuengamme"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02604"
+        },
+        "index": "vocabulary",
+        "id": "02604",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02604",
+        "alt_label": {
+          "de": "Altengamme"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02609"
+        },
+        "index": "vocabulary",
+        "id": "02609",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02609",
+        "alt_label": {
+          "de": "Allermöhe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02608"
+        },
+        "index": "vocabulary",
+        "id": "02608",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02608",
+        "alt_label": {
+          "de": "Reitbrook"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02603"
+        },
+        "index": "vocabulary",
+        "id": "02603",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02603",
+        "alt_label": {
+          "de": "Curslack"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02602"
+        },
+        "index": "vocabulary",
+        "id": "02602",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02602",
+        "alt_label": {
+          "de": "Bergedorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02601"
+        },
+        "index": "vocabulary",
+        "id": "02601",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02601",
+        "alt_label": {
+          "de": "Lohbrügge"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09479"
+        },
+        "index": "vocabulary",
+        "id": "09479",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09479",
+        "alt_label": {
+          "de": "Wunsiedel i.Fichtelgebirge"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09478"
+        },
+        "index": "vocabulary",
+        "id": "09478",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09478",
+        "alt_label": {
+          "de": "Lichtenfels"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09477"
+        },
+        "index": "vocabulary",
+        "id": "09477",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09477",
+        "alt_label": {
+          "de": "Kulmbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09476"
+        },
+        "index": "vocabulary",
+        "id": "09476",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09476",
+        "alt_label": {
+          "de": "Kronach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09475"
+        },
+        "index": "vocabulary",
+        "id": "09475",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09475",
+        "alt_label": {
+          "de": "Hof"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09474"
+        },
+        "index": "vocabulary",
+        "id": "09474",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09474",
+        "alt_label": {
+          "de": "Forchheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09473"
+        },
+        "index": "vocabulary",
+        "id": "09473",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09473",
+        "alt_label": {
+          "de": "Coburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09472"
+        },
+        "index": "vocabulary",
+        "id": "09472",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09472",
+        "alt_label": {
+          "de": "Bayreuth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09471"
+        },
+        "index": "vocabulary",
+        "id": "09471",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09471",
+        "alt_label": {
+          "de": "Bamberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02717"
+        },
+        "index": "vocabulary",
+        "id": "02717",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02717",
+        "alt_label": {
+          "de": "Cranz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02716"
+        },
+        "index": "vocabulary",
+        "id": "02716",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02716",
+        "alt_label": {
+          "de": "Neuenfelde"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02715"
+        },
+        "index": "vocabulary",
+        "id": "02715",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02715",
+        "alt_label": {
+          "de": "Francop"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02714"
+        },
+        "index": "vocabulary",
+        "id": "02714",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02714",
+        "alt_label": {
+          "de": "Neugraben-Fischbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02713"
+        },
+        "index": "vocabulary",
+        "id": "02713",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02713",
+        "alt_label": {
+          "de": "Hausbruch"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02712"
+        },
+        "index": "vocabulary",
+        "id": "02712",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02712",
+        "alt_label": {
+          "de": "Altenwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02711"
+        },
+        "index": "vocabulary",
+        "id": "02711",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02711",
+        "alt_label": {
+          "de": "Moorburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02710"
+        },
+        "index": "vocabulary",
+        "id": "02710",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02710",
+        "alt_label": {
+          "de": "Heimfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08136"
+        },
+        "index": "vocabulary",
+        "id": "08136",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08136",
+        "alt_label": {
+          "de": "Ostalbkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08135"
+        },
+        "index": "vocabulary",
+        "id": "08135",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/08135",
+        "alt_label": {
+          "de": "Heidenheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09464"
+        },
+        "index": "vocabulary",
+        "id": "09464",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09464",
+        "alt_label": {
+          "de": "Hof"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09463"
+        },
+        "index": "vocabulary",
+        "id": "09463",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09463",
+        "alt_label": {
+          "de": "Coburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09462"
+        },
+        "index": "vocabulary",
+        "id": "09462",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09462",
+        "alt_label": {
+          "de": "Bayreuth"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09461"
+        },
+        "index": "vocabulary",
+        "id": "09461",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09461",
+        "alt_label": {
+          "de": "Bamberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05978"
+        },
+        "index": "vocabulary",
+        "id": "05978",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05978",
+        "alt_label": {
+          "de": "Unna"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02104"
+        },
+        "index": "vocabulary",
+        "id": "02104",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02104",
+        "alt_label": {
+          "de": "St. Pauli"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02103"
+        },
+        "index": "vocabulary",
+        "id": "02103",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02103",
+        "alt_label": {
+          "de": "Neustadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02102"
+        },
+        "index": "vocabulary",
+        "id": "02102",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02102",
+        "alt_label": {
+          "de": "HafenCity"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02101"
+        },
+        "index": "vocabulary",
+        "id": "02101",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02101",
+        "alt_label": {
+          "de": "Hamburg-Altstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02108"
+        },
+        "index": "vocabulary",
+        "id": "02108",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02108",
+        "alt_label": {
+          "de": "Hamm"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05974"
+        },
+        "index": "vocabulary",
+        "id": "05974",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05974",
+        "alt_label": {
+          "de": "Soest"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02107"
+        },
+        "index": "vocabulary",
+        "id": "02107",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02107",
+        "alt_label": {
+          "de": "Borgfelde"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02106"
+        },
+        "index": "vocabulary",
+        "id": "02106",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02106",
+        "alt_label": {
+          "de": "Hammerbrook"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02105"
+        },
+        "index": "vocabulary",
+        "id": "02105",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02105",
+        "alt_label": {
+          "de": "St. Georg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05970"
+        },
+        "index": "vocabulary",
+        "id": "05970",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05970",
+        "alt_label": {
+          "de": "Siegen-Wittgenstein"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13004"
+        },
+        "index": "vocabulary",
+        "id": "13004",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13004",
+        "alt_label": {
+          "de": "Schwerin"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13003"
+        },
+        "index": "vocabulary",
+        "id": "13003",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13003",
+        "alt_label": {
+          "de": "Rostock"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01004"
+        },
+        "index": "vocabulary",
+        "id": "01004",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01004",
+        "alt_label": {
+          "de": "Neumünster, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02214"
+        },
+        "index": "vocabulary",
+        "id": "02214",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02214",
+        "alt_label": {
+          "de": "Rissen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02213"
+        },
+        "index": "vocabulary",
+        "id": "02213",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02213",
+        "alt_label": {
+          "de": "Sülldorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01003"
+        },
+        "index": "vocabulary",
+        "id": "01003",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01003",
+        "alt_label": {
+          "de": "Lübeck, Hansestadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05966"
+        },
+        "index": "vocabulary",
+        "id": "05966",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05966",
+        "alt_label": {
+          "de": "Olpe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02212"
+        },
+        "index": "vocabulary",
+        "id": "02212",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02212",
+        "alt_label": {
+          "de": "Iserbrook"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01002"
+        },
+        "index": "vocabulary",
+        "id": "01002",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01002",
+        "alt_label": {
+          "de": "Kiel, Landeshauptstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02211"
+        },
+        "index": "vocabulary",
+        "id": "02211",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02211",
+        "alt_label": {
+          "de": "Blankenese"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01001"
+        },
+        "index": "vocabulary",
+        "id": "01001",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01001",
+        "alt_label": {
+          "de": "Flensburg, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05962"
+        },
+        "index": "vocabulary",
+        "id": "05962",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05962",
+        "alt_label": {
+          "de": "Märkischer Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02210"
+        },
+        "index": "vocabulary",
+        "id": "02210",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02210",
+        "alt_label": {
+          "de": "Nienstedten"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05758"
+        },
+        "index": "vocabulary",
+        "id": "05758",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05758",
+        "alt_label": {
+          "de": "Herford"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03458"
+        },
+        "index": "vocabulary",
+        "id": "03458",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03458",
+        "alt_label": {
+          "de": "Oldenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05515"
+        },
+        "index": "vocabulary",
+        "id": "05515",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05515",
+        "alt_label": {
+          "de": "Münster, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03459"
+        },
+        "index": "vocabulary",
+        "id": "03459",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03459",
+        "alt_label": {
+          "de": "Osnabrück"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03454"
+        },
+        "index": "vocabulary",
+        "id": "03454",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03454",
+        "alt_label": {
+          "de": "Emsland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05512"
+        },
+        "index": "vocabulary",
+        "id": "05512",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05512",
+        "alt_label": {
+          "de": "Bottrop, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05754"
+        },
+        "index": "vocabulary",
+        "id": "05754",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05754",
+        "alt_label": {
+          "de": "Gütersloh"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03455"
+        },
+        "index": "vocabulary",
+        "id": "03455",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03455",
+        "alt_label": {
+          "de": "Friesland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03456"
+        },
+        "index": "vocabulary",
+        "id": "03456",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03456",
+        "alt_label": {
+          "de": "Grafschaft Bentheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05513"
+        },
+        "index": "vocabulary",
+        "id": "05513",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05513",
+        "alt_label": {
+          "de": "Gelsenkirchen, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03457"
+        },
+        "index": "vocabulary",
+        "id": "03457",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03457",
+        "alt_label": {
+          "de": "Leer"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03451"
+        },
+        "index": "vocabulary",
+        "id": "03451",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03451",
+        "alt_label": {
+          "de": "Ammerland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03452"
+        },
+        "index": "vocabulary",
+        "id": "03452",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03452",
+        "alt_label": {
+          "de": "Aurich"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03453"
+        },
+        "index": "vocabulary",
+        "id": "03453",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03453",
+        "alt_label": {
+          "de": "Cloppenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02122"
+        },
+        "index": "vocabulary",
+        "id": "02122",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02122",
+        "alt_label": {
+          "de": "Seeleute/Binnenschiffer"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02000"
+        },
+        "index": "vocabulary",
+        "id": "02000",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02000",
+        "alt_label": {
+          "de": "Hamburg, Freie und Hansestadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02121"
+        },
+        "index": "vocabulary",
+        "id": "02121",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02121",
+        "alt_label": {
+          "de": "Neuwerk"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02120"
+        },
+        "index": "vocabulary",
+        "id": "02120",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02120",
+        "alt_label": {
+          "de": "Finkenwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02115"
+        },
+        "index": "vocabulary",
+        "id": "02115",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02115",
+        "alt_label": {
+          "de": "Veddel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02114"
+        },
+        "index": "vocabulary",
+        "id": "02114",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02114",
+        "alt_label": {
+          "de": "Rothenburgsort"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02113"
+        },
+        "index": "vocabulary",
+        "id": "02113",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02113",
+        "alt_label": {
+          "de": "Billbrook"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02112"
+        },
+        "index": "vocabulary",
+        "id": "02112",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02112",
+        "alt_label": {
+          "de": "Billstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02119"
+        },
+        "index": "vocabulary",
+        "id": "02119",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02119",
+        "alt_label": {
+          "de": "Waltershof"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02118"
+        },
+        "index": "vocabulary",
+        "id": "02118",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02118",
+        "alt_label": {
+          "de": "Steinwerder"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02117"
+        },
+        "index": "vocabulary",
+        "id": "02117",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02117",
+        "alt_label": {
+          "de": "Kleiner Grasbrook"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02116"
+        },
+        "index": "vocabulary",
+        "id": "02116",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02116",
+        "alt_label": {
+          "de": "Wilhelmsburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02111"
+        },
+        "index": "vocabulary",
+        "id": "02111",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02111",
+        "alt_label": {
+          "de": "Horn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02309"
+        },
+        "index": "vocabulary",
+        "id": "02309",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02309",
+        "alt_label": {
+          "de": "Stellingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02308"
+        },
+        "index": "vocabulary",
+        "id": "02308",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02308",
+        "alt_label": {
+          "de": "Eidelstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02307"
+        },
+        "index": "vocabulary",
+        "id": "02307",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02307",
+        "alt_label": {
+          "de": "Schnelsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02302"
+        },
+        "index": "vocabulary",
+        "id": "02302",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02302",
+        "alt_label": {
+          "de": "Rotherbaum"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02301"
+        },
+        "index": "vocabulary",
+        "id": "02301",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02301",
+        "alt_label": {
+          "de": "Eimsbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02306"
+        },
+        "index": "vocabulary",
+        "id": "02306",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02306",
+        "alt_label": {
+          "de": "Niendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02305"
+        },
+        "index": "vocabulary",
+        "id": "02305",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02305",
+        "alt_label": {
+          "de": "Lokstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02304"
+        },
+        "index": "vocabulary",
+        "id": "02304",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02304",
+        "alt_label": {
+          "de": "Hoheluft-West"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02303"
+        },
+        "index": "vocabulary",
+        "id": "02303",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02303",
+        "alt_label": {
+          "de": "Harvestehude"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09179"
+        },
+        "index": "vocabulary",
+        "id": "09179",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09179",
+        "alt_label": {
+          "de": "Fürstenfeldbruck"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09178"
+        },
+        "index": "vocabulary",
+        "id": "09178",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09178",
+        "alt_label": {
+          "de": "Freising"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09177"
+        },
+        "index": "vocabulary",
+        "id": "09177",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09177",
+        "alt_label": {
+          "de": "Erding"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09176"
+        },
+        "index": "vocabulary",
+        "id": "09176",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09176",
+        "alt_label": {
+          "de": "Eichstätt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09175"
+        },
+        "index": "vocabulary",
+        "id": "09175",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09175",
+        "alt_label": {
+          "de": "Ebersberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09174"
+        },
+        "index": "vocabulary",
+        "id": "09174",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09174",
+        "alt_label": {
+          "de": "Dachau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09173"
+        },
+        "index": "vocabulary",
+        "id": "09173",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09173",
+        "alt_label": {
+          "de": "Bad Tölz-Wolfratshausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09172"
+        },
+        "index": "vocabulary",
+        "id": "09172",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09172",
+        "alt_label": {
+          "de": "Berchtesgadener Land"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09171"
+        },
+        "index": "vocabulary",
+        "id": "09171",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09171",
+        "alt_label": {
+          "de": "Altötting"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02412"
+        },
+        "index": "vocabulary",
+        "id": "02412",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02412",
+        "alt_label": {
+          "de": "Fuhlsbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02411"
+        },
+        "index": "vocabulary",
+        "id": "02411",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02411",
+        "alt_label": {
+          "de": "Ohlsdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02410"
+        },
+        "index": "vocabulary",
+        "id": "02410",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02410",
+        "alt_label": {
+          "de": "Barmbek-Nord"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02413"
+        },
+        "index": "vocabulary",
+        "id": "02413",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02413",
+        "alt_label": {
+          "de": "Langenhorn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09163"
+        },
+        "index": "vocabulary",
+        "id": "09163",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09163",
+        "alt_label": {
+          "de": "Rosenheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09162"
+        },
+        "index": "vocabulary",
+        "id": "09162",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09162",
+        "alt_label": {
+          "de": "München, Landeshauptstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09161"
+        },
+        "index": "vocabulary",
+        "id": "09161",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09161",
+        "alt_label": {
+          "de": "Ingolstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02209"
+        },
+        "index": "vocabulary",
+        "id": "02209",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02209",
+        "alt_label": {
+          "de": "Osdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02208"
+        },
+        "index": "vocabulary",
+        "id": "02208",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02208",
+        "alt_label": {
+          "de": "Lurup"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02203"
+        },
+        "index": "vocabulary",
+        "id": "02203",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02203",
+        "alt_label": {
+          "de": "Altona-Nord"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02202"
+        },
+        "index": "vocabulary",
+        "id": "02202",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02202",
+        "alt_label": {
+          "de": "Sternschanze"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05958"
+        },
+        "index": "vocabulary",
+        "id": "05958",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05958",
+        "alt_label": {
+          "de": "Hochsauerlandkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02201"
+        },
+        "index": "vocabulary",
+        "id": "02201",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02201",
+        "alt_label": {
+          "de": "Altona-Altstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02207"
+        },
+        "index": "vocabulary",
+        "id": "02207",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02207",
+        "alt_label": {
+          "de": "Othmarschen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02206"
+        },
+        "index": "vocabulary",
+        "id": "02206",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02206",
+        "alt_label": {
+          "de": "Groß Flottbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02205"
+        },
+        "index": "vocabulary",
+        "id": "02205",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02205",
+        "alt_label": {
+          "de": "Bahrenfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05954"
+        },
+        "index": "vocabulary",
+        "id": "05954",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05954",
+        "alt_label": {
+          "de": "Ennepe-Ruhr-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05711"
+        },
+        "index": "vocabulary",
+        "id": "05711",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05711",
+        "alt_label": {
+          "de": "Bielefeld, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02204"
+        },
+        "index": "vocabulary",
+        "id": "02204",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/02204",
+        "alt_label": {
+          "de": "Ottensen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11009"
+        },
+        "index": "vocabulary",
+        "id": "11009",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11009",
+        "alt_label": {
+          "de": "Treptow-Köpenick"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11008"
+        },
+        "index": "vocabulary",
+        "id": "11008",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11008",
+        "alt_label": {
+          "de": "Neukölln"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11001"
+        },
+        "index": "vocabulary",
+        "id": "11001",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11001",
+        "alt_label": {
+          "de": "Mitte"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14511"
+        },
+        "index": "vocabulary",
+        "id": "14511",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14511",
+        "alt_label": {
+          "de": "Chemnitz, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11000"
+        },
+        "index": "vocabulary",
+        "id": "11000",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11000",
+        "alt_label": {
+          "de": "Berlin, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11003"
+        },
+        "index": "vocabulary",
+        "id": "11003",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11003",
+        "alt_label": {
+          "de": "Pankow"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11002"
+        },
+        "index": "vocabulary",
+        "id": "11002",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11002",
+        "alt_label": {
+          "de": "Friedrichshain-Kreuzberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11005"
+        },
+        "index": "vocabulary",
+        "id": "11005",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11005",
+        "alt_label": {
+          "de": "Spandau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11004"
+        },
+        "index": "vocabulary",
+        "id": "11004",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11004",
+        "alt_label": {
+          "de": "Charlottenburg-Wilmersdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11007"
+        },
+        "index": "vocabulary",
+        "id": "11007",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11007",
+        "alt_label": {
+          "de": "Tempelhof-Schöneberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11006"
+        },
+        "index": "vocabulary",
+        "id": "11006",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11006",
+        "alt_label": {
+          "de": "Steglitz-Zehlendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09190"
+        },
+        "index": "vocabulary",
+        "id": "09190",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09190",
+        "alt_label": {
+          "de": "Weilheim-Schongau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10042"
+        },
+        "index": "vocabulary",
+        "id": "10042",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10042",
+        "alt_label": {
+          "de": "Merzig-Wadern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11010"
+        },
+        "index": "vocabulary",
+        "id": "11010",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11010",
+        "alt_label": {
+          "de": "Marzahn-Hellersdorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10041"
+        },
+        "index": "vocabulary",
+        "id": "10041",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10041",
+        "alt_label": {
+          "de": "Regionalverband Saarbrücken"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03403"
+        },
+        "index": "vocabulary",
+        "id": "03403",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03403",
+        "alt_label": {
+          "de": "Oldenburg (Oldenburg), Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03404"
+        },
+        "index": "vocabulary",
+        "id": "03404",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03404",
+        "alt_label": {
+          "de": "Osnabrück, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03405"
+        },
+        "index": "vocabulary",
+        "id": "03405",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03405",
+        "alt_label": {
+          "de": "Wilhelmshaven, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03401"
+        },
+        "index": "vocabulary",
+        "id": "03401",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03401",
+        "alt_label": {
+          "de": "Delmenhorst, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03402"
+        },
+        "index": "vocabulary",
+        "id": "03402",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03402",
+        "alt_label": {
+          "de": "Emden, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09189"
+        },
+        "index": "vocabulary",
+        "id": "09189",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09189",
+        "alt_label": {
+          "de": "Traunstein"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09188"
+        },
+        "index": "vocabulary",
+        "id": "09188",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09188",
+        "alt_label": {
+          "de": "Starnberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09187"
+        },
+        "index": "vocabulary",
+        "id": "09187",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09187",
+        "alt_label": {
+          "de": "Rosenheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11012"
+        },
+        "index": "vocabulary",
+        "id": "11012",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11012",
+        "alt_label": {
+          "de": "Reinickendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14522"
+        },
+        "index": "vocabulary",
+        "id": "14522",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14522",
+        "alt_label": {
+          "de": "Mittelsachsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10044"
+        },
+        "index": "vocabulary",
+        "id": "10044",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10044",
+        "alt_label": {
+          "de": "Saarlouis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14523"
+        },
+        "index": "vocabulary",
+        "id": "14523",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14523",
+        "alt_label": {
+          "de": "Vogtlandkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10043"
+        },
+        "index": "vocabulary",
+        "id": "10043",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10043",
+        "alt_label": {
+          "de": "Neunkirchen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "11011"
+        },
+        "index": "vocabulary",
+        "id": "11011",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/11011",
+        "alt_label": {
+          "de": "Lichtenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09186"
+        },
+        "index": "vocabulary",
+        "id": "09186",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09186",
+        "alt_label": {
+          "de": "Pfaffenhofen a.d.Ilm"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10046"
+        },
+        "index": "vocabulary",
+        "id": "10046",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10046",
+        "alt_label": {
+          "de": "St. Wendel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09185"
+        },
+        "index": "vocabulary",
+        "id": "09185",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09185",
+        "alt_label": {
+          "de": "Neuburg-Schrobenhausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14521"
+        },
+        "index": "vocabulary",
+        "id": "14521",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14521",
+        "alt_label": {
+          "de": "Erzgebirgskreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10045"
+        },
+        "index": "vocabulary",
+        "id": "10045",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/10045",
+        "alt_label": {
+          "de": "Saarpfalz-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09184"
+        },
+        "index": "vocabulary",
+        "id": "09184",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09184",
+        "alt_label": {
+          "de": "München"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09183"
+        },
+        "index": "vocabulary",
+        "id": "09183",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09183",
+        "alt_label": {
+          "de": "Mühldorf a.Inn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09182"
+        },
+        "index": "vocabulary",
+        "id": "09182",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09182",
+        "alt_label": {
+          "de": "Miesbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14524"
+        },
+        "index": "vocabulary",
+        "id": "14524",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/14524",
+        "alt_label": {
+          "de": "Zwickau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09181"
+        },
+        "index": "vocabulary",
+        "id": "09181",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09181",
+        "alt_label": {
+          "de": "Landsberg am Lech"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09180"
+        },
+        "index": "vocabulary",
+        "id": "09180",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/09180",
+        "alt_label": {
+          "de": "Garmisch-Partenkirchen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03157"
+        },
+        "index": "vocabulary",
+        "id": "03157",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03157",
+        "alt_label": {
+          "de": "Peine"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03158"
+        },
+        "index": "vocabulary",
+        "id": "03158",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03158",
+        "alt_label": {
+          "de": "Wolfenbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03159"
+        },
+        "index": "vocabulary",
+        "id": "03159",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03159",
+        "alt_label": {
+          "de": "Göttingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03153"
+        },
+        "index": "vocabulary",
+        "id": "03153",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03153",
+        "alt_label": {
+          "de": "Goslar"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03154"
+        },
+        "index": "vocabulary",
+        "id": "03154",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03154",
+        "alt_label": {
+          "de": "Helmstedt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05334"
+        },
+        "index": "vocabulary",
+        "id": "05334",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05334",
+        "alt_label": {
+          "de": "Städteregion Aachen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03155"
+        },
+        "index": "vocabulary",
+        "id": "03155",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03155",
+        "alt_label": {
+          "de": "Northeim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05570"
+        },
+        "index": "vocabulary",
+        "id": "05570",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05570",
+        "alt_label": {
+          "de": "Warendorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03151"
+        },
+        "index": "vocabulary",
+        "id": "03151",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03151",
+        "alt_label": {
+          "de": "Gifhorn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06414"
+        },
+        "index": "vocabulary",
+        "id": "06414",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06414",
+        "alt_label": {
+          "de": "Wiesbaden, Landeshauptstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06535"
+        },
+        "index": "vocabulary",
+        "id": "06535",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06535",
+        "alt_label": {
+          "de": "Vogelsbergkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06413"
+        },
+        "index": "vocabulary",
+        "id": "06413",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06413",
+        "alt_label": {
+          "de": "Offenbach am Main, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06534"
+        },
+        "index": "vocabulary",
+        "id": "06534",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06534",
+        "alt_label": {
+          "de": "Marburg-Biedenkopf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05566"
+        },
+        "index": "vocabulary",
+        "id": "05566",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05566",
+        "alt_label": {
+          "de": "Steinfurt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06531"
+        },
+        "index": "vocabulary",
+        "id": "06531",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06531",
+        "alt_label": {
+          "de": "Gießen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05562"
+        },
+        "index": "vocabulary",
+        "id": "05562",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05562",
+        "alt_label": {
+          "de": "Recklinghausen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06412"
+        },
+        "index": "vocabulary",
+        "id": "06412",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06412",
+        "alt_label": {
+          "de": "Frankfurt am Main, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06533"
+        },
+        "index": "vocabulary",
+        "id": "06533",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06533",
+        "alt_label": {
+          "de": "Limburg-Weilburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06411"
+        },
+        "index": "vocabulary",
+        "id": "06411",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06411",
+        "alt_label": {
+          "de": "Darmstadt, Wissenschaftsstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06532"
+        },
+        "index": "vocabulary",
+        "id": "06532",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06532",
+        "alt_label": {
+          "de": "Lahn-Dill-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15003"
+        },
+        "index": "vocabulary",
+        "id": "15003",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15003",
+        "alt_label": {
+          "de": "Magdeburg, Landeshauptstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15002"
+        },
+        "index": "vocabulary",
+        "id": "15002",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15002",
+        "alt_label": {
+          "de": "Halle (Saale), Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15001"
+        },
+        "index": "vocabulary",
+        "id": "15001",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/15001",
+        "alt_label": {
+          "de": "Dessau-Roßlau, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05119"
+        },
+        "index": "vocabulary",
+        "id": "05119",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05119",
+        "alt_label": {
+          "de": "Oberhausen, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05116"
+        },
+        "index": "vocabulary",
+        "id": "05116",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05116",
+        "alt_label": {
+          "de": "Mönchengladbach, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05358"
+        },
+        "index": "vocabulary",
+        "id": "05358",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05358",
+        "alt_label": {
+          "de": "Düren"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05117"
+        },
+        "index": "vocabulary",
+        "id": "05117",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05117",
+        "alt_label": {
+          "de": "Mülheim an der Ruhr, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05112"
+        },
+        "index": "vocabulary",
+        "id": "05112",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05112",
+        "alt_label": {
+          "de": "Duisburg, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05111"
+        },
+        "index": "vocabulary",
+        "id": "05111",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05111",
+        "alt_label": {
+          "de": "Düsseldorf, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05114"
+        },
+        "index": "vocabulary",
+        "id": "05114",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05114",
+        "alt_label": {
+          "de": "Krefeld, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05113"
+        },
+        "index": "vocabulary",
+        "id": "05113",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05113",
+        "alt_label": {
+          "de": "Essen, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06440"
+        },
+        "index": "vocabulary",
+        "id": "06440",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06440",
+        "alt_label": {
+          "de": "Wetteraukreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13073"
+        },
+        "index": "vocabulary",
+        "id": "13073",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13073",
+        "alt_label": {
+          "de": "Vorpommern-Rügen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13074"
+        },
+        "index": "vocabulary",
+        "id": "13074",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13074",
+        "alt_label": {
+          "de": "Nordwestmecklenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13071"
+        },
+        "index": "vocabulary",
+        "id": "13071",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13071",
+        "alt_label": {
+          "de": "Mecklenburgische Seenplatte"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13072"
+        },
+        "index": "vocabulary",
+        "id": "13072",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13072",
+        "alt_label": {
+          "de": "Landkreis Rostock"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13075"
+        },
+        "index": "vocabulary",
+        "id": "13075",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13075",
+        "alt_label": {
+          "de": "Vorpommern-Greifswald"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13076"
+        },
+        "index": "vocabulary",
+        "id": "13076",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/13076",
+        "alt_label": {
+          "de": "Ludwigslust-Parchim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06439"
+        },
+        "index": "vocabulary",
+        "id": "06439",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06439",
+        "alt_label": {
+          "de": "Rheingau-Taunus-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06436"
+        },
+        "index": "vocabulary",
+        "id": "06436",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06436",
+        "alt_label": {
+          "de": "Main-Taunus-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06435"
+        },
+        "index": "vocabulary",
+        "id": "06435",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06435",
+        "alt_label": {
+          "de": "Main-Kinzig-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06438"
+        },
+        "index": "vocabulary",
+        "id": "06438",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06438",
+        "alt_label": {
+          "de": "Offenbach"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06437"
+        },
+        "index": "vocabulary",
+        "id": "06437",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06437",
+        "alt_label": {
+          "de": "Odenwaldkreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06432"
+        },
+        "index": "vocabulary",
+        "id": "06432",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06432",
+        "alt_label": {
+          "de": "Darmstadt-Dieburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "04011"
+        },
+        "index": "vocabulary",
+        "id": "04011",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/04011",
+        "alt_label": {
+          "de": "Bremen, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06431"
+        },
+        "index": "vocabulary",
+        "id": "06431",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06431",
+        "alt_label": {
+          "de": "Bergstraße"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "04012"
+        },
+        "index": "vocabulary",
+        "id": "04012",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/04012",
+        "alt_label": {
+          "de": "Bremerhaven, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06434"
+        },
+        "index": "vocabulary",
+        "id": "06434",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06434",
+        "alt_label": {
+          "de": "Hochtaunuskreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06433"
+        },
+        "index": "vocabulary",
+        "id": "06433",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06433",
+        "alt_label": {
+          "de": "Groß-Gerau"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12071"
+        },
+        "index": "vocabulary",
+        "id": "12071",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12071",
+        "alt_label": {
+          "de": "Spree-Neiße"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12070"
+        },
+        "index": "vocabulary",
+        "id": "12070",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12070",
+        "alt_label": {
+          "de": "Prignitz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12073"
+        },
+        "index": "vocabulary",
+        "id": "12073",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12073",
+        "alt_label": {
+          "de": "Uckermark"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12072"
+        },
+        "index": "vocabulary",
+        "id": "12072",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12072",
+        "alt_label": {
+          "de": "Teltow-Fläming"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01059"
+        },
+        "index": "vocabulary",
+        "id": "01059",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01059",
+        "alt_label": {
+          "de": "Schleswig-Flensburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03359"
+        },
+        "index": "vocabulary",
+        "id": "03359",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03359",
+        "alt_label": {
+          "de": "Stade"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01058"
+        },
+        "index": "vocabulary",
+        "id": "01058",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01058",
+        "alt_label": {
+          "de": "Rendsburg-Eckernförde"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01057"
+        },
+        "index": "vocabulary",
+        "id": "01057",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01057",
+        "alt_label": {
+          "de": "Plön"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01056"
+        },
+        "index": "vocabulary",
+        "id": "01056",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01056",
+        "alt_label": {
+          "de": "Pinneberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03355"
+        },
+        "index": "vocabulary",
+        "id": "03355",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03355",
+        "alt_label": {
+          "de": "Lüneburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03356"
+        },
+        "index": "vocabulary",
+        "id": "03356",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03356",
+        "alt_label": {
+          "de": "Osterholz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03357"
+        },
+        "index": "vocabulary",
+        "id": "03357",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03357",
+        "alt_label": {
+          "de": "Rotenburg (Wümme)"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03358"
+        },
+        "index": "vocabulary",
+        "id": "03358",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03358",
+        "alt_label": {
+          "de": "Heidekreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03351"
+        },
+        "index": "vocabulary",
+        "id": "03351",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03351",
+        "alt_label": {
+          "de": "Celle"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01051"
+        },
+        "index": "vocabulary",
+        "id": "01051",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01051",
+        "alt_label": {
+          "de": "Dithmarschen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03352"
+        },
+        "index": "vocabulary",
+        "id": "03352",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03352",
+        "alt_label": {
+          "de": "Cuxhaven"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05774"
+        },
+        "index": "vocabulary",
+        "id": "05774",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05774",
+        "alt_label": {
+          "de": "Paderborn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03353"
+        },
+        "index": "vocabulary",
+        "id": "03353",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03353",
+        "alt_label": {
+          "de": "Harburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03354"
+        },
+        "index": "vocabulary",
+        "id": "03354",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03354",
+        "alt_label": {
+          "de": "Lüchow-Dannenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01055"
+        },
+        "index": "vocabulary",
+        "id": "01055",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01055",
+        "alt_label": {
+          "de": "Ostholstein"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01054"
+        },
+        "index": "vocabulary",
+        "id": "01054",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01054",
+        "alt_label": {
+          "de": "Nordfriesland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05770"
+        },
+        "index": "vocabulary",
+        "id": "05770",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05770",
+        "alt_label": {
+          "de": "Minden-Lübbecke"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01053"
+        },
+        "index": "vocabulary",
+        "id": "01053",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01053",
+        "alt_label": {
+          "de": "Herzogtum Lauenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03102"
+        },
+        "index": "vocabulary",
+        "id": "03102",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03102",
+        "alt_label": {
+          "de": "Salzgitter, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03103"
+        },
+        "index": "vocabulary",
+        "id": "03103",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03103",
+        "alt_label": {
+          "de": "Wolfsburg, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06611"
+        },
+        "index": "vocabulary",
+        "id": "06611",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06611",
+        "alt_label": {
+          "de": "Kassel, documenta-Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05766"
+        },
+        "index": "vocabulary",
+        "id": "05766",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05766",
+        "alt_label": {
+          "de": "Lippe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03461"
+        },
+        "index": "vocabulary",
+        "id": "03461",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03461",
+        "alt_label": {
+          "de": "Wesermarsch"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03462"
+        },
+        "index": "vocabulary",
+        "id": "03462",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03462",
+        "alt_label": {
+          "de": "Wittmund"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03101"
+        },
+        "index": "vocabulary",
+        "id": "03101",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03101",
+        "alt_label": {
+          "de": "Braunschweig, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05762"
+        },
+        "index": "vocabulary",
+        "id": "05762",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05762",
+        "alt_label": {
+          "de": "Höxter"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03460"
+        },
+        "index": "vocabulary",
+        "id": "03460",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03460",
+        "alt_label": {
+          "de": "Vechta"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12051"
+        },
+        "index": "vocabulary",
+        "id": "12051",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12051",
+        "alt_label": {
+          "de": "Brandenburg an der Havel, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12053"
+        },
+        "index": "vocabulary",
+        "id": "12053",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12053",
+        "alt_label": {
+          "de": "Frankfurt (Oder), Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12052"
+        },
+        "index": "vocabulary",
+        "id": "12052",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12052",
+        "alt_label": {
+          "de": "Cottbus, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12054"
+        },
+        "index": "vocabulary",
+        "id": "12054",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12054",
+        "alt_label": {
+          "de": "Potsdam, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03256"
+        },
+        "index": "vocabulary",
+        "id": "03256",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03256",
+        "alt_label": {
+          "de": "Nienburg (Weser)"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05314"
+        },
+        "index": "vocabulary",
+        "id": "05314",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05314",
+        "alt_label": {
+          "de": "Bonn, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03257"
+        },
+        "index": "vocabulary",
+        "id": "03257",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03257",
+        "alt_label": {
+          "de": "Schaumburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05316"
+        },
+        "index": "vocabulary",
+        "id": "05316",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05316",
+        "alt_label": {
+          "de": "Leverkusen, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05558"
+        },
+        "index": "vocabulary",
+        "id": "05558",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05558",
+        "alt_label": {
+          "de": "Coesfeld"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05315"
+        },
+        "index": "vocabulary",
+        "id": "05315",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05315",
+        "alt_label": {
+          "de": "Köln, Stadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03252"
+        },
+        "index": "vocabulary",
+        "id": "03252",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03252",
+        "alt_label": {
+          "de": "Hameln-Pyrmont"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05554"
+        },
+        "index": "vocabulary",
+        "id": "05554",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/05554",
+        "alt_label": {
+          "de": "Borken"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03254"
+        },
+        "index": "vocabulary",
+        "id": "03254",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03254",
+        "alt_label": {
+          "de": "Hildesheim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03255"
+        },
+        "index": "vocabulary",
+        "id": "03255",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03255",
+        "alt_label": {
+          "de": "Holzminden"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03251"
+        },
+        "index": "vocabulary",
+        "id": "03251",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03251",
+        "alt_label": {
+          "de": "Diepholz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12060"
+        },
+        "index": "vocabulary",
+        "id": "12060",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12060",
+        "alt_label": {
+          "de": "Barnim"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12062"
+        },
+        "index": "vocabulary",
+        "id": "12062",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12062",
+        "alt_label": {
+          "de": "Elbe-Elster"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12061"
+        },
+        "index": "vocabulary",
+        "id": "12061",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12061",
+        "alt_label": {
+          "de": "Dahme-Spreewald"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12064"
+        },
+        "index": "vocabulary",
+        "id": "12064",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12064",
+        "alt_label": {
+          "de": "Märkisch-Oderland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12063"
+        },
+        "index": "vocabulary",
+        "id": "12063",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12063",
+        "alt_label": {
+          "de": "Havelland"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12066"
+        },
+        "index": "vocabulary",
+        "id": "12066",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12066",
+        "alt_label": {
+          "de": "Oberspreewald-Lausitz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12065"
+        },
+        "index": "vocabulary",
+        "id": "12065",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12065",
+        "alt_label": {
+          "de": "Oberhavel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06634"
+        },
+        "index": "vocabulary",
+        "id": "06634",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06634",
+        "alt_label": {
+          "de": "Schwalm-Eder-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06633"
+        },
+        "index": "vocabulary",
+        "id": "06633",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06633",
+        "alt_label": {
+          "de": "Kassel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06636"
+        },
+        "index": "vocabulary",
+        "id": "06636",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06636",
+        "alt_label": {
+          "de": "Werra-Meißner-Kreis"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06635"
+        },
+        "index": "vocabulary",
+        "id": "06635",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06635",
+        "alt_label": {
+          "de": "Waldeck-Frankenberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01062"
+        },
+        "index": "vocabulary",
+        "id": "01062",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01062",
+        "alt_label": {
+          "de": "Stormarn"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03241"
+        },
+        "index": "vocabulary",
+        "id": "03241",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03241",
+        "alt_label": {
+          "de": "Region Hannover"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01061"
+        },
+        "index": "vocabulary",
+        "id": "01061",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01061",
+        "alt_label": {
+          "de": "Steinburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06632"
+        },
+        "index": "vocabulary",
+        "id": "06632",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06632",
+        "alt_label": {
+          "de": "Hersfeld-Rotenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01060"
+        },
+        "index": "vocabulary",
+        "id": "01060",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/01060",
+        "alt_label": {
+          "de": "Segeberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06631"
+        },
+        "index": "vocabulary",
+        "id": "06631",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/06631",
+        "alt_label": {
+          "de": "Fulda"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03360"
+        },
+        "index": "vocabulary",
+        "id": "03360",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03360",
+        "alt_label": {
+          "de": "Uelzen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03361"
+        },
+        "index": "vocabulary",
+        "id": "03361",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/03361",
+        "alt_label": {
+          "de": "Verden"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12068"
+        },
+        "index": "vocabulary",
+        "id": "12068",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12068",
+        "alt_label": {
+          "de": "Ostprignitz-Ruppin"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12067"
+        },
+        "index": "vocabulary",
+        "id": "12067",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12067",
+        "alt_label": {
+          "de": "Oder-Spree"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12069"
+        },
+        "index": "vocabulary",
+        "id": "12069",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/districtKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/districtKey/12069",
+        "alt_label": {
+          "de": "Potsdam-Mittelmark"
+        }
+      }
+    ]
+  }
+}

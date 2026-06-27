@@ -1,0 +1,53 @@
+.fader-container {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100svw;
+  height: 100svh;
+  background: white;
+}
+
+.fader {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-size: cover;
+  background-color: transparent;
+  background-image: url('odb-favicon.svg');
+  background-repeat: no-repeat;
+  opacity: 1; /* Initial opacity */
+  animation: fadeAnimation 3000ms infinite; /* 3000ms total duration, infinite loop */
+  -webkit-animation: fadeAnimation 3000ms infinite; /* 3000ms total duration, infinite loop */
+  animation-delay: 1000ms; /* 1000ms delay before animation starts */
+}
+@keyframes fadeAnimation {
+  0% {
+    opacity: 1; /* Start state: 100% opacity */
+  }
+  33.33% {
+    opacity: 0.2; /* Fade state: 20% opacity */
+  }
+  66.66% {
+    opacity: 1; /* Back to start state */
+  }
+  100% {
+    opacity: 1; /* Stay at full state befor looping again */
+  } 
+}
+
+@-webkit-keyframes fadeAnimation {
+  0% {
+    opacity: 1; /* Start state: 100% opacity */
+  }
+  33.33% {
+    opacity: 0.2; /* Fade state: 20% opacity */
+  }
+  66.66% {
+    opacity: 1; /* Back to start state */
+  }
+  100% {
+    opacity: 1; /* Stay at full state befor looping again */
+  }
+}

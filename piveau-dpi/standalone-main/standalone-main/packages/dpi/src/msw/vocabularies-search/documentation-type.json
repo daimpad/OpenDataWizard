@@ -1,0 +1,199 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 5,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "pt": "Visualização",
+          "lv": "Vizualizācija",
+          "et": "Visuaalne kuju",
+          "fr": "Visualisation",
+          "pl": "Wizualizacja",
+          "hu": "Megjelenítés",
+          "da": "Visualisering",
+          "cs": "Vizualizace",
+          "bg": "Визуализация",
+          "de": "Visualisierung",
+          "lt": "Vizualizacija",
+          "hr": "Vizualizacija",
+          "ro": "Vizualizare",
+          "mt": "Viżwalizzazzjoni",
+          "es": "Visualización",
+          "en": "Visualization",
+          "nl": "Visualisatie",
+          "el": "Οπτική εμφάνιση",
+          "sv": "Visualisering",
+          "fi": "Visualisointi",
+          "sl": "Vizualizacija",
+          "it": "Visualizzazione",
+          "sk": "Vizualizácia"
+        },
+        "index": "vocabulary",
+        "id": "VISUALIZATION",
+        "in_scheme": "http://publications.europa.eu/resource/authority/documentation-type",
+        "resource": "http://publications.europa.eu/resource/authority/documentation-type/VISUALIZATION"
+      },
+      {
+        "pref_label": {
+          "nl": "Verwante documentatie",
+          "ga": "Doiciméadacht ghaolmhar",
+          "el": "Σχετική τεκμηρίωση",
+          "fr": "Documentation correspondante",
+          "pt": "Documentação conexa",
+          "ro": "Documentație conexă",
+          "sl": "Povezana dokumentacija",
+          "da": "Relateret dokumentation",
+          "cs": "Související dokumentace",
+          "fi": "Asiaan liittyvä dokumentaatio",
+          "hu": "Kapcsolódó dokumentáció",
+          "en": "Related documentation",
+          "hr": "Povezana dokumentacija",
+          "sv": "Tillhörande dokumentation",
+          "bg": "Свързана документация",
+          "sk": "Súvisiaca dokumentácia",
+          "es": "Documentación relacionada",
+          "pl": "Dokumenty powiązane",
+          "lt": "Susijusi dokumentacija",
+          "it": "Documentazione correlata",
+          "et": "Seotud dokumendid",
+          "de": "Unterstützende Unterlagen",
+          "mt": "Dokumentazzjoni relatata",
+          "lv": "Saistītā dokumentācija"
+        },
+        "index": "vocabulary",
+        "id": "DOCUMENTATION_RELATED",
+        "in_scheme": "http://publications.europa.eu/resource/authority/documentation-type",
+        "resource": "http://publications.europa.eu/resource/authority/documentation-type/DOCUMENTATION_RELATED"
+      },
+      {
+        "pref_label": {
+          "sv": "Tillfälliga uppgifter",
+          "es": "Datos provisionales",
+          "hr": "Privremeni podaci",
+          "bg": "НЕОКОНЧАТЕЛНИ ДАННИ",
+          "en": "Provisional data",
+          "ga": "Sonraí sealadacha",
+          "cs": "Předběžné údaje",
+          "mt": "Dejta provviżorja",
+          "pl": "Dane tymczasowe",
+          "fi": "Alustavat tiedot",
+          "ro": "Date provizorii",
+          "de": "Vorläufige Daten",
+          "hu": "Ideiglenes adatok",
+          "da": "Midlertidige data",
+          "lv": "Provizoriski dati",
+          "sk": "Predbežné údaje",
+          "fr": "Données provisoires",
+          "pt": "Dados provisórios",
+          "sl": "Začasni podatki",
+          "it": "Dati provvisori",
+          "et": "Esialgsed andmed",
+          "lt": "Laikinieji duomenys",
+          "nl": "Voorlopige gegevens",
+          "el": "Προσωρινά δεδομένα"
+        },
+        "index": "vocabulary",
+        "id": "OP_DATPRO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/documentation-type",
+        "resource": "http://publications.europa.eu/resource/authority/documentation-types/OP_DATPRO"
+      },
+      {
+        "pref_label": {
+          "ga": "Doiciméadacht phríomha",
+          "fr": "Documentation principale",
+          "fi": "Päädokumentaatio",
+          "da": "Hoveddokumentation",
+          "pt": "Documentação principal",
+          "sv": "Dokumentation",
+          "es": "Documentación principal",
+          "ro": "Documentație principală",
+          "mt": "Dokumentazzjoni ewlenija",
+          "lt": "Pagrindinė dokumentacija",
+          "pl": "Dokumenty główne",
+          "it": "Documentazione principale",
+          "hu": "Alapdokumentáció",
+          "cs": "Hlavní dokumentace",
+          "de": "Zentrale Unterlagen",
+          "lv": "Galvenā dokumentācija",
+          "sl": "Glavna dokumentacija",
+          "el": "Κύρια τεκμηρίωση",
+          "nl": "Hoofddocumentatie",
+          "hr": "Glavna dokumentacija",
+          "en": "Main documentation",
+          "bg": "Основна документация",
+          "sk": "Hlavná dokumentácia",
+          "et": "Põhidokumendid"
+        },
+        "index": "vocabulary",
+        "id": "DOCUMENTATION_MAIN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/documentation-type",
+        "resource": "http://publications.europa.eu/resource/authority/documentation-type/DOCUMENTATION_MAIN"
+      },
+      {
+        "pref_label": {
+          "de": "Einschlägige Webseite",
+          "cs": "Související internetová stránka",
+          "da": "Relateret webside",
+          "es": "Página web relacionada",
+          "it": "Pagina web collegata",
+          "et": "Seotud veebileht",
+          "ro": "Pagină de internet asociată",
+          "ga": "Leathanach gréasáin gaolmhar",
+          "sk": "Súvisiaca webová stránka",
+          "hr": "Povezana web-stranica",
+          "sl": "Povezana spletna stran",
+          "hu": "Kapcsolódó weboldal",
+          "nl": "Verwante webpagina",
+          "en": "Related webpage",
+          "pt": "Página web conexa",
+          "sv": "Webbsida",
+          "bg": "Свързана интернет страница",
+          "lv": "Saistītā vietne",
+          "lt": "Susijęs tinklalapis",
+          "fr": "Page web correspondante",
+          "el": "Σχετική ιστοσελίδα",
+          "mt": "Paġna Web relatata",
+          "pl": "Powiązane strony internetowe",
+          "fi": "Asiaan liittyvä verkkosivusto"
+        },
+        "index": "vocabulary",
+        "id": "WEBPAGE_RELATED",
+        "in_scheme": "http://publications.europa.eu/resource/authority/documentation-type",
+        "resource": "http://publications.europa.eu/resource/authority/documentation-type/WEBPAGE_RELATED"
+      }
+    ]
+  }
+}

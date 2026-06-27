@@ -1,0 +1,63 @@
+/**
+Renders a scrolling text. Inspired by https://stackoverflow.com/questions/45847392/pure-css-continuous-horizontal-text-scroll-without-break
+ */
+.continuous-scrolling-text {
+  & {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    width: 10rem;
+    height: 1px;
+    @extend .bg-by-neutral-30;
+    position: relative;
+    margin: auto
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    width: 10rem;
+    height: 1px;
+    margin-top: -6px;
+    line-height: 0;
+    @extend .bg-by-neutral-30;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .marquee {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    animation: marquee 70s linear infinite;
+    @extend .text-by-neutral-60;
+
+    &:hover {
+      animation-play-state: paused;
+      @extend .text-by-neutral-80;
+    }
+
+    p {
+      margin: 1rem 0 1rem 0;
+      display: inline-block;
+
+      span {
+        padding: 0 0.75rem 0 0.75rem;
+        @extend .by-copy-large-semibold;
+      }
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

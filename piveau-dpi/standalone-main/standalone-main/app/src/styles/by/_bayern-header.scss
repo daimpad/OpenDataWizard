@@ -1,0 +1,17 @@
+
+.nav-container.header-nav-container {
+  border-bottom: 1px solid $by-neutral-10;
+}
+
+.piveau-header .nav-link {
+  @extend .by-copy-large-semibold;
+  margin-bottom: 0 !important;
+
+  &:hover {
+    margin-left: 0 !important;
+  }
+}
+
+.piveau-header .nav-link.active {
+  margin-left: 0 !important;
+}

@@ -1,0 +1,472 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 36,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "091"
+        },
+        "index": "vocabulary",
+        "id": "091",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/091",
+        "alt_label": {
+          "de": "Oberbayern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "092"
+        },
+        "index": "vocabulary",
+        "id": "092",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/092",
+        "alt_label": {
+          "de": "Niederbayern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "093"
+        },
+        "index": "vocabulary",
+        "id": "093",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/093",
+        "alt_label": {
+          "de": "Oberpfalz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "071"
+        },
+        "index": "vocabulary",
+        "id": "071",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/071",
+        "alt_label": {
+          "de": "früher: Reg.-Bez. Koblenz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "094"
+        },
+        "index": "vocabulary",
+        "id": "094",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/094",
+        "alt_label": {
+          "de": "Oberfranken"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "072"
+        },
+        "index": "vocabulary",
+        "id": "072",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/072",
+        "alt_label": {
+          "de": "früher: Reg.-Bez. Trier"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "051"
+        },
+        "index": "vocabulary",
+        "id": "051",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/051",
+        "alt_label": {
+          "de": "Reg.-Bez. Düsseldorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "095"
+        },
+        "index": "vocabulary",
+        "id": "095",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/095",
+        "alt_label": {
+          "de": "Mittelfranken"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "073"
+        },
+        "index": "vocabulary",
+        "id": "073",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/073",
+        "alt_label": {
+          "de": "früher: Reg.-Bez. Rheinhessen-Pfalz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "096"
+        },
+        "index": "vocabulary",
+        "id": "096",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/096",
+        "alt_label": {
+          "de": "Unterfranken"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "053"
+        },
+        "index": "vocabulary",
+        "id": "053",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/053",
+        "alt_label": {
+          "de": "Reg.-Bez. Köln"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "097"
+        },
+        "index": "vocabulary",
+        "id": "097",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/097",
+        "alt_label": {
+          "de": "Schwaben"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "031"
+        },
+        "index": "vocabulary",
+        "id": "031",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/031",
+        "alt_label": {
+          "de": "Statistische Region Braunschweig"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "032"
+        },
+        "index": "vocabulary",
+        "id": "032",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/032",
+        "alt_label": {
+          "de": "Statistische Region Hannover"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "055"
+        },
+        "index": "vocabulary",
+        "id": "055",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/055",
+        "alt_label": {
+          "de": "Reg.-Bez. Münster"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "033"
+        },
+        "index": "vocabulary",
+        "id": "033",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/033",
+        "alt_label": {
+          "de": "Statistische Region Lüneburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "034"
+        },
+        "index": "vocabulary",
+        "id": "034",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/034",
+        "alt_label": {
+          "de": "Statistische Region Weser-Ems"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "057"
+        },
+        "index": "vocabulary",
+        "id": "057",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/057",
+        "alt_label": {
+          "de": "Reg.-Bez. Detmold"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "059"
+        },
+        "index": "vocabulary",
+        "id": "059",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/059",
+        "alt_label": {
+          "de": "Reg.-Bez. Arnsberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "081"
+        },
+        "index": "vocabulary",
+        "id": "081",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/081",
+        "alt_label": {
+          "de": "Reg.-Bez. Stuttgart"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "082"
+        },
+        "index": "vocabulary",
+        "id": "082",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/082",
+        "alt_label": {
+          "de": "Reg.-Bez. Karlsruhe"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "083"
+        },
+        "index": "vocabulary",
+        "id": "083",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/083",
+        "alt_label": {
+          "de": "Reg.-Bez. Freiburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "084"
+        },
+        "index": "vocabulary",
+        "id": "084",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/084",
+        "alt_label": {
+          "de": "Reg.-Bez. Tübingen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "064"
+        },
+        "index": "vocabulary",
+        "id": "064",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/064",
+        "alt_label": {
+          "de": "Reg.-Bez. Darmstadt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "021"
+        },
+        "index": "vocabulary",
+        "id": "021",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/021",
+        "alt_label": {
+          "de": "Bezirk Hamburg-Mitte"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "065"
+        },
+        "index": "vocabulary",
+        "id": "065",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/065",
+        "alt_label": {
+          "de": "Reg.-Bez. Gießen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "022"
+        },
+        "index": "vocabulary",
+        "id": "022",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/022",
+        "alt_label": {
+          "de": "Bezirk Altona"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "066"
+        },
+        "index": "vocabulary",
+        "id": "066",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/066",
+        "alt_label": {
+          "de": "Reg.-Bez. Kassel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "023"
+        },
+        "index": "vocabulary",
+        "id": "023",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/023",
+        "alt_label": {
+          "de": "Bezirk Eimsbüttel"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "145"
+        },
+        "index": "vocabulary",
+        "id": "145",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/145",
+        "alt_label": {
+          "de": "früher: Direktionsbezirk Chemnitz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "024"
+        },
+        "index": "vocabulary",
+        "id": "024",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/024",
+        "alt_label": {
+          "de": "Bezirk Hamburg-Nord"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "146"
+        },
+        "index": "vocabulary",
+        "id": "146",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/146",
+        "alt_label": {
+          "de": "früher: Direktionsbezirk Dresden"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "025"
+        },
+        "index": "vocabulary",
+        "id": "025",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/025",
+        "alt_label": {
+          "de": "Bezirk Wandsbek"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "147"
+        },
+        "index": "vocabulary",
+        "id": "147",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/147",
+        "alt_label": {
+          "de": "früher: Direktionsbezirk Leipzig"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "026"
+        },
+        "index": "vocabulary",
+        "id": "026",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/026",
+        "alt_label": {
+          "de": "Bezirk Bergedorf"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "027"
+        },
+        "index": "vocabulary",
+        "id": "027",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/governmentDistrictKey/027",
+        "alt_label": {
+          "de": "Bezirk Harburg"
+        }
+      }
+    ]
+  }
+}

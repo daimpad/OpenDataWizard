@@ -1,0 +1,52 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 1,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "Datenreihe"
+        },
+        "index": "vocabulary",
+        "id": "collection",
+        "in_scheme": "http://dcat-ap.de/def/datasetTypes",
+        "resource": "http://dcat-ap.de/def/datasetTypes/collection",
+        "alt_label": {
+          "de": "Zeitreihen und sonstige linear und nicht linear angeordnete Elemente einer Reihe als Kollektionen von Datenstrukturen."
+        }
+      }
+    ]
+  }
+}

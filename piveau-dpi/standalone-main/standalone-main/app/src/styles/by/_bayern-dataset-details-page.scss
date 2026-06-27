@@ -1,0 +1,471 @@
+
+.by-dataset-details-container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+.by-dataset-details-content-container {
+  max-width: 1280px !important;
+  background-color: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  .dsd-back-button {
+    margin-left: -24px;
+    gap: 8px;
+  }
+
+  .by-dataset-details-header-catalog, .by-dataset-details-header-catalog:visited {
+    color: $by-blue-80;
+    &:hover {
+      color: $by-blue-100;
+    }
+    &:active {
+      color: $by-blue-60;
+    }
+  }
+
+  .dsd-description {
+    background-color: transparent;
+    margin: 3rem 0;
+    width: 100%;
+
+    .by-heading-4 {
+      margin-bottom: 2rem;
+    }
+
+    .dataset-info-box-header {
+      padding: 0 !important;
+      border: none !important;
+      background-color: transparent !important;
+
+      .card-title {
+        @extend .by-heading-4;
+        color: var(--secondary);
+      }
+    }
+
+    .dsd-description-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: stretch;
+      width: 100%;
+      padding: 2.5rem 1.5rem;
+      background-color: $by-neutral-0;
+      border-bottom: 1px solid $by-neutral-20;
+    }
+
+    .dsd-description-show-more {
+      width: 100%;
+      color: black !important;
+      margin-top: 20px;
+      flex-direction: column;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tab-pane {
+      width: 100%;
+      height: 100%;
+    }
+
+    .dataset-details-tabs {
+      border: none !important;
+
+      .dataset-details-tab {
+        @extend .by-copy-large-bold;
+        width: 100%;
+        margin: 0 !important;
+        border: none !important;
+        padding: 0.5rem 1rem;
+        color: $by-neutral-60;
+        background-color: transparent;
+
+        &:hover {
+          color: $by-blue-80;
+        }
+
+        &:active {
+          color: $by-blue-60;
+        }
+
+        &.active {
+          color: $by-blue-100;
+          background-color: $by-neutral-0;
+
+          &:hover {
+            color: $by-blue-80;
+          }
+        }
+      }
+    }
+  }
+
+  .similar-datasets-carousel {
+
+    .carousel-inner {
+      margin-bottom: 3rem;
+    }
+
+    .similar-datasets-carousel-indicators {
+      position: relative;
+      margin: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .similar-datasets-carousel-indicators > li {
+      height: 0.5rem;
+      width: 0.5rem;
+      border-radius: 50%;
+      background-color: $by-neutral-30;
+
+      &.active {
+        background-color: $by-neutral-60;
+      }
+    }
+
+    .dataset-info-box {
+      padding: 0;
+      margin: 0;
+      border-bottom: none !important;
+      background-color: inherit !important;
+
+      &:hover {
+        box-shadow: none !important;
+      }
+
+      .dataset-info-box-body {
+        padding: 0 15px;
+
+        .dataset-info-box-description-container {
+          flex: 1 1 100%;
+          margin-bottom: 1.5rem;
+        }
+
+        .dataset-info-box-description {
+          @extend .by-copy-small-regular;
+          @extend .text-by-neutral-60;
+        }
+
+        .dataset-info-box-badge-container {
+          flex: 1 1 100%;
+          max-width: 100%;
+          margin-bottom: 1rem !important;
+
+          .dataset-formats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+
+          .badge {
+            @extend .by-chip;
+            @extend .by-chip-static;
+            margin: 0 !important;
+          }
+
+        }
+      }
+    }
+
+    .similar-datasets-carousel-controls {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      position: relative;
+      height: 38px !important;
+      width: 64px !important;
+    }
+
+    .carousel-control-next {
+      justify-content: flex-end !important;
+    }
+
+    .carousel-control-prev {
+      justify-content: flex-start !important;
+    }
+  }
+
+  .dsd-distributions {
+    margin: 0 !important;
+
+    .row:first-child {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+
+      > .list.list-unstyled {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .distributions-header-bottom-hr {
+    display: none;
+  }
+
+  .distributions-header-title-container {
+    padding-left: 0;
+  }
+
+  .distributions-header-title {
+    margin: 3rem 0;
+  }
+
+  .distributions-header-title-title {
+    @extend .by-heading-3;
+    @extend .text-by-blue-100;
+    margin: 0;
+    margin-right: 0.5rem !important;
+
+      @media (min-width: map-get($grid-breakpoints, md)) {
+        margin-right: 1rem !important;
+      }
+  }
+
+  .distributions-header-title-count-container {
+    @extend .by-badge;
+  }
+
+  .distributions-header-title-count {
+    margin: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    color: inherit;
+
+    &::before {
+      content: '' !important;
+    }
+    &::after {
+      content: '' !important;
+    }
+  }
+
+  .distributions {
+    div:first-child .dsd-distribution-container {
+        border-top: 1px solid $by-neutral-20;
+    }
+
+    .dsd-distribution-container {
+      padding: 47px 0 48px 0;
+      margin-bottom: 0 !important;
+      border-bottom: 1px solid $by-neutral-20;
+    }
+
+    .distribution-details-container {
+      padding: 0;
+    }
+
+    .dsd-distribution-details-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .dsd-distribution-details-header-title {
+      @extend .by-heading-4;
+      @extend .text-by-blue-100;
+    }
+
+    .distribution-format-badge {
+      @extend .by-chip;
+      @extend .by-chip-static;
+      @extend .by-copy-small-regular;
+      margin-top: 1.5rem !important;
+      margin-left: 0;
+      margin-right: 0;
+
+      @media (min-width: map-get($grid-breakpoints, md)) {
+        margin-top: 0 !important;
+        margin: 0;
+      }
+    }
+
+    .dsd-distribution-details-content {
+      margin-top: 1rem;
+
+      @media (min-width: map-get($grid-breakpoints, xl)) {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: row;
+        gap: 3rem;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+      }
+    }
+
+    .dsd-distribution-details-description {
+      flex: 1 1 100%;
+      max-width: 100%;
+
+      @media (min-width: map-get($grid-breakpoints, xl)) {
+        flex: 0 0 60%;
+        max-width: 60%;
+      }
+
+      span {
+        margin-top: 0 !important;
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+
+      .distribution-description-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .details-link {
+          cursor: pointer;
+          color: $primary;
+
+          &:hover {
+            color: $secondary;
+          }
+        }
+      }
+
+      .distribution-description-url-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background-color: $by-neutral-10;
+        word-break: break-all;
+      }
+
+      .distribution-description-url-copy-icon {
+        cursor: pointer;
+        color: $by-neutral-100;
+
+        &:hover {
+          color: $by-neutral-60;
+        }
+
+        &:active {
+          color: $by-blue-80;
+        }
+      }
+
+      .distribution-description-url-container .distribution-description-url-url {
+        @extend .by-copy-small-regular;
+      }
+
+      .distribution-description-url-url {
+        @extend .by-link-light;
+
+        &:hover {
+          text-decoration: none !important;
+        }
+      }
+    }
+
+    .dsd-distribution-details-expandable-content {
+      flex: 1 1 100%;
+      max-width: 100%;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+
+      @media (min-width: map-get($grid-breakpoints, xl)) {
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .distribution-details-table {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+
+      td {
+        padding: 0;
+        margin: 0;
+      }
+
+      .distribution-content-tr {
+        @extend .by-copy-small-regular;
+        @extend .text-by-neutral-100;
+        margin-bottom: 2rem;
+        word-wrap: break-word;
+        word-break: break-word;
+      }
+
+      .distribution-content-tr a {
+        @extend .by-link-light;
+      }
+
+      .distribution-content-tr td.w-25.font-weight-bold {
+        @extend .by-caption;
+        @extend .text-by-neutral-100;
+        width: 100% !important;
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  .dsd-distribution-actions {
+    margin: 0;
+    
+    .distribution-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin: 0;
+
+      @media (min-width: map-get($grid-breakpoints, sm)) {
+        flex-direction: row;
+      }
+    }
+
+    .distribution-action-btn {
+      margin: 0 0 0 0 !important;
+    }
+
+    .distribution-download-btns-container {
+      gap: 1.5rem;
+    }
+
+    .distribution-download-btns-container .by-btn-primary-medium-light {
+      gap: 0.5rem
+    }
+
+    .distribution-options-dropdown-btn .primary-button.distribution-btn {
+      @extend .by-btn-primary-medium-light;
+      height: 100%;
+      gap: 0.5rem;
+
+      small {
+        color: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  .additional-information > table tr td a {
+    @extend .by-link-light;
+  }
+
+  .additional-information > table > tr > td a.text-by-blue-80 {
+    @extend .by-copy-small-regular;
+  }
+}

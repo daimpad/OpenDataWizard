@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "moduleDetection": "force",
+    "module": "ESNext",
+    /* Transpiling with TypeScript: */
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    /* Base Options: */
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "*.ts",
+    "packages"
+  ],
+  "exclude": [
+    "**/*.md",
+    "**/dist",
+    "node_modules",
+    "**/node_modules"
+  ]
+}

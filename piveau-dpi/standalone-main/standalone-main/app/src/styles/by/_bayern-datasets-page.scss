@@ -1,0 +1,106 @@
+
+#bayern-datasets-page {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .datasets-filters-tabs-container {
+    flex-grow: 2;
+  }
+
+  .text-neutral-content {
+    font-size: .9375rem;
+    color: #687178;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.3125rem;
+  }
+
+  .datasets-container {
+    margin-top: 0 !important;
+  }
+
+  .datasets.content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .page-title {
+    margin-top: calc(7rem - 45px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .input-group {
+    margin-top: 5rem;
+  }
+
+  .sort-buttons {
+    flex-wrap: wrap-reverse;
+    align-items: center !important;
+  }
+
+  .sort-buttons #datasets-filters-tab {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    margin-left: auto;
+    border-bottom: 0;
+  }
+
+  .search-field {
+    height: auto;
+  }
+
+  .search-field.border-left-0 {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+
+  .search-button--mobile {
+    border-radius: 26px !important;
+    padding: .875rem !important;
+  }
+
+  @media screen and (min-width: 768px) {
+    .input-group {
+      margin-top: 3rem;
+    }
+
+    .sort-buttons {
+      margin-top: 7rem;
+      flex-wrap: nowrap;
+    }
+
+    .datasets-facets-list-container {
+      flex-wrap: nowrap;
+    }
+
+    .dataset-info-box-body > .row {
+      flex-wrap: nowrap;
+      gap: 40px;
+    }
+
+    .bayern-facets--desktop {
+      min-width: 232px;
+      padding-right: 28px !important;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .page-title {
+      margin-bottom: 3rem;
+    }
+
+    .bayern-facets--desktop {
+      padding-right: 32px !important;
+    }
+
+    .input-group {
+      padding-right: 33%;
+
+      &--odp {
+        padding-right: 0;
+      }
+    }
+  }
+}

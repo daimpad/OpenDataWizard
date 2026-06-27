@@ -1,0 +1,2869 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 223,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "en": "RAR",
+          "et": "RAR"
+        },
+        "index": "vocabulary",
+        "id": "RAR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RAR",
+        "alt_label": {
+          "en": "Roshal Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PS",
+          "et": "PS"
+        },
+        "index": "vocabulary",
+        "id": "PS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PS",
+        "alt_label": {
+          "en": "PostScript File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "METS pakett",
+          "en": "METS package"
+        },
+        "index": "vocabulary",
+        "id": "METS_ZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/METS_ZIP",
+        "alt_label": {
+          "en": "Metadata Encoding and Transmission Standard – Physical METS container"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PNG",
+          "et": "PNG"
+        },
+        "index": "vocabulary",
+        "id": "PNG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PNG",
+        "alt_label": {
+          "en": "Portable Network Graphics"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "StL",
+          "et": "StL"
+        },
+        "index": "vocabulary",
+        "id": "STL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/STL",
+        "alt_label": {
+          "en": "StereoLithography"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DwC-A",
+          "et": "DwC-A"
+        },
+        "index": "vocabulary",
+        "id": "DWCA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DWCA",
+        "alt_label": {
+          "en": "Darwin Core Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PDF/X-1a",
+          "et": "PDF/X-1a"
+        },
+        "index": "vocabulary",
+        "id": "PDFX1A",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFX1A"
+      },
+      {
+        "pref_label": {
+          "en": "DWG",
+          "et": "DWG"
+        },
+        "index": "vocabulary",
+        "id": "DWG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DWG",
+        "alt_label": {
+          "en": "DWG file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "XML schema",
+          "et": "XML skeem"
+        },
+        "index": "vocabulary",
+        "id": "SCHEMA_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SCHEMA_XML",
+        "alt_label": {
+          "en": "XML Schema"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MBOX",
+          "en": "MBOX"
+        },
+        "index": "vocabulary",
+        "id": "MBOX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MBOX",
+        "alt_label": {
+          "en": "Mbox"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDF1X",
+          "en": "PDF1X"
+        },
+        "index": "vocabulary",
+        "id": "PDF1X",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDF1X",
+        "alt_label": {
+          "en": "PDF printing format extension"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "AAB",
+          "en": "AAB"
+        },
+        "index": "vocabulary",
+        "id": "AAB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AAB",
+        "alt_label": {
+          "en": "Android App Bundle"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "AAC",
+          "en": "AAC"
+        },
+        "index": "vocabulary",
+        "id": "AAC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AAC",
+        "alt_label": {
+          "en": "Advanced Audio Coding"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GeoPackage",
+          "en": "GeoPackage"
+        },
+        "index": "vocabulary",
+        "id": "GPKG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GPKG",
+        "alt_label": {
+          "en": "OGC GeoPackage"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GML",
+          "en": "GML"
+        },
+        "index": "vocabulary",
+        "id": "GML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GML",
+        "alt_label": {
+          "en": "Geography Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XHTML lihtsustatud",
+          "en": "XHTML simplified"
+        },
+        "index": "vocabulary",
+        "id": "XHTML_SIMPL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XHTML_SIMPL",
+        "alt_label": {
+          "en": "Extensible Hypertext Markup Language, simplified"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "DGN",
+          "en": "DGN"
+        },
+        "index": "vocabulary",
+        "id": "DGN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DGN",
+        "alt_label": {
+          "en": "DGN file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RDF Thrift",
+          "en": "RDF Thrift"
+        },
+        "index": "vocabulary",
+        "id": "RDF_THRIFT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_THRIFT",
+        "alt_label": {
+          "en": "RDF Binary Thrift"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ARC",
+          "en": "ARC"
+        },
+        "index": "vocabulary",
+        "id": "ARC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARC",
+        "alt_label": {
+          "en": "Internet Archive ARC file format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "METS XML",
+          "et": "METS XML"
+        },
+        "index": "vocabulary",
+        "id": "METS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/METS",
+        "alt_label": {
+          "en": "Metadata Encoding and Transmission Standard – Logical METS container"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "RSS feed",
+          "et": "RSS feed"
+        },
+        "index": "vocabulary",
+        "id": "RSS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RSS",
+        "alt_label": {
+          "en": "Really Simple Syndication"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DXF",
+          "et": "DXF"
+        },
+        "index": "vocabulary",
+        "id": "DXF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DXF",
+        "alt_label": {
+          "en": "Drawing Interchange Format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "fiware_cb"
+        },
+        "index": "vocabulary",
+        "id": "FIWARE-CB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/FIWARE-CB",
+        "alt_label": {
+          "en": "fiware_cb"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Thrift compact",
+          "en": "Thrift compact"
+        },
+        "index": "vocabulary",
+        "id": "THRIFT_COMPACT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/THRIFT_COMPACT",
+        "alt_label": {
+          "en": "Apache Thrift compact binary format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Tihendatud GML",
+          "en": "Zipped GML"
+        },
+        "index": "vocabulary",
+        "id": "GMZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GMZ",
+        "alt_label": {
+          "en": "Zipped Geography Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "WFS",
+          "et": "WFS"
+        },
+        "index": "vocabulary",
+        "id": "WFS_SRVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WFS_SRVC",
+        "alt_label": {
+          "en": "Web Feature Service"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ARJ",
+          "en": "ARJ"
+        },
+        "index": "vocabulary",
+        "id": "ARJ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARJ",
+        "alt_label": {
+          "en": "ARJ archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PowerPoint PPSX",
+          "et": "PowerPoint PPSX"
+        },
+        "index": "vocabulary",
+        "id": "PPSX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PPSX",
+        "alt_label": {
+          "en": "PowerPoint Open XML Slide Show"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MATLAB MAT",
+          "en": "MATLAB MAT"
+        },
+        "index": "vocabulary",
+        "id": "MATLAB_MAT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MATLAB_MAT",
+        "alt_label": {
+          "en": "MATLAB MAT-File"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PDF/A-1b",
+          "et": "PDF/A-1b"
+        },
+        "index": "vocabulary",
+        "id": "PDFA1B",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFA1B",
+        "alt_label": {
+          "en": "PDF archiving format, Level B conformance"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RDF XML",
+          "en": "RDF XML"
+        },
+        "index": "vocabulary",
+        "id": "RDF_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_XML",
+        "alt_label": {
+          "en": "Resource Description Framework XML syntax"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "LHA",
+          "en": "LHA"
+        },
+        "index": "vocabulary",
+        "id": "LHA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LHA",
+        "alt_label": {
+          "en": "LHA compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IMMC XML message",
+          "et": "IMMC XML sõnum"
+        },
+        "index": "vocabulary",
+        "id": "IMMC_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/IMMC_XML"
+      },
+      {
+        "pref_label": {
+          "en": "SVG",
+          "et": "SVG"
+        },
+        "index": "vocabulary",
+        "id": "SVG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SVG",
+        "alt_label": {
+          "en": "Scalable Vector Graphics"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RTF",
+          "en": "RTF"
+        },
+        "index": "vocabulary",
+        "id": "RTF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RTF",
+        "alt_label": {
+          "en": "Rich Text Format File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "INDD",
+          "en": "INDD"
+        },
+        "index": "vocabulary",
+        "id": "INDD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/INDD",
+        "alt_label": {
+          "en": "Adobe InDesign Document"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JPEG",
+          "et": "JPEG"
+        },
+        "index": "vocabulary",
+        "id": "JPEG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JPEG"
+      },
+      {
+        "pref_label": {
+          "et": "RDFa",
+          "en": "RDFa"
+        },
+        "index": "vocabulary",
+        "id": "RDFA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDFA",
+        "alt_label": {
+          "en": "Resource Description Framework in Attributes"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Plain text",
+          "en": "Plain text"
+        },
+        "index": "vocabulary",
+        "id": "TXT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TXT",
+        "alt_label": {
+          "en": "Text file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "SPSS SAV"
+        },
+        "index": "vocabulary",
+        "id": "SPSS_SAV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SPSS_SAV",
+        "alt_label": {
+          "en": "SPSS Statistics file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PowerPoint Slide Show",
+          "et": "PowerPoint slaidiesitlus"
+        },
+        "index": "vocabulary",
+        "id": "PPS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PPS",
+        "alt_label": {
+          "en": "Microsoft PowerPoint Slide Show"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Parquet",
+          "et": "Parquet"
+        },
+        "index": "vocabulary",
+        "id": "PARQUET",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PARQUET",
+        "alt_label": {
+          "en": "Apache Parquet file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "WARC",
+          "et": "WARC"
+        },
+        "index": "vocabulary",
+        "id": "WARC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WARC",
+        "alt_label": {
+          "en": "Web Archive format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SPARQL tulemused",
+          "en": "SPARQL results"
+        },
+        "index": "vocabulary",
+        "id": "SPARQLQRES",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SPARQLQRES",
+        "alt_label": {
+          "en": "SPARQL Query Results"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "RDF",
+          "et": "RDF"
+        },
+        "index": "vocabulary",
+        "id": "RDF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF",
+        "alt_label": {
+          "en": "Resource Description Framework (RDF)"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PowerPoint PPT",
+          "en": "PowerPoint PPT"
+        },
+        "index": "vocabulary",
+        "id": "PPT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PPT",
+        "alt_label": {
+          "en": "Microsoft PowerPoint Presentation"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EPUB",
+          "et": "EPUB"
+        },
+        "index": "vocabulary",
+        "id": "EPUB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/EPUB",
+        "alt_label": {
+          "en": "eBook standard of the International Digital Publishing Forum (IDPF)"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SGML DTD",
+          "en": "SGML DTD"
+        },
+        "index": "vocabulary",
+        "id": "DTD_SGML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DTD_SGML",
+        "alt_label": {
+          "en": "SGML Document Type Definition (DTD)"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDF/UA",
+          "en": "PDF/UA"
+        },
+        "index": "vocabulary",
+        "id": "PDFUA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFUA",
+        "alt_label": {
+          "en": "PDF/Universal Accessibility"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Z",
+          "et": "Z"
+        },
+        "index": "vocabulary",
+        "id": "Z",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/Z",
+        "alt_label": {
+          "en": "Unix compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GTFS",
+          "en": "GTFS"
+        },
+        "index": "vocabulary",
+        "id": "GTFS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GTFS",
+        "alt_label": {
+          "en": "General Transit Feed Specification"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PDF/A-2a",
+          "et": "PDF/A-2a"
+        },
+        "index": "vocabulary",
+        "id": "PDFA2A",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFA2A"
+      },
+      {
+        "pref_label": {
+          "et": "PDF/A-2b",
+          "en": "PDF/A-2b"
+        },
+        "index": "vocabulary",
+        "id": "PDFA2B",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFA2B"
+      },
+      {
+        "pref_label": {
+          "en": "ArcInfo coverage",
+          "et": "ArcInfo coverage"
+        },
+        "index": "vocabulary",
+        "id": "ARCINFO_COV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARCINFO_COV",
+        "alt_label": {
+          "en": "ESRI ArcInfo Coverage"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "HTML simplified",
+          "et": "HTML lihtsustatud"
+        },
+        "index": "vocabulary",
+        "id": "HTML_SIMPL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/HTML_SIMPL",
+        "alt_label": {
+          "en": "HyperText Mark-up Language, simplified"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RData",
+          "en": "RData"
+        },
+        "index": "vocabulary",
+        "id": "RDATA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDATA",
+        "alt_label": {
+          "en": "R Data format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Word DOCX",
+          "et": "Word DOCX"
+        },
+        "index": "vocabulary",
+        "id": "DOCX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DOCX",
+        "alt_label": {
+          "en": "Office Open XML Document"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO pilt",
+          "en": "ISO image"
+        },
+        "index": "vocabulary",
+        "id": "ISO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ISO",
+        "alt_label": {
+          "en": "ISO Disc Image file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "NetCDF",
+          "en": "NetCDF"
+        },
+        "index": "vocabulary",
+        "id": "NETCDF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/NETCDF",
+        "alt_label": {
+          "en": "Network Common Data Form"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XLSM",
+          "en": "XLSM"
+        },
+        "index": "vocabulary",
+        "id": "XLSM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XLSM",
+        "alt_label": {
+          "en": "Excel Macro-enabled Workbook"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "SWM",
+          "et": "SWM"
+        },
+        "index": "vocabulary",
+        "id": "SWM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SWM",
+        "alt_label": {
+          "en": "Split WIM file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "AppX",
+          "et": "AppX"
+        },
+        "index": "vocabulary",
+        "id": "APPX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/APPX",
+        "alt_label": {
+          "en": "Microsoft AppX application package"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XLSB",
+          "en": "XLSB"
+        },
+        "index": "vocabulary",
+        "id": "XLSB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XLSB",
+        "alt_label": {
+          "en": "Excel Binary Workbook"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Excel XLSX",
+          "en": "Excel XLSX"
+        },
+        "index": "vocabulary",
+        "id": "XLSX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XLSX",
+        "alt_label": {
+          "en": "Office Open XML Workbook"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ArcGIS Map eelvaade",
+          "en": "ArcGIS Map Preview"
+        },
+        "index": "vocabulary",
+        "id": "MAP_PRVW",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MAP_PRVW"
+      },
+      {
+        "pref_label": {
+          "en": "SKOS",
+          "et": "SKOS"
+        },
+        "index": "vocabulary",
+        "id": "SKOS_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SKOS_XML",
+        "alt_label": {
+          "en": "Simple Knowledge Organization System"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ICalendar",
+          "et": "IKalender"
+        },
+        "index": "vocabulary",
+        "id": "ICS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ICS",
+        "alt_label": {
+          "en": "iCalendar"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PDF/A-1a",
+          "et": "PDF/A-1a"
+        },
+        "index": "vocabulary",
+        "id": "PDFA1A",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFA1A",
+        "alt_label": {
+          "en": "PDF archiving format, Level A conformance"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "lzo",
+          "en": "lzo"
+        },
+        "index": "vocabulary",
+        "id": "LZO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LZO",
+        "alt_label": {
+          "en": "lzo compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JSON-LD",
+          "et": "JSON-LD"
+        },
+        "index": "vocabulary",
+        "id": "JSON_LD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JSON_LD",
+        "alt_label": {
+          "en": "JavaScript Object Notation for Linked Data"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "XML DTD",
+          "et": "XML DTD"
+        },
+        "index": "vocabulary",
+        "id": "DTD_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DTD_XML",
+        "alt_label": {
+          "en": "XML Document Type Definition (DTD)"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Esri ASCII grid",
+          "et": "Esri ASCII ruutkava"
+        },
+        "index": "vocabulary",
+        "id": "GRID_ASCII",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GRID_ASCII",
+        "alt_label": {
+          "en": "Environmental Systems Research Institute ASCII grid"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MrSID",
+          "en": "MrSID"
+        },
+        "index": "vocabulary",
+        "id": "MRSID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MRSID",
+        "alt_label": {
+          "en": "Multiresolution seamless image database"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MPEG-4 AVC",
+          "en": "MPEG-4 AVC"
+        },
+        "index": "vocabulary",
+        "id": "MPEG4_AVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MPEG4_AVC",
+        "alt_label": {
+          "en": "Moving Picture Experts Group 4 Advanced Video Coding"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GPX",
+          "en": "GPX"
+        },
+        "index": "vocabulary",
+        "id": "GPX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GPX",
+        "alt_label": {
+          "en": "GPS Exchange Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "YAML",
+          "en": "YAML"
+        },
+        "index": "vocabulary",
+        "id": "YAML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/YAML",
+        "alt_label": {
+          "en": "YAML Ain't Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "BWF",
+          "et": "BWF"
+        },
+        "index": "vocabulary",
+        "id": "BWF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/BWF",
+        "alt_label": {
+          "en": "Broadcast Wave File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Esri Shape",
+          "en": "Esri Shape"
+        },
+        "index": "vocabulary",
+        "id": "SHP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SHP",
+        "alt_label": {
+          "en": "Environmental Systems Research Institute Shape"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PSD",
+          "en": "PSD"
+        },
+        "index": "vocabulary",
+        "id": "PSD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PSD",
+        "alt_label": {
+          "en": "Adobe Photoshop Document"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FMX4 ZIP",
+          "en": "FMX4 ZIP"
+        },
+        "index": "vocabulary",
+        "id": "FMX4_ZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/FMX4_ZIP",
+        "alt_label": {
+          "en": "Formex 4 ZIP archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PowerPoint PPTX",
+          "et": "PowerPoint PPTX"
+        },
+        "index": "vocabulary",
+        "id": "PPTX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PPTX",
+        "alt_label": {
+          "en": "Office Open XML Presentation"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ETSI TSL",
+          "en": "ETSI TSL"
+        },
+        "index": "vocabulary",
+        "id": "ETSI_TSL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ETSI_TSL",
+        "alt_label": {
+          "en": "ETSI Trusted List"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Thrift binary",
+          "et": "Thrift binary"
+        },
+        "index": "vocabulary",
+        "id": "THRIFT_BINARY",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/THRIFT_BINARY",
+        "alt_label": {
+          "en": "Apache Thrift binary format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "GeoTIFF",
+          "et": "GeoTIFF"
+        },
+        "index": "vocabulary",
+        "id": "GEOTIFF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GEOTIFF",
+        "alt_label": {
+          "en": "OGC GeoTIFF"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "WAR",
+          "et": "WAR"
+        },
+        "index": "vocabulary",
+        "id": "WAR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WAR",
+        "alt_label": {
+          "en": "Web Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JSON",
+          "et": "JSON"
+        },
+        "index": "vocabulary",
+        "id": "JSON",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JSON",
+        "alt_label": {
+          "en": "JavaScript Object Notation"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "HDF",
+          "et": "HDF"
+        },
+        "index": "vocabulary",
+        "id": "HDF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/HDF",
+        "alt_label": {
+          "en": "Hierarchical Data Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "WAV",
+          "en": "WAV"
+        },
+        "index": "vocabulary",
+        "id": "WAV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WAV",
+        "alt_label": {
+          "en": "Waveform Audio File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDF",
+          "en": "PDF"
+        },
+        "index": "vocabulary",
+        "id": "PDF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDF",
+        "alt_label": {
+          "en": "Portable Document Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SGML",
+          "en": "SGML"
+        },
+        "index": "vocabulary",
+        "id": "SGML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SGML",
+        "alt_label": {
+          "en": "Standard Generalized Mark-up Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "HDT",
+          "et": "HDT"
+        },
+        "index": "vocabulary",
+        "id": "HDT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/HDT",
+        "alt_label": {
+          "en": "Header Dictionary Triples"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XHTML5",
+          "en": "XHTML5"
+        },
+        "index": "vocabulary",
+        "id": "XHTML5",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XHTML5",
+        "alt_label": {
+          "en": "Extensible Hypertext Markup Language 5"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "LegalHTML",
+          "et": "LegalHTML"
+        },
+        "index": "vocabulary",
+        "id": "LEGALHTML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LEGALHTML",
+        "alt_label": {
+          "en": "LegalHTML file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DMG",
+          "et": "DMG"
+        },
+        "index": "vocabulary",
+        "id": "DMG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DMG",
+        "alt_label": {
+          "en": "Apple Disk Image"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDFA-3",
+          "en": "PDFA-3"
+        },
+        "index": "vocabulary",
+        "id": "PDFA3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFA3"
+      },
+      {
+        "pref_label": {
+          "en": "Oracle Dump",
+          "et": "Oracle Dump"
+        },
+        "index": "vocabulary",
+        "id": "DMP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DMP"
+      },
+      {
+        "pref_label": {
+          "en": "Binary Data",
+          "et": "Binaarsed andmed"
+        },
+        "index": "vocabulary",
+        "id": "BIN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/BIN"
+      },
+      {
+        "pref_label": {
+          "en": "AKN4EU ZIP",
+          "et": "AKN4EU ZIP"
+        },
+        "index": "vocabulary",
+        "id": "AKN4EU_ZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AKN4EU_ZIP",
+        "alt_label": {
+          "en": "Akoma Ntoso ZIP archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TAR XZ",
+          "et": "TAR XZ"
+        },
+        "index": "vocabulary",
+        "id": "TAR_XZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TAR_XZ",
+        "alt_label": {
+          "en": "XZ Compressed Tar Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MOP",
+          "et": "MOP"
+        },
+        "index": "vocabulary",
+        "id": "MOP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MOP",
+        "alt_label": {
+          "en": "MOPAC Input Format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MP3",
+          "et": "MP3"
+        },
+        "index": "vocabulary",
+        "id": "MP3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MP3",
+        "alt_label": {
+          "en": "MPEG-1/MPEG-2 Audio Layer III"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ETSI signature validation report",
+          "et": "ETSI signature validation report"
+        },
+        "index": "vocabulary",
+        "id": "ETSI_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ETSI_XML",
+        "alt_label": {
+          "en": "European Telecommunications Standards Institute signature validation report XML"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MOV",
+          "et": "MOV"
+        },
+        "index": "vocabulary",
+        "id": "MOV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MOV",
+        "alt_label": {
+          "en": "QuickTime Movie"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDF/X-2a",
+          "en": "PDF/X-2a"
+        },
+        "index": "vocabulary",
+        "id": "PDFX2A",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFX2A"
+      },
+      {
+        "pref_label": {
+          "et": "XHTML",
+          "en": "XHTML"
+        },
+        "index": "vocabulary",
+        "id": "XHTML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XHTML",
+        "alt_label": {
+          "en": "Extensible Hypertext Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "WARC GZ",
+          "et": "WARC GZ"
+        },
+        "index": "vocabulary",
+        "id": "WARC_GZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WARC_GZ",
+        "alt_label": {
+          "en": "Compressed Web Archive format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "QGS",
+          "et": "QGS"
+        },
+        "index": "vocabulary",
+        "id": "QGS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/QGS",
+        "alt_label": {
+          "en": "Quantum GIS project"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TAR GZ",
+          "et": "TAR GZ"
+        },
+        "index": "vocabulary",
+        "id": "TAR_GZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TAR_GZ",
+        "alt_label": {
+          "en": "Compressed Tarball File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "TMX",
+          "en": "TMX"
+        },
+        "index": "vocabulary",
+        "id": "TMX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TMX",
+        "alt_label": {
+          "en": "Translation Memory eXchange"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ZIP",
+          "et": "ZIP"
+        },
+        "index": "vocabulary",
+        "id": "ZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+      },
+      {
+        "pref_label": {
+          "et": "xz",
+          "en": "xz"
+        },
+        "index": "vocabulary",
+        "id": "XZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XZ",
+        "alt_label": {
+          "en": "xz compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "7z",
+          "en": "7z"
+        },
+        "index": "vocabulary",
+        "id": "7Z",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/7Z",
+        "alt_label": {
+          "en": "7-Zip compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "E00",
+          "et": "E00"
+        },
+        "index": "vocabulary",
+        "id": "E00",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/E00",
+        "alt_label": {
+          "en": "ESRI Arc/Info interchange file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Esri File geoandmebaas",
+          "en": "Esri File Geodatabase"
+        },
+        "index": "vocabulary",
+        "id": "GDB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GDB",
+        "alt_label": {
+          "en": "Environmental Systems Research Institute File Geodatabase"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Kapseldatud Postscript",
+          "en": "Encapsulated Postscript"
+        },
+        "index": "vocabulary",
+        "id": "EPS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/EPS"
+      },
+      {
+        "pref_label": {
+          "en": "OpenDocument Database",
+          "et": "OpenDocument andmebaas"
+        },
+        "index": "vocabulary",
+        "id": "ODB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODB"
+      },
+      {
+        "pref_label": {
+          "en": "OpenDocument Chart",
+          "et": "OpenDocument graafik"
+        },
+        "index": "vocabulary",
+        "id": "ODC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODC"
+      },
+      {
+        "pref_label": {
+          "et": "ODF",
+          "en": "ODF"
+        },
+        "index": "vocabulary",
+        "id": "ODF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODF",
+        "alt_label": {
+          "en": "OpenDocument Format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OpenDocument Image",
+          "et": "OpenDocument pilt"
+        },
+        "index": "vocabulary",
+        "id": "ODG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODG"
+      },
+      {
+        "pref_label": {
+          "et": "lzip",
+          "en": "lzip"
+        },
+        "index": "vocabulary",
+        "id": "LZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LZIP",
+        "alt_label": {
+          "en": "lzip compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Word DOC",
+          "en": "Word DOC"
+        },
+        "index": "vocabulary",
+        "id": "DOC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DOC",
+        "alt_label": {
+          "en": "Microsoft Word"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "BITS XML",
+          "en": "BITS XML"
+        },
+        "index": "vocabulary",
+        "id": "BITS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/BITS",
+        "alt_label": {
+          "en": "Book Interchange Tag Suite"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ODP",
+          "et": "ODP"
+        },
+        "index": "vocabulary",
+        "id": "ODP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODP",
+        "alt_label": {
+          "en": "OpenDocument Presentation"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ODT",
+          "en": "ODT"
+        },
+        "index": "vocabulary",
+        "id": "ODT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODT",
+        "alt_label": {
+          "en": "Open Document Text"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ODS",
+          "en": "ODS"
+        },
+        "index": "vocabulary",
+        "id": "ODS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ODS",
+        "alt_label": {
+          "en": "OpenDocument Spreadsheet"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RDF TriX",
+          "en": "RDF TriX"
+        },
+        "index": "vocabulary",
+        "id": "RDF_TRIX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_TRIX",
+        "alt_label": {
+          "en": "Triples in XML"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Ungen",
+          "et": "Ungen"
+        },
+        "index": "vocabulary",
+        "id": "UNGEN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/UNGEN",
+        "alt_label": {
+          "en": "ArcGIS ungenerate"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "DAPK",
+          "en": "DAPK"
+        },
+        "index": "vocabulary",
+        "id": "DAPK",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DAPK",
+        "alt_label": {
+          "en": "Android Package (Daydream)"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MHTML",
+          "et": "MHTML"
+        },
+        "index": "vocabulary",
+        "id": "MHTML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MHTML",
+        "alt_label": {
+          "en": "MIME HTML"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PWP",
+          "en": "PWP"
+        },
+        "index": "vocabulary",
+        "id": "PWP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PWP",
+        "alt_label": {
+          "en": "Packaged Web Publications"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "KML",
+          "en": "KML"
+        },
+        "index": "vocabulary",
+        "id": "KML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/KML",
+        "alt_label": {
+          "en": "Keyhole Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MPEG-4",
+          "en": "MPEG-4"
+        },
+        "index": "vocabulary",
+        "id": "MPEG4",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MPEG4",
+        "alt_label": {
+          "en": "Moving Picture Experts Group 4"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MPEG-2",
+          "en": "MPEG-2"
+        },
+        "index": "vocabulary",
+        "id": "MPEG2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MPEG2",
+        "alt_label": {
+          "en": "Moving Picture Experts Group 2"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "AKN4EU fail",
+          "en": "AKN4EU file"
+        },
+        "index": "vocabulary",
+        "id": "AKN4EU",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AKN4EU",
+        "alt_label": {
+          "en": "Akoma Ntoso file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EAR",
+          "et": "EAR"
+        },
+        "index": "vocabulary",
+        "id": "EAR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/EAR",
+        "alt_label": {
+          "en": "Enterprise Application Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "RDF N-Quads",
+          "et": "RDF N-Quads"
+        },
+        "index": "vocabulary",
+        "id": "RDF_N_QUADS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_N_QUADS",
+        "alt_label": {
+          "en": "Resource Description Framework N-Quads"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "KMZ",
+          "en": "KMZ"
+        },
+        "index": "vocabulary",
+        "id": "KMZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/KMZ",
+        "alt_label": {
+          "en": "Keyhole Markup Language, Zipped"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "RDF TriG",
+          "en": "RDF TriG"
+        },
+        "index": "vocabulary",
+        "id": "RDF_TRIG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_TRIG",
+        "alt_label": {
+          "en": "Resource Description Framework TriG"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Amazon Kindle eBook",
+          "et": "Amazon Kindle e-raamat"
+        },
+        "index": "vocabulary",
+        "id": "AZW",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AZW",
+        "alt_label": {
+          "en": "Amazon Kindle eBook format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "OVF",
+          "en": "OVF"
+        },
+        "index": "vocabulary",
+        "id": "OVF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/OVF",
+        "alt_label": {
+          "en": "Open Virtualization Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Stata DTA",
+          "en": "Stata DTA"
+        },
+        "index": "vocabulary",
+        "id": "STATA_DTA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/STATA_DTA",
+        "alt_label": {
+          "en": "Stata dataset"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "HTTP Message",
+          "et": "HTTP sõnum"
+        },
+        "index": "vocabulary",
+        "id": "MSG_HTTP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MSG_HTTP",
+        "alt_label": {
+          "en": "HTTP Message Syntax and Routing"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TIFF FX",
+          "et": "TIFF FX"
+        },
+        "index": "vocabulary",
+        "id": "TIFF_FX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TIFF_FX",
+        "alt_label": {
+          "en": "Tagged Image Format File Fax eXtended"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Layer package",
+          "et": "Layer package"
+        },
+        "index": "vocabulary",
+        "id": "LPK",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LPK",
+        "alt_label": {
+          "en": "ArcGIS layer package"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JavaScript",
+          "et": "JavaScript"
+        },
+        "index": "vocabulary",
+        "id": "JS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JS"
+      },
+      {
+        "pref_label": {
+          "en": "MIF/MID",
+          "et": "MIF/MID"
+        },
+        "index": "vocabulary",
+        "id": "MIF_MID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MIF_MID",
+        "alt_label": {
+          "en": "MapInfo interchange format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Mobipocket eBook",
+          "et": "Mobipocket e-raamat"
+        },
+        "index": "vocabulary",
+        "id": "MOBI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MOBI",
+        "alt_label": {
+          "en": "Mobipocket eBook format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "WCS",
+          "en": "WCS"
+        },
+        "index": "vocabulary",
+        "id": "WCS_SRVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WCS_SRVC",
+        "alt_label": {
+          "en": "Web Coverage Service"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Atom Feed",
+          "et": "Atom voog"
+        },
+        "index": "vocabulary",
+        "id": "ATOM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ATOM",
+        "alt_label": {
+          "en": "Atom Syndication Format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MapInfo TAB raster file",
+          "et": "MapInfo TAB rasterfail"
+        },
+        "index": "vocabulary",
+        "id": "TAB_RSTR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TAB_RSTR"
+      },
+      {
+        "pref_label": {
+          "en": "bzip2",
+          "et": "bzip2"
+        },
+        "index": "vocabulary",
+        "id": "BZIP2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/BZIP2",
+        "alt_label": {
+          "en": "bzip2 compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MSI",
+          "et": "MSI"
+        },
+        "index": "vocabulary",
+        "id": "MSI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MSI",
+        "alt_label": {
+          "en": "Windows Installer Package"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Bitmap Image File",
+          "et": "Bitmap pildifail"
+        },
+        "index": "vocabulary",
+        "id": "BMP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/BMP"
+      },
+      {
+        "pref_label": {
+          "et": "OWL",
+          "en": "OWL"
+        },
+        "index": "vocabulary",
+        "id": "OWL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/OWL",
+        "alt_label": {
+          "en": "Web Ontology Language"
+        }
+      },
+      {
+        "pref_label": {
+          "cs": "Předběžné údaje",
+          "hu": "Ideiglenes adatok",
+          "en": "Provisional data",
+          "lt": "Laikinieji duomenys",
+          "ro": "Date provizorii",
+          "mt": "Dejta provviżorja",
+          "it": "Dati provvisori",
+          "sv": "Tillfälliga uppgifter",
+          "lv": "Provizoriski dati",
+          "sl": "Začasni podatki",
+          "pt": "Dados provisórios",
+          "de": "Vorläufige Daten",
+          "fi": "Alustavat tiedot",
+          "bg": "Неокончателни данни",
+          "nl": "Voorlopige gegevens",
+          "ga": "Sonraí sealadacha",
+          "pl": "Dane tymczasowe",
+          "hr": "Privremeni podaci",
+          "es": "Datos provisionales",
+          "fr": "Données provisoires",
+          "da": "Midlertidige data",
+          "sk": "Predbežné údaje",
+          "el": "Προσωρινά δεδομένα",
+          "et": "Esialgsed andmed"
+        },
+        "index": "vocabulary",
+        "id": "OP_DATPRO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/OP_DATPRO"
+      },
+      {
+        "pref_label": {
+          "en": "RDF Turtle",
+          "et": "RDF Turtle"
+        },
+        "index": "vocabulary",
+        "id": "RDF_TURTLE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_TURTLE",
+        "alt_label": {
+          "en": "Terse RDF Triple Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "RDF N-Triples",
+          "et": "RDF N-Triples"
+        },
+        "index": "vocabulary",
+        "id": "RDF_N_TRIPLES",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RDF_N_TRIPLES",
+        "alt_label": {
+          "en": "Resource Description Framework N-Triples"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Esri binaarne ruutkava",
+          "en": "Esri binary grid"
+        },
+        "index": "vocabulary",
+        "id": "GRID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GRID",
+        "alt_label": {
+          "en": "Environmental Systems Research Institute binary grid"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OAPK",
+          "et": "OAPK"
+        },
+        "index": "vocabulary",
+        "id": "OAPK",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/OAPK",
+        "alt_label": {
+          "en": "Android Package (Oculus)"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SPARQL",
+          "en": "SPARQL"
+        },
+        "index": "vocabulary",
+        "id": "SPARQLQ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SPARQLQ",
+        "alt_label": {
+          "en": "SPARQL Query"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MapInfo TAB file",
+          "et": "MapInfo TAB fail"
+        },
+        "index": "vocabulary",
+        "id": "TAB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TAB"
+      },
+      {
+        "pref_label": {
+          "en": "XYZ Chemical File",
+          "et": "XYZ keemiline fail"
+        },
+        "index": "vocabulary",
+        "id": "XYZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XYZ"
+      },
+      {
+        "pref_label": {
+          "en": "ECW",
+          "et": "ECW"
+        },
+        "index": "vocabulary",
+        "id": "ECW",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ECW",
+        "alt_label": {
+          "en": "Enhanced Compressed Wavelet"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ArcGIS Map teenus",
+          "en": "ArcGIS Map Service"
+        },
+        "index": "vocabulary",
+        "id": "MAP_SRVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MAP_SRVC"
+      },
+      {
+        "pref_label": {
+          "en": "GNU zip",
+          "et": "GNU zip"
+        },
+        "index": "vocabulary",
+        "id": "GZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GZIP"
+      },
+      {
+        "pref_label": {
+          "et": "LASer fail",
+          "en": "LASer file"
+        },
+        "index": "vocabulary",
+        "id": "LAS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LAS"
+      },
+      {
+        "pref_label": {
+          "en": "lzma",
+          "et": "lzma"
+        },
+        "index": "vocabulary",
+        "id": "LZMA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LZMA",
+        "alt_label": {
+          "en": "lzma compressed file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TAR",
+          "et": "TAR"
+        },
+        "index": "vocabulary",
+        "id": "TAR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TAR",
+        "alt_label": {
+          "en": "Tape Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Kompressitud LAS fail",
+          "en": "Compressed LAS file"
+        },
+        "index": "vocabulary",
+        "id": "LAZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LAZ",
+        "alt_label": {
+          "en": "Compressed LASer file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "AKN4EU LEG",
+          "et": "AKN4EU LEG"
+        },
+        "index": "vocabulary",
+        "id": "AKN4EU_LEG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/AKN4EU_LEG",
+        "alt_label": {
+          "en": "Akoma Ntoso ZIP archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "MathML",
+          "et": "MathML"
+        },
+        "index": "vocabulary",
+        "id": "MATHML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MATHML",
+        "alt_label": {
+          "en": "Mathematical Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DBF",
+          "et": "DBF"
+        },
+        "index": "vocabulary",
+        "id": "DBF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DBF",
+        "alt_label": {
+          "en": "dBase File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MDB",
+          "en": "MDB"
+        },
+        "index": "vocabulary",
+        "id": "MDB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MDB",
+        "alt_label": {
+          "en": "Microsoft Access Database"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "HTML",
+          "en": "HTML"
+        },
+        "index": "vocabulary",
+        "id": "HTML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/HTML",
+        "alt_label": {
+          "en": "HyperText Mark-up Language"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GeoJSON",
+          "en": "GeoJSON"
+        },
+        "index": "vocabulary",
+        "id": "GEOJSON",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GEOJSON",
+        "alt_label": {
+          "en": "Geographical JavaScript Object Notation"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "SDMX",
+          "et": "SDMX"
+        },
+        "index": "vocabulary",
+        "id": "SDMX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SDMX",
+        "alt_label": {
+          "en": "Statistical Data and Metadata eXchange"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "World file",
+          "en": "World file"
+        },
+        "index": "vocabulary",
+        "id": "WORLD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WORLD"
+      },
+      {
+        "pref_label": {
+          "et": "Arrow file",
+          "en": "Arrow file"
+        },
+        "index": "vocabulary",
+        "id": "ARROW_FILE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARROW_FILE",
+        "alt_label": {
+          "en": "Apache Arrow file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "GIF",
+          "en": "GIF"
+        },
+        "index": "vocabulary",
+        "id": "GIF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/GIF",
+        "alt_label": {
+          "en": "Graphics Interchange Format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "N3",
+          "et": "N3"
+        },
+        "index": "vocabulary",
+        "id": "N3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/N3",
+        "alt_label": {
+          "en": "Notation3"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PDF/X-4",
+          "et": "PDF/X-4"
+        },
+        "index": "vocabulary",
+        "id": "PDFX4",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFX4"
+      },
+      {
+        "pref_label": {
+          "et": "XLIFF",
+          "en": "XLIFF"
+        },
+        "index": "vocabulary",
+        "id": "XLIFF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XLIFF",
+        "alt_label": {
+          "en": "XML Localisation Interchange File Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ARC GZ",
+          "en": "ARC GZ"
+        },
+        "index": "vocabulary",
+        "id": "ARC_GZ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARC_GZ",
+        "alt_label": {
+          "en": "Compressed Internet Archive ARC file format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SQL",
+          "en": "SQL"
+        },
+        "index": "vocabulary",
+        "id": "SQL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SQL",
+        "alt_label": {
+          "en": "Structured Query Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Markdown",
+          "et": "Markdown"
+        },
+        "index": "vocabulary",
+        "id": "MARKDOWN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MARKDOWN",
+        "alt_label": {
+          "en": "Markdown file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DCR File",
+          "et": "DCR fail"
+        },
+        "index": "vocabulary",
+        "id": "DCR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DCR"
+      },
+      {
+        "pref_label": {
+          "en": "WebP",
+          "et": "WebP"
+        },
+        "index": "vocabulary",
+        "id": "WEBP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WEBP",
+        "alt_label": {
+          "en": "WebP image"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TSV",
+          "et": "TSV"
+        },
+        "index": "vocabulary",
+        "id": "TSV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TSV",
+        "alt_label": {
+          "en": "Tab-Separated Values"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "WIM",
+          "et": "WIM"
+        },
+        "index": "vocabulary",
+        "id": "WIM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WIM",
+        "alt_label": {
+          "en": "Windows Imaging Format"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Formex 2",
+          "en": "Formex 2"
+        },
+        "index": "vocabulary",
+        "id": "FMX2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/FMX2",
+        "alt_label": {
+          "en": "Formalized Exchange of Electronic Publications (Formex), version 2"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "eForms XML",
+          "en": "eForms XML"
+        },
+        "index": "vocabulary",
+        "id": "EFORMS_XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/EFORMS_XML",
+        "alt_label": {
+          "en": "eForms XML file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Formex 3",
+          "et": "Formex 3"
+        },
+        "index": "vocabulary",
+        "id": "FMX3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/FMX3",
+        "alt_label": {
+          "en": "Formalized Exchange of Electronic Publications (Formex), version 3"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Formex 4",
+          "et": "Formex 4"
+        },
+        "index": "vocabulary",
+        "id": "FMX4",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/FMX4",
+        "alt_label": {
+          "en": "Formalized Exchange of Electronic Publications (Formex), version 4"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XSL-FO",
+          "en": "XSL-FO"
+        },
+        "index": "vocabulary",
+        "id": "XSLFO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XSLFO",
+        "alt_label": {
+          "en": "Extensible Stylesheet Language – Formatting Objects"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "WMS",
+          "en": "WMS"
+        },
+        "index": "vocabulary",
+        "id": "WMS_SRVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WMS_SRVC",
+        "alt_label": {
+          "en": "Web Map Service"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "SAS",
+          "et": "SAS"
+        },
+        "index": "vocabulary",
+        "id": "SAS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SAS",
+        "alt_label": {
+          "en": "SAS dataset"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "sb3",
+          "en": "sb3"
+        },
+        "index": "vocabulary",
+        "id": "SB3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SB3",
+        "alt_label": {
+          "en": "Scratch 3.0"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Arrow stream",
+          "et": "Arrow stream"
+        },
+        "index": "vocabulary",
+        "id": "ARROW_STREAM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ARROW_STREAM",
+        "alt_label": {
+          "en": "Apache Arrow stream"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "RPM",
+          "et": "RPM"
+        },
+        "index": "vocabulary",
+        "id": "RPM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/RPM",
+        "alt_label": {
+          "en": "RPM Package"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "TIFF",
+          "en": "TIFF"
+        },
+        "index": "vocabulary",
+        "id": "TIFF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/TIFF",
+        "alt_label": {
+          "en": "Tagged Image Format File"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Thrift JSON",
+          "en": "Thrift JSON"
+        },
+        "index": "vocabulary",
+        "id": "THRIFT_JSON",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/THRIFT_JSON",
+        "alt_label": {
+          "en": "Apache Thrift JSON format"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JATS XML",
+          "et": "JATS XML"
+        },
+        "index": "vocabulary",
+        "id": "JATS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JATS",
+        "alt_label": {
+          "en": "Journal Article Tag Suite"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Octet voog",
+          "en": "Octet Stream"
+        },
+        "index": "vocabulary",
+        "id": "OCTET",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/OCTET"
+      },
+      {
+        "pref_label": {
+          "et": "Excel XLS",
+          "en": "Excel XLS"
+        },
+        "index": "vocabulary",
+        "id": "XLS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XLS",
+        "alt_label": {
+          "en": "Microsof Excel Workbook"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "deb",
+          "et": "deb"
+        },
+        "index": "vocabulary",
+        "id": "DEB",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/DEB",
+        "alt_label": {
+          "en": "Debian package"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JPEG 2000",
+          "et": "JPEG 2000"
+        },
+        "index": "vocabulary",
+        "id": "JPEG2000",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JPEG2000",
+        "alt_label": {
+          "en": "Joint Photographic Experts Group 2000"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "CSS",
+          "en": "CSS"
+        },
+        "index": "vocabulary",
+        "id": "CSS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/CSS",
+        "alt_label": {
+          "en": "Cascading Style Sheet"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PDF/X",
+          "en": "PDF/X"
+        },
+        "index": "vocabulary",
+        "id": "PDFX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PDFX",
+        "alt_label": {
+          "en": "PDF printing format, Blind eXchange"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "CSV",
+          "et": "CSV"
+        },
+        "index": "vocabulary",
+        "id": "CSV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/CSV",
+        "alt_label": {
+          "en": "Comma-Separated Values"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Zipped ISO image",
+          "et": "Tihendatud ISO pilt"
+        },
+        "index": "vocabulary",
+        "id": "ISO_ZIP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/ISO_ZIP",
+        "alt_label": {
+          "en": "Zipped ISO Disc Image file"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "XSLT",
+          "en": "XSLT"
+        },
+        "index": "vocabulary",
+        "id": "XSLT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XSLT",
+        "alt_label": {
+          "en": "Extensible Stylesheet Language Transformations"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "LEG",
+          "en": "LEG"
+        },
+        "index": "vocabulary",
+        "id": "LEG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/LEG"
+      },
+      {
+        "pref_label": {
+          "en": "Esri REST",
+          "et": "Esri REST"
+        },
+        "index": "vocabulary",
+        "id": "REST",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/REST",
+        "alt_label": {
+          "en": "Esri Representational State Transfer"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "EXE",
+          "en": "EXE"
+        },
+        "index": "vocabulary",
+        "id": "EXE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/EXE",
+        "alt_label": {
+          "en": "Executable file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "XML",
+          "et": "XML"
+        },
+        "index": "vocabulary",
+        "id": "XML",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/XML",
+        "alt_label": {
+          "en": "Extensible Markup Language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "HTML5",
+          "et": "HTML5"
+        },
+        "index": "vocabulary",
+        "id": "HTML5",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/HTML5",
+        "alt_label": {
+          "en": "HyperText Mark-up Language 5"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MXD",
+          "en": "MXD"
+        },
+        "index": "vocabulary",
+        "id": "MXD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/MXD",
+        "alt_label": {
+          "en": "ArcGIS Map Document"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Schematron",
+          "en": "Schematron"
+        },
+        "index": "vocabulary",
+        "id": "SCH",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/SCH",
+        "alt_label": {
+          "en": "Schematron file"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "JAR",
+          "et": "JAR"
+        },
+        "index": "vocabulary",
+        "id": "JAR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/JAR",
+        "alt_label": {
+          "en": "Java Archive"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IPA",
+          "et": "IPA"
+        },
+        "index": "vocabulary",
+        "id": "IPA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/IPA",
+        "alt_label": {
+          "en": "iOS App Store Package"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Perl script",
+          "et": "Perl script"
+        },
+        "index": "vocabulary",
+        "id": "PL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/PL"
+      },
+      {
+        "pref_label": {
+          "et": "APK",
+          "en": "APK"
+        },
+        "index": "vocabulary",
+        "id": "APK",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/APK",
+        "alt_label": {
+          "en": "Android Package"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "WMTS",
+          "en": "WMTS"
+        },
+        "index": "vocabulary",
+        "id": "WMTS_SRVC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/file-type",
+        "resource": "http://publications.europa.eu/resource/authority/file-type/WMTS_SRVC",
+        "alt_label": {
+          "en": "Web Map Tile Service"
+        }
+      }
+    ]
+  }
+}

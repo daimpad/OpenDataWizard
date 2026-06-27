@@ -1,0 +1,227 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 17,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "en": "SHA384"
+        },
+        "index": "vocabulary",
+        "id": "sha384",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha384"
+      },
+      {
+        "pref_label": {
+          "en": "BLAKE2B256"
+        },
+        "index": "vocabulary",
+        "id": "blake2b256",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_blake2b256"
+      },
+      {
+        "pref_label": {
+          "en": "SHA256"
+        },
+        "index": "vocabulary",
+        "id": "sha256",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha256"
+      },
+      {
+        "pref_label": {
+          "en": "BLAKE2B512"
+        },
+        "index": "vocabulary",
+        "id": "blake2b512",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_blake2b512"
+      },
+      {
+        "pref_label": {
+          "en": "SHA512"
+        },
+        "index": "vocabulary",
+        "id": "sha512",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha512"
+      },
+      {
+        "pref_label": {
+          "en": "SHA224"
+        },
+        "index": "vocabulary",
+        "id": "sha224",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha224"
+      },
+      {
+        "pref_label": {
+          "en": "SHA1"
+        },
+        "index": "vocabulary",
+        "id": "sha1",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha1"
+      },
+      {
+        "pref_label": {
+          "en": "SHA3_512"
+        },
+        "index": "vocabulary",
+        "id": "sha3_512",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha3_512"
+      },
+      {
+        "pref_label": {
+          "en": "SHA3_256"
+        },
+        "index": "vocabulary",
+        "id": "sha3_256",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha3_256"
+      },
+      {
+        "pref_label": {
+          "en": "ADLER32"
+        },
+        "index": "vocabulary",
+        "id": "adler32",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_adler32"
+      },
+      {
+        "pref_label": {
+          "en": "BLAKE3"
+        },
+        "index": "vocabulary",
+        "id": "blake3",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_blake3"
+      },
+      {
+        "pref_label": {
+          "en": "SHA3_384"
+        },
+        "index": "vocabulary",
+        "id": "sha3_384",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_sha3_384"
+      },
+      {
+        "pref_label": {
+          "en": "MD2"
+        },
+        "index": "vocabulary",
+        "id": "md2",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_md2"
+      },
+      {
+        "pref_label": {
+          "en": "MD4"
+        },
+        "index": "vocabulary",
+        "id": "md4",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_md4"
+      },
+      {
+        "pref_label": {
+          "en": "BLAKE2B384"
+        },
+        "index": "vocabulary",
+        "id": "blake2b384",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_blake2b384"
+      },
+      {
+        "pref_label": {
+          "en": "MD6"
+        },
+        "index": "vocabulary",
+        "id": "md6",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_md6"
+      },
+      {
+        "pref_label": {
+          "en": "MD5"
+        },
+        "index": "vocabulary",
+        "id": "md5",
+        "in_scheme": [
+          "http://spdx.org/rdf/terms#ChecksumAlgorithm"
+        ],
+        "resource": "http://spdx.org/rdf/terms#checksumAlgorithm_md5"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+#piveau-footer > .footer-navs-box > div > a,
+#piveau-footer > .footer-logos-box > div > span > a {
+    @extend .by-link-dark;
+    color: #fff;
+    &:not(.font-semi-bold){
+        font-weight: 400 !important;
+    }
+    &:visited {
+        color: inherit;
+        &:hover {
+            color: $by-blue-30;
+        }
+        &:active {
+            color: $by-blue-60;
+        }
+    }
+}

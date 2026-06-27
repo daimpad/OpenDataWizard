@@ -1,0 +1,1722 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 129,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "en": "Country calling code"
+        },
+        "index": "vocabulary",
+        "id": "PHONE_PREFIX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PHONE_PREFIX"
+      },
+      {
+        "pref_label": {
+          "en": "ESPD",
+          "et": "ESPD"
+        },
+        "index": "vocabulary",
+        "id": "ESPD",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ESPD",
+        "alt_label": {
+          "en": "ESPD code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PUB_CORP",
+          "et": "PUB_CORP"
+        },
+        "index": "vocabulary",
+        "id": "PUB_CORP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_CORP",
+        "alt_label": {
+          "en": "PUB_CORP code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 4217 num",
+          "et": "ISO 4217 num"
+        },
+        "index": "vocabulary",
+        "id": "ISO_4217_NUM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_4217_NUM",
+        "alt_label": {
+          "en": "ISO 4217 numeric code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 5218-2",
+          "en": "ISO 5218-2"
+        },
+        "index": "vocabulary",
+        "id": "ISO_5218_2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_5218_2",
+        "alt_label": {
+          "en": "ISO 5218-2 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PUB_TARGET",
+          "et": "PUB_TARGET"
+        },
+        "index": "vocabulary",
+        "id": "PUB_TARGET",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_TARGET",
+        "alt_label": {
+          "en": "PUB_TARGET code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "UPC",
+          "et": "UPC"
+        },
+        "index": "vocabulary",
+        "id": "UPC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/UPC",
+        "alt_label": {
+          "en": "Universal Product Code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PMCID",
+          "en": "PMCID"
+        },
+        "index": "vocabulary",
+        "id": "PMCID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PMCID",
+        "alt_label": {
+          "en": "PubMed Central Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 3166-2",
+          "et": "ISO 3166-2"
+        },
+        "index": "vocabulary",
+        "id": "ISO_3166_2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_3166_2",
+        "alt_label": {
+          "en": "ISO 3166-2 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "UNSD M49",
+          "en": "UNSD M49"
+        },
+        "index": "vocabulary",
+        "id": "UNSD_M49",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/UNSD_M49",
+        "alt_label": {
+          "en": "United Nations Statistics Division M49 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_375",
+          "en": "FD_375"
+        },
+        "index": "vocabulary",
+        "id": "FD_375",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_375",
+        "alt_label": {
+          "en": "FD_Table375 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 3166-3",
+          "et": "ISO 3166-3"
+        },
+        "index": "vocabulary",
+        "id": "ISO_3166_3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_3166_3",
+        "alt_label": {
+          "en": "ISO 3166-3 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "CELLAR MIME",
+          "en": "CELLAR MIME"
+        },
+        "index": "vocabulary",
+        "id": "CELLAR_MT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CELLAR_MT",
+        "alt_label": {
+          "en": "Media type (Cellar) code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_499",
+          "et": "FD_499"
+        },
+        "index": "vocabulary",
+        "id": "FD_499",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_499",
+        "alt_label": {
+          "en": "FD_Table499 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "arXiv",
+          "et": "arXiv"
+        },
+        "index": "vocabulary",
+        "id": "ARXIV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ARXIV",
+        "alt_label": {
+          "en": "arXiv identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISBN reg ele",
+          "en": "ISBN reg ele"
+        },
+        "index": "vocabulary",
+        "id": "ISBN_RG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISBN_RG",
+        "alt_label": {
+          "en": "ISBN registrant element"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_010",
+          "et": "FD_010"
+        },
+        "index": "vocabulary",
+        "id": "FD_010",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_010",
+        "alt_label": {
+          "en": "FD_Table010 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "LRIS",
+          "et": "LRIS"
+        },
+        "index": "vocabulary",
+        "id": "LRIS",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/LRIS",
+        "alt_label": {
+          "en": "Local Resource Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EU Whoiswho",
+          "et": "EU Whoiswho"
+        },
+        "index": "vocabulary",
+        "id": "WHOISWHO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/WHOISWHO",
+        "alt_label": {
+          "en": "EU Whoiswho code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ODP",
+          "et": "ODP"
+        },
+        "index": "vocabulary",
+        "id": "ODP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ODP",
+        "alt_label": {
+          "en": "ODP code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "SICI",
+          "en": "SICI"
+        },
+        "index": "vocabulary",
+        "id": "SICI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/SICI",
+        "alt_label": {
+          "en": "Serial Item and Contribution Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "INFO URI",
+          "en": "INFO URI"
+        },
+        "index": "vocabulary",
+        "id": "INFOURI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/INFOURI",
+        "alt_label": {
+          "en": "Info URI"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DOI",
+          "et": "DOI"
+        },
+        "index": "vocabulary",
+        "id": "DOI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/DOI",
+        "alt_label": {
+          "en": "Digital Object Identifier code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISSN",
+          "en": "ISSN"
+        },
+        "index": "vocabulary",
+        "id": "ISSN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISSN",
+        "alt_label": {
+          "en": "International Standard Serial Number"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_020",
+          "et": "FD_020"
+        },
+        "index": "vocabulary",
+        "id": "FD_020",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_020",
+        "alt_label": {
+          "en": "FD_Table020 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "AKN4EU",
+          "et": "AKN4EU"
+        },
+        "index": "vocabulary",
+        "id": "AKN4EU",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/AKN4EU",
+        "alt_label": {
+          "en": "Akoma Ntoso for European Union"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_140",
+          "en": "FD_140"
+        },
+        "index": "vocabulary",
+        "id": "FD_140",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_140",
+        "alt_label": {
+          "en": "FD_Table140 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_380",
+          "et": "FD_380"
+        },
+        "index": "vocabulary",
+        "id": "FD_380",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_380",
+        "alt_label": {
+          "en": "FD_Table380 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OP cat",
+          "et": "OP cat"
+        },
+        "index": "vocabulary",
+        "id": "OP_CAT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OP_CAT",
+        "alt_label": {
+          "en": "OP catalogue number"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ARK",
+          "en": "ARK"
+        },
+        "index": "vocabulary",
+        "id": "ARK",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ARK",
+        "alt_label": {
+          "en": "Archival Resource Key"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISTC",
+          "en": "ISTC"
+        },
+        "index": "vocabulary",
+        "id": "ISTC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISTC",
+        "alt_label": {
+          "en": "International Standard Text Code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EAN 13",
+          "et": "EAN 13"
+        },
+        "index": "vocabulary",
+        "id": "EAN13",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EAN13",
+        "alt_label": {
+          "en": "EAN 13 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 4217",
+          "et": "ISO 4217"
+        },
+        "index": "vocabulary",
+        "id": "ISO_4217",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_4217",
+        "alt_label": {
+          "en": "ISO 4217 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IBAN country code"
+        },
+        "index": "vocabulary",
+        "id": "IBAN_COU",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/IBAN_COU"
+      },
+      {
+        "pref_label": {
+          "et": "ISNI",
+          "en": "ISNI"
+        },
+        "index": "vocabulary",
+        "id": "ISNI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISNI",
+        "alt_label": {
+          "en": "International Standard Name Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "URI",
+          "et": "URI"
+        },
+        "index": "vocabulary",
+        "id": "URI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/URI",
+        "alt_label": {
+          "en": "Uniform Resource Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "URL",
+          "et": "URL"
+        },
+        "index": "vocabulary",
+        "id": "URL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/URL",
+        "alt_label": {
+          "en": "Uniform Resource Locator"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "URN",
+          "et": "URN"
+        },
+        "index": "vocabulary",
+        "id": "URN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/URN",
+        "alt_label": {
+          "en": "Uniform Resource Name"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EUDOR MIME",
+          "et": "EUDOR MIME"
+        },
+        "index": "vocabulary",
+        "id": "EUDOR_MIME",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EUDOR_MIME",
+        "alt_label": {
+          "en": "Media type (Eudor) code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Pégase",
+          "et": "Pégase"
+        },
+        "index": "vocabulary",
+        "id": "PEGASE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PEGASE",
+        "alt_label": {
+          "en": "Pégase code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PUB_FREQ",
+          "et": "PUB_FREQ"
+        },
+        "index": "vocabulary",
+        "id": "PUB_FREQ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_FREQ",
+        "alt_label": {
+          "en": "PUB_FREQ code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TED Schema",
+          "et": "TED Schema"
+        },
+        "index": "vocabulary",
+        "id": "TED_SCHEMA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/TED_SCHEMA",
+        "alt_label": {
+          "en": "TED Schema code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_110",
+          "en": "FD_110"
+        },
+        "index": "vocabulary",
+        "id": "FD_110",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_110",
+        "alt_label": {
+          "en": "FD_Table110 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_070",
+          "en": "FD_070"
+        },
+        "index": "vocabulary",
+        "id": "FD_070",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_070",
+        "alt_label": {
+          "en": "FD_Table070 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "DEMED",
+          "en": "DEMED"
+        },
+        "index": "vocabulary",
+        "id": "DEMED",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/DEMED",
+        "alt_label": {
+          "en": "DEMED code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "xml keel",
+          "en": "xml lang"
+        },
+        "index": "vocabulary",
+        "id": "XML_LNG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/XML_LNG",
+        "alt_label": {
+          "en": "xml language"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "File ext",
+          "et": "File ext"
+        },
+        "index": "vocabulary",
+        "id": "FILE_EXT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FILE_EXT",
+        "alt_label": {
+          "en": "File extensions code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OJ section",
+          "et": "OJ osa"
+        },
+        "index": "vocabulary",
+        "id": "OJ_SECTION",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OJ_SECTION",
+        "alt_label": {
+          "en": "OJ section code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Minidoc",
+          "et": "Minidoc"
+        },
+        "index": "vocabulary",
+        "id": "MINIDOC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/MINIDOC",
+        "alt_label": {
+          "en": "Minidoc code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "EuroVoc",
+          "en": "EuroVoc"
+        },
+        "index": "vocabulary",
+        "id": "EUROVOC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EUROVOC",
+        "alt_label": {
+          "en": "EuroVoc code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IANA",
+          "et": "IANA"
+        },
+        "index": "vocabulary",
+        "id": "IANA_DOMAIN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/IANA_DOMAIN",
+        "alt_label": {
+          "en": "Internet Assigned Numbers Authority code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 639-2 t",
+          "en": "ISO 639-2 t"
+        },
+        "index": "vocabulary",
+        "id": "ISO_639_2T",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_639_2T",
+        "alt_label": {
+          "en": "ISO 639-2 – terminological code"
+        }
+      },
+      {
+        "pref_label": {
+          "it": "Dati provvisori",
+          "es": "Datos provisionales",
+          "hu": "Ideiglenes adatok",
+          "pl": "Dane tymczasowe",
+          "en": "Provisional data",
+          "et": "Esialgsed andmed",
+          "fr": "Données provisoires",
+          "sl": "Začasni podatki",
+          "bg": "НЕОКОНЧАТЕЛНИ ДАННИ",
+          "da": "Midlertidige data",
+          "ro": "Date provizorii",
+          "nl": "Voorlopige gegevens",
+          "de": "Vorläufige Daten",
+          "hr": "Privremeni podaci",
+          "lt": "Laikinieji duomenys",
+          "el": "Προσωρινά δεδομένα",
+          "mt": "Dejta provviżorja",
+          "sv": "Tillfälliga uppgifter",
+          "fi": "Alustavat tiedot",
+          "pt": "Dados provisórios",
+          "lv": "Provizoriski dati",
+          "cs": "Předběžné údaje",
+          "ga": "Sonraí sealadacha",
+          "sk": "Predbežné údaje"
+        },
+        "index": "vocabulary",
+        "id": "OP_DATPRO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OP_DATPRO"
+      },
+      {
+        "pref_label": {
+          "en": "IANA MIME",
+          "et": "IANA MIME"
+        },
+        "index": "vocabulary",
+        "id": "IANA_MT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/IANA_MT",
+        "alt_label": {
+          "en": "Media Type (IANA) code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "CJ",
+          "et": "CJ"
+        },
+        "index": "vocabulary",
+        "id": "CJ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CJ",
+        "alt_label": {
+          "en": "CJ code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ONIX",
+          "en": "ONIX"
+        },
+        "index": "vocabulary",
+        "id": "ONIX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ONIX",
+        "alt_label": {
+          "en": "ONIX code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_400",
+          "en": "FD_400"
+        },
+        "index": "vocabulary",
+        "id": "FD_400",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_400",
+        "alt_label": {
+          "en": "FD_Table400 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Aegunud kood (legacy)",
+          "en": "Legacy code"
+        },
+        "index": "vocabulary",
+        "id": "LAC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/LAC",
+        "alt_label": {
+          "en": "Legacy authority code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 639-2 b",
+          "en": "ISO 639-2 b"
+        },
+        "index": "vocabulary",
+        "id": "ISO_639_2B",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_639_2B",
+        "alt_label": {
+          "en": "ISO 639-2 – bibliographic code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_325",
+          "en": "FD_325"
+        },
+        "index": "vocabulary",
+        "id": "FD_361",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_361",
+        "alt_label": {
+          "en": "FD_Table325 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PII",
+          "et": "PII"
+        },
+        "index": "vocabulary",
+        "id": "PII",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PII",
+        "alt_label": {
+          "en": "Publisher Item Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_LOC",
+          "en": "PUB_LOC"
+        },
+        "index": "vocabulary",
+        "id": "PUB_LOC",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_LOC",
+        "alt_label": {
+          "en": "PUB_LOC code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 15924 α-4",
+          "en": "ISO 15924 α-4"
+        },
+        "index": "vocabulary",
+        "id": "ISO_15924_ALPHA_4",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_15924_ALPHA_4",
+        "alt_label": {
+          "en": "ISO 15924 alpha-4 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_THEM14",
+          "en": "PUB_THEM14"
+        },
+        "index": "vocabulary",
+        "id": "PUB_THEM14",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_THEM14",
+        "alt_label": {
+          "en": "PUB_THEM14 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 15924 num",
+          "et": "ISO 15924 num"
+        },
+        "index": "vocabulary",
+        "id": "ISO_15924_NUM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_15924_NUM",
+        "alt_label": {
+          "en": "ISO 15924 numeric code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "TIR",
+          "et": "TIR"
+        },
+        "index": "vocabulary",
+        "id": "TIR",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/TIR",
+        "alt_label": {
+          "en": "International Road Transport code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "NIHMSID",
+          "et": "NIHMSID"
+        },
+        "index": "vocabulary",
+        "id": "NIHMSID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/NIHMSID",
+        "alt_label": {
+          "en": "NIH Manuscript Submission Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Formex",
+          "et": "Formex"
+        },
+        "index": "vocabulary",
+        "id": "FORMEX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FORMEX",
+        "alt_label": {
+          "en": "Formex code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_610",
+          "en": "FD_610"
+        },
+        "index": "vocabulary",
+        "id": "FD_610",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_610",
+        "alt_label": {
+          "en": "FD_Table610 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_613",
+          "en": "FD_613"
+        },
+        "index": "vocabulary",
+        "id": "FD_613",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_613",
+        "alt_label": {
+          "en": "FD_Table613 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_612",
+          "en": "FD_612"
+        },
+        "index": "vocabulary",
+        "id": "FD_612",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_612",
+        "alt_label": {
+          "en": "FD_Table612 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "DOI pref",
+          "et": "DOI pref"
+        },
+        "index": "vocabulary",
+        "id": "DOI_P",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/DOI_P",
+        "alt_label": {
+          "en": "DOI prefix"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "CELEX id",
+          "et": "CELEX id"
+        },
+        "index": "vocabulary",
+        "id": "CELEX",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CELEX",
+        "alt_label": {
+          "en": "CELEX code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "UNSD geoscheme",
+          "et": "UNSD geoscheme"
+        },
+        "index": "vocabulary",
+        "id": "UNSD_GEOSCHEME",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/UNSD_GEOSCHEME",
+        "alt_label": {
+          "en": "United Nations Statistics Division geoscheme"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_290",
+          "et": "FD_290"
+        },
+        "index": "vocabulary",
+        "id": "FD_290",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_290",
+        "alt_label": {
+          "en": "FD_Table290 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_050",
+          "en": "FD_050"
+        },
+        "index": "vocabulary",
+        "id": "FD_050",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_050",
+        "alt_label": {
+          "en": "FD_Table050 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_NOT",
+          "en": "PUB_NOT"
+        },
+        "index": "vocabulary",
+        "id": "PUB_NOT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_NOT",
+        "alt_label": {
+          "en": "PUB_NOT code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "COMREF",
+          "en": "COMREF"
+        },
+        "index": "vocabulary",
+        "id": "COMREF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/COMREF",
+        "alt_label": {
+          "en": "COMREF code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PUB_QUAL",
+          "et": "PUB_QUAL"
+        },
+        "index": "vocabulary",
+        "id": "PUB_QUAL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_QUAL",
+        "alt_label": {
+          "en": "PUB_QUAL code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_LNGISO",
+          "en": "PUB_LNGISO"
+        },
+        "index": "vocabulary",
+        "id": "PUB_LNGISO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_LNGISO",
+        "alt_label": {
+          "en": "PUB_LNGISO code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ORCID",
+          "en": "ORCID"
+        },
+        "index": "vocabulary",
+        "id": "ORCID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ORCID",
+        "alt_label": {
+          "en": "ORCID identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "e-ISSN",
+          "en": "e-ISSN"
+        },
+        "index": "vocabulary",
+        "id": "E_ISSN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/E_ISSN",
+        "alt_label": {
+          "en": "Electronic ISSN"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IATE",
+          "et": "IATE"
+        },
+        "index": "vocabulary",
+        "id": "IATE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/IATE",
+        "alt_label": {
+          "en": "IATE code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EP",
+          "et": "EP"
+        },
+        "index": "vocabulary",
+        "id": "EP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EP",
+        "alt_label": {
+          "en": "EP code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_100",
+          "en": "FD_100"
+        },
+        "index": "vocabulary",
+        "id": "FD_100",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_100",
+        "alt_label": {
+          "en": "FD_Table100 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Codification data",
+          "et": "Codification data"
+        },
+        "index": "vocabulary",
+        "id": "CODIF_DATA",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CODIF_DATA"
+      },
+      {
+        "pref_label": {
+          "et": "ISO 3166-1 α-2",
+          "en": "ISO 3166-1 α-2"
+        },
+        "index": "vocabulary",
+        "id": "ISO_3166_1_ALPHA_2",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_3166_1_ALPHA_2",
+        "alt_label": {
+          "en": "ISO 3166-1 alpha-2 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 3166-1 α-3",
+          "et": "ISO 3166-1 α-3"
+        },
+        "index": "vocabulary",
+        "id": "ISO_3166_1_ALPHA_3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_3166_1_ALPHA_3",
+        "alt_label": {
+          "en": "ISO 3166-1 alpha-3 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_060",
+          "et": "FD_060"
+        },
+        "index": "vocabulary",
+        "id": "FD_060",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_060",
+        "alt_label": {
+          "en": "FD_Table060 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ECLI",
+          "en": "ECLI"
+        },
+        "index": "vocabulary",
+        "id": "ECLI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ECLI",
+        "alt_label": {
+          "en": "European Case Law Identifier code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "UN location",
+          "et": "UN location"
+        },
+        "index": "vocabulary",
+        "id": "UN_LOCODE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/UN_LOCODE",
+        "alt_label": {
+          "en": "United Nations Code for Trade and Transport Locations code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "EU Bookshop",
+          "et": "EU Bookshop"
+        },
+        "index": "vocabulary",
+        "id": "EUBOOKSHOP",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EUBOOKSHOP",
+        "alt_label": {
+          "en": "EU Bookshop code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Handle",
+          "et": "Handle"
+        },
+        "index": "vocabulary",
+        "id": "HANDLE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/HANDLE",
+        "alt_label": {
+          "en": "Handle identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 3166-1 num",
+          "en": "ISO 3166-1 num"
+        },
+        "index": "vocabulary",
+        "id": "ISO_3166_1_NUM",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_3166_1_NUM",
+        "alt_label": {
+          "en": "ISO 3166-1 numeric code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "LSID",
+          "en": "LSID"
+        },
+        "index": "vocabulary",
+        "id": "LSID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/LSID",
+        "alt_label": {
+          "en": "Life Science Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_DIV",
+          "en": "PUB_DIV"
+        },
+        "index": "vocabulary",
+        "id": "PUB_DIV",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_DIV",
+        "alt_label": {
+          "en": "PUB_DIV code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "MNE",
+          "en": "MNE"
+        },
+        "index": "vocabulary",
+        "id": "MNE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/MNE",
+        "alt_label": {
+          "en": "MNE code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "CELEX juurelement",
+          "en": "CELEX root"
+        },
+        "index": "vocabulary",
+        "id": "CELEX_RT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CELEX_RT",
+        "alt_label": {
+          "en": "CELEX root code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Council",
+          "en": "Council"
+        },
+        "index": "vocabulary",
+        "id": "CONSIL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CONSIL",
+        "alt_label": {
+          "en": "Council code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISO 639-3",
+          "et": "ISO 639-3"
+        },
+        "index": "vocabulary",
+        "id": "ISO_639_3",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_639_3",
+        "alt_label": {
+          "en": "ISO 639-3 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISO 639-1",
+          "en": "ISO 639-1"
+        },
+        "index": "vocabulary",
+        "id": "ISO_639_1",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISO_639_1",
+        "alt_label": {
+          "en": "ISO 639-1 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_557",
+          "et": "FD_557"
+        },
+        "index": "vocabulary",
+        "id": "FD_557",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_557",
+        "alt_label": {
+          "en": "FD_Table557 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Litige",
+          "et": "Litige"
+        },
+        "index": "vocabulary",
+        "id": "LITIGE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/LITIGE",
+        "alt_label": {
+          "en": "Litige code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_030",
+          "en": "FD_030"
+        },
+        "index": "vocabulary",
+        "id": "FD_030",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_030",
+        "alt_label": {
+          "en": "FD_Table030 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "ISBN",
+          "en": "ISBN"
+        },
+        "index": "vocabulary",
+        "id": "ISBN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISBN",
+        "alt_label": {
+          "en": "International Standard Book Number code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISSN-L",
+          "et": "ISSN-L"
+        },
+        "index": "vocabulary",
+        "id": "ISSN_L",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISSN_L",
+        "alt_label": {
+          "en": "Linking ISSN"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PUB_ORDIN",
+          "en": "PUB_ORDIN"
+        },
+        "index": "vocabulary",
+        "id": "PUB_ORDIN",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_ORDIN",
+        "alt_label": {
+          "en": "PUB_ORDIN code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "ISG COU",
+          "et": "ISG COU"
+        },
+        "index": "vocabulary",
+        "id": "ISG_COU",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/ISG_COU",
+        "alt_label": {
+          "en": "ISG country code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PURL",
+          "en": "PURL"
+        },
+        "index": "vocabulary",
+        "id": "PURL",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PURL",
+        "alt_label": {
+          "en": "Persistent URL"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OJ id",
+          "et": "OJ id"
+        },
+        "index": "vocabulary",
+        "id": "OJ",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OJ",
+        "alt_label": {
+          "en": "OJ code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PUB_LANG",
+          "et": "PUB_LANG"
+        },
+        "index": "vocabulary",
+        "id": "PUB_LANG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PUB_LANG",
+        "alt_label": {
+          "en": "PUB_LANG code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_608",
+          "et": "FD_608"
+        },
+        "index": "vocabulary",
+        "id": "FD_608",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_608",
+        "alt_label": {
+          "en": "FD_Table608 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "Eudor keel",
+          "en": "Eudor lang"
+        },
+        "index": "vocabulary",
+        "id": "EUDOR_LNG",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/EUDOR_LNG",
+        "alt_label": {
+          "en": "Eudor language code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_607",
+          "et": "FD_607"
+        },
+        "index": "vocabulary",
+        "id": "FD_607",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_607",
+        "alt_label": {
+          "en": "FD_Table607 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_609",
+          "en": "FD_609"
+        },
+        "index": "vocabulary",
+        "id": "FD_609",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_609",
+        "alt_label": {
+          "en": "FD_Table609 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "CELLAR Manif MIME",
+          "et": "CELLAR Manif MIME"
+        },
+        "index": "vocabulary",
+        "id": "CELLAR_MANIFT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CELLAR_MANIFT",
+        "alt_label": {
+          "en": "Media type (Cellar Manifestation) code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FundRef",
+          "et": "FundRef"
+        },
+        "index": "vocabulary",
+        "id": "FUNDREF",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FUNDREF",
+        "alt_label": {
+          "en": "FundRef identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "Bibcode",
+          "et": "Bibcode"
+        },
+        "index": "vocabulary",
+        "id": "BIBCODE",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/BIBCODE",
+        "alt_label": {
+          "en": "Bibliographic Reference Code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "FD_361",
+          "et": "FD_361"
+        },
+        "index": "vocabulary",
+        "id": "FD_325",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_325",
+        "alt_label": {
+          "en": "FD_Table361 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "OP_MARC21",
+          "en": "OP_MARC21"
+        },
+        "index": "vocabulary",
+        "id": "OP_MARC21",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OP_MARC21"
+      },
+      {
+        "pref_label": {
+          "en": "FD_601",
+          "et": "FD_601"
+        },
+        "index": "vocabulary",
+        "id": "FD_601",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_601",
+        "alt_label": {
+          "en": "FD_Table601 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "TED",
+          "en": "TED"
+        },
+        "index": "vocabulary",
+        "id": "TED",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/TED",
+        "alt_label": {
+          "en": "TED code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "OCI",
+          "et": "OCI"
+        },
+        "index": "vocabulary",
+        "id": "OCI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/OCI",
+        "alt_label": {
+          "en": "Open Citation Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "IENI",
+          "et": "IENI"
+        },
+        "index": "vocabulary",
+        "id": "IENI",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/IENI",
+        "alt_label": {
+          "en": "IENI collection"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_040",
+          "en": "FD_040"
+        },
+        "index": "vocabulary",
+        "id": "FD_040",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_040",
+        "alt_label": {
+          "en": "FD_Table040 code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "FD_160",
+          "en": "FD_160"
+        },
+        "index": "vocabulary",
+        "id": "FD_160",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/FD_160",
+        "alt_label": {
+          "en": "FD_Table160 code"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "CELEX sector",
+          "et": "CELEX sektor"
+        },
+        "index": "vocabulary",
+        "id": "CELEX_SECT",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/CELEX_SECT",
+        "alt_label": {
+          "en": "CELEX sector code"
+        }
+      },
+      {
+        "pref_label": {
+          "et": "PMID",
+          "en": "PMID"
+        },
+        "index": "vocabulary",
+        "id": "PMID",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PMID",
+        "alt_label": {
+          "en": "PubMed Identifier"
+        }
+      },
+      {
+        "pref_label": {
+          "en": "PlanJO",
+          "et": "PlanJO"
+        },
+        "index": "vocabulary",
+        "id": "PLANJO",
+        "in_scheme": "http://publications.europa.eu/resource/authority/notation-type",
+        "resource": "http://publications.europa.eu/resource/authority/notation-type/PLANJO",
+        "alt_label": {
+          "en": "PlanJO code"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "result": {
+    "index": "vocabulary",
+    "count": 16,
+    "facets": [
+      {
+        "id": "attribution",
+        "title": "Attribution",
+        "items": []
+      },
+      {
+        "id": "copyleft",
+        "title": "Copy Left",
+        "items": []
+      },
+      {
+        "id": "lesser_copyleft",
+        "title": "Lesser Copy Left",
+        "items": []
+      },
+      {
+        "id": "notice",
+        "title": "Notice",
+        "items": []
+      },
+      {
+        "id": "share_alike",
+        "title": "Share Alike",
+        "items": []
+      },
+      {
+        "id": "state_changes",
+        "title": "State Changes",
+        "items": []
+      }
+    ],
+    "results": [
+      {
+        "pref_label": {
+          "de": "11"
+        },
+        "index": "vocabulary",
+        "id": "11",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/11",
+        "alt_label": {
+          "de": "Berlin"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "12"
+        },
+        "index": "vocabulary",
+        "id": "12",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/12",
+        "alt_label": {
+          "de": "Brandenburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "01"
+        },
+        "index": "vocabulary",
+        "id": "01",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/01",
+        "alt_label": {
+          "de": "Schleswig-Holstein"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "13"
+        },
+        "index": "vocabulary",
+        "id": "13",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/13",
+        "alt_label": {
+          "de": "Mecklenburg-Vorpommern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "02"
+        },
+        "index": "vocabulary",
+        "id": "02",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/02",
+        "alt_label": {
+          "de": "Hamburg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "14"
+        },
+        "index": "vocabulary",
+        "id": "14",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/14",
+        "alt_label": {
+          "de": "Sachsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "03"
+        },
+        "index": "vocabulary",
+        "id": "03",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/03",
+        "alt_label": {
+          "de": "Niedersachsen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "15"
+        },
+        "index": "vocabulary",
+        "id": "15",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/15",
+        "alt_label": {
+          "de": "Sachsen-Anhalt"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "04"
+        },
+        "index": "vocabulary",
+        "id": "04",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/04",
+        "alt_label": {
+          "de": "Bremen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "16"
+        },
+        "index": "vocabulary",
+        "id": "16",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/16",
+        "alt_label": {
+          "de": "Thüringen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "05"
+        },
+        "index": "vocabulary",
+        "id": "05",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/05",
+        "alt_label": {
+          "de": "Nordrhein-Westfalen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "06"
+        },
+        "index": "vocabulary",
+        "id": "06",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/06",
+        "alt_label": {
+          "de": "Hessen"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "07"
+        },
+        "index": "vocabulary",
+        "id": "07",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/07",
+        "alt_label": {
+          "de": "Rheinland-Pfalz"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "08"
+        },
+        "index": "vocabulary",
+        "id": "08",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/08",
+        "alt_label": {
+          "de": "Baden-Württemberg"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "09"
+        },
+        "index": "vocabulary",
+        "id": "09",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/09",
+        "alt_label": {
+          "de": "Bayern"
+        }
+      },
+      {
+        "pref_label": {
+          "de": "10"
+        },
+        "index": "vocabulary",
+        "id": "10",
+        "in_scheme": "http://dcat-ap.de/def/politicalGeocoding/stateKey",
+        "resource": "http://dcat-ap.de/def/politicalGeocoding/stateKey/10",
+        "alt_label": {
+          "de": "Saarland"
+        }
+      }
+    ]
+  }
+}

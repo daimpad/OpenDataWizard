@@ -1,0 +1,24 @@
+$byte-colors: (
+  by-blue-110: $by-blue-110,
+  by-blue-100: $by-blue-100,
+  by-blue-90: $by-blue-90,
+  by-blue-80: $by-blue-80,
+  by-blue-70: $by-blue-70,
+  by-blue-60: $by-blue-60,
+  by-blue-50: $by-blue-50,
+  by-blue-40: $by-blue-40,
+  by-blue-30: $by-blue-30,
+  by-blue-20: $by-blue-20,
+  by-blue-10: $by-blue-10,
+
+  by-neutral-100: $by-neutral-100,
+  by-neutral-90: $by-neutral-90,
+  by-neutral-80: $by-neutral-80,
+  by-neutral-60: $by-neutral-60,
+  by-neutral-30: $by-neutral-30,
+  by-neutral-20: $by-neutral-20,
+  by-neutral-10: $by-neutral-10,
+  by-neutral-5: $by-neutral-5,
+);
+
+$theme-colors: map-merge($theme-colors, $byte-colors);
