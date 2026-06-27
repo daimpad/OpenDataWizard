@@ -259,7 +259,7 @@ const mapsSchema = z.object({
   options: z.object({
     id: z.string().default('mapbox/streets-v11'),
     // todo: potentially dumb
-    accessToken: z.string().default('pk.eyJ1IjoiZmFiaWFwZmVsa2VybiIsImEiOiJja2x3MzlvZ3UwNG85MnBseXJ6aGI2MHdkIn0.bFs2g4bPMYULlvDSVsetJg'),
+    accessToken: z.string().default(''),
     attribution: z.string().default('&copy; <a href="https://ec.europa.eu/eurostat/web/gisco/">Eurostat - GISCO</a>'),
   }).default({}),
   mapStyle: z.object({
