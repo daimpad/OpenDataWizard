@@ -382,6 +382,9 @@ class ODW_Admin {
 						'ariaNumber'  => __( 'Dateigröße Zahlenwert', 'open-data-wizard' ),
 						'ariaUnit'    => __( 'Einheit', 'open-data-wizard' ),
 						'helpText'    => __( 'Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB', 'open-data-wizard' ),
+						'invalid'     => __( 'Bitte einen positiven Wert eingeben.', 'open-data-wizard' ),
+						'bytes'       => __( 'Bytes', 'open-data-wizard' ),
+						'locale'      => str_replace( '_', '-', determine_locale() ),
 					),
 				)
 			);
@@ -1109,6 +1112,8 @@ class ODW_Admin {
 		// Move to a temporary location for parsing.
 		$temp_file = wp_tempnam( $original_name );
 		if ( ! move_uploaded_file( $tmp_name, $temp_file ) ) {
+			// wp_tempnam() already created the (empty) file; clean it up on failure.
+			wp_delete_file( $temp_file );
 			wp_send_json_error( array( 'error' => __( 'Datei konnte nicht hochgeladen werden.', 'open-data-wizard' ) ) );
 		}
 

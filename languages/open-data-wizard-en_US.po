@@ -150,6 +150,9 @@ msgstr "Education, Culture & Sport"
 msgid "Bis wann sind diese Daten gültig?"
 msgstr "Until when are these data valid?"
 
+msgid "Bitte einen positiven Wert eingeben."
+msgstr "Please enter a positive value."
+
 msgid "Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB"
 msgstr "Please enter the approximate file size and select the matching unit. 1 MB = 1,024 KB"
 
@@ -158,6 +161,9 @@ msgstr "Please select a file."
 
 msgid "Bund (Federal)"
 msgstr "Federal"
+
+msgid "Bytes"
+msgstr "bytes"
 
 msgid "CC BY 4.0 — Namensnennung"
 msgstr "CC BY 4.0 — Attribution"

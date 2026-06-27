@@ -193,7 +193,11 @@ class ODW_Quality {
 			}
 		}
 
-		return $sum > 0 ? $sum : self::REQUIRED_ONLY_SCORE;
+		$threshold = $sum > 0 ? $sum : self::REQUIRED_ONLY_SCORE;
+
+		// Keep the threshold within the clamped 0–100 score range so get_level()
+		// stays consistent even if a filter pushes the required points above 100.
+		return min( 100, $threshold );
 	}
 
 	/**

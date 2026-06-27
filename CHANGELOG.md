@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.3.1] — 2026-06-27
+
+Härtungs-Release aus einem Code-Review der jüngsten Änderungen.
+
+### 🔒 Security
+- **JSON-LD `@id`-Sanitisierung gehärtet:** `odw_sanitize_jsonld_id()` ließ sich durch führenden Whitespace oder eingebettete Steuerzeichen umgehen (z. B. `" javascript:…"`), wodurch ein gefährliches Schema ungeprüft in die JSON-LD-Ausgabe gelangen konnte. Werte werden jetzt vor der Schema-Erkennung normalisiert.
+
+### 🐛 Fixed
+- **Batch-Import:** Schlägt das Verschieben der hochgeladenen Datei fehl, wird die von `wp_tempnam()` angelegte temporäre Datei nun aufgeräumt (kein Datei-Leak mehr).
+- **Dateigröße-Widget:** Wird die Zahl gelöscht, wird auch der gespeicherte Byte-Wert geleert (vorher blieb ein alter Wert erhalten).
+- **Quality-Schwelle:** Die „Ausreichend"-Schwelle wird auf 0–100 begrenzt, damit die Level-Einstufung auch bei abweichender Punkte-Konfiguration konsistent bleibt.
+
+### 🌍 i18n
+- Die letzten hartkodierten deutschen Texte im Dateigröße-Widget (Validierungsmeldung, Einheit „Bytes", Zahlenformat) werden jetzt lokalisiert und in der englischen Übersetzung berücksichtigt (338 Strings).
+
+---
+
 ## [2.3.0] — 2026-06-27
 
 ### 🌍 Added

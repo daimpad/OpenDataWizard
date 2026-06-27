@@ -597,4 +597,28 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$dist = $result['dcat:distribution'][0];
 		$this->assertSame( array( '@id' => $custom_uri ), $dist['dct:license'] );
 	}
+
+	/**
+	 * Routes scheme-bearing values — including ones obfuscated with leading
+	 * whitespace or embedded control chars — through esc_url_raw(), and leaves
+	 * bare codes/labels untouched.
+	 */
+	public function test_sanitize_jsonld_id_routes_schemes_and_blocks_whitespace_bypass(): void {
+		$this->load_fields();
+
+		\WP_Mock::userFunction( 'esc_url_raw' )->andReturn( 'ESCAPED' );
+
+		// Bare codes/labels have no scheme — returned unchanged.
+		$this->assertSame( 'de', odw_sanitize_jsonld_id( 'de' ) );
+		$this->assertSame( 'Soziales', odw_sanitize_jsonld_id( 'Soziales' ) );
+
+		// Plain scheme-bearing values are routed through esc_url_raw().
+		$this->assertSame( 'ESCAPED', odw_sanitize_jsonld_id( 'https://example.org/x' ) );
+
+		// Leading whitespace must NOT bypass scheme detection.
+		$this->assertSame( 'ESCAPED', odw_sanitize_jsonld_id( '   javascript:alert(1)' ) );
+
+		// Embedded control characters must NOT bypass it either.
+		$this->assertSame( 'ESCAPED', odw_sanitize_jsonld_id( "java\nscript:alert(1)" ) );
+	}
 }
