@@ -1,0 +1,1019 @@
+# Open Data Wizard — translation template (POT).
+# This file is distributed under the same license as the plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Open Data Wizard 2.3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: open-data-wizard\n"
+
+msgid " erstellt und sind dann zur Bearbeitung verfügbar."
+msgstr ""
+
+msgid "(optional)"
+msgstr ""
+
+msgid "1 — Grundlegende Informationen"
+msgstr ""
+
+msgid "2 — Inhaltliche Angaben"
+msgstr ""
+
+msgid "3 — Datenbereitstellung"
+msgstr ""
+
+msgid "4 — Erweiterte Angaben"
+msgstr ""
+
+msgid "5 — Vorschau"
+msgstr ""
+
+msgid "AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)"
+msgstr ""
+
+msgid "Ab wann sind diese Daten gültig?"
+msgstr ""
+
+msgid "Abbrechen"
+msgstr ""
+
+msgid "Abdeckung"
+msgstr ""
+
+msgid "Alle Datensätze"
+msgstr ""
+
+msgid "Alle Datensätze, Metadaten und Plugin-Optionen beim Deinstallieren unwiderruflich löschen."
+msgstr ""
+
+msgid "Alle Qualitätsscores neu berechnen"
+msgstr ""
+
+msgid "Alle Status"
+msgstr ""
+
+msgid "Als Vorschaubild verwenden"
+msgstr ""
+
+msgid "Auf welcher Verwaltungsebene wurden diese Daten erhoben?"
+msgstr ""
+
+msgid "Auf welcher Website finde ich weitere Kontaktinformationen?"
+msgstr ""
+
+msgid "Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik"
+msgstr ""
+
+msgid "Ausreichend"
+msgstr ""
+
+msgid "Auswählen"
+msgstr ""
+
+msgid "BESCHREIBUNG (dct:description)"
+msgstr ""
+
+msgid "Batch-Import"
+msgstr ""
+
+msgid "Beispiel: 2024-01-01"
+msgstr ""
+
+msgid "Beispiel: 2024-01-15"
+msgstr ""
+
+msgid "Beispiel: 2024-12-31"
+msgstr ""
+
+msgid "Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen."
+msgstr ""
+
+msgid "Beispiel: CSV, JSON, PDF"
+msgstr ""
+
+msgid "Beispiel: Deutsch, Englisch"
+msgstr ""
+
+msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
+msgstr ""
+
+msgid "Beispiel: Gemeinde, Landkreis, Land, Bund"
+msgstr ""
+
+msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
+msgstr ""
+
+msgid "Beispiel: Open Data Team, Statistisches Landesamt"
+msgstr ""
+
+msgid "Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig"
+msgstr ""
+
+msgid "Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur"
+msgstr ""
+
+msgid "Beispiel: Zivilgesellschaftliche Organisationen"
+msgstr ""
+
+msgid "Beispiel: https://beispiel.de/daten/datei.csv"
+msgstr ""
+
+msgid "Beispiel: https://beispiel.de/kontakt"
+msgstr ""
+
+msgid "Beispiel: opendata@beispiel.de"
+msgstr ""
+
+msgid "Bereit zum Importieren! Alle ausgewählten Datensätze werden als "
+msgstr ""
+
+msgid "Beschreiben Sie Ihre Datensätze dort, wo Sie ohnehin arbeiten – direkt in WordPress. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard DCAT-AP 3.0 und stellt sie unter einer persistenten URL bereit."
+msgstr ""
+
+msgid "Beschreibung (dct:description)"
+msgstr ""
+
+msgid "Beschreibung des Datensatzes"
+msgstr ""
+
+msgid "Bevölkerung & Gesellschaft"
+msgstr ""
+
+msgid "Bildung, Kultur & Sport"
+msgstr ""
+
+msgid "Bis wann sind diese Daten gültig?"
+msgstr ""
+
+msgid "Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB"
+msgstr ""
+
+msgid "Bitte wähle eine Datei aus."
+msgstr ""
+
+msgid "Bund (Federal)"
+msgstr ""
+
+msgid "CC BY 4.0 — Namensnennung"
+msgstr ""
+
+msgid "CC BY-SA 4.0 — Namensnennung, Weitergabe unter gleichen Bedingungen"
+msgstr ""
+
+msgid "CC0 1.0 — Gemeinfreiheit (keine Rechte vorbehalten)"
+msgstr ""
+
+msgid "CESSDA THEMENKLASSIFIKATION (cessda:topic)"
+msgstr ""
+
+msgid "CESSDA Themenklassifikation"
+msgstr ""
+
+msgid "CSV oder JSON Datei"
+msgstr ""
+
+msgid "CSV-Beispiel herunterladen"
+msgstr ""
+
+msgid "CSV-Datei ist leer oder ungültig."
+msgstr ""
+
+msgid "CSV-Datei konnte nicht geöffnet werden."
+msgstr ""
+
+msgid "Cache-Laufzeit (Sekunden)"
+msgstr ""
+
+msgid "Catalog-Endpoint (REST API)"
+msgstr ""
+
+msgid "Cleared %d transient cache(s)."
+msgstr ""
+
+msgid "DCAT-AP 3.0 Pflichtfelder"
+msgstr ""
+
+msgid "DCAT-AP 3.0 konforme Datensatz-Metadaten"
+msgstr ""
+
+msgid "Das Problem"
+msgstr ""
+
+msgid "Das Wizard-Formular ist in fünf einfache Schritte unterteilt:"
+msgstr ""
+
+msgid "Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt."
+msgstr ""
+
+msgid "Datei auswählen / hochladen"
+msgstr ""
+
+msgid "Datei auswählen oder hochladen"
+msgstr ""
+
+msgid "Datei hochladen"
+msgstr ""
+
+msgid "Datei konnte nicht hochgeladen werden."
+msgstr ""
+
+msgid "Datei nicht gefunden."
+msgstr ""
+
+msgid "Datei wird analysiert…"
+msgstr ""
+
+msgid "Datei zu groß (max. 10MB)."
+msgstr ""
+
+msgid "Dateigröße"
+msgstr ""
+
+msgid "Dateigröße (Bytes)"
+msgstr ""
+
+msgid "Dateigröße Zahlenwert"
+msgstr ""
+
+msgid "Daten löschen"
+msgstr ""
+
+msgid "Datensatz"
+msgstr ""
+
+msgid "Datensatz ansehen"
+msgstr ""
+
+msgid "Datensatz bearbeiten"
+msgstr ""
+
+msgid "Datensatz konnte nicht gebaut werden."
+msgstr ""
+
+msgid "Datensatz nicht gefunden."
+msgstr ""
+
+msgid "Datensatz-Archiv"
+msgstr ""
+
+msgid "Datensatzliste"
+msgstr ""
+
+msgid "Datensatzliste Navigation"
+msgstr ""
+
+msgid "Datensatzliste filtern"
+msgstr ""
+
+msgid "Datensätze"
+msgstr ""
+
+msgid "Datensätze importieren"
+msgstr ""
+
+msgid "Datensätze suchen"
+msgstr ""
+
+msgid "Datenverwaltung"
+msgstr ""
+
+msgid "Deinstallation"
+msgstr ""
+
+msgid "Demo-Datensatz bearbeiten"
+msgstr ""
+
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
+msgstr ""
+
+msgid "Der Open Data Wizard ermöglicht es Ihnen, Datensätze direkt in WordPress zu beschreiben und als maschinenlesbare, standardkonforme Metadaten bereitzustellen — ohne technische Vorkenntnisse."
+msgstr ""
+
+msgid "Deutsch (DE)"
+msgstr ""
+
+msgid "Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle (Namensnennung) angegeben wird."
+msgstr ""
+
+msgid "Die Daten sind gemeinfrei. Sie dürfen ohne Einschränkungen und ohne Namensnennung kopiert, verändert und – auch kommerziell – weiterverwendet werden."
+msgstr ""
+
+msgid "Die Idee"
+msgstr ""
+
+msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
+msgstr ""
+
+msgid "Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespeicherten Feldinhalten."
+msgstr ""
+
+msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
+msgstr ""
+
+msgid "Dieser Datensatz ist nicht veröffentlicht."
+msgstr ""
+
+msgid "Dieser Demo-Datensatz enthält eine Beispielliste zivilgesellschaftlicher Organisationen. Er wurde automatisch bei der Plugin-Installation erstellt und kann als Vorlage oder zum Testen des [odw_dataset]-Shortcodes verwendet werden."
+msgstr ""
+
+msgid "Distribution"
+msgstr ""
+
+msgid "Distribution mit URL (dcat:accessURL)"
+msgstr ""
+
+msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
+msgstr ""
+
+msgid "Download-Datei (Mediathek)"
+msgstr ""
+
+msgid "Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext."
+msgstr ""
+
+msgid "E-Mail-Adresse für Rückfragen."
+msgstr ""
+
+msgid "EIGENE LIZENZ-URI"
+msgstr ""
+
+msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:"
+msgstr ""
+
+msgid "Ein Fehler ist aufgetreten."
+msgstr ""
+
+msgid "Einheit"
+msgstr ""
+
+msgid "Einstellungen"
+msgstr ""
+
+msgid "Einstellungen speichern"
+msgstr ""
+
+msgid "Einstieg"
+msgstr ""
+
+msgid "Einzelner Datensatz"
+msgstr ""
+
+msgid "Element %d: Erwarte Objekt."
+msgstr ""
+
+msgid "Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0"
+msgstr ""
+
+msgid "Empfohlene Felder"
+msgstr ""
+
+msgid "Energie"
+msgstr ""
+
+msgid "Englisch (EN)"
+msgstr ""
+
+msgid "Entfernen"
+msgstr ""
+
+msgid "Entwurf"
+msgstr ""
+
+msgid "Entwürfe"
+msgstr ""
+
+msgid "Erste Schritte"
+msgstr ""
+
+msgid "Erstellt:"
+msgstr ""
+
+msgid "Erweiterte Angaben"
+msgstr ""
+
+msgid "FORMAT (dct:format)"
+msgstr ""
+
+msgid "Fehler gefunden:"
+msgstr ""
+
+msgid "Fehler:"
+msgstr ""
+
+msgid "Felder"
+msgstr ""
+
+msgid "Filter nach Lizenz (Kurzform)"
+msgstr ""
+
+msgid "Filter nach Thema"
+msgstr ""
+
+msgid "Folgende Pflichtfelder fehlen oder sind leer:"
+msgstr ""
+
+msgid "Format der Distribution (dct:format)"
+msgstr ""
+
+msgid "Format nicht unterstützt (nur CSV oder JSON)."
+msgstr ""
+
+msgid "Füllen Sie die Pflichtfelder aus (mit * gekennzeichnet) und speichern Sie den Datensatz. Sie können ihn später noch bearbeiten. Jedes Feld hat hilfreiche Beispiele – schauen Sie in den Hilfetexten vorbei!"
+msgstr ""
+
+msgid "GEOGRAPHISCHE ABDECKUNG (dct:spatial)"
+msgstr ""
+
+msgid "Gemeinde"
+msgstr ""
+
+msgid "Generiertes JSON-LD live einsehen und über die REST-API abrufen."
+msgstr ""
+
+msgid "Gesundheit"
+msgstr ""
+
+msgid "Gut"
+msgstr ""
+
+msgid "Gültige Datensätze:"
+msgstr ""
+
+msgid "HERAUSGEBENDE ORGANISATION (dct:publisher)"
+msgstr ""
+
+msgid "Harvest-Endpoint"
+msgstr ""
+
+msgid "Herausgebende Organisation"
+msgstr ""
+
+msgid "Herausgeber"
+msgstr ""
+
+msgid "Herausgeber (dct:publisher)"
+msgstr ""
+
+msgid "Herunterladen"
+msgstr ""
+
+msgid "Hinweis ausblenden"
+msgstr ""
+
+msgid "Import abgeschlossen!"
+msgstr ""
+
+msgid "Import läuft…"
+msgstr ""
+
+msgid "In Datensatz einfügen"
+msgstr ""
+
+msgid "In welche Kategorie gehört dieser Datensatz?"
+msgstr ""
+
+msgid "In welchem Format ist die Datei?"
+msgstr ""
+
+msgid "In welcher Sprache sind die Daten?"
+msgstr ""
+
+msgid "Indikator"
+msgstr ""
+
+msgid "Internationale Themen"
+msgstr ""
+
+msgid "JSON-Beispiel"
+msgstr ""
+
+msgid "JSON-Datei konnte nicht gelesen werden."
+msgstr ""
+
+msgid "JSON-Format ist ungültig."
+msgstr ""
+
+msgid "Jede Distribution benötigt eine Lizenzangabe (dct:license)"
+msgstr ""
+
+msgid "Jeder Datensatz benötigt mindestens eine Distribution mit einer Zugriffs-URL (dcat:accessURL). Mehrere Distributionen (z.B. CSV + JSON) können hinzugefügt werden."
+msgstr ""
+
+msgid "Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung"
+msgstr ""
+
+msgid "Jetzt importieren"
+msgstr ""
+
+msgid "Justiz & Sicherheit"
+msgstr ""
+
+msgid "Jährlich"
+msgstr ""
+
+msgid "Katalog"
+msgstr ""
+
+msgid "Katalog-Beschreibung"
+msgstr ""
+
+msgid "Katalog-Titel"
+msgstr ""
+
+msgid "Keine Berechtigung."
+msgstr ""
+
+msgid "Keine Datei ausgewählt"
+msgstr ""
+
+msgid "Keine Datei hochgeladen."
+msgstr ""
+
+msgid "Keine Datensätze ausgewählt."
+msgstr ""
+
+msgid "Keine Datensätze gefunden."
+msgstr ""
+
+msgid "Keine Datensätze im Papierkorb."
+msgstr ""
+
+msgid "Keine Datensätze zum Importieren."
+msgstr ""
+
+msgid "Keine gültige Upload-Datei."
+msgstr ""
+
+msgid "Keine gültigen Datensätze gefunden."
+msgstr ""
+
+msgid "Keine gültigen Zeilen gefunden."
+msgstr ""
+
+msgid "Klicken zum Markieren"
+msgstr ""
+
+msgid "Kontakt"
+msgstr ""
+
+msgid "Kurze Beschreibung des Datensatzes…"
+msgstr ""
+
+msgid "Kurze Beschreibung des Katalogs — erscheint als dct:description in der REST-API-Antwort (Pflichtfeld gemäß DCAT-AP.de)."
+msgstr ""
+
+msgid "LIZENZ (dct:license)"
+msgstr ""
+
+msgid "Land (Bundesland)"
+msgstr ""
+
+msgid "Landkreis"
+msgstr ""
+
+msgid "Landwirtschaft & Ernährung"
+msgstr ""
+
+msgid "Leer lassen für den automatischen Wert (Seitenname + „ — Datenkatalog\")."
+msgstr ""
+
+msgid "Letzte Berechnung: %s · Wird bei jedem Speichern aktualisiert."
+msgstr ""
+
+msgid "Liefert alle veröffentlichten Datensätze als dcat:Catalog (JSON-LD). Unterstützt:"
+msgstr ""
+
+msgid "Lizenz"
+msgstr ""
+
+msgid "Lizenz (dct:license)"
+msgstr ""
+
+msgid "Lizenz aus dem kontrollierten Vokabular"
+msgstr ""
+
+msgid "Lizenz-URI eingeben oder auswählen"
+msgstr ""
+
+msgid "Maximale Anzahl von %d Datensätzen erreicht — weitere Elemente wurden ignoriert."
+msgstr ""
+
+msgid "Maximale Anzahl von %d Datensätzen erreicht — weitere Zeilen wurden ignoriert."
+msgstr ""
+
+msgid "Metadaten (JSON-LD)"
+msgstr ""
+
+msgid "Metadaten des Datenkatalogs — erscheinen in der REST-API-Antwort des Catalog-Endpoints."
+msgstr ""
+
+msgid "Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)"
+msgstr ""
+
+msgid "Mit dem Batch-Import legst du mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Lade eine CSV- oder JSON-Datei hoch, prüfe in der Vorschau die erkannten Datensätze und importiere die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass du sie vor der Veröffentlichung noch bearbeiten kannst. Nutze die Beispieldatei unten als Vorlage für den Aufbau."
+msgstr ""
+
+msgid "Mit welchen Stichworten finde ich diese Daten?"
+msgstr ""
+
+msgid "Monatlich"
+msgstr ""
+
+msgid "Musterorganisation e.V."
+msgstr ""
+
+msgid "NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)"
+msgstr ""
+
+msgid "Name der herausgebenden Organisation"
+msgstr ""
+
+msgid "Name oder Organisation der Ansprechperson."
+msgstr ""
+
+msgid "Neuen Datensatz anlegen"
+msgstr ""
+
+msgid "Neuen Datensatz erstellen"
+msgstr ""
+
+msgid "Neuer Datensatz"
+msgstr ""
+
+msgid "Noch keine Daten vorhanden. Bitte erst Pflichtfelder befüllen und speichern."
+msgstr ""
+
+msgid "Noch keine Qualitätsanalyse vorhanden. Datensatz speichern, um die Prüfung auszuführen."
+msgstr ""
+
+msgid "Noch nicht berechnet"
+msgstr ""
+
+msgid "Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt."
+msgstr ""
+
+msgid "Open Data Wizard"
+msgstr ""
+
+msgid "Open Data Wizard erfolgreich installiert!"
+msgstr ""
+
+msgid "Open Data Wizard — Demo-Datensatz (CSV)"
+msgstr ""
+
+msgid "Open Data Wizard — Einstellungen"
+msgstr ""
+
+msgid "Open Data Wizard — Einstieg"
+msgstr ""
+
+msgid "Open Data Wizard: Carbon Fields konnte nicht initialisiert werden — %s"
+msgstr ""
+
+msgid "Open Data Wizard: Vendor-Abhängigkeiten fehlen. Bitte composer install im Plugin-Verzeichnis ausführen."
+msgstr ""
+
+msgid "Open Data Wizard: Veröffentlichung blockiert"
+msgstr ""
+
+msgid "Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln."
+msgstr ""
+
+msgid "Optionale Angaben"
+msgstr ""
+
+msgid "PROJEKTSEITE (dcat:landingPage)"
+msgstr ""
+
+msgid "Paginierung"
+msgstr ""
+
+msgid "Perfekt"
+msgstr ""
+
+msgid "Pflichtangaben"
+msgstr ""
+
+msgid "Pflichtfelder"
+msgstr ""
+
+msgid "Projektseite & Aktualität"
+msgstr ""
+
+msgid "Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen."
+msgstr ""
+
+msgid "Punkte"
+msgstr ""
+
+msgid "Qualität"
+msgstr ""
+
+msgid "Qualitätsprüfung"
+msgstr ""
+
+msgid "Qualitätsscores aller vorhandenen Datensätze neu berechnen — z.B. nach Änderungen an der Scoring-Logik."
+msgstr ""
+
+msgid "Qualitätsscores neu berechnet: %d Datensätze aktualisiert."
+msgstr ""
+
+msgid "REST API"
+msgstr ""
+
+msgid "REST-Endpoint öffnen"
+msgstr ""
+
+msgid "Recalculated quality scores for %d dataset(s)."
+msgstr ""
+
+msgid "Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin"
+msgstr ""
+
+msgid "Region aus der Liste wählen oder eintippen…"
+msgstr ""
+
+msgid "Regionen & Städte"
+msgstr ""
+
+msgid "SCHLAGWORTE (dcat:keyword)"
+msgstr ""
+
+msgid "SPRACHE (dct:language)"
+msgstr ""
+
+msgid "Schlagworte (dcat:keyword)"
+msgstr ""
+
+msgid "Sekunden"
+msgstr ""
+
+msgid "Shortcode"
+msgstr ""
+
+msgid "Sicherheitsüberprüfung fehlgeschlagen."
+msgstr ""
+
+msgid "Sonstige Lizenz…"
+msgstr ""
+
+msgid "Speichern Sie den Datensatz, um die Vorschau zu aktualisieren."
+msgstr ""
+
+msgid "Sprache (dct:language)"
+msgstr ""
+
+msgid "Sprache, Schlagworte, Veröffentlichungs- und Änderungsdatum, Themenklassifikation."
+msgstr ""
+
+msgid "Standard-Lizenz"
+msgstr ""
+
+msgid "Standard-Sprache"
+msgstr ""
+
+msgid "Standardwerte für neue Datensätze"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "THEMA (dcat:theme)"
+msgstr ""
+
+msgid "Tab 4 enthält optionale DCAT-AP Felder: Projektseite (dcat:landingPage), Aktualisierungsfrequenz (dct:accrualPeriodicity), geographische und zeitliche Abdeckung sowie einen Kontaktpunkt (dcat:contactPoint)."
+msgstr ""
+
+msgid "Tab 5 zeigt das generierte JSON-LD nach dem Speichern. Dort finden Sie auch den direkten Link zum REST-Endpoint."
+msgstr ""
+
+msgid "Thema"
+msgstr ""
+
+msgid "Thema (dcat:theme)"
+msgstr ""
+
+msgid "Thema eintippen oder auswählen…"
+msgstr ""
+
+msgid "Titel"
+msgstr ""
+
+msgid "Titel (dct:title)"
+msgstr ""
+
+msgid "Titel des Datensatzes (WordPress-Titel-Feld)"
+msgstr ""
+
+msgid "Täglich"
+msgstr ""
+
+msgid "URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt"
+msgstr ""
+
+msgid "Umwelt"
+msgstr ""
+
+msgid "Unbekannt"
+msgstr ""
+
+msgid "Ungültiger Dateityp (nur CSV oder JSON)."
+msgstr ""
+
+msgid "Ungültiges Datumsformat für \"since\". Bitte ISO 8601 verwenden (z. B. 2024-01-01T00:00:00Z)."
+msgstr ""
+
+msgid "Unregelmäßig"
+msgstr ""
+
+msgid "Unter welcher E-Mail-Adresse kann ich Fragen stellen?"
+msgstr ""
+
+msgid "Unter welcher Lizenz sind diese Daten verfügbar?"
+msgstr ""
+
+msgid "VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)"
+msgstr ""
+
+msgid "VERÖFFENTLICHUNGSDATUM (dct:issued)"
+msgstr ""
+
+msgid "Verbesserungsbedarf"
+msgstr ""
+
+msgid "Verkehr"
+msgstr ""
+
+msgid "Verknüpfte URI:"
+msgstr ""
+
+msgid "Verwaltung & öffentlicher Sektor"
+msgstr ""
+
+msgid "Veröffentlicht"
+msgstr ""
+
+msgid "Veröffentlichungsdatum (dct:issued)"
+msgstr ""
+
+msgid "Vierteljährlich"
+msgstr ""
+
+msgid "Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/"
+msgstr ""
+
+msgid "Vorausgewählte Lizenz bei neuen Datensätzen."
+msgstr ""
+
+msgid "Vorschau"
+msgstr ""
+
+msgid "Vorschaubild"
+msgstr ""
+
+msgid "Vorschaubild entfernen"
+msgstr ""
+
+msgid "Vorschaubild festlegen"
+msgstr ""
+
+msgid "Wann wurden diese Daten zuletzt aktualisiert?"
+msgstr ""
+
+msgid "Wann wurden diese Daten zum ersten Mal veröffentlicht?"
+msgstr ""
+
+msgid "Website mit weiteren Kontaktinformationen."
+msgstr ""
+
+msgid "Weitere Informationen:"
+msgstr ""
+
+msgid "Welche geografische Region betreffen diese Daten?"
+msgstr ""
+
+msgid "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?"
+msgstr ""
+
+msgid "Wer gibt diese Daten heraus?"
+msgstr ""
+
+msgid "Wer gibt diese Daten heraus? Worum geht es? In welche Kategorie gehört der Datensatz?"
+msgstr ""
+
+msgid "Wer ist Ansprechperson für Fragen zu diesen Daten?"
+msgstr ""
+
+msgid "Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden."
+msgstr ""
+
+msgid "Wie funktioniert es?"
+msgstr ""
+
+msgid "Wie lange Catalog- und Dataset-Antworten gecacht werden. Standard: 300 (5 Minuten). Min: 60, Max: 86400 (24 h)."
+msgstr ""
+
+msgid "Wie oft werden diese Daten aktualisiert?"
+msgstr ""
+
+msgid "Willkommen im Open Data Wizard"
+msgstr ""
+
+msgid "Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22"
+msgstr ""
+
+msgid "Wird im Feld „Herausgebende Organisation\" neuer Datensätze vorausgefüllt."
+msgstr ""
+
+msgid "Wirtschaft & Finanzen"
+msgstr ""
+
+msgid "Wissenschaft & Technologie"
+msgstr ""
+
+msgid "Wo finde ich mehr Informationen zu diesem Projekt?"
+msgstr ""
+
+msgid "Wo kann ich die Datei herunterladen?"
+msgstr ""
+
+msgid "Worum geht es in diesem Datensatz?"
+msgstr ""
+
+msgid "Wöchentlich"
+msgstr ""
+
+msgid "ZEITLICHER BEZUG — ENDE (dct:temporal)"
+msgstr ""
+
+msgid "ZEITLICHER BEZUG — START (dct:temporal)"
+msgstr ""
+
+msgid "ZUGRIFFS-URL (dcat:accessURL)"
+msgstr ""
+
+msgid "Zeile %1$d: Dateigröße muss eine ganze Zahl in Bytes sein: %2$s"
+msgstr ""
+
+msgid "Zeile %1$d: Pflichtfeld \"%2$s\" fehlt."
+msgstr ""
+
+msgid "Zeile %1$d: Ungültige Lizenz: %2$s"
+msgstr ""
+
+msgid "Zeile %1$d: Ungültige URL: %2$s"
+msgstr ""
+
+msgid "Zeile %d: Konnte Post nicht erstellen."
+msgstr ""
+
+msgid "Zeile %d: Spaltenanzahl stimmt nicht überein."
+msgstr ""
+
+msgid "Zu diesem Datensatz hochgeladen"
+msgstr ""
+
+msgid "Zugriff verweigert."
+msgstr ""
+
+msgid "Zur Datensatzliste"
+msgstr ""
+
+msgid "Zweijährlich"
+msgstr ""
+
+msgid "https://example.org/meine-lizenz"
+msgstr ""
+
+msgid "optional – nur bei CC BY oder CC BY-SA"
+msgstr ""
+
+msgid "z. B. 2.5"
+msgstr ""
+
+msgid "z.B. Musterorganisation e.V."
+msgstr ""
+
+msgid "z.B. Open Data Team"
+msgstr ""
+
+msgid "z.B. Umwelt"
+msgstr ""
+
+msgid "ÄNDERUNGSDATUM (dct:modified)"
+msgstr ""
+
+msgid "Änderungsdatum"
+msgstr ""
+
+msgid "— Bitte wählen —"
+msgstr ""
+
+msgid "— Kein Standard —"
+msgstr ""
+
+msgid "💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB"
+msgstr ""
+

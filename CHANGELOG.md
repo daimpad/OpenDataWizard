@@ -7,6 +7,16 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.3.0] — 2026-06-27
+
+### 🌍 Added
+- **Englische Lokalisierung:** Der gesamte Wizard, die Admin-Seiten, Einstellungen, Hilfetexte und Meldungen sind jetzt auf Englisch verfügbar. Auf englischsprachigen WordPress-Installationen (`en_US`) erscheint die Oberfläche automatisch in Englisch, auf deutschen weiterhin auf Deutsch.
+  - Neue Übersetzungsdateien: `languages/open-data-wizard-en_US.po` / `.mo` (336 Strings)
+  - Aktualisierte Vorlage `languages/open-data-wizard.pot` für weitere Sprachen
+  - Die technischen DCAT-AP-Bezeichner (z. B. `dct:license`) bleiben sprachunabhängig
+
+---
+
 ## [2.2.1] — 2026-06-27
 
 Bugfix- und Bedienbarkeits-Release. Repariert den Batch-Import-Workflow und verbessert den Einstieg.
