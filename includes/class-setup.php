@@ -22,8 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ODW_Setup {
 
-	private const DEMO_OPTION    = 'odw_demo_post_id';
-	private const WELCOME_OPTION = 'odw_show_welcome';
+	private const DEMO_OPTION     = 'odw_demo_post_id';
+	private const WELCOME_OPTION  = 'odw_show_welcome';
+	private const REDIRECT_OPTION = 'odw_activation_redirect';
 
 	/**
 	 * Wird direkt aus register_activation_hook aufgerufen — Carbon Fields
@@ -31,15 +32,37 @@ class ODW_Setup {
 	 */
 	public static function on_activation(): void {
 		update_option( self::WELCOME_OPTION, '1', false );
+		// Flag a one-time redirect to the introduction page on the next admin load.
+		set_transient( self::REDIRECT_OPTION, '1', 60 );
 	}
 
 	/**
 	 * Wird aus odw_bootstrap() aufgerufen, nachdem Carbon Fields initialisiert ist.
 	 */
 	public static function init(): void {
+		add_action( 'admin_init', array( self::class, 'maybe_redirect_to_intro' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_create_demo' ) );
 		add_action( 'admin_init', array( self::class, 'handle_dismiss' ) );
 		add_action( 'admin_notices', array( self::class, 'render_welcome_notice' ) );
+	}
+
+	/**
+	 * Redirects to the introduction page once, directly after activation.
+	 */
+	public static function maybe_redirect_to_intro(): void {
+		if ( ! get_transient( self::REDIRECT_OPTION ) ) {
+			return;
+		}
+
+		delete_transient( self::REDIRECT_OPTION );
+
+		// Skip during bulk plugin activation, AJAX, or for users without access.
+		if ( wp_doing_ajax() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		wp_safe_redirect( admin_url( 'edit.php?post_type=odw_dataset&page=odw-einstieg' ) );
+		exit;
 	}
 
 	// -------------------------------------------------------------------------
