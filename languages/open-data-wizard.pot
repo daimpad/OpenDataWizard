@@ -147,6 +147,9 @@ msgstr ""
 msgid "Bis wann sind diese Daten gültig?"
 msgstr ""
 
+msgid "Bitte einen positiven Wert eingeben."
+msgstr ""
+
 msgid "Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB"
 msgstr ""
 
@@ -154,6 +157,9 @@ msgid "Bitte wähle eine Datei aus."
 msgstr ""
 
 msgid "Bund (Federal)"
+msgstr ""
+
+msgid "Bytes"
 msgstr ""
 
 msgid "CC BY 4.0 — Namensnennung"

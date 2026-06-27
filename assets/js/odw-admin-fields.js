@@ -250,10 +250,24 @@
 		var factors     = { KB: 1024, MB: 1048576, GB: 1073741824 };
 
 		function updateBacking() {
-			var num  = parseFloat( numberInput.value );
+			var raw  = numberInput.value.trim();
+
+			// Empty is valid — the field is optional. Clear the stored value.
+			if ( '' === raw ) {
+				numberInput.setCustomValidity( '' );
+				if ( hint ) {
+					hint.textContent = '';
+				}
+				if ( backing ) {
+					setInputValue( backing, '' );
+				}
+				return;
+			}
+
+			var num  = parseFloat( raw );
 			var unit = unitSelect.value;
 			if ( isNaN( num ) || num < 0 ) {
-				numberInput.setCustomValidity( 'Bitte einen positiven Wert eingeben.' );
+				numberInput.setCustomValidity( i18n.invalid || 'Bitte einen positiven Wert eingeben.' );
 				if ( hint ) {
 					hint.textContent = '';
 				}
@@ -264,7 +278,7 @@
 			var bytes = Math.round( num * ( factors[ unit ] || 1048576 ) );
 
 			if ( hint ) {
-				hint.textContent = '= ' + bytes.toLocaleString( 'de-DE' ) + ' Bytes';
+				hint.textContent = '= ' + bytes.toLocaleString( i18n.locale || undefined ) + ' ' + ( i18n.bytes || 'Bytes' );
 			}
 
 			if ( backing ) {

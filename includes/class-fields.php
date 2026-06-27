@@ -757,7 +757,14 @@ class ODW_Fields {
  * @return string Sanitised @id value.
  */
 function odw_sanitize_jsonld_id( string $value ): string {
-	if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.\-]*:#', $value ) ) {
+	$value = trim( $value );
+
+	// Detect a URI scheme even when it is obfuscated with embedded whitespace or
+	// control characters (e.g. " javascript:…" or "java\nscript:…"). The probe is
+	// only used for the test; if a scheme is present the value is routed through
+	// esc_url_raw(), which strips dangerous schemes such as javascript:/data:.
+	$probe = preg_replace( '/[\s\x00-\x1F]+/', '', $value );
+	if ( is_string( $probe ) && preg_match( '#^[a-zA-Z][a-zA-Z0-9+.\-]*:#', $probe ) ) {
 		return esc_url_raw( $value );
 	}
 
