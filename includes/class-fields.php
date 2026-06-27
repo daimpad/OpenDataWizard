@@ -116,7 +116,7 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_cessda_topic', __( 'CESSDA Themenklassifikation', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-backing', 'cessda' )
-						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (cessda:topic)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
+						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -856,7 +856,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	}
 
 	if ( ! empty( $cessda_topic ) ) {
-		$dataset['cessda:topic'] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
+		// CESSDA Topic Classification concept attached via the standard DCAT-AP
+		// subject property. Emitting an undeclared `cessda:` prefix would produce
+		// invalid JSON-LD; `dct:subject` is the conformant predicate and is
+		// already part of the @context.
+		$dataset['dct:subject'] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
 	}
 
 	if ( ! empty( $issued ) ) {

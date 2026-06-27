@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.3.2] — 2026-06-27
+
+Konformitäts-Korrekturen an der JSON-LD-Ausgabe (aus der piveau-DPI-Analyse).
+
+### 🐛 Fixed
+- **Ungültiges JSON-LD bei CESSDA-Thema:** Das CESSDA-Thema wurde unter dem Präfix `cessda:topic` ausgegeben, das im `@context` nicht deklariert war — der Term war damit nicht auflösbar. Es wird nun als DCAT-AP-konformes `dct:subject` (mit `@id`) ausgegeben.
+- **Kanonischer DCAT-Namespace:** Der `dcat`-Namespace im `@context` nutzte `https://www.w3.org/ns/dcat#`. Dadurch expandierten `dcat:`-Terme (z. B. `dcat:Dataset`) zu anderen IRIs als die registrierte DCAT-Vokabular-URI, was das Typ-/Property-Matching bei Harvestern bricht. Korrigiert auf die kanonische `http://`-Form.
+
+### 📝 Docs
+- README-Sektion „Technische Spezifikationen": Gap-Analyse an den tatsächlichen Code-Stand angepasst (`dcatde:politicalGeocodingLevelURI`, `dct:spatial`/GeoNames, `dct:subject`, `dcatde:licenseAttributionByText` jetzt als umgesetzt markiert); Feldmapping Tab 3 auf `dcatde:licenseAttributionByText` korrigiert.
+
+---
+
 ## [2.3.1] — 2026-06-27
 
 Härtungs-Release aus einem Code-Review der jüngsten Änderungen.
