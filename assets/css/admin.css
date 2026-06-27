@@ -492,6 +492,9 @@
 
 .odw-filesize-widget {
     margin: 4px 0 8px;
+    /* Match the 20px horizontal padding of regular .cf-field rows. */
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .odw-filesize-label {
@@ -542,4 +545,49 @@
 /* Also hide the entire CF field wrapper for the backing field */
 .cf-field:has([data-odw-backing]) {
     display: none !important;
+}
+
+/* =========================================================================
+   CESSDA topic widget (visible label field + hidden URI backing)
+   ========================================================================= */
+
+.odw-cessda-widget {
+    margin: 4px 0 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.odw-cessda-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.odw-cessda-input {
+    width: 100%;
+    max-width: 400px;
+}
+
+.odw-cessda-hint {
+    display: block;
+    margin-top: 4px;
+    color: var(--odw-color-text-muted);
+    font-size: 12px;
+    word-break: break-all;
+}
+
+/* =========================================================================
+   License description (shown under the license select on selection)
+   ========================================================================= */
+
+.odw-license-info {
+    margin: 6px 0 4px;
+    padding: 10px 12px;
+    background: var(--odw-color-bg-light);
+    border-left: 3px solid var(--odw-color-primary);
+    border-radius: 3px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--odw-color-text);
 }

@@ -57,7 +57,7 @@ class Test_ODW_Fields extends TestCase {
 		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
 
 		$label = ODW_Fields::get_license_label( 'https://creativecommons.org/licenses/by/4.0/' );
-		$this->assertSame( 'CC-BY 4.0', $label );
+		$this->assertSame( 'CC BY 4.0 — Namensnennung', $label );
 	}
 
 	/**
@@ -71,6 +71,34 @@ class Test_ODW_Fields extends TestCase {
 
 		$unknown = 'https://example.com/custom-license';
 		$this->assertSame( $unknown, ODW_Fields::get_license_label( $unknown ) );
+	}
+
+	/**
+	 * Curated spatial options map region names to GeoNames URIs.
+	 */
+	public function test_get_spatial_options_links_geonames(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$options = ODW_Fields::get_spatial_options();
+		$this->assertArrayHasKey( 'Deutschland', $options );
+		$this->assertStringStartsWith( 'https://sws.geonames.org/', $options['Deutschland'] );
+		$this->assertArrayHasKey( 'Bayern', $options );
+	}
+
+	/**
+	 * License descriptions provide plain-language text for the standard licenses.
+	 */
+	public function test_get_license_descriptions_has_known_licenses(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$descriptions = ODW_Fields::get_license_descriptions();
+		$this->assertArrayHasKey( 'https://creativecommons.org/licenses/by/4.0/', $descriptions );
+		$this->assertNotSame( '', $descriptions['https://creativecommons.org/licenses/by/4.0/'] );
 	}
 
 	/**
