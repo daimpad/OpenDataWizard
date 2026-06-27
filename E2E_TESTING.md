@@ -255,5 +255,5 @@ Results are stored as GitHub Artifacts.
 
 ---
 
-**Last Updated:** May 27, 2026  
-**Version:** 2.1.4
+**Last Updated:** June 27, 2026  
+**Version:** 2.1.5

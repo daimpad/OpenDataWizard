@@ -225,6 +225,9 @@ curl -X GET "https://example.com/wp-json/datenatlas/v1/delta?since=2026-05-27T00
 ?since=2026-05-27T00:00:00
 ```
 
+> **Note:** Invalid or overflow dates (e.g. `2024-13-45`) are rejected with a `400`
+> validation error rather than being silently normalised.
+
 #### Response Example
 
 ```json
@@ -480,6 +483,6 @@ save_timestamp(now())
 
 ---
 
-**Last Updated:** May 27, 2026
-**Version:** 2.1.4
+**Last Updated:** June 27, 2026
+**Version:** 2.1.5
 **License:** GPL-2.0-or-later
