@@ -26,6 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ODW_Admin {
 
 	/**
+	 * Hook suffix of the batch-import submenu page (set on registration).
+	 *
+	 * @var string
+	 */
+	private static string $batch_import_hook = '';
+
+	/**
 	 * Registers all WordPress hooks for the admin UI.
 	 */
 	public static function init(): void {
@@ -45,6 +52,44 @@ class ODW_Admin {
 		add_action( 'save_post_odw_dataset', array( self::class, 'save_file_attachment' ), 20, 2 );
 		add_action( 'wp_ajax_odw_batch_import_preview', array( self::class, 'ajax_batch_import_preview' ) );
 		add_action( 'wp_ajax_odw_batch_import_execute', array( self::class, 'ajax_batch_import_execute' ) );
+		add_action( 'admin_init', array( self::class, 'maybe_download_sample' ) );
+	}
+
+	/**
+	 * Streams a bundled batch-import sample file when the download link
+	 * (?page=odw-batch-import&sample=csv|json) is requested.
+	 */
+	public static function maybe_download_sample(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'], $_GET['sample'] ) || 'odw-batch-import' !== $_GET['page'] ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_open_data' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$type = sanitize_key( wp_unslash( (string) $_GET['sample'] ) );
+		if ( ! in_array( $type, array( 'csv', 'json' ), true ) ) {
+			return;
+		}
+
+		$file = ODW_PLUGIN_DIR . 'samples/import-example.' . $type;
+		if ( ! file_exists( $file ) ) {
+			return;
+		}
+
+		$mime = 'csv' === $type ? 'text/csv' : 'application/json';
+
+		nocache_headers();
+		header( 'Content-Type: ' . $mime . '; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="odw-import-beispiel.' . $type . '"' );
+		header( 'Content-Length: ' . (string) filesize( $file ) );
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
+		readfile( $file );
+		exit;
 	}
 
 	/**
@@ -248,6 +293,12 @@ class ODW_Admin {
 			array(),
 			ODW_VERSION
 		);
+
+		// The batch-import page relies on jQuery for its inline preview/import
+		// script; load it explicitly since no other script pulls it in here.
+		if ( '' !== self::$batch_import_hook && $hook === self::$batch_import_hook ) {
+			wp_enqueue_script( 'jquery' );
+		}
 
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
 			wp_enqueue_script(
@@ -685,7 +736,7 @@ class ODW_Admin {
 	 * Register the batch import submenu page.
 	 */
 	public static function register_batch_import_page(): void {
-		add_submenu_page(
+		$hook = add_submenu_page(
 			'edit.php?post_type=odw_dataset',
 			__( 'Batch-Import', 'open-data-wizard' ),
 			__( 'Batch-Import', 'open-data-wizard' ),
@@ -693,6 +744,8 @@ class ODW_Admin {
 			'odw-batch-import',
 			array( self::class, 'render_batch_import_page' )
 		);
+
+		self::$batch_import_hook = is_string( $hook ) ? $hook : '';
 	}
 
 	/**
@@ -708,6 +761,11 @@ class ODW_Admin {
 			<h1><?php esc_html_e( 'Batch-Import', 'open-data-wizard' ); ?></h1>
 
 			<div class="odw-batch-import-container" style="max-width: 900px; margin-top: 20px;">
+
+				<p style="font-size: 14px; line-height: 1.6; color: #50575e; margin: 0 0 20px;">
+					<?php esc_html_e( 'Mit dem Batch-Import legst du mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Lade eine CSV- oder JSON-Datei hoch, prüfe in der Vorschau die erkannten Datensätze und importiere die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass du sie vor der Veröffentlichung noch bearbeiten kannst. Nutze die Beispieldatei unten als Vorlage für den Aufbau.', 'open-data-wizard' ); ?>
+				</p>
+
 
 				<!-- Upload Section -->
 				<div id="odw-upload-section" class="odw-section" style="border: 1px solid #ddd; padding: 25px; border-radius: 6px; margin-bottom: 20px; background: #f9f9f9; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -891,7 +949,7 @@ class ODW_Admin {
 		</style>
 
 		<script>
-			(function($) {
+			jQuery(function($) {
 				var previewData = [];
 
 				$('#odw-preview-btn').on('click', function() {
@@ -1013,7 +1071,7 @@ class ODW_Admin {
 				$('#odw-import-cancel-btn').on('click', function() {
 					location.reload();
 				});
-			})(jQuery);
+			});
 		</script>
 		<?php
 	}
@@ -1022,7 +1080,8 @@ class ODW_Admin {
 	 * AJAX: Preview batch import file.
 	 */
 	public static function ajax_batch_import_preview(): void {
-		check_ajax_referer( 'odw_batch_import' );
+		// The JS sends the nonce in a field named "nonce".
+		check_ajax_referer( 'odw_batch_import', 'nonce' );
 
 		if ( ! current_user_can( 'manage_open_data' ) ) {
 			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );
@@ -1074,7 +1133,8 @@ class ODW_Admin {
 	 * AJAX: Execute batch import.
 	 */
 	public static function ajax_batch_import_execute(): void {
-		check_ajax_referer( 'odw_batch_import' );
+		// The JS sends the nonce in a field named "nonce".
+		check_ajax_referer( 'odw_batch_import', 'nonce' );
 
 		if ( ! current_user_can( 'manage_open_data' ) ) {
 			wp_send_json_error( array( 'error' => __( 'Zugriff verweigert.', 'open-data-wizard' ) ) );

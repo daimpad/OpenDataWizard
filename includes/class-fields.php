@@ -166,7 +166,22 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
-						->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) ),
+						->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) )
+						->set_conditional_logic(
+							array(
+								'relation' => 'OR',
+								array(
+									'field'   => 'odw_license',
+									'value'   => 'https://creativecommons.org/licenses/by/4.0/',
+									'compare' => '=',
+								),
+								array(
+									'field'   => 'odw_license',
+									'value'   => 'https://creativecommons.org/licenses/by-sa/4.0/',
+									'compare' => '=',
+								),
+							)
+						),
 				)
 			)
 
