@@ -437,6 +437,272 @@ wp open-data-wizard cache clear
 
 ---
 
+## 🧩 Technische Spezifikationen
+
+> **Zweck dieser Sektion:** Zentrale Ablage für alle technischen Spezifikationen des Open Data Wizard.
+> Hier werden Metadatenmodell, Namespaces, kontrollierte Vokabulare, der vollständige DCAT-AP-Feldkatalog,
+> die Gap-Analyse zum Standard sowie die Umsetzungsplanung gepflegt. Neue technische Festlegungen gehören
+> in diese Sektion (nicht in die anwenderorientierten Kapitel weiter oben).
+>
+> Grundlage ist eine Analyse des **piveau Data Provider Interface (DPI, Standalone)** — der etablierten
+> Referenzimplementierung für DCAT-AP-/DCAT-AP.de-Metadatenerfassung der Fraunhofer-FOKUS-/data.europa.eu-Toolchain.
+> Das DPI verfolgt dasselbe Grundprinzip wie ODW (ein Formular zur DCAT-AP-konformen Metadatenbereitstellung),
+> deckt aber den vollständigen Standard inkl. der deutschen Erweiterung ab. Diese Spezifikation extrahiert die
+> übernehmbaren Konzepte und beschreibt deren Einbettung in die ODW-Architektur.
+
+### 1. Referenzarchitektur piveau DPI (Analyseergebnis)
+
+Das DPI ist ein Vue-3-/FormKit-/TypeScript-Frontend. Sein Kern ist eine **deklarative Feld-Registry**: Felder
+werden nicht im Code verdrahtet, sondern in einer Datenstruktur beschrieben, die ein generischer Renderer zur
+Laufzeit in ein mehrstufiges Formular übersetzt. Pro Spezifikationsprofil existiert ein Ordner mit identischem
+Bausatz:
+
+| Baustein (piveau) | Inhalt | ODW-Pendant |
+|---|---|---|
+| `input-definition.ts` | Alle Felder: Typ, DCAT-Prädikat, Kardinalität, Validierung, Vokabular | `config/dcat-ap-fields.php` (erweiterbar) |
+| `page-content-config.js` | Zuordnung Feld → Wizard-Schritt (Essentials/Additionals) | Tab-Zuordnung in `class-fields.php` |
+| `prefixes.js` | Namespace-Präfixe für JSON-LD | `odw_build_dataset_jsonld()` (`@context`) |
+| `vocab-prefixes.js` | Basis-URIs der kontrollierten Vokabulare | `dct-format-list.php`, `licenses.txt`, CESSDA-RDF |
+| `format-types.js` | MIME → EU-Format-URI Mapping | `config/dct-format-list.php` |
+| `converter.js` | Formwerte → kanonisches DCAT-AP-JSON-LD | `odw_build_dataset_jsonld()` |
+
+Profile im DPI: `dcatap` (EU-Basis), `dcatapde` (DCAT-AP.de), `dcatapdeODB` (Open Data Bayern), `dcatapdeHappyFlow`
+(geführter Vereinfachungs-Wizard). Der **HappyFlow** ist für ODW das relevanteste Vorbild: Er trennt einen kurzen
+Pflichtpfad (`Landing → Discoverability → BasicInfos → Covering → DistributionSimple → ReviewAndPublish`) von einem
+aufklappbaren Block `Additionals` mit ~35 optionalen Profi-Feldern. Genau diese Trennung erlaubt „einfache UI **und**
+voller DCAT-AP-Umfang".
+
+> **Was übernommen wird:** Konzepte (deklarative Registry, Essentials/Additionals-Trennung, Feldkatalog, Vokabular-Bindung).
+> **Was nicht übernommen wird:** die piveau-Hub-Infrastruktur (axios-Uploads, externe Vokabular-/Datei-Endpunkte) und
+> der Tech-Stack (Vue/FormKit). ODW bleibt self-contained in WordPress/PHP/Carbon Fields.
+
+### 2. Namespace-Registry (`@context`)
+
+Verbindliche Präfixe für die JSON-LD-Serialisierung (abgeglichen mit DCAT-AP.de / piveau). `dcatde` und `dcatap`
+sind für die deutsche Erweiterung bzw. HVD/Availability nötig.
+
+| Präfix | Namespace-URI | Benötigt für |
+|---|---|---|
+| `dcat` | `http://www.w3.org/ns/dcat#` | Kernvokabular |
+| `dct` | `http://purl.org/dc/terms/` | Dublin Core Terms |
+| `dcatap` | `http://data.europa.eu/r5r/` | `availability`, `hvdCategory`, `applicableLegislation` |
+| `dcatde` | `http://dcat-ap.de/def/dcatde/` | DCAT-AP.de-Erweiterungsfelder |
+| `foaf` | `http://xmlns.com/foaf/0.1/` | Agent / Organisation / Page |
+| `vcard` | `http://www.w3.org/2006/vcard/ns#` | Kontaktpunkt |
+| `adms` | `http://www.w3.org/ns/adms#` | Identifier, versionNotes, status |
+| `spdx` | `http://spdx.org/rdf/terms#` | Checksum |
+| `odrl` | `http://www.w3.org/ns/odrl/2/` | hasPolicy |
+| `prov` | `http://www.w3.org/ns/prov#` | qualifiedAttribution, wasGeneratedBy |
+| `locn` | `http://www.w3.org/ns/locn#` | Geometrie / Adresse |
+| `skos` | `http://www.w3.org/2004/02/skos/core#` | prefLabel, notation |
+| `owl` | `http://www.w3.org/2002/07/owl#` | versionInfo |
+| `xsd` | `http://www.w3.org/2001/XMLSchema#` | Datentypen (Datum) |
+
+### 3. Kontrollierte Vokabulare (Registry)
+
+DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. Basis-URIs (aus piveau
+`vocab-prefixes.js`), die ODW schrittweise einbinden sollte:
+
+| Vokabular-ID | Basis-URI | Genutzt von Feld | ODW-Status |
+|---|---|---|---|
+| `data-theme` | `http://publications.europa.eu/resource/authority/data-theme/` | `dcat:theme` | ⚠️ Freitext |
+| `language` | `http://publications.europa.eu/resource/authority/language/` | `dct:language` | ⚠️ Freitext |
+| `file-type` | `http://publications.europa.eu/resource/authority/file-type/` | `dct:format` | ✅ (`dct-format-list.php`) |
+| `frequency` | `http://publications.europa.eu/resource/authority/frequency/` | `dct:accrualPeriodicity` | ✅ URI |
+| `access-right` | `http://publications.europa.eu/resource/authority/access-right/` | `dct:accessRights` | ❌ |
+| `licence` | `http://dcat-ap.de/def/licenses/` | `dct:license` | ✅ (`licenses.txt`) |
+| `planned-availability` | `http://dcat-ap.de/def/plannedAvailability/` | `dcatap:availability` | ❌ |
+| `political-geocoding-level` | `http://dcat-ap.de/def/politicalGeocoding/Level/` | `dcatde:politicalGeocodingLevelURI` | ❌ |
+| `eurovoc` | `http://eurovoc.europa.eu/` | `dct:subject` | ❌ (CESSDA stattdessen) |
+| `corporate-body` | `http://publications.europa.eu/resource/authority/corporate-body/` | `dct:publisher` | ⚠️ Freitext |
+| `iana-media-types` | `https://www.iana.org/assignments/media-types/` | `dcat:mediaType` | ❌ |
+
+> **Wiederverwendbares Muster:** Der bestehende CESSDA-Auto-Suggest (`odw-admin-fields.js` + SKOS/RDF) ist die
+> Blaupause für ein generisches „Vokabular-Autosuggest"-Widget, das künftig `data-theme`, `access-right`,
+> `planned-availability` etc. aus lokal gebündelten Vokabulardateien bedient (keine externe Abhängigkeit).
+
+### 4. Vollständiger DCAT-AP-Feldkatalog & Gap-Analyse
+
+**Legende** — Profil: `AP` = DCAT-AP 3.0 · `DE` = DCAT-AP.de 2.0 · `HVD` = High-Value-Dataset-Pflicht ·
+Norm-Kard.: Kardinalität laut Standard (`M`andatory/`R`ecommended/`O`ptional) ·
+ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
+
+#### 4.1 Dataset (`dcat:Dataset`)
+
+| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+|---|---|---|---|---|
+| `dct:title` | lang-Literal | AP | M (1..n) | ⚠️ String |
+| `dct:description` | lang-Literal | AP | M (1..n) | ⚠️ String |
+| `dct:publisher` | `foaf:Agent` | AP | R (0..1) | ⚠️ Freitext |
+| `dcat:contactPoint` | `vcard:Kind` | AP | R (0..n) | ⚠️ name/mail/url |
+| `dcat:distribution` | `dcat:Distribution` | AP | R (0..n) | ⚠️ genau 1 |
+| `dcat:keyword` | lang-Literal | AP | R (0..n) | ✅ |
+| `dcat:theme` | URI (`data-theme`) | AP | R (0..n) | ⚠️ Freitext |
+| `dct:spatial` | `dct:Location` | AP | O (0..n) | ⚠️ |
+| `dct:temporal` | `dct:PeriodOfTime` | AP | O (0..n) | ✅ start/end |
+| `dct:issued` / `dct:modified` | Datum | AP | O (0..1) | ✅ |
+| `dct:accessRights` | URI (`access-right`) | AP | O (0..1) | ❌ |
+| `dct:accrualPeriodicity` | URI (`frequency`) | AP | O (0..1) | ✅ |
+| `dct:language` | URI (`language`) | AP | O (0..n) | ⚠️ Freitext |
+| `dct:identifier` / `adms:identifier` | Literal / Node | AP | O (0..n) | ❌ |
+| `dct:subject` | URI (`eurovoc`) | AP | O (0..n) | ❌ |
+| `dct:creator` | `foaf:Agent` | AP | O (0..n) | ❌ |
+| `dct:type` | URI (`dataset-type`) | AP | O (0..1) | ❌ |
+| `dcat:landingPage` | `foaf:Document` | AP | O (0..n) | ✅ |
+| `dct:conformsTo` / `dct:provenance` | Node | AP | O (0..n) | ❌ |
+| `owl:versionInfo` / `adms:versionNotes` | Literal | AP | O | ❌ |
+| `dcat:spatialResolutionInMeters` | Dezimal | AP | O | ❌ |
+| `dcat:temporalResolution` | Duration | AP | O | ❌ |
+| `prov:qualifiedAttribution`, `dcat:qualifiedRelation`, `prov:wasGeneratedBy` | Node | AP | O | ❌ |
+| `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ❌ |
+| `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ❌ |
+| `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
+| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ❌ |
+| `dcatde:legalBasis` | lang-Literal | DE | O | ❌ |
+| `dcatde:qualityProcessURI` | URI | DE | O | ❌ |
+| `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ❌ |
+| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ❌ |
+| `dcatap:hvdCategory` | URI | HVD | M *wenn HVD* | ❌ |
+| `dcatap:applicableLegislation` | URI | HVD | M *wenn HVD* | ❌ |
+
+#### 4.2 Distribution (`dcat:Distribution`)
+
+| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+|---|---|---|---|---|
+| `dcat:accessURL` | URI | AP | M (1..n) | ✅ |
+| `dcat:downloadURL` | URI | AP | O (0..n) | ❌ |
+| `dct:format` | URI (`file-type`) | AP | R (0..1) | ✅ |
+| `dcat:mediaType` | URI (`iana`) | AP | O (0..1) | ❌ |
+| `dct:license` | URI (`licence`) | AP | R (0..1) | ✅ |
+| `dcat:byteSize` | Nonneg-Integer | AP | O (0..1) | ✅ |
+| `dct:title` / `dct:description` | lang-Literal | AP | O | ❌ |
+| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ❌ |
+| `spdx:checksum` | Node | AP | O | ❌ |
+| `dcat:accessService` | `dcat:DataService` | AP | O | ❌ |
+| `dct:conformsTo`, `dct:issued`, `dct:modified`, `dct:rights` | div. | AP | O | ❌ |
+| `adms:status` | URI | AP | O | ❌ |
+| `odrl:hasPolicy` | Node | AP | O | ❌ |
+| `dcat:compressFormat` / `packageFormat` | URI (`iana`) | AP | O | ❌ |
+| `foaf:page` | `foaf:Document` | AP | O | ❌ |
+| `dcatde:licenseAttributionByText` | lang-Literal | DE | O (bei CC-BY) | ⚠️ siehe Hinweis |
+
+> **Korrektheitshinweis:** Der ODW-Zuschreibungstext wird derzeit als `odrl:attribution` ausgegeben
+> (siehe Feldmapping Tab 3). DCAT-AP.de-konform ist `dcatde:licenseAttributionByText` (sprachgetaggtes Literal).
+> Diese Abweichung sollte in Phase A korrigiert werden.
+
+#### 4.3 Catalogue (`dcat:Catalog`)
+
+ODW erzeugt den Katalog **automatisch** im REST-Endpoint `/catalog` (eine WordPress-Site = ein Katalog). Die
+Catalogue-Felder (`dct:title`, `dct:publisher`, `dct:license`, `dct:language`, `foaf:homepage`, `dct:spatial`)
+gehören daher in die **Einstellungsseite**, nicht in das Dataset-Formular. Aktuell werden Titel/Publisher
+unterstützt; `dct:license`, `dct:language`, `dcat:themeTaxonomy` und `dct:spatial` des Katalogs sind offen.
+
+### 5. Erweiterung der Feld-Registry (`config/dcat-ap-fields.php`)
+
+Heute trägt jeder Registry-Eintrag: `key`, `meta_key`, `dcat_prop`, `label`, `points`, `required`. Damit **eine**
+Definition künftig Formular, Validierung, Qualität *und* JSON-LD treibt (Single Source of Truth, wie piveaus
+`input-definition.ts`), werden folgende **optionale** Schlüssel ergänzt (abwärtskompatibel — bestehende Einträge
+bleiben gültig):
+
+```php
+array(
+    // Bestand:
+    'key'         => 'access_rights',
+    'meta_key'    => '_odw_access_rights',
+    'dcat_prop'   => 'dct:accessRights',
+    'label'       => __( 'Zugriffsrechte', 'open-data-wizard' ),
+    'points'      => 0,
+    'required'    => false,
+    // NEU (alle optional, mit sinnvollen Defaults):
+    'profile'     => 'ap',          // 'ap' | 'ap.de' | 'hvd'
+    'tier'        => 'optional',    // 'mandatory' | 'recommended' | 'optional'
+    'range'       => 'uri',         // 'literal' | 'literal-lang' | 'uri' | 'node'
+    'cardinality' => '0..1',        // '0..1' | '0..n' | '1..1' | '1..n'
+    'vocab'       => 'access-right', // ID aus der Vokabular-Registry (Abschnitt 3)
+    'tab'         => 'advanced-pro', // 'basic'|'content'|'distribution'|'advanced'|'advanced-pro'
+    'entity'      => 'dataset',     // 'dataset' | 'distribution' | 'catalog'
+),
+```
+
+- `profile`/`tier`/`cardinality` steuern Validierung und Qualitäts-Scoring deklarativ.
+- `range` steuert die JSON-LD-Serialisierung (`uri` → `{"@id": …}`, `literal-lang` → `{"@value":…,"@language":…}`).
+- `vocab` aktiviert das Vokabular-Autosuggest-Widget.
+- `tab`/`entity` steuern die automatische Einsortierung im Carbon-Fields-Formular.
+
+### 6. Mapping piveau-FormKit → Carbon Fields
+
+Übersetzungstabelle für die Portierung der piveau-Feldtypen in die ODW-Formulartechnik:
+
+| piveau (`$formkit`) | Carbon Fields | Hinweis |
+|---|---|---|
+| `text` / `simpleInput` | `Field::make( 'text', … )` | mit Sanitization |
+| `textarea` | `Field::make( 'textarea', … )` | |
+| `select` / `simpleSelect` | `Field::make( 'select', … )` | Optionen aus Vokabular |
+| `auto` (Vokabular-Autocomplete) | `text` + Autosuggest-JS | CESSDA-Muster generalisieren |
+| `repeatable` (group) | `Field::make( 'complex', … )` | wiederholbare Gruppen |
+| `group` / `formkitGroup` | `complex` (max. 1) | strukturierter Knoten |
+| `simpleConditional` | `text/select` + `->set_conditional_logic()` | Vokabular ODER manuell |
+| `fileupload` | wp.media-Meta-Box | bereits in ODW vorhanden |
+| `date` / `datetime-local` | `Field::make( 'date' / 'date_time', … )` | xsd-Typ in JSON-LD |
+| `url` | `text` + `esc_url_raw()` | blockt `javascript:` |
+| `id` | verstecktes Feld / Post-Slug | Dataset-Identifier |
+
+### 7. Umsetzungsplanung (phasiert)
+
+Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
+
+#### Phase A — Fundament & Korrekturen (v2.2, nicht brechend)
+- Namespace-Registry (Abschnitt 2) vollständig in `@context` von `odw_build_dataset_jsonld()` aufnehmen.
+- Feld-Registry-Schema (Abschnitt 5) um die neuen optionalen Schlüssel erweitern; bestehende Einträge anreichern.
+- Korrektur: Zuschreibungstext `odrl:attribution` → `dcatde:licenseAttributionByText` (lang-Literal).
+- Neuer Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt vorbereitet (Grundgerüst).
+- _Betroffen:_ `class-fields.php`, `class-rest-api.php`/JSON-LD-Builder, `config/dcat-ap-fields.php`.
+
+#### Phase B — DCAT-AP.de & Vokabulare (v2.3)
+- DCAT-AP.de-Felder ergänzen: `dcatde:politicalGeocodingLevelURI`, `politicalGeocodingURI`, `contributorID`,
+  `legalBasis`, `qualityProcessURI`, `originator`, `maintainer`, `dcatap:availability`.
+- Generisches Vokabular-Autosuggest-Widget (CESSDA-Muster) + lokal gebündelte Vokabulardateien für
+  `data-theme`, `access-right`, `planned-availability`, `language`.
+- _Betroffen:_ `class-fields.php`, `odw-admin-fields.js`, neue `config/vocabularies/*`, JSON-LD-Builder, `class-quality.php`.
+
+#### Phase C — HVD-Unterstützung (v2.4)
+- Schalter „High-Value-Dataset" → bedingte Pflichtfelder `dcatap:hvdCategory` + `dcatap:applicableLegislation`.
+- Bedingte Validierung (`tier`/`profile` = `hvd`) in `class-validation.php`.
+- _Betroffen:_ `class-fields.php` (conditional logic), `class-validation.php`, JSON-LD-Builder.
+
+#### Phase D — Mehrsprachige Literale (v2.5, Datenmodell-Migration)
+- Umstellung von String- auf sprachgetaggte Literale (`@value`/`@language`) für `title`, `description`, `keyword`.
+- Migrationsroutine + WP-CLI-Befehl für Bestandsdaten; Default-Sprache aus Einstellungen.
+- _Betroffen:_ Datenmodell (Post Meta), JSON-LD-Builder, Validierung, REST-API, Tests.
+
+#### Phase E — Multi-Distribution (optional, v2.6)
+- Rücknahme der v2.1.4-Vereinfachung hinter einem Einstellungs-Schalter: wiederholbare Distributionen
+  (`Field::make('complex')`) für Nutzer mit mehreren Dateien pro Datensatz.
+- _Betroffen:_ `class-fields.php`, JSON-LD-Builder, Quality-Scoring, Shortcode-Card, Tests.
+
+### 8. UX-Konzept: Essentials/Additionals (aus HappyFlow)
+
+Beibehaltung der bestehenden 5-Tab-Struktur, ergänzt um die piveau-Trennung:
+
+```
+Pflichtpfad (Einsteiger):   Tab 1 Grundlagen → Tab 2 Inhalt → Tab 3 Distribution → Tab 5 Vorschau/Publish
+Profi-Erweiterung (opt-in): Tab 4 „Erweiterte Angaben"  ▸ ausklappbar in Gruppen
+                            (Abdeckung · Provenienz · Versionierung · DCAT-AP.de · HVD)
+```
+
+Damit bleibt die Einstiegshürde niedrig, während der volle DCAT-AP-/DCAT-AP.de-Umfang optional verfügbar ist —
+analog zum HappyFlow-Block `Additionals`. Tab 5 erhält zusätzlich eine **Validierungs-Checkliste**
+(Pflicht/Empfohlen/HVD) vor der Veröffentlichung (piveau-Schritt `ReviewAndPublish`).
+
+### 9. Nicht-Ziele / bewusste Abgrenzungen
+
+- **Keine piveau-Hub-Anbindung:** ODW serialisiert lokal nach JSON-LD; keine externen Upload-/Vokabular-Endpunkte.
+- **Keine Vue/FormKit-Portierung:** Umsetzung bleibt Carbon Fields / PHP.
+- **Vokabulare lokal gebündelt:** keine Laufzeit-Abhängigkeit von data.europa.eu zur Editierzeit.
+- **Catalogue-Metadaten** verbleiben in den Einstellungen, nicht im Dataset-Formular.
+
+---
+
 ## Roadmap
 
 **Abgeschlossen (v1.0 — v2.1):**
@@ -455,7 +721,12 @@ wp open-data-wizard cache clear
 - [x] CESSDA-Themenklassifikation (Auto-Suggest aus SKOS/RDF)
 - [x] Externe Konfigurationsdateien (licenses.txt, dct-format-list.php, dcat-ap-fields.php)
 
-**In Planung (v2.2+):**
+**In Planung (v2.2+):** — Details siehe [Technische Spezifikationen § 7](#7-umsetzungsplanung-phasiert)
+- [ ] Phase A: Namespace-/Feld-Registry-Erweiterung + `dcatde:licenseAttributionByText`-Korrektur (v2.2)
+- [ ] Phase B: DCAT-AP.de-Felder (politicalGeocoding, contributorID, availability …) + Vokabular-Autosuggest (v2.3)
+- [ ] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
+- [ ] Phase D: Mehrsprachige Literale (`@language`/`@value`) inkl. Migration (v2.5)
+- [ ] Phase E: Multi-Distribution (opt-in) (v2.6)
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
