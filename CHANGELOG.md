@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.2.1] — 2026-06-27
+
+Bugfix- und Bedienbarkeits-Release. Repariert den Batch-Import-Workflow und verbessert den Einstieg.
+
+### 🐛 Fixed
+- **Batch-Import funktioniert wieder:** Auf der Batch-Import-Seite wurde kein jQuery geladen, wodurch der „Vorschau"-Button ohne Reaktion blieb. jQuery wird jetzt gezielt eingebunden und der Seiten-Code erst nach dem Laden ausgeführt.
+- **Nonce-Prüfung der Upload-/Import-AJAX-Aufrufe:** Das JavaScript sendet das Sicherheits-Token im Feld `nonce`; die Server-Prüfung erwartete bisher `_wpnonce` und schlug daher immer fehl. Beide AJAX-Handler prüfen nun das korrekte Feld.
+- **Beispieldatei-Download:** Die Links „CSV-/JSON-Beispiel herunterladen" führten ins Leere. Ein Download-Handler liefert die Beispieldateien jetzt korrekt aus.
+
+### ✨ Improvements
+- **Einleitung zum Batch-Import:** Die Seite erklärt nun mit einem kurzen Einleitungstext, wie der Import funktioniert.
+- **Direkt zum Einstieg nach Installation:** Nach der Aktivierung wird einmalig automatisch die „Einstieg"-Seite geöffnet.
+- **Namensnennungstext kontextabhängig:** Das Feld „Namensnennungstext" erscheint nur noch, wenn als Lizenz CC BY 4.0 oder CC BY-SA 4.0 gewählt ist.
+- **Hinweis bei der Qualitätsprüfung:** Ein einleitender Satz stellt klar, dass die Werte erst beim Speichern aktualisiert werden.
+
+---
+
 ## [2.2.0] — 2026-06-27
 
 Formular- und Bedienbarkeits-Release. Verbessert die Verständlichkeit der Eingabemaske und verknüpft geografische Angaben mit GeoNames.

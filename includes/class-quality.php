@@ -402,6 +402,10 @@ class ODW_Quality {
 		?>
 		<div class="odw-quality-report">
 
+			<p class="description" style="margin: 0 0 10px;">
+				<?php esc_html_e( 'Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus.', 'open-data-wizard' ); ?>
+			</p>
+
 			<div class="odw-quality-summary">
 				<div class="odw-quality-gauge-wrap">
 					<div class="odw-quality-gauge">
