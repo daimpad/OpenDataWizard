@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.1.4-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.1.5-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -103,8 +103,13 @@ Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-
 - `format` — Dateiformat (z.B. CSV, JSON, PDF)
 - `issued` — Veröffentlichungsdatum
 - `keywords` — Schlagworte (komma-getrennt)
-- `byte_size` — Dateigröße in Bytes
+- `byte_size` — Dateigröße in Bytes (nur ganze Zahl; abweichende Werte werden als Fehler markiert)
 - `attribution` — Namensnennungstext
+
+**Gut zu wissen:**
+- **Excel-kompatibel:** UTF-8-CSVs mit BOM (Excel-Standardexport) werden korrekt eingelesen.
+- **Limit:** Bis zu **2.000 Datensätze** pro Import (Schutz vor Speicher-/Timeout-Problemen).
+- **Sicherheit:** Zell-Inhalte, die als Tabellen-Formel interpretiert werden könnten (Beginn mit `=` `+` `@` `-`), werden beim Import automatisch neutralisiert; Datei-Typ wird anhand der echten Endung geprüft, nicht des Browser-MIME-Typs.
 
 [📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
 Sidebar-Meta-Box — vollständig unabhängig von Carbon Fields:

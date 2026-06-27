@@ -2,9 +2,9 @@
 
 ## 🔐 Security Audit Report
 
-**Audit Date:** May 27, 2026  
+**Audit Date:** June 27, 2026  
 **Status:** ✅ **SECURE**  
-**Scope:** Full codebase review (PHP, JavaScript, REST API)
+**Scope:** Full codebase review (PHP, JavaScript, REST API) — incl. v2.1.5 hardening pass
 
 ---
 
@@ -17,7 +17,7 @@ The Open Data Wizard WordPress plugin follows WordPress security best practices 
 - Secure file handling
 - Query parameter protection
 
-**Test Coverage:** 90 PHPUnit tests (all passing)  
+**Test Coverage:** 92 PHPUnit tests (all passing)  
 **Code Standards:** PHPCS compliant  
 **Static Analysis:** PHPStan Level 6 passing
 
@@ -164,6 +164,7 @@ composer audit
 
 | Version | Audit Date | Status | Notes |
 |---------|-----------|--------|-------|
+| 2.1.5 | June 27, 2026 | ✅ Secure | Hardening pass: batch-import XSS fix, CSV/formula-injection neutralization, JSON-LD `@id` URL sanitization, upload validation by real extension, 2000-record import cap |
 | 2.1.4 | May 27, 2026 | ✅ Secure | Full security audit completed |
 
 ---
@@ -176,6 +177,6 @@ composer audit
 
 ---
 
-**Last Updated:** May 27, 2026  
+**Last Updated:** June 27, 2026  
 **Maintained By:** Open Data Wizard Team  
 **License:** GPL-2.0-or-later

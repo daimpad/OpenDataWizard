@@ -22,7 +22,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (90 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (92 Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -53,6 +53,7 @@ open-data-wizard/
 │   ├── class-rest-api.php           # REST Endpoints (/catalog, /datasets/<id>, /delta)
 │   ├── class-settings.php           # Einstellungsseite
 │   ├── class-shortcode.php          # [odw_dataset id="123"] Frontend-Card
+│   ├── class-batch-import.php       # CSV/JSON Batch-Import (Parser + Importer)
 │   └── class-cli.php                # WP-CLI Befehle
 ├── assets/
 │   ├── css/
@@ -122,7 +123,8 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Rest_API** | REST Endpoints mit Transient-Caching | `get_catalog()`, `get_dataset()`, `get_delta()` |
 | **ODW_Settings** | Plugin-Einstellungsseite | `get()`, `filter_catalog_title()` |
 | **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()` |
-| **ODW_CLI** | WP-CLI Befehle (Batch-Operationen) | `export_json()`, `validate_all()` |
+| **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
+| **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
 
 ### Design Patterns
 
@@ -372,7 +374,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 
 #### Running Tests
 ```bash
-# Alle 90 Tests
+# Alle 92 Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -691,7 +693,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.1.4**
+Current: **v2.1.5**
 
 ---
 
@@ -757,7 +759,7 @@ Current: **v2.1.4**
 1. **Write tests for new features** — Aim for >80% coverage
 2. **Mock all WordPress functions** — WP_Mock does the heavy lifting
 3. **Test edge cases** — null values, empty strings, large datasets
-4. **Run full test suite before pushing** — 90 tests must pass
+4. **Run full test suite before pushing** — 92 tests must pass
 
 ### Performance
 1. **Never call `odw_build_dataset_jsonld()` in loops** — expensive, cache it
@@ -776,6 +778,6 @@ Current: **v2.1.4**
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.1.4 (Mai 2026)
+**Zuletzt aktualisiert**: Version 2.1.5 (Juni 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
