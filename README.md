@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.4.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.5.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -69,7 +69,7 @@ Fünf-Tab-Assistent mit Pflichtfeldprüfung und praktischen Beispielen:
 1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „In welche Kategorie gehört dieser Datensatz?"
 2. **Inhaltliche Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Stichworten finde ich diese Daten?", Zeitangaben, CESSDA-Themenklassifikation
 3. **Datenbereitstellung** — Distributionen (wiederholbar): Zugriffs-URL, Format, Dateigröße, **Lizenz (Pflichtfeld pro Distribution)**, Zuschreibungstext
-4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, High-Value-Datensatz (HVD) Kategorie
+4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, Verantwortlichkeiten (Urheber/pflegende Stelle, GovData-Contributor-ID), High-Value-Datensatz (HVD) Kategorie
 5. **Vorschau** — generiertes JSON-LD live einsehen
 
 ### 🏷 Lizenz-Auswahl
@@ -294,6 +294,7 @@ open-data-wizard/
 | Dateigröße | `dcat:byteSize` | — |
 | Lizenz | `dct:license` (URI) | ✓ pro Distribution |
 | Zuschreibungstext | `dcatde:licenseAttributionByText` | — |
+| Planbare Verfügbarkeit | `dcatap:availability` (`@id`, DCAT-AP.de-URI) | — |
 
 #### Tab 4 — Erweiterte Angaben
 
@@ -310,6 +311,9 @@ open-data-wizard/
 | HVD-Markierung | (steuert HVD-Ausgabe) | — |
 | HVD-Kategorie | `dcatap:hvdCategory` (`@id`, EU-URI) | ✓ wenn HVD |
 | HVD-Rechtsgrundlage (auto) | `dcatap:applicableLegislation` (Reg. 2023/138) | — |
+| Bereitstellende Stelle | `dcatde:contributorID` (`@id`, GovData-Verzeichnis) | — |
+| Urheber (Name/E-Mail) | `dcatde:originator` → `foaf:Agent` | — |
+| Pflegende Stelle (Name/E-Mail) | `dcatde:maintainer` → `foaf:Agent` | — |
 
 #### Sidebar — Download-Datei
 
@@ -514,7 +518,8 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 | `frequency` | `http://publications.europa.eu/resource/authority/frequency/` | `dct:accrualPeriodicity` | ✅ URI |
 | `access-right` | `http://publications.europa.eu/resource/authority/access-right/` | `dct:accessRights` | ❌ |
 | `licence` | `http://dcat-ap.de/def/licenses/` | `dct:license` | ✅ (`licenses.txt`) |
-| `planned-availability` | `http://dcat-ap.de/def/plannedAvailability/` | `dcatap:availability` | ❌ |
+| `planned-availability` | `http://publications.europa.eu/resource/authority/planned-availability/` | `dcatap:availability` | ✅ (Auswahl) |
+| `contributors` | `http://dcat-ap.de/def/contributors/` | `dcatde:contributorID` | ✅ (gebündelt, 69) |
 | `political-geocoding-level` | `http://dcat-ap.de/def/politicalGeocoding/Level/` | `dcatde:politicalGeocodingLevelURI` | ✅ (Auswahl) |
 | `eurovoc` | `http://eurovoc.europa.eu/` | `dct:subject` | ⚠️ (via CESSDA, nicht EuroVoc) |
 | `corporate-body` | `http://publications.europa.eu/resource/authority/corporate-body/` | `dct:publisher` | ⚠️ Freitext |
@@ -560,11 +565,11 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
 | `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ❌ |
 | `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
-| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ❌ |
+| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Autosuggest) |
 | `dcatde:legalBasis` | lang-Literal | DE | O | ❌ |
 | `dcatde:qualityProcessURI` | URI | DE | O | ❌ |
-| `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ❌ |
-| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ❌ |
+| `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ✅ |
+| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ✅ |
 | `dcatap:hvdCategory` | URI | HVD | M *wenn HVD* | ✅ |
 | `dcatap:applicableLegislation` | URI | HVD | M *wenn HVD* | ✅ (auto) |
 
@@ -579,7 +584,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dct:license` | URI (`licence`) | AP | R (0..1) | ✅ |
 | `dcat:byteSize` | Nonneg-Integer | AP | O (0..1) | ✅ |
 | `dct:title` / `dct:description` | lang-Literal | AP | O | ❌ |
-| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ❌ |
+| `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ✅ |
 | `spdx:checksum` | Node | AP | O | ❌ |
 | `dcat:accessService` | `dcat:DataService` | AP | O | ❌ |
 | `dct:conformsTo`, `dct:issued`, `dct:modified`, `dct:rights` | div. | AP | O | ❌ |
@@ -663,12 +668,11 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ☐ Neuer Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt vorbereitet (Grundgerüst).
 - _Betroffen:_ `class-fields.php`, `class-rest-api.php`/JSON-LD-Builder, `config/dcat-ap-fields.php`.
 
-#### Phase B — DCAT-AP.de & Vokabulare (v2.3)
-- DCAT-AP.de-Felder ergänzen: `dcatde:politicalGeocodingLevelURI`, `politicalGeocodingURI`, `contributorID`,
-  `legalBasis`, `qualityProcessURI`, `originator`, `maintainer`, `dcatap:availability`.
-- Generisches Vokabular-Autosuggest-Widget (CESSDA-Muster) + lokal gebündelte Vokabulardateien für
-  `data-theme`, `access-right`, `planned-availability`, `language`.
-- _Betroffen:_ `class-fields.php`, `odw-admin-fields.js`, neue `config/vocabularies/*`, JSON-LD-Builder, `class-quality.php`.
+#### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt
+- ✅ DCAT-AP.de-Felder: `dcatde:contributorID`, `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (zzgl. `dcatde:politicalGeocodingLevelURI` aus v2.3).
+- ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge).
+- ☐ Offen (optional): `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`; weitere gebündelte Vokabulare (`data-theme`, `access-right`, `language`).
+- _Betroffen:_ `class-fields.php`, `class-admin.php`, `odw-admin-fields.js`, `config/vocabularies/*`, JSON-LD-Builder.
 
 #### Phase C — HVD-Unterstützung (v2.4) — ✅ umgesetzt
 - ✅ Schalter „High-Value-Dataset" (Tab 4) → bedingtes Pflichtfeld `dcatap:hvdCategory` (sechs EU-Kategorien) + automatisches `dcatap:applicableLegislation` (Reg. 2023/138).
@@ -729,7 +733,7 @@ analog zum HappyFlow-Block `Additionals`. Tab 5 erhält zusätzlich eine **Valid
 
 **In Planung (v2.2+):** — Details siehe [Technische Spezifikationen § 7](#7-umsetzungsplanung-phasiert)
 - [~] Phase A: Konformitäts-Korrekturen + `@context`-Namespaces erledigt (v2.3.2/2.4.0); Feld-Registry-Schema-Erweiterung offen
-- [ ] Phase B: DCAT-AP.de-Felder (politicalGeocoding ✅, contributorID, availability …) + Vokabular-Autosuggest (v2.3)
+- [x] Phase B: DCAT-AP.de-Felder (contributorID, originator, maintainer, availability) + generisches Vokabular-Autosuggest (v2.5)
 - [x] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
 - [ ] Phase D: Mehrsprachige Literale (`@language`/`@value`) inkl. Migration (v2.5)
 - [ ] Phase E: Multi-Distribution (opt-in) (v2.6)

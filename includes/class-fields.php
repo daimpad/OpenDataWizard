@@ -182,6 +182,10 @@ class ODW_Fields {
 								),
 							)
 						),
+
+					Field::make( 'select', 'odw_availability', __( 'Wie dauerhaft ist diese Datei verfügbar?', 'open-data-wizard' ) )
+						->add_options( self::get_availability_options() )
+						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -251,6 +255,32 @@ class ODW_Fields {
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
 						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
+
+					Field::make( 'html', 'odw_ext_hint_responsibility' )
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Verantwortlichkeiten & Herkunft', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'text', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-vocab', 'contributors' )
+						->set_attribute( 'placeholder', __( 'Stelle eintippen oder auswählen…', 'open-data-wizard' ) )
+						->set_help_text( __( 'CONTRIBUTOR-ID (dcatde:contributorID)', 'open-data-wizard' ) . "\n\n" . __( 'Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet.', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_originator_name', __( 'Wer hat diese Daten ursprünglich erstellt?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z.B. Statistisches Landesamt', 'open-data-wizard' ) )
+						->set_help_text( __( 'URHEBER (dcatde:originator)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle, von der die Daten ursprünglich stammen (kann von Herausgeber abweichen).', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_originator_email', __( 'E-Mail des Urhebers', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'email' )
+						->set_attribute( 'placeholder', 'kontakt@beispiel.de' )
+						->set_help_text( __( 'E-Mail-Adresse des Urhebers (optional).', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_maintainer_name', __( 'Wer pflegt diese Daten laufend?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
+						->set_help_text( __( 'PFLEGENDE STELLE (dcatde:maintainer)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle, die für die laufende Pflege/Aktualisierung der Daten zuständig ist.', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_maintainer_email', __( 'E-Mail der pflegenden Stelle', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'email' )
+						->set_attribute( 'placeholder', 'opendata@beispiel.de' )
+						->set_help_text( __( 'E-Mail-Adresse der pflegenden Stelle (optional).', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' ) . '</h4>' ),
@@ -745,6 +775,72 @@ class ODW_Fields {
 		);
 	}
 
+	/**
+	 * Planned-availability options (DCAT-AP.de `dcatap:availability`).
+	 * Values are the canonical concept URIs from the DCAT-AP.de planned
+	 * availability vocabulary (http://dcat-ap.de/def/plannedAvailability/).
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_availability_options(): array {
+		// EU-managed authority table (required by the EU dcatap:availability SHACL);
+		// the deprecated dcat-ap.de/def/plannedAvailability list must not be used.
+		$base = 'http://publications.europa.eu/resource/authority/planned-availability/';
+		return array(
+			''                     => __( '— Bitte wählen —', 'open-data-wizard' ),
+			$base . 'AVAILABLE'    => __( 'Verfügbar (mittelfristige Planung)', 'open-data-wizard' ),
+			$base . 'STABLE'       => __( 'Stabil (langfristig verfügbar)', 'open-data-wizard' ),
+			$base . 'EXPERIMENTAL' => __( 'Experimentell', 'open-data-wizard' ),
+			$base . 'TEMPORARY'    => __( 'Temporär (kann jederzeit entfallen)', 'open-data-wizard' ),
+		);
+	}
+
+	/**
+	 * Loads a bundled controlled vocabulary from config/vocabularies/<id>.json.
+	 * Each entry is normalised to { value, label } for the autosuggest widget.
+	 * Results are cached in a transient for 24h.
+	 *
+	 * @param string $id Vocabulary identifier (e.g. 'contributors').
+	 * @return array<int, array{value: string, label: string}>
+	 */
+	public static function load_vocabulary( string $id ): array {
+		$id = preg_replace( '/[^a-z0-9_-]/', '', $id );
+		if ( '' === (string) $id ) {
+			return array();
+		}
+
+		$cache_key = 'odw_vocab_' . $id;
+		$cached    = get_transient( $cache_key );
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$file = ODW_PLUGIN_DIR . 'config/vocabularies/' . $id . '.json';
+		if ( ! is_readable( $file ) ) {
+			return array();
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local bundled config file, not a remote URL.
+		$decoded = json_decode( (string) file_get_contents( $file ), true );
+		if ( ! is_array( $decoded ) ) {
+			return array();
+		}
+
+		$out = array();
+		foreach ( $decoded as $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['value'] ) ) {
+				continue;
+			}
+			$out[] = array(
+				'value' => (string) $entry['value'],
+				'label' => (string) ( $entry['label'] ?? $entry['value'] ),
+			);
+		}
+
+		set_transient( $cache_key, $out, DAY_IN_SECONDS );
+		return $out;
+	}
+
 	// -------------------------------------------------------------------------
 	// HTML helpers
 	// -------------------------------------------------------------------------
@@ -824,6 +920,62 @@ function odw_sanitize_jsonld_id( string $value ): string {
 }
 
 /**
+ * Build a foaf:Agent node (name + optional mailbox) for DCAT-AP.de roles such
+ * as dcatde:originator and dcatde:maintainer. Returns null when no name is set.
+ *
+ * @param  string $name  Agent name.
+ * @param  string $email Agent e-mail (optional).
+ * @return array<string, mixed>|null
+ */
+function odw_build_agent_node( string $name, string $email = '' ): ?array {
+	if ( '' === trim( $name ) ) {
+		return null;
+	}
+
+	$node = array(
+		'@type'     => 'foaf:Agent',
+		'foaf:name' => $name,
+	);
+
+	if ( '' !== trim( $email ) ) {
+		$node['foaf:mbox'] = array( '@id' => odw_sanitize_jsonld_id( 'mailto:' . $email ) );
+	}
+
+	return $node;
+}
+
+/**
+ * Resolve a controlled-vocabulary field value to its canonical URI.
+ *
+ * Vocabulary autosuggest fields store the human-readable label; this maps that
+ * label back to the URI for JSON-LD output. A value that is already an http(s)
+ * URI is returned as-is; an unknown label resolves to an empty string so it is
+ * not emitted as a bogus @id.
+ *
+ * @param  string $value    Stored field value (label or URI).
+ * @param  string $vocab_id Vocabulary identifier (e.g. 'contributors').
+ * @return string Canonical URI, or '' when it cannot be resolved.
+ */
+function odw_resolve_vocab_uri( string $value, string $vocab_id ): string {
+	$value = trim( $value );
+	if ( '' === $value ) {
+		return '';
+	}
+
+	if ( preg_match( '#^https?://#i', $value ) ) {
+		return $value;
+	}
+
+	foreach ( ODW_Fields::load_vocabulary( $vocab_id ) as $entry ) {
+		if ( 0 === strcasecmp( (string) $entry['label'], $value ) ) {
+			return (string) $entry['value'];
+		}
+	}
+
+	return '';
+}
+
+/**
  * Build DCAT-AP 3.0 JSON-LD array for a single dataset.
  * Used by both the REST API and the preview tab.
  *
@@ -851,6 +1003,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$dist_license        = (string) carbon_get_post_meta( $post_id, 'odw_license' );
 	$dist_license_custom = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
 	$dist_attribution    = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
+	$dist_availability   = (string) carbon_get_post_meta( $post_id, 'odw_availability' );
 	$cessda_topic        = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
 
 	// Extended DCAT-AP fields (Tab 4).
@@ -865,6 +1018,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$contact_url               = (string) carbon_get_post_meta( $post_id, 'odw_contact_url' );
 	$is_hvd                    = (string) carbon_get_post_meta( $post_id, 'odw_is_hvd' );
 	$hvd_category              = (string) carbon_get_post_meta( $post_id, 'odw_hvd_category' );
+	$contributor_id            = (string) carbon_get_post_meta( $post_id, 'odw_contributor_id' );
+	$originator_name           = (string) carbon_get_post_meta( $post_id, 'odw_originator_name' );
+	$originator_email          = (string) carbon_get_post_meta( $post_id, 'odw_originator_email' );
+	$maintainer_name           = (string) carbon_get_post_meta( $post_id, 'odw_maintainer_name' );
+	$maintainer_email          = (string) carbon_get_post_meta( $post_id, 'odw_maintainer_email' );
 
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
@@ -959,6 +1117,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$dist_item['dcatde:licenseAttributionByText'] = $dist_attribution;
 		}
 
+		if ( ! empty( $dist_availability ) ) {
+			$dist_item['dcatap:availability'] = array( '@id' => odw_sanitize_jsonld_id( (string) $dist_availability ) );
+		}
+
 		$dataset['dcat:distribution'] = array( $dist_item );
 	}
 
@@ -1033,6 +1195,25 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( 'yes' === $is_hvd && ! empty( $hvd_category ) ) {
 		$dataset['dcatap:hvdCategory']           = array( '@id' => odw_sanitize_jsonld_id( (string) $hvd_category ) );
 		$dataset['dcatap:applicableLegislation'] = array( '@id' => 'http://data.europa.eu/eli/reg_impl/2023/138/oj' );
+	}
+
+	// DCAT-AP.de: contributor identifier of the data-providing body (GovData).
+	// The field stores the human-readable label; resolve it to the official URI.
+	$contributor_uri = odw_resolve_vocab_uri( $contributor_id, 'contributors' );
+	if ( '' !== $contributor_uri ) {
+		$dataset['dcatde:contributorID'] = array( '@id' => odw_sanitize_jsonld_id( $contributor_uri ) );
+	}
+
+	// DCAT-AP.de: originator (who created the data) and maintainer (who keeps it
+	// current), each a foaf:Agent with name and optional mailbox.
+	$originator = odw_build_agent_node( $originator_name, $originator_email );
+	if ( null !== $originator ) {
+		$dataset['dcatde:originator'] = $originator;
+	}
+
+	$maintainer = odw_build_agent_node( $maintainer_name, $maintainer_email );
+	if ( null !== $maintainer ) {
+		$dataset['dcatde:maintainer'] = $maintainer;
 	}
 
 	/**

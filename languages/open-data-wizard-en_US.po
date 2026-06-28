@@ -1073,3 +1073,72 @@ msgstr "Mobility"
 
 msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
 msgstr "Select an HVD category (dcatap:hvdCategory)"
+
+msgid "Wie dauerhaft ist diese Datei verfügbar?"
+msgstr "How durably is this file available?"
+
+msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
+msgstr "PLANNED AVAILABILITY (dcatap:availability)"
+
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
+msgstr "How reliable/durable is access to this file planned to be? Example: Stable, Available, Temporary"
+
+msgid "Verfügbar (mittelfristige Planung)"
+msgstr "Available (medium-term planning)"
+
+msgid "Stabil (langfristig verfügbar)"
+msgstr "Stable (available long-term)"
+
+msgid "Experimentell"
+msgstr "Experimental"
+
+msgid "Temporär (kann jederzeit entfallen)"
+msgstr "Temporary (may be removed at any time)"
+
+msgid "Verantwortlichkeiten & Herkunft"
+msgstr "Responsibilities & Provenance"
+
+msgid "Welche Stelle stellt diese Daten im GovData-Verbund bereit?"
+msgstr "Which body provides this data within the GovData network?"
+
+msgid "Stelle eintippen oder auswählen…"
+msgstr "Type or select a body…"
+
+msgid "CONTRIBUTOR-ID (dcatde:contributorID)"
+msgstr "CONTRIBUTOR ID (dcatde:contributorID)"
+
+msgid "Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet."
+msgstr "Official identifier of the providing body from the DCAT-AP.de registry. Choose a body from the list; the corresponding official URI is used automatically."
+
+msgid "Wer hat diese Daten ursprünglich erstellt?"
+msgstr "Who originally created this data?"
+
+msgid "z.B. Statistisches Landesamt"
+msgstr "e.g. State Statistical Office"
+
+msgid "URHEBER (dcatde:originator)"
+msgstr "ORIGINATOR (dcatde:originator)"
+
+msgid "Stelle, von der die Daten ursprünglich stammen (kann von Herausgeber abweichen)."
+msgstr "The body the data originally comes from (may differ from the publisher)."
+
+msgid "E-Mail des Urhebers"
+msgstr "Originator e-mail"
+
+msgid "E-Mail-Adresse des Urhebers (optional)."
+msgstr "Originator e-mail address (optional)."
+
+msgid "Wer pflegt diese Daten laufend?"
+msgstr "Who maintains this data on an ongoing basis?"
+
+msgid "PFLEGENDE STELLE (dcatde:maintainer)"
+msgstr "MAINTAINER (dcatde:maintainer)"
+
+msgid "Stelle, die für die laufende Pflege/Aktualisierung der Daten zuständig ist."
+msgstr "The body responsible for the ongoing maintenance/updating of the data."
+
+msgid "E-Mail der pflegenden Stelle"
+msgstr "Maintainer e-mail"
+
+msgid "E-Mail-Adresse der pflegenden Stelle (optional)."
+msgstr "Maintainer e-mail address (optional)."

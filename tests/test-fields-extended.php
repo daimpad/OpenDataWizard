@@ -345,6 +345,112 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * The dcatap:availability term is attached to the distribution when set.
+	 */
+	public function test_build_includes_availability_in_distribution(): void {
+		$this->load_fields();
+
+		$uri = 'http://publications.europa.eu/resource/authority/planned-availability/STABLE';
+
+		$this->setup_jsonld_mocks(
+			15,
+			'odw_dataset',
+			array(
+				'odw_access_url'   => 'https://example.com/data.csv',
+				'odw_availability' => $uri,
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 15 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dcat:distribution', $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dcat:distribution'][0]['dcatap:availability'] );
+	}
+
+	/**
+	 * The dcatde:contributorID is emitted as an @id object when set.
+	 */
+	public function test_build_includes_contributor_id(): void {
+		$this->load_fields();
+
+		$uri = 'http://dcat-ap.de/def/contributors/openDataBayern';
+
+		$this->setup_jsonld_mocks(
+			16,
+			'odw_dataset',
+			array( 'odw_contributor_id' => $uri )
+		);
+
+		$result = odw_build_dataset_jsonld( 16 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dcatde:contributorID'] );
+	}
+
+	/**
+	 * The dcatde:originator and dcatde:maintainer build foaf:Agent nodes; the
+	 * mailbox is only present when an e-mail is given.
+	 */
+	public function test_build_includes_originator_and_maintainer_agents(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			17,
+			'odw_dataset',
+			array(
+				'odw_originator_name'  => 'Statistisches Landesamt',
+				'odw_originator_email' => 'urheber@example.com',
+				'odw_maintainer_name'  => 'Open Data Team',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 17 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( 'foaf:Agent', $result['dcatde:originator']['@type'] );
+		$this->assertSame( 'Statistisches Landesamt', $result['dcatde:originator']['foaf:name'] );
+		$this->assertSame( array( '@id' => 'mailto:urheber@example.com' ), $result['dcatde:originator']['foaf:mbox'] );
+
+		$this->assertSame( 'Open Data Team', $result['dcatde:maintainer']['foaf:name'] );
+		$this->assertArrayNotHasKey( 'foaf:mbox', $result['dcatde:maintainer'] );
+	}
+
+	/**
+	 * Agent roles are omitted entirely when no name is provided.
+	 */
+	public function test_build_omits_agents_without_name(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			17,
+			'odw_dataset',
+			array( 'odw_originator_email' => 'lonely@example.com' )
+		);
+
+		$result = odw_build_dataset_jsonld( 17 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayNotHasKey( 'dcatde:originator', $result );
+		$this->assertArrayNotHasKey( 'dcatde:maintainer', $result );
+	}
+
+	/**
+	 * The planned-availability options expose the empty default plus four values.
+	 */
+	public function test_get_availability_options_structure(): void {
+		$this->load_fields();
+
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$options = ODW_Fields::get_availability_options();
+
+		$this->assertArrayHasKey( '', $options );
+		$this->assertArrayHasKey( 'http://publications.europa.eu/resource/authority/planned-availability/STABLE', $options );
+		$this->assertCount( 5, $options );
+	}
+
+	/**
 	 * The dct:accrualPeriodicity is included as an @id object when the field is set.
 	 */
 	public function test_build_includes_accrual_periodicity_when_set(): void {
