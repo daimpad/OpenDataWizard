@@ -267,7 +267,7 @@ class ODW_Fields {
 					->set_html(
 						'<button type="button" class="odw-pro-toggle" data-odw-pro-toggle aria-expanded="false">'
 						. '<span class="odw-pro-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen', 'open-data-wizard' )
+						. esc_html__( 'Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen', 'open-data-wizard' )
 						. '</button>'
 					),
 
@@ -338,6 +338,73 @@ class ODW_Fields {
 								),
 							)
 						),
+
+					Field::make( 'html', 'odw_ext_hint_more' )
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Weitere DCAT-AP-Felder (optional)', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'text', 'odw_identifier', __( 'Welche eindeutige Kennung hat dieser Datensatz?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z. B. DOI oder interne ID', 'open-data-wizard' ) )
+						->set_help_text( __( 'IDENTIFIER (dct:identifier)', 'open-data-wizard' ) . "\n\n" . __( 'Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_type', __( 'Um welchen Typ von Datensatz handelt es sich?', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'url' )
+						->set_attribute( 'placeholder', 'http://publications.europa.eu/resource/authority/dataset-type/...' )
+						->set_help_text( __( 'DATENSATZ-TYP (dct:type)', 'open-data-wizard' ) . "\n\n" . __( 'URI aus der EU-Liste „dataset-type". Beispiel: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_creator_name', __( 'Wer hat diese Daten erstellt?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z. B. Statistisches Amt', 'open-data-wizard' ) )
+						->set_help_text( __( 'ERSTELLER (dct:creator)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle oder Person, die die Daten erstellt hat (kann vom Herausgeber abweichen).', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_creator_email', __( 'E-Mail-Adresse des Erstellers (optional).', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'email' )
+						->set_help_text( __( 'E-MAIL DES ERSTELLERS (foaf:mbox)', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_version', __( 'Welche Version hat dieser Datensatz?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z. B. 1.0', 'open-data-wizard' ) )
+						->set_help_text( __( 'VERSION (owl:versionInfo)', 'open-data-wizard' ) . "\n\n" . __( 'Versionsbezeichnung des Datensatzes. Beispiel: 1.0, 2024-Q1', 'open-data-wizard' ) ),
+
+					Field::make( 'textarea', 'odw_version_notes', __( 'Was hat sich in dieser Version geändert?', 'open-data-wizard' ) )
+						->set_rows( 2 )
+						->set_help_text( __( 'VERSIONSHINWEISE (adms:versionNotes)', 'open-data-wizard' ) . "\n\n" . __( 'Kurze Beschreibung der Änderungen gegenüber der Vorversion.', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_spatial_resolution', __( 'Welche räumliche Auflösung haben die Daten (in Metern)?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z. B. 30', 'open-data-wizard' ) )
+						->set_help_text( __( 'RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)', 'open-data-wizard' ) . "\n\n" . __( 'Kleinste räumlich auflösbare Distanz in Metern (nur Zahl). Beispiel: 30', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_temporal_resolution', __( 'Welche zeitliche Auflösung haben die Daten?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', 'P1D' )
+						->set_help_text( __( 'ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)', 'open-data-wizard' ) . "\n\n" . __( 'Als ISO-8601-Dauer. Beispiel: P1D (täglich), PT1H (stündlich)', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_conforms_to', __( 'Welchem Standard oder Schema entsprechen die Daten?', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'url' )
+						->set_attribute( 'placeholder', 'https://…' )
+						->set_help_text( __( 'KONFORM ZU (dct:conformsTo)', 'open-data-wizard' ) . "\n\n" . __( 'URI des Standards/Anwendungsprofils, dem die Daten folgen.', 'open-data-wizard' ) ),
+
+					Field::make( 'textarea', 'odw_provenance', __( 'Woher stammen die Daten und wie sind sie entstanden?', 'open-data-wizard' ) )
+						->set_rows( 2 )
+						->set_help_text( __( 'HERKUNFT (dct:provenance)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext zur Entstehung und Herkunft der Daten.', 'open-data-wizard' ) ),
+
+					Field::make( 'html', 'odw_ext_hint_dist' )
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Distribution — erweitert', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'text', 'odw_dist_title', __( 'Wie heißt die bereitgestellte Datei/Distribution?', 'open-data-wizard' ) )
+						->set_help_text( __( 'TITEL DER DISTRIBUTION (dct:title)', 'open-data-wizard' ) . "\n\n" . __( 'Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV', 'open-data-wizard' ) ),
+
+					Field::make( 'textarea', 'odw_dist_description', __( 'Wie lässt sich die Distribution beschreiben?', 'open-data-wizard' ) )
+						->set_rows( 2 )
+						->set_help_text( __( 'BESCHREIBUNG DER DISTRIBUTION (dct:description)', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_download_url', __( 'Direkter Download-Link zur Datei?', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'url' )
+						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
+						->set_help_text( __( 'DOWNLOAD-URL (dcat:downloadURL)', 'open-data-wizard' ) . "\n\n" . __( 'Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL).', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_media_type', __( 'Welchen Medientyp (MIME) hat die Datei?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', 'https://www.iana.org/assignments/media-types/text/csv' )
+						->set_help_text( __( 'MEDIENTYP (dcat:mediaType)', 'open-data-wizard' ) . "\n\n" . __( 'IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_dist_rights', __( 'Welche Nutzungsrechte gelten für die Datei?', 'open-data-wizard' ) )
+						->set_help_text( __( 'RECHTE (dct:rights)', 'open-data-wizard' ) . "\n\n" . __( 'URI oder Freitext zu den Nutzungsrechten der Distribution.', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -1235,6 +1302,23 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$quality_process_uri       = (string) carbon_get_post_meta( $post_id, 'odw_quality_process_uri' );
 	$access_rights             = (string) carbon_get_post_meta( $post_id, 'odw_access_rights' );
 
+	// Additional optional DCAT-AP 3.0 fields (advanced, Tab 4).
+	$identifier          = (string) carbon_get_post_meta( $post_id, 'odw_identifier' );
+	$dataset_type        = (string) carbon_get_post_meta( $post_id, 'odw_type' );
+	$creator_name        = (string) carbon_get_post_meta( $post_id, 'odw_creator_name' );
+	$creator_email       = (string) carbon_get_post_meta( $post_id, 'odw_creator_email' );
+	$version             = (string) carbon_get_post_meta( $post_id, 'odw_version' );
+	$version_notes       = (string) carbon_get_post_meta( $post_id, 'odw_version_notes' );
+	$spatial_resolution  = (string) carbon_get_post_meta( $post_id, 'odw_spatial_resolution' );
+	$temporal_resolution = (string) carbon_get_post_meta( $post_id, 'odw_temporal_resolution' );
+	$conforms_to         = (string) carbon_get_post_meta( $post_id, 'odw_conforms_to' );
+	$provenance          = (string) carbon_get_post_meta( $post_id, 'odw_provenance' );
+	$dist_title          = (string) carbon_get_post_meta( $post_id, 'odw_dist_title' );
+	$dist_description    = (string) carbon_get_post_meta( $post_id, 'odw_dist_description' );
+	$download_url        = (string) carbon_get_post_meta( $post_id, 'odw_download_url' );
+	$media_type          = (string) carbon_get_post_meta( $post_id, 'odw_media_type' );
+	$dist_rights         = (string) carbon_get_post_meta( $post_id, 'odw_dist_rights' );
+
 	// Content language tag (BCP-47) for language-tagged literals. Derived from the
 	// dataset language field, falling back to the configured default, then 'de'.
 	$lang_tag = odw_resolve_language_tag( (string) $language );
@@ -1360,6 +1444,35 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$dist_item['dcatap:availability'] = array( '@id' => odw_sanitize_jsonld_id( (string) $dist_availability ) );
 		}
 
+		// Additional optional distribution properties (advanced, Tab 4).
+		if ( '' !== $dist_title ) {
+			$dist_item['dct:title'] = odw_lang_literal( $dist_title, $lang_tag );
+		}
+
+		if ( '' !== $dist_description ) {
+			$dist_item['dct:description'] = odw_lang_literal( $dist_description, $lang_tag );
+		}
+
+		$download_url_safe = esc_url_raw( $download_url );
+		if ( '' !== $download_url_safe ) {
+			$dist_item['dcat:downloadURL'] = array( '@id' => $download_url_safe );
+		}
+
+		if ( '' !== $media_type ) {
+			$dist_item['dcat:mediaType'] = array( '@id' => odw_sanitize_jsonld_id( $media_type ) );
+		}
+
+		if ( '' !== $dist_rights ) {
+			if ( preg_match( '#^https?://#', $dist_rights ) ) {
+				$dist_item['dct:rights'] = array( '@id' => odw_sanitize_jsonld_id( $dist_rights ) );
+			} else {
+				$dist_item['dct:rights'] = array(
+					'@type'      => 'dct:RightsStatement',
+					'rdfs:label' => $dist_rights,
+				);
+			}
+		}
+
 		$dataset['dcat:distribution'] = array( $dist_item );
 	}
 
@@ -1471,6 +1584,53 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	// DCAT-AP: access classification of the dataset (EU access-right vocabulary).
 	if ( ! empty( $access_rights ) ) {
 		$dataset['dct:accessRights'] = array( '@id' => odw_sanitize_jsonld_id( (string) $access_rights ) );
+	}
+
+	// Additional optional DCAT-AP 3.0 dataset properties (advanced, Tab 4).
+	if ( '' !== $identifier ) {
+		$dataset['dct:identifier'] = $identifier;
+	}
+
+	if ( '' !== $dataset_type ) {
+		$dataset['dct:type'] = array( '@id' => odw_sanitize_jsonld_id( $dataset_type ) );
+	}
+
+	$creator = odw_build_agent_node( $creator_name, $creator_email );
+	if ( null !== $creator ) {
+		$dataset['dct:creator'] = $creator;
+	}
+
+	if ( '' !== $version ) {
+		$dataset['owl:versionInfo'] = $version;
+	}
+
+	if ( '' !== $version_notes ) {
+		$dataset['adms:versionNotes'] = odw_lang_literal( $version_notes, $lang_tag );
+	}
+
+	if ( '' !== $spatial_resolution && is_numeric( $spatial_resolution ) ) {
+		$dataset['dcat:spatialResolutionInMeters'] = array(
+			'@type'  => 'xsd:decimal',
+			'@value' => $spatial_resolution,
+		);
+	}
+
+	if ( '' !== $temporal_resolution ) {
+		$dataset['dcat:temporalResolution'] = array(
+			'@type'  => 'xsd:duration',
+			'@value' => $temporal_resolution,
+		);
+	}
+
+	if ( '' !== $conforms_to ) {
+		$dataset['dct:conformsTo'] = array( '@id' => odw_sanitize_jsonld_id( $conforms_to ) );
+	}
+
+	if ( '' !== $provenance ) {
+		$dataset['dct:provenance'] = array(
+			'@type'      => 'dct:ProvenanceStatement',
+			'rdfs:label' => odw_lang_literal( $provenance, $lang_tag ),
+		);
 	}
 
 	/**

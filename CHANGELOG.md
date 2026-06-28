@@ -7,6 +7,26 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.12.0] — 2026-06-28
+
+UX-Feinschliff und Vervollständigung der optionalen DCAT-AP-3.0-Felder.
+
+### ✨ Added — optionale DCAT-AP-3.0-Felder (Tab 4, „Erweiterte Angaben")
+Alle Pflicht- und empfohlenen DCAT-AP-3.0-Felder waren bereits enthalten; ergänzt wurden die praktischen **optionalen** Felder:
+- **Dataset:** `dct:identifier`, `dct:type`, `dct:creator` (foaf:Agent), `owl:versionInfo`, `adms:versionNotes`, `dcat:spatialResolutionInMeters` (xsd:decimal), `dcat:temporalResolution` (xsd:duration), `dct:conformsTo`, `dct:provenance` (dct:ProvenanceStatement).
+- **Distribution:** `dct:title`, `dct:description`, `dcat:downloadURL`, `dcat:mediaType`, `dct:rights` (URI oder dct:RightsStatement).
+- `@context` um `rdfs` ergänzt (für `dct:ProvenanceStatement`/`dct:RightsStatement`-Label).
+
+### 🐛 Fixed / Changed
+- **CESSDA-Themenklassifikation:** Eingabefeld nun linksbündig über die volle Zeilenbreite (wie die übrigen Felder; bisher auf 400 px begrenzt).
+- **Profi-Bereich umbenannt:** Toggle „Erweiterte Angaben **für Profis** …" → „Erweiterte Angaben …".
+- **Willkommens-Hinweis nur einmalig:** „Open Data Wizard erfolgreich installiert!" wird jetzt genau einmal nach der Installation angezeigt und dann automatisch entfernt (statt bis zum manuellen Ausblenden bei jedem Seitenaufruf).
+
+### ✅ Tests
+- Neue Builder-Tests für die optionalen Dataset- und Distribution-Felder (inkl. Nicht-numerische räumliche Auflösung wird verworfen; Freitext-Rechte werden zu `dct:RightsStatement`).
+
+---
+
 ## [2.11.3] — 2026-06-28
 
 UX-/Korrektur-Fixes aus Praxis-Feedback bei der Live-Installation.
