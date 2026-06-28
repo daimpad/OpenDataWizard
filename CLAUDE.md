@@ -70,7 +70,8 @@ open-data-wizard/
 │   ├── phpunit.xml                 # Unit-Test Konfiguration
 │   ├── licenses.txt                # Lizenz-Liste (URI | Label)
 │   ├── dct-format-list.php         # Format-Mapping (MIME → DCAT-AP URI)
-│   └── dcat-ap-fields.php          # Feld-Definitionen (Meta-Key, Label, Required)
+│   ├── dcat-ap-fields.php          # Feld-Registry (Meta-Key, Label, Required + Schema-Metadaten)
+│   └── vocabularies/               # Lokal gebündelte Vokabulare (z.B. contributors.json)
 ├── tests/
 │   ├── test-fields.php             # ODW_Fields Methoden-Tests
 │   ├── test-fields-extended.php    # JSON-LD Builder Tests
@@ -84,7 +85,9 @@ open-data-wizard/
 │   ├── open-data-wizard.pot        # i18n Translation Template
 │   ├── open-data-wizard-en_US.po   # Englische Übersetzung (Quelle)
 │   └── open-data-wizard-en_US.mo   # Englische Übersetzung (kompiliert)
-├── README.md                        # User-facing Dokumentation (DE)
+├── README.md                        # User-facing Dokumentation (DE) + Doku-Navigation
+├── DOCUMENTATION.md                 # Technische Dokumentation (Architektur, REST-API, CLI …)
+├── TECHNICAL-SPEC.md                # Technische Spezifikationen + DCAT-AP-Roadmap/Umsetzungsstand
 ├── CHANGELOG.md                     # Version-History
 ├── composer.json                    # PHP Dependencies
 └── CLAUDE.md                        # Diese Datei
@@ -707,7 +710,7 @@ Current: **v2.5.1**
 
 Die technische Weiterentwicklung folgt einer Analyse des **piveau Data Provider Interface (DPI)**. Die
 vollständige Spezifikation (Metadatenmodell, Namespaces, Vokabulare, DCAT-AP-/DCAT-AP.de-Feldkatalog mit
-Gap-Analyse, Feld-Registry-Schema, phasierte Umsetzungsplanung) liegt in **[`docs/TECHNICAL-SPEC.md`](docs/TECHNICAL-SPEC.md)**.
+Gap-Analyse, Feld-Registry-Schema, phasierte Umsetzungsplanung) liegt in **[`TECHNICAL-SPEC.md`](TECHNICAL-SPEC.md)**.
 Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ### ✅ Erledigt

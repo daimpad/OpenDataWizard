@@ -1,6 +1,6 @@
 # Technische Spezifikationen — Open Data Wizard
 
-> Zentrale Ablage für alle technischen Festlegungen des Open Data Wizard. Zurück zur Übersicht: [README](../README.md).
+> Zentrale Ablage für alle technischen Festlegungen des Open Data Wizard. Zurück zur Übersicht: [README](README.md).
 
 ## 📌 Umsetzungsstand
 
