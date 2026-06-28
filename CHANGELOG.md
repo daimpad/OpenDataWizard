@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.9.0] — 2026-06-28
+
+Phase D: mehrsprachige Literale (`@value`/`@language`) für die Kernfelder.
+
+### 🔧 Changed
+- **`dct:title`, `dct:description`, `dcat:keyword`** werden im JSON-LD jetzt als **sprachgetaggte Literale** ausgegeben (`{"@value": "…", "@language": "de"}` bzw. ein Array solcher Literale für Keywords) statt als reine Strings — die DCAT-AP-konforme Form. Die Sprache wird aus dem Sprache-Feld des Datensatzes abgeleitet (EU-URI → BCP-47), mit Rückfall auf die Standardsprache und zuletzt `de`.
+- **Keine Datenmigration nötig:** Werte bleiben unverändert als Klartext gespeichert; die Sprach-Auszeichnung erfolgt erst bei der JSON-LD-Erzeugung. Formular und Eingabe sind unverändert (eine Sprache pro Feld).
+
+> Hinweis für Harvester/Konsumenten: Die Ausgabe dieser drei Felder ändert ihre Form von Plain-String auf `{@value,@language}`. Das ist die standardkonforme Darstellung; DCAT-AP-Harvester verarbeiten sie korrekt.
+
+---
+
 ## [2.8.1] — 2026-06-28
 
 Bugfix aus einem Code-Review.
