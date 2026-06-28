@@ -7,6 +7,21 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.11.3] — 2026-06-28
+
+UX-/Korrektur-Fixes aus Praxis-Feedback bei der Live-Installation.
+
+### 🐛 Fixed
+- **Hilfe-Tooltip (ⓘ) sprang in die nächste Zeile:** Das ⓘ-Symbol wird jetzt **innerhalb des Feld-Labels** verankert und sitzt damit in derselben Zeile wie die Formularfrage (zuvor als Geschwister-Element unter dem block-level Label umgebrochen).
+- **CESSDA-Themenklassifikation ohne Erklärung:** Da das eigentliche CF-Feld (mit Hilfetext) ausgeblendet ist, hatte das JS-gebaute Eingabe-Widget keinen Tooltip. Es erhält nun denselben ⓘ-Tooltip mit Erklärung **(dct:subject)** inkl. Handlungsaufforderung („Thema eintippen oder auswählen"). Die URI wird weiterhin automatisch verknüpft.
+- **DCAT-AP-Namen in der Qualitätsprüfung ergänzt:** Die Indikatoren *Beschreibung*, *Herausgeber* und *Lizenz* trugen in der Registry (`config/dcat-ap-fields.php`) noch die reine Formularfrage als Label; sie heißen nun einheitlich `Beschreibung (dct:description)`, `Herausgeber (dct:publisher)` und `Lizenz (dct:license)` — konsistent mit den übrigen Indikatoren (wirkt auch auf Validierungsmeldungen).
+- **Qualitäts-Score wird beim ersten Veröffentlichen/Speichern korrekt berechnet:** Der Neuberechnungs-Hook lief auf `save_post_odw_dataset`, das WordPress **vor** dem generischen `save_post` feuert — genau dort speichert Carbon Fields aber erst seine Meta-Werte (Priorität 10). Dadurch wurde der Score aus veralteten Daten berechnet und stimmte erst nach dem **zweiten** Speichern. Der Hook läuft nun auf `save_post` (Priorität 30, nach dem CF-Save) mit Post-Type-Guard. Batch-Importe berechnen die Qualität nun ebenfalls explizit nach dem Schreiben der Metadaten.
+
+### ✅ Tests
+- Neuer Registry-Test stellt sicher, dass jedes Label seinen DCAT-AP-Property-Namen trägt.
+
+---
+
 ## [2.11.2] — 2026-06-28
 
 ### 🔧 Changed

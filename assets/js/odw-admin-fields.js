@@ -115,6 +115,13 @@
 			lbl.className   = 'odw-cessda-label';
 			lbl.textContent = w.label || '';
 
+			// The real CF field (with its help text) is hidden, so attach the same
+			// ⓘ tooltip here to explain what the CESSDA classification is.
+			if ( w.help ) {
+				var tipLabel = ( data.helpTip && data.helpTip.label ) || '';
+				lbl.appendChild( buildHelpTip( helpTextNode( w.help ), tipLabel ) );
+			}
+
 			var input = document.createElement( 'input' );
 			input.type        = 'text';
 			input.className    = 'odw-cessda-input';
@@ -415,6 +422,66 @@
 	// label one hover/click away. Progressive enhancement: without JS the help
 	// text simply stays inline.
 	// -------------------------------------------------------------------------
+	// One document-level handler closes any open click-tooltip on outside tap.
+	function ensureTipDocHandler() {
+		if ( document.body.dataset.odwTipDocBound ) {
+			return;
+		}
+		document.body.dataset.odwTipDocBound = '1';
+		document.addEventListener( 'click', function ( e ) {
+			document.querySelectorAll( '.odw-help-tip-wrap.is-open' ).forEach( function ( w ) {
+				if ( ! w.contains( e.target ) ) {
+					w.classList.remove( 'is-open' );
+					var b = w.querySelector( '.odw-help-tip' );
+					if ( b ) {
+						b.setAttribute( 'aria-expanded', 'false' );
+					}
+				}
+			} );
+		} );
+	}
+
+	// Build an ⓘ tooltip wrapper around a content node. Reused by the field help
+	// tooltips and the JS-built widgets (e.g. CESSDA) so they look identical.
+	function buildHelpTip( contentNode, tipLabel ) {
+		ensureTipDocHandler();
+
+		var wrap = document.createElement( 'span' );
+		wrap.className = 'odw-help-tip-wrap';
+
+		var btn = document.createElement( 'button' );
+		btn.type     = 'button';
+		btn.className = 'odw-help-tip';
+		btn.setAttribute( 'aria-label', tipLabel || 'Hilfe' );
+		btn.setAttribute( 'aria-expanded', 'false' );
+		btn.innerHTML = '<span aria-hidden="true">i</span>';
+
+		var pop = document.createElement( 'span' );
+		pop.className = 'odw-help-pop';
+		pop.setAttribute( 'role', 'tooltip' );
+		pop.appendChild( contentNode );
+
+		wrap.appendChild( btn );
+		wrap.appendChild( pop );
+
+		// Click toggles for touch/keyboard; hover/focus is handled in CSS.
+		btn.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			var open = wrap.classList.toggle( 'is-open' );
+			btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+		} );
+
+		return wrap;
+	}
+
+	// Build a popup content node from a plain (multi-line) help string.
+	function helpTextNode( text ) {
+		var span = document.createElement( 'span' );
+		span.className   = 'odw-help-pop__content';
+		span.textContent = text; // CSS white-space:pre-line preserves line breaks.
+		return span;
+	}
+
 	function initHelpTooltips() {
 		var tip = data.helpTip || {};
 		document.querySelectorAll( '.cf-field' ).forEach( function ( field ) {
@@ -427,62 +494,26 @@
 			if ( ! help || ! ( help.textContent || '' ).trim() ) {
 				return;
 			}
-			var head = field.querySelector( ':scope > .cf-field__head' ) || field.querySelector( ':scope > label' );
-			if ( ! head ) {
+			// Anchor the ⓘ inside the label so it sits inline with the question
+			// text (the head/label is block-level, so a sibling would wrap below).
+			var anchor = field.querySelector( ':scope > .cf-field__head > .cf-field__label' ) ||
+				field.querySelector( ':scope > .cf-field__head' ) ||
+				field.querySelector( ':scope > label' );
+			if ( ! anchor ) {
 				return;
 			}
 			// The attribute both guards re-processing and drives the CSS rule that
 			// hides the inline help (robust even if React re-renders the <em>).
 			field.dataset.odwTipInit = '1';
 
-			var wrap = document.createElement( 'span' );
-			wrap.className = 'odw-help-tip-wrap';
-
-			var btn = document.createElement( 'button' );
-			btn.type      = 'button';
-			btn.className  = 'odw-help-tip';
-			btn.setAttribute( 'aria-label', tip.label || 'Hilfe' );
-			btn.setAttribute( 'aria-expanded', 'false' );
-			btn.innerHTML  = '<span aria-hidden="true">i</span>';
-
-			var pop = document.createElement( 'span' );
-			pop.className = 'odw-help-pop';
-			pop.setAttribute( 'role', 'tooltip' );
-
 			// Clone (not move) the React-owned help node into the popup so its
 			// exact content/formatting is preserved while React keeps owning the
-			// original, which the CSS rule above hides from the inline flow.
+			// original, which the CSS rule hides from the inline flow.
 			var content = help.cloneNode( true );
 			content.className = 'odw-help-pop__content';
-			pop.appendChild( content );
 
-			wrap.appendChild( btn );
-			wrap.appendChild( pop );
-			head.appendChild( wrap );
-
-			// Click toggles for touch/keyboard; hover/focus is handled in CSS.
-			btn.addEventListener( 'click', function ( e ) {
-				e.preventDefault();
-				var open = wrap.classList.toggle( 'is-open' );
-				btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
-			} );
+			anchor.appendChild( buildHelpTip( content, tip.label ) );
 		} );
-
-		// One document-level handler closes any open click-tooltip on outside tap.
-		if ( ! document.body.dataset.odwTipDocBound ) {
-			document.body.dataset.odwTipDocBound = '1';
-			document.addEventListener( 'click', function ( e ) {
-				document.querySelectorAll( '.odw-help-tip-wrap.is-open' ).forEach( function ( w ) {
-					if ( ! w.contains( e.target ) ) {
-						w.classList.remove( 'is-open' );
-						var b = w.querySelector( '.odw-help-tip' );
-						if ( b ) {
-							b.setAttribute( 'aria-expanded', 'false' );
-						}
-					}
-				} );
-			} );
-		}
 	}
 
 	// -------------------------------------------------------------------------
