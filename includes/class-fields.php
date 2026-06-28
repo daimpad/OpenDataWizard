@@ -1123,9 +1123,12 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		);
 		$themes[]     = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
 	}
-	// Optional additional EU data-theme URI (advanced field, bundled vocabulary).
-	if ( ! empty( $theme_uri ) ) {
-		$themes[] = array( '@id' => odw_sanitize_jsonld_id( (string) $theme_uri ) );
+	// Optional additional EU data-theme (advanced field, bundled vocabulary).
+	// The field stores the human-readable label; resolve it to the official URI
+	// (a directly entered URI passes through unchanged).
+	$theme_uri_resolved = odw_resolve_vocab_uri( $theme_uri, 'data-theme' );
+	if ( '' !== $theme_uri_resolved ) {
+		$themes[] = array( '@id' => odw_sanitize_jsonld_id( $theme_uri_resolved ) );
 	}
 	if ( 1 === count( $themes ) ) {
 		$dataset['dcat:theme'] = $themes[0];

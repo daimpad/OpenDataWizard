@@ -7,6 +7,15 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.8.1] — 2026-06-28
+
+Bugfix aus einem Code-Review.
+
+### 🐛 Fixed
+- **Zusätzliches EU-Thema (`dcat:theme`):** Das optionale Profi-Feld speichert (wie Contributor-ID) das menschenlesbare Label aus dem Autosuggest. Beim Aufbau des JSON-LD wurde dieses Label jedoch direkt als `@id` ausgegeben (z. B. `{"@id": "Energie"}` statt der EU-URI) — ungültiger IRI. Der Wert wird nun über `odw_resolve_vocab_uri()` zur kanonischen `data-theme`-URI aufgelöst (direkt eingegebene URIs werden weiterhin durchgereicht). Regressionstest ergänzt.
+
+---
+
 ## [2.8.0] — 2026-06-28
 
 Profi-UX: ausklappbarer „Erweiterte Angaben für Profis"-Bereich (aus der piveau-DPI-Analyse, Essentials/Additionals-Muster).
