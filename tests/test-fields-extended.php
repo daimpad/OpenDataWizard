@@ -436,6 +436,51 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * The DCAT-AP.de coverage/legal fields are emitted with the correct shape:
+	 * politicalGeocodingURI and qualityProcessURI as @id objects, legalBasis as
+	 * a plain literal.
+	 */
+	public function test_build_includes_dcatde_coverage_and_legal_fields(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			18,
+			'odw_dataset',
+			array(
+				'odw_political_geocoding_uri' => 'http://dcat-ap.de/def/politicalGeocoding/regionalKey/09',
+				'odw_legal_basis'             => '§ 12a EGovG',
+				'odw_quality_process_uri'     => 'https://example.com/qa',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 18 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array( '@id' => 'http://dcat-ap.de/def/politicalGeocoding/regionalKey/09' ),
+			$result['dcatde:politicalGeocodingURI']
+		);
+		$this->assertSame( '§ 12a EGovG', $result['dcatde:legalBasis'] );
+		$this->assertSame( array( '@id' => 'https://example.com/qa' ), $result['dcatde:qualityProcessURI'] );
+	}
+
+	/**
+	 * The DCAT-AP.de coverage/legal fields are absent when not set.
+	 */
+	public function test_build_omits_dcatde_coverage_and_legal_fields_when_empty(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks( 18, 'odw_dataset' );
+
+		$result = odw_build_dataset_jsonld( 18 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayNotHasKey( 'dcatde:politicalGeocodingURI', $result );
+		$this->assertArrayNotHasKey( 'dcatde:legalBasis', $result );
+		$this->assertArrayNotHasKey( 'dcatde:qualityProcessURI', $result );
+	}
+
+	/**
 	 * The planned-availability options expose the empty default plus four values.
 	 */
 	public function test_get_availability_options_structure(): void {

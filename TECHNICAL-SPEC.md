@@ -13,7 +13,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **C** | HVD-Unterstützung (`dcatap:hvdCategory` + `dcatap:applicableLegislation`) | ✅ v2.4.0 |
 | **D** | Mehrsprachige Literale (`@language`/`@value`) inkl. Datenmigration | ☐ offen |
 | **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ☐ offen |
-| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich); weitere DCAT-AP.de-Felder (`politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`); weitere gebündelte Vokabulare; Registry-getriebenes Formular/JSON-LD | ☐ optional/künftig |
+| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich); weitere gebündelte Vokabulare; Registry-getriebenes Formular/JSON-LD | ☐ optional/künftig |
 
 Details zur phasierten Umsetzungsplanung in Abschnitt 7.
 
@@ -137,11 +137,11 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcat:temporalResolution` | Duration | AP | O | ❌ |
 | `prov:qualifiedAttribution`, `dcat:qualifiedRelation`, `prov:wasGeneratedBy` | Node | AP | O | ❌ |
 | `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
-| `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ❌ |
+| `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ✅ |
 | `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
 | `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Autosuggest) |
-| `dcatde:legalBasis` | lang-Literal | DE | O | ❌ |
-| `dcatde:qualityProcessURI` | URI | DE | O | ❌ |
+| `dcatde:legalBasis` | lang-Literal | DE | O | ✅ |
+| `dcatde:qualityProcessURI` | URI | DE | O | ✅ |
 | `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ✅ |
 | `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ✅ |
 | `dcatap:hvdCategory` | URI | HVD | M *wenn HVD* | ✅ |
@@ -247,7 +247,8 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 #### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt
 - ✅ DCAT-AP.de-Felder: `dcatde:contributorID`, `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (zzgl. `dcatde:politicalGeocodingLevelURI` aus v2.3).
 - ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge).
-- ☐ Offen (optional): `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`; weitere gebündelte Vokabulare (`data-theme`, `access-right`, `language`).
+- ✅ DCAT-AP.de-Felder `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI` (v2.6.0).
+- ☐ Offen (optional): weitere gebündelte Vokabulare (`data-theme`, `access-right`, `language`).
 - _Betroffen:_ `class-fields.php`, `class-admin.php`, `odw-admin-fields.js`, `config/vocabularies/*`, JSON-LD-Builder.
 
 #### Phase C — HVD-Unterstützung (v2.4) — ✅ umgesetzt

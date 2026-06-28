@@ -1142,3 +1142,33 @@ msgstr "Maintainer e-mail"
 
 msgid "E-Mail-Adresse der pflegenden Stelle (optional)."
 msgstr "Maintainer e-mail address (optional)."
+
+msgid "Auf welches amtliche Gebiet beziehen sich die Daten?"
+msgstr "Which official territory do the data refer to?"
+
+msgid "AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)"
+msgstr "OFFICIAL TERRITORY KEY (dcatde:politicalGeocodingURI)"
+
+msgid "URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09"
+msgstr "URI of the official regional/municipality key (AGS/ARS). Example: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09"
+
+msgid "Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?"
+msgstr "On what legal basis are the data provided?"
+
+msgid "z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)"
+msgstr "e.g. § 12a EGovG, German Re-use of Public Sector Information Act (IWG)"
+
+msgid "RECHTSGRUNDLAGE (dcatde:legalBasis)"
+msgstr "LEGAL BASIS (dcatde:legalBasis)"
+
+msgid "Gesetz/Verordnung, das die Bereitstellung regelt. Beispiel: § 12a EGovG"
+msgstr "Law/regulation governing the provision. Example: § 12a EGovG"
+
+msgid "Wo ist das Qualitätssicherungs-Verfahren dokumentiert?"
+msgstr "Where is the quality-assurance process documented?"
+
+msgid "QUALITÄTSPROZESS (dcatde:qualityProcessURI)"
+msgstr "QUALITY PROCESS (dcatde:qualityProcessURI)"
+
+msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
+msgstr "URL describing the quality-assurance process (optional)."
