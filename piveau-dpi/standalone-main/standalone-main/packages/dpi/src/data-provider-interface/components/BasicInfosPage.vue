@@ -1,1 +1,0 @@
-<template>Grundlegende INFOS</template>

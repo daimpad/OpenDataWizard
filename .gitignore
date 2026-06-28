@@ -1,0 +1,16 @@
+# Betriebssystem / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Logs / temporäre Dateien
+*.log
+*.tmp
+
+# Node (nur für E2E/Build; nicht committen)
+node_modules/
+
+# Playwright-Artefakte
+/test-results/
+/playwright-report/

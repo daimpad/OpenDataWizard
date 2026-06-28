@@ -1,1 +1,0 @@
-<template>Covering Page</template>
