@@ -379,6 +379,16 @@ class ODW_Admin {
 						'placeholder' => __( 'Thema eintippen oder auswählen…', 'open-data-wizard' ),
 						'linkLabel'   => __( 'Verknüpfte URI:', 'open-data-wizard' ),
 					),
+					'helpTip'             => array(
+						'label' => __( 'Hilfe anzeigen', 'open-data-wizard' ),
+					),
+					'livePreview'         => array(
+						'fields'       => ODW_Fields::get_live_preview_fields(),
+						'empty'        => __( 'noch leer', 'open-data-wizard' ),
+						/* translators: 1: number of filled required fields, 2: total number of required fields. */
+						'progressTmpl' => __( '%1$d von %2$d Pflichtangaben ausgefüllt', 'open-data-wizard' ),
+						'complete'     => __( 'Alle Pflichtangaben ausgefüllt', 'open-data-wizard' ),
+					),
 					'fileSizeWidget'      => array(
 						'label'       => __( 'Dateigröße', 'open-data-wizard' ),
 						'optional'    => __( '(optional)', 'open-data-wizard' ),

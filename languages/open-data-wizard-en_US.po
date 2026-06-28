@@ -1199,3 +1199,39 @@ msgstr "Optionally an additional theme from the official EU theme list (suppleme
 
 msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
 msgstr "Show advanced fields for pros (DCAT-AP.de, HVD, access rights)"
+
+msgid "Beschreibung"
+msgstr "Description"
+
+msgid "Zugriffs-URL"
+msgstr "Access URL"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Hilfe anzeigen"
+msgstr "Show help"
+
+msgid "noch leer"
+msgstr "still empty"
+
+msgid "Live-Vorschau"
+msgstr "Live preview"
+
+msgid "Zusammenfassung"
+msgstr "Summary"
+
+msgid "Alle Pflichtangaben ausgefüllt"
+msgstr "All required fields completed"
+
+msgid "%1$d von %2$d Pflichtangaben ausgefüllt"
+msgstr "%1$d of %2$d required fields completed"
+
+msgid "Aktualisiert sich automatisch, während Sie die Felder ausfüllen — ohne Speichern."
+msgstr "Updates automatically as you fill in the fields — no saving required."
+
+msgid "Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis."
+msgstr "The JSON-LD view below shows the last saved result."
+
+msgid "Speichern Sie den Datensatz, um sie zu aktualisieren."
+msgstr "Save the dataset to update it."
