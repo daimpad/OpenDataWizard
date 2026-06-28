@@ -1139,3 +1139,33 @@ msgstr ""
 
 msgid "E-Mail-Adresse der pflegenden Stelle (optional)."
 msgstr ""
+
+msgid "Auf welches amtliche Gebiet beziehen sich die Daten?"
+msgstr ""
+
+msgid "AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)"
+msgstr ""
+
+msgid "URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09"
+msgstr ""
+
+msgid "Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?"
+msgstr ""
+
+msgid "z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)"
+msgstr ""
+
+msgid "RECHTSGRUNDLAGE (dcatde:legalBasis)"
+msgstr ""
+
+msgid "Gesetz/Verordnung, das die Bereitstellung regelt. Beispiel: § 12a EGovG"
+msgstr ""
+
+msgid "Wo ist das Qualitätssicherungs-Verfahren dokumentiert?"
+msgstr ""
+
+msgid "QUALITÄTSPROZESS (dcatde:qualityProcessURI)"
+msgstr ""
+
+msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
+msgstr ""

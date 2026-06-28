@@ -7,6 +7,20 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.6.0] — 2026-06-28
+
+Weitere DCAT-AP.de-Felder (aus der piveau-DPI-Analyse).
+
+### ✨ Added
+- **`dcatde:politicalGeocodingURI`** (Tab 4) — URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS).
+- **`dcatde:legalBasis`** (Tab 4) — Rechtsgrundlage der Bereitstellung (Freitext-Literal).
+- **`dcatde:qualityProcessURI`** (Tab 4) — URL zur Dokumentation des Qualitätssicherungs-Prozesses.
+
+### 🌍 i18n
+- Neue Oberflächentexte übersetzbar und in der englischen Übersetzung (`en_US`) enthalten.
+
+---
+
 ## [2.5.1] — 2026-06-28
 
 Abschluss von Phase A: deklaratives Schema der Feld-Registry (aus der piveau-DPI-Analyse).

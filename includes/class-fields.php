@@ -214,6 +214,11 @@ class ODW_Fields {
 						->add_options( self::get_political_geocoding_level_options() )
 						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Gemeinde, Landkreis, Land, Bund', 'open-data-wizard' ) ),
 
+					Field::make( 'text', 'odw_political_geocoding_uri', __( 'Auf welches amtliche Gebiet beziehen sich die Daten?', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'url' )
+						->set_attribute( 'placeholder', 'http://dcat-ap.de/def/politicalGeocoding/regionalKey/09' )
+						->set_help_text( __( 'AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)', 'open-data-wizard' ) . "\n\n" . __( 'URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09', 'open-data-wizard' ) ),
+
 					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'Region aus der Liste wählen oder eintippen…', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-autosuggest', 'spatial' )
@@ -281,6 +286,16 @@ class ODW_Fields {
 						->set_attribute( 'type', 'email' )
 						->set_attribute( 'placeholder', 'opendata@beispiel.de' )
 						->set_help_text( __( 'E-Mail-Adresse der pflegenden Stelle (optional).', 'open-data-wizard' ) ),
+
+					Field::make( 'textarea', 'odw_legal_basis', __( 'Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?', 'open-data-wizard' ) )
+						->set_rows( 2 )
+						->set_attribute( 'placeholder', __( 'z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)', 'open-data-wizard' ) )
+						->set_help_text( __( 'RECHTSGRUNDLAGE (dcatde:legalBasis)', 'open-data-wizard' ) . "\n\n" . __( 'Gesetz/Verordnung, das die Bereitstellung regelt. Beispiel: § 12a EGovG', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_quality_process_uri', __( 'Wo ist das Qualitätssicherungs-Verfahren dokumentiert?', 'open-data-wizard' ) )
+						->set_attribute( 'type', 'url' )
+						->set_attribute( 'placeholder', 'https://beispiel.de/qualitaetssicherung' )
+						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) . "\n\n" . __( 'URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional).', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' ) . '</h4>' ),
@@ -1010,6 +1025,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
 	$accrual_periodicity       = (string) carbon_get_post_meta( $post_id, 'odw_accrual_periodicity' );
 	$political_geocoding_level = (string) carbon_get_post_meta( $post_id, 'odw_political_geocoding_level' );
+	$political_geocoding_uri   = (string) carbon_get_post_meta( $post_id, 'odw_political_geocoding_uri' );
 	$spatial                   = (string) carbon_get_post_meta( $post_id, 'odw_spatial' );
 	$temporal_start            = (string) carbon_get_post_meta( $post_id, 'odw_temporal_start' );
 	$temporal_end              = (string) carbon_get_post_meta( $post_id, 'odw_temporal_end' );
@@ -1023,6 +1039,8 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$originator_email          = (string) carbon_get_post_meta( $post_id, 'odw_originator_email' );
 	$maintainer_name           = (string) carbon_get_post_meta( $post_id, 'odw_maintainer_name' );
 	$maintainer_email          = (string) carbon_get_post_meta( $post_id, 'odw_maintainer_email' );
+	$legal_basis               = (string) carbon_get_post_meta( $post_id, 'odw_legal_basis' );
+	$quality_process_uri       = (string) carbon_get_post_meta( $post_id, 'odw_quality_process_uri' );
 
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
@@ -1138,6 +1156,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$dataset['dcatde:politicalGeocodingLevelURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $political_geocoding_level ) );
 	}
 
+	if ( ! empty( $political_geocoding_uri ) ) {
+		$dataset['dcatde:politicalGeocodingURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $political_geocoding_uri ) );
+	}
+
 	if ( ! empty( $spatial ) ) {
 		$location = array(
 			'@type'          => 'dct:Location',
@@ -1214,6 +1236,15 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$maintainer = odw_build_agent_node( $maintainer_name, $maintainer_email );
 	if ( null !== $maintainer ) {
 		$dataset['dcatde:maintainer'] = $maintainer;
+	}
+
+	// DCAT-AP.de: legal basis (literal) and quality-process documentation (URI).
+	if ( ! empty( $legal_basis ) ) {
+		$dataset['dcatde:legalBasis'] = $legal_basis;
+	}
+
+	if ( ! empty( $quality_process_uri ) ) {
+		$dataset['dcatde:qualityProcessURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $quality_process_uri ) );
 	}
 
 	/**
