@@ -370,6 +370,9 @@ class ODW_Admin {
 					'licenseDescriptions' => (object) ODW_Fields::get_license_descriptions(),
 					'cessdaOptions'       => $cessda_options,
 					'spatialOptions'      => $spatial_options,
+					'vocabularies'        => array(
+						'contributors' => ODW_Fields::load_vocabulary( 'contributors' ),
+					),
 					'cessdaWidget'        => array(
 						'label'       => __( 'CESSDA Themenklassifikation', 'open-data-wizard' ),
 						'placeholder' => __( 'Thema eintippen oder auswählen…', 'open-data-wizard' ),

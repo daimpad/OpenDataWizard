@@ -212,6 +212,32 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 2d. Generic vocabulary auto-suggest — any input[data-odw-vocab="<id>"]
+	// pulls its options from data.vocabularies[<id>] (bundled JSON vocab).
+	// -------------------------------------------------------------------------
+	function attachVocab( input ) {
+		var id = input.getAttribute( 'data-odw-vocab' );
+		if ( ! id ) {
+			return;
+		}
+		var vocab = ( data.vocabularies || {} )[ id ];
+		if ( ! vocab || ! vocab.length ) {
+			return;
+		}
+		// Suggest the human-readable label as the field value (so the user can
+		// type a name to filter in every browser and never sees a raw URI). The
+		// label→URI resolution happens server-side in odw_resolve_vocab_uri().
+		var opts = vocab.map( function ( o ) {
+			return { value: o.label, label: '' };
+		} );
+		attachDatalist( input, 'odw-vocab-datalist-' + id, opts );
+	}
+
+	function initVocabAutosuggest() {
+		document.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
+	}
+
+	// -------------------------------------------------------------------------
 	// 3. File-size composite widget
 	// Built dynamically from JS so no CF html-field is needed inside the
 	// complex field. Finds every hidden [data-odw-backing] input and inserts
@@ -359,6 +385,7 @@
 					node.querySelectorAll( 'input[data-odw-backing="byte_size"]' ).forEach( function ( backing ) {
 						initFileSizeWidget( backing );
 					} );
+					node.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
 				} );
 			} );
 		} );
@@ -374,6 +401,7 @@
 		initLicenseInfo();
 		initCessdaWidget();
 		initSpatialAutosuggest();
+		initVocabAutosuggest();
 		initFileSizeWidgets();
 		observeNewGroups();
 
@@ -385,6 +413,7 @@
 			initLicenseInfo();
 			initCessdaWidget();
 			initSpatialAutosuggest();
+			initVocabAutosuggest();
 			initFileSizeWidgets();
 			if ( passes > 10 ) {
 				clearInterval( rerun );

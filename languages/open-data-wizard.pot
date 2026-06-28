@@ -1070,3 +1070,72 @@ msgstr ""
 
 msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
 msgstr ""
+
+msgid "Wie dauerhaft ist diese Datei verfügbar?"
+msgstr ""
+
+msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
+msgstr ""
+
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
+msgstr ""
+
+msgid "Verfügbar (mittelfristige Planung)"
+msgstr ""
+
+msgid "Stabil (langfristig verfügbar)"
+msgstr ""
+
+msgid "Experimentell"
+msgstr ""
+
+msgid "Temporär (kann jederzeit entfallen)"
+msgstr ""
+
+msgid "Verantwortlichkeiten & Herkunft"
+msgstr ""
+
+msgid "Welche Stelle stellt diese Daten im GovData-Verbund bereit?"
+msgstr ""
+
+msgid "Stelle eintippen oder auswählen…"
+msgstr ""
+
+msgid "CONTRIBUTOR-ID (dcatde:contributorID)"
+msgstr ""
+
+msgid "Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet."
+msgstr ""
+
+msgid "Wer hat diese Daten ursprünglich erstellt?"
+msgstr ""
+
+msgid "z.B. Statistisches Landesamt"
+msgstr ""
+
+msgid "URHEBER (dcatde:originator)"
+msgstr ""
+
+msgid "Stelle, von der die Daten ursprünglich stammen (kann von Herausgeber abweichen)."
+msgstr ""
+
+msgid "E-Mail des Urhebers"
+msgstr ""
+
+msgid "E-Mail-Adresse des Urhebers (optional)."
+msgstr ""
+
+msgid "Wer pflegt diese Daten laufend?"
+msgstr ""
+
+msgid "PFLEGENDE STELLE (dcatde:maintainer)"
+msgstr ""
+
+msgid "Stelle, die für die laufende Pflege/Aktualisierung der Daten zuständig ist."
+msgstr ""
+
+msgid "E-Mail der pflegenden Stelle"
+msgstr ""
+
+msgid "E-Mail-Adresse der pflegenden Stelle (optional)."
+msgstr ""

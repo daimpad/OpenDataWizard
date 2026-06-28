@@ -7,6 +7,22 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.5.0] — 2026-06-28
+
+Phase B der Technischen Spezifikationen: weitere DCAT-AP.de-Felder und ein generisches Vokabular-Autosuggest (aus der piveau-DPI-Analyse).
+
+### ✨ Added
+- **DCAT-AP.de-Felder:**
+  - `dcatap:availability` (Tab 3, Distribution) — planbare Verfügbarkeit aus dem DCAT-AP.de-Vokabular.
+  - `dcatde:contributorID` (Tab 4) — bereitstellende Stelle aus dem offiziellen GovData-Verzeichnis (69 Einträge), mit Autosuggest.
+  - `dcatde:originator` und `dcatde:maintainer` (Tab 4) — Urheber bzw. pflegende Stelle als `foaf:Agent` (Name + optional E-Mail).
+- **Generisches Vokabular-Autosuggest:** Felder mit `data-odw-vocab="<id>"` beziehen ihre Vorschläge aus lokal gebündelten Vokabulardateien unter `config/vocabularies/` (CESSDA-Muster verallgemeinert) — keine externe Laufzeitabhängigkeit.
+
+### 🌍 i18n
+- Neue Oberflächentexte übersetzbar und in der englischen Übersetzung (`en_US`) enthalten.
+
+---
+
 ## [2.4.0] — 2026-06-27
 
 Unterstützung für High-Value-Datensätze (HVD) und Vervollständigung der JSON-LD-Namespaces (aus der piveau-DPI-Analyse).
