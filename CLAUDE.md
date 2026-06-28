@@ -699,7 +699,43 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.3.0**
+Current: **v2.5.1**
+
+---
+
+## 🧩 Projektstand & DCAT-AP-Roadmap (piveau-DPI-Analyse)
+
+Die technische Weiterentwicklung folgt einer Analyse des **piveau Data Provider Interface (DPI)**. Die
+vollständige Spezifikation (Metadatenmodell, Namespaces, Vokabulare, DCAT-AP-/DCAT-AP.de-Feldkatalog mit
+Gap-Analyse, Feld-Registry-Schema, phasierte Umsetzungsplanung) liegt in **[`docs/TECHNICAL-SPEC.md`](docs/TECHNICAL-SPEC.md)**.
+Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
+
+### ✅ Erledigt
+
+- **Konformitäts-Fixes (v2.3.2):** CESSDA-Thema als `dct:subject` (statt undeklariertem `cessda:`-Präfix);
+  `dcat`-Namespace auf kanonisches `http://www.w3.org/ns/dcat#`.
+- **HVD-Unterstützung (v2.4.0):** `dcatap:hvdCategory` + `dcatap:applicableLegislation` (EU-Reg. 2023/138);
+  `@context` um `dcatap`, `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx` vervollständigt.
+- **DCAT-AP.de-Felder + Vokabular-Autosuggest (v2.5.0):** `dcatde:contributorID` (gebündeltes Vokabular,
+  `config/vocabularies/`), `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (EU-Authority-Table);
+  generisches Autosuggest via `data-odw-vocab` + `odw_resolve_vocab_uri()`.
+- **Feld-Registry-Schema (v2.5.1):** `config/dcat-ap-fields.php` trägt deklarative Metadaten
+  (`profile`, `tier`, `range`, `cardinality`, `entity`, `vocab`); abwärtskompatibel, durch
+  `tests/test-registry-schema.php` abgesichert.
+
+### ☐ Noch offen / geplant
+
+- **Phase D — Mehrsprachige Literale:** Umstellung von `title`/`description`/`keyword` auf
+  `@language`/`@value` inkl. Datenmigration (WP-CLI) — Datenmodell-Änderung.
+- **Phase E — Multi-Distribution:** wiederholbare Distributionen (opt-in) statt der einen Distribution
+  pro Datensatz.
+- **Optional/künftig:** Profi-UX („Erweiterte Angaben" ausklappbar); weitere DCAT-AP.de-Felder
+  (`politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`); weitere gebündelte Vokabulare
+  (`data-theme`, `access-right`, `language`); Registry-getriebenes Formular-/JSON-LD-Rendering.
+
+> **Hinweis zu i18n:** Im aktuellen Container ist `msgfmt` nicht verfügbar. Die `.mo` wird daher per
+> kleinem, geprüftem PO→MO-Skript neu erzeugt (siehe PR-Historie). Bei Änderungen an Strings die
+> `.po`/`.pot` pflegen und die `.mo` neu kompilieren.
 
 ---
 
@@ -784,6 +820,6 @@ Current: **v2.3.0**
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.3.0 (Juni 2026)
+**Zuletzt aktualisiert**: Version 2.5.1 (Juni 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
