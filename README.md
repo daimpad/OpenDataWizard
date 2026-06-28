@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.3.2-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.4.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -69,7 +69,7 @@ Fünf-Tab-Assistent mit Pflichtfeldprüfung und praktischen Beispielen:
 1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „In welche Kategorie gehört dieser Datensatz?"
 2. **Inhaltliche Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Stichworten finde ich diese Daten?", Zeitangaben, CESSDA-Themenklassifikation
 3. **Datenbereitstellung** — Distributionen (wiederholbar): Zugriffs-URL, Format, Dateigröße, **Lizenz (Pflichtfeld pro Distribution)**, Zuschreibungstext
-4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen
+4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, High-Value-Datensatz (HVD) Kategorie
 5. **Vorschau** — generiertes JSON-LD live einsehen
 
 ### 🏷 Lizenz-Auswahl
@@ -307,6 +307,9 @@ open-data-wizard/
 | Kontaktpunkt Name | `dcat:contactPoint` → `vcard:fn` | — |
 | Kontaktpunkt E-Mail | `vcard:hasEmail` (mit `mailto:`-Prefix) | — |
 | Kontaktpunkt Website | `vcard:hasURL` (`@id`) | — |
+| HVD-Markierung | (steuert HVD-Ausgabe) | — |
+| HVD-Kategorie | `dcatap:hvdCategory` (`@id`, EU-URI) | ✓ wenn HVD |
+| HVD-Rechtsgrundlage (auto) | `dcatap:applicableLegislation` (Reg. 2023/138) | — |
 
 #### Sidebar — Download-Datei
 
@@ -562,8 +565,8 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcatde:qualityProcessURI` | URI | DE | O | ❌ |
 | `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ❌ |
 | `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ❌ |
-| `dcatap:hvdCategory` | URI | HVD | M *wenn HVD* | ❌ |
-| `dcatap:applicableLegislation` | URI | HVD | M *wenn HVD* | ❌ |
+| `dcatap:hvdCategory` | URI | HVD | M *wenn HVD* | ✅ |
+| `dcatap:applicableLegislation` | URI | HVD | M *wenn HVD* | ✅ (auto) |
 
 #### 4.2 Distribution (`dcat:Distribution`)
 
@@ -667,10 +670,11 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
   `data-theme`, `access-right`, `planned-availability`, `language`.
 - _Betroffen:_ `class-fields.php`, `odw-admin-fields.js`, neue `config/vocabularies/*`, JSON-LD-Builder, `class-quality.php`.
 
-#### Phase C — HVD-Unterstützung (v2.4)
-- Schalter „High-Value-Dataset" → bedingte Pflichtfelder `dcatap:hvdCategory` + `dcatap:applicableLegislation`.
-- Bedingte Validierung (`tier`/`profile` = `hvd`) in `class-validation.php`.
-- _Betroffen:_ `class-fields.php` (conditional logic), `class-validation.php`, JSON-LD-Builder.
+#### Phase C — HVD-Unterstützung (v2.4) — ✅ umgesetzt
+- ✅ Schalter „High-Value-Dataset" (Tab 4) → bedingtes Pflichtfeld `dcatap:hvdCategory` (sechs EU-Kategorien) + automatisches `dcatap:applicableLegislation` (Reg. 2023/138).
+- ✅ Bedingte Validierung: HVD-Kategorie ist Pflicht, sobald der Datensatz als HVD markiert ist (`class-validation.php`).
+- ✅ `dcatap`-Namespace + restliche Standard-Präfixe (`locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`) im `@context` ergänzt.
+- _Betroffen:_ `class-fields.php` (Felder, Options-Helfer, JSON-LD-Builder), `class-validation.php`, `class-rest-api.php`.
 
 #### Phase D — Mehrsprachige Literale (v2.5, Datenmodell-Migration)
 - Umstellung von String- auf sprachgetaggte Literale (`@value`/`@language`) für `title`, `description`, `keyword`.
@@ -724,9 +728,9 @@ analog zum HappyFlow-Block `Additionals`. Tab 5 erhält zusätzlich eine **Valid
 - [x] Externe Konfigurationsdateien (licenses.txt, dct-format-list.php, dcat-ap-fields.php)
 
 **In Planung (v2.2+):** — Details siehe [Technische Spezifikationen § 7](#7-umsetzungsplanung-phasiert)
-- [ ] Phase A: Namespace-/Feld-Registry-Erweiterung + `dcatde:licenseAttributionByText`-Korrektur (v2.2)
-- [ ] Phase B: DCAT-AP.de-Felder (politicalGeocoding, contributorID, availability …) + Vokabular-Autosuggest (v2.3)
-- [ ] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
+- [~] Phase A: Konformitäts-Korrekturen + `@context`-Namespaces erledigt (v2.3.2/2.4.0); Feld-Registry-Schema-Erweiterung offen
+- [ ] Phase B: DCAT-AP.de-Felder (politicalGeocoding ✅, contributorID, availability …) + Vokabular-Autosuggest (v2.3)
+- [x] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
 - [ ] Phase D: Mehrsprachige Literale (`@language`/`@value`) inkl. Migration (v2.5)
 - [ ] Phase E: Multi-Distribution (opt-in) (v2.6)
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe

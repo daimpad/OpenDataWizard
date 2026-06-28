@@ -119,6 +119,15 @@ class ODW_Validation {
 			$errors[] = __( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', 'open-data-wizard' );
 		}
 
+		// --- HVD: Kategorie ist Pflicht, wenn als High-Value-Datensatz markiert ---
+		$is_hvd = (string) self::get_field_value( $post_id, $cf_input, '_odw_is_hvd' );
+		if ( 'yes' === $is_hvd ) {
+			$hvd_category = (string) self::get_field_value( $post_id, $cf_input, '_odw_hvd_category' );
+			if ( '' === trim( $hvd_category ) ) {
+				$errors[] = __( 'HVD-Kategorie auswählen (dcatap:hvdCategory)', 'open-data-wizard' );
+			}
+		}
+
 		return $errors;
 	}
 

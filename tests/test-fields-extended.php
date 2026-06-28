@@ -255,6 +255,96 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * When a dataset is flagged HVD with a category, both dcatap:hvdCategory and
+	 * dcatap:applicableLegislation are emitted (the latter pinned to Reg 2023/138).
+	 */
+	public function test_build_includes_hvd_category_and_legislation_when_enabled(): void {
+		$this->load_fields();
+
+		$category = 'http://data.europa.eu/bna/c_ac64a52d';
+
+		$this->setup_jsonld_mocks(
+			14,
+			'odw_dataset',
+			array(
+				'odw_is_hvd'       => 'yes',
+				'odw_hvd_category' => $category,
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 14 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $category ), $result['dcatap:hvdCategory'] );
+		$this->assertSame(
+			array( '@id' => 'http://data.europa.eu/eli/reg_impl/2023/138/oj' ),
+			$result['dcatap:applicableLegislation']
+		);
+	}
+
+	/**
+	 * HVD keys are absent when the dataset is not flagged as HVD.
+	 */
+	public function test_build_omits_hvd_when_disabled(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			14,
+			'odw_dataset',
+			array(
+				'odw_is_hvd'       => '',
+				'odw_hvd_category' => 'http://data.europa.eu/bna/c_ac64a52d',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 14 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayNotHasKey( 'dcatap:hvdCategory', $result );
+		$this->assertArrayNotHasKey( 'dcatap:applicableLegislation', $result );
+	}
+
+	/**
+	 * HVD keys are absent when flagged HVD but no category is chosen — we never
+	 * emit applicableLegislation without a category.
+	 */
+	public function test_build_omits_hvd_when_category_empty(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			14,
+			'odw_dataset',
+			array(
+				'odw_is_hvd'       => 'yes',
+				'odw_hvd_category' => '',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 14 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayNotHasKey( 'dcatap:hvdCategory', $result );
+		$this->assertArrayNotHasKey( 'dcatap:applicableLegislation', $result );
+	}
+
+	/**
+	 * The HVD category options expose the empty default plus the six EU categories.
+	 */
+	public function test_get_hvd_category_options_has_six_categories_and_default(): void {
+		$this->load_fields();
+
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$options = ODW_Fields::get_hvd_category_options();
+
+		$this->assertArrayHasKey( '', $options );
+		$this->assertArrayHasKey( 'http://data.europa.eu/bna/c_ac64a52d', $options );
+		$this->assertArrayHasKey( 'http://data.europa.eu/bna/c_b79e35eb', $options );
+		// Six categories + one empty default.
+		$this->assertCount( 7, $options );
+	}
+
+	/**
 	 * The dct:accrualPeriodicity is included as an @id object when the field is set.
 	 */
 	public function test_build_includes_accrual_periodicity_when_set(): void {

@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Open Data Wizard 2.3.0\n"
+"Project-Id-Version: Open Data Wizard 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2026-06-27 00:00+0000\n"
 "Language: en_US\n"
@@ -1026,3 +1026,50 @@ msgstr "— No default —"
 msgid "💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB"
 msgstr "💾 Supported formats: CSV, JSON  •  Maximum size: 10MB"
 
+msgid "Nein"
+msgstr "No"
+
+msgid "Ja, dieser Datensatz ist ein High-Value-Datensatz"
+msgstr "Yes, this dataset is a high-value dataset"
+
+msgid "High-Value-Datensatz (HVD)"
+msgstr "High-Value Dataset (HVD)"
+
+msgid "Ist dies ein hochwertiger Datensatz (HVD)?"
+msgstr "Is this a high-value dataset (HVD)?"
+
+msgid "HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)"
+msgstr "HIGH-VALUE DATASET (EU Implementing Regulation 2023/138)"
+
+msgid "Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie."
+msgstr "High-value datasets (HVD) are datasets defined by the EU with particular benefit to the economy and society. If applicable, select the matching category below."
+
+msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
+msgstr "Which HVD category does this dataset belong to?"
+
+msgid "HVD-KATEGORIE (dcatap:hvdCategory)"
+msgstr "HVD CATEGORY (dcatap:hvdCategory)"
+
+msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
+msgstr "One of the six EU thematic categories. Example: Geospatial, Meteorological, Mobility"
+
+msgid "Georaum (Geospatial)"
+msgstr "Geospatial"
+
+msgid "Erdbeobachtung und Umwelt"
+msgstr "Earth observation and environment"
+
+msgid "Meteorologie"
+msgstr "Meteorological"
+
+msgid "Statistik"
+msgstr "Statistics"
+
+msgid "Unternehmen und Eigentümerschaft von Unternehmen"
+msgstr "Companies and company ownership"
+
+msgid "Mobilität"
+msgstr "Mobility"
+
+msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
+msgstr "Select an HVD category (dcatap:hvdCategory)"

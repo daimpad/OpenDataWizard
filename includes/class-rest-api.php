@@ -28,11 +28,18 @@ class ODW_Rest_API {
 	 */
 	private const JSONLD_CONTEXT = array(
 		'dcat'   => 'http://www.w3.org/ns/dcat#',
+		'dcatap' => 'http://data.europa.eu/r5r/',
 		'dct'    => 'http://purl.org/dc/terms/',
 		'foaf'   => 'http://xmlns.com/foaf/0.1/',
 		'xsd'    => 'http://www.w3.org/2001/XMLSchema#',
 		'vcard'  => 'http://www.w3.org/2006/vcard/ns#',
 		'skos'   => 'http://www.w3.org/2004/02/skos/core#',
+		'locn'   => 'http://www.w3.org/ns/locn#',
+		'adms'   => 'http://www.w3.org/ns/adms#',
+		'owl'    => 'http://www.w3.org/2002/07/owl#',
+		'prov'   => 'http://www.w3.org/ns/prov#',
+		'odrl'   => 'http://www.w3.org/ns/odrl/2/',
+		'spdx'   => 'http://spdx.org/rdf/terms#',
 		'dcatde' => 'http://dcat-ap.de/def/dcatde/',
 		'odw'    => 'https://github.com/daimpad/OpenDataWizard/ns#',
 	);
