@@ -7,6 +7,13 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.11.2] — 2026-06-28
+
+### 🔧 Changed
+- **Git-Updater-Kompatibilität:** Header `Primary Branch: main` ergänzt. Aktuelle Git-Updater-Versionen werten `Primary Branch` aus; ohne ihn wurde fälschlich von `master` geladen (404 beim Installations-/Update-ZIP). `GitHub Branch: main` bleibt zur Abwärtskompatibilität erhalten.
+
+---
+
 ## [2.11.1] — 2026-06-28
 
 Code-Review-Korrekturen an der v2.11.0-UX (Hilfe-Tooltips), gefunden bei einer Überprüfung des Codes.
