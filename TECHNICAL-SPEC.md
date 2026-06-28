@@ -11,7 +11,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **A** | Konformitäts-Korrekturen (CESSDA→`dct:subject`, kanonischer `dcat`-NS, `dcatde:licenseAttributionByText`), vollständige `@context`-Namespaces, deklaratives Feld-Registry-Schema | ✅ v2.3.2 / 2.4.0 / 2.5.1 |
 | **B** | DCAT-AP.de-Felder (`contributorID`, `originator`, `maintainer`, `availability`) + generisches Vokabular-Autosuggest | ✅ v2.5.0 |
 | **C** | HVD-Unterstützung (`dcatap:hvdCategory` + `dcatap:applicableLegislation`) | ✅ v2.4.0 |
-| **D** | Mehrsprachige Literale (`@language`/`@value`) inkl. Datenmigration | ☐ offen |
+| **D** | Mehrsprachige Literale (`@language`/`@value`) für title/description/keyword (Output-Tagging, ohne Migration) | ✅ v2.9.0 |
 | **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ☐ offen |
 | — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich) ✅ v2.8.0; Registry-getriebenes Formular/JSON-LD ☐ | teils |
 
@@ -113,8 +113,8 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 
 | DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
 |---|---|---|---|---|
-| `dct:title` | lang-Literal | AP | M (1..n) | ⚠️ String |
-| `dct:description` | lang-Literal | AP | M (1..n) | ⚠️ String |
+| `dct:title` | lang-Literal | AP | M (1..n) | ✅ |
+| `dct:description` | lang-Literal | AP | M (1..n) | ✅ |
 | `dct:publisher` | `foaf:Agent` | AP | R (0..1) | ⚠️ Freitext |
 | `dcat:contactPoint` | `vcard:Kind` | AP | R (0..n) | ⚠️ name/mail/url |
 | `dcat:distribution` | `dcat:Distribution` | AP | R (0..n) | ⚠️ genau 1 |
@@ -258,10 +258,11 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ✅ `dcatap`-Namespace + restliche Standard-Präfixe (`locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`) im `@context` ergänzt.
 - _Betroffen:_ `class-fields.php` (Felder, Options-Helfer, JSON-LD-Builder), `class-validation.php`, `class-rest-api.php`.
 
-#### Phase D — Mehrsprachige Literale (v2.5, Datenmodell-Migration)
-- Umstellung von String- auf sprachgetaggte Literale (`@value`/`@language`) für `title`, `description`, `keyword`.
-- Migrationsroutine + WP-CLI-Befehl für Bestandsdaten; Default-Sprache aus Einstellungen.
-- _Betroffen:_ Datenmodell (Post Meta), JSON-LD-Builder, Validierung, REST-API, Tests.
+#### Phase D — Mehrsprachige Literale (v2.9.0) — ✅ umgesetzt
+- ✅ `dct:title`, `dct:description`, `dcat:keyword` werden als sprachgetaggte Literale (`{"@value","@language"}`) ausgegeben.
+- ✅ **Output-Tagging gewählt (statt Datenmodell-Migration):** Werte bleiben als Klartext gespeichert; die Sprache wird bei der JSON-LD-Erzeugung aus dem Sprache-Feld (EU-URI → BCP-47, `odw_resolve_language_tag()`) abgeleitet, Rückfall Standardsprache → `de`. Dadurch **keine Datenmigration** und keine UX-Änderung; eine Sprache pro Feld.
+- _Betroffen:_ `class-fields.php` (Builder + `odw_lang_literal()`/`odw_resolve_language_tag()`), `config/dcat-ap-fields.php` (range → `literal-lang`), Tests.
+- ☐ Offen (optional/künftig): echtes mehrsprachiges Datenmodell mit mehreren Sprachen je Feld (wiederholbare Eingabe + Migration).
 
 #### Phase E — Multi-Distribution (optional, v2.6)
 - Rücknahme der v2.1.4-Vereinfachung hinter einem Einstellungs-Schalter: wiederholbare Distributionen

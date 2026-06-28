@@ -1027,6 +1027,76 @@ function odw_resolve_vocab_uri( string $value, string $vocab_id ): string {
 }
 
 /**
+ * Resolve a stored language value to a BCP-47 tag for language-tagged literals.
+ *
+ * Accepts the EU authority language URI (…/authority/language/DEU), a bare EU
+ * three-letter code (DEU), or a legacy two-letter tag (de). Returns '' when it
+ * cannot be mapped, so callers can fall back.
+ *
+ * @param  string $language Stored language value.
+ * @return string BCP-47 language tag (e.g. 'de'), or '' if unresolved.
+ */
+function odw_resolve_language_tag( string $language ): string {
+	$value = trim( $language );
+	if ( '' === $value ) {
+		return '';
+	}
+
+	// Already a 2-letter BCP-47 tag (legacy storage).
+	if ( preg_match( '/^[a-z]{2}$/', $value ) ) {
+		return $value;
+	}
+
+	// EU authority three-letter code → BCP-47 (covers the EU official languages).
+	$map = array(
+		'BUL' => 'bg',
+		'CES' => 'cs',
+		'DAN' => 'da',
+		'DEU' => 'de',
+		'ELL' => 'el',
+		'ENG' => 'en',
+		'EST' => 'et',
+		'FIN' => 'fi',
+		'FRA' => 'fr',
+		'GLE' => 'ga',
+		'HRV' => 'hr',
+		'HUN' => 'hu',
+		'ITA' => 'it',
+		'LAV' => 'lv',
+		'LIT' => 'lt',
+		'MLT' => 'mt',
+		'NLD' => 'nl',
+		'POL' => 'pl',
+		'POR' => 'pt',
+		'RON' => 'ro',
+		'SLK' => 'sk',
+		'SLV' => 'sl',
+		'SPA' => 'es',
+		'SWE' => 'sv',
+	);
+
+	$parts = explode( '/', rtrim( $value, '/' ) );
+	$code  = strtoupper( (string) end( $parts ) );
+
+	return $map[ $code ] ?? '';
+}
+
+/**
+ * Build a DCAT-AP language-tagged literal { @value, @language }.
+ *
+ * @param  string $value Literal value.
+ * @param  string $tag   BCP-47 language tag; omitted from the output when empty.
+ * @return array<string, string>
+ */
+function odw_lang_literal( string $value, string $tag ): array {
+	$literal = array( '@value' => $value );
+	if ( '' !== $tag ) {
+		$literal['@language'] = $tag;
+	}
+	return $literal;
+}
+
+/**
  * Build DCAT-AP 3.0 JSON-LD array for a single dataset.
  * Used by both the REST API and the preview tab.
  *
@@ -1080,11 +1150,21 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$quality_process_uri       = (string) carbon_get_post_meta( $post_id, 'odw_quality_process_uri' );
 	$access_rights             = (string) carbon_get_post_meta( $post_id, 'odw_access_rights' );
 
+	// Content language tag (BCP-47) for language-tagged literals. Derived from the
+	// dataset language field, falling back to the configured default, then 'de'.
+	$lang_tag = odw_resolve_language_tag( (string) $language );
+	if ( '' === $lang_tag && class_exists( 'ODW_Settings' ) ) {
+		$lang_tag = odw_resolve_language_tag( (string) ODW_Settings::get( 'default_language' ) );
+	}
+	if ( '' === $lang_tag ) {
+		$lang_tag = 'de';
+	}
+
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
 		'@id'             => rest_url( 'datenatlas/v1/datasets/' . $post_id ),
-		'dct:title'       => $title,
-		'dct:description' => $description,
+		'dct:title'       => odw_lang_literal( (string) $title, $lang_tag ),
+		'dct:description' => odw_lang_literal( (string) $description, $lang_tag ),
 		'dct:publisher'   => array(
 			'@type'     => 'foaf:Organization',
 			'foaf:name' => $publisher,
@@ -1104,7 +1184,12 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( ! empty( $keywords ) && is_string( $keywords ) ) {
 		$keyword_list = array_values( array_filter( array_map( 'trim', explode( "\n", $keywords ) ) ) );
 		if ( ! empty( $keyword_list ) ) {
-			$dataset['dcat:keyword'] = $keyword_list;
+			$dataset['dcat:keyword'] = array_map(
+				static function ( $kw ) use ( $lang_tag ) {
+					return odw_lang_literal( (string) $kw, $lang_tag );
+				},
+				$keyword_list
+			);
 		}
 	}
 

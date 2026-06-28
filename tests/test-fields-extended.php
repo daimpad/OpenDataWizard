@@ -195,6 +195,102 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * Title and description are emitted as language-tagged literals; without a
+	 * language field the default tag 'de' is used.
+	 */
+	public function test_build_title_description_are_language_tagged_default_de(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			30,
+			'odw_dataset',
+			array( 'odw_description' => 'Eine Beschreibung' )
+		);
+
+		$result = odw_build_dataset_jsonld( 30 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array(
+				'@value'    => 'Test Dataset',
+				'@language' => 'de',
+			),
+			$result['dct:title']
+		);
+		$this->assertSame(
+			array(
+				'@value'    => 'Eine Beschreibung',
+				'@language' => 'de',
+			),
+			$result['dct:description']
+		);
+	}
+
+	/**
+	 * The language field drives the literal language tag (EU URI → BCP-47).
+	 */
+	public function test_build_language_field_sets_literal_tag(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			31,
+			'odw_dataset',
+			array(
+				'odw_description' => 'A description',
+				'odw_language'    => 'http://publications.europa.eu/resource/authority/language/ENG',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 31 );
+
+		$this->assertSame( 'en', $result['dct:title']['@language'] );
+		$this->assertSame( 'en', $result['dct:description']['@language'] );
+	}
+
+	/**
+	 * Keywords are emitted as an array of language-tagged literals.
+	 */
+	public function test_build_keywords_are_language_tagged(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			32,
+			'odw_dataset',
+			array( 'odw_keywords' => "Umwelt\nWasser" )
+		);
+
+		$result = odw_build_dataset_jsonld( 32 );
+
+		$this->assertSame(
+			array(
+				array(
+					'@value'    => 'Umwelt',
+					'@language' => 'de',
+				),
+				array(
+					'@value'    => 'Wasser',
+					'@language' => 'de',
+				),
+			),
+			$result['dcat:keyword']
+		);
+	}
+
+	/**
+	 * The language-tag resolver maps EU URIs, bare codes and legacy tags; unknown
+	 * values resolve to an empty string.
+	 */
+	public function test_resolve_language_tag(): void {
+		$this->load_fields();
+
+		$this->assertSame( 'de', odw_resolve_language_tag( 'http://publications.europa.eu/resource/authority/language/DEU' ) );
+		$this->assertSame( 'en', odw_resolve_language_tag( 'ENG' ) );
+		$this->assertSame( 'fr', odw_resolve_language_tag( 'fr' ) );
+		$this->assertSame( '', odw_resolve_language_tag( '' ) );
+		$this->assertSame( '', odw_resolve_language_tag( 'http://example.org/lang/XXX' ) );
+	}
+
+	/**
 	 * The dcat:landingPage key is present in JSON-LD when odw_landing_page is set.
 	 */
 	public function test_build_includes_landing_page_when_set(): void {
