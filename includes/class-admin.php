@@ -1130,10 +1130,12 @@ class ODW_Admin {
 			wp_send_json_error( array( 'error' => $result['error'] ) );
 		}
 
+		// Surface per-row validation errors so the preview can warn about rows
+		// that were skipped (otherwise invalid rows are silently dropped).
 		wp_send_json_success(
 			array(
 				'records' => $result['data'],
-				'errors'  => array(),
+				'errors'  => isset( $result['errors'] ) ? array_values( (array) $result['errors'] ) : array(),
 			)
 		);
 	}
