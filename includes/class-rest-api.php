@@ -261,15 +261,20 @@ class ODW_Rest_API {
 			$catalog['dct:description'] = $catalog_description;
 		}
 
-		set_transient(
-			$cache_key,
-			array(
-				'body'  => $catalog,
-				'total' => $total,
-				'pages' => $pages,
-			),
-			self::get_cache_ttl()
-		);
+		// Only cache non-empty result pages. This prevents unauthenticated
+		// requests with arbitrary theme/license/page values (which yield no
+		// datasets) from creating unbounded distinct transients.
+		if ( ! empty( $datasets ) ) {
+			set_transient(
+				$cache_key,
+				array(
+					'body'  => $catalog,
+					'total' => $total,
+					'pages' => $pages,
+				),
+				self::get_cache_ttl()
+			);
+		}
 
 		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
 
@@ -458,16 +463,21 @@ class ODW_Rest_API {
 			'odw:removed'       => $removed,
 		);
 
-		set_transient(
-			$cache_key,
-			array(
-				'body'         => $body,
-				'total'        => $total,
-				'pages'        => $pages,
-				'generated_at' => $generated_at,
-			),
-			self::get_cache_ttl()
-		);
+		// Only cache deltas that actually carry changes. An arbitrary `since`
+		// value usually yields an empty delta; caching those would let
+		// unauthenticated callers create unbounded distinct transients.
+		if ( ! empty( $datasets ) || ! empty( $removed ) ) {
+			set_transient(
+				$cache_key,
+				array(
+					'body'         => $body,
+					'total'        => $total,
+					'pages'        => $pages,
+					'generated_at' => $generated_at,
+				),
+				self::get_cache_ttl()
+			);
+		}
 
 		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
 

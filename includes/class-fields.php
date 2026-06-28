@@ -1247,7 +1247,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( ! empty( $dist_access_url_safe ) ) {
 		$dist_item = array(
 			'@type'          => 'dcat:Distribution',
-			'dcat:accessURL' => $dist_access_url_safe,
+			'dcat:accessURL' => array( '@id' => $dist_access_url_safe ),
 		);
 
 		if ( ! empty( $dist_format ) ) {
@@ -1338,7 +1338,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$contact['vcard:fn'] = $contact_name;
 		}
 		if ( ! empty( $contact_email ) ) {
-			$contact['vcard:hasEmail'] = 'mailto:' . $contact_email;
+			$contact['vcard:hasEmail'] = array( '@id' => odw_sanitize_jsonld_id( 'mailto:' . $contact_email ) );
 		}
 		if ( ! empty( $contact_url ) ) {
 			$contact['vcard:hasURL'] = array( '@id' => odw_sanitize_jsonld_id( (string) $contact_url ) );

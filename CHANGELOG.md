@@ -7,6 +7,22 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.10.0] — 2026-06-28
+
+Ergebnisse eines vollständigen Korrektheits- und Sicherheits-Reviews des gesamten Plugins. Es wurden keine kritischen oder hohen Schwachstellen gefunden; die folgenden Härtungen/Korrekturen wurden umgesetzt.
+
+### 🔒 Security / Hardening
+- **REST-Endpoints cachen keine leeren Ergebnisse mehr** (`/catalog`, `/delta`): Unauthentifizierte Aufrufe mit beliebigen `theme`/`license`/`page`/`since`-Werten erzeugten bisher je einen Transient (auch bei 0 Treffern), was die `wp_options`-Tabelle aufblähen konnte. Es werden nur noch Ergebnisse mit Inhalt gecacht.
+
+### 🐛 Fixed / Changed
+- **`dcat:accessURL`** und **`vcard:hasEmail`** werden im JSON-LD jetzt als IRI-Ressourcen (`{"@id": …}`) ausgegeben — konsistent mit allen anderen URI-Feldern und DCAT-AP-konform (zuvor als Plain-String bzw. ungesäuberter `mailto:`-String). Die Kontakt-E-Mail läuft nun ebenfalls durch `odw_sanitize_jsonld_id()`.
+- **Batch-Import-Vorschau:** Zeilen-Validierungsfehler werden jetzt an die Vorschau zurückgegeben, statt still verworfen zu werden — Nutzer sehen nun, wenn einzelne Zeilen beim Import übersprungen werden.
+
+### ✅ Review-Ergebnis (geprüft, keine Änderung nötig)
+- Sanitisierung/Escaping (Shortcode, Vorschau, Admin-Spalten), Nonce-/Capability-Prüfungen, Datei-Upload, Sample-Download (kein Path-Traversal/Header-Injection), CSV-Formel-Injection-Neutralisierung, MIME-/Endungsprüfung, Opt-in-Deinstallation, `odw_sanitize_jsonld_id()` gegen `javascript:`/`data:` (inkl. Obfuskierung) — alles korrekt.
+
+---
+
 ## [2.9.0] — 2026-06-28
 
 Phase D: mehrsprachige Literale (`@value`/`@language`) für die Kernfelder.

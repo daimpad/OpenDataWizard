@@ -462,6 +462,8 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->assertIsArray( $result );
 		$this->assertArrayHasKey( 'dcat:distribution', $result );
 		$this->assertSame( array( '@id' => $uri ), $result['dcat:distribution'][0]['dcatap:availability'] );
+		// dcat:accessURL is an IRI resource ({@id}), consistent with other URI fields.
+		$this->assertSame( array( '@id' => 'https://example.com/data.csv' ), $result['dcat:distribution'][0]['dcat:accessURL'] );
 	}
 
 	/**
@@ -828,7 +830,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$contact = $result['dcat:contactPoint'];
 		$this->assertSame( 'vcard:Organization', $contact['@type'] );
 		$this->assertSame( 'Max Mustermann', $contact['vcard:fn'] );
-		$this->assertSame( 'mailto:max@example.org', $contact['vcard:hasEmail'] );
+		$this->assertSame( array( '@id' => 'mailto:max@example.org' ), $contact['vcard:hasEmail'] );
 	}
 
 	/**

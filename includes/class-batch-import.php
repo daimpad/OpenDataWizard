@@ -70,6 +70,7 @@ class ODW_Batch_Import {
 	 *   success: bool,
 	 *   data: array<int, array<string, mixed>>,
 	 *   error: string|null,
+	 *   errors?: array<int, string>,
 	 *   count: int
 	 * }
 	 */
@@ -104,6 +105,7 @@ class ODW_Batch_Import {
 	 *   success: bool,
 	 *   data: array<int, array<string, mixed>>,
 	 *   error: string|null,
+	 *   errors?: array<int, string>,
 	 *   count: int
 	 * }
 	 */
@@ -182,6 +184,7 @@ class ODW_Batch_Import {
 			'success' => true,
 			'data'    => $data,
 			'error'   => null,
+			'errors'  => $errors,
 			'count'   => count( $data ),
 		);
 	}
@@ -194,6 +197,7 @@ class ODW_Batch_Import {
 	 *   success: bool,
 	 *   data: array<int, array<string, mixed>>,
 	 *   error: string|null,
+	 *   errors?: array<int, string>,
 	 *   count: int
 	 * }
 	 */
@@ -258,6 +262,7 @@ class ODW_Batch_Import {
 			'success' => true,
 			'data'    => $records,
 			'error'   => null,
+			'errors'  => $errors,
 			'count'   => count( $records ),
 		);
 	}
