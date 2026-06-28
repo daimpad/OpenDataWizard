@@ -214,6 +214,10 @@ class ODW_Setup {
 			return;
 		}
 
+		// Show exactly once: remove the flag immediately so the notice does not
+		// reappear on subsequent admin page loads, even without an explicit dismiss.
+		delete_option( self::WELCOME_OPTION );
+
 		$demo_id     = (int) get_option( self::DEMO_OPTION );
 		$edit_url    = $demo_id ? get_edit_post_link( $demo_id ) : null;
 		$list_url    = admin_url( 'edit.php?post_type=odw_dataset' );

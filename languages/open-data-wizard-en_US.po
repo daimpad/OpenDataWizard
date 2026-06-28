@@ -1241,3 +1241,153 @@ msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
 
 msgid "Fachliche Einordnung Ihres Datensatzes aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Tippen Sie ein Thema ein oder wählen Sie eines aus der Liste — die passende URI wird automatisch verknüpft. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik."
 msgstr "A subject classification of your dataset from the CESSDA Controlled Vocabulary (version 4.2.3, German). Type a topic or pick one from the list — the matching URI is linked automatically. Example: censuses, migration, economic policy."
+
+msgid "Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr "Show advanced fields (DCAT-AP.de, HVD, access rights)"
+
+msgid "Weitere DCAT-AP-Felder (optional)"
+msgstr "More DCAT-AP fields (optional)"
+
+msgid "Distribution — erweitert"
+msgstr "Distribution — advanced"
+
+msgid "Welche eindeutige Kennung hat dieser Datensatz?"
+msgstr "What unique identifier does this dataset have?"
+
+msgid "z. B. DOI oder interne ID"
+msgstr "e.g. DOI or internal ID"
+
+msgid "IDENTIFIER (dct:identifier)"
+msgstr "IDENTIFIER (dct:identifier)"
+
+msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
+msgstr "A unique identifier of the dataset (e.g. DOI or internal ID). Example: 10.1234/abcd"
+
+msgid "Um welchen Typ von Datensatz handelt es sich?"
+msgstr "What type of dataset is this?"
+
+msgid "DATENSATZ-TYP (dct:type)"
+msgstr "DATASET TYPE (dct:type)"
+
+msgid "URI aus der EU-Liste „dataset-type\". Beispiel: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"
+msgstr "URI from the EU \"dataset-type\" list. Example: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"
+
+msgid "Wer hat diese Daten erstellt?"
+msgstr "Who created this data?"
+
+msgid "z. B. Statistisches Amt"
+msgstr "e.g. Statistical Office"
+
+msgid "ERSTELLER (dct:creator)"
+msgstr "CREATOR (dct:creator)"
+
+msgid "Stelle oder Person, die die Daten erstellt hat (kann vom Herausgeber abweichen)."
+msgstr "Body or person that created the data (may differ from the publisher)."
+
+msgid "E-Mail-Adresse des Erstellers (optional)."
+msgstr "Creator's e-mail address (optional)."
+
+msgid "E-MAIL DES ERSTELLERS (foaf:mbox)"
+msgstr "CREATOR E-MAIL (foaf:mbox)"
+
+msgid "Welche Version hat dieser Datensatz?"
+msgstr "What version is this dataset?"
+
+msgid "z. B. 1.0"
+msgstr "e.g. 1.0"
+
+msgid "VERSION (owl:versionInfo)"
+msgstr "VERSION (owl:versionInfo)"
+
+msgid "Versionsbezeichnung des Datensatzes. Beispiel: 1.0, 2024-Q1"
+msgstr "Version label of the dataset. Example: 1.0, 2024-Q1"
+
+msgid "Was hat sich in dieser Version geändert?"
+msgstr "What changed in this version?"
+
+msgid "VERSIONSHINWEISE (adms:versionNotes)"
+msgstr "VERSION NOTES (adms:versionNotes)"
+
+msgid "Kurze Beschreibung der Änderungen gegenüber der Vorversion."
+msgstr "Short description of the changes from the previous version."
+
+msgid "Welche räumliche Auflösung haben die Daten (in Metern)?"
+msgstr "What spatial resolution does the data have (in meters)?"
+
+msgid "z. B. 30"
+msgstr "e.g. 30"
+
+msgid "RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)"
+msgstr "SPATIAL RESOLUTION IN METERS (dcat:spatialResolutionInMeters)"
+
+msgid "Kleinste räumlich auflösbare Distanz in Metern (nur Zahl). Beispiel: 30"
+msgstr "Smallest spatially resolvable distance in meters (number only). Example: 30"
+
+msgid "Welche zeitliche Auflösung haben die Daten?"
+msgstr "What temporal resolution does the data have?"
+
+msgid "ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)"
+msgstr "TEMPORAL RESOLUTION (dcat:temporalResolution)"
+
+msgid "Als ISO-8601-Dauer. Beispiel: P1D (täglich), PT1H (stündlich)"
+msgstr "As an ISO 8601 duration. Example: P1D (daily), PT1H (hourly)"
+
+msgid "Welchem Standard oder Schema entsprechen die Daten?"
+msgstr "Which standard or schema does the data conform to?"
+
+msgid "KONFORM ZU (dct:conformsTo)"
+msgstr "CONFORMS TO (dct:conformsTo)"
+
+msgid "URI des Standards/Anwendungsprofils, dem die Daten folgen."
+msgstr "URI of the standard/application profile the data follows."
+
+msgid "Woher stammen die Daten und wie sind sie entstanden?"
+msgstr "Where does the data come from and how was it created?"
+
+msgid "HERKUNFT (dct:provenance)"
+msgstr "PROVENANCE (dct:provenance)"
+
+msgid "Freitext zur Entstehung und Herkunft der Daten."
+msgstr "Free text on the origin and provenance of the data."
+
+msgid "Wie heißt die bereitgestellte Datei/Distribution?"
+msgstr "What is the name of the provided file/distribution?"
+
+msgid "TITEL DER DISTRIBUTION (dct:title)"
+msgstr "DISTRIBUTION TITLE (dct:title)"
+
+msgid "Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV"
+msgstr "Short title of the distribution. Example: Full data as CSV"
+
+msgid "Wie lässt sich die Distribution beschreiben?"
+msgstr "How can the distribution be described?"
+
+msgid "BESCHREIBUNG DER DISTRIBUTION (dct:description)"
+msgstr "DISTRIBUTION DESCRIPTION (dct:description)"
+
+msgid "Direkter Download-Link zur Datei?"
+msgstr "Direct download link to the file?"
+
+msgid "DOWNLOAD-URL (dcat:downloadURL)"
+msgstr "DOWNLOAD URL (dcat:downloadURL)"
+
+msgid "Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL)."
+msgstr "Direct URL to download the file (as opposed to the access URL)."
+
+msgid "Welchen Medientyp (MIME) hat die Datei?"
+msgstr "What media type (MIME) does the file have?"
+
+msgid "MEDIENTYP (dcat:mediaType)"
+msgstr "MEDIA TYPE (dcat:mediaType)"
+
+msgid "IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv"
+msgstr "IANA media type as a URI. Example: https://www.iana.org/assignments/media-types/text/csv"
+
+msgid "Welche Nutzungsrechte gelten für die Datei?"
+msgstr "What usage rights apply to the file?"
+
+msgid "RECHTE (dct:rights)"
+msgstr "RIGHTS (dct:rights)"
+
+msgid "URI oder Freitext zu den Nutzungsrechten der Distribution."
+msgstr "URI or free text on the usage rights of the distribution."

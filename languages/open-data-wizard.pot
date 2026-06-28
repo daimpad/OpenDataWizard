@@ -1238,3 +1238,153 @@ msgstr ""
 
 msgid "Fachliche Einordnung Ihres Datensatzes aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Tippen Sie ein Thema ein oder wählen Sie eines aus der Liste — die passende URI wird automatisch verknüpft. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik."
 msgstr ""
+
+msgid "Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr ""
+
+msgid "Weitere DCAT-AP-Felder (optional)"
+msgstr ""
+
+msgid "Distribution — erweitert"
+msgstr ""
+
+msgid "Welche eindeutige Kennung hat dieser Datensatz?"
+msgstr ""
+
+msgid "z. B. DOI oder interne ID"
+msgstr ""
+
+msgid "IDENTIFIER (dct:identifier)"
+msgstr ""
+
+msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
+msgstr ""
+
+msgid "Um welchen Typ von Datensatz handelt es sich?"
+msgstr ""
+
+msgid "DATENSATZ-TYP (dct:type)"
+msgstr ""
+
+msgid "URI aus der EU-Liste „dataset-type\". Beispiel: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"
+msgstr ""
+
+msgid "Wer hat diese Daten erstellt?"
+msgstr ""
+
+msgid "z. B. Statistisches Amt"
+msgstr ""
+
+msgid "ERSTELLER (dct:creator)"
+msgstr ""
+
+msgid "Stelle oder Person, die die Daten erstellt hat (kann vom Herausgeber abweichen)."
+msgstr ""
+
+msgid "E-Mail-Adresse des Erstellers (optional)."
+msgstr ""
+
+msgid "E-MAIL DES ERSTELLERS (foaf:mbox)"
+msgstr ""
+
+msgid "Welche Version hat dieser Datensatz?"
+msgstr ""
+
+msgid "z. B. 1.0"
+msgstr ""
+
+msgid "VERSION (owl:versionInfo)"
+msgstr ""
+
+msgid "Versionsbezeichnung des Datensatzes. Beispiel: 1.0, 2024-Q1"
+msgstr ""
+
+msgid "Was hat sich in dieser Version geändert?"
+msgstr ""
+
+msgid "VERSIONSHINWEISE (adms:versionNotes)"
+msgstr ""
+
+msgid "Kurze Beschreibung der Änderungen gegenüber der Vorversion."
+msgstr ""
+
+msgid "Welche räumliche Auflösung haben die Daten (in Metern)?"
+msgstr ""
+
+msgid "z. B. 30"
+msgstr ""
+
+msgid "RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)"
+msgstr ""
+
+msgid "Kleinste räumlich auflösbare Distanz in Metern (nur Zahl). Beispiel: 30"
+msgstr ""
+
+msgid "Welche zeitliche Auflösung haben die Daten?"
+msgstr ""
+
+msgid "ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)"
+msgstr ""
+
+msgid "Als ISO-8601-Dauer. Beispiel: P1D (täglich), PT1H (stündlich)"
+msgstr ""
+
+msgid "Welchem Standard oder Schema entsprechen die Daten?"
+msgstr ""
+
+msgid "KONFORM ZU (dct:conformsTo)"
+msgstr ""
+
+msgid "URI des Standards/Anwendungsprofils, dem die Daten folgen."
+msgstr ""
+
+msgid "Woher stammen die Daten und wie sind sie entstanden?"
+msgstr ""
+
+msgid "HERKUNFT (dct:provenance)"
+msgstr ""
+
+msgid "Freitext zur Entstehung und Herkunft der Daten."
+msgstr ""
+
+msgid "Wie heißt die bereitgestellte Datei/Distribution?"
+msgstr ""
+
+msgid "TITEL DER DISTRIBUTION (dct:title)"
+msgstr ""
+
+msgid "Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV"
+msgstr ""
+
+msgid "Wie lässt sich die Distribution beschreiben?"
+msgstr ""
+
+msgid "BESCHREIBUNG DER DISTRIBUTION (dct:description)"
+msgstr ""
+
+msgid "Direkter Download-Link zur Datei?"
+msgstr ""
+
+msgid "DOWNLOAD-URL (dcat:downloadURL)"
+msgstr ""
+
+msgid "Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL)."
+msgstr ""
+
+msgid "Welchen Medientyp (MIME) hat die Datei?"
+msgstr ""
+
+msgid "MEDIENTYP (dcat:mediaType)"
+msgstr ""
+
+msgid "IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv"
+msgstr ""
+
+msgid "Welche Nutzungsrechte gelten für die Datei?"
+msgstr ""
+
+msgid "RECHTE (dct:rights)"
+msgstr ""
+
+msgid "URI oder Freitext zu den Nutzungsrechten der Distribution."
+msgstr ""

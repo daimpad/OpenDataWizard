@@ -34,6 +34,7 @@ class ODW_Rest_API {
 		'xsd'    => 'http://www.w3.org/2001/XMLSchema#',
 		'vcard'  => 'http://www.w3.org/2006/vcard/ns#',
 		'skos'   => 'http://www.w3.org/2004/02/skos/core#',
+		'rdfs'   => 'http://www.w3.org/2000/01/rdf-schema#',
 		'locn'   => 'http://www.w3.org/ns/locn#',
 		'adms'   => 'http://www.w3.org/ns/adms#',
 		'owl'    => 'http://www.w3.org/2002/07/owl#',

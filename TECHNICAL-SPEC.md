@@ -126,15 +126,15 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dct:accessRights` | URI (`access-right`) | AP | O (0..1) | ✅ |
 | `dct:accrualPeriodicity` | URI (`frequency`) | AP | O (0..1) | ✅ |
 | `dct:language` | URI (`language`) | AP | O (0..n) | ⚠️ Freitext |
-| `dct:identifier` / `adms:identifier` | Literal / Node | AP | O (0..n) | ❌ |
+| `dct:identifier` | Literal | AP | O (0..n) | ✅ (`adms:identifier` ❌) |
 | `dct:subject` | URI (`eurovoc`) | AP | O (0..n) | ✅ (via CESSDA-Thema) |
-| `dct:creator` | `foaf:Agent` | AP | O (0..n) | ❌ |
-| `dct:type` | URI (`dataset-type`) | AP | O (0..1) | ❌ |
+| `dct:creator` | `foaf:Agent` | AP | O (0..n) | ✅ |
+| `dct:type` | URI (`dataset-type`) | AP | O (0..1) | ✅ |
 | `dcat:landingPage` | `foaf:Document` | AP | O (0..n) | ✅ |
-| `dct:conformsTo` / `dct:provenance` | Node | AP | O (0..n) | ❌ |
-| `owl:versionInfo` / `adms:versionNotes` | Literal | AP | O | ❌ |
-| `dcat:spatialResolutionInMeters` | Dezimal | AP | O | ❌ |
-| `dcat:temporalResolution` | Duration | AP | O | ❌ |
+| `dct:conformsTo` / `dct:provenance` | Node | AP | O (0..n) | ✅ |
+| `owl:versionInfo` / `adms:versionNotes` | Literal | AP | O | ✅ |
+| `dcat:spatialResolutionInMeters` | Dezimal | AP | O | ✅ |
+| `dcat:temporalResolution` | Duration | AP | O | ✅ |
 | `prov:qualifiedAttribution`, `dcat:qualifiedRelation`, `prov:wasGeneratedBy` | Node | AP | O | ❌ |
 | `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
 | `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ✅ |
@@ -152,16 +152,17 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
 |---|---|---|---|---|
 | `dcat:accessURL` | URI | AP | M (1..n) | ✅ |
-| `dcat:downloadURL` | URI | AP | O (0..n) | ❌ |
+| `dcat:downloadURL` | URI | AP | O (0..n) | ✅ |
 | `dct:format` | URI (`file-type`) | AP | R (0..1) | ✅ |
-| `dcat:mediaType` | URI (`iana`) | AP | O (0..1) | ❌ |
+| `dcat:mediaType` | URI (`iana`) | AP | O (0..1) | ✅ |
 | `dct:license` | URI (`licence`) | AP | R (0..1) | ✅ |
 | `dcat:byteSize` | Nonneg-Integer | AP | O (0..1) | ✅ |
-| `dct:title` / `dct:description` | lang-Literal | AP | O | ❌ |
+| `dct:title` / `dct:description` | lang-Literal | AP | O | ✅ |
 | `dcatap:availability` | URI (`planned-availability`) | DE | R (DE) | ✅ |
 | `spdx:checksum` | Node | AP | O | ❌ |
 | `dcat:accessService` | `dcat:DataService` | AP | O | ❌ |
-| `dct:conformsTo`, `dct:issued`, `dct:modified`, `dct:rights` | div. | AP | O | ❌ |
+| `dct:rights` | URI/Node | AP | O | ✅ |
+| `dct:conformsTo`, `dct:issued`, `dct:modified` (Distribution) | div. | AP | O | ❌ |
 | `adms:status` | URI | AP | O | ❌ |
 | `odrl:hasPolicy` | Node | AP | O | ❌ |
 | `dcat:compressFormat` / `packageFormat` | URI (`iana`) | AP | O | ❌ |

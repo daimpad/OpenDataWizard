@@ -1081,4 +1081,136 @@ class Test_ODW_Fields_Extended extends TestCase {
 		// Embedded control characters must NOT bypass it either.
 		$this->assertSame( 'ESCAPED', odw_sanitize_jsonld_id( "java\nscript:alert(1)" ) );
 	}
+
+	// -------------------------------------------------------------------------
+	// Additional optional DCAT-AP 3.0 fields (v2.12.0)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Dataset-level optional fields are emitted with the correct DCAT-AP shapes.
+	 */
+	public function test_build_includes_additional_dataset_fields(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			60,
+			'odw_dataset',
+			array(
+				'odw_identifier'          => '10.1234/abcd',
+				'odw_type'                => 'http://example.org/dataset-type/STATISTICAL',
+				'odw_creator_name'        => 'Statistik Amt',
+				'odw_creator_email'       => 'amt@example.org',
+				'odw_version'             => '1.0',
+				'odw_version_notes'       => 'Erste Veröffentlichung',
+				'odw_spatial_resolution'  => '30',
+				'odw_temporal_resolution' => 'P1D',
+				'odw_conforms_to'         => 'https://example.org/schema',
+				'odw_provenance'          => 'Aus amtlicher Erhebung.',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 60 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( '10.1234/abcd', $result['dct:identifier'] );
+		$this->assertSame( array( '@id' => 'http://example.org/dataset-type/STATISTICAL' ), $result['dct:type'] );
+		$this->assertSame( 'foaf:Agent', $result['dct:creator']['@type'] );
+		$this->assertSame( 'Statistik Amt', $result['dct:creator']['foaf:name'] );
+		$this->assertSame( '1.0', $result['owl:versionInfo'] );
+		$this->assertSame( 'Erste Veröffentlichung', $result['adms:versionNotes']['@value'] );
+		$this->assertSame(
+			array(
+				'@type'  => 'xsd:decimal',
+				'@value' => '30',
+			),
+			$result['dcat:spatialResolutionInMeters']
+		);
+		$this->assertSame(
+			array(
+				'@type'  => 'xsd:duration',
+				'@value' => 'P1D',
+			),
+			$result['dcat:temporalResolution']
+		);
+		$this->assertSame( array( '@id' => 'https://example.org/schema' ), $result['dct:conformsTo'] );
+		$this->assertSame( 'dct:ProvenanceStatement', $result['dct:provenance']['@type'] );
+		$this->assertSame( 'Aus amtlicher Erhebung.', $result['dct:provenance']['rdfs:label']['@value'] );
+	}
+
+	/**
+	 * A non-numeric spatial resolution is rejected (no malformed decimal literal).
+	 */
+	public function test_build_omits_non_numeric_spatial_resolution(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			61,
+			'odw_dataset',
+			array( 'odw_spatial_resolution' => 'sehr fein' )
+		);
+
+		$result = odw_build_dataset_jsonld( 61 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayNotHasKey( 'dcat:spatialResolutionInMeters', $result );
+	}
+
+	/**
+	 * Optional distribution fields are emitted inside the distribution node.
+	 */
+	public function test_build_includes_additional_distribution_fields(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			62,
+			'odw_dataset',
+			array(
+				'odw_access_url'       => 'https://example.org/data',
+				'odw_dist_title'       => 'Gesamtdaten als CSV',
+				'odw_dist_description' => 'Alle Datensätze in einer Datei.',
+				'odw_download_url'     => 'https://example.org/data.csv',
+				'odw_media_type'       => 'https://www.iana.org/assignments/media-types/text/csv',
+				'odw_dist_rights'      => 'https://example.org/rights',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 62 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dcat:distribution', $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame( 'Gesamtdaten als CSV', $dist['dct:title']['@value'] );
+		$this->assertSame( 'Alle Datensätze in einer Datei.', $dist['dct:description']['@value'] );
+		$this->assertSame( array( '@id' => 'https://example.org/data.csv' ), $dist['dcat:downloadURL'] );
+		$this->assertSame( array( '@id' => 'https://www.iana.org/assignments/media-types/text/csv' ), $dist['dcat:mediaType'] );
+		$this->assertSame( array( '@id' => 'https://example.org/rights' ), $dist['dct:rights'] );
+	}
+
+	/**
+	 * A non-URI rights value becomes a dct:RightsStatement node with a label.
+	 */
+	public function test_build_distribution_rights_freetext_becomes_statement(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			63,
+			'odw_dataset',
+			array(
+				'odw_access_url'  => 'https://example.org/data',
+				'odw_dist_rights' => 'Nur für nichtkommerzielle Nutzung',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 63 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame(
+			array(
+				'@type'      => 'dct:RightsStatement',
+				'rdfs:label' => 'Nur für nichtkommerzielle Nutzung',
+			),
+			$dist['dct:rights']
+		);
+	}
 }
