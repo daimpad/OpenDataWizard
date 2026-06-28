@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.5.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.5.1-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 **Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
@@ -605,12 +605,14 @@ Catalogue-Felder (`dct:title`, `dct:publisher`, `dct:license`, `dct:language`, `
 gehören daher in die **Einstellungsseite**, nicht in das Dataset-Formular. Aktuell werden Titel/Publisher
 unterstützt; `dct:license`, `dct:language`, `dcat:themeTaxonomy` und `dct:spatial` des Katalogs sind offen.
 
-### 5. Erweiterung der Feld-Registry (`config/dcat-ap-fields.php`)
+### 5. Erweiterung der Feld-Registry (`config/dcat-ap-fields.php`) — ✅ umgesetzt (v2.5.1)
 
-Heute trägt jeder Registry-Eintrag: `key`, `meta_key`, `dcat_prop`, `label`, `points`, `required`. Damit **eine**
-Definition künftig Formular, Validierung, Qualität *und* JSON-LD treibt (Single Source of Truth, wie piveaus
-`input-definition.ts`), werden folgende **optionale** Schlüssel ergänzt (abwärtskompatibel — bestehende Einträge
-bleiben gültig):
+Jeder Registry-Eintrag trägt die Basis-Schlüssel `key`, `meta_key`, `dcat_prop`, `label`, `points`, `required`
+sowie seit v2.5.1 die **deklarativen Schema-Metadaten** `profile`, `tier`, `range`, `cardinality`, `entity`, `vocab`.
+Damit ist die Registry die dokumentierte Single Source of Truth für Pflichtigkeit, Kardinalität und Wertform
+(wie piveaus `input-definition.ts`). Die Metadaten sind **abwärtskompatibel** — bestehende Konsumenten
+(Qualität, Validierung) lesen weiterhin nur die Basis-Schlüssel; das 0–100-Punkteschema bleibt unverändert.
+Eine Schema-Validierung sichert die Invarianten (`tests/test-registry-schema.php`):
 
 ```php
 array(
@@ -663,9 +665,9 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ✅ Korrektur: Zuschreibungstext `odrl:attribution` → `dcatde:licenseAttributionByText` (erledigt v2.3).
 - ✅ Korrektur: CESSDA-Thema als `dct:subject` statt undeklariertem `cessda:`-Präfix (gültiges JSON-LD).
 - ✅ Korrektur: `dcat`-Namespace auf kanonisches `http://www.w3.org/ns/dcat#`.
-- ☐ Namespace-Registry (Abschnitt 2) vollständig in `@context` aufnehmen (offen: `dcatap`, `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`).
-- ☐ Feld-Registry-Schema (Abschnitt 5) um die neuen optionalen Schlüssel erweitern; bestehende Einträge anreichern.
-- ☐ Neuer Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt vorbereitet (Grundgerüst).
+- ✅ Namespace-Registry (Abschnitt 2) vollständig in `@context` aufgenommen (`dcatap`, `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`) — v2.4.0.
+- ✅ Feld-Registry-Schema (Abschnitt 5) um die deklarativen Schlüssel erweitert; bestehende Einträge angereichert — v2.5.1.
+- ☐ Optional/künftig: Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt (reines UX-Grundgerüst).
 - _Betroffen:_ `class-fields.php`, `class-rest-api.php`/JSON-LD-Builder, `config/dcat-ap-fields.php`.
 
 #### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt
@@ -732,7 +734,7 @@ analog zum HappyFlow-Block `Additionals`. Tab 5 erhält zusätzlich eine **Valid
 - [x] Externe Konfigurationsdateien (licenses.txt, dct-format-list.php, dcat-ap-fields.php)
 
 **In Planung (v2.2+):** — Details siehe [Technische Spezifikationen § 7](#7-umsetzungsplanung-phasiert)
-- [~] Phase A: Konformitäts-Korrekturen + `@context`-Namespaces erledigt (v2.3.2/2.4.0); Feld-Registry-Schema-Erweiterung offen
+- [x] Phase A: Konformitäts-Korrekturen, `@context`-Namespaces und Feld-Registry-Schema (v2.3.2 / 2.4.0 / 2.5.1)
 - [x] Phase B: DCAT-AP.de-Felder (contributorID, originator, maintainer, availability) + generisches Vokabular-Autosuggest (v2.5)
 - [x] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
 - [ ] Phase D: Mehrsprachige Literale (`@language`/`@value`) inkl. Migration (v2.5)
