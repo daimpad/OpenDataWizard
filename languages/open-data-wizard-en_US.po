@@ -1196,3 +1196,6 @@ msgstr "ADDITIONAL THEME (dcat:theme)"
 
 msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
 msgstr "Optionally an additional theme from the official EU theme list (supplements the category from tab 1)."
+
+msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr "Show advanced fields for pros (DCAT-AP.de, HVD, access rights)"

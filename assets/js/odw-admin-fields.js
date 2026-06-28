@@ -238,6 +238,47 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 2e. "Erweiterte Angaben für Profis" — collapse all Tab-4 fields after the
+	// toggle into an opt-in section. Progressive enhancement: if JS is absent,
+	// every field simply stays visible. State persists in sessionStorage.
+	// -------------------------------------------------------------------------
+	var PRO_KEY = 'odw_pro_open';
+
+	function applyProState( wrapper, btn, open ) {
+		var node = wrapper.nextElementSibling;
+		while ( node ) {
+			if ( node.classList && node.classList.contains( 'cf-field' ) ) {
+				node.classList.toggle( 'odw-pro-collapsed', ! open );
+			}
+			node = node.nextElementSibling;
+		}
+		btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+		btn.classList.toggle( 'odw-pro-open', open );
+	}
+
+	function initProSection() {
+		document.querySelectorAll( '[data-odw-pro-toggle]' ).forEach( function ( btn ) {
+			var wrapper = btn.closest( '.cf-field' );
+			if ( ! wrapper || ! wrapper.parentNode ) {
+				return;
+			}
+			var open = sessionStorage.getItem( PRO_KEY ) === '1';
+			applyProState( wrapper, btn, open );
+
+			if ( ! btn.getAttribute( 'data-odw-pro-bound' ) ) {
+				btn.setAttribute( 'data-odw-pro-bound', '1' );
+				btn.addEventListener( 'click', function () {
+					var nowOpen = sessionStorage.getItem( PRO_KEY ) !== '1';
+					try {
+						sessionStorage.setItem( PRO_KEY, nowOpen ? '1' : '0' );
+					} catch ( e ) {} // eslint-disable-line no-empty
+					applyProState( wrapper, btn, nowOpen );
+				} );
+			}
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// 3. File-size composite widget
 	// Built dynamically from JS so no CF html-field is needed inside the
 	// complex field. Finds every hidden [data-odw-backing] input and inserts
@@ -402,6 +443,7 @@
 		initCessdaWidget();
 		initSpatialAutosuggest();
 		initVocabAutosuggest();
+		initProSection();
 		initFileSizeWidgets();
 		observeNewGroups();
 
@@ -414,6 +456,7 @@
 			initCessdaWidget();
 			initSpatialAutosuggest();
 			initVocabAutosuggest();
+			initProSection();
 			initFileSizeWidgets();
 			if ( passes > 10 ) {
 				clearInterval( rerun );
