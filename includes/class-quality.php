@@ -39,8 +39,13 @@ class ODW_Quality {
 	 * Registers WordPress hooks.
 	 */
 	public static function init(): void {
-		// Qualität nach jedem echten Speichern neu berechnen (nach CF-Save und set_modified_date).
-		add_action( 'save_post_odw_dataset', array( self::class, 'recalculate_on_save' ), 30 );
+		// Qualität nach jedem echten Speichern neu berechnen. Wichtig: das generische
+		// save_post (Priorität 30) statt save_post_odw_dataset verwenden — WordPress
+		// feuert save_post_{post_type} VOR dem generischen save_post, an dem Carbon
+		// Fields seine Meta-Werte erst speichert (Priorität 10). Auf save_post_odw_dataset
+		// liefen wir vor dem CF-Save und lasen veraltete Meta (Score erst beim 2. Speichern
+		// korrekt). Priorität 30 garantiert, dass CF (10) bereits geschrieben hat.
+		add_action( 'save_post', array( self::class, 'recalculate_on_save' ), 30 );
 
 		// Meta-Box auf dem Edit-Screen registrieren.
 		add_action( 'add_meta_boxes', array( self::class, 'register_meta_box' ) );
@@ -329,6 +334,11 @@ class ODW_Quality {
 		}
 
 		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		// Now hooked on the generic save_post, so guard the post type explicitly.
+		if ( 'odw_dataset' !== get_post_type( $post_id ) ) {
 			return;
 		}
 

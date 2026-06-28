@@ -1235,3 +1235,9 @@ msgstr "The JSON-LD view below shows the last saved result."
 
 msgid "Speichern Sie den Datensatz, um sie zu aktualisieren."
 msgstr "Save the dataset to update it."
+
+msgid "CESSDA-THEMENKLASSIFIKATION (dct:subject)"
+msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
+
+msgid "Fachliche Einordnung Ihres Datensatzes aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Tippen Sie ein Thema ein oder wählen Sie eines aus der Liste — die passende URI wird automatisch verknüpft. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik."
+msgstr "A subject classification of your dataset from the CESSDA Controlled Vocabulary (version 4.2.3, German). Type a topic or pick one from the list — the matching URI is linked automatically. Example: censuses, migration, economic policy."

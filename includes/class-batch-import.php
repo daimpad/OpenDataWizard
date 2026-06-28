@@ -489,6 +489,13 @@ class ODW_Batch_Import {
 		// Set import tracking.
 		update_post_meta( $post_id, '_odw_imported', current_time( 'mysql' ) );
 
+		// Recalculate quality now that all meta is written. wp_insert_post() above
+		// fired save_post before these meta values existed, so the score stored then
+		// would be stale; recompute explicitly to reflect the imported metadata.
+		if ( class_exists( 'ODW_Quality' ) ) {
+			ODW_Quality::store( $post_id, ODW_Quality::calculate( $post_id ) );
+		}
+
 		return array(
 			'success' => true,
 			'post_id' => $post_id,

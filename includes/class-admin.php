@@ -378,6 +378,7 @@ class ODW_Admin {
 						'label'       => __( 'CESSDA Themenklassifikation', 'open-data-wizard' ),
 						'placeholder' => __( 'Thema eintippen oder auswählen…', 'open-data-wizard' ),
 						'linkLabel'   => __( 'Verknüpfte URI:', 'open-data-wizard' ),
+						'help'        => __( 'CESSDA-THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Fachliche Einordnung Ihres Datensatzes aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Tippen Sie ein Thema ein oder wählen Sie eines aus der Liste — die passende URI wird automatisch verknüpft. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik.', 'open-data-wizard' ),
 					),
 					'helpTip'             => array(
 						'label' => __( 'Hilfe anzeigen', 'open-data-wizard' ),

@@ -109,4 +109,23 @@ class Test_ODW_Registry_Schema extends TestCase {
 		$keys = array_column( $this->defs, 'key' );
 		$this->assertSame( count( $keys ), count( array_unique( $keys ) ) );
 	}
+
+	/**
+	 * Every label carries its DCAT-AP property name so the quality report and
+	 * validation messages stay consistent (regression: description/publisher/
+	 * license previously used the bare form question without the dct/dcat name).
+	 */
+	public function test_labels_include_dcat_property_name(): void {
+		foreach ( $this->defs as $entry ) {
+			$prop = (string) ( $entry['dcat_prop'] ?? '' );
+			if ( '' === $prop ) {
+				continue;
+			}
+			$this->assertStringContainsString(
+				'(' . $prop . ')',
+				(string) $entry['label'],
+				"Label for '{$entry['key']}' must include its DCAT-AP property name {$prop}."
+			);
+		}
+	}
 }
