@@ -629,6 +629,12 @@
 /* -------------------------------------------------------------------------
  * Help tooltips (ⓘ popup next to field labels)
  * ------------------------------------------------------------------------- */
+/* Hide the inline help once it has been lifted into an ⓘ tooltip. Driven by
+ * the data attribute (not a JS-added class) so it survives React re-renders. */
+.cf-field[data-odw-tip-init] > .cf-field__help {
+	display: none;
+}
+
 .odw-help-tip-wrap {
 	position: relative;
 	display: inline-flex;
