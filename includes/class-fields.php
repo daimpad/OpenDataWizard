@@ -251,6 +251,26 @@ class ODW_Fields {
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
 						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
+
+					Field::make( 'html', 'odw_ext_hint_hvd' )
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'select', 'odw_is_hvd', __( 'Ist dies ein hochwertiger Datensatz (HVD)?', 'open-data-wizard' ) )
+						->add_options( self::get_hvd_flag_options() )
+						->set_help_text( __( 'HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)', 'open-data-wizard' ) . "\n\n" . __( 'Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie.', 'open-data-wizard' ) ),
+
+					Field::make( 'select', 'odw_hvd_category', __( 'Welcher HVD-Kategorie gehört dieser Datensatz an?', 'open-data-wizard' ) )
+						->add_options( self::get_hvd_category_options() )
+						->set_help_text( __( 'HVD-KATEGORIE (dcatap:hvdCategory)', 'open-data-wizard' ) . "\n\n" . __( 'Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität', 'open-data-wizard' ) )
+						->set_conditional_logic(
+							array(
+								array(
+									'field'   => 'odw_is_hvd',
+									'value'   => 'yes',
+									'compare' => '=',
+								),
+							)
+						),
 				)
 			)
 
@@ -693,6 +713,38 @@ class ODW_Fields {
 		);
 	}
 
+	/**
+	 * High-Value-Dataset (HVD) Ja/Nein options.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_hvd_flag_options(): array {
+		return array(
+			''    => __( 'Nein', 'open-data-wizard' ),
+			'yes' => __( 'Ja, dieser Datensatz ist ein High-Value-Datensatz', 'open-data-wizard' ),
+		);
+	}
+
+	/**
+	 * High-Value-Dataset thematic categories (EU Implementing Regulation 2023/138).
+	 * Values are the canonical concept URIs from the EU "High-value dataset
+	 * categories" authority table (http://data.europa.eu/bna/).
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_hvd_category_options(): array {
+		$base = 'http://data.europa.eu/bna/';
+		return array(
+			''                   => __( '— Bitte wählen —', 'open-data-wizard' ),
+			$base . 'c_ac64a52d' => __( 'Georaum (Geospatial)', 'open-data-wizard' ),
+			$base . 'c_dd313021' => __( 'Erdbeobachtung und Umwelt', 'open-data-wizard' ),
+			$base . 'c_164e0bf5' => __( 'Meteorologie', 'open-data-wizard' ),
+			$base . 'c_e1da4e07' => __( 'Statistik', 'open-data-wizard' ),
+			$base . 'c_a9135398' => __( 'Unternehmen und Eigentümerschaft von Unternehmen', 'open-data-wizard' ),
+			$base . 'c_b79e35eb' => __( 'Mobilität', 'open-data-wizard' ),
+		);
+	}
+
 	// -------------------------------------------------------------------------
 	// HTML helpers
 	// -------------------------------------------------------------------------
@@ -811,6 +863,8 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$contact_name              = (string) carbon_get_post_meta( $post_id, 'odw_contact_name' );
 	$contact_email             = (string) carbon_get_post_meta( $post_id, 'odw_contact_email' );
 	$contact_url               = (string) carbon_get_post_meta( $post_id, 'odw_contact_url' );
+	$is_hvd                    = (string) carbon_get_post_meta( $post_id, 'odw_is_hvd' );
+	$hvd_category              = (string) carbon_get_post_meta( $post_id, 'odw_hvd_category' );
 
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
@@ -970,6 +1024,15 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			$contact['vcard:hasURL'] = array( '@id' => odw_sanitize_jsonld_id( (string) $contact_url ) );
 		}
 		$dataset['dcat:contactPoint'] = $contact;
+	}
+
+	// High-Value-Dataset (HVD) per EU Implementing Regulation 2023/138. Both
+	// hvdCategory and applicableLegislation are emitted together; a category is
+	// required (enforced in ODW_Validation) so applicableLegislation never
+	// appears without it.
+	if ( 'yes' === $is_hvd && ! empty( $hvd_category ) ) {
+		$dataset['dcatap:hvdCategory']           = array( '@id' => odw_sanitize_jsonld_id( (string) $hvd_category ) );
+		$dataset['dcatap:applicableLegislation'] = array( '@id' => 'http://data.europa.eu/eli/reg_impl/2023/138/oj' );
 	}
 
 	/**

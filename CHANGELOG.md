@@ -7,6 +7,22 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.4.0] — 2026-06-27
+
+Unterstützung für High-Value-Datensätze (HVD) und Vervollständigung der JSON-LD-Namespaces (aus der piveau-DPI-Analyse).
+
+### ✨ Added
+- **High-Value-Datensatz (HVD) Unterstützung:** Tab 4 enthält nun eine HVD-Markierung und eine Auswahl der sechs EU-Themenkategorien (Georaum, Erdbeobachtung und Umwelt, Meteorologie, Statistik, Unternehmen und Eigentümerschaft, Mobilität). Markierte Datensätze geben `dcatap:hvdCategory` sowie `dcatap:applicableLegislation` (EU-Durchführungsverordnung 2023/138) im JSON-LD aus. Die Kategorie-URIs stammen aus dem offiziellen EU-Vokabular (`http://data.europa.eu/bna/`).
+- **Validierung:** Ist ein Datensatz als HVD markiert, ist die Auswahl einer HVD-Kategorie vor der Veröffentlichung verpflichtend.
+
+### 🔧 Changed
+- **JSON-LD `@context` vervollständigt:** Zusätzliche Standard-Namespaces ergänzt — `dcatap` (r5r), `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx` — damit aktuelle und künftige DCAT-AP-Terme korrekt auflösen.
+
+### 🌍 i18n
+- Neue HVD-Oberflächentexte sind übersetzbar und in der englischen Übersetzung (`en_US`) enthalten.
+
+---
+
 ## [2.3.2] — 2026-06-27
 
 Konformitäts-Korrekturen an der JSON-LD-Ausgabe (aus der piveau-DPI-Analyse).

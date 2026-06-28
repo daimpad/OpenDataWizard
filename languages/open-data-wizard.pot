@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Open Data Wizard 2.3.0\n"
+"Project-Id-Version: Open Data Wizard 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1023,3 +1023,50 @@ msgstr ""
 msgid "💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB"
 msgstr ""
 
+msgid "Nein"
+msgstr ""
+
+msgid "Ja, dieser Datensatz ist ein High-Value-Datensatz"
+msgstr ""
+
+msgid "High-Value-Datensatz (HVD)"
+msgstr ""
+
+msgid "Ist dies ein hochwertiger Datensatz (HVD)?"
+msgstr ""
+
+msgid "HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)"
+msgstr ""
+
+msgid "Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie."
+msgstr ""
+
+msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
+msgstr ""
+
+msgid "HVD-KATEGORIE (dcatap:hvdCategory)"
+msgstr ""
+
+msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
+msgstr ""
+
+msgid "Georaum (Geospatial)"
+msgstr ""
+
+msgid "Erdbeobachtung und Umwelt"
+msgstr ""
+
+msgid "Meteorologie"
+msgstr ""
+
+msgid "Statistik"
+msgstr ""
+
+msgid "Unternehmen und Eigentümerschaft von Unternehmen"
+msgstr ""
+
+msgid "Mobilität"
+msgstr ""
+
+msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
+msgstr ""

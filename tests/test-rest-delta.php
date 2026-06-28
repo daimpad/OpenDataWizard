@@ -254,6 +254,21 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertSame( 'http://www.w3.org/ns/dcat#', $context['dcat'] );
 	}
 
+	/**
+	 * The dcatap namespace (r5r) must be declared so HVD terms
+	 * (dcatap:hvdCategory, dcatap:applicableLegislation) resolve in the JSON-LD.
+	 */
+	public function test_jsonld_context_declares_dcatap_namespace(): void {
+		$this->load_class();
+
+		$reflection = new \ReflectionClass( 'ODW_Rest_API' );
+		$context    = $reflection->getConstant( 'JSONLD_CONTEXT' );
+
+		$this->assertIsArray( $context );
+		$this->assertArrayHasKey( 'dcatap', $context );
+		$this->assertSame( 'http://data.europa.eu/r5r/', $context['dcatap'] );
+	}
+
 	// -------------------------------------------------------------------------
 	// validate_since_param()
 	// -------------------------------------------------------------------------
