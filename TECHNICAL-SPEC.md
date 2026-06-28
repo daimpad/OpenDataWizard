@@ -13,7 +13,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **C** | HVD-Unterstützung (`dcatap:hvdCategory` + `dcatap:applicableLegislation`) | ✅ v2.4.0 |
 | **D** | Mehrsprachige Literale (`@language`/`@value`) für title/description/keyword (Output-Tagging, ohne Migration) | ✅ v2.9.0 |
 | **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ☐ offen |
-| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich) ✅ v2.8.0; Registry-getriebenes Formular/JSON-LD ☐ | teils |
+| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich) ✅ v2.8.0; Hilfe-Tooltips + Live-Vorschau ✅ v2.11.0; Registry-getriebenes Formular/JSON-LD ☐ | teils |
 
 Details zur phasierten Umsetzungsplanung in Abschnitt 7.
 
@@ -242,6 +242,7 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ✅ Namespace-Registry (Abschnitt 2) vollständig in `@context` aufgenommen (`dcatap`, `locn`, `adms`, `owl`, `prov`, `odrl`, `spdx`) — v2.4.0.
 - ✅ Feld-Registry-Schema (Abschnitt 5) um die deklarativen Schlüssel erweitert; bestehende Einträge angereichert — v2.5.1.
 - ✅ Formular-Bereich „Erweiterte Angaben (für Profis)" als ausklappbarer Abschnitt in Tab 4 (v2.8.0, Progressive Enhancement).
+- ✅ Hilfe-Tooltips (ⓘ-Popups statt Inline-Hilfetext) + Live-Vorschau in Tab 5 (Pflichtangaben-Checkliste mit Fortschritt + Zusammenfassungs-Karte, Aktualisierung beim Tippen) — v2.11.0, Progressive Enhancement (`assets/js/odw-admin-fields.js`, `assets/css/admin.css`, `ODW_Fields::get_live_preview_fields()`).
 - _Betroffen:_ `class-fields.php`, `class-rest-api.php`/JSON-LD-Builder, `config/dcat-ap-fields.php`.
 
 #### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt

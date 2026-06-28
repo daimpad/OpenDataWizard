@@ -897,11 +897,71 @@ class ODW_Fields {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Renders the HTML for the composite file-size widget (Änderung 8).
-	 * The backing byte_size field is hidden via CSS; JS syncs the two.
+	 * Field definitions for the live wizard preview (Tab 5).
 	 *
-	 * @return string HTML markup.
+	 * Single source of truth shared by the preview markup (get_preview_html())
+	 * and the JS that fills it (localised in ODW_Admin::enqueue_assets()). Each
+	 * entry maps a form field to a human-readable label and flags whether the
+	 * field is a publishing requirement (shown in the completeness checklist)
+	 * and/or part of the summary card. The "key" matches the Carbon Fields name
+	 * (without the leading underscore); the special key "title" maps to the
+	 * native post-title input.
+	 *
+	 * @return array<int, array{key: string, label: string, required: bool, card: bool}>
 	 */
+	public static function get_live_preview_fields(): array {
+		return array(
+			array(
+				'key'      => 'title',
+				'label'    => __( 'Titel', 'open-data-wizard' ),
+				'required' => true,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_publisher',
+				'label'    => __( 'Herausgeber', 'open-data-wizard' ),
+				'required' => true,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_description',
+				'label'    => __( 'Beschreibung', 'open-data-wizard' ),
+				'required' => true,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_theme',
+				'label'    => __( 'Thema', 'open-data-wizard' ),
+				'required' => false,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_access_url',
+				'label'    => __( 'Zugriffs-URL', 'open-data-wizard' ),
+				'required' => true,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_format',
+				'label'    => __( 'Format', 'open-data-wizard' ),
+				'required' => false,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_license',
+				'label'    => __( 'Lizenz', 'open-data-wizard' ),
+				'required' => true,
+				'card'     => true,
+			),
+			array(
+				'key'      => 'odw_byte_size',
+				'label'    => __( 'Dateigröße', 'open-data-wizard' ),
+				'required' => false,
+				'card'     => true,
+			),
+		);
+	}
+
 	/**
 	 * Generates the HTML for the JSON-LD preview tab.
 	 *
@@ -911,9 +971,34 @@ class ODW_Fields {
 		ob_start();
 		?>
 		<div class="odw-preview-wrapper">
+			<?php
+			// Live preview panel — populated and revealed by JS (progressive
+			// enhancement). Without JS it stays hidden and the saved JSON-LD
+			// below remains the fallback.
+			?>
+			<div class="odw-live-preview" data-odw-live-preview hidden>
+				<div class="odw-live-preview__head">
+					<h3 class="odw-live-preview__title"><?php esc_html_e( 'Live-Vorschau', 'open-data-wizard' ); ?></h3>
+					<span class="odw-live-progress" data-odw-live-progress></span>
+				</div>
+				<p class="description odw-live-preview__intro">
+					<?php esc_html_e( 'Aktualisiert sich automatisch, während Sie die Felder ausfüllen — ohne Speichern.', 'open-data-wizard' ); ?>
+				</p>
+				<div class="odw-live-preview__cols">
+					<div class="odw-live-preview__col">
+						<h4><?php esc_html_e( 'Pflichtangaben', 'open-data-wizard' ); ?></h4>
+						<ul class="odw-live-checklist" data-odw-live-checklist></ul>
+					</div>
+					<div class="odw-live-preview__col">
+						<h4><?php esc_html_e( 'Zusammenfassung', 'open-data-wizard' ); ?></h4>
+						<dl class="odw-live-card" data-odw-live-card></dl>
+					</div>
+				</div>
+			</div>
+
 			<p class="description">
-		<?php esc_html_e( 'Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespeicherten Feldinhalten.', 'open-data-wizard' ); ?>
-		<?php esc_html_e( 'Speichern Sie den Datensatz, um die Vorschau zu aktualisieren.', 'open-data-wizard' ); ?>
+		<?php esc_html_e( 'Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis.', 'open-data-wizard' ); ?>
+		<?php esc_html_e( 'Speichern Sie den Datensatz, um sie zu aktualisieren.', 'open-data-wizard' ); ?>
 			</p>
 			<div id="odw-jsonld-preview">
 		<?php

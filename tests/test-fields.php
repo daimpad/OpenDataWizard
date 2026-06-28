@@ -209,4 +209,51 @@ class Test_ODW_Fields extends TestCase {
 			$this->assertStringStartsWith( $base, $key );
 		}
 	}
+
+	/**
+	 * The live-preview field config exposes well-formed entries for the wizard.
+	 */
+	public function test_get_live_preview_fields_returns_wellformed_entries(): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$fields = ODW_Fields::get_live_preview_fields();
+
+		$this->assertIsArray( $fields );
+		$this->assertNotEmpty( $fields );
+
+		foreach ( $fields as $field ) {
+			$this->assertArrayHasKey( 'key', $field );
+			$this->assertArrayHasKey( 'label', $field );
+			$this->assertArrayHasKey( 'required', $field );
+			$this->assertArrayHasKey( 'card', $field );
+			$this->assertIsString( $field['key'] );
+			$this->assertIsBool( $field['required'] );
+			$this->assertIsBool( $field['card'] );
+		}
+	}
+
+	/**
+	 * The live-preview required entries cover the core publishing requirements.
+	 */
+	public function test_get_live_preview_fields_marks_core_required(): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$fields   = ODW_Fields::get_live_preview_fields();
+		$required = array();
+		foreach ( $fields as $field ) {
+			if ( $field['required'] ) {
+				$required[] = $field['key'];
+			}
+		}
+
+		$this->assertContains( 'title', $required );
+		$this->assertContains( 'odw_publisher', $required );
+		$this->assertContains( 'odw_description', $required );
+		$this->assertContains( 'odw_access_url', $required );
+		$this->assertContains( 'odw_license', $required );
+	}
 }

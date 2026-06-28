@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.11.0] — 2026-06-28
+
+Phase 3 UX: zwei Verbesserungen der Eingabemaske (reine Progressive Enhancement, kein Datenmodell-Eingriff).
+
+### ✨ Added
+- **Hilfe-Tooltips (ⓘ-Popups):** Der Hilfetext jedes Formularfelds (inkl. des technischen DCAT-AP-Labels) wird jetzt in ein kompaktes ⓘ-Symbol neben dem Feldtitel ausgelagert. Das Popup öffnet bei Hover, Tastatur-Fokus oder Klick (touch-/tastaturfreundlich) und entrümpelt so das Formular. Ohne JavaScript bleibt der Hilfetext wie bisher inline sichtbar.
+- **Live-Vorschau (Tab „Vorschau"):** Oberhalb der gespeicherten JSON-LD-Ansicht zeigt ein neues Panel eine Pflichtangaben-Checkliste (mit Fortschrittsanzeige „x von y ausgefüllt") und eine Zusammenfassungs-Karte der Kernfelder, die sich beim Tippen automatisch aktualisieren — ohne Speichern. Die Feldliste stammt aus `ODW_Fields::get_live_preview_fields()` (Single Source of Truth, in PHP getestet). Ohne JavaScript bleibt das Panel ausgeblendet; die gespeicherte JSON-LD-Ansicht bleibt der Rückfall.
+
+### 🌍 i18n
+- Neue UI-Strings in `.pot`/`.po` ergänzt und `en_US.mo` neu kompiliert.
+
+---
+
 ## [2.10.0] — 2026-06-28
 
 Ergebnisse eines vollständigen Korrektheits- und Sicherheits-Reviews des gesamten Plugins. Es wurden keine kritischen oder hohen Schwachstellen gefunden; die folgenden Härtungen/Korrekturen wurden umgesetzt.

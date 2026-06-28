@@ -1196,3 +1196,39 @@ msgstr ""
 
 msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
 msgstr ""
+
+msgid "Beschreibung"
+msgstr ""
+
+msgid "Zugriffs-URL"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "Hilfe anzeigen"
+msgstr ""
+
+msgid "noch leer"
+msgstr ""
+
+msgid "Live-Vorschau"
+msgstr ""
+
+msgid "Zusammenfassung"
+msgstr ""
+
+msgid "Alle Pflichtangaben ausgefüllt"
+msgstr ""
+
+msgid "%1$d von %2$d Pflichtangaben ausgefüllt"
+msgstr ""
+
+msgid "Aktualisiert sich automatisch, während Sie die Felder ausfüllen — ohne Speichern."
+msgstr ""
+
+msgid "Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis."
+msgstr ""
+
+msgid "Speichern Sie den Datensatz, um sie zu aktualisieren."
+msgstr ""

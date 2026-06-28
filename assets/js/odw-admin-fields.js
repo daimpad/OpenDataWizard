@@ -410,6 +410,184 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 4. Help tooltips — turn each field's inline help text into an ⓘ popup next
+	// to the label. Declutters the form while keeping the technical DCAT-AP
+	// label one hover/click away. Progressive enhancement: without JS the help
+	// text simply stays inline.
+	// -------------------------------------------------------------------------
+	function initHelpTooltips() {
+		var tip = data.helpTip || {};
+		document.querySelectorAll( '.cf-field' ).forEach( function ( field ) {
+			if ( field.dataset.odwTipInit ) {
+				return;
+			}
+			var help = field.querySelector( '.cf-field__help' );
+			if ( ! help || ! ( help.textContent || '' ).trim() ) {
+				return;
+			}
+			var head = field.querySelector( '.cf-field__head' ) || field.querySelector( 'label' );
+			if ( ! head ) {
+				return;
+			}
+			field.dataset.odwTipInit = '1';
+
+			var wrap = document.createElement( 'span' );
+			wrap.className = 'odw-help-tip-wrap';
+
+			var btn = document.createElement( 'button' );
+			btn.type      = 'button';
+			btn.className  = 'odw-help-tip';
+			btn.setAttribute( 'aria-label', tip.label || 'Hilfe' );
+			btn.setAttribute( 'aria-expanded', 'false' );
+			btn.innerHTML  = '<span aria-hidden="true">i</span>';
+
+			var pop = document.createElement( 'span' );
+			pop.className = 'odw-help-pop';
+			pop.setAttribute( 'role', 'tooltip' );
+
+			// Move the original help node into the popup so its exact content and
+			// formatting are preserved, and remove it from the inline flow.
+			help.parentNode.removeChild( help );
+			help.classList.add( 'odw-help-pop__content' );
+			pop.appendChild( help );
+
+			wrap.appendChild( btn );
+			wrap.appendChild( pop );
+			head.appendChild( wrap );
+
+			// Click toggles for touch/keyboard; hover/focus is handled in CSS.
+			btn.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				var open = wrap.classList.toggle( 'is-open' );
+				btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+			} );
+		} );
+
+		// One document-level handler closes any open click-tooltip on outside tap.
+		if ( ! document.body.dataset.odwTipDocBound ) {
+			document.body.dataset.odwTipDocBound = '1';
+			document.addEventListener( 'click', function ( e ) {
+				document.querySelectorAll( '.odw-help-tip-wrap.is-open' ).forEach( function ( w ) {
+					if ( ! w.contains( e.target ) ) {
+						w.classList.remove( 'is-open' );
+						var b = w.querySelector( '.odw-help-tip' );
+						if ( b ) {
+							b.setAttribute( 'aria-expanded', 'false' );
+						}
+					}
+				} );
+			} );
+		}
+	}
+
+	// -------------------------------------------------------------------------
+	// 5. Live wizard preview (Tab 5) — a completeness checklist + summary card
+	// that update as the user types, without saving. The field list and labels
+	// come from PHP (odwAdminFields.livePreview). Progressive enhancement: the
+	// panel stays hidden when JS is off and the saved JSON-LD remains the view.
+	// -------------------------------------------------------------------------
+	function fieldInput( key ) {
+		if ( 'title' === key ) {
+			return document.getElementById( 'title' );
+		}
+		// Carbon Fields compact inputs are named carbon_fields_compact_input[_odw_x].
+		return document.querySelector( '[name$="[_' + key + ']"]' );
+	}
+
+	function fieldValue( key ) {
+		var el = fieldInput( key );
+		if ( ! el ) {
+			return '';
+		}
+		if ( 'SELECT' === el.tagName && el.selectedIndex >= 0 ) {
+			var opt = el.options[ el.selectedIndex ];
+			// Skip empty placeholder options ("— bitte wählen —" style: empty value).
+			if ( ! el.value ) {
+				return '';
+			}
+			return ( opt.text || el.value ).trim();
+		}
+		return ( el.value || '' ).trim();
+	}
+
+	function initLivePreview() {
+		var cfg = data.livePreview;
+		if ( ! cfg || ! cfg.fields || ! cfg.fields.length ) {
+			return;
+		}
+		var panel = document.querySelector( '[data-odw-live-preview]' );
+		if ( ! panel || panel.dataset.odwLiveInit ) {
+			return;
+		}
+		panel.dataset.odwLiveInit = '1';
+		panel.hidden = false;
+
+		var checklist = panel.querySelector( '[data-odw-live-checklist]' );
+		var card      = panel.querySelector( '[data-odw-live-card]' );
+		var progress  = panel.querySelector( '[data-odw-live-progress]' );
+
+		function refresh() {
+			var requiredTotal = 0;
+			var requiredDone  = 0;
+			var checkHtml = '';
+			var cardHtml  = '';
+
+			cfg.fields.forEach( function ( f ) {
+				var val    = fieldValue( f.key );
+				var filled = '' !== val;
+
+				if ( f.required ) {
+					requiredTotal++;
+					if ( filled ) {
+						requiredDone++;
+					}
+					checkHtml += '<li class="odw-live-checklist__item ' +
+						( filled ? 'is-done' : 'is-missing' ) + '">' +
+						'<span class="odw-live-check" aria-hidden="true">' +
+						( filled ? '✓' : '○' ) + '</span>' +
+						'<span class="odw-live-check__label">' + escapeHtml( f.label ) + '</span>' +
+						'</li>';
+				}
+
+				if ( f.card ) {
+					var display = filled
+						? '<dd>' + escapeHtml( val ) + '</dd>'
+						: '<dd class="odw-live-card__empty">' + escapeHtml( cfg.empty || '' ) + '</dd>';
+					cardHtml += '<dt>' + escapeHtml( f.label ) + '</dt>' + display;
+				}
+			} );
+
+			if ( checklist ) {
+				checklist.innerHTML = checkHtml;
+			}
+			if ( card ) {
+				card.innerHTML = cardHtml;
+			}
+			if ( progress ) {
+				if ( requiredTotal > 0 && requiredDone === requiredTotal ) {
+					progress.textContent = cfg.complete || '';
+					progress.className   = 'odw-live-progress is-complete';
+				} else {
+					progress.textContent = ( cfg.progressTmpl || '%1$d / %2$d' )
+						.replace( '%1$d', requiredDone ).replace( '%2$d', requiredTotal );
+					progress.className   = 'odw-live-progress';
+				}
+			}
+		}
+
+		// Update on any field change anywhere in the form (events bubble).
+		document.addEventListener( 'input',  refresh );
+		document.addEventListener( 'change', refresh );
+		refresh();
+	}
+
+	function escapeHtml( str ) {
+		return String( str ).replace( /[&<>"']/g, function ( c ) {
+			return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ c ];
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// Observe DOM for dynamically added CF complex groups (e.g. new distribution)
 	// -------------------------------------------------------------------------
 	function observeNewGroups() {
@@ -427,6 +605,7 @@
 						initFileSizeWidget( backing );
 					} );
 					node.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
+					initHelpTooltips();
 				} );
 			} );
 		} );
@@ -445,6 +624,8 @@
 		initVocabAutosuggest();
 		initProSection();
 		initFileSizeWidgets();
+		initHelpTooltips();
+		initLivePreview();
 		observeNewGroups();
 
 		// Carbon Fields mounts fields asynchronously; re-run widget inits a few
@@ -458,6 +639,8 @@
 			initVocabAutosuggest();
 			initProSection();
 			initFileSizeWidgets();
+			initHelpTooltips();
+			initLivePreview();
 			if ( passes > 10 ) {
 				clearInterval( rerun );
 			}
