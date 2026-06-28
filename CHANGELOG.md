@@ -7,6 +7,16 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.11.1] — 2026-06-28
+
+Code-Review-Korrekturen an der v2.11.0-UX (Hilfe-Tooltips), gefunden bei einer Überprüfung des Codes.
+
+### 🐛 Fixed
+- **Tooltip-Selektor jetzt feldgenau (`:scope >`):** Der äußere Tab-/Container-Feldknoten konnte zuvor den Hilfetext eines verschachtelten Kindfeldes greifen und ein verirrtes ⓘ am Container erzeugen. Tooltips werden nun nur noch am tatsächlich zugehörigen Feld erzeugt.
+- **React-sichere Tooltip-Erzeugung:** Der Hilfetext-Knoten (`<em class="cf-field__help">`) wird von Carbon Fields per React (`dangerouslySetInnerHTML`) verwaltet. Statt ihn ins Popup zu verschieben (Risiko von doppeltem/wiederhergestelltem Inline-Hilfetext beim Re-Render von Feldern mit bedingter Logik), wird er nun **geklont**; das Original bleibt im DOM und wird über eine an das Attribut `data-odw-tip-init` gebundene CSS-Regel ausgeblendet (überlebt React-Re-Renders).
+
+---
+
 ## [2.11.0] — 2026-06-28
 
 Phase 3 UX: zwei Verbesserungen der Eingabemaske (reine Progressive Enhancement, kein Datenmodell-Eingriff).

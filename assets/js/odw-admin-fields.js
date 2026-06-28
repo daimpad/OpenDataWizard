@@ -421,14 +421,18 @@
 			if ( field.dataset.odwTipInit ) {
 				return;
 			}
-			var help = field.querySelector( '.cf-field__help' );
+			// Only this field's own help — ":scope >" prevents a container/complex
+			// field from grabbing a nested child field's help element.
+			var help = field.querySelector( ':scope > .cf-field__help' );
 			if ( ! help || ! ( help.textContent || '' ).trim() ) {
 				return;
 			}
-			var head = field.querySelector( '.cf-field__head' ) || field.querySelector( 'label' );
+			var head = field.querySelector( ':scope > .cf-field__head' ) || field.querySelector( ':scope > label' );
 			if ( ! head ) {
 				return;
 			}
+			// The attribute both guards re-processing and drives the CSS rule that
+			// hides the inline help (robust even if React re-renders the <em>).
 			field.dataset.odwTipInit = '1';
 
 			var wrap = document.createElement( 'span' );
@@ -445,11 +449,12 @@
 			pop.className = 'odw-help-pop';
 			pop.setAttribute( 'role', 'tooltip' );
 
-			// Move the original help node into the popup so its exact content and
-			// formatting are preserved, and remove it from the inline flow.
-			help.parentNode.removeChild( help );
-			help.classList.add( 'odw-help-pop__content' );
-			pop.appendChild( help );
+			// Clone (not move) the React-owned help node into the popup so its
+			// exact content/formatting is preserved while React keeps owning the
+			// original, which the CSS rule above hides from the inline flow.
+			var content = help.cloneNode( true );
+			content.className = 'odw-help-pop__content';
+			pop.appendChild( content );
 
 			wrap.appendChild( btn );
 			wrap.appendChild( pop );
