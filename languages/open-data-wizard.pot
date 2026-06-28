@@ -1193,3 +1193,6 @@ msgstr ""
 
 msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
 msgstr ""
+
+msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr ""

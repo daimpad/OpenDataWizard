@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.8.0] — 2026-06-28
+
+Profi-UX: ausklappbarer „Erweiterte Angaben für Profis"-Bereich (aus der piveau-DPI-Analyse, Essentials/Additionals-Muster).
+
+### ✨ Added
+- **Ausklappbarer Profi-Bereich in Tab 4:** Die spezialisierten Felder (DCAT-AP.de-Verantwortlichkeiten/Rechtsgrundlage, Zugriffsrechte, Zusatz-Thema, HVD) sind standardmäßig eingeklappt und über einen Umschalter einblendbar. Das hält die Eingabemaske für Einsteiger schlank, ohne den vollen DCAT-AP-/DCAT-AP.de-Umfang zu verbergen.
+- Umsetzung als Progressive Enhancement (CSS/JS); ohne JavaScript bleiben alle Felder sichtbar. Der Zustand wird je Sitzung gemerkt (`sessionStorage`). Keine Änderung an Feldspeicherung oder JSON-LD.
+
+### 🌍 i18n
+- Neuer Umschalter-Text übersetzbar und in der englischen Übersetzung (`en_US`) enthalten.
+
+---
+
 ## [2.7.0] — 2026-06-28
 
 Weitere gebündelte Vokabulare + Zugriffsrechte-Feld (aus der piveau-DPI-Analyse).

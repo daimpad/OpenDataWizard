@@ -591,3 +591,37 @@
     line-height: 1.5;
     color: var(--odw-color-text);
 }
+
+/* -------------------------------------------------------------------------
+ * Profi-Bereich (Tab 4): ausklappbare „Erweiterte Angaben für Profis"
+ * Toggle + Collapse-Zustand (gesteuert von odw-admin-fields.js).
+ * ------------------------------------------------------------------------- */
+.odw-pro-collapsed {
+	display: none !important;
+}
+
+.odw-pro-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 16px 0 4px;
+	padding: 8px 12px;
+	background: var( --odw-color-bg-light, #f6f7f7 );
+	border: 1px solid var( --odw-color-border, #c3c4c7 );
+	border-radius: 4px;
+	color: var( --odw-color-primary, #2271b1 );
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.odw-pro-toggle:hover {
+	background: #eef1f3;
+}
+
+.odw-pro-caret {
+	transition: transform 0.15s ease;
+}
+
+.odw-pro-toggle.odw-pro-open .odw-pro-caret {
+	transform: rotate( 90deg );
+}

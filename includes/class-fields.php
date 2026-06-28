@@ -261,6 +261,16 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
 						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
 
+					// Toggle: collapses all following Tab-4 fields into an opt-in
+					// "advanced/pro" section (progressive enhancement via odw-admin-fields.js).
+					Field::make( 'html', 'odw_pro_toggle' )
+					->set_html(
+						'<button type="button" class="odw-pro-toggle" data-odw-pro-toggle aria-expanded="false">'
+						. '<span class="odw-pro-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen', 'open-data-wizard' )
+						. '</button>'
+					),
+
 					Field::make( 'html', 'odw_ext_hint_responsibility' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Verantwortlichkeiten & Herkunft', 'open-data-wizard' ) . '</h4>' ),
 
