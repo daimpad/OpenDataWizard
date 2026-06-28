@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.5.1] — 2026-06-28
+
+Abschluss von Phase A: deklaratives Schema der Feld-Registry (aus der piveau-DPI-Analyse).
+
+### 🔧 Changed
+- **Feld-Registry erweitert (`config/dcat-ap-fields.php`):** Jeder Eintrag trägt nun zusätzliche, deklarative Schema-Metadaten — `profile` (ap/ap.de/hvd), `tier` (mandatory/recommended/optional), `range` (literal/literal-lang/uri/node), `cardinality`, `entity` (dataset/distribution/catalog) und `vocab`. Die Registry ist damit die dokumentierte Single Source of Truth für Pflichtigkeit, Kardinalität und Wertform.
+- Vollständig abwärtskompatibel: bestehende Konsumenten (Qualitäts-Scoring, Validierung) lesen unverändert nur die Basis-Schlüssel; das 0–100-Punkteschema bleibt identisch.
+
+### 🧪 Tests
+- Neue `tests/test-registry-schema.php` sichert die Schema-Invarianten (gültige Enum-Werte, Konsistenz von `tier`/`required`, Punktesumme 100, eindeutige Keys).
+
+---
+
 ## [2.5.0] — 2026-06-28
 
 Phase B der Technischen Spezifikationen: weitere DCAT-AP.de-Felder und ein generisches Vokabular-Autosuggest (aus der piveau-DPI-Analyse).
