@@ -561,6 +561,37 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * The additional theme field stores a human-readable label (autosuggest);
+	 * it is resolved to the official EU data-theme URI for the @id (mirrors the
+	 * contributorID behaviour). Regression test for the label-as-@id bug.
+	 */
+	public function test_build_resolves_additional_theme_label_to_uri(): void {
+		$this->load_fields();
+
+		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+			define( 'DAY_IN_SECONDS', 86400 );
+		}
+
+		// load_vocabulary() is hit because the value is a label, not a URI.
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
+		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
+
+		$this->setup_jsonld_mocks(
+			21,
+			'odw_dataset',
+			array( 'odw_theme_uri' => 'Energie' )
+		);
+
+		$result = odw_build_dataset_jsonld( 21 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array( '@id' => 'http://publications.europa.eu/resource/authority/data-theme/ENER' ),
+			$result['dcat:theme']
+		);
+	}
+
+	/**
 	 * The dct:accrualPeriodicity is included as an @id object when the field is set.
 	 */
 	public function test_build_includes_accrual_periodicity_when_set(): void {
