@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.7.0] — 2026-06-28
+
+Weitere gebündelte Vokabulare + Zugriffsrechte-Feld (aus der piveau-DPI-Analyse).
+
+### ✨ Added
+- **`dct:accessRights`** (Tab 4) — Zugriffs-Klassifikation des Datensatzes (Öffentlich / Eingeschränkt / Nicht öffentlich), gespeist aus dem gebündelten EU-Vokabular `access-right`.
+- **Zusätzliches EU-Thema** (Tab 4, optional) — Autosuggest-Feld aus der gebündelten EU-Themenliste (`data-theme`); ergänzt die kuratierte Kategorie aus Tab 1 und wird als zusätzliches `dcat:theme` ausgegeben.
+- **Gebündelte Vokabulare:** `config/vocabularies/access-right.json` und `config/vocabularies/data-theme.json` (offizielle EU-Listen) für das generische Autosuggest.
+
+### 🔧 Notes
+- Die bestehenden Auswahlfelder für Thema (Tab 1) und Sprache bleiben aus Kompatibilitätsgründen kuratierte Selects; die vollständige EU-Sprachliste (454 Einträge) wird bewusst nicht als Autosuggest aufgezwungen.
+
+### 🌍 i18n
+- Neue Oberflächentexte übersetzbar und in der englischen Übersetzung (`en_US`) enthalten.
+
+---
+
 ## [2.6.0] — 2026-06-28
 
 Weitere DCAT-AP.de-Felder (aus der piveau-DPI-Analyse).

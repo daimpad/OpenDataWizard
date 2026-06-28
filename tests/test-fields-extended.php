@@ -496,6 +496,71 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * The dct:accessRights is emitted as an @id object when set.
+	 */
+	public function test_build_includes_access_rights(): void {
+		$this->load_fields();
+
+		$uri = 'http://publications.europa.eu/resource/authority/access-right/PUBLIC';
+
+		$this->setup_jsonld_mocks(
+			19,
+			'odw_dataset',
+			array( 'odw_access_rights' => $uri )
+		);
+
+		$result = odw_build_dataset_jsonld( 19 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dct:accessRights'] );
+	}
+
+	/**
+	 * An additional theme URI is appended to the curated theme, producing a
+	 * dcat:theme array with both entries.
+	 */
+	public function test_build_appends_additional_theme_uri(): void {
+		$this->load_fields();
+
+		$extra = 'http://publications.europa.eu/resource/authority/data-theme/ENER';
+
+		$this->setup_jsonld_mocks(
+			20,
+			'odw_dataset',
+			array(
+				'odw_theme'     => 'Bildung',
+				'odw_theme_uri' => $extra,
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 20 );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['dcat:theme'] );
+		$this->assertSame( $extra, $result['dcat:theme'][1]['@id'] );
+	}
+
+	/**
+	 * A theme URI on its own yields a single dcat:theme object (not an array).
+	 */
+	public function test_build_theme_uri_alone_is_single_object(): void {
+		$this->load_fields();
+
+		$extra = 'http://publications.europa.eu/resource/authority/data-theme/TECH';
+
+		$this->setup_jsonld_mocks(
+			20,
+			'odw_dataset',
+			array( 'odw_theme_uri' => $extra )
+		);
+
+		$result = odw_build_dataset_jsonld( 20 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $extra ), $result['dcat:theme'] );
+	}
+
+	/**
 	 * The dct:accrualPeriodicity is included as an @id object when the field is set.
 	 */
 	public function test_build_includes_accrual_periodicity_when_set(): void {

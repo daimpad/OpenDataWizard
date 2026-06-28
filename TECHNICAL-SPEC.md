@@ -13,7 +13,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **C** | HVD-Unterstützung (`dcatap:hvdCategory` + `dcatap:applicableLegislation`) | ✅ v2.4.0 |
 | **D** | Mehrsprachige Literale (`@language`/`@value`) inkl. Datenmigration | ☐ offen |
 | **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ☐ offen |
-| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich); weitere gebündelte Vokabulare; Registry-getriebenes Formular/JSON-LD | ☐ optional/künftig |
+| — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich); Registry-getriebenes Formular/JSON-LD | ☐ optional/künftig |
 
 Details zur phasierten Umsetzungsplanung in Abschnitt 7.
 
@@ -86,11 +86,11 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 
 | Vokabular-ID | Basis-URI | Genutzt von Feld | ODW-Status |
 |---|---|---|---|
-| `data-theme` | `http://publications.europa.eu/resource/authority/data-theme/` | `dcat:theme` | ⚠️ Freitext |
+| `data-theme` | `http://publications.europa.eu/resource/authority/data-theme/` | `dcat:theme` | ✅ (Select + gebündelt) |
 | `language` | `http://publications.europa.eu/resource/authority/language/` | `dct:language` | ⚠️ Freitext |
 | `file-type` | `http://publications.europa.eu/resource/authority/file-type/` | `dct:format` | ✅ (`dct-format-list.php`) |
 | `frequency` | `http://publications.europa.eu/resource/authority/frequency/` | `dct:accrualPeriodicity` | ✅ URI |
-| `access-right` | `http://publications.europa.eu/resource/authority/access-right/` | `dct:accessRights` | ❌ |
+| `access-right` | `http://publications.europa.eu/resource/authority/access-right/` | `dct:accessRights` | ✅ (gebündelt) |
 | `licence` | `http://dcat-ap.de/def/licenses/` | `dct:license` | ✅ (`licenses.txt`) |
 | `planned-availability` | `http://publications.europa.eu/resource/authority/planned-availability/` | `dcatap:availability` | ✅ (Auswahl) |
 | `contributors` | `http://dcat-ap.de/def/contributors/` | `dcatde:contributorID` | ✅ (gebündelt, 69) |
@@ -119,11 +119,11 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcat:contactPoint` | `vcard:Kind` | AP | R (0..n) | ⚠️ name/mail/url |
 | `dcat:distribution` | `dcat:Distribution` | AP | R (0..n) | ⚠️ genau 1 |
 | `dcat:keyword` | lang-Literal | AP | R (0..n) | ✅ |
-| `dcat:theme` | URI (`data-theme`) | AP | R (0..n) | ⚠️ Freitext |
+| `dcat:theme` | URI (`data-theme`) | AP | R (0..n) | ✅ (Select + Zusatz-URI) |
 | `dct:spatial` | `dct:Location` | AP | O (0..n) | ✅ (GeoNames) |
 | `dct:temporal` | `dct:PeriodOfTime` | AP | O (0..n) | ✅ start/end |
 | `dct:issued` / `dct:modified` | Datum | AP | O (0..1) | ✅ |
-| `dct:accessRights` | URI (`access-right`) | AP | O (0..1) | ❌ |
+| `dct:accessRights` | URI (`access-right`) | AP | O (0..1) | ✅ |
 | `dct:accrualPeriodicity` | URI (`frequency`) | AP | O (0..1) | ✅ |
 | `dct:language` | URI (`language`) | AP | O (0..n) | ⚠️ Freitext |
 | `dct:identifier` / `adms:identifier` | Literal / Node | AP | O (0..n) | ❌ |
@@ -248,7 +248,8 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ✅ DCAT-AP.de-Felder: `dcatde:contributorID`, `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (zzgl. `dcatde:politicalGeocodingLevelURI` aus v2.3).
 - ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge).
 - ✅ DCAT-AP.de-Felder `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI` (v2.6.0).
-- ☐ Offen (optional): weitere gebündelte Vokabulare (`data-theme`, `access-right`, `language`).
+- ✅ Gebündelte Vokabulare `access-right` (Feld `dct:accessRights`) und `data-theme` (Zusatz-Theme) (v2.7.0).
+- ☐ Offen (optional): vollständige EU-Sprachliste als Autosuggest (bewusst zurückgestellt).
 - _Betroffen:_ `class-fields.php`, `class-admin.php`, `odw-admin-fields.js`, `config/vocabularies/*`, JSON-LD-Builder.
 
 #### Phase C — HVD-Unterstützung (v2.4) — ✅ umgesetzt

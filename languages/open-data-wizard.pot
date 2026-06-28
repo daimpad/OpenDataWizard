@@ -1169,3 +1169,27 @@ msgstr ""
 
 msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
 msgstr ""
+
+msgid "Zugriff & weitere Auffindbarkeit"
+msgstr ""
+
+msgid "Wer darf auf diese Daten zugreifen?"
+msgstr ""
+
+msgid "ZUGRIFFSRECHTE (dct:accessRights)"
+msgstr ""
+
+msgid "Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich"
+msgstr ""
+
+msgid "Weiteres EU-Thema (Kategorie-URI)?"
+msgstr ""
+
+msgid "EU-Datenthema eintippen oder auswählen…"
+msgstr ""
+
+msgid "ZUSÄTZLICHES THEMA (dcat:theme)"
+msgstr ""
+
+msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
+msgstr ""

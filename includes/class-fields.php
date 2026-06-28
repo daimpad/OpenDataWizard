@@ -297,6 +297,18 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', 'https://beispiel.de/qualitaetssicherung' )
 						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) . "\n\n" . __( 'URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional).', 'open-data-wizard' ) ),
 
+					Field::make( 'html', 'odw_ext_hint_access' )
+					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Zugriff & weitere Auffindbarkeit', 'open-data-wizard' ) . '</h4>' ),
+
+					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
+						->add_options( self::get_access_rights_options() )
+						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) . "\n\n" . __( 'Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich', 'open-data-wizard' ) ),
+
+					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Kategorie-URI)?', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-vocab', 'data-theme' )
+						->set_attribute( 'placeholder', __( 'EU-Datenthema eintippen oder auswählen…', 'open-data-wizard' ) )
+						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1).', 'open-data-wizard' ) ),
+
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' ) . '</h4>' ),
 
@@ -811,6 +823,20 @@ class ODW_Fields {
 	}
 
 	/**
+	 * Access-rights options (DCAT-AP `dct:accessRights`), sourced from the bundled
+	 * EU access-right vocabulary (config/vocabularies/access-right.json).
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_access_rights_options(): array {
+		$options = array( '' => __( '— Bitte wählen —', 'open-data-wizard' ) );
+		foreach ( self::load_vocabulary( 'access-right' ) as $entry ) {
+			$options[ $entry['value'] ] = $entry['label'];
+		}
+		return $options;
+	}
+
+	/**
 	 * Loads a bundled controlled vocabulary from config/vocabularies/<id>.json.
 	 * Each entry is normalised to { value, label } for the autosuggest widget.
 	 * Results are cached in a transient for 24h.
@@ -1010,6 +1036,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$language            = carbon_get_post_meta( $post_id, 'odw_language' );
 	$keywords            = carbon_get_post_meta( $post_id, 'odw_keywords' );
 	$theme               = carbon_get_post_meta( $post_id, 'odw_theme' );
+	$theme_uri           = (string) carbon_get_post_meta( $post_id, 'odw_theme_uri' );
 	$issued              = carbon_get_post_meta( $post_id, 'odw_issued' );
 	$modified            = get_post_meta( $post_id, '_odw_modified', true );
 	$dist_access_url     = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
@@ -1041,6 +1068,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$maintainer_email          = (string) carbon_get_post_meta( $post_id, 'odw_maintainer_email' );
 	$legal_basis               = (string) carbon_get_post_meta( $post_id, 'odw_legal_basis' );
 	$quality_process_uri       = (string) carbon_get_post_meta( $post_id, 'odw_quality_process_uri' );
+	$access_rights             = (string) carbon_get_post_meta( $post_id, 'odw_access_rights' );
 
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
@@ -1070,9 +1098,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		}
 	}
 
+	$themes = array();
 	if ( ! empty( $theme ) ) {
-		$theme_base            = 'http://publications.europa.eu/resource/authority/data-theme/';
-		$theme_legacy          = array(
+		$theme_base   = 'http://publications.europa.eu/resource/authority/data-theme/';
+		$theme_legacy = array(
 			'Bildung'    => $theme_base . 'EDUC',
 			'Gesundheit' => $theme_base . 'HEAL',
 			'Soziales'   => $theme_base . 'SOCI',
@@ -1082,7 +1111,16 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 			'Sport'      => $theme_base . 'EDUC',
 			'Sonstiges'  => $theme_base . 'GOVE',
 		);
-		$dataset['dcat:theme'] = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
+		$themes[]     = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
+	}
+	// Optional additional EU data-theme URI (advanced field, bundled vocabulary).
+	if ( ! empty( $theme_uri ) ) {
+		$themes[] = array( '@id' => odw_sanitize_jsonld_id( (string) $theme_uri ) );
+	}
+	if ( 1 === count( $themes ) ) {
+		$dataset['dcat:theme'] = $themes[0];
+	} elseif ( count( $themes ) > 1 ) {
+		$dataset['dcat:theme'] = $themes;
 	}
 
 	if ( ! empty( $cessda_topic ) ) {
@@ -1245,6 +1283,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 
 	if ( ! empty( $quality_process_uri ) ) {
 		$dataset['dcatde:qualityProcessURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $quality_process_uri ) );
+	}
+
+	// DCAT-AP: access classification of the dataset (EU access-right vocabulary).
+	if ( ! empty( $access_rights ) ) {
+		$dataset['dct:accessRights'] = array( '@id' => odw_sanitize_jsonld_id( (string) $access_rights ) );
 	}
 
 	/**
