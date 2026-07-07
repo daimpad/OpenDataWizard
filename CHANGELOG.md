@@ -7,6 +7,40 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.13.0] — 2026-07-07
+
+Neues Qualitäts-Scoring nach der EU-MQA-Methodik (Phase 1). Siehe `docs/MQA-KONZEPT.md`.
+
+### ✨ Changed — Qualitätsprüfung auf MQA umgestellt
+- Die Qualitätsprüfung folgt jetzt dem **Metadata Quality Assessment (MQA)** von data.europa.eu:
+  **5 FAIR-Dimensionen** (Auffindbarkeit, Zugänglichkeit, Interoperabilität, Wiederverwendbarkeit,
+  Kontext), **405 Punkte**, **4 Bewertungsstufen** (Ausgezeichnet / Gut / Ausreichend / Mangelhaft).
+- Die Metriken stehen in der neuen Single-Source-of-Truth `config/mqa-metrics.php`.
+- Die Meta-Box zeigt die Bewertung pro Dimension inkl. Punkte und Metrik-Status.
+- Das JSON-LD/REST-Feld `odw:qualityScore` weist nun MQA-Punkte (von 405), die Bewertungsstufe und
+  die Dimensions-Aufschlüsselung aus (verweist auf die MQA-Methodik-URL).
+
+### 🔧 Phasenumfang
+- **Phase 1 (dieses Release):** Alle „gesetzt?"-Metriken werden bewertet (offline).
+- Vokabular-, URL-Erreichbarkeits- und DCAT-AP-SHACL-Metriken sind als **„nicht bewertet"** verdrahtet
+  und werden aus dem bewertbaren Maximum herausgerechnet; die Bewertungsstufen werden **proportional**
+  auf das bewertbare Maximum skaliert. Diese Metriken folgen in Phase 2 (Vokabular) und Phase 3
+  (Netzwerk/SHACL).
+
+### ♻️ Abwärtskompatibilität
+- Die Publish-Validierung (`config/dcat-ap-fields.php`) bleibt unverändert.
+- Der abgeleitete 0–100-Score und das Level bleiben in `_odw_quality_score` / `_odw_quality_level`
+  erhalten (Admin-Listenspalte, Sortierung). Das vollständige MQA-Ergebnis liegt in `_odw_mqa`.
+
+### 🌍 i18n
+- 33 neue MQA-UI-Strings in `.po`/`.pot` ergänzt und `en_US.mo` neu kompiliert.
+
+### ✅ Tests
+- Neue Tests für Bewertungsstufen (proportionale Schwellen), Metrik-Summen je Dimension (405 gesamt)
+  und die MQA-Persistierung/JSON-LD-Ausgabe.
+
+---
+
 ## [2.12.0] — 2026-06-28
 
 UX-Feinschliff und Vervollständigung der optionalen DCAT-AP-3.0-Felder.

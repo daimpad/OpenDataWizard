@@ -187,92 +187,163 @@ class Test_ODW_Quality extends TestCase {
 	}
 
 	// -------------------------------------------------------------------------
-	// get() — liest aus Post-Meta
+	// get_rating() — MQA-Bewertungsstufen (proportional)
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Returns a zeroed result when no quality level is stored in post meta.
+	 * A full assessable score maps to the excellent rating.
 	 */
-	public function test_get_returns_empty_result_when_no_level_stored(): void {
+	public function test_get_rating_full_is_excellent(): void {
 		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$this->assertSame( ODW_Quality::RATING_EXCELLENT, ODW_Quality::get_rating( 230, 230 ) );
+		$this->assertSame( ODW_Quality::RATING_EXCELLENT, ODW_Quality::get_rating( 405, 405 ) );
+	}
+
+	/**
+	 * The proportional thresholds (351/221/121 of 405) map to the correct bands.
+	 */
+	public function test_get_rating_bands_on_full_scale(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$this->assertSame( ODW_Quality::RATING_EXCELLENT, ODW_Quality::get_rating( 351, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_GOOD, ODW_Quality::get_rating( 350, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_GOOD, ODW_Quality::get_rating( 221, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_SUFFICIENT, ODW_Quality::get_rating( 220, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_SUFFICIENT, ODW_Quality::get_rating( 121, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_BAD, ODW_Quality::get_rating( 120, 405 ) );
+		$this->assertSame( ODW_Quality::RATING_BAD, ODW_Quality::get_rating( 0, 405 ) );
+	}
+
+	/**
+	 * A zero assessable maximum yields the bad rating without division by zero.
+	 */
+	public function test_get_rating_zero_assessable_is_bad(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$this->assertSame( ODW_Quality::RATING_BAD, ODW_Quality::get_rating( 0, 0 ) );
+	}
+
+	/**
+	 * Each MQA rating constant has a non-empty label; unknown falls back.
+	 */
+	public function test_get_rating_label(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$this->assertSame( 'Ausgezeichnet', ODW_Quality::get_rating_label( ODW_Quality::RATING_EXCELLENT ) );
+		$this->assertSame( 'Mangelhaft', ODW_Quality::get_rating_label( ODW_Quality::RATING_BAD ) );
+		$this->assertSame( 'Unbekannt', ODW_Quality::get_rating_label( 'nope' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// get_metrics() — MQA-Konfiguration
+	// -------------------------------------------------------------------------
+
+	/**
+	 * The MQA metric points sum to 405 across the five dimensions.
+	 */
+	public function test_get_metrics_sum_to_405(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$total = array_sum( array_column( ODW_Quality::get_metrics(), 'points' ) );
+		$this->assertSame( 405, $total );
+	}
+
+	/**
+	 * Each dimension reaches its documented MQA maximum.
+	 */
+	public function test_get_metrics_dimension_maxima(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$by_dim = array();
+		foreach ( ODW_Quality::get_metrics() as $m ) {
+			$by_dim[ $m['dimension'] ] = ( $by_dim[ $m['dimension'] ] ?? 0 ) + (int) $m['points'];
+		}
+
+		$this->assertSame( 100, $by_dim['findability'] );
+		$this->assertSame( 100, $by_dim['accessibility'] );
+		$this->assertSame( 110, $by_dim['interoperability'] );
+		$this->assertSame( 75, $by_dim['reusability'] );
+		$this->assertSame( 20, $by_dim['contextuality'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// get() / store() — MQA-Persistierung
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Returns a zeroed result when no MQA data is stored in post meta.
+	 */
+	public function test_get_returns_empty_result_when_nothing_stored(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
 
 		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 42, '_odw_quality_level', true )
+			->with( 42, '_odw_mqa', true )
 			->andReturn( '' );
 
 		$result = ODW_Quality::get( 42 );
 
 		$this->assertSame( 0, $result['score'] );
 		$this->assertSame( '', $result['level'] );
-		$this->assertSame( array(), $result['indicators'] );
-		$this->assertSame( '', $result['calculated_at'] );
+		$this->assertSame( '', $result['rating'] );
 	}
 
 	/**
-	 * Returns score, level, and calculated_at from stored post meta.
+	 * Returns the stored MQA structure verbatim.
 	 */
-	public function test_get_returns_stored_values(): void {
+	public function test_get_returns_stored_mqa(): void {
 		$this->load_class();
 
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 42, '_odw_quality_level', true )
-			->andReturn( 'high' );
+		$stored = array(
+			'achieved'      => 200,
+			'assessable'    => 230,
+			'max'           => 405,
+			'rating'        => 'good',
+			'dimensions'    => array(),
+			'metrics'       => array(),
+			'calculated_at' => '2026-04-21 10:00:00',
+			'score'         => 87,
+			'level'         => 'high',
+		);
 
 		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 42, '_odw_quality_score', true )
-			->andReturn( '85' );
-
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 42, '_odw_quality_indicators', true )
-			->andReturn( array( 'title' => array( 'passed' => true ) ) );
-
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 42, '_odw_quality_calculated_at', true )
-			->andReturn( '2026-04-21 10:00:00' );
+			->with( 42, '_odw_mqa', true )
+			->andReturn( $stored );
 
 		$result = ODW_Quality::get( 42 );
 
-		$this->assertSame( 85, $result['score'] );
-		$this->assertSame( 'high', $result['level'] );
-		$this->assertSame( '2026-04-21 10:00:00', $result['calculated_at'] );
+		$this->assertSame( 'good', $result['rating'] );
+		$this->assertSame( 200, $result['achieved'] );
+		$this->assertSame( 87, $result['score'] );
 	}
 
-	// -------------------------------------------------------------------------
-	// store()
-	// -------------------------------------------------------------------------
-
 	/**
-	 * Calls update_post_meta for all four quality meta keys.
+	 * Persists the full MQA array plus the backward-compatible scalar keys.
 	 */
-	public function test_store_calls_update_post_meta_for_all_keys(): void {
+	public function test_store_persists_mqa_and_bc_keys(): void {
 		$this->load_class();
 
 		$result = array(
-			'score'         => 75,
-			'level'         => 'medium',
-			'indicators'    => array(),
+			'rating'        => 'good',
 			'calculated_at' => '2026-04-21 12:00:00',
+			'score'         => 75,
+			'level'         => 'high',
 		);
 
-		\WP_Mock::userFunction( 'update_post_meta' )
-			->with( 7, '_odw_quality_score', 75 )
-			->once();
-
-		\WP_Mock::userFunction( 'update_post_meta' )
-			->with( 7, '_odw_quality_level', 'medium' )
-			->once();
-
-		\WP_Mock::userFunction( 'update_post_meta' )
-			->with( 7, '_odw_quality_indicators', array() )
-			->once();
-
-		\WP_Mock::userFunction( 'update_post_meta' )
-			->with( 7, '_odw_quality_calculated_at', '2026-04-21 12:00:00' )
-			->once();
+		\WP_Mock::userFunction( 'update_post_meta' )->with( 7, '_odw_mqa', $result )->once();
+		\WP_Mock::userFunction( 'update_post_meta' )->with( 7, '_odw_quality_score', 75 )->once();
+		\WP_Mock::userFunction( 'update_post_meta' )->with( 7, '_odw_quality_level', 'high' )->once();
+		\WP_Mock::userFunction( 'update_post_meta' )->with( 7, '_odw_quality_calculated_at', '2026-04-21 12:00:00' )->once();
 
 		ODW_Quality::store( 7, $result );
 
-		// WP_Mock ->once() expectations verified in tearDown; count them explicitly.
 		$this->addToAssertionCount( 4 );
 	}
 
@@ -281,44 +352,50 @@ class Test_ODW_Quality extends TestCase {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Adds odw:qualityScore to the dataset array when a quality level is stored.
+	 * Adds odw:qualityScore (405-scale, rating, dimensions) when MQA data exists.
 	 */
-	public function test_append_to_jsonld_adds_quality_data(): void {
+	public function test_append_to_jsonld_adds_mqa_data(): void {
 		$this->load_class();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
 
 		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 5, '_odw_quality_level', true )
-			->andReturn( 'high' );
-
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 5, '_odw_quality_score', true )
-			->andReturn( '90' );
-
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 5, '_odw_quality_indicators', true )
-			->andReturn( array() );
-
-		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 5, '_odw_quality_calculated_at', true )
-			->andReturn( '2026-04-21 09:00:00' );
+			->with( 5, '_odw_mqa', true )
+			->andReturn(
+				array(
+					'achieved'      => 200,
+					'assessable'    => 230,
+					'max'           => 405,
+					'rating'        => 'good',
+					'dimensions'    => array(
+						'findability' => array(
+							'achieved'   => 100,
+							'assessable' => 100,
+							'max'        => 100,
+						),
+					),
+					'metrics'       => array(),
+					'calculated_at' => '2026-04-21 09:00:00',
+				)
+			);
 
 		$dataset = array( '@type' => 'dcat:Dataset' );
 		$result  = ODW_Quality::append_to_jsonld( $dataset, 5 );
 
 		$this->assertArrayHasKey( 'odw:qualityScore', $result );
-		$this->assertSame( 90, $result['odw:qualityScore']['odw:score'] );
-		$this->assertSame( 'high', $result['odw:qualityScore']['odw:level'] );
-		$this->assertSame( 100, $result['odw:qualityScore']['odw:maxScore'] );
+		$this->assertSame( 200, $result['odw:qualityScore']['odw:score'] );
+		$this->assertSame( 'good', $result['odw:qualityScore']['odw:rating'] );
+		$this->assertSame( 405, $result['odw:qualityScore']['odw:maxScore'] );
+		$this->assertArrayHasKey( 'findability', $result['odw:qualityScore']['odw:dimensions'] );
 	}
 
 	/**
-	 * Leaves the dataset array unchanged when no quality level is stored.
+	 * Leaves the dataset array unchanged when no MQA data is stored.
 	 */
-	public function test_append_to_jsonld_skips_when_no_level(): void {
+	public function test_append_to_jsonld_skips_when_no_data(): void {
 		$this->load_class();
 
 		\WP_Mock::userFunction( 'get_post_meta' )
-			->with( 5, '_odw_quality_level', true )
+			->with( 5, '_odw_mqa', true )
 			->andReturn( '' );
 
 		$dataset = array( '@type' => 'dcat:Dataset' );

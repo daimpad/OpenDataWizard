@@ -55,5 +55,3 @@ parameters:
         # PHPDoc type strictness causes false positives with WordPress types
         - identifier: function.impossibleType
           message: '/Call to function is_wp_error.*will always evaluate/'
-
-        - identifier: identical.alwaysTrue
