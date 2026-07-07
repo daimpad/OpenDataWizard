@@ -7,6 +7,31 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.14.0] — 2026-07-07
+
+MQA-Qualitäts-Scoring **Phase 2**: Vokabular-Prüfungen (offline). Siehe `docs/MQA-KONZEPT.md`.
+
+### ✨ Added — Vokabular-Metriken bewertet
+- Die MQA-Metriken vom Typ `vocab` werden jetzt bewertet (offline, ohne neue Felder):
+  - **Format/Media-Type aus Vokabular** (10) — Format ist Teil des kontrollierten EU-Vokabulars.
+  - **Nicht-proprietäres Format** (20) und **Maschinenlesbares Format** (20) — aus den neuen Flags
+    in `config/dct-format-list.php`.
+  - **Lizenz aus Vokabular** (10) — Lizenz-URI ist im bekannten Lizenz-Set (`config/licenses.txt`
+    bzw. Standardlizenzen).
+  - **Zugriffsrechte aus Vokabular** (5) — Wert stammt aus dem EU-Access-Right-Vokabular.
+- Das bewertbare Maximum steigt damit von ~230 auf **~295 von 405 Punkten** (rein offline).
+- `config/dct-format-list.php` um `machine_readable` und `non_proprietary` je Format erweitert
+  (orientiert an den EU-Vokabularen).
+
+### 🔧 Verbleibend (Phase 3, opt-in)
+- Nur noch **URL-Erreichbarkeit** (80) und **DCAT-AP-SHACL-Konformität** (30) sind „nicht bewertet".
+
+### ✅ Tests
+- Neuer Test für die Format-Flags (`get_format_meta`: CSV offen/maschinenlesbar, XLSX proprietär,
+  „Sonstiges" ohne Vokabular).
+
+---
+
 ## [2.13.0] — 2026-07-07
 
 Neues Qualitäts-Scoring nach der EU-MQA-Methodik (Phase 1). Siehe `docs/MQA-KONZEPT.md`.

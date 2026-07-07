@@ -801,6 +801,17 @@ class ODW_Fields {
 	}
 
 	/**
+	 * Returns the config entry for a format label (mime, eu_uri and MQA flags).
+	 *
+	 * @param  string $format Short format label (e.g. "CSV").
+	 * @return array{mime?: string, eu_uri?: string, machine_readable?: bool, non_proprietary?: bool}
+	 */
+	public static function get_format_meta( string $format ): array {
+		$list = self::load_format_list();
+		return $list[ $format ] ?? array();
+	}
+
+	/**
 	 * Maps a short format label to its EU Publications Office file-type URI.
 	 *
 	 * @param  string $format Short format label (e.g. "CSV").

@@ -88,6 +88,32 @@ class Test_ODW_Fields extends TestCase {
 	}
 
 	/**
+	 * Format metadata exposes the MQA machine-readable / non-proprietary flags.
+	 */
+	public function test_get_format_meta_exposes_mqa_flags(): void {
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$csv = ODW_Fields::get_format_meta( 'CSV' );
+		$this->assertTrue( $csv['machine_readable'] );
+		$this->assertTrue( $csv['non_proprietary'] );
+		$this->assertNotSame( '', $csv['eu_uri'] );
+
+		// XLSX is machine-readable but proprietary.
+		$xlsx = ODW_Fields::get_format_meta( 'XLSX' );
+		$this->assertTrue( $xlsx['machine_readable'] );
+		$this->assertFalse( $xlsx['non_proprietary'] );
+
+		// "Sonstiges" is neither and has no EU vocabulary URI.
+		$other = ODW_Fields::get_format_meta( 'Sonstiges' );
+		$this->assertFalse( $other['machine_readable'] );
+		$this->assertFalse( $other['non_proprietary'] );
+		$this->assertSame( '', $other['eu_uri'] );
+
+		// Unknown format returns an empty array.
+		$this->assertSame( array(), ODW_Fields::get_format_meta( 'NOPE' ) );
+	}
+
+	/**
 	 * License descriptions provide plain-language text for the standard licenses.
 	 */
 	public function test_get_license_descriptions_has_known_licenses(): void {
