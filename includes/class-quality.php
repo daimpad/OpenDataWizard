@@ -190,12 +190,18 @@ class ODW_Quality {
 	 * @return bool|null true = erfüllt, false = nicht erfüllt, null = nicht bewertet (Vokabular/Netzwerk/SHACL).
 	 */
 	private static function evaluate_metric( array $metric, \WP_Post $post ): ?bool {
-		if ( 'present' !== ( $metric['type'] ?? '' ) ) {
-			// Vokabular-, Erreichbarkeits- und SHACL-Prüfungen folgen in späteren Phasen.
-			return null;
+		$type = (string) ( $metric['type'] ?? '' );
+
+		if ( 'present' === $type ) {
+			return self::check_metric( (string) $metric['check'], $post );
 		}
 
-		return self::check_metric( (string) $metric['check'], $post );
+		if ( 'vocab' === $type ) {
+			return self::check_vocab_metric( (string) $metric['check'], $post );
+		}
+
+		// Erreichbarkeits- und SHACL-Prüfungen folgen in Phase 3.
+		return null;
 	}
 
 	/**
@@ -270,6 +276,89 @@ class ODW_Quality {
 		}
 
 		return false;
+	}
+
+	/**
+	 * „Stammt der Wert aus einem kontrollierten Vokabular?"-Prüfung (MQA Phase 2).
+	 *
+	 * @param string   $check Check-Schlüssel aus der Metrik-Definition.
+	 * @param \WP_Post $post  Dataset post object.
+	 * @return bool True wenn der Wert einem kontrollierten Vokabular entspricht.
+	 */
+	private static function check_vocab_metric( string $check, \WP_Post $post ): bool {
+		if ( ! class_exists( 'ODW_Fields' ) ) {
+			return false;
+		}
+
+		$id = $post->ID;
+
+		switch ( $check ) {
+			case 'format_vocab':
+				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
+				if ( '' === $format ) {
+					return false;
+				}
+				return '' !== (string) ( ODW_Fields::get_format_meta( $format )['eu_uri'] ?? '' );
+
+			case 'format_nonproprietary':
+				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
+				return true === ( ODW_Fields::get_format_meta( $format )['non_proprietary'] ?? false );
+
+			case 'format_machine_readable':
+				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
+				return true === ( ODW_Fields::get_format_meta( $format )['machine_readable'] ?? false );
+
+			case 'license_vocab':
+				return self::license_in_vocab( self::effective_license( $id ) );
+
+			case 'access_rights_vocab':
+				$value = (string) carbon_get_post_meta( $id, 'odw_access_rights' );
+				if ( '' === $value ) {
+					return false;
+				}
+				foreach ( ODW_Fields::load_vocabulary( 'access-right' ) as $entry ) {
+					if ( $entry['value'] === $value ) {
+						return true;
+					}
+				}
+				return false;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Effektive Lizenz-URI (bei „sonstige" die eigene URI).
+	 *
+	 * @param int $id Post ID.
+	 * @return string
+	 */
+	private static function effective_license( int $id ): string {
+		$lic = (string) carbon_get_post_meta( $id, 'odw_license' );
+		if ( 'sonstige' === $lic ) {
+			return (string) carbon_get_post_meta( $id, 'odw_license_custom' );
+		}
+		return $lic;
+	}
+
+	/**
+	 * Prüft, ob eine Lizenz-URI in einem bekannten Lizenz-Vokabular enthalten ist.
+	 *
+	 * @param string $uri Lizenz-URI.
+	 * @return bool
+	 */
+	private static function license_in_vocab( string $uri ): bool {
+		if ( '' === $uri || 'sonstige' === $uri ) {
+			return false;
+		}
+
+		$options = ODW_Fields::get_license_options();
+		if ( isset( $options[ $uri ] ) ) {
+			return true;
+		}
+
+		$extended = ODW_Fields::load_license_list();
+		return isset( $extended[ $uri ] );
 	}
 
 	/**
@@ -498,7 +587,7 @@ class ODW_Quality {
 				echo esc_html(
 					sprintf(
 					/* translators: %d: number of points not yet assessed */
-						__( '%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit, Vokabular- und DCAT-AP-SHACL-Prüfung folgen).', 'open-data-wizard' ),
+						__( '%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit und DCAT-AP-SHACL-Prüfung folgen).', 'open-data-wizard' ),
 						$not_assessed
 					)
 				);

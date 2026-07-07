@@ -18,6 +18,9 @@ msgstr " created and are then available for editing."
 msgid "%1$d von %2$d Pflichtangaben ausgefüllt"
 msgstr "%1$d of %2$d required fields completed"
 
+msgid "%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit und DCAT-AP-SHACL-Prüfung folgen)."
+msgstr "%d points are currently not assessed (URL reachability and DCAT-AP SHACL checks are coming)."
+
 msgid "%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit, Vokabular- und DCAT-AP-SHACL-Prüfung folgen)."
 msgstr "%d points are currently not assessed (URL reachability, vocabulary and DCAT-AP SHACL checks are coming)."
 
