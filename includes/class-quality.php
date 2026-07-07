@@ -1,15 +1,15 @@
 <?php
 /**
- * Qualitätsindikatoren / Ampellogik für odw_dataset
+ * Qualitäts-Scoring nach der EU-MQA-Methodik für odw_dataset
  *
- * Berechnet einen Qualitätsscore (0–100) aus DCAT-AP 3.0 Feldvollständigkeit,
- * speichert ihn in Post-Meta und stellt ihn im Admin und REST API bereit.
+ * Bewertet die Metadatenqualität nach dem Metadata Quality Assessment (MQA) von
+ * data.europa.eu: 5 FAIR-Dimensionen, 405 Punkte, 4 Bewertungsstufen. Die Metriken
+ * stehen in config/mqa-metrics.php; siehe docs/MQA-KONZEPT.md.
  *
- * Level-Logik (siehe get_level()):
- *   perfect    — 100 Punkte (alle Felder ausgefüllt)
- *   high       — über der Pflichtfeld-Schwelle, aber < 100
- *   sufficient — genau die Pflichtfeld-Schwelle (alle Pflichtfelder, keine optionalen)
- *   low        — unter der Pflichtfeld-Schwelle (Pflichtfelder fehlen)
+ * Aktuell bewertet werden alle „gesetzt?"-Metriken (offline). Vokabular-,
+ * Erreichbarkeits- und SHACL-Metriken sind als „nicht bewertet" verdrahtet und
+ * werden aus dem bewertbaren Maximum herausgerechnet; die Bewertungsstufen werden
+ * proportional auf das bewertbare Maximum skaliert.
  *
  * @package OpenDataWizard
  */
@@ -21,30 +21,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Quality indicator and traffic-light logic for odw_dataset posts.
+ * MQA-basiertes Qualitäts-Scoring und Ampellogik für odw_dataset posts.
  *
  * @package OpenDataWizard
  */
 class ODW_Quality {
 
+	// MQA-Bewertungsstufen.
+	public const RATING_EXCELLENT  = 'excellent';
+	public const RATING_GOOD       = 'good';
+	public const RATING_SUFFICIENT = 'sufficient';
+	public const RATING_BAD        = 'bad';
+
+	// Legacy-Level-Konstanten (Abwärtskompatibilität: Admin-Spalte, Badge-CSS).
 	public const LEVEL_PERFECT    = 'perfect';
 	public const LEVEL_HIGH       = 'high';
 	public const LEVEL_SUFFICIENT = 'sufficient';
 	public const LEVEL_LOW        = 'low';
 
-	/** Fallback score at which all required fields are fulfilled when indicators are unavailable. */
+	/** Fallback-Schwelle (Summe aller Pflichtpunkte), falls die Indikator-Config fehlt. */
 	private const REQUIRED_ONLY_SCORE = 55;
+
+	/** MQA-Gesamtmaximum. */
+	private const MQA_MAX = 405;
+
+	// MQA-Original-Schwellen (Anteile von 405), proportional angewendet.
+	private const RATING_EXCELLENT_RATIO  = 351 / 405;
+	private const RATING_GOOD_RATIO       = 221 / 405;
+	private const RATING_SUFFICIENT_RATIO = 121 / 405;
+
+	/** Dimensionen in Anzeigereihenfolge. */
+	private const DIMENSIONS = array( 'findability', 'accessibility', 'interoperability', 'reusability', 'contextuality' );
 
 	/**
 	 * Registers WordPress hooks.
 	 */
 	public static function init(): void {
-		// Qualität nach jedem echten Speichern neu berechnen. Wichtig: das generische
-		// save_post (Priorität 30) statt save_post_odw_dataset verwenden — WordPress
-		// feuert save_post_{post_type} VOR dem generischen save_post, an dem Carbon
-		// Fields seine Meta-Werte erst speichert (Priorität 10). Auf save_post_odw_dataset
-		// liefen wir vor dem CF-Save und lasen veraltete Meta (Score erst beim 2. Speichern
-		// korrekt). Priorität 30 garantiert, dass CF (10) bereits geschrieben hat.
+		// Qualität nach jedem echten Speichern neu berechnen. Priorität 30 stellt
+		// sicher, dass Carbon Fields (Priorität 10) seine Meta bereits geschrieben hat.
 		add_action( 'save_post', array( self::class, 'recalculate_on_save' ), 30 );
 
 		// Meta-Box auf dem Edit-Screen registrieren.
@@ -55,12 +69,535 @@ class ODW_Quality {
 	}
 
 	// -------------------------------------------------------------------------
-	// Indikator-Definitionen — Single Source of Truth
+	// Metrik-Definitionen
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Gibt alle Qualitätsindikatoren mit Punktewertung zurück.
-	 * Geladen aus config/dcat-ap-fields.php via ODW_Fields::load_field_definitions().
+	 * Lädt die MQA-Metriken aus config/mqa-metrics.php.
+	 *
+	 * @return array<int, array{key: string, dimension: string, dcat_prop: string, label: string, points: int, type: string, check: string}>
+	 */
+	public static function get_metrics(): array {
+		$file = ODW_PLUGIN_DIR . 'config/mqa-metrics.php';
+
+		if ( ! file_exists( $file ) ) {
+			return array();
+		}
+
+		$data = include $file;
+		return is_array( $data ) ? $data : array();
+	}
+
+	/**
+	 * Menschenlesbare Labels der Dimensionen.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_dimension_labels(): array {
+		return array(
+			'findability'      => __( 'Auffindbarkeit', 'open-data-wizard' ),
+			'accessibility'    => __( 'Zugänglichkeit', 'open-data-wizard' ),
+			'interoperability' => __( 'Interoperabilität', 'open-data-wizard' ),
+			'reusability'      => __( 'Wiederverwendbarkeit', 'open-data-wizard' ),
+			'contextuality'    => __( 'Kontext', 'open-data-wizard' ),
+		);
+	}
+
+	// -------------------------------------------------------------------------
+	// Scoring
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Berechnet den MQA-Qualitätsscore für einen Datensatz.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 * @return array<string, mixed> MQA-Ergebnis inkl. abgeleitetem 0–100-Score und Legacy-Level.
+	 */
+	public static function calculate( int $post_id ): array {
+		$post = get_post( $post_id );
+
+		if ( ! $post || 'odw_dataset' !== $post->post_type ) {
+			return self::empty_result();
+		}
+
+		$dimensions = array();
+		foreach ( self::DIMENSIONS as $dim ) {
+			$dimensions[ $dim ] = array(
+				'achieved'   => 0,
+				'assessable' => 0,
+				'max'        => 0,
+			);
+		}
+
+		$metrics = array();
+
+		foreach ( self::get_metrics() as $metric ) {
+			$dim = $metric['dimension'];
+			if ( ! isset( $dimensions[ $dim ] ) ) {
+				$dimensions[ $dim ] = array(
+					'achieved'   => 0,
+					'assessable' => 0,
+					'max'        => 0,
+				);
+			}
+
+			$points                     = (int) $metric['points'];
+			$dimensions[ $dim ]['max'] += $points;
+
+			$passed = self::evaluate_metric( $metric, $post );
+
+			if ( null === $passed ) {
+				$status = 'not_assessed';
+			} else {
+				$dimensions[ $dim ]['assessable'] += $points;
+				if ( $passed ) {
+					$dimensions[ $dim ]['achieved'] += $points;
+				}
+				$status = $passed ? 'passed' : 'failed';
+			}
+
+			$metrics[ $metric['key'] ] = array(
+				'label'     => $metric['label'],
+				'dimension' => $dim,
+				'points'    => $points,
+				'status'    => $status,
+			);
+		}
+
+		$achieved   = (int) array_sum( array_column( $dimensions, 'achieved' ) );
+		$assessable = (int) array_sum( array_column( $dimensions, 'assessable' ) );
+		$rating     = self::get_rating( $achieved, $assessable );
+
+		return array(
+			'achieved'      => $achieved,
+			'assessable'    => $assessable,
+			'max'           => self::MQA_MAX,
+			'rating'        => $rating,
+			'dimensions'    => $dimensions,
+			'metrics'       => $metrics,
+			'calculated_at' => current_time( 'Y-m-d H:i:s' ),
+			// Abwärtskompatibilität für Admin-Spalte, Sortierung und Alt-Konsumenten.
+			'score'         => $assessable > 0 ? (int) round( $achieved / $assessable * 100 ) : 0,
+			'level'         => self::rating_to_level( $rating ),
+		);
+	}
+
+	/**
+	 * Wertet eine einzelne Metrik aus.
+	 *
+	 * @param array<string, mixed> $metric Metrik-Definition.
+	 * @param \WP_Post             $post   Dataset post object.
+	 * @return bool|null true = erfüllt, false = nicht erfüllt, null = nicht bewertet (Vokabular/Netzwerk/SHACL).
+	 */
+	private static function evaluate_metric( array $metric, \WP_Post $post ): ?bool {
+		if ( 'present' !== ( $metric['type'] ?? '' ) ) {
+			// Vokabular-, Erreichbarkeits- und SHACL-Prüfungen folgen in späteren Phasen.
+			return null;
+		}
+
+		return self::check_metric( (string) $metric['check'], $post );
+	}
+
+	/**
+	 * „Ist die Eigenschaft gesetzt?"-Prüfung je Metrik.
+	 *
+	 * @param string   $check Check-Schlüssel aus der Metrik-Definition.
+	 * @param \WP_Post $post  Dataset post object.
+	 * @return bool True wenn die Eigenschaft im Datensatz vorhanden ist.
+	 */
+	private static function check_metric( string $check, \WP_Post $post ): bool {
+		$id = $post->ID;
+
+		switch ( $check ) {
+			case 'keyword':
+				$raw      = (string) carbon_get_post_meta( $id, 'odw_keywords' );
+				$parts    = preg_split( '/\r?\n/', $raw );
+				$keywords = is_array( $parts ) ? array_filter( array_map( 'trim', $parts ) ) : array();
+				return ! empty( $keywords );
+
+			case 'theme':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_theme' ) );
+
+			case 'spatial':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_spatial' ) );
+
+			case 'temporal':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_temporal_start' ) )
+					|| '' !== trim( (string) carbon_get_post_meta( $id, 'odw_temporal_end' ) );
+
+			case 'download_url':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_download_url' ) );
+
+			case 'format':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_format' ) );
+
+			case 'media_type':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_media_type' ) );
+
+			case 'license':
+				$lic = (string) carbon_get_post_meta( $id, 'odw_license' );
+				if ( '' !== $lic && 'sonstige' !== $lic ) {
+					return true;
+				}
+				if ( 'sonstige' === $lic ) {
+					return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_license_custom' ) );
+				}
+				return false;
+
+			case 'access_rights':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_access_rights' ) );
+
+			case 'contact_point':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_contact_name' ) )
+					|| '' !== trim( (string) carbon_get_post_meta( $id, 'odw_contact_email' ) )
+					|| '' !== trim( (string) carbon_get_post_meta( $id, 'odw_contact_url' ) );
+
+			case 'publisher':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_publisher' ) );
+
+			case 'rights':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_dist_rights' ) );
+
+			case 'byte_size':
+				return (int) carbon_get_post_meta( $id, 'odw_byte_size' ) > 0;
+
+			case 'issued':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_issued' ) );
+
+			case 'modified':
+				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_modified' ) )
+					|| '' !== trim( (string) get_post_meta( $id, '_odw_modified', true ) );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Ermittelt die MQA-Bewertungsstufe aus erreichten/bewertbaren Punkten.
+	 * Die MQA-Schwellen (351/221/121 von 405) werden proportional auf das
+	 * bewertbare Maximum skaliert.
+	 *
+	 * @param int $achieved   Erreichte Punkte.
+	 * @param int $assessable Bewertbares Maximum.
+	 * @return string Eine der RATING_* Konstanten.
+	 */
+	public static function get_rating( int $achieved, int $assessable ): string {
+		if ( $assessable <= 0 ) {
+			return self::RATING_BAD;
+		}
+
+		$ratio = $achieved / $assessable;
+
+		if ( $ratio >= self::RATING_EXCELLENT_RATIO ) {
+			return self::RATING_EXCELLENT;
+		}
+		if ( $ratio >= self::RATING_GOOD_RATIO ) {
+			return self::RATING_GOOD;
+		}
+		if ( $ratio >= self::RATING_SUFFICIENT_RATIO ) {
+			return self::RATING_SUFFICIENT;
+		}
+		return self::RATING_BAD;
+	}
+
+	/**
+	 * Bildet eine MQA-Bewertungsstufe auf eine Legacy-Level-Konstante ab
+	 * (für Admin-Spalte und Badge-CSS).
+	 *
+	 * @param string $rating Eine der RATING_* Konstanten.
+	 * @return string Eine der LEVEL_* Konstanten.
+	 */
+	private static function rating_to_level( string $rating ): string {
+		return array(
+			self::RATING_EXCELLENT  => self::LEVEL_PERFECT,
+			self::RATING_GOOD       => self::LEVEL_HIGH,
+			self::RATING_SUFFICIENT => self::LEVEL_SUFFICIENT,
+			self::RATING_BAD        => self::LEVEL_LOW,
+		)[ $rating ] ?? self::LEVEL_LOW;
+	}
+
+	// -------------------------------------------------------------------------
+	// Persistierung
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Holt gespeicherte Qualitätsdaten aus Post-Meta.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 * @return array<string, mixed>
+	 */
+	public static function get( int $post_id ): array {
+		$stored = get_post_meta( $post_id, '_odw_mqa', true );
+
+		if ( ! is_array( $stored ) || empty( $stored['rating'] ) ) {
+			return self::empty_result();
+		}
+
+		return $stored;
+	}
+
+	/**
+	 * Speichert Qualitätsdaten in Post-Meta.
+	 *
+	 * @param int                  $post_id Dataset post ID.
+	 * @param array<string, mixed> $result  Result array from calculate().
+	 */
+	public static function store( int $post_id, array $result ): void {
+		update_post_meta( $post_id, '_odw_mqa', $result );
+
+		// Abwärtskompatible Skalar-Meta für Admin-Spalte + Sortierung.
+		update_post_meta( $post_id, '_odw_quality_score', $result['score'] ?? 0 );
+		update_post_meta( $post_id, '_odw_quality_level', $result['level'] ?? '' );
+		update_post_meta( $post_id, '_odw_quality_calculated_at', $result['calculated_at'] ?? '' );
+	}
+
+	/**
+	 * Hook-Callback: Qualität nach jedem Speichern neu berechnen.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 */
+	public static function recalculate_on_save( int $post_id ): void {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( 'odw_dataset' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		self::store( $post_id, self::calculate( $post_id ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// REST API Integration
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Hängt die MQA-Qualitätsdaten an den JSON-LD Dataset-Array an.
+	 *
+	 * @param array<string, mixed> $dataset Der JSON-LD Array.
+	 * @param int                  $post_id Post-ID.
+	 * @return array<string, mixed>
+	 */
+	public static function append_to_jsonld( array $dataset, int $post_id ): array {
+		$quality = self::get( $post_id );
+
+		if ( empty( $quality['rating'] ) ) {
+			return $dataset;
+		}
+
+		$dimensions = array();
+		foreach ( (array) ( $quality['dimensions'] ?? array() ) as $dim => $data ) {
+			$dimensions[ $dim ] = array(
+				'odw:score'      => (int) ( $data['achieved'] ?? 0 ),
+				'odw:assessable' => (int) ( $data['assessable'] ?? 0 ),
+				'odw:maxScore'   => (int) ( $data['max'] ?? 0 ),
+			);
+		}
+
+		$dataset['odw:qualityScore'] = array(
+			'@type'            => 'odw:QualityScore',
+			'odw:methodology'  => 'https://data.europa.eu/mqa/methodology',
+			'odw:score'        => (int) ( $quality['achieved'] ?? 0 ),
+			'odw:assessable'   => (int) ( $quality['assessable'] ?? 0 ),
+			'odw:maxScore'     => (int) ( $quality['max'] ?? self::MQA_MAX ),
+			'odw:rating'       => (string) $quality['rating'],
+			'odw:dimensions'   => $dimensions,
+			'odw:calculatedAt' => (string) ( $quality['calculated_at'] ?? '' ),
+		);
+
+		return $dataset;
+	}
+
+	// -------------------------------------------------------------------------
+	// Admin Meta-Box
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Registriert die Qualitäts-Meta-Box auf dem Edit-Screen.
+	 */
+	public static function register_meta_box(): void {
+		add_meta_box(
+			'odw-quality-report',
+			__( 'Qualitätsprüfung (MQA)', 'open-data-wizard' ),
+			array( self::class, 'render_meta_box' ),
+			'odw_dataset',
+			'normal',
+			'default'
+		);
+	}
+
+	/**
+	 * Rendert den Inhalt der Qualitäts-Meta-Box (MQA-Dimensionen + Metriken).
+	 *
+	 * @param \WP_Post $post Current post object.
+	 */
+	public static function render_meta_box( \WP_Post $post ): void {
+		$quality = self::get( $post->ID );
+
+		if ( empty( $quality['rating'] ) ) {
+			echo '<p class="description">' . esc_html__( 'Noch keine Qualitätsanalyse vorhanden. Datensatz speichern, um die Prüfung auszuführen.', 'open-data-wizard' ) . '</p>';
+			return;
+		}
+
+		$achieved     = (int) ( $quality['achieved'] ?? 0 );
+		$assessable   = (int) ( $quality['assessable'] ?? 0 );
+		$max          = (int) ( $quality['max'] ?? self::MQA_MAX );
+		$rating       = (string) $quality['rating'];
+		$rating_label = self::get_rating_label( $rating );
+		$level_class  = 'odw-quality--' . self::rating_to_level( $rating );
+		$percent      = $assessable > 0 ? (int) round( $achieved / $assessable * 100 ) : 0;
+		$not_assessed = $max - $assessable;
+		$dim_labels   = self::get_dimension_labels();
+		$metrics      = (array) ( $quality['metrics'] ?? array() );
+		?>
+		<div class="odw-quality-report">
+
+			<p class="description" style="margin: 0 0 10px;">
+				<?php esc_html_e( 'Bewertung nach der EU-Metadata-Quality-Assessment-Methodik (data.europa.eu). Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern aus.', 'open-data-wizard' ); ?>
+			</p>
+
+			<div class="odw-quality-summary">
+				<div class="odw-quality-gauge-wrap">
+					<div class="odw-quality-gauge">
+						<div class="odw-quality-bar <?php echo esc_attr( $level_class ); ?>"
+							style="width: <?php echo esc_attr( (string) $percent ); ?>%"
+							role="progressbar"
+							aria-valuenow="<?php echo esc_attr( (string) $achieved ); ?>"
+							aria-valuemin="0"
+							aria-valuemax="<?php echo esc_attr( (string) $assessable ); ?>">
+						</div>
+					</div>
+					<span class="odw-quality-score-number">
+						<?php echo esc_html( sprintf( '%d / %d', $achieved, $assessable ) ); ?>
+						<?php
+						if ( $assessable !== $max ) {
+							echo ' <span class="odw-quality-of-max">' . esc_html(
+								sprintf(
+								/* translators: %d: MQA maximum score */
+									__( '(von max. %d)', 'open-data-wizard' ),
+									$max
+								)
+							) . '</span>';
+						}
+						?>
+					</span>
+				</div>
+				<span class="odw-quality-level-badge <?php echo esc_attr( $level_class ); ?>">
+					<?php echo esc_html( $rating_label ); ?>
+				</span>
+			</div>
+
+			<?php if ( $not_assessed > 0 ) : ?>
+			<p class="description" style="margin: 0 0 12px;">
+				<?php
+				echo esc_html(
+					sprintf(
+					/* translators: %d: number of points not yet assessed */
+						__( '%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit, Vokabular- und DCAT-AP-SHACL-Prüfung folgen).', 'open-data-wizard' ),
+						$not_assessed
+					)
+				);
+				?>
+			</p>
+			<?php endif; ?>
+
+			<table class="odw-quality-table widefat striped">
+				<tbody>
+				<?php
+				foreach ( self::DIMENSIONS as $dim ) {
+					$dim_data = $quality['dimensions'][ $dim ] ?? array(
+						'achieved'   => 0,
+						'assessable' => 0,
+						'max'        => 0,
+					);
+					$d_ach    = (int) $dim_data['achieved'];
+					$d_ass    = (int) $dim_data['assessable'];
+					$d_max    = (int) $dim_data['max'];
+
+					echo '<tr class="odw-quality-section-row"><th colspan="3">'
+						. esc_html( $dim_labels[ $dim ] ?? $dim )
+						. ' <span class="odw-quality-dim-score">' . esc_html( sprintf( '%d / %d', $d_ach, $d_ass ) )
+						. ( $d_ass !== $d_max ? esc_html( sprintf( ' (max. %d)', $d_max ) ) : '' )
+						. '</span></th></tr>';
+
+					foreach ( $metrics as $m ) {
+						if ( ( $m['dimension'] ?? '' ) !== $dim ) {
+							continue;
+						}
+
+						$status = $m['status'] ?? 'failed';
+						$pts    = (int) ( $m['points'] ?? 0 );
+
+						if ( 'passed' === $status ) {
+							$icon        = '✓';
+							$row_class   = 'odw-quality-pass';
+							$pts_display = (string) $pts;
+						} elseif ( 'not_assessed' === $status ) {
+							$icon        = '–';
+							$row_class   = 'odw-quality-notassessed';
+							$pts_display = '–';
+						} else {
+							$icon        = '✗';
+							$row_class   = 'odw-quality-fail';
+							$pts_display = "0 / {$pts}";
+						}
+						?>
+						<tr class="<?php echo esc_attr( $row_class ); ?>">
+							<td><?php echo esc_html( (string) $m['label'] ); ?></td>
+							<td class="odw-quality-col-pts"><?php echo esc_html( $pts_display ); ?></td>
+							<td class="odw-quality-col-status"><?php echo esc_html( $icon ); ?></td>
+						</tr>
+						<?php
+					}
+				}
+				?>
+				</tbody>
+			</table>
+
+			<p class="odw-quality-footer description">
+				<?php
+				printf(
+					/* translators: %s: Datetime of last quality calculation */
+					esc_html__( 'Letzte Berechnung: %s · Wird bei jedem Speichern aktualisiert.', 'open-data-wizard' ),
+					esc_html( (string) ( $quality['calculated_at'] ?? '' ) )
+				);
+				?>
+			</p>
+		</div>
+		<?php
+	}
+
+	// -------------------------------------------------------------------------
+	// Anzeigehilfen
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Menschenlesbares Label einer MQA-Bewertungsstufe.
+	 *
+	 * @param string $rating Eine der RATING_* Konstanten.
+	 * @return string Übersetztes Label.
+	 */
+	public static function get_rating_label( string $rating ): string {
+		return array(
+			self::RATING_EXCELLENT  => __( 'Ausgezeichnet', 'open-data-wizard' ),
+			self::RATING_GOOD       => __( 'Gut', 'open-data-wizard' ),
+			self::RATING_SUFFICIENT => __( 'Ausreichend', 'open-data-wizard' ),
+			self::RATING_BAD        => __( 'Mangelhaft', 'open-data-wizard' ),
+		)[ $rating ] ?? __( 'Unbekannt', 'open-data-wizard' );
+	}
+
+	// -------------------------------------------------------------------------
+	// Abwärtskompatibilität (Legacy-API für Admin-Spalte, Validierung, Tests)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Gibt die DCAT-AP-Indikatoren (Validierungsregistry) zurück.
+	 * Weiterhin aus config/dcat-ap-fields.php geladen — steuert die Publish-Validierung.
 	 *
 	 * @return array<int, array{key: string, label: string, points: int, required: bool}>
 	 */
@@ -72,123 +609,13 @@ class ODW_Quality {
 			}
 		}
 
-		// Fallback when ODW_Fields is not available (e.g. unit tests).
-		return array(
-			array(
-				'key'      => 'title',
-				'label'    => __( 'Titel (dct:title)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => true,
-			),
-			array(
-				'key'      => 'description',
-				'label'    => __( 'Beschreibung (dct:description)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => true,
-			),
-			array(
-				'key'      => 'publisher',
-				'label'    => __( 'Herausgeber (dct:publisher)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => true,
-			),
-			array(
-				'key'      => 'license',
-				'label'    => __( 'Lizenz (dct:license)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => true,
-			),
-			array(
-				'key'      => 'distribution',
-				'label'    => __( 'Distribution mit URL (dcat:accessURL)', 'open-data-wizard' ),
-				'points'   => 15,
-				'required' => true,
-			),
-			array(
-				'key'      => 'language',
-				'label'    => __( 'Sprache (dct:language)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => false,
-			),
-			array(
-				'key'      => 'keywords',
-				'label'    => __( 'Schlagworte (dcat:keyword)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => false,
-			),
-			array(
-				'key'      => 'theme',
-				'label'    => __( 'Thema (dcat:theme)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => false,
-			),
-			array(
-				'key'      => 'issued',
-				'label'    => __( 'Veröffentlichungsdatum (dct:issued)', 'open-data-wizard' ),
-				'points'   => 10,
-				'required' => false,
-			),
-			array(
-				'key'      => 'dist_format',
-				'label'    => __( 'Format der Distribution (dct:format)', 'open-data-wizard' ),
-				'points'   => 5,
-				'required' => false,
-			),
-		);
-	}
-
-	// -------------------------------------------------------------------------
-	// Scoring
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Berechnet den Qualitätsscore für einen Datensatz.
-	 *
-	 * @param int $post_id Dataset post ID.
-	 * @return array{score: int, level: string, indicators: array<string, array{label: string, points: int, earned: int, passed: bool, required: bool}>, calculated_at: string}
-	 */
-	public static function calculate( int $post_id ): array {
-		$post = get_post( $post_id );
-
-		if ( ! $post || 'odw_dataset' !== $post->post_type ) {
-			return self::empty_result();
-		}
-
-		$total     = 0;
-		$breakdown = array();
-
-		foreach ( self::get_indicators() as $indicator ) {
-			$passed = self::check_indicator( $indicator['key'], $post );
-			$earned = $passed ? $indicator['points'] : 0;
-			$total += $earned;
-
-			$breakdown[ $indicator['key'] ] = array(
-				'label'    => $indicator['label'],
-				'points'   => $indicator['points'],
-				'earned'   => $earned,
-				'passed'   => $passed,
-				'required' => $indicator['required'],
-			);
-		}
-
-		// Clamp into the documented 0–100 range so a changed config can never
-		// produce an out-of-range score.
-		$total = max( 0, min( 100, $total ) );
-
-		return array(
-			'score'         => $total,
-			'level'         => self::get_level( $total ),
-			'indicators'    => $breakdown,
-			'calculated_at' => current_time( 'Y-m-d H:i:s' ),
-		);
+		return array();
 	}
 
 	/**
-	 * Sum of points for all required indicators — the score reached when exactly
-	 * the required fields are filled. Computed from the active config so the level
-	 * thresholds stay correct if the point values change.
+	 * Summe der Pflichtpunkte aus der Indikator-Config (Legacy-Schwelle).
 	 *
-	 * @return int Required-only score threshold.
+	 * @return int
 	 */
 	private static function get_required_only_score(): int {
 		$sum = 0;
@@ -200,70 +627,12 @@ class ODW_Quality {
 
 		$threshold = $sum > 0 ? $sum : self::REQUIRED_ONLY_SCORE;
 
-		// Keep the threshold within the clamped 0–100 score range so get_level()
-		// stays consistent even if a filter pushes the required points above 100.
 		return min( 100, $threshold );
 	}
 
 	/**
-	 * Prüft einen einzelnen Indikator am WP_Post-Objekt.
-	 *
-	 * @param string   $key  Indicator key (e.g. 'title', 'license').
-	 * @param \WP_Post $post Dataset post object.
-	 * @return bool True when the indicator passes.
-	 */
-	private static function check_indicator( string $key, \WP_Post $post ): bool {
-		switch ( $key ) {
-			case 'title':
-				return '' !== trim( $post->post_title );
-
-			case 'description':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_description' ) );
-
-			case 'publisher':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_publisher' ) );
-
-			case 'license':
-				$lic = (string) carbon_get_post_meta( $post->ID, 'odw_license' );
-				if ( '' !== $lic && 'sonstige' !== $lic ) {
-					return true;
-				}
-				if ( 'sonstige' === $lic ) {
-					return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_license_custom' );
-				}
-				return false;
-
-			case 'distribution':
-				return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_access_url' );
-
-			case 'language':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_language' ) );
-
-			case 'keywords':
-				$raw      = (string) carbon_get_post_meta( $post->ID, 'odw_keywords' );
-				$keywords = array_filter( array_map( 'trim', preg_split( '/\r?\n/', $raw ) ) );
-				return ! empty( $keywords );
-
-			case 'theme':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_theme' ) );
-
-			case 'issued':
-				return '' !== trim( (string) carbon_get_post_meta( $post->ID, 'odw_issued' ) );
-
-			case 'dist_format':
-				return '' !== (string) carbon_get_post_meta( $post->ID, 'odw_format' );
-		}
-
-		return false;
-	}
-
-	/**
-	 * Ermittelt das Qualitätslevel aus dem Score.
-	 *
-	 * 100           → Perfekt     (alle Felder ausgefüllt)
-	 * 56–99         → Gut         (alle Pflichtfelder + einige optionale)
-	 * REQUIRED_ONLY → Ausreichend (genau alle Pflichtfelder, keine optionalen)
-	 * < REQUIRED    → Verbesserungsbedarf (Pflichtfelder fehlen)
+	 * Legacy: ermittelt ein 4-stufiges Level aus einem 0–100-Score.
+	 * Weiterhin von der Admin-Listenspalte verwendet.
 	 *
 	 * @param int $score Numeric score 0–100.
 	 * @return string One of LEVEL_PERFECT, LEVEL_HIGH, LEVEL_SUFFICIENT, LEVEL_LOW.
@@ -283,234 +652,10 @@ class ODW_Quality {
 		return self::LEVEL_LOW;
 	}
 
-	// -------------------------------------------------------------------------
-	// Persistierung
-	// -------------------------------------------------------------------------
-
 	/**
-	 * Holt gespeicherte Qualitätsdaten aus Post-Meta.
+	 * Legacy-Label für eine Level-Konstante (Admin-Spalte).
 	 *
-	 * @param int $post_id Dataset post ID.
-	 * @return array{score: int, level: string, indicators: array, calculated_at: string}
-	 */
-	public static function get( int $post_id ): array {
-		$level = (string) get_post_meta( $post_id, '_odw_quality_level', true );
-
-		if ( '' === $level ) {
-			return self::empty_result();
-		}
-
-		$indicators = get_post_meta( $post_id, '_odw_quality_indicators', true );
-
-		return array(
-			'score'         => (int) get_post_meta( $post_id, '_odw_quality_score', true ),
-			'level'         => $level,
-			'indicators'    => is_array( $indicators ) ? $indicators : array(),
-			'calculated_at' => (string) get_post_meta( $post_id, '_odw_quality_calculated_at', true ),
-		);
-	}
-
-	/**
-	 * Speichert Qualitätsdaten in Post-Meta.
-	 *
-	 * @param int                  $post_id Dataset post ID.
-	 * @param array<string, mixed> $result  Result array from calculate().
-	 */
-	public static function store( int $post_id, array $result ): void {
-		update_post_meta( $post_id, '_odw_quality_score', $result['score'] );
-		update_post_meta( $post_id, '_odw_quality_level', $result['level'] );
-		update_post_meta( $post_id, '_odw_quality_indicators', $result['indicators'] );
-		update_post_meta( $post_id, '_odw_quality_calculated_at', $result['calculated_at'] );
-	}
-
-	/**
-	 * Hook-Callback: Qualität nach jedem Speichern neu berechnen.
-	 *
-	 * @param int $post_id Dataset post ID.
-	 */
-	public static function recalculate_on_save( int $post_id ): void {
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
-		if ( wp_is_post_revision( $post_id ) ) {
-			return;
-		}
-
-		// Now hooked on the generic save_post, so guard the post type explicitly.
-		if ( 'odw_dataset' !== get_post_type( $post_id ) ) {
-			return;
-		}
-
-		$result = self::calculate( $post_id );
-		self::store( $post_id, $result );
-	}
-
-	// -------------------------------------------------------------------------
-	// REST API Integration
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Hängt Qualitätsdaten an den JSON-LD Dataset-Array an.
-	 *
-	 * @param array<string, mixed> $dataset  Der JSON-LD Array.
-	 * @param int                  $post_id  Post-ID.
-	 * @return array<string, mixed>
-	 */
-	public static function append_to_jsonld( array $dataset, int $post_id ): array {
-		$quality = self::get( $post_id );
-
-		if ( '' === $quality['level'] ) {
-			return $dataset;
-		}
-
-		$dataset['odw:qualityScore'] = array(
-			'@type'            => 'odw:QualityScore',
-			'odw:score'        => $quality['score'],
-			'odw:maxScore'     => 100,
-			'odw:level'        => $quality['level'],
-			'odw:calculatedAt' => $quality['calculated_at'],
-		);
-
-		return $dataset;
-	}
-
-	// -------------------------------------------------------------------------
-	// Admin Meta-Box
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Registriert die Qualitäts-Meta-Box auf dem Edit-Screen.
-	 */
-	public static function register_meta_box(): void {
-		add_meta_box(
-			'odw-quality-report',
-			__( 'Qualitätsprüfung', 'open-data-wizard' ),
-			array( self::class, 'render_meta_box' ),
-			'odw_dataset',
-			'normal',
-			'default'
-		);
-	}
-
-	/**
-	 * Rendert den Inhalt der Qualitäts-Meta-Box.
-	 *
-	 * @param \WP_Post $post Current post object.
-	 */
-	public static function render_meta_box( \WP_Post $post ): void {
-		$quality    = self::get( $post->ID );
-		$indicators = self::get_indicators();
-
-		if ( '' === $quality['level'] ) {
-			echo '<p class="description">' . esc_html__( 'Noch keine Qualitätsanalyse vorhanden. Datensatz speichern, um die Prüfung auszuführen.', 'open-data-wizard' ) . '</p>';
-			return;
-		}
-
-		$score       = $quality['score'];
-		$level       = $quality['level'];
-		$level_label = self::get_level_label( $level );
-		// Map 'perfect' to 'high' CSS class so existing styles apply.
-		$level_class = 'odw-quality--' . ( 'perfect' === $level ? 'high' : $level );
-		$stored      = $quality['indicators'];
-		?>
-		<div class="odw-quality-report">
-
-			<p class="description" style="margin: 0 0 10px;">
-				<?php esc_html_e( 'Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus.', 'open-data-wizard' ); ?>
-			</p>
-
-			<div class="odw-quality-summary">
-				<div class="odw-quality-gauge-wrap">
-					<div class="odw-quality-gauge">
-						<div class="odw-quality-bar odw-quality-bar--<?php echo esc_attr( $level ); ?>"
-							style="width: <?php echo esc_attr( (string) $score ); ?>%"
-							role="progressbar"
-							aria-valuenow="<?php echo esc_attr( (string) $score ); ?>"
-							aria-valuemin="0"
-							aria-valuemax="100">
-						</div>
-					</div>
-					<span class="odw-quality-score-number"><?php echo esc_html( (string) $score ); ?> / 100</span>
-				</div>
-				<span class="odw-quality-level-badge <?php echo esc_attr( $level_class ); ?>">
-					<?php echo esc_html( $level_label ); ?>
-				</span>
-			</div>
-
-			<table class="odw-quality-table widefat striped">
-				<thead>
-					<tr>
-						<th><?php esc_html_e( 'Indikator', 'open-data-wizard' ); ?></th>
-						<th class="odw-quality-col-pts"><?php esc_html_e( 'Punkte', 'open-data-wizard' ); ?></th>
-						<th class="odw-quality-col-status"><?php esc_html_e( 'Status', 'open-data-wizard' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-				<?php
-				$prev_required = null;
-				foreach ( $indicators as $indicator ) {
-					$key      = $indicator['key'];
-					$required = $indicator['required'];
-					$row      = $stored[ $key ] ?? null;
-					$passed   = $row['passed'] ?? false;
-					$earned   = $row['earned'] ?? 0;
-					$pts      = $indicator['points'];
-
-					// Abschnittsüberschrift bei Wechsel Pflicht → Empfohlen → Optional.
-					if ( $prev_required !== $required ) {
-						if ( true === $required ) {
-							echo '<tr class="odw-quality-section-row"><th colspan="3">' . esc_html__( 'Pflichtfelder', 'open-data-wizard' ) . '</th></tr>';
-						} elseif ( false === $required && null !== $prev_required ) {
-							$section = ( $pts >= 10 )
-								? __( 'Empfohlene Felder', 'open-data-wizard' )
-								: __( 'Optionale Angaben', 'open-data-wizard' );
-							echo '<tr class="odw-quality-section-row"><th colspan="3">' . esc_html( $section ) . '</th></tr>';
-						}
-						$prev_required = $required;
-					} elseif ( false === $required && $pts < 10 && $prev_pts >= 10 ) {
-						// Wechsel von Empfohlen zu Optional innerhalb derselben required=false Gruppe.
-						echo '<tr class="odw-quality-section-row"><th colspan="3">' . esc_html__( 'Optionale Angaben', 'open-data-wizard' ) . '</th></tr>';
-					}
-
-					$prev_pts = $pts;
-
-					$status_icon  = $passed ? '✓' : '✗';
-					$status_class = $passed ? 'odw-quality-pass' : 'odw-quality-fail';
-					$pts_display  = $passed ? $pts : "0 / {$pts}";
-					?>
-					<tr class="<?php echo esc_attr( $status_class ); ?>">
-						<td><?php echo esc_html( $indicator['label'] ); ?></td>
-						<td class="odw-quality-col-pts"><?php echo esc_html( (string) $pts_display ); ?></td>
-						<td class="odw-quality-col-status"><?php echo esc_html( $status_icon ); ?></td>
-					</tr>
-					<?php
-				}
-				?>
-				</tbody>
-			</table>
-
-			<p class="odw-quality-footer description">
-				<?php
-				printf(
-					/* translators: %s: Datetime of last quality calculation */
-					esc_html__( 'Letzte Berechnung: %s · Wird bei jedem Speichern aktualisiert.', 'open-data-wizard' ),
-					esc_html( $quality['calculated_at'] )
-				);
-				?>
-			</p>
-		</div>
-		<?php
-	}
-
-	// -------------------------------------------------------------------------
-	// Anzeigehilfen
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Returns a human-readable label for a quality level constant.
-	 *
-	 * @param string $level One of LEVEL_HIGH, LEVEL_MEDIUM, LEVEL_LOW.
+	 * @param string $level One of LEVEL_*.
 	 * @return string Translated label.
 	 */
 	public static function get_level_label( string $level ): string {
@@ -527,16 +672,21 @@ class ODW_Quality {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Returns a zeroed-out quality result used when no data has been stored yet.
+	 * Leeres MQA-Ergebnis (noch keine Analyse vorhanden).
 	 *
-	 * @return array{score: int, level: string, indicators: array, calculated_at: string}
+	 * @return array<string, mixed>
 	 */
 	private static function empty_result(): array {
 		return array(
+			'achieved'      => 0,
+			'assessable'    => 0,
+			'max'           => self::MQA_MAX,
+			'rating'        => '',
+			'dimensions'    => array(),
+			'metrics'       => array(),
+			'calculated_at' => '',
 			'score'         => 0,
 			'level'         => '',
-			'indicators'    => array(),
-			'calculated_at' => '',
 		);
 	}
 }

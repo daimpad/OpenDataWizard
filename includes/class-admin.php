@@ -153,7 +153,8 @@ class ODW_Admin {
 				} else {
 					$level      = $quality['level'];
 					$score      = $quality['score'];
-					$label      = ODW_Quality::get_level_label( $level );
+					$rating     = (string) ( $quality['rating'] ?? '' );
+					$label      = '' !== $rating ? ODW_Quality::get_rating_label( $rating ) : ODW_Quality::get_level_label( $level );
 					$title_attr = sprintf( '%s · %d/100 %s', $label, $score, __( 'Punkte', 'open-data-wizard' ) );
 					printf(
 						'<span class="odw-quality-badge odw-quality--%s" title="%s"><span class="odw-quality-dot" aria-hidden="true">●</span> %d</span>',

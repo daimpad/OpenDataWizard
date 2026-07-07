@@ -344,6 +344,23 @@
 .odw-quality-fail .odw-quality-col-status { color: var(--odw-color-quality-low-dot); }
 .odw-quality-fail                          { color: var(--odw-color-text-muted); }
 
+/* MQA: not-assessed metrics (network / vocabulary / SHACL — pending phases) */
+.odw-quality-notassessed                          { color: var(--odw-color-text-muted); }
+.odw-quality-notassessed .odw-quality-col-status  { color: var(--odw-color-border); }
+
+/* MQA: per-dimension score in the section header */
+.odw-quality-dim-score {
+    float: right;
+    font-weight: 400;
+    color: var(--odw-color-text-muted);
+}
+
+.odw-quality-of-max {
+    font-weight: 400;
+    color: var(--odw-color-text-muted);
+    font-size: 12px;
+}
+
 /* Footer */
 .odw-quality-footer {
     margin-top: 12px;
