@@ -166,6 +166,16 @@ class ODW_Settings {
 
 		add_settings_field( 'cache_ttl', __( 'Cache-Laufzeit (Sekunden)', 'open-data-wizard' ), array( self::class, 'field_cache_ttl' ), 'odw-settings', 'odw_section_api' );
 
+		// --- Qualität (MQA) ---
+		add_settings_section(
+			'odw_section_quality',
+			__( 'Qualitätsprüfung (MQA)', 'open-data-wizard' ),
+			null,
+			'odw-settings'
+		);
+
+		add_settings_field( 'mqa_check_urls', __( 'URL-Erreichbarkeit prüfen', 'open-data-wizard' ), array( self::class, 'field_mqa_check_urls' ), 'odw-settings', 'odw_section_quality' );
+
 		// --- Deinstallation ---
 		add_settings_section(
 			'odw_section_uninstall',
@@ -291,6 +301,27 @@ class ODW_Settings {
 	}
 
 	/**
+	 * Renders the MQA URL-reachability settings field.
+	 */
+	public static function field_mqa_check_urls(): void {
+		$checked = (bool) self::get( 'mqa_check_urls' );
+		?>
+		<label>
+			<input
+				type="checkbox"
+				name="<?php echo esc_attr( self::OPTION_KEY . '[mqa_check_urls]' ); ?>"
+				value="1"
+				<?php checked( $checked ); ?>
+			>
+			<?php esc_html_e( 'Zugriffs- und Download-URLs beim Speichern per HTTP-HEAD auf Erreichbarkeit prüfen (MQA-Zugänglichkeit, +80 Punkte).', 'open-data-wizard' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'Sendet ausgehende Anfragen an die angegebenen Datensatz-URLs. Ergebnisse werden 24 Stunden zwischengespeichert. Standardmäßig deaktiviert.', 'open-data-wizard' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
 	 * Renders the delete-on-uninstall settings field.
 	 */
 	public static function field_delete_on_uninstall(): void {
@@ -327,6 +358,7 @@ class ODW_Settings {
 		$output['default_publisher']   = sanitize_text_field( $input['default_publisher'] ?? '' );
 		$output['default_license']     = sanitize_text_field( $input['default_license'] ?? '' );
 		$output['delete_on_uninstall'] = ! empty( $input['delete_on_uninstall'] ) ? '1' : '0';
+		$output['mqa_check_urls']      = ! empty( $input['mqa_check_urls'] ) ? '1' : '0';
 
 		// Migrate legacy ISO language codes to EU language URIs.
 		$lang_raw                   = sanitize_text_field( $input['default_language'] ?? '' );
@@ -447,6 +479,7 @@ class ODW_Settings {
 			'default_language'    => '',
 			'cache_ttl'           => 300,
 			'delete_on_uninstall' => '0',
+			'mqa_check_urls'      => '0',
 		);
 	}
 }

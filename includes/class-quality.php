@@ -200,8 +200,21 @@ class ODW_Quality {
 			return self::check_vocab_metric( (string) $metric['check'], $post );
 		}
 
-		// Erreichbarkeits- und SHACL-Prüfungen folgen in Phase 3.
+		if ( 'reachable' === $type && self::url_checks_enabled() ) {
+			return self::check_reachable_metric( (string) $metric['check'], $post );
+		}
+
+		// SHACL (und Erreichbarkeit bei deaktivierter Einstellung) folgt in Phase 3+.
 		return null;
+	}
+
+	/**
+	 * Ist die opt-in-URL-Erreichbarkeitsprüfung aktiviert?
+	 *
+	 * @return bool
+	 */
+	private static function url_checks_enabled(): bool {
+		return class_exists( 'ODW_Settings' ) && (bool) ODW_Settings::get( 'mqa_check_urls' );
 	}
 
 	/**
@@ -359,6 +372,58 @@ class ODW_Quality {
 
 		$extended = ODW_Fields::load_license_list();
 		return isset( $extended[ $uri ] );
+	}
+
+	/**
+	 * „Ist die referenzierte URL erreichbar?"-Prüfung (MQA Phase 3, opt-in).
+	 *
+	 * @param string   $check Check-Schlüssel (access_url | download_url).
+	 * @param \WP_Post $post  Dataset post object.
+	 * @return bool True wenn die URL per HTTP-HEAD einen 2xx/3xx-Status liefert.
+	 */
+	private static function check_reachable_metric( string $check, \WP_Post $post ): bool {
+		$field = 'download_url' === $check ? 'odw_download_url' : 'odw_access_url';
+		$url   = trim( (string) carbon_get_post_meta( $post->ID, $field ) );
+
+		if ( '' === $url || ! preg_match( '#^https?://#i', $url ) ) {
+			return false;
+		}
+
+		return self::url_is_reachable( $url );
+	}
+
+	/**
+	 * Prüft die Erreichbarkeit einer URL per HTTP HEAD (mit GET-Fallback), 24h gecacht.
+	 *
+	 * @param string $url Zu prüfende URL.
+	 * @return bool True bei Statuscode 200–399.
+	 */
+	private static function url_is_reachable( string $url ): bool {
+		$cache_key = 'odw_mqa_reach_' . md5( $url );
+		$cached    = get_transient( $cache_key );
+		if ( '1' === $cached || '0' === $cached ) {
+			return '1' === $cached;
+		}
+
+		$args = array(
+			'timeout'     => 5,
+			'redirection' => 3,
+			'user-agent'  => 'OpenDataWizard-MQA/1.0',
+		);
+
+		$response = wp_remote_head( $url, $args );
+		$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+
+		// Manche Server lehnen HEAD ab (405/501) — dann ein leichtgewichtiges GET versuchen.
+		if ( 405 === $code || 501 === $code || 0 === $code ) {
+			$response = wp_remote_get( $url, $args );
+			$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+		}
+
+		$ok = $code >= 200 && $code < 400;
+		set_transient( $cache_key, $ok ? '1' : '0', DAY_IN_SECONDS );
+
+		return $ok;
 	}
 
 	/**
@@ -587,7 +652,7 @@ class ODW_Quality {
 				echo esc_html(
 					sprintf(
 					/* translators: %d: number of points not yet assessed */
-						__( '%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit und DCAT-AP-SHACL-Prüfung folgen).', 'open-data-wizard' ),
+						__( '%d Punkte konnten nicht automatisch bewertet werden (in der Tabelle mit „–" markiert).', 'open-data-wizard' ),
 						$not_assessed
 					)
 				);

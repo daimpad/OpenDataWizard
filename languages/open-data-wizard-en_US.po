@@ -18,6 +18,9 @@ msgstr " created and are then available for editing."
 msgid "%1$d von %2$d Pflichtangaben ausgefüllt"
 msgstr "%1$d of %2$d required fields completed"
 
+msgid "%d Punkte konnten nicht automatisch bewertet werden (in der Tabelle mit „–\" markiert)."
+msgstr "%d points could not be assessed automatically (marked with “–” in the table)."
+
 msgid "%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit und DCAT-AP-SHACL-Prüfung folgen)."
 msgstr "%d points are currently not assessed (URL reachability and DCAT-AP SHACL checks are coming)."
 
@@ -1035,6 +1038,9 @@ msgstr "Keywords (dcat:keyword)"
 msgid "Sekunden"
 msgstr "Seconds"
 
+msgid "Sendet ausgehende Anfragen an die angegebenen Datensatz-URLs. Ergebnisse werden 24 Stunden zwischengespeichert. Standardmäßig deaktiviert."
+msgstr "Sends outbound requests to the given dataset URLs. Results are cached for 24 hours. Disabled by default."
+
 msgid "Shortcode"
 msgstr "Shortcode"
 
@@ -1142,6 +1148,9 @@ msgstr "URL of the project website or data portal with further information about
 
 msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
 msgstr "URL describing the quality-assurance process (optional)."
+
+msgid "URL-Erreichbarkeit prüfen"
+msgstr "Check URL reachability"
 
 msgid "Um welchen Typ von Datensatz handelt es sich?"
 msgstr "What type of dataset is this?"
@@ -1412,6 +1421,9 @@ msgstr "Access & further discoverability"
 
 msgid "Zugriff verweigert."
 msgstr "Access denied."
+
+msgid "Zugriffs- und Download-URLs beim Speichern per HTTP-HEAD auf Erreichbarkeit prüfen (MQA-Zugänglichkeit, +80 Punkte)."
+msgstr "Check access and download URLs for reachability via HTTP HEAD on save (MQA accessibility, +80 points)."
 
 msgid "Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich"
 msgstr "Access classification of the dataset. Example: Public, Restricted, Non-public"

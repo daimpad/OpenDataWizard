@@ -7,6 +7,32 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.15.0] — 2026-07-07
+
+MQA-Qualitäts-Scoring **Phase 3a**: optionale URL-Erreichbarkeitsprüfung.
+
+### ✨ Added — URL-Erreichbarkeit (opt-in)
+- Neue Einstellung **„URL-Erreichbarkeit prüfen"** (Bereich *Qualitätsprüfung (MQA)*,
+  standardmäßig deaktiviert). Ist sie aktiv, prüft das Plugin `dcat:accessURL` und
+  `dcat:downloadURL` beim Speichern per **HTTP HEAD** (mit GET-Fallback bei 405/501) auf
+  Erreichbarkeit (Statuscode 200–399).
+- Ergebnisse werden **24 Stunden** als Transient zwischengespeichert (Cache-Key je URL),
+  sodass wiederholte Speichervorgänge keine erneuten Requests auslösen.
+- Damit steigt das bewertbare Maximum bei aktivierter Prüfung von ~295 auf **~375 von 405**.
+  Es verbleibt nur die **DCAT-AP-SHACL-Konformität** (30 P) als „nicht bewertet".
+
+### 🔒 Datenschutz/Performance
+- Die Prüfung ist **opt-in** und sendet ausgehende Anfragen ausschließlich an die im Datensatz
+  hinterlegten URLs (kein Fremddienst). Kurzer Timeout (5 s) + 24h-Cache.
+
+### 🧾 i18n
+- 4 neue UI-Strings; `en_US.mo` neu kompiliert.
+
+### ✅ Tests
+- Erreichbarkeitslogik: Cache-Hit (kein Request) und 2xx→erreichbar (mit Caching).
+
+---
+
 ## [2.14.0] — 2026-07-07
 
 MQA-Qualitäts-Scoring **Phase 2**: Vokabular-Prüfungen (offline). Siehe `docs/MQA-KONZEPT.md`.
