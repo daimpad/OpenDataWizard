@@ -403,4 +403,50 @@ class Test_ODW_Quality extends TestCase {
 
 		$this->assertArrayNotHasKey( 'odw:qualityScore', $result );
 	}
+
+	// -------------------------------------------------------------------------
+	// url_is_reachable() — MQA Phase 3 (opt-in reachability)
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Invokes the private static url_is_reachable() helper.
+	 *
+	 * @param string $url URL to check.
+	 * @return bool
+	 */
+	private function call_url_is_reachable( string $url ): bool {
+		$ref = new \ReflectionMethod( 'ODW_Quality', 'url_is_reachable' );
+		$ref->setAccessible( true );
+		return (bool) $ref->invoke( null, $url );
+	}
+
+	/**
+	 * A cached negative result short-circuits without a network request.
+	 */
+	public function test_url_is_reachable_uses_cached_result(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( '0' );
+
+		$this->assertFalse( $this->call_url_is_reachable( 'https://example.com/data.csv' ) );
+	}
+
+	/**
+	 * A 200 HEAD response marks the URL reachable and caches the result.
+	 */
+	public function test_url_is_reachable_maps_2xx_to_true(): void {
+		$this->load_class();
+
+		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+			define( 'DAY_IN_SECONDS', 86400 );
+		}
+
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
+		\WP_Mock::userFunction( 'wp_remote_head' )->andReturn( array( 'response' => array( 'code' => 200 ) ) );
+		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
+		\WP_Mock::userFunction( 'wp_remote_retrieve_response_code' )->andReturn( 200 );
+		\WP_Mock::userFunction( 'set_transient' )->once()->andReturn( true );
+
+		$this->assertTrue( $this->call_url_is_reachable( 'https://example.com/data.csv' ) );
+	}
 }
