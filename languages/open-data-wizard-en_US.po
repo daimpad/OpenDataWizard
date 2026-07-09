@@ -66,14 +66,23 @@ msgstr "Coverage"
 msgid "AccessURL erreichbar (dcat:accessURL)"
 msgstr "AccessURL reachable (dcat:accessURL)"
 
+msgid "Aktualisiert"
+msgstr "Updated"
+
 msgid "Aktualisiert sich automatisch, während Sie die Felder ausfüllen — ohne Speichern."
 msgstr "Updates automatically as you fill in the fields — no saving required."
+
+msgid "Aktualisierungsfrequenz"
+msgstr "Update frequency"
 
 msgid "Alle Datensätze"
 msgstr "All Datasets"
 
 msgid "Alle Datensätze, Metadaten und Plugin-Optionen beim Deinstallieren unwiderruflich löschen."
 msgstr "Irreversibly delete all datasets, metadata and plugin options on uninstall."
+
+msgid "Alle Metadaten anzeigen"
+msgstr "Show all metadata"
 
 msgid "Alle Pflichtangaben ausgefüllt"
 msgstr "All required fields completed"
@@ -237,6 +246,9 @@ msgstr "CESSDA Topic Classification"
 msgid "CESSDA-THEMENKLASSIFIKATION (dct:subject)"
 msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
 
+msgid "CESSDA-Themenfeld"
+msgstr "CESSDA topic"
+
 msgid "CONTRIBUTOR-ID (dcatde:contributorID)"
 msgstr "CONTRIBUTOR ID (dcatde:contributorID)"
 
@@ -290,6 +302,9 @@ msgstr "Select / upload file"
 
 msgid "Datei auswählen oder hochladen"
 msgstr "Select or upload file"
+
+msgid "Datei herunterladen"
+msgstr "Download file"
 
 msgid "Datei hochladen"
 msgstr "Upload file"
@@ -422,6 +437,9 @@ msgstr "Distribution — advanced"
 
 msgid "Download-Datei (Mediathek)"
 msgstr "Download file (media library)"
+
+msgid "Download-URL"
+msgstr "Download URL"
 
 msgid "Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext."
 msgstr "Download URL, format, file size, license and attribution text."
@@ -765,6 +783,9 @@ msgstr "Click to select"
 msgid "Kontakt"
 msgstr "Contact"
 
+msgid "Kontakt-Website"
+msgstr "Contact website"
+
 msgid "Kontaktpunkt (dcat:contactPoint)"
 msgstr "Contact point (dcat:contactPoint)"
 
@@ -840,11 +861,17 @@ msgstr "Maximum of %d datasets reached — further elements were ignored."
 msgid "Maximale Anzahl von %d Datensätzen erreicht — weitere Zeilen wurden ignoriert."
 msgstr "Maximum of %d datasets reached — further rows were ignored."
 
+msgid "Media-Type"
+msgstr "Media type"
+
 msgid "Media-Type gesetzt (dcat:mediaType)"
 msgstr "Media type set (dcat:mediaType)"
 
 msgid "Metadaten (JSON-LD)"
 msgstr "Metadata (JSON-LD)"
+
+msgid "Metadaten JSON"
+msgstr "Metadata JSON"
 
 msgid "Metadaten des Datenkatalogs — erscheinen in der REST-API-Antwort des Catalog-Endpoints."
 msgstr "Metadata of the data catalog — appears in the REST API response of the catalog endpoint."
@@ -878,6 +905,9 @@ msgstr "Name of the publishing organization"
 
 msgid "Name oder Organisation der Ansprechperson."
 msgstr "Name or organization of the contact person."
+
+msgid "Namensnennung"
+msgstr "Attribution"
 
 msgid "Nein"
 msgstr "No"
@@ -957,11 +987,17 @@ msgstr "Pagination"
 msgid "Perfekt"
 msgstr "Perfect"
 
+msgid "Pflegende Stelle"
+msgstr "Maintainer"
+
 msgid "Pflichtangaben"
 msgstr "Required information"
 
 msgid "Pflichtfelder"
 msgstr "Required fields"
+
+msgid "Projektseite"
+msgstr "Project page"
 
 msgid "Projektseite & Aktualität"
 msgstr "Project page & timeliness"
@@ -1020,6 +1056,9 @@ msgstr "Regions & Cities"
 msgid "RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)"
 msgstr "SPATIAL RESOLUTION IN METERS (dcat:spatialResolutionInMeters)"
 
+msgid "Räumliche Abdeckung"
+msgstr "Spatial coverage"
+
 msgid "Räumliche Abdeckung (dct:spatial)"
 msgstr "Spatial coverage (dct:spatial)"
 
@@ -1028,6 +1067,9 @@ msgstr "KEYWORDS (dcat:keyword)"
 
 msgid "SPRACHE (dct:language)"
 msgstr "LANGUAGE (dct:language)"
+
+msgid "Schlagworte"
+msgstr "Keywords"
 
 msgid "Schlagworte (dcat:keyword)"
 msgstr "Keywords (dcat:keyword)"
@@ -1055,6 +1097,9 @@ msgstr "Save the dataset to update the preview."
 
 msgid "Speichern Sie den Datensatz, um sie zu aktualisieren."
 msgstr "Save the dataset to update it."
+
+msgid "Sprache"
+msgstr "Language"
 
 msgid "Sprache (dct:language)"
 msgstr "Language (dct:language)"
@@ -1178,6 +1223,9 @@ msgstr "Under which license are these data available?"
 
 msgid "Unternehmen und Eigentümerschaft von Unternehmen"
 msgstr "Companies and company ownership"
+
+msgid "Urheber"
+msgstr "Originator"
 
 msgid "VERSION (owl:versionInfo)"
 msgstr "VERSION (owl:versionInfo)"
@@ -1413,6 +1461,9 @@ msgstr "Row %d: column count does not match."
 msgid "Zeitliche Abdeckung (dct:temporal)"
 msgstr "Temporal coverage (dct:temporal)"
 
+msgid "Zeitraum"
+msgstr "Time period"
+
 msgid "Zu diesem Datensatz hochgeladen"
 msgstr "Uploaded to this dataset"
 
@@ -1430,6 +1481,9 @@ msgstr "Access classification of the dataset. Example: Public, Restricted, Non-p
 
 msgid "Zugriffs-URL"
 msgstr "Access URL"
+
+msgid "Zugriffsrechte"
+msgstr "Access rights"
 
 msgid "Zugriffsrechte aus Vokabular"
 msgstr "Access rights from vocabulary"

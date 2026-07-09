@@ -2,15 +2,15 @@
 /**
  * Shortcode [odw_dataset id="…"] — Download-Card für Frontend
  *
- * Liest Metadaten direkt via get_post_meta(); keine Carbon Fields Abhängigkeit.
+ * Liest Metadaten via Carbon Fields / get_post_meta(); keine harte CF-Abhängigkeit.
  *
- * Datei-Metadaten (_odw_file_size, _odw_file_format) werden seit v1.8.0 beim
- * Speichern vorberechnet (ODW_Admin::save_file_attachment) und hier direkt
- * gelesen. Für ältere Datensätze ohne diese Meta-Einträge greift ein Fallback
- * auf filesize()/pathinfo() zur Laufzeit.
+ * Aufbau der Karte (v2.18.0):
+ *   1. Datensatzname (groß) + Link „Metadaten JSON" (rechts)
+ *   2. Download-Button zur bereitgestellten Datei
+ *   3. Bunte Badges: Dateiformat · Dateigröße · Lizenz
+ *   4. Aufklappbares Accordion mit allen angegebenen Metadatenfeldern
  *
- * CSS wird lazy per wp_register_style / wp_enqueue_style eingebunden:
- * assets/css/frontend.css wird nur auf Seiten geladen, die den Shortcode rendern.
+ * CSS wird lazy eingebunden: assets/css/frontend.css nur auf Seiten mit Shortcode.
  *
  * @package OpenDataWizard
  */
@@ -37,8 +37,7 @@ class ODW_Shortcode {
 	}
 
 	/**
-	 * Nur registrieren — tatsächlich eingebunden wird erst beim Rendern,
-	 * damit CSS nur auf Seiten geladen wird, die den Shortcode verwenden.
+	 * Nur registrieren — tatsächlich eingebunden wird erst beim Rendern.
 	 */
 	public static function register_assets(): void {
 		wp_register_style(
@@ -47,6 +46,20 @@ class ODW_Shortcode {
 			array(),
 			ODW_VERSION
 		);
+	}
+
+	/**
+	 * Reads a Carbon Fields value with a get_post_meta fallback.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Carbon field key (e.g. 'odw_publisher').
+	 * @return string
+	 */
+	private static function meta( int $post_id, string $key ): string {
+		if ( function_exists( 'carbon_get_post_meta' ) ) {
+			return trim( (string) carbon_get_post_meta( $post_id, $key ) );
+		}
+		return trim( (string) get_post_meta( $post_id, '_' . $key, true ) );
 	}
 
 	/**
@@ -71,27 +84,22 @@ class ODW_Shortcode {
 
 		wp_enqueue_style( 'odw-frontend' );
 
-		// --- Metadaten ---
-		$title   = get_the_title( $post );
-		$theme   = (string) get_post_meta( $post_id, '_odw_theme', true );
-		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
+		$title = get_the_title( $post );
 
-		// License from post meta.
+		// --- License label ---
 		$license_label = '';
-		if ( function_exists( 'carbon_get_post_meta' ) ) {
-			$license_uri = (string) carbon_get_post_meta( $post_id, 'odw_license' );
-			if ( 'sonstige' === $license_uri ) {
-				$license_label = (string) carbon_get_post_meta( $post_id, 'odw_license_custom' );
-			} elseif ( '' !== $license_uri ) {
-				$license_label = ODW_Fields::get_license_label( $license_uri );
+		$license_uri   = self::meta( $post_id, 'odw_license' );
+		if ( 'sonstige' === $license_uri ) {
+			$license_label = self::meta( $post_id, 'odw_license_custom' );
+			if ( class_exists( 'ODW_Fields' ) && '' !== $license_label ) {
+				$license_label = ODW_Fields::get_license_label( $license_label );
 			}
+		} elseif ( '' !== $license_uri && class_exists( 'ODW_Fields' ) ) {
+			$license_label = ODW_Fields::get_license_label( $license_uri );
 		}
 
-		// Keywords: newline-separated string → array of trimmed, non-empty values.
-		$keywords_raw = (string) get_post_meta( $post_id, '_odw_keywords', true );
-		$keywords     = array_filter( array_map( 'trim', explode( "\n", $keywords_raw ) ) );
-
-		// --- Datei-Informationen aus der Mediathek ---
+		// --- File (media library) ---
+		$file_id     = (int) get_post_meta( $post_id, '_odw_file_id', true );
 		$file_url    = '';
 		$file_size   = '';
 		$file_format = '';
@@ -99,9 +107,7 @@ class ODW_Shortcode {
 		if ( $file_id > 0 ) {
 			$url = wp_get_attachment_url( $file_id );
 			if ( $url ) {
-				$file_url = $url;
-
-				// Use pre-computed meta (set on save) — fall back to runtime on old entries.
+				$file_url      = $url;
 				$stored_format = (string) get_post_meta( $post_id, '_odw_file_format', true );
 				$file_format   = $stored_format ? $stored_format : strtoupper( (string) pathinfo( $url, PATHINFO_EXTENSION ) );
 
@@ -117,70 +123,170 @@ class ODW_Shortcode {
 			}
 		}
 
-		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
+		// Format from the form takes precedence over the derived file extension.
+		$form_format = self::meta( $post_id, 'odw_format' );
+		if ( '' !== $form_format ) {
+			$file_format = $form_format;
+		}
 
-		// --- HTML aufbauen ---
+		// byteSize from the form when no media-library size is available.
+		if ( '' === $file_size ) {
+			$byte_size = (int) self::meta( $post_id, 'odw_byte_size' );
+			if ( $byte_size > 0 ) {
+				$file_size = self::format_bytes( $byte_size );
+			}
+		}
+
+		// --- Download target: downloadURL → media file → accessURL ---
+		$download_url = self::meta( $post_id, 'odw_download_url' );
+		if ( '' === $download_url ) {
+			$download_url = '' !== $file_url ? $file_url : self::meta( $post_id, 'odw_access_url' );
+		}
+
+		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
+		$meta_rows    = self::collect_metadata_rows( $post_id, $license_label, $file_size );
+
+		// --- HTML ---
 		ob_start();
 		?>
 		<article class="odw-download-card">
 
-			<div class="odw-download-card__header">
-				<h3 class="odw-download-card__title"><?php echo esc_html( $title ); ?></h3>
-				<?php if ( '' !== $theme ) : ?>
-					<span class="odw-download-card__theme"><?php echo esc_html( $theme ); ?></span>
-				<?php endif; ?>
+			<div class="odw-download-card__top">
+				<h2 class="odw-download-card__title"><?php echo esc_html( $title ); ?></h2>
+				<a
+					class="odw-download-card__metajson"
+					href="<?php echo esc_url( $metadata_url ); ?>"
+					download="<?php echo esc_attr( 'metadaten-' . $post_id . '.json' ); ?>"
+				>
+					<span aria-hidden="true">⤓</span> <?php esc_html_e( 'Metadaten JSON', 'open-data-wizard' ); ?>
+				</a>
 			</div>
 
-			<?php if ( $license_label ) : ?>
-			<dl class="odw-download-card__meta">
-				<div class="odw-download-card__meta-row">
-					<dt><?php esc_html_e( 'Lizenz', 'open-data-wizard' ); ?></dt>
-					<dd><?php echo esc_html( $license_label ); ?></dd>
-				</div>
-			</dl>
+			<?php if ( '' !== $download_url ) : ?>
+			<a
+				class="odw-download-card__download"
+				href="<?php echo esc_url( $download_url ); ?>"
+				download
+			>
+				<span aria-hidden="true">⬇</span> <?php esc_html_e( 'Datei herunterladen', 'open-data-wizard' ); ?>
+			</a>
 			<?php endif; ?>
 
-			<?php if ( ! empty( $keywords ) ) : ?>
-			<div class="odw-download-card__keywords">
-				<?php foreach ( $keywords as $keyword ) : ?>
-					<span class="odw-download-card__keyword"><?php echo esc_html( $keyword ); ?></span>
+			<?php
+			$badges = array();
+			if ( '' !== $file_format ) {
+				$badges[] = array( 'format', $file_format );
+			}
+			if ( '' !== $file_size ) {
+				$badges[] = array( 'size', $file_size );
+			}
+			if ( '' !== $license_label ) {
+				$badges[] = array( 'license', $license_label );
+			}
+			if ( ! empty( $badges ) ) :
+				?>
+			<div class="odw-download-card__badges">
+				<?php foreach ( $badges as $badge ) : ?>
+					<span class="odw-badge odw-badge--<?php echo esc_attr( $badge[0] ); ?>"><?php echo esc_html( $badge[1] ); ?></span>
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
 
-			<div class="odw-download-card__footer">
-				<?php if ( '' !== $file_url ) : ?>
-				<a
-					href="<?php echo esc_url( $file_url ); ?>"
-					class="odw-download-card__button"
-					download
-				>
-					<?php esc_html_e( 'Herunterladen', 'open-data-wizard' ); ?>
-				</a>
-
-					<?php
-					$file_info_parts = array_filter( array( $file_format, $file_size ) );
-					if ( ! empty( $file_info_parts ) ) :
-						?>
-				<span class="odw-download-card__file-info">
-						<?php echo esc_html( implode( ' · ', $file_info_parts ) ); ?>
-				</span>
-					<?php endif; ?>
-				<?php endif; ?>
-
-				<a
-					href="<?php echo esc_url( $metadata_url ); ?>"
-					class="odw-download-card__button odw-download-card__button--meta"
-					target="_blank"
-					rel="noopener"
-				>
-					<?php esc_html_e( 'Metadaten (JSON-LD)', 'open-data-wizard' ); ?>
-				</a>
-			</div>
+			<?php if ( ! empty( $meta_rows ) ) : ?>
+			<details class="odw-download-card__details">
+				<summary><?php esc_html_e( 'Alle Metadaten anzeigen', 'open-data-wizard' ); ?></summary>
+				<dl class="odw-download-card__metalist">
+					<?php foreach ( $meta_rows as $row ) : ?>
+					<div class="odw-metarow">
+						<dt><?php echo esc_html( $row['label'] ); ?></dt>
+						<dd>
+							<?php
+							if ( ! empty( $row['url'] ) ) {
+								printf(
+									'<a href="%s" target="_blank" rel="noopener">%s</a>',
+									esc_url( $row['value'] ),
+									esc_html( $row['value'] )
+								);
+							} else {
+								echo nl2br( esc_html( $row['value'] ) );
+							}
+							?>
+						</dd>
+					</div>
+					<?php endforeach; ?>
+				</dl>
+			</details>
+			<?php endif; ?>
 
 		</article>
 		<?php
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Collects all populated metadata fields as label/value rows for the accordion.
+	 *
+	 * @param int    $post_id       Post ID.
+	 * @param string $license_label Resolved license label.
+	 * @param string $file_size     Human-readable file size.
+	 * @return array<int, array{label: string, value: string, url: bool}>
+	 */
+	private static function collect_metadata_rows( int $post_id, string $license_label, string $file_size ): array {
+		$rows = array();
+
+		$add = static function ( string $label, string $value, bool $url = false ) use ( &$rows ): void {
+			if ( '' !== trim( $value ) ) {
+				$rows[] = array(
+					'label' => $label,
+					'value' => trim( $value ),
+					'url'   => $url,
+				);
+			}
+		};
+
+		$add( __( 'Herausgeber', 'open-data-wizard' ), self::meta( $post_id, 'odw_publisher' ) );
+		$add( __( 'Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_description' ) );
+		$add( __( 'Thema', 'open-data-wizard' ), self::meta( $post_id, 'odw_theme' ) );
+		$add( __( 'CESSDA-Themenfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_cessda_topic' ), true );
+		$add( __( 'Sprache', 'open-data-wizard' ), self::meta( $post_id, 'odw_language' ), true );
+
+		$keywords = array_filter( array_map( 'trim', explode( "\n", self::meta( $post_id, 'odw_keywords' ) ) ) );
+		$add( __( 'Schlagworte', 'open-data-wizard' ), implode( ', ', $keywords ) );
+
+		$add( __( 'Zugriffs-URL', 'open-data-wizard' ), self::meta( $post_id, 'odw_access_url' ), true );
+		$add( __( 'Download-URL', 'open-data-wizard' ), self::meta( $post_id, 'odw_download_url' ), true );
+		$add( __( 'Format', 'open-data-wizard' ), self::meta( $post_id, 'odw_format' ) );
+		$add( __( 'Media-Type', 'open-data-wizard' ), self::meta( $post_id, 'odw_media_type' ), true );
+		$add( __( 'Dateigröße', 'open-data-wizard' ), $file_size );
+		$add( __( 'Lizenz', 'open-data-wizard' ), $license_label );
+		$add( __( 'Namensnennung', 'open-data-wizard' ), self::meta( $post_id, 'odw_attribution_text' ) );
+		$add( __( 'Zugriffsrechte', 'open-data-wizard' ), self::meta( $post_id, 'odw_access_rights' ), true );
+
+		$add( __( 'Räumliche Abdeckung', 'open-data-wizard' ), self::meta( $post_id, 'odw_spatial' ) );
+
+		$t_start = self::meta( $post_id, 'odw_temporal_start' );
+		$t_end   = self::meta( $post_id, 'odw_temporal_end' );
+		if ( '' !== $t_start || '' !== $t_end ) {
+			$add( __( 'Zeitraum', 'open-data-wizard' ), trim( $t_start . ' – ' . $t_end, ' –' ) );
+		}
+
+		$add( __( 'Veröffentlicht', 'open-data-wizard' ), self::meta( $post_id, 'odw_issued' ) );
+		$add( __( 'Aktualisiert', 'open-data-wizard' ), self::meta( $post_id, 'odw_modified' ) );
+		$add( __( 'Projektseite', 'open-data-wizard' ), self::meta( $post_id, 'odw_landing_page' ), true );
+		$add( __( 'Aktualisierungsfrequenz', 'open-data-wizard' ), self::meta( $post_id, 'odw_accrual_periodicity' ), true );
+		$add( __( 'Urheber', 'open-data-wizard' ), self::meta( $post_id, 'odw_originator_name' ) );
+		$add( __( 'Pflegende Stelle', 'open-data-wizard' ), self::meta( $post_id, 'odw_maintainer_name' ) );
+
+		$contact = array_filter(
+			array(
+				self::meta( $post_id, 'odw_contact_name' ),
+				self::meta( $post_id, 'odw_contact_email' ),
+			)
+		);
+		$add( __( 'Kontakt', 'open-data-wizard' ), implode( ' · ', $contact ) );
+		$add( __( 'Kontakt-Website', 'open-data-wizard' ), self::meta( $post_id, 'odw_contact_url' ), true );
+
+		return $rows;
 	}
 
 	/**
