@@ -372,8 +372,9 @@ class ODW_Admin {
 					'cessdaOptions'       => $cessda_options,
 					'spatialOptions'      => $spatial_options,
 					'vocabularies'        => array(
-						'contributors' => ODW_Fields::load_vocabulary( 'contributors' ),
-						'data-theme'   => ODW_Fields::load_vocabulary( 'data-theme' ),
+						'contributors'   => ODW_Fields::load_vocabulary( 'contributors' ),
+						'data-theme'     => ODW_Fields::load_vocabulary( 'data-theme' ),
+						'engagementfeld' => ODW_Fields::load_vocabulary( 'engagementfeld' ),
 					),
 					'cessdaWidget'        => array(
 						'label'       => __( 'CESSDA Themenklassifikation', 'open-data-wizard' ),
