@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.18.0] — 2026-07-09
+
+### 💅 Changed — Download-Card (`[odw_dataset]`) neu gestaltet
+- **Datensatzname groß** oben, rechts daneben ein Link **„Metadaten JSON"** (lädt das JSON-LD herunter).
+- Prominenter **Download-Button** zur bereitgestellten Datei (Download-URL → Mediathek-Datei → Zugriffs-URL).
+- Darunter **bunte Badges** in kleiner Schrift: **Dateiformat · Dateigröße · Lizenz**.
+- **Aufklappbares Accordion** („Alle Metadaten anzeigen") mit **allen angegebenen Metadatenfeldern**
+  (Herausgeber, Beschreibung, Thema, CESSDA, Sprache, Schlagworte, URLs, Format, Zeitraum, Kontakt u. v. m.).
+- Frontend-CSS entsprechend überarbeitet; 18 neue UI-Strings in `en_US` übersetzt.
+
+---
+
 ## [2.17.0] — 2026-07-09
 
 ### ✨ Added
