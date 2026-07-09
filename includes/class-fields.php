@@ -70,6 +70,10 @@ class ODW_Fields {
 						->add_options( self::get_theme_options() )
 						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
 
+					Field::make( 'text', 'odw_cessda_topic', __( 'Ordnen Sie den Datensatz einem oder mehreren Themenfeld nach CESSDA-Vokabular zu', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-backing', 'cessda' )
+						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
+
 					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_rows( 5 )
@@ -113,10 +117,6 @@ class ODW_Fields {
 							)
 						)
 						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22', 'open-data-wizard' ) ),
-
-					Field::make( 'text', 'odw_cessda_topic', __( 'CESSDA Themenklassifikation', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-backing', 'cessda' )
-						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 				)
 			)
 
