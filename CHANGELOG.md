@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.17.0] — 2026-07-09
+
+### ✨ Added
+- **Datei per Link ODER Upload** (Datenbereitstellung): Das Zugriffs-URL-Feld heißt jetzt
+  „Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch". Wer eine
+  Datei über die Mediathek-Box hochlädt, muss die URL **nicht** mehr eintippen — Zugriffs-URL und
+  Format werden beim Speichern automatisch aus der Datei übernommen. Pflichtprüfung ist erfüllt,
+  sobald **entweder** ein Link eingetragen **oder** eine Datei hochgeladen wurde.
+- **„Auf dem Datenatlas Zivilgesellschaft veröffentlichen"** (optional): Im letzten Wizard-Schritt
+  (Vorschau) verlinkt ein Button auf [datenatlas-zivilgesellschaft.de](https://datenatlas-zivilgesellschaft.de).
+
+---
+
 ## [2.16.0] — 2026-07-08
 
 ### ✨ Changed

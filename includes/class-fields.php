@@ -126,11 +126,10 @@ class ODW_Fields {
 			->add_tab(
 				__( '3 — Datenbereitstellung', 'open-data-wizard' ),
 				array(
-					Field::make( 'text', 'odw_access_url', __( 'Wo kann ich die Datei herunterladen?', 'open-data-wizard' ) )
-						->set_required( true )
+					Field::make( 'text', 'odw_access_url', __( 'Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
 						->set_attribute( 'type', 'url' )
-						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/daten/datei.csv', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei in der Box „Download-Datei (Mediathek)" hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen.', 'open-data-wizard' ) ),
 
 					Field::make( 'select', 'odw_format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
 						->add_options( self::get_format_options() )
@@ -416,6 +415,16 @@ class ODW_Fields {
 				array(
 					Field::make( 'html', 'odw_preview_html' )
 					->set_html( self::get_preview_html() ),
+
+					Field::make( 'html', 'odw_datenatlas_publish' )
+					->set_html(
+						'<div class="odw-datenatlas-publish">'
+						. '<h4 style="margin:16px 0 4px">' . esc_html__( 'Auf dem Datenatlas Zivilgesellschaft veröffentlichen', 'open-data-wizard' ) . '</h4>'
+						. '<p class="description" style="margin:0 0 10px">' . esc_html__( 'Optional: Machen Sie diesen Datensatz zusätzlich auf dem Datenatlas Zivilgesellschaft auffindbar.', 'open-data-wizard' ) . '</p>'
+						. '<a href="https://datenatlas-zivilgesellschaft.de" target="_blank" rel="noopener noreferrer" class="button button-primary">'
+						. esc_html__( 'Zum Datenatlas Zivilgesellschaft', 'open-data-wizard' ) . ' ↗</a>'
+						. '</div>'
+					),
 				)
 			);
 	}
