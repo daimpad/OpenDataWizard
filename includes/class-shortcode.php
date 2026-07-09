@@ -248,6 +248,7 @@ class ODW_Shortcode {
 		$add( __( 'Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_description' ) );
 		$add( __( 'Thema', 'open-data-wizard' ), self::meta( $post_id, 'odw_theme' ) );
 		$add( __( 'CESSDA-Themenfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_cessda_topic' ), true );
+		$add( __( 'Engagementfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_engagementfeld' ) );
 		$add( __( 'Sprache', 'open-data-wizard' ), self::meta( $post_id, 'odw_language' ), true );
 
 		$keywords = array_filter( array_map( 'trim', explode( "\n", self::meta( $post_id, 'odw_keywords' ) ) ) );

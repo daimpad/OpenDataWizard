@@ -74,6 +74,11 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-backing', 'cessda' )
 						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 
+					Field::make( 'text', 'odw_engagementfeld', __( 'In welchem Engagementfeld ist die Organisation aktiv?', 'open-data-wizard' ) )
+						->set_attribute( 'data-odw-vocab', 'engagementfeld' )
+						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
+						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
+
 					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
 						->set_required( true )
 						->set_rows( 5 )
@@ -1299,6 +1304,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$dist_attribution    = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
 	$dist_availability   = (string) carbon_get_post_meta( $post_id, 'odw_availability' );
 	$cessda_topic        = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
+	$engagementfeld      = (string) carbon_get_post_meta( $post_id, 'odw_engagementfeld' );
 
 	// Extended DCAT-AP fields (Tab 4).
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
@@ -1410,12 +1416,21 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$dataset['dcat:theme'] = $themes;
 	}
 
+	// Thematic classifications are attached via the standard DCAT-AP subject
+	// property. CESSDA topic and ZiviZ engagement field both map to dct:subject;
+	// when both are present, dct:subject becomes an array.
+	$subjects = array();
 	if ( ! empty( $cessda_topic ) ) {
-		// CESSDA Topic Classification concept attached via the standard DCAT-AP
-		// subject property. Emitting an undeclared `cessda:` prefix would produce
-		// invalid JSON-LD; `dct:subject` is the conformant predicate and is
-		// already part of the @context.
-		$dataset['dct:subject'] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
+		$subjects[] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
+	}
+	if ( ! empty( $engagementfeld ) ) {
+		$engagement_uri = odw_resolve_vocab_uri( $engagementfeld, 'engagementfeld' );
+		if ( '' !== $engagement_uri ) {
+			$subjects[] = array( '@id' => odw_sanitize_jsonld_id( $engagement_uri ) );
+		}
+	}
+	if ( ! empty( $subjects ) ) {
+		$dataset['dct:subject'] = 1 === count( $subjects ) ? $subjects[0] : $subjects;
 	}
 
 	if ( ! empty( $issued ) ) {

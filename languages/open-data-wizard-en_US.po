@@ -474,6 +474,9 @@ msgstr "Email address for inquiries."
 msgid "EIGENE LIZENZ-URI"
 msgstr "CUSTOM LICENSE URI"
 
+msgid "ENGAGEMENTFELD (ZiviZ, dct:subject)"
+msgstr "FIELD OF ENGAGEMENT (ZiviZ, dct:subject)"
+
 msgid "ERSTELLER (dct:creator)"
 msgstr "CREATOR (dct:creator)"
 
@@ -518,6 +521,12 @@ msgstr "Recommended fields"
 
 msgid "Energie"
 msgstr "Energy"
+
+msgid "Engagementfeld"
+msgstr "Field of engagement"
+
+msgid "Engagementfeld eintippen oder auswählen…"
+msgstr "Type or select a field of engagement…"
 
 msgid "Englisch (EN)"
 msgstr "English (EN)"
@@ -680,6 +689,9 @@ msgstr "Insert into dataset"
 
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr "Which category does this dataset belong to?"
+
+msgid "In welchem Engagementfeld ist die Organisation aktiv?"
+msgstr "In which field of engagement is the organization active?"
 
 msgid "In welchem Format ist die Datei?"
 msgstr "What format is the file in?"
@@ -968,6 +980,9 @@ msgstr "Open data platforms can add this URL as a harvest source and collect the
 
 msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
 msgstr "Optionally an additional theme from the official EU theme list (supplements the category from tab 1)."
+
+msgid "Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz."
+msgstr "Optional: assign the dataset to a civil-society field of engagement from the ZiviZ vocabulary. Pick one from the list — the matching URI is used automatically. Example: Culture, Sports, Environmental and nature protection."
 
 msgid "Optionale Angaben"
 msgstr "Optional details"

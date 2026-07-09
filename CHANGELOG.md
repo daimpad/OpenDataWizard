@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.19.0] — 2026-07-09
+
+### ✨ Added — ZiviZ-Engagementfelder
+- Neues **optionales** Auswahlfeld **„In welchem Engagementfeld ist die Organisation aktiv?"** im
+  Schritt „Grundlegende Informationen". Auto-Suggest aus dem gebündelten **ZiviZ-Engagementfeld-
+  Vokabular** (`config/vocabularies/engagementfeld.json`, 16 Felder — Soziale Dienste, Kultur, Sport,
+  Umwelt- und Naturschutz u. a.); die zugehörige `ziviz.de`-URI wird automatisch verwendet.
+- Im JSON-LD als `dct:subject` ausgegeben — zusammen mit einer CESSDA-Klassifikation wird
+  `dct:subject` zu einem Array.
+- Erscheint auch im Frontend-Widget-Accordion „Alle Metadaten anzeigen".
+
+---
+
 ## [2.18.0] — 2026-07-09
 
 ### 💅 Changed — Download-Card (`[odw_dataset]`) neu gestaltet
