@@ -544,10 +544,29 @@ class ODW_Admin {
 		update_post_meta( $post_id, '_odw_file_id', $file_id );
 
 		if ( $file_id > 0 ) {
+			$ext       = '';
 			$file_path = get_attached_file( $file_id );
 			if ( $file_path && file_exists( $file_path ) ) {
 				update_post_meta( $post_id, '_odw_file_size', (int) filesize( $file_path ) );
-				update_post_meta( $post_id, '_odw_file_format', strtoupper( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) ) );
+				$ext = strtoupper( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) );
+				update_post_meta( $post_id, '_odw_file_format', $ext );
+			}
+
+			// A media-library upload doubles as the distribution: derive the
+			// access URL (and format) from the file when the user did not enter
+			// them manually, so they never have to type the URL twice.
+			if ( '' === trim( (string) get_post_meta( $post_id, '_odw_access_url', true ) ) ) {
+				$attachment_url = wp_get_attachment_url( $file_id );
+				if ( $attachment_url ) {
+					update_post_meta( $post_id, '_odw_access_url', esc_url_raw( $attachment_url ) );
+				}
+			}
+
+			if ( '' !== $ext
+				&& '' === trim( (string) get_post_meta( $post_id, '_odw_format', true ) )
+				&& array() !== ODW_Fields::get_format_meta( $ext )
+			) {
+				update_post_meta( $post_id, '_odw_format', $ext );
 			}
 		} else {
 			delete_post_meta( $post_id, '_odw_file_size' );

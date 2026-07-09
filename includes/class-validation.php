@@ -162,7 +162,21 @@ class ODW_Validation {
 
 		// Fall back to existing meta.
 		$access_url = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
-		return ! empty( $access_url ) && self::is_valid_url( $access_url );
+		if ( ! empty( $access_url ) && self::is_valid_url( $access_url ) ) {
+			return true;
+		}
+
+		// A media-library upload also counts as a valid distribution — its access
+		// URL is derived from the file on save (see ODW_Admin::save_file_attachment).
+		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
+		if ( 0 === $file_id
+			&& isset( $_POST['_odw_file_id'], $_POST['odw_file_upload_nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['odw_file_upload_nonce'] ) ), 'odw_save_file_attachment' )
+		) {
+			$file_id = absint( wp_unslash( $_POST['_odw_file_id'] ) );
+		}
+
+		return $file_id > 0;
 	}
 
 	/**

@@ -857,3 +857,17 @@
 	color: #a0a5aa;
 	font-style: italic;
 }
+
+/* =========================================================================
+   Datenatlas Zivilgesellschaft — Veröffentlichen-Abschnitt (Tab 5)
+   ========================================================================= */
+
+.odw-datenatlas-publish {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid var(--odw-color-border, #c3c4c7);
+}
+
+.odw-datenatlas-publish h4 {
+	font-size: 14px;
+}
