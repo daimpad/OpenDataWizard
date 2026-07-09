@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.16.0] — 2026-07-08
+
+### ✨ Changed
+- **CESSDA-Themenklassifikation** in den Schritt **„Grundlegende Informationen"** verschoben (vormals
+  „Inhaltliche Angaben") und mit klarerer Fragestellung versehen: „Ordnen Sie den Datensatz einem oder
+  mehreren Themenfeld nach CESSDA-Vokabular zu".
+- **Lizenz „Sonstige"**: Die Auswahlliste (Auto-Suggest) wurde um das offizielle
+  **DCAT-AP.de-Lizenzregister** (`http://dcat-ap.de/def/licenses/…`, 34 Lizenzen) erweitert — von den
+  Datenlizenzen Deutschland über Creative-Commons- und Open-Data-Commons-Lizenzen bis zu Software- und
+  eingeschränkten Lizenzen. Diese URIs zählen zugleich für die MQA-Metrik „Lizenz aus Vokabular".
+
+---
+
 ## [2.15.0] — 2026-07-07
 
 MQA-Qualitäts-Scoring **Phase 3a**: optionale URL-Erreichbarkeitsprüfung.
