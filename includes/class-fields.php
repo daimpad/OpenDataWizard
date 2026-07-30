@@ -65,7 +65,11 @@ class ODW_Fields {
 				array(
 
 					Field::make( 'text', 'odw_publisher', __( 'Wer gibt diese Daten heraus?', 'open-data-wizard' ) )
-						->set_required( true )
+						// Pflicht wird NICHT über Carbon Fields' set_required erzwungen
+						// (das sperrt schon das Speichern eines leeren Entwurfs). Stattdessen
+						// markiert JS das Feld mit einem Sternchen und die Server-Validierung
+						// (ODW_Validation) blockiert nur die Veröffentlichung.
+						->set_attribute( 'data-odw-required', '1' )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_publisher' ) : '' )
 						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) )
 						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V.', 'open-data-wizard' ) ),
@@ -84,7 +88,8 @@ class ODW_Fields {
 						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
 
 					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
-						->set_required( true )
+						// Pflicht nur zum Veröffentlichen (siehe odw_publisher).
+						->set_attribute( 'data-odw-required', '1' )
 						->set_rows( 5 )
 						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
 						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
@@ -216,7 +221,8 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-backing', 'byte_size' ),
 
 					Field::make( 'select', 'odw_license', __( 'Unter welcher Lizenz sind diese Daten verfügbar?', 'open-data-wizard' ) )
-						->set_required( true )
+						// Pflicht nur zum Veröffentlichen (siehe odw_publisher).
+						->set_attribute( 'data-odw-required', '1' )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
 						->add_options( self::get_license_options() )
 						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
@@ -621,7 +627,7 @@ class ODW_Fields {
 	 * and the validation class. Each entry: [meta_key, label].
 	 * Loaded from config/dcat-ap-fields.php.
 	 *
-	 * @return array<int, array{meta_key: string, label: string}>
+	 * @return array<int, array{key: string, meta_key: string, label: string}>
 	 */
 	public static function get_required_fields(): array {
 		$all = self::load_field_definitions();
@@ -632,6 +638,7 @@ class ODW_Fields {
 			// Distribution and title are handled separately in ODW_Validation.
 			if ( $field['required'] && ! empty( $field['meta_key'] ) ) {
 				$required[] = array(
+					'key'      => $field['key'],
 					'meta_key' => $field['meta_key'],
 					'label'    => $field['label'],
 				);

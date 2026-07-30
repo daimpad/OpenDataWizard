@@ -394,6 +394,12 @@ class ODW_Admin {
 					'helpTip'             => array(
 						'label' => __( 'Hilfe anzeigen', 'open-data-wizard' ),
 					),
+					'required'            => array(
+						'star'      => '*',
+						'starTitle' => __( 'Pflichtfeld zum Veröffentlichen', 'open-data-wizard' ),
+						'legend'    => __( '* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern.', 'open-data-wizard' ),
+						'keys'      => array( '_odw_publisher', '_odw_description', '_odw_license' ),
+					),
 					'livePreview'         => array(
 						'fields'       => ODW_Fields::get_live_preview_fields(),
 						'empty'        => __( 'noch leer', 'open-data-wizard' ),

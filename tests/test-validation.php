@@ -16,9 +16,15 @@ use PHPUnit\Framework\TestCase;
 class Test_ODW_Validation extends TestCase {
 
 	/**
-	 * The exact error label appended when an HVD dataset lacks a category.
+	 * The exact (form-language) error label appended when an HVD dataset lacks a category.
 	 */
-	private const HVD_ERROR = 'HVD-Kategorie auswählen (dcatap:hvdCategory)';
+	private const HVD_ERROR = 'HVD-Kategorie';
+
+	/** Form-language label for the missing-distribution error. */
+	private const DIST_ERROR = 'Link zur Datei oder Datei-Upload';
+
+	/** Form-language label for the missing-license error. */
+	private const LICENSE_ERROR = 'Lizenz';
 
 	/**
 	 * Set up WP_Mock before each test.
@@ -53,7 +59,7 @@ class Test_ODW_Validation extends TestCase {
 	 * @param int                  $post_id  Post ID.
 	 * @param array<string, mixed> $postarr  Raw post array (incl. carbon_fields_compact_input).
 	 * @param array<string, mixed> $meta_map Optional get_post_meta fallback map (meta_key => value).
-	 * @return array<int, string> Validation error labels.
+	 * @return array<int, array{label: string, dcat: string, tab: int, target: string, section: string}> Structured errors.
 	 */
 	private function run_validate( int $post_id, array $postarr, array $meta_map = array() ): array {
 		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
@@ -74,6 +80,16 @@ class Test_ODW_Validation extends TestCase {
 		$method->setAccessible( true );
 
 		return (array) $method->invoke( null, $post_id, $postarr );
+	}
+
+	/**
+	 * Extracts the label column from structured validation errors.
+	 *
+	 * @param array<int, array{label: string}> $errors Structured errors.
+	 * @return array<int, string>
+	 */
+	private function labels( array $errors ): array {
+		return array_column( $errors, 'label' );
 	}
 
 	/**
@@ -123,8 +139,9 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertNotContains( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', $errors );
-		$this->assertNotContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+		$labels = $this->labels( $errors );
+		$this->assertNotContains( self::DIST_ERROR, $labels );
+		$this->assertNotContains( self::LICENSE_ERROR, $labels );
 	}
 
 	/**
@@ -140,8 +157,9 @@ class Test_ODW_Validation extends TestCase {
 			array( '_odw_file_id' => 7 )
 		);
 
-		$this->assertNotContains( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', $errors );
-		$this->assertContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+		$labels = $this->labels( $errors );
+		$this->assertNotContains( self::DIST_ERROR, $labels );
+		$this->assertContains( self::LICENSE_ERROR, $labels );
 	}
 
 	/**
@@ -171,7 +189,7 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+		$this->assertContains( self::LICENSE_ERROR, $this->labels( $errors ) );
 	}
 
 	/**
@@ -190,7 +208,7 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertContains( self::HVD_ERROR, $errors );
+		$this->assertContains( self::HVD_ERROR, $this->labels( $errors ) );
 	}
 
 	/**
@@ -209,7 +227,7 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertNotContains( self::HVD_ERROR, $errors );
+		$this->assertNotContains( self::HVD_ERROR, $this->labels( $errors ) );
 	}
 
 	/**
@@ -228,7 +246,7 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertNotContains( self::HVD_ERROR, $errors );
+		$this->assertNotContains( self::HVD_ERROR, $this->labels( $errors ) );
 	}
 
 	/**
@@ -247,6 +265,34 @@ class Test_ODW_Validation extends TestCase {
 			)
 		);
 
-		$this->assertContains( self::HVD_ERROR, $errors );
+		$this->assertContains( self::HVD_ERROR, $this->labels( $errors ) );
+	}
+
+	/**
+	 * Each structured error carries a tab number and DOM target so the admin
+	 * notice can render a working "jump to field" link (B2).
+	 */
+	public function test_errors_carry_tab_and_target_metadata(): void {
+		$this->load_classes();
+
+		// Empty dataset: title, publisher, description, distribution and license all missing.
+		$errors = $this->run_validate( 20, array( 'post_title' => '' ) );
+
+		$by_label = array();
+		foreach ( $errors as $error ) {
+			$by_label[ $error['label'] ] = $error;
+		}
+
+		$this->assertArrayHasKey( 'Titel', $by_label );
+		$this->assertSame( 0, $by_label['Titel']['tab'] );
+		$this->assertSame( 'title', $by_label['Titel']['target'] );
+
+		$this->assertArrayHasKey( 'Herausgebende Organisation', $by_label );
+		$this->assertSame( 1, $by_label['Herausgebende Organisation']['tab'] );
+		$this->assertSame( '_odw_publisher', $by_label['Herausgebende Organisation']['target'] );
+
+		$this->assertArrayHasKey( self::DIST_ERROR, $by_label );
+		$this->assertSame( 3, $by_label[ self::DIST_ERROR ]['tab'] );
+		$this->assertSame( '_odw_access_url', $by_label[ self::DIST_ERROR ]['target'] );
 	}
 }

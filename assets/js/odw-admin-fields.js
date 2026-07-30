@@ -713,6 +713,137 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 6. Required-field markers (B1) — the mandatory fields no longer use Carbon
+	// Fields' set_required (which blocks saving an empty draft). Instead we mark
+	// them with a visible "*" and show a one-line legend explaining that drafts
+	// may be saved incomplete and only publishing enforces the required fields.
+	// -------------------------------------------------------------------------
+	function markRequiredField( input, cfg ) {
+		var field = input.closest( '.cf-field' );
+		if ( ! field || field.dataset.odwReqInit ) {
+			return;
+		}
+		var label = field.querySelector( ':scope > .cf-field__head > .cf-field__label' ) ||
+			field.querySelector( ':scope > .cf-field__head' ) ||
+			field.querySelector( ':scope > label' );
+		if ( ! label || label.querySelector( '.odw-req' ) ) {
+			return;
+		}
+		field.dataset.odwReqInit = '1';
+		var star = document.createElement( 'span' );
+		star.className   = 'odw-req';
+		star.textContent = cfg.star || '*';
+		star.setAttribute( 'title', cfg.starTitle || '' );
+		star.setAttribute( 'aria-hidden', 'true' );
+		label.appendChild( star );
+	}
+
+	function injectRequiredLegend( cfg ) {
+		if ( ! cfg.legend ) {
+			return;
+		}
+		var container = document.querySelector( '.cf-container' );
+		if ( ! container || container.dataset.odwReqLegend ) {
+			return;
+		}
+		container.dataset.odwReqLegend = '1';
+		var note = document.createElement( 'p' );
+		note.className   = 'odw-required-legend description';
+		note.textContent = cfg.legend;
+		container.insertBefore( note, container.firstChild );
+	}
+
+	function initRequiredMarks() {
+		var cfg = data.required || {};
+		// Mark by attribute (works for text/textarea) …
+		document.querySelectorAll( '[data-odw-required]' ).forEach( function ( input ) {
+			markRequiredField( input, cfg );
+		} );
+		// … and by meta-key name suffix (robust for <select>, whose React renderer
+		// may not spread the data-attribute onto the DOM element).
+		( cfg.keys || [] ).forEach( function ( key ) {
+			var input = document.querySelector( '[name$="[' + key + ']"]' );
+			if ( input ) {
+				markRequiredField( input, cfg );
+			}
+		} );
+		injectRequiredLegend( cfg );
+	}
+
+	// -------------------------------------------------------------------------
+	// 7. "Zum Feld springen" (B2) — the publish-blocked admin notice renders a
+	// jump button per missing field. Clicking it switches to the field's tab,
+	// expands its collapsible section if needed, then scrolls to and focuses it.
+	// -------------------------------------------------------------------------
+	function switchToTab( tabNumber ) {
+		if ( ! tabNumber || tabNumber < 1 ) {
+			return;
+		}
+		var tabs = document.querySelectorAll( '.cf-container__tabs-list .cf-container__tabs-item' );
+		var tab  = tabs[ tabNumber - 1 ];
+		if ( ! tab ) {
+			return;
+		}
+		var btn = tab.querySelector( 'button' );
+		if ( btn ) {
+			btn.click();
+		}
+	}
+
+	function expandSection( sectionKey ) {
+		if ( ! sectionKey ) {
+			return;
+		}
+		var toggle = document.querySelector( '[data-odw-section-toggle="' + sectionKey + '"]' );
+		if ( toggle && toggle.getAttribute( 'aria-expanded' ) !== 'true' ) {
+			toggle.click();
+		}
+	}
+
+	function gotoTarget( target ) {
+		if ( ! target ) {
+			return;
+		}
+		var el = ( 'title' === target )
+			? document.getElementById( 'title' )
+			: document.querySelector( '[name$="[' + target + ']"]' );
+		if ( ! el ) {
+			return;
+		}
+		var field = el.closest( '.cf-field' ) || el;
+		if ( field.scrollIntoView ) {
+			field.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+		}
+		field.classList.add( 'odw-field-flash' );
+		setTimeout( function () {
+			field.classList.remove( 'odw-field-flash' );
+		}, 1600 );
+		try {
+			el.focus( { preventScroll: true } );
+		} catch ( e ) {
+			el.focus();
+		}
+	}
+
+	function initGotoLinks() {
+		document.querySelectorAll( '.odw-goto-field' ).forEach( function ( link ) {
+			if ( link.dataset.odwGotoBound ) {
+				return;
+			}
+			link.dataset.odwGotoBound = '1';
+			link.addEventListener( 'click', function ( e ) {
+				e.preventDefault();
+				switchToTab( parseInt( link.getAttribute( 'data-odw-goto-tab' ), 10 ) );
+				// Let the tab switch settle before expanding/scrolling.
+				setTimeout( function () {
+					expandSection( link.getAttribute( 'data-odw-goto-section' ) );
+					gotoTarget( link.getAttribute( 'data-odw-goto-target' ) );
+				}, 80 );
+			} );
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// Observe DOM for dynamically added CF complex groups (e.g. new distribution)
 	// -------------------------------------------------------------------------
 	function observeNewGroups() {
@@ -752,6 +883,8 @@
 		initFileSizeWidgets();
 		initHelpTooltips();
 		initFieldMore();
+		initRequiredMarks();
+		initGotoLinks();
 		initLivePreview();
 		observeNewGroups();
 
@@ -768,6 +901,7 @@
 			initFileSizeWidgets();
 			initHelpTooltips();
 			initFieldMore();
+			initRequiredMarks();
 			initLivePreview();
 			if ( passes > 10 ) {
 				clearInterval( rerun );

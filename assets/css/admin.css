@@ -390,6 +390,53 @@
 .odw-validation-notice .odw-missing-fields li {
     list-style: disc;
     font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.odw-validation-notice .odw-missing-tab {
+    color: var(--odw-color-text-muted);
+    font-weight: 600;
+}
+
+.odw-validation-notice .odw-missing-dcat {
+    color: var(--odw-color-text-muted);
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.odw-validation-notice .odw-goto-field {
+    margin-left: 6px;
+    font-weight: 400;
+}
+
+/* =========================================================================
+   Required-field markers + legend (B1)
+   ========================================================================= */
+
+.odw-req {
+    color: var(--odw-color-error);
+    font-weight: 700;
+    margin-left: 3px;
+}
+
+.odw-required-legend {
+    margin: 0 0 12px;
+    padding: 6px 10px;
+    background: var(--odw-color-bg-light);
+    border-left: 3px solid var(--odw-color-primary);
+    font-size: 12px;
+    color: var(--odw-color-text-muted);
+}
+
+/* Kurzes Aufblitzen des angesprungenen Feldes (B2). */
+.odw-field-flash {
+    animation: odw-field-flash 1.6s ease-out;
+    border-radius: 3px;
+}
+
+@keyframes odw-field-flash {
+    0%   { box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.5); background: rgba(34, 113, 177, 0.08); }
+    100% { box-shadow: 0 0 0 3px rgba(34, 113, 177, 0); background: transparent; }
 }
 
 /* =========================================================================
