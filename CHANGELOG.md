@@ -7,6 +7,24 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.25.0] — 2026-07-30
+
+### 📚 Added — Offizielle SHACL-Shapes gebündelt
+- Neues Verzeichnis **`config/shacl/`** mit den **offiziellen** DCAT-AP-SHACL-Shapes als Referenz:
+  - `dcat-ap-SHACL.ttl` — EU DCAT-AP 3.0 (SEMIC, CC BY 4.0)
+  - `dcat-ap-SHACL-DE.ttl` — DCAT-AP.de (GovData, CC0)
+- **`config/shacl/README.md`** dokumentiert Herkunft, Lizenzen, Abrufdatum und die Anleitung zur
+  Validierung der Plugin-Ausgabe (JSON-LD des Datensatzes → externer EU-/DCAT-AP.de-Validator bzw. lokal
+  per pySHACL).
+- **Hinweis:** Das Plugin führt SHACL nicht selbst aus (keine PHP-Engine); die Dateien dienen als Referenz
+  und für die externe Validierung. Verlinkt aus `docs/MQA-KONZEPT.md` und `DOCUMENTATION.md`.
+
+### ✅ Tests
+- Integritätstest, dass beide Shape-Dateien vorhanden sind und den SHACL-Namespace referenzieren
+  (166 Tests).
+
+---
+
 ## [2.24.0] — 2026-07-30
 
 ### ✨ Added — Zusätzliche Distributionen in Widget & Scoring
