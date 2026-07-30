@@ -110,6 +110,24 @@ class Test_ODW_Field_Catalog extends TestCase {
 	}
 
 	/**
+	 * No complex sub-field uses a name Carbon Fields reserves.
+	 *
+	 * Carbon Fields rejects "value" (and "_type") as complex sub-field names,
+	 * which silently breaks the repeater's "Add entry" button. Guard against
+	 * re-introducing such a name.
+	 */
+	public function test_no_reserved_complex_subfield_names(): void {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reads local source, not a remote request.
+		$source = (string) file_get_contents( ODW_PLUGIN_DIR . 'includes/class-fields.php' );
+
+		$this->assertDoesNotMatchRegularExpression(
+			"/Field::make\\(\\s*'[a-z]+',\\s*'(value|_type)'/",
+			$source,
+			'Carbon Fields reserves "value"/"_type" as complex sub-field names — rename the field.'
+		);
+	}
+
+	/**
 	 * The committed docs/FELD-REFERENZ.md matches the generated output.
 	 *
 	 * Fails when the catalog changed but the doc was not regenerated
