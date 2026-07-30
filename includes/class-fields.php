@@ -190,6 +190,46 @@ class ODW_Fields {
 					Field::make( 'select', 'odw_availability', __( 'Wie dauerhaft ist diese Datei verfügbar?', 'open-data-wizard' ) )
 						->add_options( self::get_availability_options() )
 						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär', 'open-data-wizard' ) ),
+
+					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
+						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
+						->set_collapsed( true )
+						->set_header_template( '<%- access_url || "' . esc_js( __( 'Weitere Distribution', 'open-data-wizard' ) ) . '" %>' )
+						->add_fields(
+							array(
+								Field::make( 'text', 'access_url', __( 'Zugriffs-URL', 'open-data-wizard' ) )
+									->set_required( true )
+									->set_attribute( 'type', 'url' )
+									->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.json' )
+									->set_help_text( __( 'Wo kann diese Distribution abgerufen werden? (dcat:accessURL)', 'open-data-wizard' ) ),
+								Field::make( 'select', 'format', __( 'Format', 'open-data-wizard' ) )
+									->add_options( self::get_format_options() )
+									->set_help_text( __( 'Dateiformat dieser Distribution (dct:format)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
+									->set_attribute( 'type', 'number' )
+									->set_help_text( __( 'Größe in Bytes, nur Zahl (dcat:byteSize)', 'open-data-wizard' ) ),
+								Field::make( 'select', 'license', __( 'Lizenz', 'open-data-wizard' ) )
+									->add_options( self::get_license_options() )
+									->set_help_text( __( 'Lizenz dieser Distribution (dct:license)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'license_custom', __( 'Eigene Lizenz-URI (bei „Sonstige")', 'open-data-wizard' ) )
+									->set_attribute( 'data-odw-autosuggest', 'license_custom' )
+									->set_help_text( __( 'Nur ausfüllen, wenn oben „Sonstige" gewählt wurde.', 'open-data-wizard' ) ),
+								Field::make( 'text', 'download_url', __( 'Direkter Download-Link', 'open-data-wizard' ) )
+									->set_attribute( 'type', 'url' )
+									->set_help_text( __( 'Direkter Download dieser Distribution (dcat:downloadURL)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'media_type', __( 'Media-Type (MIME)', 'open-data-wizard' ) )
+									->set_help_text( __( 'IANA-Medientyp, z. B. application/json (dcat:mediaType)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'title', __( 'Titel der Distribution', 'open-data-wizard' ) )
+									->set_help_text( __( 'Kurzer Titel dieser Distribution (dct:title)', 'open-data-wizard' ) ),
+								Field::make( 'textarea', 'description', __( 'Beschreibung der Distribution', 'open-data-wizard' ) )
+									->set_rows( 2 )
+									->set_help_text( __( 'Kurze Beschreibung dieser Distribution (dct:description)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'attribution', __( 'Namensnennungstext', 'open-data-wizard' ) )
+									->set_help_text( __( 'Nur bei Namensnennungslizenzen (dcatde:licenseAttributionByText)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'rights', __( 'Nutzungsrechte', 'open-data-wizard' ) )
+									->set_help_text( __( 'Rechtlicher Hinweis über die Lizenz hinaus (dct:rights)', 'open-data-wizard' ) ),
+							)
+						),
 				)
 			)
 
@@ -1274,6 +1314,88 @@ function odw_lang_literal( string $value, string $tag ): array {
 }
 
 /**
+ * Build a single dcat:Distribution JSON-LD node from a flat set of values.
+ *
+ * Shared by the primary distribution (Tab 3 singular fields) and each additional
+ * distribution (the odw_extra_distributions repeater), so both produce identical
+ * node structure. Returns null when no access URL is present (nothing to emit).
+ *
+ * @param array<string, mixed> $d        Distribution values (access_url, format, byte_size,
+ *                                        license, license_custom, attribution, availability,
+ *                                        title, description, download_url, media_type, rights).
+ * @param string               $lang_tag BCP-47 language tag for title/description literals.
+ * @return array<string, mixed>|null
+ */
+function odw_build_distribution_node( array $d, string $lang_tag ): ?array {
+	$access = esc_url_raw( (string) ( $d['access_url'] ?? '' ) );
+	if ( '' === $access ) {
+		return null;
+	}
+
+	$node = array(
+		'@type'          => 'dcat:Distribution',
+		'dcat:accessURL' => array( '@id' => $access ),
+	);
+
+	$format = (string) ( $d['format'] ?? '' );
+	if ( '' !== $format ) {
+		$node['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $format ) );
+	}
+
+	$byte_size = (int) ( $d['byte_size'] ?? 0 );
+	if ( $byte_size > 0 ) {
+		$node['dcat:byteSize'] = $byte_size;
+	}
+
+	$license = (string) ( $d['license'] ?? '' );
+	if ( 'sonstige' === $license && ! empty( $d['license_custom'] ) ) {
+		$license = (string) $d['license_custom'];
+	}
+	if ( '' !== $license && 'sonstige' !== $license ) {
+		$node['dct:license'] = array( '@id' => odw_sanitize_jsonld_id( $license ) );
+	}
+
+	if ( ! empty( $d['attribution'] ) ) {
+		$node['dcatde:licenseAttributionByText'] = (string) $d['attribution'];
+	}
+
+	if ( ! empty( $d['availability'] ) ) {
+		$node['dcatap:availability'] = array( '@id' => odw_sanitize_jsonld_id( (string) $d['availability'] ) );
+	}
+
+	if ( ! empty( $d['title'] ) ) {
+		$node['dct:title'] = odw_lang_literal( (string) $d['title'], $lang_tag );
+	}
+
+	if ( ! empty( $d['description'] ) ) {
+		$node['dct:description'] = odw_lang_literal( (string) $d['description'], $lang_tag );
+	}
+
+	$download = esc_url_raw( (string) ( $d['download_url'] ?? '' ) );
+	if ( '' !== $download ) {
+		$node['dcat:downloadURL'] = array( '@id' => $download );
+	}
+
+	if ( ! empty( $d['media_type'] ) ) {
+		$node['dcat:mediaType'] = array( '@id' => odw_sanitize_jsonld_id( (string) $d['media_type'] ) );
+	}
+
+	$rights = (string) ( $d['rights'] ?? '' );
+	if ( '' !== $rights ) {
+		if ( preg_match( '#^https?://#', $rights ) ) {
+			$node['dct:rights'] = array( '@id' => odw_sanitize_jsonld_id( $rights ) );
+		} else {
+			$node['dct:rights'] = array(
+				'@type'      => 'dct:RightsStatement',
+				'rdfs:label' => $rights,
+			);
+		}
+	}
+
+	return $node;
+}
+
+/**
  * Build DCAT-AP 3.0 JSON-LD array for a single dataset.
  * Used by both the REST API and the preview tab.
  *
@@ -1447,68 +1569,62 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		);
 	}
 
-	$dist_access_url_safe = esc_url_raw( $dist_access_url );
-	if ( ! empty( $dist_access_url_safe ) ) {
-		$dist_item = array(
-			'@type'          => 'dcat:Distribution',
-			'dcat:accessURL' => array( '@id' => $dist_access_url_safe ),
-		);
+	// Primary distribution (Tab 3 singular fields) plus any additional
+	// distributions from the odw_extra_distributions repeater. All nodes share
+	// odw_build_distribution_node() so their JSON-LD structure is identical.
+	$distributions = array();
 
-		if ( ! empty( $dist_format ) ) {
-			$dist_item['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $dist_format ) );
-		}
+	$primary_distribution = odw_build_distribution_node(
+		array(
+			'access_url'     => $dist_access_url,
+			'format'         => $dist_format,
+			'byte_size'      => $dist_byte_size,
+			'license'        => $dist_license,
+			'license_custom' => $dist_license_custom,
+			'attribution'    => $dist_attribution,
+			'availability'   => $dist_availability,
+			'title'          => $dist_title,
+			'description'    => $dist_description,
+			'download_url'   => $download_url,
+			'media_type'     => $media_type,
+			'rights'         => $dist_rights,
+		),
+		$lang_tag
+	);
+	if ( null !== $primary_distribution ) {
+		$distributions[] = $primary_distribution;
+	}
 
-		$byte_size_int = (int) $dist_byte_size;
-		if ( $byte_size_int > 0 ) {
-			$dist_item['dcat:byteSize'] = $byte_size_int;
-		}
-
-		$effective_license = $dist_license;
-		if ( 'sonstige' === $dist_license && ! empty( $dist_license_custom ) ) {
-			$effective_license = $dist_license_custom;
-		}
-		if ( ! empty( $effective_license ) && 'sonstige' !== $effective_license ) {
-			$dist_item['dct:license'] = array( '@id' => odw_sanitize_jsonld_id( (string) $effective_license ) );
-		}
-
-		if ( ! empty( $dist_attribution ) ) {
-			$dist_item['dcatde:licenseAttributionByText'] = $dist_attribution;
-		}
-
-		if ( ! empty( $dist_availability ) ) {
-			$dist_item['dcatap:availability'] = array( '@id' => odw_sanitize_jsonld_id( (string) $dist_availability ) );
-		}
-
-		// Additional optional distribution properties (advanced, Tab 4).
-		if ( '' !== $dist_title ) {
-			$dist_item['dct:title'] = odw_lang_literal( $dist_title, $lang_tag );
-		}
-
-		if ( '' !== $dist_description ) {
-			$dist_item['dct:description'] = odw_lang_literal( $dist_description, $lang_tag );
-		}
-
-		$download_url_safe = esc_url_raw( $download_url );
-		if ( '' !== $download_url_safe ) {
-			$dist_item['dcat:downloadURL'] = array( '@id' => $download_url_safe );
-		}
-
-		if ( '' !== $media_type ) {
-			$dist_item['dcat:mediaType'] = array( '@id' => odw_sanitize_jsonld_id( $media_type ) );
-		}
-
-		if ( '' !== $dist_rights ) {
-			if ( preg_match( '#^https?://#', $dist_rights ) ) {
-				$dist_item['dct:rights'] = array( '@id' => odw_sanitize_jsonld_id( $dist_rights ) );
-			} else {
-				$dist_item['dct:rights'] = array(
-					'@type'      => 'dct:RightsStatement',
-					'rdfs:label' => $dist_rights,
-				);
+	$extra_distributions = carbon_get_post_meta( $post_id, 'odw_extra_distributions' );
+	if ( is_array( $extra_distributions ) ) {
+		foreach ( $extra_distributions as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$node = odw_build_distribution_node(
+				array(
+					'access_url'     => $row['access_url'] ?? '',
+					'format'         => $row['format'] ?? '',
+					'byte_size'      => $row['byte_size'] ?? '',
+					'license'        => $row['license'] ?? '',
+					'license_custom' => $row['license_custom'] ?? '',
+					'attribution'    => $row['attribution'] ?? '',
+					'title'          => $row['title'] ?? '',
+					'description'    => $row['description'] ?? '',
+					'download_url'   => $row['download_url'] ?? '',
+					'media_type'     => $row['media_type'] ?? '',
+					'rights'         => $row['rights'] ?? '',
+				),
+				$lang_tag
+			);
+			if ( null !== $node ) {
+				$distributions[] = $node;
 			}
 		}
+	}
 
-		$dataset['dcat:distribution'] = array( $dist_item );
+	if ( ! empty( $distributions ) ) {
+		$dataset['dcat:distribution'] = $distributions;
 	}
 
 	// Extended DCAT-AP fields (Tab 4).

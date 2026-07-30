@@ -12,7 +12,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **B** | DCAT-AP.de-Felder (`contributorID`, `originator`, `maintainer`, `availability`) + generisches Vokabular-Autosuggest | ✅ v2.5.0 |
 | **C** | HVD-Unterstützung (`dcatap:hvdCategory` + `dcatap:applicableLegislation`) | ✅ v2.4.0 |
 | **D** | Mehrsprachige Literale (`@language`/`@value`) für title/description/keyword (Output-Tagging, ohne Migration) | ✅ v2.9.0 |
-| **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ☐ offen |
+| **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ✅ v2.22.0 (additiv) |
 | — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich) ✅ v2.8.0; Hilfe-Tooltips + Live-Vorschau ✅ v2.11.0; Registry-getriebenes Formular/JSON-LD ☐ | teils |
 
 Details zur phasierten Umsetzungsplanung in Abschnitt 7.
@@ -266,10 +266,13 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - _Betroffen:_ `class-fields.php` (Builder + `odw_lang_literal()`/`odw_resolve_language_tag()`), `config/dcat-ap-fields.php` (range → `literal-lang`), Tests.
 - ☐ Offen (optional/künftig): echtes mehrsprachiges Datenmodell mit mehreren Sprachen je Feld (wiederholbare Eingabe + Migration).
 
-#### Phase E — Multi-Distribution (optional, v2.6)
-- Rücknahme der v2.1.4-Vereinfachung hinter einem Einstellungs-Schalter: wiederholbare Distributionen
-  (`Field::make('complex')`) für Nutzer mit mehreren Dateien pro Datensatz.
-- _Betroffen:_ `class-fields.php`, JSON-LD-Builder, Quality-Scoring, Shortcode-Card, Tests.
+#### Phase E — Multi-Distribution ✅ (v2.22.0, additiv)
+- Umgesetzt **additiv**: Die primäre Distribution (Tab-3-Einzelfelder) bleibt unverändert; ein optionales,
+  wiederholbares Feld `odw_extra_distributions` (`Field::make('complex')`) ergänzt weitere Distributionen.
+- JSON-LD: `odw_build_distribution_node()` baut primäre und zusätzliche Distributionen identisch; alle
+  werden an das `dcat:distribution`-Array angehängt. **Keine Migration** nötig (rückwärtskompatibel).
+- Scoring/MQA bewertet weiterhin die primäre Distribution; die Shortcode-Card zeigt weiterhin die primäre
+  (zusätzliche Distributionen erscheinen in REST/JSON-LD) — mögliche Folgeerweiterung.
 
 ### 8. UX-Konzept: Essentials/Additionals (aus HappyFlow)
 

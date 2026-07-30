@@ -198,6 +198,9 @@ msgstr "Description"
 msgid "Beschreibung (dct:description)"
 msgstr "Description (dct:description)"
 
+msgid "Beschreibung der Distribution"
+msgstr "Distribution description"
+
 msgid "Beschreibung des Datensatzes"
 msgstr "Description of the dataset"
 
@@ -324,6 +327,9 @@ msgstr "Analyzing file…"
 msgid "Datei zu groß (max. 10MB)."
 msgstr "File too large (max. 10MB)."
 
+msgid "Dateiformat dieser Distribution (dct:format)"
+msgstr "File format of this distribution (dct:format)"
+
 msgid "Dateigröße"
 msgstr "File size"
 
@@ -423,6 +429,12 @@ msgstr "This demo dataset contains a sample list of civil society organizations.
 msgid "Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL)."
 msgstr "Direct URL to download the file (as opposed to the access URL)."
 
+msgid "Direkter Download dieser Distribution (dcat:downloadURL)"
+msgstr "Direct download of this distribution (dcat:downloadURL)"
+
+msgid "Direkter Download-Link"
+msgstr "Direct download link"
+
 msgid "Direkter Download-Link zur Datei?"
 msgstr "Direct download link to the file?"
 
@@ -485,6 +497,9 @@ msgstr "CREATOR (dct:creator)"
 
 msgid "EU-Datenthema eintippen oder auswählen…"
 msgstr "Type or select an EU data theme…"
+
+msgid "Eigene Lizenz-URI (bei „Sonstige\")"
+msgstr "Custom license URI (when “Other”)"
 
 msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:"
 msgstr "A demo dataset with a sample CSV was created automatically. Insert this shortcode into a post or page to display the download card:"
@@ -630,6 +645,9 @@ msgstr "Law/regulation governing the provision. Example: § 12a EGovG"
 msgid "Gesundheit"
 msgstr "Health"
 
+msgid "Größe in Bytes, nur Zahl (dcat:byteSize)"
+msgstr "Size in bytes, number only (dcat:byteSize)"
+
 msgid "Gut"
 msgstr "Good"
 
@@ -680,6 +698,9 @@ msgstr "High-value datasets (HVD) are datasets defined by the EU with particular
 
 msgid "IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv"
 msgstr "IANA media type as a URI. Example: https://www.iana.org/assignments/media-types/text/csv"
+
+msgid "IANA-Medientyp, z. B. application/json (dcat:mediaType)"
+msgstr "IANA media type, e.g. application/json (dcat:mediaType)"
 
 msgid "IDENTIFIER (dct:identifier)"
 msgstr "IDENTIFIER (dct:identifier)"
@@ -819,8 +840,14 @@ msgstr "Short description of the dataset…"
 msgid "Kurze Beschreibung des Katalogs — erscheint als dct:description in der REST-API-Antwort (Pflichtfeld gemäß DCAT-AP.de)."
 msgstr "Short description of the catalog — appears as dct:description in the REST API response (required field per DCAT-AP.de)."
 
+msgid "Kurze Beschreibung dieser Distribution (dct:description)"
+msgstr "Short description of this distribution (dct:description)"
+
 msgid "Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV"
 msgstr "Short title of the distribution. Example: Full data as CSV"
+
+msgid "Kurzer Titel dieser Distribution (dct:title)"
+msgstr "Short title of this distribution (dct:title)"
 
 msgid "LIZENZ (dct:license)"
 msgstr "LICENSE (dct:license)"
@@ -858,6 +885,9 @@ msgstr "License from vocabulary"
 msgid "Lizenz aus dem kontrollierten Vokabular"
 msgstr "License from the controlled vocabulary"
 
+msgid "Lizenz dieser Distribution (dct:license)"
+msgstr "License of this distribution (dct:license)"
+
 msgid "Lizenz gesetzt (dct:license)"
 msgstr "License set (dct:license)"
 
@@ -866,6 +896,9 @@ msgstr "Enter or select a license URI"
 
 msgid "MEDIENTYP (dcat:mediaType)"
 msgstr "MEDIA TYPE (dcat:mediaType)"
+
+msgid "MEHRERE DISTRIBUTIONEN (dcat:distribution)"
+msgstr "MULTIPLE DISTRIBUTIONS (dcat:distribution)"
 
 msgid "Mangelhaft"
 msgstr "Poor"
@@ -881,6 +914,9 @@ msgstr "Maximum of %d datasets reached — further rows were ignored."
 
 msgid "Media-Type"
 msgstr "Media type"
+
+msgid "Media-Type (MIME)"
+msgstr "Media type (MIME)"
 
 msgid "Media-Type gesetzt (dcat:mediaType)"
 msgstr "Media type set (dcat:mediaType)"
@@ -930,6 +966,9 @@ msgstr "Name or organization of the contact person."
 msgid "Namensnennung"
 msgstr "Attribution"
 
+msgid "Namensnennungstext"
+msgstr "Attribution text"
+
 msgid "Nein"
 msgstr "No"
 
@@ -953,6 +992,15 @@ msgstr "No quality analysis yet. Save the dataset to run the check."
 
 msgid "Noch nicht berechnet"
 msgstr "Not yet calculated"
+
+msgid "Nur ausfüllen, wenn oben „Sonstige\" gewählt wurde."
+msgstr "Only fill in when “Other” was selected above."
+
+msgid "Nur bei Namensnennungslizenzen (dcatde:licenseAttributionByText)"
+msgstr "Only for attribution licenses (dcatde:licenseAttributionByText)"
+
+msgid "Nutzungsrechte"
+msgstr "Usage rights"
 
 msgid "Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt."
 msgstr "Publishing open data is harder than it needs to be. Complex forms and unfamiliar jargon make the work difficult. The Open Data Wizard simplifies this by guiding you through the process with easy-to-understand questions."
@@ -992,6 +1040,9 @@ msgstr "Optionally an additional theme from the official EU theme list (suppleme
 
 msgid "Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz."
 msgstr "Optional: assign the dataset to a civil-society field of engagement from the ZiviZ vocabulary. Pick one from the list — the matching URI is used automatically. Example: Culture, Sports, Environmental and nature protection."
+
+msgid "Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution."
+msgstr "Optional: additional access points for this dataset — e.g. the same data in another format or at a different URL. The file entered above remains the primary distribution."
 
 msgid "Optionale Angaben"
 msgstr "Optional details"
@@ -1067,6 +1118,9 @@ msgstr "Recalculated quality scores for %d dataset(s)."
 
 msgid "Rechte (dct:rights)"
 msgstr "Rights (dct:rights)"
+
+msgid "Rechtlicher Hinweis über die Lizenz hinaus (dct:rights)"
+msgstr "Legal note beyond the license (dct:rights)"
 
 msgid "Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin"
 msgstr "Select a region from the list (linked to GeoNames) or enter free text/URI. Example: Germany, Bavaria, Berlin"
@@ -1190,6 +1244,9 @@ msgstr "Title"
 
 msgid "Titel (dct:title)"
 msgstr "Title (dct:title)"
+
+msgid "Titel der Distribution"
+msgstr "Distribution title"
 
 msgid "Titel des Datensatzes (WordPress-Titel-Feld)"
 msgstr "Title of the dataset (WordPress title field)"
@@ -1326,6 +1383,12 @@ msgstr "Website with further contact information."
 msgid "Weitere DCAT-AP-Felder (optional)"
 msgstr "More DCAT-AP fields (optional)"
 
+msgid "Weitere Distribution"
+msgstr "Additional distribution"
+
+msgid "Weitere Distributionen"
+msgstr "Additional distributions"
+
 msgid "Weitere Informationen:"
 msgstr "Further information:"
 
@@ -1433,6 +1496,9 @@ msgstr "Where can I find more information about this project?"
 
 msgid "Wo ist das Qualitätssicherungs-Verfahren dokumentiert?"
 msgstr "Where is the quality-assurance process documented?"
+
+msgid "Wo kann diese Distribution abgerufen werden? (dcat:accessURL)"
+msgstr "Where can this distribution be accessed? (dcat:accessURL)"
 
 msgid "Wo kann ich die Datei herunterladen?"
 msgstr "Where can I download the file?"
