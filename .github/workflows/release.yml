@@ -1,0 +1,94 @@
+name: Release
+
+# Baut das installationsfertige WordPress-Plugin-ZIP und veröffentlicht es als
+# GitHub-Release — automatisch, sobald eine neue Plugin-Version auf main landet.
+#
+# Ablauf: Version aus dem Plugin-Header lesen → existiert für diese Version noch
+# kein Release, wird per bin/build-release.sh gebaut und als Release mit dem ZIP
+# als Anhang veröffentlicht. Gleiche Version = kein doppelter Release (Skip).
+# Manuell auslösbar über "Run workflow" (workflow_dispatch).
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build & publish plugin ZIP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Plugin-Version lesen
+        id: ver
+        run: |
+          VERSION="$(grep -oE "define\( *'ODW_VERSION', *'[^']+'" open-data-wizard.php | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+          if [ -z "$VERSION" ]; then
+            echo "::error::Version (ODW_VERSION) konnte nicht ermittelt werden."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+
+      - name: Release-Existenz prüfen
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.ver.outputs.tag }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release ${{ steps.ver.outputs.tag }} existiert bereits — überspringe."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: PHP + Composer einrichten
+        if: steps.check.outputs.exists == 'false'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      - name: Plugin-ZIP bauen
+        if: steps.check.outputs.exists == 'false'
+        run: bash bin/build-release.sh
+
+      - name: Release-Notes aus Changelog
+        if: steps.check.outputs.exists == 'false'
+        id: notes
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          NOTES="${RUNNER_TEMP}/notes.md"
+          awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" {grab=1; next}
+            grab && /^## \[/ {grab=0}
+            grab {print}
+          ' CHANGELOG.md | grep -v '^---$' > "$NOTES" || true
+          if [ ! -s "$NOTES" ]; then
+            echo "Automatisch gebautes Plugin-ZIP für Version ${VERSION}." > "$NOTES"
+          fi
+          {
+            echo ""
+            echo "**Installation:** WordPress → Plugins → Installieren → Plugin hochladen."
+          } >> "$NOTES"
+          echo "path=$NOTES" >> "$GITHUB_OUTPUT"
+
+      - name: GitHub-Release veröffentlichen
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.ver.outputs.tag }}" \
+            "dist/open-data-wizard-${{ steps.ver.outputs.version }}.zip" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Open Data Wizard ${{ steps.ver.outputs.version }}" \
+            --notes-file "${{ steps.notes.outputs.path }}"

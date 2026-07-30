@@ -262,3 +262,9 @@ bin/build-release.sh
 Installation in WordPress: **Plugins → Installieren → Plugin hochladen**. Das Skript nutzt
 `composer install --no-dev`, entschlackt die Carbon-Fields-Dev-Dateien (die kompilierten
 `build/`-Assets bleiben erhalten) und legt das ZIP unter `dist/` ab (gitignored).
+
+**Automatische Releases:** `.github/workflows/release.yml` baut dieses ZIP bei jedem Push auf `main`
+und veröffentlicht es als **GitHub-Release**, sobald die Plugin-Version (`ODW_VERSION`) neu ist — für
+dieselbe Version wird kein doppelter Release erzeugt. Es genügt also, die Version zu bumpen und zu
+mergen; das ZIP erscheint dann unter [Releases](https://github.com/daimpad/OpenDataWizard/releases)
+(auch manuell via „Run workflow" auslösbar).
