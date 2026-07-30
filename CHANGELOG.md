@@ -7,6 +7,22 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.20.0] — 2026-07-09
+
+### 📚 Added — Mehrstufige Feld-Referenz
+- Neue Dokumentation **[docs/FELD-REFERENZ.md](docs/FELD-REFERENZ.md)**: Jedes der **52 Formularfelder**
+  wird in **vier Stufen** beschrieben — (1) DCAT-AP-Frage, (2) verständliche Frage, (3) DCAT-AP-
+  Langbeschreibung, (4) verständliche Langbeschreibung — jeweils mit DCAT-Property, Meta-Key, Stufe
+  (Pflicht/Empfohlen/Optional/Bedingt) und Vokabular.
+- **Single Source of Truth:** `config/field-catalog.php`. Das Dokument wird daraus generiert — per
+  **WP-CLI** (`wp open-data-wizard docs`) oder standalone (`php bin/generate-field-reference.php`,
+  ohne WordPress, CI-tauglich) durch die neue Klasse `ODW_Field_Reference`.
+- **Verlinkt** aus README und DOCUMENTATION.
+- **Tests** (`tests/test-field-catalog.php`): Katalog-Vollständigkeit, eindeutige Keys und ein
+  Sync-Check, der fehlschlägt, wenn der Katalog geändert, aber die Doku nicht neu generiert wurde.
+
+---
+
 ## [2.19.0] — 2026-07-09
 
 ### ✨ Added — ZiviZ-Engagementfelder
