@@ -276,8 +276,10 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
   wiederholbares Feld `odw_extra_distributions` (`Field::make('complex')`) ergänzt weitere Distributionen.
 - JSON-LD: `odw_build_distribution_node()` baut primäre und zusätzliche Distributionen identisch; alle
   werden an das `dcat:distribution`-Array angehängt. **Keine Migration** nötig (rückwärtskompatibel).
-- Scoring/MQA bewertet weiterhin die primäre Distribution; die Shortcode-Card zeigt weiterhin die primäre
-  (zusätzliche Distributionen erscheinen in REST/JSON-LD) — mögliche Folgeerweiterung.
+- **v2.24.0 — Folgeerweiterung umgesetzt:** Das MQA-Scoring berücksichtigt jetzt **alle** Distributionen
+  (distribution-bezogene Metriken gelten als erfüllt, sobald *irgendeine* Distribution sie erfüllt;
+  `ODW_Quality::all_distributions()` / `any_distribution()`), und die Shortcode-Card listet zusätzliche
+  Distributionen mit eigenem Download-Link und Format/Größe-Badges.
 
 ### 8. UX-Konzept: Essentials/Additionals (aus HappyFlow)
 

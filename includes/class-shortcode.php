@@ -145,6 +145,7 @@ class ODW_Shortcode {
 
 		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
 		$meta_rows    = self::collect_metadata_rows( $post_id, $license_label, $file_size );
+		$extra_dists  = self::collect_extra_distributions( $post_id );
 
 		// --- HTML ---
 		ob_start();
@@ -188,6 +189,26 @@ class ODW_Shortcode {
 			<div class="odw-download-card__badges">
 				<?php foreach ( $badges as $badge ) : ?>
 					<span class="odw-badge odw-badge--<?php echo esc_attr( $badge[0] ); ?>"><?php echo esc_html( $badge[1] ); ?></span>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $extra_dists ) ) : ?>
+			<div class="odw-download-card__dists">
+				<h4 class="odw-download-card__dists-title"><?php esc_html_e( 'Weitere Distributionen', 'open-data-wizard' ); ?></h4>
+				<?php foreach ( $extra_dists as $dist ) : ?>
+				<div class="odw-dist">
+					<a class="odw-dist__link" href="<?php echo esc_url( $dist['url'] ); ?>" download>
+						<span aria-hidden="true">⬇</span> <?php echo esc_html( $dist['label'] ); ?>
+					</a>
+					<?php if ( ! empty( $dist['badges'] ) ) : ?>
+					<span class="odw-dist__badges">
+						<?php foreach ( $dist['badges'] as $badge ) : ?>
+							<span class="odw-badge odw-badge--<?php echo esc_attr( $badge[0] ); ?>"><?php echo esc_html( $badge[1] ); ?></span>
+						<?php endforeach; ?>
+					</span>
+					<?php endif; ?>
+				</div>
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
@@ -288,6 +309,70 @@ class ODW_Shortcode {
 		$add( __( 'Kontakt-Website', 'open-data-wizard' ), self::meta( $post_id, 'odw_contact_url' ), true );
 
 		return $rows;
+	}
+
+	/**
+	 * Collects additional distributions (odw_extra_distributions) that have a
+	 * usable download/access URL, for display below the primary download.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array<int, array{url: string, label: string, badges: array<int, array<int, string>>}>
+	 */
+	private static function collect_extra_distributions( int $post_id ): array {
+		if ( ! function_exists( 'carbon_get_post_meta' ) ) {
+			return array();
+		}
+
+		$rows = carbon_get_post_meta( $post_id, 'odw_extra_distributions' );
+		if ( ! is_array( $rows ) ) {
+			return array();
+		}
+
+		$out   = array();
+		$index = 0;
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			++$index;
+
+			$url = trim( (string) ( $row['download_url'] ?? '' ) );
+			if ( '' === $url ) {
+				$url = trim( (string) ( $row['access_url'] ?? '' ) );
+			}
+			if ( '' === $url ) {
+				continue;
+			}
+
+			$format = trim( (string) ( $row['format'] ?? '' ) );
+			$title  = trim( (string) ( $row['title'] ?? '' ) );
+
+			if ( '' !== $title ) {
+				$label = $title;
+			} elseif ( '' !== $format ) {
+				$label = $format;
+			} else {
+				/* translators: %d: distribution number */
+				$label = sprintf( __( 'Distribution %d', 'open-data-wizard' ), $index );
+			}
+
+			$badges = array();
+			if ( '' !== $format ) {
+				$badges[] = array( 'format', $format );
+			}
+			$byte = (int) ( $row['byte_size'] ?? 0 );
+			if ( $byte > 0 ) {
+				$badges[] = array( 'size', self::format_bytes( $byte ) );
+			}
+
+			$out[] = array(
+				'url'    => $url,
+				'label'  => $label,
+				'badges' => $badges,
+			);
+		}
+
+		return $out;
 	}
 
 	/**

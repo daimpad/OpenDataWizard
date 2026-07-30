@@ -449,4 +449,105 @@ class Test_ODW_Quality extends TestCase {
 
 		$this->assertTrue( $this->call_url_is_reachable( 'https://example.com/data.csv' ) );
 	}
+
+	// -------------------------------------------------------------------------
+	// Multi-distribution scoring (Phase E follow-up) — all_distributions() /
+	// any_distribution() consider the primary plus odw_extra_distributions.
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Invokes a private static ODW_Quality method via reflection.
+	 *
+	 * @param string $method Method name.
+	 * @param mixed  ...$args Arguments.
+	 * @return mixed
+	 */
+	private function call_private( string $method, ...$args ) {
+		$ref = new \ReflectionMethod( 'ODW_Quality', $method );
+		$ref->setAccessible( true );
+		return $ref->invoke( null, ...$args );
+	}
+
+	/**
+	 * Returns the primary distribution plus each extra row (all_distributions()).
+	 */
+	public function test_all_distributions_includes_primary_and_extras(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'carbon_get_post_meta' )->andReturnUsing(
+			function ( $id, $key ) {
+				if ( 'odw_extra_distributions' === $key ) {
+					return array(
+						array(
+							'format'       => 'JSON',
+							'download_url' => 'https://example.org/extra.json',
+						),
+						'not-an-array',
+					);
+				}
+				if ( 'odw_format' === $key ) {
+					return 'CSV';
+				}
+				return '';
+			}
+		);
+
+		$rows = $this->call_private( 'all_distributions', 5 );
+
+		$this->assertCount( 2, $rows );
+		$this->assertSame( 'CSV', $rows[0]['format'] );
+		$this->assertSame( 'JSON', $rows[1]['format'] );
+		$this->assertSame( 'https://example.org/extra.json', $rows[1]['download'] );
+	}
+
+	/**
+	 * Matches an extra distribution when the primary is empty (any_distribution()).
+	 */
+	public function test_any_distribution_matches_extra_when_primary_empty(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'carbon_get_post_meta' )->andReturnUsing(
+			function ( $id, $key ) {
+				if ( 'odw_extra_distributions' === $key ) {
+					return array( array( 'format' => 'CSV' ) );
+				}
+				return ''; // Primary has no format.
+			}
+		);
+
+		$has_format = $this->call_private(
+			'any_distribution',
+			5,
+			static function ( array $d ): bool {
+				return '' !== trim( $d['format'] );
+			}
+		);
+
+		$this->assertTrue( $has_format );
+	}
+
+	/**
+	 * An extra distribution's custom "sonstige" license resolves to its URI.
+	 */
+	public function test_all_distributions_resolves_extra_custom_license(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'carbon_get_post_meta' )->andReturnUsing(
+			function ( $id, $key ) {
+				if ( 'odw_extra_distributions' === $key ) {
+					return array(
+						array(
+							'license'        => 'sonstige',
+							'license_custom' => 'http://dcat-ap.de/def/licenses/cc-by/4.0',
+						),
+					);
+				}
+				return '';
+			}
+		);
+
+		$rows = $this->call_private( 'all_distributions', 5 );
+
+		$this->assertSame( 'http://dcat-ap.de/def/licenses/cc-by/4.0', $rows[1]['license'] );
+	}
 }

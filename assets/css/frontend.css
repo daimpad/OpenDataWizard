@@ -164,3 +164,48 @@
         display: block;
     }
 }
+
+/* --- Weitere Distributionen --- */
+.odw-download-card__dists {
+    margin-top: 1.1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    padding-top: 0.85rem;
+}
+
+.odw-download-card__dists-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.9em;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+.odw-dist {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    padding: 0.35rem 0;
+}
+
+.odw-dist__link {
+    font-weight: 600;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.odw-dist__link:hover {
+    text-decoration: underline;
+}
+
+.odw-dist__badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+@media screen and (max-width: 480px) {
+    .odw-dist {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
