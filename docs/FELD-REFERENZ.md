@@ -18,13 +18,13 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 - **1 — Grundlegende Informationen**
   - [Wer gibt diese Daten heraus?](#wer-gibt-diese-daten-heraus)
-  - [In welche Kategorie gehört dieser Datensatz?](#in-welche-kategorie-gehört-dieser-datensatz)
+  - [Welchem Thema ist dieser Datensatz zugeordnet?](#welchem-thema-ist-dieser-datensatz-zugeordnet)
   - [Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?](#welchem-themenfeld-nach-cessda-ordnen-sie-den-datensatz-zu)
   - [In welchem Engagementfeld ist die Organisation aktiv?](#in-welchem-engagementfeld-ist-die-organisation-aktiv)
   - [Worum geht es in diesem Datensatz?](#worum-geht-es-in-diesem-datensatz)
 - **2 — Inhaltliche Angaben**
   - [In welcher Sprache sind die Daten?](#in-welcher-sprache-sind-die-daten)
-  - [Mit welchen Stichworten finde ich diese Daten?](#mit-welchen-stichworten-finde-ich-diese-daten)
+  - [Mit welchen Schlagworten finde ich diese Daten?](#mit-welchen-schlagworten-finde-ich-diese-daten)
   - [Wann wurden diese Daten zum ersten Mal veröffentlicht?](#wann-wurden-diese-daten-zum-ersten-mal-veröffentlicht)
   - [Wann wurden diese Daten zuletzt aktualisiert?](#wann-wurden-diese-daten-zuletzt-aktualisiert)
 - **3 — Datenbereitstellung**
@@ -95,7 +95,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Tragen Sie hier die Organisation ein, die die Daten offiziell veröffentlicht — also wer dafür verantwortlich ist, dass die Daten bereitstehen. Das ist oft eine Behörde, ein Amt oder ein Verein. Beispiel: „Statistisches Landesamt Musterstadt" oder „Umweltbundesamt".
 
-### In welche Kategorie gehört dieser Datensatz?
+### Welchem Thema ist dieser Datensatz zugeordnet?
 
 | Eigenschaft | Wert |
 |---|---|
@@ -106,7 +106,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **1 · DCAT-AP-Frage:** Welchem `dcat:theme` (Datenthema) ist der Datensatz zugeordnet?
 
-**2 · Verständliche Frage:** In welche Kategorie gehört dieser Datensatz?
+**2 · Verständliche Frage:** Welchem Thema ist dieser Datensatz zugeordnet?
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:theme` ordnet den Datensatz einer oder mehreren Kategorien zu. In DCAT-AP wird das kontrollierte EU-Vokabular „Data Theme" (`http://publications.europa.eu/resource/authority/data-theme/`) verwendet, z. B. `ENVI` (Umwelt) oder `EDUC` (Bildung). Kardinalität 0..n.
 
@@ -184,7 +184,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Geben Sie an, in welcher Sprache die Inhalte der Daten verfasst sind (z. B. die Spaltenüberschriften und Texte). Das hilft Nutzenden einzuschätzen, ob sie die Daten verstehen. Beispiel: Deutsch, Englisch.
 
-### Mit welchen Stichworten finde ich diese Daten?
+### Mit welchen Schlagworten finde ich diese Daten?
 
 | Eigenschaft | Wert |
 |---|---|
@@ -195,11 +195,11 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **1 · DCAT-AP-Frage:** Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?
 
-**2 · Verständliche Frage:** Mit welchen Stichworten finde ich diese Daten?
+**2 · Verständliche Frage:** Mit welchen Schlagworten finde ich diese Daten?
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.
 
-**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Stichwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen die Kategorie und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.
+**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.
 
 ### Wann wurden diese Daten zum ersten Mal veröffentlicht?
 
@@ -698,9 +698,9 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Welches weitere EU-Thema möchten Sie ergänzen?
 
-**3 · DCAT-AP-Langbeschreibung:** Zusätzliches `dcat:theme` als direkte EU-Themen-URI (`http://publications.europa.eu/resource/authority/data-theme/…`). Ergänzt die Kategorie-Auswahl aus Tab 1 um weitere Themen. Kardinalität 0..n.
+**3 · DCAT-AP-Langbeschreibung:** Zusätzliches `dcat:theme` als direkte EU-Themen-URI (`http://publications.europa.eu/resource/authority/data-theme/…`). Ergänzt die Themen-Auswahl aus Tab 1 um weitere Themen. Kardinalität 0..n.
 
-**4 · Verständliche Langbeschreibung:** Falls Ihr Datensatz in mehr als eine Kategorie passt, ergänzen Sie hier ein weiteres EU-Thema aus der Vorschlagsliste. Das erhöht die Auffindbarkeit über mehrere Themenfilter. Beispiel: Umwelt zusätzlich zu Gesundheit.
+**4 · Verständliche Langbeschreibung:** Falls Ihr Datensatz zu mehr als einem Thema passt, ergänzen Sie hier ein weiteres EU-Thema aus der Vorschlagsliste. Das erhöht die Auffindbarkeit über mehrere Themenfilter. Beispiel: Umwelt zusätzlich zu Gesundheit.
 
 ### Ist dies ein hochwertiger Datensatz (HVD)?
 

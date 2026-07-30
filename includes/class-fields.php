@@ -74,9 +74,29 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) )
 						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V.', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_theme', __( 'In welche Kategorie gehört dieser Datensatz?', 'open-data-wizard' ) )
+					// Beschreibung direkt nach dem Herausgeber (beide Pflicht), damit die
+					// zwei wichtigsten Angaben oben stehen (B3).
+					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
+						// Pflicht nur zum Veröffentlichen (siehe odw_publisher).
+						->set_attribute( 'data-odw-required', '1' )
+						->set_rows( 5 )
+						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
+						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
+
+					Field::make( 'select', 'odw_theme', __( 'Welchem Thema ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
 						->add_options( self::get_theme_options() )
 						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
+
+					// Weniger häufige Einordnungen (CESSDA, ZiviZ) und die Übersetzungen
+					// als aufklappbare Untergruppe ans Tab-Ende — entschlackt den Einstieg
+					// für die typische Nutzung (B3, Accordion-Muster wie Tab 4).
+					Field::make( 'html', 'odw_hint_tab1_extra' )
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="tab1extra" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Weitere Einordnung & Übersetzungen (optional)', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'text', 'odw_cessda_topic', __( 'Ordnen Sie den Datensatz einem oder mehreren Themenfeld nach CESSDA-Vokabular zu', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-backing', 'cessda' )
@@ -86,13 +106,6 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-vocab', 'engagementfeld' )
 						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
 						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
-
-					Field::make( 'textarea', 'odw_description', __( 'Worum geht es in diesem Datensatz?', 'open-data-wizard' ) )
-						// Pflicht nur zum Veröffentlichen (siehe odw_publisher).
-						->set_attribute( 'data-odw-required', '1' )
-						->set_rows( 5 )
-						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
-						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_hint_translations' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel und Beschreibung zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben oben bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
@@ -151,7 +164,7 @@ class ODW_Fields {
 						->add_options( self::get_language_options() )
 						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
 
-					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Stichworten finde ich diese Daten?', 'open-data-wizard' ) )
+					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Schlagworten finde ich diese Daten?', 'open-data-wizard' ) )
 						->set_rows( 3 )
 						->set_attribute( 'placeholder', __( "Umwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) )
 						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) ),
@@ -453,10 +466,10 @@ class ODW_Fields {
 						->add_options( self::get_access_rights_options() )
 						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) . "\n\n" . __( 'Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich', 'open-data-wizard' ) ),
 
-					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Kategorie-URI)?', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Themen-URI)?', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-vocab', 'data-theme' )
 						->set_attribute( 'placeholder', __( 'EU-Datenthema eintippen oder auswählen…', 'open-data-wizard' ) )
-						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt das Thema aus Tab 1).', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html(

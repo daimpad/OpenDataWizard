@@ -7,6 +7,33 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.30.0] — 2026-07-30
+
+Aufgeräumtes Tab 1 und einheitliche Begriffe (Paket B, Teil 2 von 4).
+
+### ✨ Changed
+- **Tab 1 „Grundlegende Informationen" entschlackt (B3):** Reihenfolge jetzt
+  **Herausgeber → Beschreibung → Thema** (die zwei Pflichtangaben stehen oben).
+  CESSDA-Themenklassifikation, ZiviZ-Engagementfeld und die Titel-/Beschreibungs-
+  Übersetzungen sind in eine **aufklappbare Untergruppe** („Weitere Einordnung &
+  Übersetzungen") ans Tab-Ende gewandert — gleiches Accordion-Muster wie in Tab 4.
+- **Einheitliche Begriffe (B5):** Durchgängig **„Thema"** (statt „Kategorie") für
+  `dcat:theme` und **„Schlagworte/Schlagwörter"** (statt „Stichworte") für
+  `dcat:keyword` — im Formular, in der Feld-Referenz, in den MQA-Metrik-Labels und
+  auf der Einstiegsseite.
+
+### 🔧 Technisch
+- Das Accordion (`sectionFields` in `odw-admin-fields.js`) klappt jetzt auch
+  eingefügte Widgets (z. B. das sichtbare CESSDA-Eingabefeld) mit ein, nicht nur
+  Carbon-Fields-Felder.
+- `docs/FELD-REFERENZ.md` neu generiert (`php bin/generate-field-reference.php`).
+
+### ✅ Tests
+- Neuer Terminologie-Test stellt die Begriffs-Konsistenz im Feld-Katalog sicher.
+  Gesamt: 177.
+
+---
+
 ## [2.29.0] — 2026-07-30
 
 Bessere Pflichtfeld-Führung für nicht-technische Nutzer (Paket B, Teil 1 von 4).

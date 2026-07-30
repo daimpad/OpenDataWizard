@@ -47,7 +47,7 @@ return array(
 		'key'       => 'theme',
 		'dimension' => 'findability',
 		'dcat_prop' => 'dcat:theme',
-		'label'     => __( 'Kategorien (dcat:theme)', 'open-data-wizard' ),
+		'label'     => __( 'Thema (dcat:theme)', 'open-data-wizard' ),
 		'points'    => 30,
 		'type'      => 'present',
 		'check'     => 'theme',

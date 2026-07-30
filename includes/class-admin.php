@@ -730,7 +730,7 @@ class ODW_Admin {
 				<ol>
 					<li>
 						<strong><?php esc_html_e( '1 — Grundlegende Informationen', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? In welche Kategorie gehört der Datensatz?', 'open-data-wizard' ); ?>
+						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet?', 'open-data-wizard' ); ?>
 					</li>
 					<li>
 						<strong><?php esc_html_e( '2 — Inhaltliche Angaben', 'open-data-wizard' ); ?></strong><br>
