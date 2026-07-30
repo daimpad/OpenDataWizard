@@ -27,6 +27,11 @@ class ODW_Setup {
 	private const REDIRECT_OPTION = 'odw_activation_redirect';
 
 	/**
+	 * Custom capability, die Batch-Import & Co. schützt.
+	 */
+	public const CAPABILITY = 'manage_open_data';
+
+	/**
 	 * Wird direkt aus register_activation_hook aufgerufen — Carbon Fields
 	 * ist zu diesem Zeitpunkt noch nicht geladen.
 	 */
@@ -34,16 +39,42 @@ class ODW_Setup {
 		update_option( self::WELCOME_OPTION, '1', false );
 		// Flag a one-time redirect to the introduction page on the next admin load.
 		set_transient( self::REDIRECT_OPTION, '1', 60 );
+		self::grant_capability();
 	}
 
 	/**
 	 * Wird aus odw_bootstrap() aufgerufen, nachdem Carbon Fields initialisiert ist.
 	 */
 	public static function init(): void {
+		add_action( 'admin_init', array( self::class, 'maybe_grant_capability' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_redirect_to_intro' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_create_demo' ) );
 		add_action( 'admin_init', array( self::class, 'handle_dismiss' ) );
 		add_action( 'admin_notices', array( self::class, 'render_welcome_notice' ) );
+	}
+
+	/**
+	 * Vergibt manage_open_data an Administratoren und Redakteure.
+	 */
+	public static function grant_capability(): void {
+		foreach ( array( 'administrator', 'editor' ) as $role_name ) {
+			$role = get_role( $role_name );
+			if ( $role && ! $role->has_cap( self::CAPABILITY ) ) {
+				$role->add_cap( self::CAPABILITY );
+			}
+		}
+	}
+
+	/**
+	 * Upgrade-sicherer Nachtrag: Bestehende Installationen durchlaufen den
+	 * Aktivierungs-Hook nicht erneut — die Capability wird daher bei Bedarf
+	 * auf admin_init nachvergeben (billiger has_cap-Check).
+	 */
+	public static function maybe_grant_capability(): void {
+		$admin = get_role( 'administrator' );
+		if ( $admin && ! $admin->has_cap( self::CAPABILITY ) ) {
+			self::grant_capability();
+		}
 	}
 
 	/**

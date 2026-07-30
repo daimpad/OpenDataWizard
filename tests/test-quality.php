@@ -442,7 +442,7 @@ class Test_ODW_Quality extends TestCase {
 		}
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
-		\WP_Mock::userFunction( 'wp_remote_head' )->andReturn( array( 'response' => array( 'code' => 200 ) ) );
+		\WP_Mock::userFunction( 'wp_safe_remote_head' )->andReturn( array( 'response' => array( 'code' => 200 ) ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
 		\WP_Mock::userFunction( 'wp_remote_retrieve_response_code' )->andReturn( 200 );
 		\WP_Mock::userFunction( 'set_transient' )->once()->andReturn( true );

@@ -7,6 +7,56 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.27.0] — 2026-07-30
+
+Sicherheits- und Bugfix-Release nach einem umfassenden Audit (Security, Funktion, UX).
+
+### 🔒 Security
+- **SSRF-Härtung:** Die opt-in-URL-Erreichbarkeitsprüfung nutzt jetzt `wp_safe_remote_head/get`
+  (blockt Loopback-/private/link-lokale Ziele wie `127.0.0.1` oder Cloud-Metadata-Adressen).
+- **XSS behoben:** Die Fehlerliste der Batch-Import-Vorschau wird jetzt ausschließlich per `.text()`
+  ins DOM geschrieben — präparierte CSV-/JSON-Inhalte können kein Script mehr im wp-admin ausführen.
+- **Entwurfs-Enumeration unterbunden:** REST `/datasets/<id>` antwortet für unveröffentlichte
+  Datensätze jetzt mit 404 (statt 403) und identischer Meldung.
+
+### 🐛 Fixed
+- **Capability `manage_open_data` wird jetzt tatsächlich vergeben** (Aktivierung + upgrade-sicherer
+  Nachtrag auf `admin_init`; Entfernung bei Deinstallation). Vorher war der **Batch-Import auf frischen
+  Installationen für alle unzugänglich** — auch für Administratoren.
+- **Auto-Zugriffs-URL aus Datei-Upload & Auto-`dct:modified` funktionieren jetzt wirklich:** Beide
+  Hooks liefen auf `save_post_odw_dataset` und wurden anschließend von Carbon Fields (`save_post`@10)
+  wieder überschrieben — jetzt `save_post`@20 mit Post-Type-Guard.
+- **Repeater-Header zeigen wieder Inhalte:** `set_header_template()` stand vor `add_fields()` und wurde
+  von Carbon Fields verworfen (Template wird der zuletzt registrierten Gruppe zugewiesen) — alle vier
+  Repeater korrigiert.
+- **Papierkorb-Ansicht repariert:** Der Status-Filter erzwang in jeder Listenansicht `publish/draft`
+  und machte Papierkorb/Ausstehend/Privat unbrauchbar — er greift jetzt nur noch bei explizitem
+  Dropdown-Wert.
+- **Tab-Navigation wiederbelebt:** `wizard-tabs.js` und die Tab-CSS zielten auf veraltete
+  Carbon-Fields-Klassen (`tabs-nav`/`cf-tab__label`) — auf die echten CF-3.6-Klassen
+  (`tabs-list`/`tabs-item--current`, Button) umgestellt; Tab-Persistenz, Pfeiltasten (+ Home/End)
+  und das Tab-Styling funktionieren wieder.
+- **`wp open-data-wizard quality recalculate` speichert jetzt** (rief zuvor nur `calculate()` ohne
+  `store()` auf).
+- **Delta-Harvesting:** `?since=YYYY-MM-DD` beginnt jetzt um 00:00 UTC (statt zur aktuellen Uhrzeit) —
+  same-day-Änderungen gehen nicht mehr verloren (`!Y-m-d`-Format).
+- **Publish-Validierung konsistent zu Multi-Distribution & Upload:** Zusätzliche Distributionen zählen
+  als gültige Distribution; das Entfernen der hochgeladenen Datei wird im selben Save erkannt
+  (POST-Wert hat Vorrang); Lizenzpflicht gilt jetzt auch für Upload-only-Datensätze und für jede
+  zusätzliche Distribution.
+- **Batch-Import-Lizenz-Aliasse** auf die `https`-URIs des Plugins vereinheitlicht (vorher `http` →
+  Katalog-Filter, Lizenz-Labels und MQA-Vokabular-Metrik scheiterten für Importe); `dl-de-by`/`dl-de-zero`
+  als Aliasse ergänzt.
+- **MQA-Erreichbarkeitsmetriken** berücksichtigen jetzt alle Distributionen (eine erreichbare URL
+  genügt) statt nur der primären.
+- **Deinstallation löscht jetzt auch Papierkorb-Datensätze** (`post_status 'any'` schloss `trash` aus).
+
+### ✅ Tests
+- 4 neue Tests: Delta-Mitternacht-Semantik, Extra-Distribution als gültige Distribution,
+  Lizenzpflicht bei Upload-only, „sonstige" ohne eigene URI. Gesamt: 172.
+
+---
+
 ## [2.26.1] — 2026-07-30
 
 ### 🐛 Fixed

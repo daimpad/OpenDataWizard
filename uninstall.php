@@ -19,10 +19,12 @@ if ( empty( $odw_settings['delete_on_uninstall'] ) ) {
 }
 
 // Alle odw_dataset Posts inkl. Postmeta löschen.
+// 'any' würde Stati mit exclude_from_search (trash, auto-draft) auslassen —
+// daher explizit alle registrierten Stati abfragen.
 $odw_post_ids = get_posts(
 	array(
 		'post_type'      => 'odw_dataset',
-		'post_status'    => 'any',
+		'post_status'    => array_values( get_post_stati() ),
 		'posts_per_page' => -1,
 		'fields'         => 'ids',
 	)
@@ -30,6 +32,14 @@ $odw_post_ids = get_posts(
 
 foreach ( $odw_post_ids as $odw_pid ) {
 	wp_delete_post( (int) $odw_pid, true );
+}
+
+// Custom Capability aus allen Rollen entfernen.
+$odw_roles = wp_roles();
+foreach ( $odw_roles->role_objects as $odw_role ) {
+	if ( $odw_role->has_cap( 'manage_open_data' ) ) {
+		$odw_role->remove_cap( 'manage_open_data' );
+	}
 }
 
 // Plugin-Optionen löschen.

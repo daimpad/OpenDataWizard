@@ -49,7 +49,11 @@ class ODW_Admin {
 		add_action( 'load-post.php', array( self::class, 'register_help_tabs' ) );
 		add_action( 'load-post-new.php', array( self::class, 'register_help_tabs' ) );
 		add_action( 'add_meta_boxes', array( self::class, 'register_file_meta_box' ) );
-		add_action( 'save_post_odw_dataset', array( self::class, 'save_file_attachment' ), 20, 2 );
+		// Auf 'save_post'@20 (nicht 'save_post_odw_dataset'): Carbon Fields
+		// speichert auf 'save_post'@10, und save_post_{post_type} feuert davor.
+		// Nur so bleibt die aus dem Upload abgeleitete Zugriffs-URL erhalten und
+		// wird nicht von CFs (leerem) Formularwert überschrieben.
+		add_action( 'save_post', array( self::class, 'save_file_attachment' ), 20, 2 );
 		add_action( 'wp_ajax_odw_batch_import_preview', array( self::class, 'ajax_batch_import_preview' ) );
 		add_action( 'wp_ajax_odw_batch_import_execute', array( self::class, 'ajax_batch_import_execute' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_download_sample' ) );
@@ -269,10 +273,11 @@ class ODW_Admin {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$filter = isset( $_GET['odw_status_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['odw_status_filter'] ) ) : '';
 
+		// Nur eingreifen, wenn der eigene Dropdown-Filter explizit gesetzt ist.
+		// Ein pauschales Erzwingen von publish/draft würde die WordPress-eigenen
+		// Ansichten (Papierkorb, Ausstehend, Privat) unbrauchbar machen.
 		if ( in_array( $filter, array( 'publish', 'draft' ), true ) ) {
 			$query->set( 'post_status', $filter );
-		} else {
-			$query->set( 'post_status', array( 'publish', 'draft' ) );
 		}
 	}
 
@@ -528,7 +533,11 @@ class ODW_Admin {
 	 * @param int      $post_id Post ID.
 	 * @param \WP_Post $post    Post object (required by hook signature).
 	 */
-	public static function save_file_attachment( int $post_id, \WP_Post $post ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	public static function save_file_attachment( int $post_id, \WP_Post $post ): void {
+		if ( 'odw_dataset' !== $post->post_type ) {
+			return;
+		}
+
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
@@ -1058,11 +1067,12 @@ class ODW_Admin {
 					$('#odw-preview-rows').html(rows);
 
 					if (data.errors && data.errors.length > 0) {
-						var errorHtml = '';
+						// Fehlermeldungen enthalten rohe Dateiinhalte — ausschließlich
+						// per .text() einfügen (XSS-Schutz), niemals als HTML.
+						var errorList = $('#odw-errors-list').empty();
 						$.each(data.errors, function(idx, error) {
-							errorHtml += '<li>' + error + '</li>';
+							$('<li></li>').text(error).appendTo(errorList);
 						});
-						$('#odw-errors-list').html(errorHtml);
 						$('#odw-errors-section').show();
 					} else {
 						$('#odw-errors-section').hide();

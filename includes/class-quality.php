@@ -404,6 +404,7 @@ class ODW_Quality {
 		$rows = array();
 
 		$rows[] = array(
+			'access'     => (string) carbon_get_post_meta( $id, 'odw_access_url' ),
 			'format'     => (string) carbon_get_post_meta( $id, 'odw_format' ),
 			'media_type' => (string) carbon_get_post_meta( $id, 'odw_media_type' ),
 			'download'   => (string) carbon_get_post_meta( $id, 'odw_download_url' ),
@@ -423,6 +424,7 @@ class ODW_Quality {
 					$license = (string) ( $row['license_custom'] ?? '' );
 				}
 				$rows[] = array(
+					'access'     => (string) ( $row['access_url'] ?? '' ),
 					'format'     => (string) ( $row['format'] ?? '' ),
 					'media_type' => (string) ( $row['media_type'] ?? '' ),
 					'download'   => (string) ( $row['download_url'] ?? '' ),
@@ -480,14 +482,22 @@ class ODW_Quality {
 	 * @return bool True wenn die URL per HTTP-HEAD einen 2xx/3xx-Status liefert.
 	 */
 	private static function check_reachable_metric( string $check, \WP_Post $post ): bool {
-		$field = 'download_url' === $check ? 'odw_download_url' : 'odw_access_url';
-		$url   = trim( (string) carbon_get_post_meta( $post->ID, $field ) );
+		// Alle Distributionen (primäre + zusätzliche) berücksichtigen — eine
+		// erreichbare URL genügt, damit Repeater-Distributionen nicht als
+		// „fehlgeschlagen" bewertet werden.
+		$key = 'download_url' === $check ? 'download' : 'access';
 
-		if ( '' === $url || ! preg_match( '#^https?://#i', $url ) ) {
-			return false;
+		foreach ( self::all_distributions( $post->ID ) as $distribution ) {
+			$url = trim( $distribution[ $key ] );
+			if ( '' === $url || ! preg_match( '#^https?://#i', $url ) ) {
+				continue;
+			}
+			if ( self::url_is_reachable( $url ) ) {
+				return true;
+			}
 		}
 
-		return self::url_is_reachable( $url );
+		return false;
 	}
 
 	/**
@@ -503,18 +513,20 @@ class ODW_Quality {
 			return '1' === $cached;
 		}
 
+		// SSRF-Schutz: wp_safe_remote_* validiert die URL via wp_http_validate_url()
+		// und blockt Loopback-/private/link-lokale Ziele sowie exotische Ports.
 		$args = array(
 			'timeout'     => 5,
 			'redirection' => 3,
 			'user-agent'  => 'OpenDataWizard-MQA/1.0',
 		);
 
-		$response = wp_remote_head( $url, $args );
+		$response = wp_safe_remote_head( $url, $args );
 		$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
 
 		// Manche Server lehnen HEAD ab (405/501) — dann ein leichtgewichtiges GET versuchen.
 		if ( 405 === $code || 501 === $code || 0 === $code ) {
-			$response = wp_remote_get( $url, $args );
+			$response = wp_safe_remote_get( $url, $args );
 			$code     = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
 		}
 

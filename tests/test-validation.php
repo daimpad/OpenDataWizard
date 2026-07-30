@@ -97,6 +97,84 @@ class Test_ODW_Validation extends TestCase {
 	}
 
 	/**
+	 * An additional distribution (repeater row) satisfies the distribution rule
+	 * even when the primary access URL is empty.
+	 */
+	public function test_extra_distribution_counts_as_valid_distribution(): void {
+		$this->load_classes();
+
+		\WP_Mock::userFunction( 'wp_parse_url' )->andReturnUsing(
+			static function ( $url, $component ) {
+				return parse_url( $url, $component ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
+			}
+		);
+
+		$errors = $this->run_validate(
+			11,
+			$this->make_postarr(
+				array(
+					'_odw_extra_distributions' => array(
+						array(
+							'_access_url' => 'https://example.org/extra.json',
+							'_license'    => 'https://creativecommons.org/licenses/by/4.0/',
+						),
+					),
+				)
+			)
+		);
+
+		$this->assertNotContains( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', $errors );
+		$this->assertNotContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+	}
+
+	/**
+	 * A dataset whose only distribution is an uploaded media file must still
+	 * carry a license.
+	 */
+	public function test_upload_only_distribution_requires_license(): void {
+		$this->load_classes();
+
+		$errors = $this->run_validate(
+			12,
+			$this->make_postarr( array() ),
+			array( '_odw_file_id' => 7 )
+		);
+
+		$this->assertNotContains( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', $errors );
+		$this->assertContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+	}
+
+	/**
+	 * An extra distribution with "sonstige" license but no custom URI fails the
+	 * license rule.
+	 */
+	public function test_extra_distribution_sonstige_without_custom_fails(): void {
+		$this->load_classes();
+
+		\WP_Mock::userFunction( 'wp_parse_url' )->andReturnUsing(
+			static function ( $url, $component ) {
+				return parse_url( $url, $component ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
+			}
+		);
+
+		$errors = $this->run_validate(
+			13,
+			$this->make_postarr(
+				array(
+					'_odw_extra_distributions' => array(
+						array(
+							'_access_url' => 'https://example.org/extra.csv',
+							'_license'    => 'sonstige',
+						),
+					),
+				)
+			)
+		);
+
+		$this->assertContains( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', $errors );
+	}
+
+	/**
 	 * HVD flagged with an empty category yields the HVD error.
 	 */
 	public function test_hvd_yes_without_category_adds_error(): void {

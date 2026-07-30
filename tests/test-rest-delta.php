@@ -652,4 +652,22 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertArrayHasKey( 'dcat:dataset', $body );
 		$this->assertArrayHasKey( 'odw:removed', $body );
 	}
+
+	/**
+	 * A date-only since parameter is parsed as start of day (00:00:00 UTC) —
+	 * without the '!' format prefix, createFromFormat() would inject the current
+	 * wall-clock time and silently drop same-day changes from the delta.
+	 */
+	public function test_parse_iso8601_date_only_is_midnight_utc(): void {
+		$this->load_class();
+
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'parse_iso8601' );
+		$method->setAccessible( true );
+
+		$dt = $method->invoke( null, '2026-07-30' );
+
+		$this->assertInstanceOf( \DateTimeImmutable::class, $dt );
+		$this->assertSame( '2026-07-30 00:00:00', $dt->format( 'Y-m-d H:i:s' ) );
+		$this->assertSame( 'UTC', $dt->getTimezone()->getName() );
+	}
 }

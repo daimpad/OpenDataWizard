@@ -2,7 +2,10 @@
  * Open Data Wizard — Tab Navigation
  *
  * Vanilla JS, keine jQuery-Abhängigkeit.
- * Nutzt Carbon Fields native Tab-Struktur und sessionStorage für Tab-Zustand.
+ * Nutzt Carbon Fields' native Tab-Struktur (CF 3.6:
+ * ul.cf-container__tabs-list > li.cf-container__tabs-item > button,
+ * aktiver Tab: li.cf-container__tabs-item--current) und sessionStorage
+ * für den Tab-Zustand. role/aria-selected verwaltet Carbon Fields selbst.
  */
 (function () {
     'use strict';
@@ -40,7 +43,7 @@
      */
     function waitForTabs(callback, attempts) {
         attempts = attempts || 0;
-        var tabs = document.querySelectorAll('.cf-container__tabs-nav li');
+        var tabs = document.querySelectorAll('.cf-container__tabs-list .cf-container__tabs-item');
 
         if (tabs.length > 0) {
             callback(tabs);
@@ -49,6 +52,21 @@
                 waitForTabs(callback, attempts + 1);
             }, 200);
         }
+    }
+
+    /**
+     * Der klickbare Button innerhalb eines Tab-Listenelements.
+     */
+    function tabButton(tab) {
+        return tab.querySelector('button');
+    }
+
+    /**
+     * Sichtbarer Tab-Name (Button-Text).
+     */
+    function tabLabel(tab) {
+        var btn = tabButton(tab);
+        return (btn ? btn.textContent : tab.textContent).trim();
     }
 
     /**
@@ -61,65 +79,55 @@
         }
 
         tabs.forEach(function (tab) {
-            var labelEl = tab.querySelector('.cf-tab__label');
-            if (labelEl && labelEl.textContent.trim() === savedLabel) {
-                tab.click();
+            var btn = tabButton(tab);
+            if (btn && tabLabel(tab) === savedLabel) {
+                btn.click();
             }
         });
     }
 
     /**
-     * Speichert aktiven Tab-Namen in sessionStorage beim Klick.
+     * Speichert aktiven Tab-Namen in sessionStorage beim Klick
+     * (Klicks auf den Button bubbeln zum li).
      */
     function persistTab(tabs) {
         tabs.forEach(function (tab) {
             tab.addEventListener('click', function () {
-                var labelEl = tab.querySelector('.cf-tab__label');
-                if (labelEl) {
-                    storage.set(SESSION_KEY, labelEl.textContent.trim());
-                }
+                storage.set(SESSION_KEY, tabLabel(tab));
             });
         });
     }
 
     /**
-     * Setzt aria-selected Attribut via MutationObserver.
-     * Gibt den Observer zurück damit er beim Entladen getrennt werden kann.
-     */
-    function enhanceActiveStyle(tabs) {
-        var observer = new MutationObserver(function () {
-            tabs.forEach(function (tab) {
-                tab.setAttribute('aria-selected', tab.classList.contains('cf-tab--active') ? 'true' : 'false');
-            });
-        });
-
-        tabs.forEach(function (tab) {
-            observer.observe(tab, { attributes: true, attributeFilter: ['class'] });
-        });
-
-        return observer;
-    }
-
-    /**
-     * Keyboard navigation für Tabs (Accessibility).
+     * Keyboard navigation für Tabs (Accessibility):
+     * Pfeiltasten wechseln, Home/End springen an Anfang/Ende.
      */
     function addKeyboardNav(tabs) {
         tabs.forEach(function (tab, idx) {
-            tab.setAttribute('tabindex', '0');
-            tab.setAttribute('role', 'tab');
+            var btn = tabButton(tab);
+            if (!btn) {
+                return;
+            }
 
-            tab.addEventListener('keydown', function (e) {
+            btn.addEventListener('keydown', function (e) {
                 var newIdx = -1;
                 if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
                     newIdx = (idx + 1) % tabs.length;
                 } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
                     newIdx = (idx - 1 + tabs.length) % tabs.length;
+                } else if (e.key === 'Home') {
+                    newIdx = 0;
+                } else if (e.key === 'End') {
+                    newIdx = tabs.length - 1;
                 }
 
                 if (newIdx >= 0) {
                     e.preventDefault();
-                    tabs[newIdx].click();
-                    tabs[newIdx].focus();
+                    var target = tabButton(tabs[newIdx]);
+                    if (target) {
+                        target.click();
+                        target.focus();
+                    }
                 }
             });
         });
@@ -132,14 +140,8 @@
         waitForTabs(function (tabs) {
             var tabsArray = Array.prototype.slice.call(tabs);
             persistTab(tabsArray);
-            var observer = enhanceActiveStyle(tabsArray);
             addKeyboardNav(tabsArray);
             restoreTab(tabsArray);
-
-            // Observer beim Verlassen der Seite trennen (Speicherleck vermeiden).
-            window.addEventListener('beforeunload', function () {
-                observer.disconnect();
-            }, { once: true });
         });
     }
 

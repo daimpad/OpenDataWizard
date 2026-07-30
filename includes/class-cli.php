@@ -102,7 +102,9 @@ class ODW_CLI {
 
 		foreach ( $post_ids as $post_id ) {
 			if ( class_exists( 'ODW_Quality' ) ) {
-				ODW_Quality::calculate( $post_id );
+				// calculate() liefert nur das Ergebnis — erst store() persistiert
+				// Score/Level/MQA-Daten in den Post-Metas.
+				ODW_Quality::store( $post_id, ODW_Quality::calculate( $post_id ) );
 			}
 			$progress->tick();
 			++$count;
