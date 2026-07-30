@@ -71,6 +71,45 @@ class Test_ODW_Field_Catalog extends TestCase {
 	}
 
 	/**
+	 * Every data field in the wizard form has a catalog entry and vice versa.
+	 *
+	 * Guards against drift: adding or removing a form field without updating
+	 * config/field-catalog.php fails this test.
+	 */
+	public function test_catalog_covers_all_form_fields(): void {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reads local source, not a remote request.
+		$source = (string) file_get_contents( ODW_PLUGIN_DIR . 'includes/class-fields.php' );
+
+		$this->assertNotSame( '', $source, 'class-fields.php could not be read' );
+
+		// Collect the internal keys of all scalar data fields (text/textarea/select/date).
+		preg_match_all(
+			"/Field::make\\(\\s*'(?:text|textarea|select|date)',\\s*'odw_([a-z_]+)'/",
+			$source,
+			$matches
+		);
+		$form_keys = array_values( array_unique( $matches[1] ) );
+		sort( $form_keys );
+
+		$catalog_keys = array_column( $this->catalog, 'key' );
+		sort( $catalog_keys );
+
+		$missing_in_catalog = array_diff( $form_keys, $catalog_keys );
+		$missing_in_form    = array_diff( $catalog_keys, $form_keys );
+
+		$this->assertSame(
+			array(),
+			array_values( $missing_in_catalog ),
+			'Form fields without a catalog entry: ' . implode( ', ', $missing_in_catalog )
+		);
+		$this->assertSame(
+			array(),
+			array_values( $missing_in_form ),
+			'Catalog entries without a form field: ' . implode( ', ', $missing_in_form )
+		);
+	}
+
+	/**
 	 * The committed docs/FELD-REFERENZ.md matches the generated output.
 	 *
 	 * Fails when the catalog changed but the doc was not regenerated

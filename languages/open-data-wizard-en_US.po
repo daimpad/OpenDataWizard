@@ -282,6 +282,9 @@ msgstr "DCAT-AP 3.0 required fields"
 msgid "DCAT-AP 3.0 konforme Datensatz-Metadaten"
 msgstr "DCAT-AP 3.0 compliant dataset metadata"
 
+msgid "DCAT-AP-Definition"
+msgstr "DCAT-AP definition"
+
 msgid "DCAT-AP-Konformität (SHACL)"
 msgstr "DCAT-AP compliance (SHACL)"
 
@@ -494,6 +497,9 @@ msgstr "One of the six EU thematic categories. Example: Geospatial, Meteorologic
 
 msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
 msgstr "A unique identifier of the dataset (e.g. DOI or internal ID). Example: 10.1234/abcd"
+
+msgid "Einfach erklärt"
+msgstr "In plain language"
 
 msgid "Einheit"
 msgstr "Unit"
@@ -878,6 +884,9 @@ msgstr "Media type"
 
 msgid "Media-Type gesetzt (dcat:mediaType)"
 msgstr "Media type set (dcat:mediaType)"
+
+msgid "Mehr erfahren"
+msgstr "Learn more"
 
 msgid "Metadaten (JSON-LD)"
 msgstr "Metadata (JSON-LD)"

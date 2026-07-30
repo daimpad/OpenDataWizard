@@ -517,6 +517,62 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 4b. "Mehr erfahren" — an expandable panel per field with the catalog's
+	// DCAT-AP and plain-language long descriptions (config/field-catalog.php via
+	// odwAdminFields.fieldCatalog). Additive: the translatable inline help stays.
+	// -------------------------------------------------------------------------
+	function moreBlock( label, text ) {
+		var p = document.createElement( 'p' );
+		p.className = 'odw-field-more__block';
+		if ( label ) {
+			var strong = document.createElement( 'strong' );
+			strong.textContent = label + ': ';
+			p.appendChild( strong );
+		}
+		p.appendChild( document.createTextNode( text ) );
+		return p;
+	}
+
+	function initFieldMore() {
+		var cfg     = data.fieldMore || {};
+		var catalog = data.fieldCatalog || [];
+		catalog.forEach( function ( f ) {
+			if ( ! f.meta_key ) {
+				return;
+			}
+			// Match the Carbon Fields compact input by its exact meta-key suffix,
+			// e.g. carbon_fields_compact_input[_odw_access_url].
+			var input = document.querySelector( '[name$="[' + f.meta_key + ']"]' );
+			if ( ! input ) {
+				return;
+			}
+			var field = input.closest( '.cf-field' );
+			if ( ! field || field.dataset.odwMoreInit ) {
+				return;
+			}
+			field.dataset.odwMoreInit = '1';
+
+			var details = document.createElement( 'details' );
+			details.className = 'odw-field-more';
+
+			var summary = document.createElement( 'summary' );
+			summary.textContent = cfg.toggle || 'Mehr erfahren';
+			details.appendChild( summary );
+
+			var body = document.createElement( 'div' );
+			body.className = 'odw-field-more__body';
+			if ( f.desc_dcat ) {
+				body.appendChild( moreBlock( cfg.dcat, f.desc_dcat ) );
+			}
+			if ( f.desc_human ) {
+				body.appendChild( moreBlock( cfg.plain, f.desc_human ) );
+			}
+			details.appendChild( body );
+			field.appendChild( details );
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// 5. Live wizard preview (Tab 5) — a completeness checklist + summary card
 	// that update as the user types, without saving. The field list and labels
 	// come from PHP (odwAdminFields.livePreview). Progressive enhancement: the
@@ -642,6 +698,7 @@
 					} );
 					node.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
 					initHelpTooltips();
+					initFieldMore();
 				} );
 			} );
 		} );
@@ -661,6 +718,7 @@
 		initProSection();
 		initFileSizeWidgets();
 		initHelpTooltips();
+		initFieldMore();
 		initLivePreview();
 		observeNewGroups();
 
@@ -676,6 +734,7 @@
 			initProSection();
 			initFileSizeWidgets();
 			initHelpTooltips();
+			initFieldMore();
 			initLivePreview();
 			if ( passes > 10 ) {
 				clearInterval( rerun );

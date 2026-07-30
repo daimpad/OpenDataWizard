@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.21.0] — 2026-07-30
+
+### ✨ Added — „Mehr erfahren" im Formular (katalog-gespeist)
+- Jedes Formularfeld erhält ein aufklappbares **„Mehr erfahren"** mit der **DCAT-AP-Langbeschreibung**
+  und der **verständlichen Langbeschreibung** aus `config/field-catalog.php` — dieselbe Quelle wie die
+  Feld-Referenz (docs/FELD-REFERENZ.md). Die ausführlichen Erklärungen erscheinen damit direkt im
+  Wizard; die kurzen, **übersetzbaren** Hilfetexte bleiben unverändert (kein i18n-Regress).
+- Die Katalog-Langtexte gelangen über `ODW_Field_Reference::js_map()` ins Admin-JS; das Panel wird per
+  `assets/js/odw-admin-fields.js` progressiv ergänzt (auch für nachgeladene CF-Felder).
+- 3 neue UI-Strings in `en_US` übersetzt.
+
+### ✅ Tests
+- Neuer **Konsistenztest**: Jedes Datenfeld des Formulars hat einen Katalog-Eintrag und umgekehrt —
+  CI schlägt fehl, wenn ein Feld ergänzt/entfernt, aber der Katalog nicht gepflegt wurde.
+
+---
+
 ## [2.20.0] — 2026-07-09
 
 ### 📚 Added — Mehrstufige Feld-Referenz
