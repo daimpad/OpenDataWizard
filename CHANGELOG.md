@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.26.1] — 2026-07-30
+
+### 🐛 Fixed
+- **Übersetzungs-Repeater (Titel/Beschreibung) ließen sich nicht befüllen.** Die Unterfelder hießen
+  `value` — ein bei Carbon Fields **reserviertes Schlüsselwort** für Complex-Felder. Dadurch erschien im
+  Backend die Meldung „*value is a reserved keyword for Complex fields*" und der „Add entry"-Button
+  reagierte nicht. Die Unterfelder heißen jetzt `content`; „Titel/Beschreibung in weiteren Sprachen"
+  funktioniert wieder. (Da zuvor keine Einträge gespeichert werden konnten, ist **keine Migration** nötig.)
+- **Regressionstest** ergänzt, der reservierte Complex-Unterfeldnamen (`value`/`_type`) künftig verhindert.
+
+---
+
 ## [2.26.0] — 2026-07-30
 
 ### ✨ Added — DCAT-AP.de-Feld & Profi-UX

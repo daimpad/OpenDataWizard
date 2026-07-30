@@ -1324,7 +1324,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 				'odw_title_translations' => array(
 					array(
 						'language' => 'http://publications.europa.eu/resource/authority/language/DEU',
-						'value'    => 'Deutscher Titel',
+						'content'  => 'Deutscher Titel',
 					),
 				),
 			)
@@ -1398,11 +1398,11 @@ class Test_ODW_Fields_Extended extends TestCase {
 			array(
 				array(
 					'language' => 'http://publications.europa.eu/resource/authority/language/ENG',
-					'value'    => 'Hello',
+					'content'  => 'Hello',
 				),
 				array(
 					'language' => 'fr',
-					'value'    => '',
+					'content'  => '',
 				),
 				'not-an-array',
 			)

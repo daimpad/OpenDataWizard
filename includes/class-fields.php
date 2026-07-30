@@ -90,26 +90,26 @@ class ODW_Fields {
 
 					Field::make( 'complex', 'odw_title_translations', __( 'Titel in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- value || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
+						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
 									->add_options( self::get_language_options() )
 									->set_help_text( __( 'Sprache dieser Übersetzung (dct:title @language)', 'open-data-wizard' ) ),
-								Field::make( 'text', 'value', __( 'Titel', 'open-data-wizard' ) )
+								Field::make( 'text', 'content', __( 'Titel', 'open-data-wizard' ) )
 									->set_help_text( __( 'Übersetzter Titel', 'open-data-wizard' ) ),
 							)
 						),
 
 					Field::make( 'complex', 'odw_description_translations', __( 'Beschreibung in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- value || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
+						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
 									->add_options( self::get_language_options() )
 									->set_help_text( __( 'Sprache dieser Übersetzung (dct:description @language)', 'open-data-wizard' ) ),
-								Field::make( 'textarea', 'value', __( 'Beschreibung', 'open-data-wizard' ) )
+								Field::make( 'textarea', 'content', __( 'Beschreibung', 'open-data-wizard' ) )
 									->set_rows( 3 )
 									->set_help_text( __( 'Übersetzte Beschreibung', 'open-data-wizard' ) ),
 							)
@@ -1408,7 +1408,7 @@ function odw_collect_lang_literals( string $primary_value, string $primary_tag, 
 			if ( ! is_array( $row ) ) {
 				continue;
 			}
-			$value = trim( (string) ( $row['value'] ?? '' ) );
+			$value = trim( (string) ( $row['content'] ?? '' ) );
 			if ( '' === $value ) {
 				continue;
 			}
