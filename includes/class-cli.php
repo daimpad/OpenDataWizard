@@ -31,6 +31,34 @@ class ODW_CLI {
 		}
 		\WP_CLI::add_command( 'open-data-wizard quality recalculate', array( self::class, 'quality_recalculate' ) );
 		\WP_CLI::add_command( 'open-data-wizard cache clear', array( self::class, 'cache_clear' ) );
+		\WP_CLI::add_command( 'open-data-wizard docs', array( self::class, 'generate_docs' ) );
+	}
+
+	/**
+	 * Regenerates the field reference (docs/FELD-REFERENZ.md) from the field catalog.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard docs
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments.
+	 */
+	public static function generate_docs( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		if ( ! class_exists( 'ODW_Field_Reference' ) ) {
+			require_once ODW_PLUGIN_DIR . 'includes/class-field-reference.php';
+		}
+
+		$target = ODW_PLUGIN_DIR . 'docs/FELD-REFERENZ.md';
+		$bytes  = ODW_Field_Reference::write( $target );
+
+		if ( $bytes > 0 ) {
+			$count = count( ODW_Field_Reference::load_catalog() );
+			\WP_CLI::success( sprintf( 'Feld-Referenz erzeugt: %d Felder, %d Bytes → docs/FELD-REFERENZ.md', $count, $bytes ) );
+			return;
+		}
+
+		\WP_CLI::error( 'Feld-Referenz konnte nicht geschrieben werden.' );
 	}
 
 	/**

@@ -66,6 +66,11 @@ open-data-wizard/
 
 ### Feldmapping DCAT-AP 3.0
 
+> 📋 **Vollständige, mehrstufige Feld-Referenz:** [docs/FELD-REFERENZ.md](docs/FELD-REFERENZ.md)
+> dokumentiert jedes Formularfeld in vier Stufen (DCAT-AP-Frage · verständliche Frage ·
+> DCAT-AP-Langbeschreibung · verständliche Langbeschreibung). Sie wird aus `config/field-catalog.php`
+> generiert (`php bin/generate-field-reference.php` bzw. `wp open-data-wizard docs`).
+
 #### Tab 1 — Grundlegende Informationen
 
 | Feld | DCAT-AP Prädikat | Pflicht |
