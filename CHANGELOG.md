@@ -7,6 +7,24 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.26.0] — 2026-07-30
+
+### ✨ Added — DCAT-AP.de-Feld & Profi-UX
+- **Neues Feld `dcatde:geocodingDescription`** („Wie lässt sich der räumliche Bezug in Worten
+  beschreiben?", Tab „Erweiterte Angaben" → Abdeckung): textuelle Ergänzung zu `dct:spatial` /
+  `dcatde:politicalGeocodingURI`. Im JSON-LD als sprachgetaggtes Literal, in Feld-Referenz und
+  Frontend-Widget-Accordion enthalten.
+- **Profi-UX v2:** Der große Bereich „Erweiterte Angaben" (Tab 4) ist jetzt in **einzeln aufklappbare
+  Untergruppen** gegliedert (Verantwortlichkeiten · Zugriff · HVD · Weitere DCAT-AP-Felder ·
+  Distribution) statt eines einzigen großen Reveals. Standardmäßig eingeklappt; Zustand je Gruppe in
+  `sessionStorage`. Progressive Enhancement: ohne JS bleiben alle Felder sichtbar.
+
+### 🌍 i18n / ✅ Tests
+- 7 neue UI-Strings in `en_US`; JSON-LD-Test für `dcatde:geocodingDescription` (167 Tests). Feld-Referenz
+  neu generiert (53 Felder).
+
+---
+
 ## [2.25.0] — 2026-07-30
 
 ### 📚 Added — Offizielle SHACL-Shapes gebündelt

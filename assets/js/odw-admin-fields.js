@@ -249,37 +249,49 @@
 	// toggle into an opt-in section. Progressive enhancement: if JS is absent,
 	// every field simply stays visible. State persists in sessionStorage.
 	// -------------------------------------------------------------------------
-	var PRO_KEY = 'odw_pro_open';
-
-	function applyProState( wrapper, btn, open ) {
-		var node = wrapper.nextElementSibling;
+	// Fields belonging to a section = every .cf-field after the heading until
+	// the next section heading (or the end of the tab).
+	function sectionFields( wrapper ) {
+		var fields = [];
+		var node   = wrapper.nextElementSibling;
 		while ( node ) {
 			if ( node.classList && node.classList.contains( 'cf-field' ) ) {
-				node.classList.toggle( 'odw-pro-collapsed', ! open );
+				if ( node.querySelector && node.querySelector( '[data-odw-section-toggle]' ) ) {
+					break;
+				}
+				fields.push( node );
 			}
 			node = node.nextElementSibling;
 		}
+		return fields;
+	}
+
+	function applySection( btn, fields, open ) {
+		fields.forEach( function ( f ) {
+			f.classList.toggle( 'odw-pro-collapsed', ! open );
+		} );
 		btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
-		btn.classList.toggle( 'odw-pro-open', open );
+		btn.classList.toggle( 'odw-section-open', open );
 	}
 
 	function initProSection() {
-		document.querySelectorAll( '[data-odw-pro-toggle]' ).forEach( function ( btn ) {
+		document.querySelectorAll( '[data-odw-section-toggle]' ).forEach( function ( btn ) {
 			var wrapper = btn.closest( '.cf-field' );
 			if ( ! wrapper || ! wrapper.parentNode ) {
 				return;
 			}
-			var open = sessionStorage.getItem( PRO_KEY ) === '1';
-			applyProState( wrapper, btn, open );
+			var key  = 'odw_sec_' + ( btn.getAttribute( 'data-odw-section-toggle' ) || '' );
+			var open = sessionStorage.getItem( key ) === '1'; // Default: collapsed.
+			applySection( btn, sectionFields( wrapper ), open );
 
-			if ( ! btn.getAttribute( 'data-odw-pro-bound' ) ) {
-				btn.setAttribute( 'data-odw-pro-bound', '1' );
+			if ( ! btn.getAttribute( 'data-odw-sec-bound' ) ) {
+				btn.setAttribute( 'data-odw-sec-bound', '1' );
 				btn.addEventListener( 'click', function () {
-					var nowOpen = sessionStorage.getItem( PRO_KEY ) !== '1';
+					var nowOpen = sessionStorage.getItem( key ) !== '1';
 					try {
-						sessionStorage.setItem( PRO_KEY, nowOpen ? '1' : '0' );
+						sessionStorage.setItem( key, nowOpen ? '1' : '0' );
 					} catch ( e ) {} // eslint-disable-line no-empty
-					applyProState( wrapper, btn, nowOpen );
+					applySection( btn, sectionFields( wrapper ), nowOpen );
 				} );
 			}
 		} );

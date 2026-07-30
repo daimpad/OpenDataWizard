@@ -293,6 +293,18 @@ return array(
 		'desc_human' => 'Verlinken Sie das genaue amtliche Gebiet, auf das sich die Daten beziehen — als offizielle Kennung (z. B. Gemeindeschlüssel). Damit ist eindeutig, welche Region gemeint ist. Beispiel: die URI zum amtlichen Gemeindeschlüssel Ihrer Stadt.',
 	),
 	array(
+		'key'        => 'geocoding_description',
+		'meta_key'   => '_odw_geocoding_description',
+		'dcat_prop'  => 'dcatde:geocodingDescription',
+		'tab'        => '4 — Erweiterte Angaben',
+		'tier'       => 'optional',
+		'vocab'      => '',
+		'q_dcat'     => 'Wie lautet die `dcatde:geocodingDescription` (textuelle Beschreibung des räumlichen Bezugs)?',
+		'q_human'    => 'Wie lässt sich der räumliche Bezug in Worten beschreiben?',
+		'desc_dcat'  => '`dcatde:geocodingDescription` (DCAT-AP.de) ist eine frei formulierte textuelle Beschreibung der räumlichen Abdeckung (`literal`/`literal-lang`). Kardinalität 0..n. Ergänzt die maschinenlesbaren Angaben `dct:spatial` und `dcatde:politicalGeocodingURI` um eine menschenlesbare Erläuterung.',
+		'desc_human' => 'Beschreiben Sie den räumlichen Bezug zusätzlich in Worten — etwa wenn ein Gebietsschlüssel allein nicht genau genug ist. Das hilft Nutzenden, die Abdeckung einzuordnen. Beispiel: „Stadtgebiet Musterstadt ohne den Ortsteil X".',
+	),
+	array(
 		'key'        => 'spatial',
 		'meta_key'   => '_odw_spatial',
 		'dcat_prop'  => 'dct:spatial',

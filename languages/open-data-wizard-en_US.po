@@ -582,6 +582,9 @@ msgstr "Advanced details"
 msgid "Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
 msgstr "Show advanced fields (DCAT-AP.de, HVD, access rights)"
 
+msgid "Erweiterte Angaben (optional)"
+msgstr "Advanced details (optional)"
+
 msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
 msgstr "Show advanced fields for pros (DCAT-AP.de, HVD, access rights)"
 
@@ -630,8 +633,14 @@ msgstr "Format/media type from vocabulary"
 msgid "Freitext zur Entstehung und Herkunft der Daten."
 msgstr "Free text on the origin and provenance of the data."
 
+msgid "Freitextbeschreibung des räumlichen Bezugs, ergänzend zum amtlichen Gebietsschlüssel. Beispiel: Stadtgebiet Musterstadt"
+msgstr "Free-text description of the spatial coverage, complementing the official area code. Example: city of Musterstadt"
+
 msgid "Füllen Sie die Pflichtfelder aus (mit * gekennzeichnet) und speichern Sie den Datensatz. Sie können ihn später noch bearbeiten. Jedes Feld hat hilfreiche Beispiele – schauen Sie in den Hilfetexten vorbei!"
 msgstr "Fill in the required fields (marked with *) and save the dataset. You can edit it later. Every field has helpful examples – take a look at the help texts!"
+
+msgid "Für Profis: DCAT-AP.de-, HVD- und weitere Detailfelder. Öffnen Sie gezielt nur die Gruppen, die Sie brauchen."
+msgstr "For power users: DCAT-AP.de, HVD and further detail fields. Open only the groups you need."
 
 msgid "GEOGRAPHISCHE ABDECKUNG (dct:spatial)"
 msgstr "GEOGRAPHIC COVERAGE (dct:spatial)"
@@ -1146,11 +1155,17 @@ msgstr "Regions & Cities"
 msgid "RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)"
 msgstr "SPATIAL RESOLUTION IN METERS (dcat:spatialResolutionInMeters)"
 
+msgid "RÄUMLICHE BESCHREIBUNG (dcatde:geocodingDescription)"
+msgstr "SPATIAL DESCRIPTION (dcatde:geocodingDescription)"
+
 msgid "Räumliche Abdeckung"
 msgstr "Spatial coverage"
 
 msgid "Räumliche Abdeckung (dct:spatial)"
 msgstr "Spatial coverage (dct:spatial)"
+
+msgid "Räumliche Beschreibung"
+msgstr "Spatial description"
 
 msgid "SCHLAGWORTE (dcat:keyword)"
 msgstr "KEYWORDS (dcat:keyword)"
@@ -1494,6 +1509,9 @@ msgstr "What is the name of the provided file/distribution?"
 msgid "Wie lange Catalog- und Dataset-Antworten gecacht werden. Standard: 300 (5 Minuten). Min: 60, Max: 86400 (24 h)."
 msgstr "How long catalog and dataset responses are cached. Default: 300 (5 minutes). Min: 60, Max: 86400 (24 h)."
 
+msgid "Wie lässt sich der räumliche Bezug in Worten beschreiben?"
+msgstr "How can the spatial coverage be described in words?"
+
 msgid "Wie lässt sich die Distribution beschreiben?"
 msgstr "How can the distribution be described?"
 
@@ -1652,6 +1670,9 @@ msgstr "e.g. Sample Organization"
 
 msgid "z.B. Open Data Team"
 msgstr "e.g. Open Data Team"
+
+msgid "z.B. Stadtgebiet Musterstadt ohne Ortsteil X"
+msgstr "e.g. city of Musterstadt excluding district X"
 
 msgid "z.B. Statistisches Landesamt"
 msgstr "e.g. State Statistical Office"
