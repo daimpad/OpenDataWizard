@@ -165,6 +165,56 @@ Diese URLs können bei einer Open-Data-Plattform als Harvest-Quelle eingetragen 
 ### ✅ DCAT-AP 3.0 Konformität
 Alle Ausgaben sind DCAT-AP 3.0 konform und in JSON-LD serialisiert.
 
+### 🔎 DCAT-AP-Validierung (SHACL)
+
+Ob die erzeugten Metadaten dem Standard **formal** entsprechen, lässt sich mit **SHACL** prüfen — der
+offiziellen Regelsprache, mit der die EU und GovData DCAT-AP-Konformität definieren. Damit du nicht auf
+inoffizielle Regeln angewiesen bist, bringt das Plugin die **maßgeblichen, offiziellen Shape-Dateien**
+gebündelt mit (unter [`config/shacl/`](config/shacl/)):
+
+| Datei | Herkunft | Zweck | Lizenz |
+|---|---|---|---|
+| `dcat-ap-SHACL.ttl` | [SEMICeu/DCAT-AP](https://github.com/SEMICeu/DCAT-AP) (Release 3.0.0) | generische **EU-DCAT-AP-3.0**-Regeln | CC BY 4.0 |
+| `dcat-ap-SHACL-DE.ttl` | [GovDataOfficial](https://github.com/GovDataOfficial/DCAT-AP.de-SHACL-Validation) (v3.0) | **DCAT-AP.de**-Ergänzungen (u. a. `dcatde:`-Felder, deutschsprachige Meldungen) | CC0 |
+
+> **Wichtig:** Das Plugin führt SHACL **nicht selbst** aus — dafür gibt es in PHP keine praxistaugliche
+> Engine. Die Dateien liegen als **Referenz** bei; die eigentliche Prüfung erfolgt über einen externen
+> Validierungsdienst oder ein lokales SHACL-Werkzeug. So bleibt das Plugin self-contained und ohne
+> Pflicht-Netzwerkzugriff.
+
+#### So validierst du einen Datensatz
+
+1. **JSON-LD abrufen** — jeder veröffentlichte Datensatz ist über die REST-API erreichbar:
+   ```
+   https://<deine-site>/wp-json/datenatlas/v1/datasets/<ID>
+   ```
+   (den ganzen Katalog liefert `…/datenatlas/v1/catalog`).
+
+2. **Gegen die Shapes prüfen** — mit einem der offiziellen Dienste (Datei hochladen bzw. JSON-LD einfügen):
+   - **EU-Validator (SHACL / ITB):** <https://www.itb.ec.europa.eu/shacl/dcat-ap/upload>
+   - **data.europa.eu MQA:** <https://data.europa.eu/mqa/>
+   - **DCAT-AP.de-Validator** (Docker/ITB): siehe
+     [DCAT-AP.de-SHACL-Validation](https://github.com/GovDataOfficial/DCAT-AP.de-SHACL-Validation)
+
+3. **Oder lokal** validieren, z. B. mit [pySHACL](https://github.com/RDFLib/pySHACL) gegen die gebündelten Shapes:
+   ```bash
+   # JSON-LD des Datensatzes speichern …
+   curl -s "https://<deine-site>/wp-json/datenatlas/v1/datasets/42" -o datensatz.jsonld
+   # … und gegen die DCAT-AP.de-Shapes prüfen
+   pyshacl -s config/shacl/dcat-ap-SHACL-DE.ttl -df json-ld datensatz.jsonld
+   ```
+
+Der Validierungs-Report zeigt Verstöße (`sh:Violation`) mit Pfad und Meldung — so siehst du genau, welches
+Feld ggf. nachzubessern ist.
+
+#### Verhältnis zum Qualitäts-Score
+
+Die integrierten **Qualitätsindikatoren** (siehe unten) decken die „gesetzt?"- und Vokabular-Prüfungen der
+[EU-MQA-Methodik](https://data.europa.eu/mqa/methodology) bereits offline ab. Die MQA-Metrik
+**„DCAT-AP-Konformität" (SHACL, 30 Punkte)** wird davon bewusst **nicht** automatisch bewertet, sondern über
+die hier beschriebene externe Validierung geprüft (Ansatz „achievable max"). Details im
+[MQA-Konzept](docs/MQA-KONZEPT.md).
+
 ---
 
 ## Installation
