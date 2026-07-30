@@ -1286,4 +1286,118 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->assertSame( 'Nur intern', $node['dct:rights']['rdfs:label'] );
 		$this->assertArrayNotHasKey( '@language', $node['dct:title'] );
 	}
+
+	// -------------------------------------------------------------------------
+	// Multilingual literals (Phase D) — title/description/keyword translations
+	// -------------------------------------------------------------------------
+
+	/**
+	 * With a title translation, dct:title becomes an array of language literals.
+	 */
+	public function test_build_title_multilingual_becomes_array(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			88,
+			'odw_dataset',
+			array(
+				'odw_language'           => 'http://publications.europa.eu/resource/authority/language/ENG',
+				'odw_title_translations' => array(
+					array(
+						'language' => 'http://publications.europa.eu/resource/authority/language/DEU',
+						'value'    => 'Deutscher Titel',
+					),
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 88 );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['dct:title'] );
+		$this->assertSame( 'Test Dataset', $result['dct:title'][0]['@value'] );
+		$this->assertSame( 'en', $result['dct:title'][0]['@language'] );
+		$this->assertSame( 'Deutscher Titel', $result['dct:title'][1]['@value'] );
+		$this->assertSame( 'de', $result['dct:title'][1]['@language'] );
+	}
+
+	/**
+	 * Without translations, dct:title stays a single object (backward compatible).
+	 */
+	public function test_build_title_single_language_stays_object(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks( 90, 'odw_dataset', array( 'odw_language' => 'http://publications.europa.eu/resource/authority/language/ENG' ) );
+
+		$result = odw_build_dataset_jsonld( 90 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( '@value', $result['dct:title'] );
+		$this->assertSame( 'Test Dataset', $result['dct:title']['@value'] );
+	}
+
+	/**
+	 * Translated keywords are appended to the primary keyword list.
+	 */
+	public function test_build_keyword_translations_appended(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			89,
+			'odw_dataset',
+			array(
+				'odw_keywords'             => "Umwelt\nWasser",
+				'odw_keyword_translations' => array(
+					array(
+						'language' => 'http://publications.europa.eu/resource/authority/language/ENG',
+						'keywords' => "Environment\nWater",
+					),
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 89 );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 4, $result['dcat:keyword'] );
+		$this->assertSame(
+			array( 'Umwelt', 'Wasser', 'Environment', 'Water' ),
+			array_column( $result['dcat:keyword'], '@value' )
+		);
+		$this->assertSame( 'en', $result['dcat:keyword'][2]['@language'] );
+	}
+
+	/**
+	 * The collector returns the primary literal first, then non-empty translations.
+	 */
+	public function test_collect_lang_literals_skips_empty_and_non_arrays(): void {
+		$this->load_fields();
+
+		$out = odw_collect_lang_literals(
+			'Hallo',
+			'de',
+			array(
+				array(
+					'language' => 'http://publications.europa.eu/resource/authority/language/ENG',
+					'value'    => 'Hello',
+				),
+				array(
+					'language' => 'fr',
+					'value'    => '',
+				),
+				'not-an-array',
+			)
+		);
+
+		$this->assertCount( 2, $out );
+		$this->assertSame(
+			array(
+				'@value'    => 'Hallo',
+				'@language' => 'de',
+			),
+			$out[0]
+		);
+		$this->assertSame( 'Hello', $out[1]['@value'] );
+		$this->assertSame( 'en', $out[1]['@language'] );
+	}
 }

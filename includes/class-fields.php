@@ -84,6 +84,36 @@ class ODW_Fields {
 						->set_rows( 5 )
 						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
 						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
+
+					Field::make( 'html', 'odw_hint_translations' )
+						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel und Beschreibung zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben oben bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
+
+					Field::make( 'complex', 'odw_title_translations', __( 'Titel in weiteren Sprachen', 'open-data-wizard' ) )
+						->set_collapsed( true )
+						->set_header_template( '<%- value || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
+						->add_fields(
+							array(
+								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
+									->add_options( self::get_language_options() )
+									->set_help_text( __( 'Sprache dieser Übersetzung (dct:title @language)', 'open-data-wizard' ) ),
+								Field::make( 'text', 'value', __( 'Titel', 'open-data-wizard' ) )
+									->set_help_text( __( 'Übersetzter Titel', 'open-data-wizard' ) ),
+							)
+						),
+
+					Field::make( 'complex', 'odw_description_translations', __( 'Beschreibung in weiteren Sprachen', 'open-data-wizard' ) )
+						->set_collapsed( true )
+						->set_header_template( '<%- value || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
+						->add_fields(
+							array(
+								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
+									->add_options( self::get_language_options() )
+									->set_help_text( __( 'Sprache dieser Übersetzung (dct:description @language)', 'open-data-wizard' ) ),
+								Field::make( 'textarea', 'value', __( 'Beschreibung', 'open-data-wizard' ) )
+									->set_rows( 3 )
+									->set_help_text( __( 'Übersetzte Beschreibung', 'open-data-wizard' ) ),
+							)
+						),
 				)
 			)
 
@@ -102,6 +132,21 @@ class ODW_Fields {
 						->set_rows( 3 )
 						->set_attribute( 'placeholder', __( 'z.B. Umwelt', 'open-data-wizard' ) )
 						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( 'Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung', 'open-data-wizard' ) ),
+
+					Field::make( 'complex', 'odw_keyword_translations', __( 'Schlagworte in weiteren Sprachen', 'open-data-wizard' ) )
+						->set_collapsed( true )
+						->set_header_template( '<%- language || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
+						->set_help_text( __( 'Optional: übersetzte Schlagworte je Sprache (dcat:keyword @language).', 'open-data-wizard' ) )
+						->add_fields(
+							array(
+								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
+									->add_options( self::get_language_options() )
+									->set_help_text( __( 'Sprache dieser Schlagworte', 'open-data-wizard' ) ),
+								Field::make( 'textarea', 'keywords', __( 'Schlagworte', 'open-data-wizard' ) )
+									->set_rows( 3 )
+									->set_help_text( __( 'Jedes übersetzte Schlagwort in einer eigenen Zeile.', 'open-data-wizard' ) ),
+							)
+						),
 
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
@@ -1314,6 +1359,40 @@ function odw_lang_literal( string $value, string $tag ): array {
 }
 
 /**
+ * Collect language-tagged literals for one field: the primary value plus any
+ * translations from a { language, value } repeater. Returns a list of
+ * { @value, @language } entries (possibly empty). The primary value comes first.
+ *
+ * @param string $primary_value Primary-language value.
+ * @param string $primary_tag   BCP-47 tag for the primary value.
+ * @param mixed  $translations  Repeater rows (array of { language, value }), or non-array.
+ * @return array<int, array<string, string>>
+ */
+function odw_collect_lang_literals( string $primary_value, string $primary_tag, $translations ): array {
+	$literals = array();
+
+	if ( '' !== trim( $primary_value ) ) {
+		$literals[] = odw_lang_literal( $primary_value, $primary_tag );
+	}
+
+	if ( is_array( $translations ) ) {
+		foreach ( $translations as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$value = trim( (string) ( $row['value'] ?? '' ) );
+			if ( '' === $value ) {
+				continue;
+			}
+			$tag        = odw_resolve_language_tag( (string) ( $row['language'] ?? '' ) );
+			$literals[] = odw_lang_literal( $value, $tag );
+		}
+	}
+
+	return $literals;
+}
+
+/**
  * Build a single dcat:Distribution JSON-LD node from a flat set of values.
  *
  * Shared by the primary distribution (Tab 3 singular fields) and each additional
@@ -1477,11 +1556,17 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$lang_tag = 'de';
 	}
 
+	// Title/description as language-tagged literals — a single object when only
+	// the primary language is present (backward compatible), an array of objects
+	// once translations are added (odw_title_translations / …_description…).
+	$title_literals       = odw_collect_lang_literals( (string) $title, $lang_tag, carbon_get_post_meta( $post_id, 'odw_title_translations' ) );
+	$description_literals = odw_collect_lang_literals( (string) $description, $lang_tag, carbon_get_post_meta( $post_id, 'odw_description_translations' ) );
+
 	$dataset = array(
 		'@type'           => 'dcat:Dataset',
 		'@id'             => rest_url( 'datenatlas/v1/datasets/' . $post_id ),
-		'dct:title'       => odw_lang_literal( (string) $title, $lang_tag ),
-		'dct:description' => odw_lang_literal( (string) $description, $lang_tag ),
+		'dct:title'       => 1 === count( $title_literals ) ? $title_literals[0] : $title_literals,
+		'dct:description' => 1 === count( $description_literals ) ? $description_literals[0] : $description_literals,
 		'dct:publisher'   => array(
 			'@type'     => 'foaf:Organization',
 			'foaf:name' => $publisher,
@@ -1498,16 +1583,30 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$dataset['dct:language'] = array( '@id' => odw_sanitize_jsonld_id( $lang_uri ) );
 	}
 
+	$keyword_literals = array();
 	if ( ! empty( $keywords ) && is_string( $keywords ) ) {
-		$keyword_list = array_values( array_filter( array_map( 'trim', explode( "\n", $keywords ) ) ) );
-		if ( ! empty( $keyword_list ) ) {
-			$dataset['dcat:keyword'] = array_map(
-				static function ( $kw ) use ( $lang_tag ) {
-					return odw_lang_literal( (string) $kw, $lang_tag );
-				},
-				$keyword_list
-			);
+		foreach ( array_values( array_filter( array_map( 'trim', explode( "\n", $keywords ) ) ) ) as $kw ) {
+			$keyword_literals[] = odw_lang_literal( (string) $kw, $lang_tag );
 		}
+	}
+
+	// Translated keywords (odw_keyword_translations): each row carries a language
+	// and its own newline-separated keyword list; all are appended.
+	$keyword_translations = carbon_get_post_meta( $post_id, 'odw_keyword_translations' );
+	if ( is_array( $keyword_translations ) ) {
+		foreach ( $keyword_translations as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$row_tag = odw_resolve_language_tag( (string) ( $row['language'] ?? '' ) );
+			foreach ( array_values( array_filter( array_map( 'trim', explode( "\n", (string) ( $row['keywords'] ?? '' ) ) ) ) ) as $kw ) {
+				$keyword_literals[] = odw_lang_literal( (string) $kw, $row_tag );
+			}
+		}
+	}
+
+	if ( ! empty( $keyword_literals ) ) {
+		$dataset['dcat:keyword'] = $keyword_literals;
 	}
 
 	$themes = array();

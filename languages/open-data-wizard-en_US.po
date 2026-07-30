@@ -204,6 +204,9 @@ msgstr "Distribution description"
 msgid "Beschreibung des Datensatzes"
 msgstr "Description of the dataset"
 
+msgid "Beschreibung in weiteren Sprachen"
+msgstr "Description in additional languages"
+
 msgid "Bevölkerung & Gesellschaft"
 msgstr "Population & Society"
 
@@ -759,6 +762,9 @@ msgstr "Each dataset requires at least one distribution with an access URL (dcat
 msgid "Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung"
 msgstr "One keyword per line. Example: environment, water, air pollution"
 
+msgid "Jedes übersetzte Schlagwort in einer eigenen Zeile."
+msgstr "Each translated keyword on its own line."
+
 msgid "Jetzt importieren"
 msgstr "Import now"
 
@@ -1044,6 +1050,9 @@ msgstr "Optional: assign the dataset to a civil-society field of engagement from
 msgid "Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution."
 msgstr "Optional: additional access points for this dataset — e.g. the same data in another format or at a different URL. The file entered above remains the primary distribution."
 
+msgid "Optional: übersetzte Schlagworte je Sprache (dcat:keyword @language)."
+msgstr "Optional: translated keywords per language (dcat:keyword @language)."
+
 msgid "Optionale Angaben"
 msgstr "Optional details"
 
@@ -1152,6 +1161,9 @@ msgstr "Keywords"
 msgid "Schlagworte (dcat:keyword)"
 msgstr "Keywords (dcat:keyword)"
 
+msgid "Schlagworte in weiteren Sprachen"
+msgstr "Keywords in additional languages"
+
 msgid "Schlüsselwörter (dcat:keyword)"
 msgstr "Keywords (dcat:keyword)"
 
@@ -1181,6 +1193,15 @@ msgstr "Language"
 
 msgid "Sprache (dct:language)"
 msgstr "Language (dct:language)"
+
+msgid "Sprache dieser Schlagworte"
+msgstr "Language of these keywords"
+
+msgid "Sprache dieser Übersetzung (dct:description @language)"
+msgstr "Language of this translation (dct:description @language)"
+
+msgid "Sprache dieser Übersetzung (dct:title @language)"
+msgstr "Language of this translation (dct:title @language)"
 
 msgid "Sprache, Schlagworte, Veröffentlichungs- und Änderungsdatum, Themenklassifikation."
 msgstr "Language, keywords, publication and modification date, topic classification."
@@ -1250,6 +1271,12 @@ msgstr "Distribution title"
 
 msgid "Titel des Datensatzes (WordPress-Titel-Feld)"
 msgstr "Title of the dataset (WordPress title field)"
+
+msgid "Titel in weiteren Sprachen"
+msgstr "Title in additional languages"
+
+msgid "Titel und Beschreibung zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben oben bleiben die Hauptsprache."
+msgstr "Title and description in additional languages — for multilingual, DCAT-AP-compliant metadata. The entries above remain the main language."
 
 msgid "Täglich"
 msgstr "Daily"
@@ -1640,6 +1667,18 @@ msgstr "Modification date"
 
 msgid "Änderungsdatum (dct:modified)"
 msgstr "Modification date (dct:modified)"
+
+msgid "Übersetzte Beschreibung"
+msgstr "Translated description"
+
+msgid "Übersetzter Titel"
+msgstr "Translated title"
+
+msgid "Übersetzung"
+msgstr "Translation"
+
+msgid "Übersetzungen (optional)"
+msgstr "Translations (optional)"
 
 msgid "— Bitte wählen —"
 msgstr "— Please select —"
