@@ -1213,4 +1213,77 @@ class Test_ODW_Fields_Extended extends TestCase {
 			$dist['dct:rights']
 		);
 	}
+
+	// -------------------------------------------------------------------------
+	// Multi-distribution (Phase E) — odw_extra_distributions + node helper
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Additional distributions from the repeater are appended after the primary.
+	 */
+	public function test_build_appends_extra_distributions(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			77,
+			'odw_dataset',
+			array(
+				'odw_access_url'          => 'https://example.org/primary.csv',
+				'odw_format'              => 'CSV',
+				'odw_extra_distributions' => array(
+					array(
+						'access_url' => 'https://example.org/extra.json',
+						'format'     => 'JSON',
+						'media_type' => 'application/json',
+					),
+					array( 'access_url' => '' ), // No access URL → skipped.
+				),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 77 );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['dcat:distribution'] );
+		$this->assertSame( 'https://example.org/primary.csv', $result['dcat:distribution'][0]['dcat:accessURL']['@id'] );
+		$this->assertSame( 'https://example.org/extra.json', $result['dcat:distribution'][1]['dcat:accessURL']['@id'] );
+		$this->assertSame( 'application/json', $result['dcat:distribution'][1]['dcat:mediaType']['@id'] );
+	}
+
+	/**
+	 * The node helper returns null when no access URL is present.
+	 */
+	public function test_build_distribution_node_null_without_access_url(): void {
+		$this->load_fields();
+		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnArg( 0 );
+
+		$this->assertNull( odw_build_distribution_node( array(), 'de' ) );
+		$this->assertNull( odw_build_distribution_node( array( 'access_url' => '' ), 'de' ) );
+	}
+
+	/**
+	 * The node helper resolves a custom license and freetext rights, and omits
+	 * the language tag when none is given.
+	 */
+	public function test_build_distribution_node_custom_license_and_freetext_rights(): void {
+		$this->load_fields();
+		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnArg( 0 );
+
+		$node = odw_build_distribution_node(
+			array(
+				'access_url'     => 'https://example.org/x',
+				'license'        => 'sonstige',
+				'license_custom' => 'http://dcat-ap.de/def/licenses/cc-by/4.0',
+				'title'          => 'Ohne Sprachtag',
+				'rights'         => 'Nur intern',
+			),
+			''
+		);
+
+		$this->assertIsArray( $node );
+		$this->assertSame( 'http://dcat-ap.de/def/licenses/cc-by/4.0', $node['dct:license']['@id'] );
+		$this->assertSame( 'dct:RightsStatement', $node['dct:rights']['@type'] );
+		$this->assertSame( 'Nur intern', $node['dct:rights']['rdfs:label'] );
+		$this->assertArrayNotHasKey( '@language', $node['dct:title'] );
+	}
 }

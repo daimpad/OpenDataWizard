@@ -7,6 +7,31 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.22.0] — 2026-07-30
+
+### ✨ Added — Multi-Distribution (Phase E, additiv)
+- Neues optionales, **wiederholbares Feld „Weitere Distributionen"** (Tab „Datenbereitstellung"): Ein
+  Datensatz kann jetzt **mehrere Distributionen** haben — z. B. dieselben Daten in einem weiteren Format
+  oder unter einer anderen URL. Jede zusätzliche Distribution hat eigene Felder (Zugriffs-URL, Format,
+  Größe, Lizenz, Download-URL, MediaType, Titel, Beschreibung, Namensnennung, Rechte).
+- **Rückwärtskompatibel & ohne Migration:** Die bisherige (primäre) Distribution bleibt unverändert; die
+  Repeater-Einträge werden zusätzlich an `dcat:distribution` angehängt.
+- Intern: Ein gemeinsamer Helfer `odw_build_distribution_node()` erzeugt primäre und zusätzliche
+  Distributionen mit identischer JSON-LD-Struktur.
+
+### 🌍 i18n
+- 22 neue UI-Strings in `en_US` übersetzt.
+
+### ✅ Tests
+- Integrationstest (primäre + zusätzliche Distributionen → Array) und Helfer-Unit-Tests (kein Access-URL →
+  `null`; eigene Lizenz + Freitext-Rechte; Sprachtag-Weglassung). Gesamt: 158 Tests.
+
+### 📝 Hinweise
+- Scoring/MQA bewertet weiterhin die **primäre** Distribution; die Frontend-Card zeigt weiterhin die
+  primäre (zusätzliche Distributionen sind über REST/JSON-LD verfügbar) — mögliche Folgeerweiterung.
+
+---
+
 ## [2.21.0] — 2026-07-30
 
 ### ✨ Added — „Mehr erfahren" im Formular (katalog-gespeist)
