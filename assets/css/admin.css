@@ -871,3 +871,46 @@
 .odw-datenatlas-publish h4 {
 	font-size: 14px;
 }
+
+/* =========================================================================
+   „Mehr erfahren" — aufklappbare Katalog-Langbeschreibung pro Feld
+   ========================================================================= */
+
+.odw-field-more {
+	margin: 6px 0 2px;
+	font-size: 12px;
+}
+
+.odw-field-more > summary {
+	cursor: pointer;
+	display: inline-block;
+	color: var(--odw-color-primary, #2271b1);
+	font-weight: 600;
+	list-style-position: inside;
+}
+
+.odw-field-more > summary:hover {
+	text-decoration: underline;
+}
+
+.odw-field-more__body {
+	margin-top: 8px;
+	padding: 10px 12px;
+	background: var(--odw-color-bg-light, #f6f7f7);
+	border-left: 3px solid var(--odw-color-primary, #2271b1);
+	border-radius: 0 var(--odw-radius, 4px) var(--odw-radius, 4px) 0;
+}
+
+.odw-field-more__block {
+	margin: 0 0 8px;
+	line-height: 1.5;
+	color: var(--odw-color-text, #1d2327);
+}
+
+.odw-field-more__block:last-child {
+	margin-bottom: 0;
+}
+
+.odw-field-more__block strong {
+	color: var(--odw-color-text-muted, #50575e);
+}

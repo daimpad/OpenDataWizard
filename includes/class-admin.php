@@ -363,6 +363,10 @@ class ODW_Admin {
 				);
 			}
 
+			if ( ! class_exists( 'ODW_Field_Reference' ) ) {
+				require_once ODW_PLUGIN_DIR . 'includes/class-field-reference.php';
+			}
+
 			wp_localize_script(
 				'odw-admin-fields',
 				'odwAdminFields',
@@ -402,6 +406,12 @@ class ODW_Admin {
 						'invalid'     => __( 'Bitte einen positiven Wert eingeben.', 'open-data-wizard' ),
 						'bytes'       => __( 'Bytes', 'open-data-wizard' ),
 						'locale'      => str_replace( '_', '-', determine_locale() ),
+					),
+					'fieldCatalog'        => ODW_Field_Reference::js_map(),
+					'fieldMore'           => array(
+						'toggle' => __( 'Mehr erfahren', 'open-data-wizard' ),
+						'dcat'   => __( 'DCAT-AP-Definition', 'open-data-wizard' ),
+						'plain'  => __( 'Einfach erklärt', 'open-data-wizard' ),
 					),
 				)
 			);
