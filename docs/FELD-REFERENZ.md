@@ -40,6 +40,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
   - [Wie oft werden diese Daten aktualisiert?](#wie-oft-werden-diese-daten-aktualisiert)
   - [Auf welcher Verwaltungsebene wurden diese Daten erhoben?](#auf-welcher-verwaltungsebene-wurden-diese-daten-erhoben)
   - [Auf welches amtliche Gebiet beziehen sich die Daten?](#auf-welches-amtliche-gebiet-beziehen-sich-die-daten)
+  - [Wie lässt sich der räumliche Bezug in Worten beschreiben?](#wie-lässt-sich-der-räumliche-bezug-in-worten-beschreiben)
   - [Welche geografische Region betreffen diese Daten?](#welche-geografische-region-betreffen-diese-daten)
   - [Ab wann sind diese Daten gültig?](#ab-wann-sind-diese-daten-gültig)
   - [Bis wann sind diese Daten gültig?](#bis-wann-sind-diese-daten-gültig)
@@ -428,6 +429,23 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 **3 · DCAT-AP-Langbeschreibung:** `dcatde:politicalGeocodingURI` (DCAT-AP.de) referenziert ein konkretes amtliches Gebiet über eine URI (z. B. amtlicher Regionalschlüssel/AGS als URI). Kardinalität 0..n. Ermöglicht die eindeutige, maschinenlesbare Verortung.
 
 **4 · Verständliche Langbeschreibung:** Verlinken Sie das genaue amtliche Gebiet, auf das sich die Daten beziehen — als offizielle Kennung (z. B. Gemeindeschlüssel). Damit ist eindeutig, welche Region gemeint ist. Beispiel: die URI zum amtlichen Gemeindeschlüssel Ihrer Stadt.
+
+### Wie lässt sich der räumliche Bezug in Worten beschreiben?
+
+| Eigenschaft | Wert |
+|---|---|
+| DCAT-Property | `dcatde:geocodingDescription` |
+| Meta-Key | `_odw_geocoding_description` |
+| Stufe | Optional |
+| Vokabular | — |
+
+**1 · DCAT-AP-Frage:** Wie lautet die `dcatde:geocodingDescription` (textuelle Beschreibung des räumlichen Bezugs)?
+
+**2 · Verständliche Frage:** Wie lässt sich der räumliche Bezug in Worten beschreiben?
+
+**3 · DCAT-AP-Langbeschreibung:** `dcatde:geocodingDescription` (DCAT-AP.de) ist eine frei formulierte textuelle Beschreibung der räumlichen Abdeckung (`literal`/`literal-lang`). Kardinalität 0..n. Ergänzt die maschinenlesbaren Angaben `dct:spatial` und `dcatde:politicalGeocodingURI` um eine menschenlesbare Erläuterung.
+
+**4 · Verständliche Langbeschreibung:** Beschreiben Sie den räumlichen Bezug zusätzlich in Worten — etwa wenn ein Gebietsschlüssel allein nicht genau genug ist. Das hilft Nutzenden, die Abdeckung einzuordnen. Beispiel: „Stadtgebiet Musterstadt ohne den Ortsteil X".
 
 ### Welche geografische Region betreffen diese Daten?
 

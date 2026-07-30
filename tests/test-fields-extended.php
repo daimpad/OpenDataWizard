@@ -1292,6 +1292,25 @@ class Test_ODW_Fields_Extended extends TestCase {
 	// -------------------------------------------------------------------------
 
 	/**
+	 * The DCAT-AP.de geocoding description is emitted as a language literal.
+	 */
+	public function test_build_includes_geocoding_description(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			70,
+			'odw_dataset',
+			array( 'odw_geocoding_description' => 'Stadtgebiet Musterstadt' )
+		);
+
+		$result = odw_build_dataset_jsonld( 70 );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'dcatde:geocodingDescription', $result );
+		$this->assertSame( 'Stadtgebiet Musterstadt', $result['dcatde:geocodingDescription']['@value'] );
+	}
+
+	/**
 	 * With a title translation, dct:title becomes an array of language literals.
 	 */
 	public function test_build_title_multilingual_becomes_array(): void {

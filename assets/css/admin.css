@@ -642,6 +642,38 @@
 	transform: rotate( 90deg );
 }
 
+/* Collapsible subsection headers (Tab 4 „Erweiterte Angaben") */
+.odw-section-toggle {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	margin: 12px 0 4px;
+	padding: 8px 12px;
+	background: var( --odw-color-bg-light, #f6f7f7 );
+	border: 1px solid var( --odw-color-border, #c3c4c7 );
+	border-radius: 4px;
+	color: var( --odw-color-text, #1d2327 );
+	font-size: 13px;
+	font-weight: 600;
+	text-align: left;
+	cursor: pointer;
+}
+
+.odw-section-toggle:hover {
+	background: #eef1f3;
+	color: var( --odw-color-primary, #2271b1 );
+}
+
+.odw-section-caret {
+	color: var( --odw-color-primary, #2271b1 );
+	transition: transform 0.15s ease;
+}
+
+.odw-section-toggle.odw-section-open .odw-section-caret {
+	transform: rotate( 90deg );
+}
+
 /* -------------------------------------------------------------------------
  * Help tooltips (ⓘ popup next to field labels)
  * ------------------------------------------------------------------------- */

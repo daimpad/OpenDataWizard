@@ -308,6 +308,10 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', 'http://dcat-ap.de/def/politicalGeocoding/regionalKey/09' )
 						->set_help_text( __( 'AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)', 'open-data-wizard' ) . "\n\n" . __( 'URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09', 'open-data-wizard' ) ),
 
+					Field::make( 'text', 'odw_geocoding_description', __( 'Wie lässt sich der räumliche Bezug in Worten beschreiben?', 'open-data-wizard' ) )
+						->set_attribute( 'placeholder', __( 'z.B. Stadtgebiet Musterstadt ohne Ortsteil X', 'open-data-wizard' ) )
+						->set_help_text( __( 'RÄUMLICHE BESCHREIBUNG (dcatde:geocodingDescription)', 'open-data-wizard' ) . "\n\n" . __( 'Freitextbeschreibung des räumlichen Bezugs, ergänzend zum amtlichen Gebietsschlüssel. Beispiel: Stadtgebiet Musterstadt', 'open-data-wizard' ) ),
+
 					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'Region aus der Liste wählen oder eintippen…', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-autosuggest', 'spatial' )
@@ -350,18 +354,22 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
 						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
 
-					// Toggle: collapses all following Tab-4 fields into an opt-in
-					// "advanced/pro" section (progressive enhancement via odw-admin-fields.js).
-					Field::make( 'html', 'odw_pro_toggle' )
+					// "Erweiterte Angaben" — the groups below are individually
+					// collapsible (progressive enhancement via odw-admin-fields.js:
+					// each odw-section-toggle collapses its fields until the next).
+					Field::make( 'html', 'odw_ext_hint_pro' )
 					->set_html(
-						'<button type="button" class="odw-pro-toggle" data-odw-pro-toggle aria-expanded="false">'
-						. '<span class="odw-pro-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen', 'open-data-wizard' )
-						. '</button>'
+						'<h4 style="margin:20px 0 2px">' . esc_html__( 'Erweiterte Angaben (optional)', 'open-data-wizard' ) . '</h4>'
+						. '<p class="description" style="margin:0 0 4px">' . esc_html__( 'Für Profis: DCAT-AP.de-, HVD- und weitere Detailfelder. Öffnen Sie gezielt nur die Gruppen, die Sie brauchen.', 'open-data-wizard' ) . '</p>'
 					),
 
 					Field::make( 'html', 'odw_ext_hint_responsibility' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Verantwortlichkeiten & Herkunft', 'open-data-wizard' ) . '</h4>' ),
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="responsibility" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Verantwortlichkeiten & Herkunft', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'text', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-vocab', 'contributors' )
@@ -397,7 +405,12 @@ class ODW_Fields {
 						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) . "\n\n" . __( 'URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional).', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_access' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Zugriff & weitere Auffindbarkeit', 'open-data-wizard' ) . '</h4>' ),
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="access" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Zugriff & weitere Auffindbarkeit', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
 						->add_options( self::get_access_rights_options() )
@@ -409,7 +422,12 @@ class ODW_Fields {
 						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1).', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' ) . '</h4>' ),
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="hvd" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'select', 'odw_is_hvd', __( 'Ist dies ein hochwertiger Datensatz (HVD)?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_flag_options() )
@@ -429,7 +447,12 @@ class ODW_Fields {
 						),
 
 					Field::make( 'html', 'odw_ext_hint_more' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Weitere DCAT-AP-Felder (optional)', 'open-data-wizard' ) . '</h4>' ),
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="more" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Weitere DCAT-AP-Felder (optional)', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'text', 'odw_identifier', __( 'Welche eindeutige Kennung hat dieser Datensatz?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z. B. DOI oder interne ID', 'open-data-wizard' ) )
@@ -474,7 +497,12 @@ class ODW_Fields {
 						->set_help_text( __( 'HERKUNFT (dct:provenance)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext zur Entstehung und Herkunft der Daten.', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_dist' )
-					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Distribution — erweitert', 'open-data-wizard' ) . '</h4>' ),
+					->set_html(
+						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="dist" aria-expanded="false">'
+						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
+						. esc_html__( 'Distribution — erweitert', 'open-data-wizard' )
+						. '</button>'
+					),
 
 					Field::make( 'text', 'odw_dist_title', __( 'Wie heißt die bereitgestellte Datei/Distribution?', 'open-data-wizard' ) )
 						->set_help_text( __( 'TITEL DER DISTRIBUTION (dct:title)', 'open-data-wizard' ) . "\n\n" . __( 'Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV', 'open-data-wizard' ) ),
@@ -1512,6 +1540,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$accrual_periodicity       = (string) carbon_get_post_meta( $post_id, 'odw_accrual_periodicity' );
 	$political_geocoding_level = (string) carbon_get_post_meta( $post_id, 'odw_political_geocoding_level' );
 	$political_geocoding_uri   = (string) carbon_get_post_meta( $post_id, 'odw_political_geocoding_uri' );
+	$geocoding_description     = (string) carbon_get_post_meta( $post_id, 'odw_geocoding_description' );
 	$spatial                   = (string) carbon_get_post_meta( $post_id, 'odw_spatial' );
 	$temporal_start            = (string) carbon_get_post_meta( $post_id, 'odw_temporal_start' );
 	$temporal_end              = (string) carbon_get_post_meta( $post_id, 'odw_temporal_end' );
@@ -1742,6 +1771,10 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 
 	if ( ! empty( $political_geocoding_uri ) ) {
 		$dataset['dcatde:politicalGeocodingURI'] = array( '@id' => odw_sanitize_jsonld_id( (string) $political_geocoding_uri ) );
+	}
+
+	if ( '' !== trim( (string) $geocoding_description ) ) {
+		$dataset['dcatde:geocodingDescription'] = odw_lang_literal( (string) $geocoding_description, $lang_tag );
 	}
 
 	if ( ! empty( $spatial ) ) {

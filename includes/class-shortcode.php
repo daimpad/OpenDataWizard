@@ -285,6 +285,7 @@ class ODW_Shortcode {
 		$add( __( 'Zugriffsrechte', 'open-data-wizard' ), self::meta( $post_id, 'odw_access_rights' ), true );
 
 		$add( __( 'Räumliche Abdeckung', 'open-data-wizard' ), self::meta( $post_id, 'odw_spatial' ) );
+		$add( __( 'Räumliche Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_geocoding_description' ) );
 
 		$t_start = self::meta( $post_id, 'odw_temporal_start' );
 		$t_end   = self::meta( $post_id, 'odw_temporal_end' );
