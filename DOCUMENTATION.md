@@ -26,6 +26,8 @@ open-data-wizard/
 │   ├── licenses.txt                  # Lizenzdatei (URI | Label)
 │   ├── dct-format-list.php           # Dateiformate (MIME + EU-URI)
 │   ├── dcat-ap-fields.php            # Felddefinitionen (Qualität + Validierung)
+│   ├── field-catalog.php             # Feld-Katalog (Quelle der Feld-Referenz)
+│   ├── shacl/                        # Offizielle SHACL-Shapes (EU + DCAT-AP.de) + Anleitung
 │   ├── TopicClassification-4.2.3_de-4.2.3.rdf  # CESSDA SKOS/RDF (95 Konzepte)
 │   ├── phpcs.xml                     # PHPCS Konfiguration
 │   ├── phpstan.neon                  # PHPStan Level 6

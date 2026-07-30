@@ -132,6 +132,8 @@ Empfohlener Ansatz (**„achievable max"**):
 - **Optional per Einstellung aktivierbar (Phase 3):**
   - *Erreichbarkeits-Check:* `wp_remote_head()` mit Transient-Cache (z. B. 24 h), asynchron/on-demand.
   - *SHACL:* Anbindung des offiziellen [DCAT-AP SHACL Validierungsdienstes](https://data.europa.eu/api/mqa/shacl) oder Auslassen.
+    Die maßgeblichen **offiziellen SHACL-Shapes** (EU DCAT-AP 3.0 + DCAT-AP.de) sind seit v2.25.0 unter
+    [`config/shacl/`](../config/shacl/) gebündelt (Referenz + Anleitung zur externen Validierung).
 
 So bleibt das Plugin **self-contained** und ohne Pflicht-Netzwerkzugriff, kann aber auf Wunsch die
 volle 405-Punkte-Bewertung liefern.
