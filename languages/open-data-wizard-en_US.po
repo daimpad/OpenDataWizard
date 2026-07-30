@@ -1770,3 +1770,84 @@ msgstr "— No default —"
 msgid "💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB"
 msgstr "💾 Supported formats: CSV, JSON  •  Maximum size: 10MB"
 
+
+msgid "Tab %s"
+msgstr "Tab %s"
+
+msgid "Zum Feld springen"
+msgstr "Go to field"
+
+msgid "Pflichtfeld zum Veröffentlichen"
+msgstr "Required for publishing"
+
+msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
+msgstr "* Required for publishing. You can always save an incomplete draft."
+
+msgid "Link zur Datei oder Datei-Upload"
+msgstr "Link to the file or file upload"
+
+msgid "HVD-Kategorie"
+msgstr "HVD category"
+
+msgid "Grundlegende Informationen"
+msgstr "Basic information"
+
+msgid "Inhaltliche Angaben"
+msgstr "Content details"
+
+msgid "Datenbereitstellung"
+msgstr "Data provision"
+
+msgid "Folgende Pflichtangaben fehlen oder sind leer:"
+msgstr "The following required fields are missing or empty:"
+
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
+msgstr "The dataset was saved as a draft. Please complete all required fields and publish again. You can always save an incomplete draft."
+
+msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
+msgstr "Which theme is this dataset assigned to?"
+
+msgid "Mit welchen Schlagworten finde ich diese Daten?"
+msgstr "Which keywords help people find this data?"
+
+msgid "Weitere Einordnung & Übersetzungen (optional)"
+msgstr "Further classification & translations (optional)"
+
+msgid "Weiteres EU-Thema (Themen-URI)?"
+msgstr "Additional EU theme (theme URI)?"
+
+msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt das Thema aus Tab 1)."
+msgstr "Optionally add another theme from the official EU theme list (complements the theme from tab 1)."
+
+msgid "%1$s · %2$d %% Metadatenqualität"
+msgstr "%1$s · %2$d %% metadata quality"
+
+msgid "(MQA %1$d/%2$d Punkte)"
+msgstr "(MQA %1$d/%2$d points)"
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte (von max. %3$d)"
+msgstr "MQA raw score: %1$d / %2$d points (of max. %3$d)"
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte"
+msgstr "MQA raw score: %1$d / %2$d points"
+
+msgid "CSV- oder JSON-Datei"
+msgstr "CSV or JSON file"
+
+msgid "Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10 MB"
+msgstr "Supported formats: CSV, JSON  •  Maximum size: 10 MB"
+
+msgid "JSON-Beispiel herunterladen"
+msgstr "Download JSON example"
+
+msgid "von"
+msgstr "of"
+
+msgid "Sprache, Schlagworte sowie Veröffentlichungs- und Änderungsdatum."
+msgstr "Language, keywords and the publication and modification dates."
+
+msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Optional lassen sich unter „Weitere Einordnung & Übersetzungen\" auch eine Themenklassifikation, ein Engagementfeld und Übersetzungen ergänzen."
+msgstr "Who publishes this data? What is it about? Which theme is the dataset assigned to? Optionally, a topic classification, an engagement field and translations can be added under the \"Further classification & translations\" group."
+
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
+msgstr "Required fields are marked with a red asterisk (*). You can always save an incomplete draft — only publishing requires all mandatory fields to be filled in. Every field has helpful examples that you can reveal via the ⓘ icon."

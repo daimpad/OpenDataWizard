@@ -750,11 +750,11 @@ class ODW_Admin {
 				<ol>
 					<li>
 						<strong><?php esc_html_e( '1 — Grundlegende Informationen', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet?', 'open-data-wizard' ); ?>
+						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Optional lassen sich unter „Weitere Einordnung & Übersetzungen" auch eine Themenklassifikation, ein Engagementfeld und Übersetzungen ergänzen.', 'open-data-wizard' ); ?>
 					</li>
 					<li>
 						<strong><?php esc_html_e( '2 — Inhaltliche Angaben', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Sprache, Schlagworte, Veröffentlichungs- und Änderungsdatum, Themenklassifikation.', 'open-data-wizard' ); ?>
+						<?php esc_html_e( 'Sprache, Schlagworte sowie Veröffentlichungs- und Änderungsdatum.', 'open-data-wizard' ); ?>
 					</li>
 					<li>
 						<strong><?php esc_html_e( '3 — Datenbereitstellung', 'open-data-wizard' ); ?></strong><br>
@@ -772,7 +772,7 @@ class ODW_Admin {
 
 				<h3><?php esc_html_e( 'Erste Schritte', 'open-data-wizard' ); ?></h3>
 				<p>
-					<?php esc_html_e( 'Füllen Sie die Pflichtfelder aus (mit * gekennzeichnet) und speichern Sie den Datensatz. Sie können ihn später noch bearbeiten. Jedes Feld hat hilfreiche Beispiele – schauen Sie in den Hilfetexten vorbei!', 'open-data-wizard' ); ?>
+					<?php esc_html_e( 'Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden.', 'open-data-wizard' ); ?>
 				</p>
 
 				<p class="submit">
@@ -843,198 +843,131 @@ class ODW_Admin {
 		}
 
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Batch-Import', 'open-data-wizard' ); ?></h1>
+			<div class="wrap">
+				<h1><?php esc_html_e( 'Batch-Import', 'open-data-wizard' ); ?></h1>
 
-			<div class="odw-batch-import-container" style="max-width: 900px; margin-top: 20px;">
+				<div class="odw-batch">
 
-				<p style="font-size: 14px; line-height: 1.6; color: #50575e; margin: 0 0 20px;">
-					<?php esc_html_e( 'Mit dem Batch-Import legen Sie mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Laden Sie eine CSV- oder JSON-Datei hoch, prüfen Sie in der Vorschau die erkannten Datensätze und importieren Sie die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass Sie sie vor der Veröffentlichung noch bearbeiten können. Nutzen Sie die Beispieldatei unten als Vorlage für den Aufbau.', 'open-data-wizard' ); ?>
-				</p>
+					<p class="odw-batch__intro">
+						<?php esc_html_e( 'Mit dem Batch-Import legen Sie mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Laden Sie eine CSV- oder JSON-Datei hoch, prüfen Sie in der Vorschau die erkannten Datensätze und importieren Sie die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass Sie sie vor der Veröffentlichung noch bearbeiten können. Nutzen Sie die Beispieldatei unten als Vorlage für den Aufbau.', 'open-data-wizard' ); ?>
+					</p>
 
+					<div id="odw-upload-section" class="odw-batch-section">
+						<h2 class="odw-batch-section__title"><span class="odw-batch-ico" aria-hidden="true">📁</span> <?php esc_html_e( 'Datei hochladen', 'open-data-wizard' ); ?></h2>
 
-				<!-- Upload Section -->
-				<div id="odw-upload-section" class="odw-section" style="border: 1px solid #ddd; padding: 25px; border-radius: 6px; margin-bottom: 20px; background: #f9f9f9; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-					<h2 style="margin-top: 0; color: #2271b1;">📁 <?php esc_html_e( 'Datei hochladen', 'open-data-wizard' ); ?></h2>
+						<form id="odw-import-form" method="post" enctype="multipart/form-data">
+							<?php wp_nonce_field( 'odw_batch_import' ); ?>
 
-					<form id="odw-import-form" method="post" enctype="multipart/form-data">
-						<?php wp_nonce_field( 'odw_batch_import' ); ?>
-
-						<div style="margin-bottom: 20px;">
-							<label for="odw-import-file" style="display: block; margin-bottom: 10px; font-weight: 600; color: #1d2327;">
-								<?php esc_html_e( 'CSV oder JSON Datei', 'open-data-wizard' ); ?>
+							<label class="odw-batch-field-label" for="odw-import-file">
+								<?php esc_html_e( 'CSV- oder JSON-Datei', 'open-data-wizard' ); ?>
 							</label>
-							<div style="display: flex; gap: 10px; align-items: center;">
-								<input type="file" id="odw-import-file" name="import_file" accept=".csv,.json" required style="padding: 10px; border: 2px solid #ddd; border-radius: 4px; flex: 1; font-size: 14px;">
-								<button type="button" id="odw-preview-btn" class="button button-primary" style="padding: 10px 25px; white-space: nowrap;">
-									✓ <?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?>
+							<div class="odw-batch-file">
+								<input type="file" id="odw-import-file" name="import_file" accept=".csv,.json" required>
+								<button type="button" id="odw-preview-btn" class="button button-primary">
+									<?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?>
 								</button>
 							</div>
-							<p class="description" style="margin-top: 10px; color: #50575e;">
-								<?php esc_html_e( '💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB', 'open-data-wizard' ); ?>
+							<p class="description odw-batch-hint">
+								<?php esc_html_e( 'Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10 MB', 'open-data-wizard' ); ?>
 							</p>
-							<p style="margin-top: 8px; font-size: 13px;">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=odw-batch-import&sample=csv' ) ); ?>" style="color: #2271b1; text-decoration: none;">
-									📥 <?php esc_html_e( 'CSV-Beispiel herunterladen', 'open-data-wizard' ); ?>
+							<p class="odw-batch-links">
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=odw-batch-import&sample=csv' ) ); ?>">
+									<?php esc_html_e( 'CSV-Beispiel herunterladen', 'open-data-wizard' ); ?>
 								</a>
-								&nbsp; • &nbsp;
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=odw-batch-import&sample=json' ) ); ?>" style="color: #2271b1; text-decoration: none;">
-									<?php esc_html_e( 'JSON-Beispiel', 'open-data-wizard' ); ?>
+								&nbsp;&bull;&nbsp;
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=odw-batch-import&sample=json' ) ); ?>">
+									<?php esc_html_e( 'JSON-Beispiel herunterladen', 'open-data-wizard' ); ?>
+								</a>
+							</p>
+						</form>
+					</div>
+
+					<div id="odw-preview-section" class="odw-batch-section" style="display: none;">
+						<h2 class="odw-batch-section__title"><span class="odw-batch-ico" aria-hidden="true">👁️</span> <?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?></h2>
+
+						<div id="odw-preview-loading" class="odw-batch-loading" style="display: none;">
+							<span class="odw-batch-spinner" aria-hidden="true">🔄</span>
+							<p><?php esc_html_e( 'Datei wird analysiert…', 'open-data-wizard' ); ?></p>
+						</div>
+
+						<div id="odw-preview-content" style="display: none;">
+							<div class="odw-batch-callout odw-batch-callout--success">
+								<strong><?php esc_html_e( 'Gültige Datensätze:', 'open-data-wizard' ); ?></strong>
+								<span id="odw-preview-count" class="odw-batch-count">0</span>
+							</div>
+
+							<table id="odw-preview-table" class="wp-list-table widefat striped odw-batch-table">
+								<thead>
+									<tr>
+										<td class="check-column"><input type="checkbox" id="odw-select-all" checked></td>
+										<th scope="col"><?php esc_html_e( 'Titel', 'open-data-wizard' ); ?></th>
+										<th scope="col"><?php esc_html_e( 'Herausgeber', 'open-data-wizard' ); ?></th>
+										<th scope="col"><?php esc_html_e( 'Lizenz', 'open-data-wizard' ); ?></th>
+										<th scope="col"><?php esc_html_e( 'Status', 'open-data-wizard' ); ?></th>
+									</tr>
+								</thead>
+								<tbody id="odw-preview-rows"></tbody>
+							</table>
+
+							<div id="odw-errors-section" class="odw-batch-callout odw-batch-callout--error" style="display: none;">
+								<strong><?php esc_html_e( 'Fehler gefunden:', 'open-data-wizard' ); ?></strong>
+								<ul id="odw-errors-list" style="margin: 10px 0 0; padding-left: 20px;"></ul>
+							</div>
+						</div>
+
+						<div id="odw-preview-error" class="odw-batch-callout odw-batch-callout--error" style="display: none;"></div>
+					</div>
+
+					<div id="odw-import-section" class="odw-batch-section" style="display: none;">
+						<h2 class="odw-batch-section__title"><span class="odw-batch-ico" aria-hidden="true">🚀</span> <?php esc_html_e( 'Datensätze importieren', 'open-data-wizard' ); ?></h2>
+
+						<div id="odw-import-ready">
+							<p class="description">
+								<?php esc_html_e( 'Bereit zum Importieren! Alle ausgewählten Datensätze werden als ', 'open-data-wizard' ); ?>
+								<strong><?php esc_html_e( 'Entwürfe', 'open-data-wizard' ); ?></strong>
+								<?php esc_html_e( ' erstellt und sind dann zur Bearbeitung verfügbar.', 'open-data-wizard' ); ?>
+							</p>
+
+							<div class="odw-batch-actions">
+								<button type="button" id="odw-import-btn" class="button button-primary">
+									<?php esc_html_e( 'Jetzt importieren', 'open-data-wizard' ); ?>
+								</button>
+								<button type="button" id="odw-import-cancel-btn" class="button">
+									<?php esc_html_e( 'Abbrechen', 'open-data-wizard' ); ?>
+								</button>
+							</div>
+						</div>
+
+						<div id="odw-import-progress" style="display: none;">
+							<p>
+								<span id="odw-import-status"><?php esc_html_e( 'Import läuft…', 'open-data-wizard' ); ?></span>
+							</p>
+							<progress id="odw-import-progress-bar" class="odw-batch-progress" value="0" max="100"></progress>
+							<p id="odw-import-counter" class="odw-batch-counter">0 <?php esc_html_e( 'von', 'open-data-wizard' ); ?> 0</p>
+						</div>
+
+						<div id="odw-import-result" class="odw-batch-callout odw-batch-callout--success" style="display: none;">
+							<h3 style="margin-top: 0;"><?php esc_html_e( 'Import abgeschlossen!', 'open-data-wizard' ); ?></h3>
+							<p>
+								<?php esc_html_e( 'Erstellt:', 'open-data-wizard' ); ?>
+								<strong id="odw-import-result-created">0</strong>
+							</p>
+							<p id="odw-import-result-failed-container" style="display: none;">
+								<?php esc_html_e( 'Fehler:', 'open-data-wizard' ); ?>
+								<strong id="odw-import-result-failed">0</strong>
+							</p>
+							<p style="margin-bottom: 0;">
+								<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=odw_dataset' ) ); ?>" class="button button-primary">
+									<?php esc_html_e( 'Zur Datensatzliste', 'open-data-wizard' ); ?>
 								</a>
 							</p>
 						</div>
-					</form>
+					</div>
+
 				</div>
-
-				<!-- Preview Section (hidden until preview is clicked) -->
-				<div id="odw-preview-section" class="odw-section" style="display: none; border: 1px solid #ddd; padding: 25px; border-radius: 6px; margin-bottom: 20px; background: #f9f9f9; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-					<h2 style="margin-top: 0; color: #2271b1;">👁️ <?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?></h2>
-
-					<div id="odw-preview-loading" style="display: none; text-align: center; padding: 60px 20px;">
-						<div style="animation: spin 2s linear infinite;">🔄</div>
-						<p style="margin-top: 15px; color: #50575e; font-size: 15px;">
-							<?php esc_html_e( 'Datei wird analysiert…', 'open-data-wizard' ); ?>
-						</p>
-					</div>
-
-					<div id="odw-preview-content" style="display: none;">
-						<div style="margin-bottom: 20px; padding: 15px; background: #dafbe1; border-left: 4px solid #1a7f37; border-radius: 4px;">
-							<strong style="color: #0f5323;">✓ <?php esc_html_e( 'Gültige Datensätze:', 'open-data-wizard' ); ?></strong>
-							<span id="odw-preview-count" style="font-size: 20px; color: #1a7f37; font-weight: 700; margin-left: 10px;">0</span>
-						</div>
-
-						<table id="odw-preview-table" class="wp-list-table widefat striped" style="margin-bottom: 20px; border-collapse: collapse;">
-							<thead style="background: #f3f3f3;">
-								<tr>
-									<th style="width: 40px; padding: 12px; text-align: center;"><input type="checkbox" id="odw-select-all" checked></th>
-									<th style="padding: 12px; text-align: left; font-weight: 600;">📄 <?php esc_html_e( 'Titel', 'open-data-wizard' ); ?></th>
-									<th style="padding: 12px; text-align: left; font-weight: 600;">🏢 <?php esc_html_e( 'Herausgeber', 'open-data-wizard' ); ?></th>
-									<th style="padding: 12px; text-align: left; font-weight: 600;">⚖️ <?php esc_html_e( 'Lizenz', 'open-data-wizard' ); ?></th>
-									<th style="padding: 12px; text-align: left; font-weight: 600;">📋 <?php esc_html_e( 'Status', 'open-data-wizard' ); ?></th>
-								</tr>
-							</thead>
-							<tbody id="odw-preview-rows"></tbody>
-						</table>
-
-						<div id="odw-errors-section" style="display: none; margin-bottom: 20px; padding: 15px; background: #ffd7d5; border-left: 4px solid #c1272d; border-radius: 4px;">
-							<strong style="color: #7d1212;">⚠️ <?php esc_html_e( 'Fehler gefunden:', 'open-data-wizard' ); ?></strong>
-							<ul id="odw-errors-list" style="margin-top: 10px; margin-bottom: 0; color: #7d1212; padding-left: 20px;"></ul>
-						</div>
-					</div>
-
-					<div id="odw-preview-error" style="display: none; color: #7d1212; padding: 15px; background: #ffd7d5; border-left: 4px solid #c1272d; border-radius: 4px; font-weight: 500;">
-						❌
-					</div>
-				</div>
-
-				<!-- Import Section (hidden until preview is successful) -->
-				<div id="odw-import-section" class="odw-section" style="display: none; border: 1px solid #ddd; padding: 25px; border-radius: 6px; margin-bottom: 20px; background: #f9f9f9; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-					<h2 style="margin-top: 0; color: #2271b1;">🚀 <?php esc_html_e( 'Datensätze importieren', 'open-data-wizard' ); ?></h2>
-
-					<div id="odw-import-ready" style="display: block;">
-						<p style="color: #50575e; font-size: 15px;">
-							<?php esc_html_e( 'Bereit zum Importieren! Alle ausgewählten Datensätze werden als ', 'open-data-wizard' ); ?>
-							<strong><?php esc_html_e( 'Entwürfe', 'open-data-wizard' ); ?></strong>
-							<?php esc_html_e( ' erstellt und sind dann zur Bearbeitung verfügbar.', 'open-data-wizard' ); ?>
-						</p>
-
-						<div style="margin-top: 20px; display: flex; gap: 10px;">
-							<button type="button" id="odw-import-btn" class="button" style="background-color: #1a7f37; border-color: #1a7f37; color: white; padding: 12px 30px; font-weight: 600; font-size: 14px; cursor: pointer;">
-								✓ <?php esc_html_e( 'Jetzt importieren', 'open-data-wizard' ); ?>
-							</button>
-							<button type="button" id="odw-import-cancel-btn" class="button" style="padding: 12px 30px; font-weight: 600; font-size: 14px;">
-								↶ <?php esc_html_e( 'Abbrechen', 'open-data-wizard' ); ?>
-							</button>
-						</div>
-					</div>
-
-					<div id="odw-import-progress" style="display: none; margin-top: 30px;">
-						<div style="margin-bottom: 15px;">
-							<span id="odw-import-status" style="color: #50575e; font-size: 15px;">
-								⏳ <?php esc_html_e( 'Import läuft…', 'open-data-wizard' ); ?>
-							</span>
-						</div>
-						<progress id="odw-import-progress-bar" value="0" max="100" style="width: 100%; height: 30px; border-radius: 4px; border: none; background: #ddd; overflow: hidden;"></progress>
-						<p id="odw-import-counter" style="margin-top: 10px; color: #50575e; font-size: 14px;">0 von 0</p>
-					</div>
-
-					<div id="odw-import-result" style="display: none; margin-top: 30px; padding: 20px; border-radius: 4px; background: #dafbe1; border-left: 4px solid #1a7f37;">
-						<h3 style="margin-top: 0; color: #0f5323;">✓ <?php esc_html_e( 'Import abgeschlossen!', 'open-data-wizard' ); ?></h3>
-						<div style="margin-bottom: 15px;">
-							<span style="font-size: 16px; color: #1a7f37;">
-								✓ <?php esc_html_e( 'Erstellt:', 'open-data-wizard' ); ?>
-								<strong id="odw-import-result-created" style="color: #1a7f37; font-size: 18px;">0</strong>
-							</span>
-						</div>
-						<div id="odw-import-result-failed-container" style="display: none; margin-bottom: 15px;">
-							<span style="font-size: 16px; color: #7d1212;">
-								⚠️ <?php esc_html_e( 'Fehler:', 'open-data-wizard' ); ?>
-								<strong id="odw-import-result-failed" style="color: #7d1212; font-size: 18px;">0</strong>
-							</span>
-						</div>
-						<p style="margin-top: 20px; margin-bottom: 0;">
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=odw_dataset' ) ); ?>" class="button button-primary">
-								➜ <?php esc_html_e( 'Zur Datensatzliste', 'open-data-wizard' ); ?>
-							</a>
-						</p>
-					</div>
-				</div>
-
 			</div>
-		</div>
 
-		<style>
-			@keyframes spin {
-				from { transform: rotate(0deg); }
-				to { transform: rotate(360deg); }
-			}
-
-			.odw-batch-import-container {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-			}
-
-			.odw-section {
-				transition: box-shadow 0.3s ease;
-			}
-
-			.odw-section:hover {
-				box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-			}
-
-			#odw-preview-table tbody tr:hover {
-				background-color: #f0f0f0;
-			}
-
-			#odw-import-progress-bar {
-				appearance: none;
-				-webkit-appearance: none;
-			}
-
-			#odw-import-progress-bar::-webkit-progress-bar {
-				background: #e0e0e0;
-				border-radius: 4px;
-			}
-
-			#odw-import-progress-bar::-webkit-progress-value {
-				background: linear-gradient(90deg, #1a7f37 0%, #2da652 100%);
-				border-radius: 4px;
-			}
-
-			#odw-import-progress-bar::-moz-progress-bar {
-				background: linear-gradient(90deg, #1a7f37 0%, #2da652 100%);
-				border-radius: 4px;
-			}
-
-			.odw-row-select {
-				cursor: pointer;
-			}
-
-			button:active {
-				transform: scale(0.98);
-			}
-		</style>
-
-		<script>
+			<script>
 			jQuery(function($) {
 				var previewData = [];
 
@@ -1046,6 +979,7 @@ class ODW_Admin {
 					}
 
 					previewData = [];
+					$('#odw-preview-section').show();
 					$('#odw-preview-content').hide();
 					$('#odw-preview-error').hide();
 					$('#odw-preview-loading').show();

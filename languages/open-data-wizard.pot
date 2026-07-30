@@ -1388,3 +1388,84 @@ msgstr ""
 
 msgid "URI oder Freitext zu den Nutzungsrechten der Distribution."
 msgstr ""
+
+msgid "Tab %s"
+msgstr ""
+
+msgid "Zum Feld springen"
+msgstr ""
+
+msgid "Pflichtfeld zum Veröffentlichen"
+msgstr ""
+
+msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
+msgstr ""
+
+msgid "Link zur Datei oder Datei-Upload"
+msgstr ""
+
+msgid "HVD-Kategorie"
+msgstr ""
+
+msgid "Grundlegende Informationen"
+msgstr ""
+
+msgid "Inhaltliche Angaben"
+msgstr ""
+
+msgid "Datenbereitstellung"
+msgstr ""
+
+msgid "Folgende Pflichtangaben fehlen oder sind leer:"
+msgstr ""
+
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
+msgstr ""
+
+msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
+msgstr ""
+
+msgid "Mit welchen Schlagworten finde ich diese Daten?"
+msgstr ""
+
+msgid "Weitere Einordnung & Übersetzungen (optional)"
+msgstr ""
+
+msgid "Weiteres EU-Thema (Themen-URI)?"
+msgstr ""
+
+msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt das Thema aus Tab 1)."
+msgstr ""
+
+msgid "%1$s · %2$d %% Metadatenqualität"
+msgstr ""
+
+msgid "(MQA %1$d/%2$d Punkte)"
+msgstr ""
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte (von max. %3$d)"
+msgstr ""
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte"
+msgstr ""
+
+msgid "CSV- oder JSON-Datei"
+msgstr ""
+
+msgid "Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10 MB"
+msgstr ""
+
+msgid "JSON-Beispiel herunterladen"
+msgstr ""
+
+msgid "von"
+msgstr ""
+
+msgid "Sprache, Schlagworte sowie Veröffentlichungs- und Änderungsdatum."
+msgstr ""
+
+msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Optional lassen sich unter „Weitere Einordnung & Übersetzungen\" auch eine Themenklassifikation, ein Engagementfeld und Übersetzungen ergänzen."
+msgstr ""
+
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
+msgstr ""

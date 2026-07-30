@@ -737,8 +737,10 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
   (`data-theme`, `access-right`, `language`); Registry-getriebenes Formular-/JSON-LD-Rendering.
 
 > **Hinweis zu i18n:** Im aktuellen Container ist `msgfmt` nicht verfügbar. Die `.mo` wird daher per
-> kleinem, geprüftem PO→MO-Skript neu erzeugt (siehe PR-Historie). Bei Änderungen an Strings die
-> `.po`/`.pot` pflegen und die `.mo` neu kompilieren.
+> gebündeltem, dependency-freiem PO→MO-Skript neu erzeugt:
+> `python3 bin/compile-mo.py languages/open-data-wizard-en_US.po languages/open-data-wizard-en_US.mo`.
+> Bei Änderungen an Strings die `.po`/`.pot` pflegen (neue `msgid`/`msgstr`-Paare ergänzen) und die
+> `.mo` neu kompilieren.
 
 ---
 
