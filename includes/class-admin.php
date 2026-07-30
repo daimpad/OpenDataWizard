@@ -155,16 +155,36 @@ class ODW_Admin {
 				if ( '' === $quality['level'] ) {
 					echo '<span class="odw-quality-badge odw-quality--unknown" title="' . esc_attr__( 'Noch nicht berechnet', 'open-data-wizard' ) . '">—</span>';
 				} else {
-					$level      = $quality['level'];
-					$score      = $quality['score'];
+					$level = $quality['level'];
+					// 'score' ist bereits der MQA-Prozentwert (achieved/assessable*100).
+					$percent    = (int) ( $quality['score'] ?? 0 );
+					$achieved   = (int) ( $quality['achieved'] ?? 0 );
+					$assessable = (int) ( $quality['assessable'] ?? 0 );
 					$rating     = (string) ( $quality['rating'] ?? '' );
 					$label      = '' !== $rating ? ODW_Quality::get_rating_label( $rating ) : ODW_Quality::get_level_label( $level );
-					$title_attr = sprintf( '%s · %d/100 %s', $label, $score, __( 'Punkte', 'open-data-wizard' ) );
+
+					// Leitwert überall: Prozent + Stufe. Der MQA-Rohwert steht nur
+					// zusätzlich im Tooltip (B4 — einheitliche Score-Darstellung).
+					$title_attr = sprintf(
+						/* translators: 1: rating label, 2: percent value */
+						__( '%1$s · %2$d %% Metadatenqualität', 'open-data-wizard' ),
+						$label,
+						$percent
+					);
+					if ( $assessable > 0 ) {
+						$title_attr .= ' ' . sprintf(
+							/* translators: 1: achieved MQA points, 2: assessable MQA points */
+							__( '(MQA %1$d/%2$d Punkte)', 'open-data-wizard' ),
+							$achieved,
+							$assessable
+						);
+					}
+
 					printf(
-						'<span class="odw-quality-badge odw-quality--%s" title="%s"><span class="odw-quality-dot" aria-hidden="true">●</span> %d</span>',
+						'<span class="odw-quality-badge odw-quality--%s" title="%s"><span class="odw-quality-dot" aria-hidden="true">●</span> %s</span>',
 						esc_attr( $level ),
 						esc_attr( $title_attr ),
-						(int) $score
+						esc_html( sprintf( '%d %%', $percent ) )
 					);
 				}
 				break;
