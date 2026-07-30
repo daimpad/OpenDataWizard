@@ -128,6 +128,27 @@ class Test_ODW_Field_Catalog extends TestCase {
 	}
 
 	/**
+	 * Terminology glossary (B5): the recurring concepts use one consistent term —
+	 * "Thema" (not "Kategorie") for dcat:theme and "Schlagworte/Schlagwörter"
+	 * (not "Stichworte/Schlüsselwörter") for dcat:keyword.
+	 */
+	public function test_terminology_glossary_is_consistent(): void {
+		$by_key = array();
+		foreach ( $this->catalog as $entry ) {
+			$by_key[ $entry['key'] ] = $entry;
+		}
+
+		$this->assertArrayHasKey( 'theme', $by_key );
+		$this->assertStringContainsString( 'Thema', $by_key['theme']['q_human'] );
+		$this->assertStringNotContainsString( 'Kategorie', $by_key['theme']['q_human'] );
+
+		$this->assertArrayHasKey( 'keywords', $by_key );
+		$this->assertStringContainsString( 'Schlagworten', $by_key['keywords']['q_human'] );
+		$this->assertStringNotContainsString( 'Stichwort', $by_key['keywords']['q_human'] );
+		$this->assertStringNotContainsString( 'Stichwör', $by_key['keywords']['desc_human'] );
+	}
+
+	/**
 	 * The committed docs/FELD-REFERENZ.md matches the generated output.
 	 *
 	 * Fails when the catalog changed but the doc was not regenerated

@@ -255,10 +255,14 @@
 		var fields = [];
 		var node   = wrapper.nextElementSibling;
 		while ( node ) {
-			if ( node.classList && node.classList.contains( 'cf-field' ) ) {
-				if ( node.querySelector && node.querySelector( '[data-odw-section-toggle]' ) ) {
-					break;
-				}
+			// Stop at the next collapsible section heading.
+			if ( node.querySelector && node.querySelector( '[data-odw-section-toggle]' ) ) {
+				break;
+			}
+			// Collect every element sibling — CF fields AND injected widgets such
+			// as the visible CESSDA label widget (a sibling of the hidden backing
+			// .cf-field), so collapsing the section hides those too.
+			if ( node.nodeType === 1 ) {
 				fields.push( node );
 			}
 			node = node.nextElementSibling;
