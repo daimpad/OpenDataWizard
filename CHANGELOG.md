@@ -7,6 +7,34 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.32.0] — 2026-07-30
+
+Aufgeräumtes Onboarding, Batch-Import im Admin-Design + vollständige Übersetzung
+(Paket B, Teil 4 von 4 — Abschluss).
+
+### ✨ Changed / Fixed
+- **Batch-Import-Seite ins Admin-Design integriert (B6):** Die zahllosen Inline-Styles
+  sind in `admin.css`-Klassen (`.odw-batch-*`) umgezogen, die Buttons nutzen jetzt die
+  Standard-WordPress-Stile (`button-primary`), und dekorative Emojis sind `aria-hidden`
+  (keine störende Screenreader-Ausgabe mehr). Emojis wurden aus übersetzbaren Strings
+  entfernt.
+- **Bugfix Batch-Vorschau:** Der Vorschaubereich wurde nie eingeblendet (das umschließende
+  `#odw-preview-section` blieb dauerhaft `display:none`) — die Vorschau erschien nie. Jetzt
+  wird der Bereich beim Klick auf „Vorschau" korrekt angezeigt. (Fiel erst auf, seit die
+  Capability-Vergabe aus v2.27.0 die Seite überhaupt erreichbar macht.)
+- **Einstiegsseite mit dem realen Formular synchronisiert:** Schritt 1 erwähnt die neue
+  optionale Untergruppe („Weitere Einordnung & Übersetzungen"), Schritt 2 nicht länger die
+  dorthin verschobene Themenklassifikation; der „Erste Schritte"-Abschnitt erklärt jetzt das
+  Pflichtfeld-Sternchen und das Entwurf-/Veröffentlichen-Verhalten aus v2.29.0.
+
+### 🌍 i18n
+- **Vollständige englische Übersetzung** aller in Paket B (v2.29.0–v2.32.0) neu hinzugekommenen
+  Strings (27 Einträge) — `en_US` ist wieder lückenlos.
+- **Reproduzierbarer PO→MO-Compiler** als `bin/compile-mo.py` gebündelt (dependency-frei, ersetzt
+  das fehlende `msgfmt`); in `CLAUDE.md` dokumentiert.
+
+---
+
 ## [2.31.0] — 2026-07-30
 
 Einheitliche Qualitäts-Darstellung (Paket B, Teil 3 von 4).

@@ -1002,3 +1002,139 @@
 .odw-field-more__block strong {
 	color: var(--odw-color-text-muted, #50575e);
 }
+
+/* =========================================================================
+   Batch-Import-Seite (B6 — ins Admin-Design integriert)
+   ========================================================================= */
+
+.odw-batch {
+    max-width: 900px;
+    margin-top: 20px;
+}
+
+.odw-batch__intro {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--odw-color-text-muted);
+    margin: 0 0 20px;
+}
+
+.odw-batch-section {
+    border: 1px solid var(--odw-color-border);
+    padding: 20px 24px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    background: var(--odw-color-bg-light);
+}
+
+.odw-batch-section__title {
+    margin-top: 0;
+    color: var(--odw-color-primary);
+    font-size: 16px;
+}
+
+.odw-batch-ico {
+    font-style: normal;
+}
+
+.odw-batch-file {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.odw-batch-file input[type="file"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--odw-color-border);
+    border-radius: 4px;
+    background: var(--odw-color-primary-bg);
+}
+
+.odw-batch-field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--odw-color-text);
+}
+
+.odw-batch-hint {
+    margin-top: 10px;
+}
+
+.odw-batch-links {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.odw-batch-callout {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    border-left: 4px solid var(--odw-color-border);
+    border-radius: 4px;
+    background: var(--odw-color-bg-light);
+}
+
+.odw-batch-callout--success {
+    background: var(--odw-color-quality-high-bg);
+    border-left-color: var(--odw-color-quality-high-dot);
+    color: var(--odw-color-quality-high-text);
+}
+
+.odw-batch-callout--error {
+    background: #fcf0f1;
+    border-left-color: var(--odw-color-error);
+    color: #8a1f21;
+}
+
+.odw-batch-count {
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.odw-batch-loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--odw-color-text-muted);
+}
+
+.odw-batch-spinner {
+    display: inline-block;
+    font-size: 22px;
+    animation: odw-batch-spin 1.4s linear infinite;
+}
+
+@keyframes odw-batch-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.odw-batch-table {
+    margin-bottom: 20px;
+}
+
+.odw-batch-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.odw-batch-progress {
+    width: 100%;
+    height: 24px;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--odw-color-border);
+}
+
+.odw-batch-progress::-webkit-progress-bar { background: var(--odw-color-border); }
+.odw-batch-progress::-webkit-progress-value { background: var(--odw-color-primary); }
+.odw-batch-progress::-moz-progress-bar { background: var(--odw-color-primary); }
+
+.odw-batch-counter {
+    margin-top: 10px;
+    color: var(--odw-color-text-muted);
+    font-size: 14px;
+}
