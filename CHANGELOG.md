@@ -7,6 +7,34 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.29.0] — 2026-07-30
+
+Bessere Pflichtfeld-Führung für nicht-technische Nutzer (Paket B, Teil 1 von 4).
+
+### ✨ Added / Changed
+- **Pflichtfeld-Konzept repariert:** Die Pflichtfelder (Herausgeber, Beschreibung, Lizenz)
+  sperren nicht länger schon das Speichern eines leeren **Entwurfs**. Stattdessen sind sie
+  sichtbar mit einem roten Sternchen (`*`) markiert, eine kurze Legende erklärt: „Pflichtfeld
+  zum Veröffentlichen — als Entwurf jederzeit unvollständig speicherbar". Erzwungen wird die
+  Vollständigkeit weiterhin ausschließlich beim **Veröffentlichen** (Server-Validierung).
+- **Fehlermeldungen mit Ort und Sprung:** Wird die Veröffentlichung blockiert, nennt die
+  Meldung jetzt pro fehlender Angabe den **Tab** („Tab 3 — Datenbereitstellung") und ein
+  **Klartext-Label in Formularsprache** (der technische DCAT-AP-Begriff steht nur noch klein
+  in Klammern). Ein Button **„Zum Feld springen"** wechselt direkt auf den passenden Tab,
+  klappt bei Bedarf die zugehörige Gruppe auf und hebt das Feld kurz hervor.
+
+### 🔧 Technisch
+- `ODW_Validation::validate()` liefert strukturierte Fehler (`label`, `dcat`, `tab`, `target`,
+  `section`) statt roher Strings; `ODW_Fields::get_required_fields()` trägt den Registry-`key` mit.
+- Neue JS-Routinen in `odw-admin-fields.js` (`initRequiredMarks`, `initGotoLinks`) — progressive
+  Enhancement, ohne JS bleiben alle Felder sichtbar und die Validierung greift weiterhin.
+
+### ✅ Tests
+- Validierungstests auf die strukturierte Fehlerform umgestellt; neuer Test prüft Tab/Target-
+  Metadaten für die Sprung-Links. Gesamt: 176.
+
+---
+
 ## [2.28.0] — 2026-07-30
 
 UX- und Konsistenz-Verbesserungen (Teil 2 des Audit-Nachgangs).

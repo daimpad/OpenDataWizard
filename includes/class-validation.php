@@ -84,9 +84,13 @@ class ODW_Validation {
 	 * At wp_insert_post_data time, the CF values may not yet be in the DB,
 	 * so we additionally look at $_POST['carbon_fields_compact_input'].
 	 *
+	 * Each error is a structured entry so the admin notice can point at the exact
+	 * tab and field (B2): { label, dcat, tab, target, section }.
+	 *
 	 * @param int                  $post_id  Post ID.
 	 * @param array<string, mixed> $postarr  Raw $_POST data.
-	 * @return string[]  Array of human-readable error messages (empty = valid).
+	 * @return array<int, array{label: string, dcat: string, tab: int, target: string, section: string}>
+	 *         Structured error entries (empty = valid).
 	 */
 	private static function validate( int $post_id, array $postarr ): array {
 		$errors = array();
@@ -97,26 +101,26 @@ class ODW_Validation {
 		// --- Titel (WP-native, nicht in Carbon Fields) ---
 		$title = trim( (string) ( $postarr['post_title'] ?? '' ) );
 		if ( '' === $title ) {
-			$errors[] = __( 'Titel (dct:title)', 'open-data-wizard' );
+			$errors[] = self::error( 'title' );
 		}
 
 		// --- Pflichtfelder aus zentraler Registry (ODW_Fields::get_required_fields) ---
 		foreach ( ODW_Fields::get_required_fields() as $field ) {
 			$value = self::get_field_value( $post_id, $cf_input, $field['meta_key'] );
 			if ( '' === trim( (string) $value ) ) {
-				$errors[] = $field['label'];
+				$errors[] = self::error( $field['key'], $field['label'] );
 			}
 		}
 
 		// --- Mindestens 1 Distribution mit Zugriffs-URL ---
 		$has_distribution = self::has_valid_distribution( $post_id, $cf_input );
 		if ( ! $has_distribution ) {
-			$errors[] = __( 'Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)', 'open-data-wizard' );
+			$errors[] = self::error( 'distribution' );
 		}
 
 		// --- Lizenz in jeder Distribution (Änderung 7) ---
 		if ( $has_distribution && ! self::all_distributions_have_license( $post_id, $cf_input ) ) {
-			$errors[] = __( 'Jede Distribution benötigt eine Lizenzangabe (dct:license)', 'open-data-wizard' );
+			$errors[] = self::error( 'license' );
 		}
 
 		// --- HVD: Kategorie ist Pflicht, wenn als High-Value-Datensatz markiert ---
@@ -124,11 +128,103 @@ class ODW_Validation {
 		if ( 'yes' === $is_hvd ) {
 			$hvd_category = (string) self::get_field_value( $post_id, $cf_input, '_odw_hvd_category' );
 			if ( '' === trim( $hvd_category ) ) {
-				$errors[] = __( 'HVD-Kategorie auswählen (dcatap:hvdCategory)', 'open-data-wizard' );
+				$errors[] = self::error( 'hvd_category' );
 			}
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Build a structured error entry for a required-field key.
+	 *
+	 * Central catalogue (form-language label + technical DCAT term + tab number +
+	 * DOM target + optional collapsible section) so the admin notice can render a
+	 * clickable "jump to field" link that switches tab and expands the group.
+	 *
+	 * @param string $key      Registry/error key.
+	 * @param string $fallback Optional label fallback (registry label) for keys not in the map.
+	 * @return array{label: string, dcat: string, tab: int, target: string, section: string}
+	 */
+	private static function error( string $key, string $fallback = '' ): array {
+		$map = array(
+			'title'        => array(
+				'label'   => __( 'Titel', 'open-data-wizard' ),
+				'dcat'    => 'dct:title',
+				'tab'     => 0,
+				'target'  => 'title',
+				'section' => '',
+			),
+			'publisher'    => array(
+				'label'   => __( 'Herausgebende Organisation', 'open-data-wizard' ),
+				'dcat'    => 'dct:publisher',
+				'tab'     => 1,
+				'target'  => '_odw_publisher',
+				'section' => '',
+			),
+			'description'  => array(
+				'label'   => __( 'Beschreibung', 'open-data-wizard' ),
+				'dcat'    => 'dct:description',
+				'tab'     => 1,
+				'target'  => '_odw_description',
+				'section' => '',
+			),
+			'distribution' => array(
+				'label'   => __( 'Link zur Datei oder Datei-Upload', 'open-data-wizard' ),
+				'dcat'    => 'dcat:accessURL',
+				'tab'     => 3,
+				'target'  => '_odw_access_url',
+				'section' => '',
+			),
+			'license'      => array(
+				'label'   => __( 'Lizenz', 'open-data-wizard' ),
+				'dcat'    => 'dct:license',
+				'tab'     => 3,
+				'target'  => '_odw_license',
+				'section' => '',
+			),
+			'hvd_category' => array(
+				'label'   => __( 'HVD-Kategorie', 'open-data-wizard' ),
+				'dcat'    => 'dcatap:hvdCategory',
+				'tab'     => 4,
+				'target'  => '_odw_hvd_category',
+				'section' => 'hvd',
+			),
+		);
+
+		$entry = $map[ $key ] ?? array(
+			'label'   => '' !== $fallback ? $fallback : $key,
+			'dcat'    => '',
+			'tab'     => 0,
+			'target'  => '',
+			'section' => '',
+		);
+
+		return array(
+			'label'   => (string) $entry['label'],
+			'dcat'    => (string) $entry['dcat'],
+			'tab'     => (int) $entry['tab'],
+			'target'  => (string) $entry['target'],
+			'section' => (string) $entry['section'],
+		);
+	}
+
+	/**
+	 * Human-readable tab name for the given 1-based tab number (0 = no tab / post title).
+	 *
+	 * @param int $tab Tab number.
+	 * @return string
+	 */
+	private static function tab_name( int $tab ): string {
+		$names = array(
+			1 => __( 'Grundlegende Informationen', 'open-data-wizard' ),
+			2 => __( 'Inhaltliche Angaben', 'open-data-wizard' ),
+			3 => __( 'Datenbereitstellung', 'open-data-wizard' ),
+			4 => __( 'Erweiterte Angaben', 'open-data-wizard' ),
+			5 => __( 'Vorschau', 'open-data-wizard' ),
+		);
+
+		return $names[ $tab ] ?? '';
 	}
 
 	/**
@@ -343,15 +439,52 @@ class ODW_Validation {
 
 		echo '<div class="notice notice-error odw-validation-notice is-dismissible">';
 		echo '<p><strong>' . esc_html__( 'Open Data Wizard: Veröffentlichung blockiert', 'open-data-wizard' ) . '</strong></p>';
-		echo '<p>' . esc_html__( 'Folgende Pflichtfelder fehlen oder sind leer:', 'open-data-wizard' ) . '</p>';
+		echo '<p>' . esc_html__( 'Folgende Pflichtangaben fehlen oder sind leer:', 'open-data-wizard' ) . '</p>';
 		echo '<ul class="odw-missing-fields">';
 
-		foreach ( $errors as $field_label ) {
-			echo '<li>' . esc_html( $field_label ) . '</li>';
+		foreach ( $errors as $error ) {
+			// Backward-compat: a plain string (e.g. from an older stored transient)
+			// is rendered as-is without a jump link.
+			if ( ! is_array( $error ) ) {
+				echo '<li>' . esc_html( (string) $error ) . '</li>';
+				continue;
+			}
+
+			$tab      = (int) ( $error['tab'] ?? 0 );
+			$tab_name = self::tab_name( $tab );
+			$label    = (string) ( $error['label'] ?? '' );
+			$dcat     = (string) ( $error['dcat'] ?? '' );
+			$target   = (string) ( $error['target'] ?? '' );
+			$section  = (string) ( $error['section'] ?? '' );
+
+			echo '<li>';
+
+			if ( '' !== $tab_name ) {
+				/* translators: %s: form tab name. */
+				echo '<span class="odw-missing-tab">' . esc_html( sprintf( __( 'Tab %s', 'open-data-wizard' ), $tab_name ) ) . ':</span> ';
+			}
+
+			echo '<span class="odw-missing-label">' . esc_html( $label ) . '</span>';
+
+			if ( '' !== $dcat ) {
+				echo ' <span class="odw-missing-dcat">(' . esc_html( $dcat ) . ')</span>';
+			}
+
+			if ( '' !== $target ) {
+				printf(
+					' <button type="button" class="button-link odw-goto-field" data-odw-goto-tab="%1$d" data-odw-goto-target="%2$s" data-odw-goto-section="%3$s">%4$s</button>',
+					(int) $tab,
+					esc_attr( $target ),
+					esc_attr( $section ),
+					esc_html__( 'Zum Feld springen', 'open-data-wizard' )
+				);
+			}
+
+			echo '</li>';
 		}
 
 		echo '</ul>';
-		echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen.', 'open-data-wizard' ) . '</p>';
+		echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern.', 'open-data-wizard' ) . '</p>';
 		echo '</div>';
 	}
 }
