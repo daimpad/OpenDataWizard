@@ -7,6 +7,26 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.23.0] — 2026-07-30
+
+### ✨ Added — Mehrsprachige Literale (Phase D, additiv)
+- Neue optionale **Übersetzungs-Felder** für Titel, Beschreibung und Schlagworte:
+  „Titel/Beschreibung/Schlagworte in weiteren Sprachen" (Repeater mit `{ Sprache, Wert }`).
+- **JSON-LD:** `dct:title` und `dct:description` werden zu einem **Array sprachgetaggter Literale**,
+  sobald Übersetzungen vorhanden sind — ohne Übersetzung bleibt es ein Einzelobjekt
+  (**rückwärtskompatibel**). Übersetzte Schlagworte werden an `dcat:keyword` angehängt.
+- Intern: gemeinsamer Helfer `odw_collect_lang_literals()`. **Keine Datenmigration** — die bisherigen
+  Angaben bleiben die Hauptsprache.
+
+### 🌍 i18n
+- 13 neue UI-Strings in `en_US` übersetzt.
+
+### ✅ Tests
+- Mehrsprachiger Titel wird zum Array; Einzelsprache bleibt Objekt; übersetzte Schlagworte werden
+  angehängt; Helfer überspringt leere/ungültige Zeilen. Gesamt: 162 Tests.
+
+---
+
 ## [2.22.0] — 2026-07-30
 
 ### ✨ Added — Multi-Distribution (Phase E, additiv)

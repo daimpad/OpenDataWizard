@@ -264,7 +264,12 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 - ✅ `dct:title`, `dct:description`, `dcat:keyword` werden als sprachgetaggte Literale (`{"@value","@language"}`) ausgegeben.
 - ✅ **Output-Tagging gewählt (statt Datenmodell-Migration):** Werte bleiben als Klartext gespeichert; die Sprache wird bei der JSON-LD-Erzeugung aus dem Sprache-Feld (EU-URI → BCP-47, `odw_resolve_language_tag()`) abgeleitet, Rückfall Standardsprache → `de`. Dadurch **keine Datenmigration** und keine UX-Änderung; eine Sprache pro Feld.
 - _Betroffen:_ `class-fields.php` (Builder + `odw_lang_literal()`/`odw_resolve_language_tag()`), `config/dcat-ap-fields.php` (range → `literal-lang`), Tests.
-- ☐ Offen (optional/künftig): echtes mehrsprachiges Datenmodell mit mehreren Sprachen je Feld (wiederholbare Eingabe + Migration).
+- ✅ **v2.23.0 — echte Mehrsprachigkeit (additiv):** Optionale Übersetzungs-Repeater
+  (`odw_title_translations`, `odw_description_translations`, `odw_keyword_translations`) je Feld
+  `{ Sprache, Wert }`. `dct:title`/`dct:description` werden zu einem Array von Literalen, sobald
+  Übersetzungen vorhanden sind (sonst weiterhin Einzelobjekt = rückwärtskompatibel); übersetzte
+  Schlagworte werden an `dcat:keyword` angehängt. Gemeinsamer Helfer `odw_collect_lang_literals()`.
+  **Keine Migration** (Hauptsprache bleibt wie bisher).
 
 #### Phase E — Multi-Distribution ✅ (v2.22.0, additiv)
 - Umgesetzt **additiv**: Die primäre Distribution (Tab-3-Einzelfelder) bleibt unverändert; ein optionales,
