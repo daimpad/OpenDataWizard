@@ -141,7 +141,6 @@ class ODW_Settings {
 
 		add_settings_field( 'catalog_title', __( 'Katalog-Titel', 'open-data-wizard' ), array( self::class, 'field_catalog_title' ), 'odw-settings', 'odw_section_catalog' );
 		add_settings_field( 'catalog_description', __( 'Katalog-Beschreibung', 'open-data-wizard' ), array( self::class, 'field_catalog_description' ), 'odw-settings', 'odw_section_catalog' );
-		add_settings_field( 'default_publisher', __( 'Herausgebende Organisation', 'open-data-wizard' ), array( self::class, 'field_default_publisher' ), 'odw-settings', 'odw_section_catalog' );
 
 		// --- Standardwerte ---
 		add_settings_section(
@@ -153,6 +152,7 @@ class ODW_Settings {
 			'odw-settings'
 		);
 
+		add_settings_field( 'default_publisher', __( 'Herausgebende Organisation', 'open-data-wizard' ), array( self::class, 'field_default_publisher' ), 'odw-settings', 'odw_section_defaults' );
 		add_settings_field( 'default_license', __( 'Standard-Lizenz', 'open-data-wizard' ), array( self::class, 'field_default_license' ), 'odw-settings', 'odw_section_defaults' );
 		add_settings_field( 'default_language', __( 'Standard-Sprache', 'open-data-wizard' ), array( self::class, 'field_default_language' ), 'odw-settings', 'odw_section_defaults' );
 

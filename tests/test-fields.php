@@ -282,4 +282,51 @@ class Test_ODW_Fields extends TestCase {
 		$this->assertContains( 'odw_access_url', $required );
 		$this->assertContains( 'odw_license', $required );
 	}
+
+	/**
+	 * Maps a theme code, label or URI to the EU URI (resolve_theme_uri()).
+	 */
+	public function test_resolve_theme_uri_maps_code_label_and_passthrough(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$expected = 'http://publications.europa.eu/resource/authority/data-theme/SOCI';
+
+		$this->assertSame( $expected, ODW_Fields::resolve_theme_uri( 'SOCI' ) );
+		$this->assertSame( $expected, ODW_Fields::resolve_theme_uri( 'Bevölkerung & Gesellschaft' ) );
+		$this->assertSame( $expected, ODW_Fields::resolve_theme_uri( $expected ) );
+		// Unknown value passes through unchanged.
+		$this->assertSame( 'Foobar', ODW_Fields::resolve_theme_uri( 'Foobar' ) );
+	}
+
+	/**
+	 * Turns a stored EU theme URI back into its readable label (resolve_label()).
+	 */
+	public function test_resolve_label_theme_uri_to_label(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$this->assertSame(
+			'Umwelt',
+			ODW_Fields::resolve_label( 'theme', 'http://publications.europa.eu/resource/authority/data-theme/ENVI' )
+		);
+		// Freetext / unknown value is returned unchanged.
+		$this->assertSame( 'Musterstadt', ODW_Fields::resolve_label( 'theme', 'Musterstadt' ) );
+	}
+
+	/**
+	 * Normalises format keys case- and separator-insensitively (resolve_format_key()).
+	 */
+	public function test_resolve_format_key_normalises_case_and_separators(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		$this->assertSame( 'GeoJSON', ODW_Fields::resolve_format_key( 'GEOJSON' ) );
+		$this->assertSame( 'JSON-LD', ODW_Fields::resolve_format_key( 'jsonld' ) );
+		$this->assertSame( 'CSV', ODW_Fields::resolve_format_key( 'csv' ) );
+		$this->assertSame( '', ODW_Fields::resolve_format_key( 'nope' ) );
+	}
 }

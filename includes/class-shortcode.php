@@ -63,6 +63,23 @@ class ODW_Shortcode {
 	}
 
 	/**
+	 * Wie meta(), löst den Wert aber über ein Vokabular zum lesbaren Label auf
+	 * (URI → Label), damit im Frontend keine rohen URIs erscheinen.
+	 *
+	 * @param string $vocab   Vokabular-Kennung (siehe ODW_Fields::resolve_label).
+	 * @param string $key     Carbon-Feld-Schlüssel.
+	 * @param int    $post_id Post ID.
+	 * @return string
+	 */
+	private static function label( string $vocab, string $key, int $post_id ): string {
+		$value = self::meta( $post_id, $key );
+		if ( '' === $value || ! class_exists( 'ODW_Fields' ) ) {
+			return $value;
+		}
+		return ODW_Fields::resolve_label( $vocab, $value );
+	}
+
+	/**
 	 * Shortcode-Handler — gibt HTML zurück, kein direktes echo.
 	 *
 	 * @param array<string, string>|string $atts Shortcode attributes. Expects `id` with the post ID.
@@ -267,10 +284,10 @@ class ODW_Shortcode {
 
 		$add( __( 'Herausgeber', 'open-data-wizard' ), self::meta( $post_id, 'odw_publisher' ) );
 		$add( __( 'Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_description' ) );
-		$add( __( 'Thema', 'open-data-wizard' ), self::meta( $post_id, 'odw_theme' ) );
-		$add( __( 'CESSDA-Themenfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_cessda_topic' ), true );
+		$add( __( 'Thema', 'open-data-wizard' ), self::label( 'theme', 'odw_theme', $post_id ) );
+		$add( __( 'CESSDA-Themenfeld', 'open-data-wizard' ), self::label( 'cessda', 'odw_cessda_topic', $post_id ) );
 		$add( __( 'Engagementfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_engagementfeld' ) );
-		$add( __( 'Sprache', 'open-data-wizard' ), self::meta( $post_id, 'odw_language' ), true );
+		$add( __( 'Sprache', 'open-data-wizard' ), self::label( 'language', 'odw_language', $post_id ) );
 
 		$keywords = array_filter( array_map( 'trim', explode( "\n", self::meta( $post_id, 'odw_keywords' ) ) ) );
 		$add( __( 'Schlagworte', 'open-data-wizard' ), implode( ', ', $keywords ) );
@@ -282,7 +299,7 @@ class ODW_Shortcode {
 		$add( __( 'Dateigröße', 'open-data-wizard' ), $file_size );
 		$add( __( 'Lizenz', 'open-data-wizard' ), $license_label );
 		$add( __( 'Namensnennung', 'open-data-wizard' ), self::meta( $post_id, 'odw_attribution_text' ) );
-		$add( __( 'Zugriffsrechte', 'open-data-wizard' ), self::meta( $post_id, 'odw_access_rights' ), true );
+		$add( __( 'Zugriffsrechte', 'open-data-wizard' ), self::label( 'access_rights', 'odw_access_rights', $post_id ) );
 
 		$add( __( 'Räumliche Abdeckung', 'open-data-wizard' ), self::meta( $post_id, 'odw_spatial' ) );
 		$add( __( 'Räumliche Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_geocoding_description' ) );
@@ -296,7 +313,7 @@ class ODW_Shortcode {
 		$add( __( 'Veröffentlicht', 'open-data-wizard' ), self::meta( $post_id, 'odw_issued' ) );
 		$add( __( 'Aktualisiert', 'open-data-wizard' ), self::meta( $post_id, 'odw_modified' ) );
 		$add( __( 'Projektseite', 'open-data-wizard' ), self::meta( $post_id, 'odw_landing_page' ), true );
-		$add( __( 'Aktualisierungsfrequenz', 'open-data-wizard' ), self::meta( $post_id, 'odw_accrual_periodicity' ), true );
+		$add( __( 'Aktualisierungsfrequenz', 'open-data-wizard' ), self::label( 'periodicity', 'odw_accrual_periodicity', $post_id ) );
 		$add( __( 'Urheber', 'open-data-wizard' ), self::meta( $post_id, 'odw_originator_name' ) );
 		$add( __( 'Pflegende Stelle', 'open-data-wizard' ), self::meta( $post_id, 'odw_maintainer_name' ) );
 

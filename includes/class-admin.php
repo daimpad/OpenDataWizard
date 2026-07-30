@@ -134,8 +134,8 @@ class ODW_Admin {
 				break;
 
 			case 'odw_theme':
-				$theme = carbon_get_post_meta( $post_id, 'odw_theme' );
-				echo esc_html( (string) $theme );
+				$theme = (string) carbon_get_post_meta( $post_id, 'odw_theme' );
+				echo esc_html( '' !== $theme ? ODW_Fields::resolve_label( 'theme', $theme ) : '—' );
 				break;
 
 			case 'odw_status':
@@ -582,11 +582,13 @@ class ODW_Admin {
 				}
 			}
 
-			if ( '' !== $ext
-				&& '' === trim( (string) get_post_meta( $post_id, '_odw_format', true ) )
-				&& array() !== ODW_Fields::get_format_meta( $ext )
-			) {
-				update_post_meta( $post_id, '_odw_format', $ext );
+			if ( '' !== $ext && '' === trim( (string) get_post_meta( $post_id, '_odw_format', true ) ) ) {
+				// Kanonischen Format-Key speichern (z. B. GEOJSON → GeoJSON),
+				// damit der Wert zur Auswahlliste passt.
+				$format_key = ODW_Fields::resolve_format_key( $ext );
+				if ( '' !== $format_key ) {
+					update_post_meta( $post_id, '_odw_format', $format_key );
+				}
 			}
 		} else {
 			delete_post_meta( $post_id, '_odw_file_size' );
@@ -685,7 +687,7 @@ class ODW_Admin {
 			'edit.php?post_type=odw_dataset',
 			__( 'Einstieg', 'open-data-wizard' ),
 			__( 'Einstieg', 'open-data-wizard' ),
-			'manage_options',
+			'manage_open_data',
 			'odw-einstieg',
 			array( self::class, 'render_introduction_page' )
 		);
@@ -821,7 +823,7 @@ class ODW_Admin {
 			<div class="odw-batch-import-container" style="max-width: 900px; margin-top: 20px;">
 
 				<p style="font-size: 14px; line-height: 1.6; color: #50575e; margin: 0 0 20px;">
-					<?php esc_html_e( 'Mit dem Batch-Import legst du mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Lade eine CSV- oder JSON-Datei hoch, prüfe in der Vorschau die erkannten Datensätze und importiere die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass du sie vor der Veröffentlichung noch bearbeiten kannst. Nutze die Beispieldatei unten als Vorlage für den Aufbau.', 'open-data-wizard' ); ?>
+					<?php esc_html_e( 'Mit dem Batch-Import legen Sie mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Laden Sie eine CSV- oder JSON-Datei hoch, prüfen Sie in der Vorschau die erkannten Datensätze und importieren Sie die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass Sie sie vor der Veröffentlichung noch bearbeiten können. Nutzen Sie die Beispieldatei unten als Vorlage für den Aufbau.', 'open-data-wizard' ); ?>
 				</p>
 
 
@@ -1013,7 +1015,7 @@ class ODW_Admin {
 				$('#odw-preview-btn').on('click', function() {
 					var fileInput = document.getElementById('odw-import-file');
 					if (!fileInput.files.length) {
-						alert('<?php esc_html_e( 'Bitte wähle eine Datei aus.', 'open-data-wizard' ); ?>');
+						alert('<?php echo esc_js( __( 'Bitte wählen Sie eine Datei aus.', 'open-data-wizard' ) ); ?>');
 						return;
 					}
 

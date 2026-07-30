@@ -481,6 +481,24 @@ class ODW_Batch_Import {
 
 				if ( 'byte_size' === $field ) {
 					$value = (string) absint( $value );
+				} elseif ( 'theme' === $field ) {
+					// Code (SOCI) oder Label → gespeicherte EU-URI.
+					$value = class_exists( 'ODW_Fields' )
+						? ODW_Fields::resolve_theme_uri( sanitize_text_field( $value ) )
+						: sanitize_text_field( $value );
+				} elseif ( 'keywords' === $field ) {
+					// Schlagworte werden intern zeilengetrennt gespeichert. Import
+					// erlaubt Komma- ODER Zeilentrennung — beides zu Zeilen normalisieren.
+					$split = preg_split( '/[\r\n,]+/', self::neutralize_formula( $value ) );
+					$parts = array_values(
+						array_filter(
+							array_map( 'trim', is_array( $split ) ? $split : array() ),
+							static function ( string $keyword ): bool {
+								return '' !== $keyword;
+							}
+						)
+					);
+					$value = implode( "\n", array_map( 'sanitize_text_field', $parts ) );
 				} elseif ( '_odw_attribution_text' === $meta_key ) {
 					$value = sanitize_textarea_field( self::neutralize_formula( $value ) );
 				} else {
