@@ -307,10 +307,12 @@ class ODW_Rest_API {
 		}
 
 		if ( 'publish' !== $post->post_status ) {
+			// Bewusst identisch zum Nicht-Existieren (404 + gleiche Meldung),
+			// damit Entwurfs-IDs nicht von außen enumerierbar sind.
 			return new WP_Error(
-				'odw_not_published',
-				__( 'Dieser Datensatz ist nicht veröffentlicht.', 'open-data-wizard' ),
-				array( 'status' => 403 )
+				'odw_not_found',
+				__( 'Datensatz nicht gefunden.', 'open-data-wizard' ),
+				array( 'status' => 404 )
 			);
 		}
 
@@ -515,12 +517,14 @@ class ODW_Rest_API {
 	private static function parse_iso8601( string $value ): ?DateTimeImmutable {
 		$utc = new DateTimeZone( 'UTC' );
 
-		// Formats tried in descending specificity.
+		// Formats tried in descending specificity. Das führende '!' setzt alle
+		// nicht angegebenen Teile auf 0 — ohne '!' würde bei 'Y-m-d' die AKTUELLE
+		// Uhrzeit übernommen und same-day-Änderungen im Delta verschluckt.
 		$formats = array(
-			'Y-m-d\TH:i:sP',  // Numeric timezone offset notation.
-			'Y-m-d\TH:i:s\Z', // UTC Z suffix.
-			'Y-m-d\TH:i:s',   // No timezone (assumed UTC).
-			'Y-m-d',           // Date only, start of day UTC.
+			'!Y-m-d\TH:i:sP',  // Numeric timezone offset notation.
+			'!Y-m-d\TH:i:s\Z', // UTC Z suffix.
+			'!Y-m-d\TH:i:s',   // No timezone (assumed UTC).
+			'!Y-m-d',           // Date only, start of day UTC.
 		);
 
 		foreach ( $formats as $format ) {

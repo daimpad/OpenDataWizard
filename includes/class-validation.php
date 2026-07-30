@@ -154,6 +154,27 @@ class ODW_Validation {
 	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
 	 */
 	private static function has_valid_distribution( int $post_id, array $cf_input ): bool {
+		if ( self::has_primary_distribution( $post_id, $cf_input ) ) {
+			return true;
+		}
+
+		// Zusätzliche Distributionen (Repeater) zählen ebenfalls.
+		foreach ( self::get_extra_distribution_rows( $post_id, $cf_input ) as $row ) {
+			if ( '' !== $row['access_url'] && self::is_valid_url( $row['access_url'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Primäre Distribution vorhanden? (Zugriffs-URL oder Mediathek-Upload.)
+	 *
+	 * @param int                  $post_id  Post ID.
+	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
+	 */
+	private static function has_primary_distribution( int $post_id, array $cf_input ): bool {
 		// Check CF compact input first.
 		$access_url = (string) ( $cf_input['_odw_access_url'] ?? '' );
 		if ( ! empty( $access_url ) && self::is_valid_url( $access_url ) ) {
@@ -168,37 +189,91 @@ class ODW_Validation {
 
 		// A media-library upload also counts as a valid distribution — its access
 		// URL is derived from the file on save (see ODW_Admin::save_file_attachment).
-		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
-		if ( 0 === $file_id
-			&& isset( $_POST['_odw_file_id'], $_POST['odw_file_upload_nonce'] )
-			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['odw_file_upload_nonce'] ) ), 'odw_save_file_attachment' )
-		) {
-			$file_id = absint( wp_unslash( $_POST['_odw_file_id'] ) );
-		}
-
-		return $file_id > 0;
+		return self::get_effective_file_id( $post_id ) > 0;
 	}
 
 	/**
-	 * Check that if an access_url is set, a license is also set.
+	 * Effektive Mediathek-Datei-ID: Der POST-Wert (mit Nonce) hat Vorrang vor dem
+	 * gespeicherten Meta — sonst würde das Entfernen der Datei (POST=0) im selben
+	 * Save von der alten Meta-ID überdeckt und ein Datensatz ohne Distribution
+	 * bliebe veröffentlicht.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	private static function get_effective_file_id( int $post_id ): int {
+		if ( isset( $_POST['_odw_file_id'], $_POST['odw_file_upload_nonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['odw_file_upload_nonce'] ) ), 'odw_save_file_attachment' )
+		) {
+			return absint( wp_unslash( $_POST['_odw_file_id'] ) );
+		}
+
+		return (int) get_post_meta( $post_id, '_odw_file_id', true );
+	}
+
+	/**
+	 * Zusätzliche Distributionen als normalisierte Zeilen.
+	 *
+	 * Compact-Input-Zeilen tragen Unterfeld-Schlüssel MIT führendem Unterstrich
+	 * (_access_url), gespeicherte Meta-Zeilen (carbon_get_post_meta) OHNE.
+	 *
+	 * @param int                  $post_id  Post ID.
+	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
+	 * @return array<int, array{access_url: string, license: string, license_custom: string}>
+	 */
+	private static function get_extra_distribution_rows( int $post_id, array $cf_input ): array {
+		$raw = $cf_input['_odw_extra_distributions'] ?? carbon_get_post_meta( $post_id, 'odw_extra_distributions' );
+		if ( ! is_array( $raw ) ) {
+			return array();
+		}
+
+		$rows = array();
+		foreach ( $raw as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			$rows[] = array(
+				'access_url'     => trim( (string) ( $row['_access_url'] ?? $row['access_url'] ?? '' ) ),
+				'license'        => trim( (string) ( $row['_license'] ?? $row['license'] ?? '' ) ),
+				'license_custom' => trim( (string) ( $row['_license_custom'] ?? $row['license_custom'] ?? '' ) ),
+			);
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Check that every distribution (primary + extras) carries a license.
 	 *
 	 * @param int                  $post_id  Post ID.
 	 * @param array<string, mixed> $cf_input Decoded Carbon Fields compact input.
 	 */
 	private static function all_distributions_have_license( int $post_id, array $cf_input ): bool {
-		$access_url = (string) ( $cf_input['_odw_access_url'] ?? carbon_get_post_meta( $post_id, 'odw_access_url' ) );
-		if ( empty( $access_url ) ) {
-			return true;
+		// Primäre Distribution (URL ODER Datei-Upload) → Lizenz Pflicht.
+		if ( self::has_primary_distribution( $post_id, $cf_input ) ) {
+			$license = (string) ( $cf_input['_odw_license'] ?? carbon_get_post_meta( $post_id, 'odw_license' ) );
+			if ( '' === $license ) {
+				return false;
+			}
+
+			if ( 'sonstige' === $license ) {
+				$custom = (string) ( $cf_input['_odw_license_custom'] ?? carbon_get_post_meta( $post_id, 'odw_license_custom' ) );
+				if ( empty( $custom ) ) {
+					return false;
+				}
+			}
 		}
 
-		$license = (string) ( $cf_input['_odw_license'] ?? carbon_get_post_meta( $post_id, 'odw_license' ) );
-		if ( '' === $license ) {
-			return false;
-		}
-
-		if ( 'sonstige' === $license ) {
-			$custom = (string) ( $cf_input['_odw_license_custom'] ?? carbon_get_post_meta( $post_id, 'odw_license_custom' ) );
-			return ! empty( $custom );
+		// Jede zusätzliche Distribution mit Zugriffs-URL braucht ebenfalls eine Lizenz.
+		foreach ( self::get_extra_distribution_rows( $post_id, $cf_input ) as $row ) {
+			if ( '' === $row['access_url'] ) {
+				continue;
+			}
+			if ( '' === $row['license'] ) {
+				return false;
+			}
+			if ( 'sonstige' === $row['license'] && '' === $row['license_custom'] ) {
+				return false;
+			}
 		}
 
 		return true;

@@ -27,7 +27,11 @@ class ODW_Fields {
 	 */
 	public static function init(): void {
 		add_action( 'carbon_fields_register_fields', array( self::class, 'register' ) );
-		add_action( 'save_post_odw_dataset', array( self::class, 'set_modified_date' ), 10, 2 );
+		// Auf 'save_post' (nicht 'save_post_odw_dataset'): Carbon Fields speichert
+		// die Formularwerte auf 'save_post'@10, und WordPress feuert
+		// save_post_{post_type} grundsätzlich DAVOR — nur mit 'save_post'@20 läuft
+		// das Auto-Update nach CF und wird nicht vom Formularwert überschrieben.
+		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
 	}
 
 	/**
@@ -90,7 +94,6 @@ class ODW_Fields {
 
 					Field::make( 'complex', 'odw_title_translations', __( 'Titel in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
@@ -99,11 +102,13 @@ class ODW_Fields {
 								Field::make( 'text', 'content', __( 'Titel', 'open-data-wizard' ) )
 									->set_help_text( __( 'Übersetzter Titel', 'open-data-wizard' ) ),
 							)
-						),
+						)
+						// Muss NACH add_fields() stehen: CF hängt das Template an die
+						// zuletzt registrierte Gruppe — vorher existiert keine.
+						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' ),
 
 					Field::make( 'complex', 'odw_description_translations', __( 'Beschreibung in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
@@ -113,7 +118,8 @@ class ODW_Fields {
 									->set_rows( 3 )
 									->set_help_text( __( 'Übersetzte Beschreibung', 'open-data-wizard' ) ),
 							)
-						),
+						)
+						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' ),
 				)
 			)
 
@@ -135,7 +141,6 @@ class ODW_Fields {
 
 					Field::make( 'complex', 'odw_keyword_translations', __( 'Schlagworte in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- language || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' )
 						->set_help_text( __( 'Optional: übersetzte Schlagworte je Sprache (dcat:keyword @language).', 'open-data-wizard' ) )
 						->add_fields(
 							array(
@@ -146,7 +151,8 @@ class ODW_Fields {
 									->set_rows( 3 )
 									->set_help_text( __( 'Jedes übersetzte Schlagwort in einer eigenen Zeile.', 'open-data-wizard' ) ),
 							)
-						),
+						)
+						->set_header_template( '<%- language || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' ),
 
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
@@ -239,7 +245,6 @@ class ODW_Fields {
 					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
 						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
 						->set_collapsed( true )
-						->set_header_template( '<%- access_url || "' . esc_js( __( 'Weitere Distribution', 'open-data-wizard' ) ) . '" %>' )
 						->add_fields(
 							array(
 								Field::make( 'text', 'access_url', __( 'Zugriffs-URL', 'open-data-wizard' ) )
@@ -274,7 +279,8 @@ class ODW_Fields {
 								Field::make( 'text', 'rights', __( 'Nutzungsrechte', 'open-data-wizard' ) )
 									->set_help_text( __( 'Rechtlicher Hinweis über die Lizenz hinaus (dct:rights)', 'open-data-wizard' ) ),
 							)
-						),
+						)
+						->set_header_template( '<%- access_url || "' . esc_js( __( 'Weitere Distribution', 'open-data-wizard' ) ) . '" %>' ),
 				)
 			)
 
@@ -576,9 +582,9 @@ class ODW_Fields {
 			return;
 		}
 
-		remove_action( 'save_post_odw_dataset', array( self::class, 'set_modified_date' ), 10 );
+		remove_action( 'save_post', array( self::class, 'set_modified_date' ), 20 );
 		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
-		add_action( 'save_post_odw_dataset', array( self::class, 'set_modified_date' ), 10, 2 );
+		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
 	}
 
 	// -------------------------------------------------------------------------

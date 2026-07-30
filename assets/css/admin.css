@@ -41,7 +41,9 @@
    Tab Navigation
    ========================================================================= */
 
-.cf-container__tabs-nav {
+/* Carbon Fields 3.6 rendert ul.cf-container__tabs-list > li.cf-container__tabs-item
+   mit einem <button> als Klickfläche; aktiver Tab: --current. */
+.cf-container__tabs-list {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
@@ -51,18 +53,22 @@
     border-bottom: 2px solid var(--odw-color-primary);
 }
 
-.cf-container__tabs-nav li {
+.cf-container__tabs-item {
     margin: 0;
     padding: 0;
     cursor: pointer;
     position: relative;
 }
 
-.cf-container__tabs-nav li .cf-tab__label {
+.cf-container__tabs-item button {
     display: block;
+    width: 100%;
     padding: 10px 18px;
+    font: inherit;
     font-size: 13px;
     font-weight: 500;
+    text-align: left;
+    cursor: pointer;
     color: var(--odw-color-text-muted);
     background: var(--odw-color-bg-light);
     border: 1px solid var(--odw-color-border);
@@ -72,21 +78,22 @@
     user-select: none;
 }
 
-.cf-container__tabs-nav li:hover .cf-tab__label {
+.cf-container__tabs-item:hover button {
     background: var(--odw-color-primary-bg);
     color: var(--odw-color-text);
 }
 
-.cf-container__tabs-nav li.cf-tab--active .cf-tab__label {
+.cf-container__tabs-item--current button {
     background: var(--odw-color-primary-bg);
     color: var(--odw-color-primary);
     font-weight: 600;
     border-bottom: 2px solid var(--odw-color-primary-bg);
     margin-bottom: -2px;
     z-index: 1;
+    position: relative;
 }
 
-.cf-container__tabs-nav li:focus-visible {
+.cf-container__tabs-item button:focus-visible {
     outline: 2px solid var(--odw-color-primary);
     outline-offset: 2px;
 }
@@ -456,18 +463,18 @@
    ========================================================================= */
 
 @media screen and (max-width: 782px) {
-    .cf-container__tabs-nav {
+    .cf-container__tabs-list {
         flex-direction: column;
         border-bottom: none;
     }
 
-    .cf-container__tabs-nav li .cf-tab__label {
+    .cf-container__tabs-item button {
         border-radius: var(--odw-radius);
         border: 1px solid var(--odw-color-border);
         margin-bottom: 4px;
     }
 
-    .cf-container__tabs-nav li.cf-tab--active .cf-tab__label {
+    .cf-container__tabs-item--current button {
         border: 2px solid var(--odw-color-primary);
         margin-bottom: 4px;
     }
