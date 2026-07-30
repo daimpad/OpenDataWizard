@@ -444,6 +444,9 @@ msgstr "Direct download link to the file?"
 msgid "Distribution"
 msgstr "Distribution"
 
+msgid "Distribution %d"
+msgstr "Distribution %d"
+
 msgid "Distribution mit URL (dcat:accessURL)"
 msgstr "Distribution with URL (dcat:accessURL)"
 

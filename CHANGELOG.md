@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.24.0] — 2026-07-30
+
+### ✨ Added — Zusätzliche Distributionen in Widget & Scoring
+- **Frontend-Card:** Zusätzliche Distributionen (aus „Weitere Distributionen") werden jetzt unterhalb der
+  primären Datei mit **eigenem Download-Link** und **Format-/Größe-Badges** aufgelistet.
+- **MQA-Scoring:** Distribution-bezogene Metriken (Format, Media-Type, Download-URL, Lizenz, Rechte,
+  Dateigröße sowie Format-/Lizenz-Vokabular) gelten jetzt als erfüllt, sobald **irgendeine** Distribution
+  sie erfüllt — nicht mehr nur die primäre. Ein Datensatz wird also nicht abgewertet, wenn z. B. ein
+  maschinenlesbares Format nur in einer zusätzlichen Distribution vorliegt.
+- Intern: `ODW_Quality::all_distributions()` (primäre + zusätzliche) und `any_distribution()`.
+
+### ✅ Tests / i18n
+- Reflection-Tests für `all_distributions()`/`any_distribution()` (inkl. „sonstige"-Lizenz einer
+  zusätzlichen Distribution). Gesamt: 165 Tests. Ein neuer UI-String in `en_US`.
+
+---
+
 ## [2.23.0] — 2026-07-30
 
 ### ✨ Added — Mehrsprachige Literale (Phase D, additiv)

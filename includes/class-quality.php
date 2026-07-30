@@ -245,23 +245,36 @@ class ODW_Quality {
 					|| '' !== trim( (string) carbon_get_post_meta( $id, 'odw_temporal_end' ) );
 
 			case 'download_url':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_download_url' ) );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['download'] );
+					}
+				);
 
 			case 'format':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_format' ) );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['format'] );
+					}
+				);
 
 			case 'media_type':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_media_type' ) );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['media_type'] );
+					}
+				);
 
 			case 'license':
-				$lic = (string) carbon_get_post_meta( $id, 'odw_license' );
-				if ( '' !== $lic && 'sonstige' !== $lic ) {
-					return true;
-				}
-				if ( 'sonstige' === $lic ) {
-					return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_license_custom' ) );
-				}
-				return false;
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['license'] );
+					}
+				);
 
 			case 'access_rights':
 				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_access_rights' ) );
@@ -275,10 +288,20 @@ class ODW_Quality {
 				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_publisher' ) );
 
 			case 'rights':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_dist_rights' ) );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['rights'] );
+					}
+				);
 
 			case 'byte_size':
-				return (int) carbon_get_post_meta( $id, 'odw_byte_size' ) > 0;
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return (int) $d['byte_size'] > 0;
+					}
+				);
 
 			case 'issued':
 				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_issued' ) );
@@ -307,22 +330,37 @@ class ODW_Quality {
 
 		switch ( $check ) {
 			case 'format_vocab':
-				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
-				if ( '' === $format ) {
-					return false;
-				}
-				return '' !== (string) ( ODW_Fields::get_format_meta( $format )['eu_uri'] ?? '' );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return '' !== trim( $d['format'] )
+							&& '' !== (string) ( ODW_Fields::get_format_meta( $d['format'] )['eu_uri'] ?? '' );
+					}
+				);
 
 			case 'format_nonproprietary':
-				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
-				return true === ( ODW_Fields::get_format_meta( $format )['non_proprietary'] ?? false );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return true === ( ODW_Fields::get_format_meta( $d['format'] )['non_proprietary'] ?? false );
+					}
+				);
 
 			case 'format_machine_readable':
-				$format = (string) carbon_get_post_meta( $id, 'odw_format' );
-				return true === ( ODW_Fields::get_format_meta( $format )['machine_readable'] ?? false );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return true === ( ODW_Fields::get_format_meta( $d['format'] )['machine_readable'] ?? false );
+					}
+				);
 
 			case 'license_vocab':
-				return self::license_in_vocab( self::effective_license( $id ) );
+				return self::any_distribution(
+					$id,
+					static function ( array $d ): bool {
+						return self::license_in_vocab( $d['license'] );
+					}
+				);
 
 			case 'access_rights_vocab':
 				$value = (string) carbon_get_post_meta( $id, 'odw_access_rights' );
@@ -352,6 +390,66 @@ class ODW_Quality {
 			return (string) carbon_get_post_meta( $id, 'odw_license_custom' );
 		}
 		return $lic;
+	}
+
+	/**
+	 * Alle Distributionen eines Datensatzes (primäre + zusätzliche) als
+	 * normalisierte Wertelisten. Distribution-bezogene MQA-Metriken gelten als
+	 * erfüllt, sobald **irgendeine** Distribution die Bedingung erfüllt.
+	 *
+	 * @param int $id Post ID.
+	 * @return array<int, array<string, string>>
+	 */
+	private static function all_distributions( int $id ): array {
+		$rows = array();
+
+		$rows[] = array(
+			'format'     => (string) carbon_get_post_meta( $id, 'odw_format' ),
+			'media_type' => (string) carbon_get_post_meta( $id, 'odw_media_type' ),
+			'download'   => (string) carbon_get_post_meta( $id, 'odw_download_url' ),
+			'byte_size'  => (string) carbon_get_post_meta( $id, 'odw_byte_size' ),
+			'license'    => self::effective_license( $id ),
+			'rights'     => (string) carbon_get_post_meta( $id, 'odw_dist_rights' ),
+		);
+
+		$extras = carbon_get_post_meta( $id, 'odw_extra_distributions' );
+		if ( is_array( $extras ) ) {
+			foreach ( $extras as $row ) {
+				if ( ! is_array( $row ) ) {
+					continue;
+				}
+				$license = (string) ( $row['license'] ?? '' );
+				if ( 'sonstige' === $license ) {
+					$license = (string) ( $row['license_custom'] ?? '' );
+				}
+				$rows[] = array(
+					'format'     => (string) ( $row['format'] ?? '' ),
+					'media_type' => (string) ( $row['media_type'] ?? '' ),
+					'download'   => (string) ( $row['download_url'] ?? '' ),
+					'byte_size'  => (string) ( $row['byte_size'] ?? '' ),
+					'license'    => $license,
+					'rights'     => (string) ( $row['rights'] ?? '' ),
+				);
+			}
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * True, wenn mindestens eine Distribution das Prädikat erfüllt.
+	 *
+	 * @param int      $id   Post ID.
+	 * @param callable $pred Prädikat, das eine Distribution-Wertliste erhält.
+	 * @return bool
+	 */
+	private static function any_distribution( int $id, callable $pred ): bool {
+		foreach ( self::all_distributions( $id ) as $distribution ) {
+			if ( $pred( $distribution ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
