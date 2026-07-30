@@ -7,6 +7,31 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.31.0] — 2026-07-30
+
+Einheitliche Qualitäts-Darstellung (Paket B, Teil 3 von 4).
+
+### 💅 Changed
+- **Ein Leitwert überall (B4):** Metadatenqualität wird jetzt konsequent als
+  **Prozent + Stufe** dargestellt (z. B. „72 % · Gut") — in der Listenspalte
+  **und** in der Qualitäts-Meta-Box. Zuvor mischten sich drei Zahlensysteme
+  (Listenspalte „21/100 Punkte", Meta-Box „54/259 von 405").
+- **Listenspalte:** Badge zeigt den Prozentwert (`72 %`); der MQA-Rohwert
+  (`MQA 54/259 Punkte`) steht nur noch zusätzlich im Tooltip.
+- **Meta-Box:** Überschrift ist jetzt der große **Prozentwert + Stufen-Badge**;
+  der MQA-Rohwert („MQA-Rohwert: 54 / 259 Punkte (von max. 405)") erscheint als
+  unauffällige Nebenzeile unter dem Fortschrittsbalken.
+
+### 🔧 Technisch
+- Der in `_odw_mqa` gespeicherte `score` ist bereits der MQA-Prozentwert
+  (`achieved/assessable*100`); Listenspalte und Meta-Box nutzen jetzt beide
+  denselben Wert und dieselbe Formel.
+- Zwei tote CSS-Selektoren entfernt (`.odw-quality-score-number`,
+  `.odw-quality-of-max`), Meta-Box-Summary auf ein klares Kopf-/Nebenzeilen-Layout
+  umgestellt.
+
+---
+
 ## [2.30.0] — 2026-07-30
 
 Aufgeräumtes Tab 1 und einheitliche Begriffe (Paket B, Teil 2 von 4).

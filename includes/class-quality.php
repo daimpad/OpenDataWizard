@@ -726,34 +726,45 @@ class ODW_Quality {
 			</p>
 
 			<div class="odw-quality-summary">
-				<div class="odw-quality-gauge-wrap">
-					<div class="odw-quality-gauge">
-						<div class="odw-quality-bar <?php echo esc_attr( $level_class ); ?>"
-							style="width: <?php echo esc_attr( (string) $percent ); ?>%"
-							role="progressbar"
-							aria-valuenow="<?php echo esc_attr( (string) $achieved ); ?>"
-							aria-valuemin="0"
-							aria-valuemax="<?php echo esc_attr( (string) $assessable ); ?>">
-						</div>
-					</div>
-					<span class="odw-quality-score-number">
-						<?php echo esc_html( sprintf( '%d / %d', $achieved, $assessable ) ); ?>
-						<?php
-						if ( $assessable !== $max ) {
-							echo ' <span class="odw-quality-of-max">' . esc_html(
-								sprintf(
-								/* translators: %d: MQA maximum score */
-									__( '(von max. %d)', 'open-data-wizard' ),
-									$max
-								)
-							) . '</span>';
-						}
-						?>
+				<div class="odw-quality-headline">
+					<span class="odw-quality-percent"><?php echo esc_html( sprintf( '%d %%', $percent ) ); ?></span>
+					<span class="odw-quality-level-badge <?php echo esc_attr( $level_class ); ?>">
+						<?php echo esc_html( $rating_label ); ?>
 					</span>
 				</div>
-				<span class="odw-quality-level-badge <?php echo esc_attr( $level_class ); ?>">
-					<?php echo esc_html( $rating_label ); ?>
-				</span>
+				<div class="odw-quality-gauge">
+					<div class="odw-quality-bar <?php echo esc_attr( $level_class ); ?>"
+						style="width: <?php echo esc_attr( (string) $percent ); ?>%"
+						role="progressbar"
+						aria-valuenow="<?php echo esc_attr( (string) $percent ); ?>"
+						aria-valuemin="0"
+						aria-valuemax="100">
+					</div>
+				</div>
+				<p class="odw-quality-rawscore description">
+					<?php
+					if ( $assessable !== $max ) {
+						echo esc_html(
+							sprintf(
+							/* translators: 1: achieved MQA points, 2: assessable MQA points, 3: MQA maximum */
+								__( 'MQA-Rohwert: %1$d / %2$d Punkte (von max. %3$d)', 'open-data-wizard' ),
+								$achieved,
+								$assessable,
+								$max
+							)
+						);
+					} else {
+						echo esc_html(
+							sprintf(
+							/* translators: 1: achieved MQA points, 2: assessable MQA points */
+								__( 'MQA-Rohwert: %1$d / %2$d Punkte', 'open-data-wizard' ),
+								$achieved,
+								$assessable
+							)
+						);
+					}
+					?>
+				</p>
 			</div>
 
 			<?php if ( $not_assessed > 0 ) : ?>

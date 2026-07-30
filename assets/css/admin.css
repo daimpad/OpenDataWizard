@@ -252,28 +252,39 @@
 
 /* Zusammenfassung: Balken + Score + Ampel-Badge */
 .odw-quality-summary {
-    display: flex;
-    align-items: center;
-    gap: 16px;
     padding: 12px 0 16px;
     border-bottom: 1px solid var(--odw-color-border);
     margin-bottom: 16px;
 }
 
-.odw-quality-gauge-wrap {
+/* Leitwert: großer Prozentwert + Stufen-Badge (B4). */
+.odw-quality-headline {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.odw-quality-percent {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--odw-color-text);
 }
 
 .odw-quality-gauge {
-    flex: 1;
-    max-width: 220px;
+    max-width: 320px;
     height: 10px;
     background: var(--odw-color-border);
     border-radius: 5px;
     overflow: hidden;
+}
+
+/* MQA-Rohwert nur als Nebenzeile. */
+.odw-quality-rawscore {
+    margin: 8px 0 0;
+    color: var(--odw-color-text-muted);
+    font-size: 12px;
 }
 
 .odw-quality-bar {
@@ -288,13 +299,6 @@
 .odw-quality-bar.odw-quality--medium { background: var(--odw-color-quality-medium-dot); }
 .odw-quality-bar.odw-quality--low    { background: var(--odw-color-quality-low-dot); }
 .odw-quality-bar.odw-quality--unknown { background: var(--odw-color-border); }
-
-.odw-quality-score-number {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--odw-color-text);
-    white-space: nowrap;
-}
 
 .odw-quality-level-badge {
     display: inline-block;
@@ -359,12 +363,6 @@
     float: right;
     font-weight: 400;
     color: var(--odw-color-text-muted);
-}
-
-.odw-quality-of-max {
-    font-weight: 400;
-    color: var(--odw-color-text-muted);
-    font-size: 12px;
 }
 
 /* Footer */
