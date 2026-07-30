@@ -199,7 +199,7 @@ class ODW_Rest_API {
 		if ( ! empty( $theme ) ) {
 			$meta_query[] = array(
 				'key'   => '_odw_theme',
-				'value' => $theme,
+				'value' => class_exists( 'ODW_Fields' ) ? ODW_Fields::resolve_theme_uri( $theme ) : $theme,
 			);
 		}
 

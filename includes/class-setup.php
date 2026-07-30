@@ -88,7 +88,7 @@ class ODW_Setup {
 		delete_transient( self::REDIRECT_OPTION );
 
 		// Skip during bulk plugin activation, AJAX, or for users without access.
-		if ( wp_doing_ajax() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( wp_doing_ajax() || isset( $_GET['activate-multi'] ) || ! current_user_can( 'manage_open_data' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 

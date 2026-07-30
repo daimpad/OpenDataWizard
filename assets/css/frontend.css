@@ -83,9 +83,9 @@
     line-height: 1.5;
 }
 
-.odw-badge--format  { background: #e7f0fd; color: #1c4e80; }
-.odw-badge--size    { background: #e6f4ea; color: #1a7f37; }
-.odw-badge--license { background: #fdf3e2; color: #8a5a00; }
+.odw-badge--format  { background: #e7f0fd; color: #17416b; }
+.odw-badge--size    { background: #e6f4ea; color: #0f5323; }
+.odw-badge--license { background: #fdf3e2; color: #7a4f00; }
 
 /* --- Accordion mit allen Metadatenfeldern --- */
 .odw-download-card__details {

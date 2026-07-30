@@ -7,6 +7,39 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.28.0] — 2026-07-30
+
+UX- und Konsistenz-Verbesserungen (Teil 2 des Audit-Nachgangs).
+
+### 💅 Changed / Fixed
+- **Keine rohen URIs mehr im UI:** Thema, Sprache, Aktualisierungsfrequenz, Zugriffsrechte und
+  CESSDA-Themenfeld werden in der Listenspalte und der Frontend-Card als **lesbares Label** angezeigt
+  (statt der EU-URI). Der REST-Filter `?theme=` akzeptiert weiterhin URI, Code (`SOCI`) oder Label.
+- **Qualitäts-Balken zeigt die richtigen Ampelfarben** (CSS-Klassen-Mismatch behoben).
+- **Deutsche Repeater-Beschriftungen:** „Übersetzung(en)" bzw. „Distribution(en)" statt „Entry" via
+  `setup_labels()`.
+- **Einstiegsseite** ist jetzt auch für Redakteure sichtbar (`manage_open_data` statt `manage_options`).
+- **Änderungsdatum** ist als automatisch/schreibgeschützt gekennzeichnet (wird bei jedem Speichern gesetzt).
+- **Dateigröße-Widget** verändert gespeicherte Byte-Werte nicht mehr beim bloßen Öffnen der Seite.
+- **Format-Ableitung beim Upload** ist case-/trennzeichen-tolerant (`GEOJSON` → `GeoJSON`, `jsonld` →
+  `JSON-LD`) und speichert den kanonischen Format-Key.
+- **Batch-Import:** Schlagworte werden bei Komma- ODER Zeilentrennung korrekt in mehrere `dcat:keyword`
+  aufgeteilt; das `theme`-Feld (Code/Label) wird zur EU-URI aufgelöst; die Seite siezt jetzt durchgängig.
+- **Lizenz-Schnellauswahl** um **DL-DE BY 2.0** und **DL-DE Zero 2.0** ergänzt (inkl. Klartext-Erklärung).
+- **Tab-Navigation-Accessibility:** Tooltips per **Escape** schließbar, größere Klickfläche, sichtbarer
+  Fokusring; Frontend-Größen-Badge abgedunkelt (besserer Kontrast).
+- **Einstellungen:** „Herausgebende Organisation" in die Sektion „Standardwerte" verschoben.
+- Toter CSS-Selektor entfernt.
+
+### 🌍 i18n
+- **Vollständige englische Übersetzung:** 19 zuvor fehlende Strings ergänzt (u. a. Datenatlas-Block,
+  neues Zugriffs-URL-Label, CESSDA-Label) — `en_US` ist jetzt lückenlos (systematisch per Tokenizer geprüft).
+
+### ✅ Tests
+- Neue Tests für `resolve_theme_uri()`, `resolve_label()`, `resolve_format_key()`. Gesamt: 175.
+
+---
+
 ## [2.27.0] — 2026-07-30
 
 Sicherheits- und Bugfix-Release nach einem umfassenden Audit (Security, Funktion, UX).

@@ -127,12 +127,8 @@
    Required field indicators
    ========================================================================= */
 
-.cf-field--required > label::after,
-.cf-field--required > .cf-field__label::after {
-    content: ' *';
-    color: var(--odw-color-error);
-    font-weight: 700;
-}
+/* Carbon Fields rendert das Pflicht-Sternchen selbst (cf-field__asterisk);
+   eine eigene ::after-Regel wäre wirkungslos und wurde daher entfernt. */
 
 /* =========================================================================
    JSON-LD Preview
@@ -286,9 +282,12 @@
     transition: width 0.4s ease;
 }
 
-.odw-quality-bar--high   { background: var(--odw-color-quality-high-dot); }
-.odw-quality-bar--medium { background: var(--odw-color-quality-medium-dot); }
-.odw-quality-bar--low    { background: var(--odw-color-quality-low-dot); }
+/* Der Balken erhält die Level-Klasse odw-quality--<level> (nicht -bar--). Die
+   höhere Spezifität hier gewinnt gegen die blassen Badge-Hintergründe. */
+.odw-quality-bar.odw-quality--high   { background: var(--odw-color-quality-high-dot); }
+.odw-quality-bar.odw-quality--medium { background: var(--odw-color-quality-medium-dot); }
+.odw-quality-bar.odw-quality--low    { background: var(--odw-color-quality-low-dot); }
+.odw-quality-bar.odw-quality--unknown { background: var(--odw-color-border); }
 
 .odw-quality-score-number {
     font-size: 14px;
@@ -701,14 +700,14 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
 	padding: 0;
 	border: 1px solid var( --odw-color-primary, #2271b1 );
 	border-radius: 50%;
 	background: var( --odw-color-primary-bg, #fff );
 	color: var( --odw-color-primary, #2271b1 );
-	font-size: 11px;
+	font-size: 12px;
 	font-style: italic;
 	font-weight: 700;
 	font-family: Georgia, "Times New Roman", serif;
@@ -720,7 +719,12 @@
 .odw-help-tip:focus {
 	background: var( --odw-color-primary, #2271b1 );
 	color: #fff;
-	outline: none;
+}
+
+/* Sichtbaren Fokusring erhalten (WCAG 2.4.7) — Farbinversion allein genügt nicht. */
+.odw-help-tip:focus-visible {
+	outline: 2px solid var( --odw-color-primary, #2271b1 );
+	outline-offset: 2px;
 }
 
 .odw-help-pop {

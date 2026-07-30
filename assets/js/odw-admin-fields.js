@@ -393,7 +393,10 @@
 				}
 				numberInput.value = parseFloat( displayVal.toFixed( 2 ) );
 				unitSelect.value  = displayUnit;
-				updateBacking();
+				// Bewusst KEIN updateBacking() hier: Das würde den exakt
+				// gespeicherten Byte-Wert durch den auf 2 Nachkommastellen
+				// gerundeten Anzeigewert ersetzen (Drift bei jedem Seitenaufruf).
+				// Der Backing-Wert wird erst bei echter Nutzereingabe aktualisiert.
 			}
 		}
 	}
@@ -440,15 +443,33 @@
 			return;
 		}
 		document.body.dataset.odwTipDocBound = '1';
+
+		function closeTip( wrap, refocus ) {
+			wrap.classList.remove( 'is-open' );
+			var b = wrap.querySelector( '.odw-help-tip' );
+			if ( b ) {
+				b.setAttribute( 'aria-expanded', 'false' );
+				if ( refocus ) {
+					b.focus();
+				}
+			}
+		}
+
 		document.addEventListener( 'click', function ( e ) {
 			document.querySelectorAll( '.odw-help-tip-wrap.is-open' ).forEach( function ( w ) {
 				if ( ! w.contains( e.target ) ) {
-					w.classList.remove( 'is-open' );
-					var b = w.querySelector( '.odw-help-tip' );
-					if ( b ) {
-						b.setAttribute( 'aria-expanded', 'false' );
-					}
+					closeTip( w, false );
 				}
+			} );
+		} );
+
+		// WCAG 1.4.13: geöffnete Tooltips per Escape schließbar machen.
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key !== 'Escape' && e.key !== 'Esc' ) {
+				return;
+			}
+			document.querySelectorAll( '.odw-help-tip-wrap.is-open' ).forEach( function ( w ) {
+				closeTip( w, true );
 			} );
 		} );
 	}

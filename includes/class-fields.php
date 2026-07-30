@@ -94,6 +94,12 @@ class ODW_Fields {
 
 					Field::make( 'complex', 'odw_title_translations', __( 'Titel in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
+						->setup_labels(
+							array(
+								'singular_name' => __( 'Übersetzung', 'open-data-wizard' ),
+								'plural_name'   => __( 'Übersetzungen', 'open-data-wizard' ),
+							)
+						)
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
@@ -109,6 +115,12 @@ class ODW_Fields {
 
 					Field::make( 'complex', 'odw_description_translations', __( 'Beschreibung in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
+						->setup_labels(
+							array(
+								'singular_name' => __( 'Übersetzung', 'open-data-wizard' ),
+								'plural_name'   => __( 'Übersetzungen', 'open-data-wizard' ),
+							)
+						)
 						->add_fields(
 							array(
 								Field::make( 'select', 'language', __( 'Sprache', 'open-data-wizard' ) )
@@ -136,11 +148,17 @@ class ODW_Fields {
 
 					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Stichworten finde ich diese Daten?', 'open-data-wizard' ) )
 						->set_rows( 3 )
-						->set_attribute( 'placeholder', __( 'z.B. Umwelt', 'open-data-wizard' ) )
-						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( 'Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung', 'open-data-wizard' ) ),
+						->set_attribute( 'placeholder', __( "Umwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) )
+						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) ),
 
 					Field::make( 'complex', 'odw_keyword_translations', __( 'Schlagworte in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
+						->setup_labels(
+							array(
+								'singular_name' => __( 'Übersetzung', 'open-data-wizard' ),
+								'plural_name'   => __( 'Übersetzungen', 'open-data-wizard' ),
+							)
+						)
 						->set_help_text( __( 'Optional: übersetzte Schlagworte je Sprache (dcat:keyword @language).', 'open-data-wizard' ) )
 						->add_fields(
 							array(
@@ -164,15 +182,16 @@ class ODW_Fields {
 						)
 						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_modified', __( 'Wann wurden diese Daten zuletzt aktualisiert?', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_modified', __( 'Zuletzt aktualisiert (automatisch)', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
+						->set_attribute( 'readOnly', true )
 						->set_picker_options(
 							array(
 								'dateFormat' => 'Y-m-d',
 								'locale'     => 'de',
 							)
 						)
-						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird bei jedem Speichern automatisch auf das heutige Datum gesetzt — eine manuelle Eingabe ist nicht nötig.', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -245,6 +264,12 @@ class ODW_Fields {
 					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
 						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
 						->set_collapsed( true )
+						->setup_labels(
+							array(
+								'singular_name' => __( 'Distribution', 'open-data-wizard' ),
+								'plural_name'   => __( 'Distributionen', 'open-data-wizard' ),
+							)
+						)
 						->add_fields(
 							array(
 								Field::make( 'text', 'access_url', __( 'Zugriffs-URL', 'open-data-wizard' ) )
@@ -777,6 +802,8 @@ class ODW_Fields {
 			'https://creativecommons.org/publicdomain/zero/1.0/' => __( 'CC0 1.0 — Gemeinfreiheit (keine Rechte vorbehalten)', 'open-data-wizard' ),
 			'https://creativecommons.org/licenses/by/4.0/' => __( 'CC BY 4.0 — Namensnennung', 'open-data-wizard' ),
 			'https://creativecommons.org/licenses/by-sa/4.0/' => __( 'CC BY-SA 4.0 — Namensnennung, Weitergabe unter gleichen Bedingungen', 'open-data-wizard' ),
+			'https://www.govdata.de/dl-de/by-2-0'          => __( 'Datenlizenz Deutschland — Namensnennung 2.0 (DL-DE BY)', 'open-data-wizard' ),
+			'https://www.govdata.de/dl-de/zero-2-0'        => __( 'Datenlizenz Deutschland — Zero 2.0 (DL-DE Zero)', 'open-data-wizard' ),
 			'sonstige'                                     => __( 'Sonstige Lizenz…', 'open-data-wizard' ),
 		);
 
@@ -794,6 +821,8 @@ class ODW_Fields {
 			'https://creativecommons.org/publicdomain/zero/1.0/' => __( 'Die Daten sind gemeinfrei. Sie dürfen ohne Einschränkungen und ohne Namensnennung kopiert, verändert und – auch kommerziell – weiterverwendet werden.', 'open-data-wizard' ),
 			'https://creativecommons.org/licenses/by/4.0/' => __( 'Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle (Namensnennung) angegeben wird.', 'open-data-wizard' ),
 			'https://creativecommons.org/licenses/by-sa/4.0/' => __( 'Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden.', 'open-data-wizard' ),
+			'https://www.govdata.de/dl-de/by-2-0'          => __( 'Amtliche Datenlizenz Deutschland. Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle genannt wird (Namensnennung).', 'open-data-wizard' ),
+			'https://www.govdata.de/dl-de/zero-2-0'        => __( 'Amtliche Datenlizenz Deutschland ohne Namensnennung. Die Daten dürfen ohne Einschränkungen und ohne Quellenangabe – auch kommerziell – weiterverwendet werden.', 'open-data-wizard' ),
 		);
 
 		return (array) apply_filters( 'odw_license_descriptions', $descriptions );
@@ -857,6 +886,81 @@ class ODW_Fields {
 		$extended = self::load_license_list();
 
 		return $extended[ $uri ] ?? $uri;
+	}
+
+	/**
+	 * Löst einen gespeicherten Vokabular-Wert (i. d. R. eine URI) zum lesbaren
+	 * Label auf. Fällt auf den Rohwert zurück, wenn keine Zuordnung existiert
+	 * (z. B. Freitext-Spatial oder eigene URIs).
+	 *
+	 * @param string $vocab Vokabular-Kennung (theme|language|periodicity|access_rights|cessda).
+	 * @param string $value Gespeicherter Wert.
+	 * @return string Lesbares Label oder der Rohwert.
+	 */
+	/**
+	 * Löst einen Themen-Wert (volle EU-URI, Code wie „SOCI" oder deutsches Label)
+	 * auf die gespeicherte EU-URI auf. Rohwert-Rückfall, wenn nichts passt.
+	 *
+	 * @param string $value Themen-Eingabe.
+	 * @return string EU-Themen-URI oder der Rohwert.
+	 */
+	public static function resolve_theme_uri( string $value ): string {
+		$value = trim( $value );
+		if ( '' === $value || preg_match( '#^https?://#i', $value ) ) {
+			return $value;
+		}
+
+		$base = 'http://publications.europa.eu/resource/authority/data-theme/';
+		foreach ( self::get_theme_options() as $uri => $label ) {
+			if ( '' === $uri ) {
+				continue;
+			}
+			if ( 0 === strcasecmp( str_replace( $base, '', $uri ), $value )
+				|| 0 === strcasecmp( (string) $label, $value )
+			) {
+				return $uri;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Löst einen gespeicherten Vokabular-Wert (i. d. R. eine URI) zum lesbaren
+	 * Label auf. Fällt auf den Rohwert zurück, wenn keine Zuordnung existiert
+	 * (z. B. Freitext-Spatial oder eigene URIs).
+	 *
+	 * @param string $vocab Vokabular-Kennung (theme|language|periodicity|access_rights|cessda).
+	 * @param string $value Gespeicherter Wert.
+	 * @return string Lesbares Label oder der Rohwert.
+	 */
+	public static function resolve_label( string $vocab, string $value ): string {
+		$value = trim( $value );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		switch ( $vocab ) {
+			case 'theme':
+				$map = self::get_theme_options();
+				break;
+			case 'language':
+				$map = self::get_language_options();
+				break;
+			case 'periodicity':
+				$map = self::get_periodicity_options();
+				break;
+			case 'access_rights':
+				$map = self::get_access_rights_options();
+				break;
+			case 'cessda':
+				$map = self::load_cessda_options();
+				break;
+			default:
+				$map = array();
+		}
+
+		return isset( $map[ $value ] ) && '' !== (string) $map[ $value ] ? (string) $map[ $value ] : $value;
 	}
 
 	/**
@@ -941,7 +1045,43 @@ class ODW_Fields {
 	 */
 	public static function get_format_meta( string $format ): array {
 		$list = self::load_format_list();
-		return $list[ $format ] ?? array();
+		if ( isset( $list[ $format ] ) ) {
+			return $list[ $format ];
+		}
+
+		$key = self::resolve_format_key( $format );
+		return '' !== $key ? $list[ $key ] : array();
+	}
+
+	/**
+	 * Ordnet eine (Datei-)Endung dem kanonischen Format-Key zu — case- und
+	 * trennzeichen-tolerant, damit z. B. „GEOJSON" → „GeoJSON" und
+	 * „JSONLD" → „JSON-LD" auflösen. Leerstring, wenn kein Format passt.
+	 *
+	 * @param string $format Roh-Endung/Format.
+	 * @return string Kanonischer Key aus dct-format-list.php oder ''.
+	 */
+	public static function resolve_format_key( string $format ): string {
+		$list = self::load_format_list();
+		if ( isset( $list[ $format ] ) ) {
+			return $format;
+		}
+
+		$normalize = static function ( string $s ): string {
+			return strtolower( (string) preg_replace( '/[^a-z0-9]/i', '', $s ) );
+		};
+		$needle    = $normalize( $format );
+		if ( '' === $needle ) {
+			return '';
+		}
+
+		foreach ( array_keys( $list ) as $key ) {
+			if ( $normalize( (string) $key ) === $needle ) {
+				return (string) $key;
+			}
+		}
+
+		return '';
 	}
 
 	/**

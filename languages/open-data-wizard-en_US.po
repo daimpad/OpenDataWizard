@@ -99,6 +99,15 @@ msgstr "As an ISO 8601 duration. Example: P1D (daily), PT1H (hourly)"
 msgid "Als Vorschaubild verwenden"
 msgstr "Use as featured image"
 
+msgid "Amtliche Datenlizenz Deutschland ohne Namensnennung. Die Daten dürfen ohne Einschränkungen und ohne Quellenangabe – auch kommerziell – weiterverwendet werden."
+msgstr "Official German data licence without attribution. The data may be reused without restrictions and without crediting the source — including commercially."
+
+msgid "Amtliche Datenlizenz Deutschland. Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle genannt wird (Namensnennung)."
+msgstr "Official German data licence. The data may be used, modified and shared freely — including commercially — provided the source is credited (attribution)."
+
+msgid "Auf dem Datenatlas Zivilgesellschaft veröffentlichen"
+msgstr "Publish on the Datenatlas Zivilgesellschaft"
+
 msgid "Auf welcher Verwaltungsebene wurden diese Daten erhoben?"
 msgstr "At which administrative level were these data collected?"
 
@@ -228,6 +237,9 @@ msgstr "Please enter the approximate file size and select the matching unit. 1 M
 msgid "Bitte wähle eine Datei aus."
 msgstr "Please select a file."
 
+msgid "Bitte wählen Sie eine Datei aus."
+msgstr "Please select a file."
+
 msgid "Bund (Federal)"
 msgstr "Federal"
 
@@ -245,6 +257,9 @@ msgstr "CC0 1.0 — Public Domain (no rights reserved)"
 
 msgid "CESSDA THEMENKLASSIFIKATION (cessda:topic)"
 msgstr "CESSDA TOPIC CLASSIFICATION (cessda:topic)"
+
+msgid "CESSDA THEMENKLASSIFIKATION (dct:subject)"
+msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
 
 msgid "CESSDA Themenklassifikation"
 msgstr "CESSDA Topic Classification"
@@ -347,6 +362,12 @@ msgstr "File size numeric value"
 
 msgid "Daten löschen"
 msgstr "Delete data"
+
+msgid "Datenlizenz Deutschland — Namensnennung 2.0 (DL-DE BY)"
+msgstr "Data licence Germany — Attribution 2.0 (DL-DE BY)"
+
+msgid "Datenlizenz Deutschland — Zero 2.0 (DL-DE Zero)"
+msgstr "Data licence Germany — Zero 2.0 (DL-DE Zero)"
 
 msgid "Datensatz"
 msgstr "Dataset"
@@ -455,6 +476,9 @@ msgstr "Distribution with access URL (dcat:accessURL)"
 
 msgid "Distribution — erweitert"
 msgstr "Distribution — advanced"
+
+msgid "Distributionen"
+msgstr "Distributions"
 
 msgid "Download-Datei (Mediathek)"
 msgstr "Download file (media library)"
@@ -569,6 +593,9 @@ msgstr "Drafts"
 
 msgid "Erdbeobachtung und Umwelt"
 msgstr "Earth observation and environment"
+
+msgid "Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch"
+msgstr "Add the link to your dataset or upload the file to the media library"
 
 msgid "Erste Schritte"
 msgstr "First Steps"
@@ -771,6 +798,9 @@ msgstr "Each distribution requires a license (dct:license)"
 msgid "Jeder Datensatz benötigt mindestens eine Distribution mit einer Zugriffs-URL (dcat:accessURL). Mehrere Distributionen (z.B. CSV + JSON) können hinzugefügt werden."
 msgstr "Each dataset requires at least one distribution with an access URL (dcat:accessURL). Multiple distributions (e.g. CSV + JSON) can be added."
 
+msgid "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung"
+msgstr "One keyword per line (do not separate with commas). Example:\nEnvironment\nWater\nAir pollution"
+
 msgid "Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung"
 msgstr "One keyword per line. Example: environment, water, air pollution"
 
@@ -957,6 +987,9 @@ msgstr "Meteorological"
 msgid "Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)"
 msgstr "At least one distribution with an access URL (dcat:accessURL)"
 
+msgid "Mit dem Batch-Import legen Sie mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Laden Sie eine CSV- oder JSON-Datei hoch, prüfen Sie in der Vorschau die erkannten Datensätze und importieren Sie die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass Sie sie vor der Veröffentlichung noch bearbeiten können. Nutzen Sie die Beispieldatei unten als Vorlage für den Aufbau."
+msgstr "Batch import lets you create several datasets at once instead of entering them one by one. Upload a CSV or JSON file, review the detected datasets in the preview and import the desired entries with one click. All imported datasets are created as drafts first, so you can edit them before publishing. Use the sample file below as a template."
+
 msgid "Mit dem Batch-Import legst du mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Lade eine CSV- oder JSON-Datei hoch, prüfe in der Vorschau die erkannten Datensätze und importiere die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass du sie vor der Veröffentlichung noch bearbeiten kannst. Nutze die Beispieldatei unten als Vorlage für den Aufbau."
 msgstr "With the batch import you create several datasets at once instead of entering them one by one. Upload a CSV or JSON file, check the detected datasets in the preview and import the desired entries with one click. All imported datasets are initially created as drafts, so you can still edit them before publishing. Use the sample file below as a template for the structure."
 
@@ -1056,6 +1089,9 @@ msgstr "Open data platforms can add this URL as a harvest source and collect the
 msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
 msgstr "Optionally an additional theme from the official EU theme list (supplements the category from tab 1)."
 
+msgid "Optional: Machen Sie diesen Datensatz zusätzlich auf dem Datenatlas Zivilgesellschaft auffindbar."
+msgstr "Optional: also make this dataset discoverable on the Datenatlas Zivilgesellschaft."
+
 msgid "Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz."
 msgstr "Optional: assign the dataset to a civil-society field of engagement from the ZiviZ vocabulary. Pick one from the list — the matching URI is used automatically. Example: Culture, Sports, Environmental and nature protection."
 
@@ -1067,6 +1103,9 @@ msgstr "Optional: translated keywords per language (dcat:keyword @language)."
 
 msgid "Optionale Angaben"
 msgstr "Optional details"
+
+msgid "Ordnen Sie den Datensatz einem oder mehreren Themenfeld nach CESSDA-Vokabular zu"
+msgstr "Assign the dataset to a topic from the CESSDA vocabulary"
 
 msgid "PFLEGENDE STELLE (dcatde:maintainer)"
 msgstr "MAINTAINER (dcatde:maintainer)"
@@ -1329,6 +1368,9 @@ msgstr "What type of dataset is this?"
 msgid "Umwelt"
 msgstr "Environment"
 
+msgid "Umwelt\nWasser\nLuftverschmutzung"
+msgstr "Environment\nWater\nAir pollution"
+
 msgid "Unbekannt"
 msgstr "Unknown"
 
@@ -1530,6 +1572,9 @@ msgstr "Welcome to the Open Data Wizard"
 msgid "Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22"
 msgstr "Updated automatically on every save. Example: 2026-04-22"
 
+msgid "Wird bei jedem Speichern automatisch auf das heutige Datum gesetzt — eine manuelle Eingabe ist nicht nötig."
+msgstr "Automatically set to today’s date on every save — no manual entry needed."
+
 msgid "Wird im Feld „Herausgebende Organisation\" neuer Datensätze vorausgefüllt."
 msgstr "Pre-filled in the “Publishing organization” field of new datasets."
 
@@ -1632,11 +1677,20 @@ msgstr "Access rights set (dct:accessRights)"
 msgid "Zugänglichkeit"
 msgstr "Accessibility"
 
+msgid "Zuletzt aktualisiert (automatisch)"
+msgstr "Last updated (automatic)"
+
+msgid "Zum Datenatlas Zivilgesellschaft"
+msgstr "Go to the Datenatlas Zivilgesellschaft"
+
 msgid "Zur Datensatzliste"
 msgstr "To the dataset list"
 
 msgid "Zusammenfassung"
 msgstr "Summary"
+
+msgid "Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei in der Box „Download-Datei (Mediathek)\" hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen."
+msgstr "Two ways — one is enough: enter the link to your file here OR upload the file in the “Download file (media library)” box. On upload the URL is filled in automatically on save; you can then leave this field empty."
 
 msgid "Zweijährlich"
 msgstr "Biennial"
@@ -1700,6 +1754,9 @@ msgstr "Translated title"
 
 msgid "Übersetzung"
 msgstr "Translation"
+
+msgid "Übersetzungen"
+msgstr "Translations"
 
 msgid "Übersetzungen (optional)"
 msgstr "Translations (optional)"
