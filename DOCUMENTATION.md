@@ -248,3 +248,17 @@ wp open-data-wizard cache clear
 | [WP_Mock](https://github.com/10up/wp_mock) | ^1.0 | WordPress-Stubs für Tests (dev) |
 | [PHPStan](https://phpstan.org/) + WordPress-Stubs | ^2.0 | Statische Analyse Level 6 (dev) |
 | [WPCS](https://github.com/WordPress/WordPress-Coding-Standards) | ^3.1 | Coding Standards (dev) |
+
+### Release bauen
+
+Ein installationsfertiges Plugin-ZIP (nur Laufzeit-Dateien inkl. Produktions-`vendor/` mit Carbon
+Fields, ohne Tests/Doku/Dev-Configs) erzeugt:
+
+```bash
+bin/build-release.sh
+# → dist/open-data-wizard-<version>.zip  (Version aus dem Plugin-Header)
+```
+
+Installation in WordPress: **Plugins → Installieren → Plugin hochladen**. Das Skript nutzt
+`composer install --no-dev`, entschlackt die Carbon-Fields-Dev-Dateien (die kompilierten
+`build/`-Assets bleiben erhalten) und legt das ZIP unter `dist/` ab (gitignored).
