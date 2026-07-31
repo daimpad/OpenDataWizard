@@ -28,7 +28,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (94 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (188 Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -57,6 +57,8 @@ open-data-wizard/
 │   ├── class-quality.php            # Qualitäts-Scoring (0-100)
 │   ├── class-admin.php              # Admin UI, Spalten, Intro-Seite
 │   ├── class-rest-api.php           # REST Endpoints (/catalog, /datasets/<id>, /delta)
+│   ├── class-rdf.php                # JSON-LD → Turtle Serializer (Harvest-Ausgabe)
+│   ├── class-field-reference.php    # Feld-Referenz-Generator (docs/FELD-REFERENZ.md)
 │   ├── class-settings.php           # Einstellungsseite
 │   ├── class-shortcode.php          # [odw_dataset id="123"] Frontend-Card
 │   ├── class-batch-import.php       # CSV/JSON Batch-Import (Parser + Importer)
@@ -77,7 +79,17 @@ open-data-wizard/
 │   ├── licenses.txt                # Lizenz-Liste (URI | Label)
 │   ├── dct-format-list.php         # Format-Mapping (MIME → DCAT-AP URI)
 │   ├── dcat-ap-fields.php          # Feld-Registry (Meta-Key, Label, Required + Schema-Metadaten)
+│   ├── field-catalog.php           # Feld-Katalog (Quelle für docs/FELD-REFERENZ.md)
+│   ├── mqa-metrics.php             # EU-MQA-Metriken (5 Dimensionen, 405 Punkte)
+│   ├── shacl/                      # Offizielle SHACL-Shapes (EU + GovData) — nur Referenz
 │   └── vocabularies/               # Lokal gebündelte Vokabulare (z.B. contributors.json)
+├── bin/
+│   ├── build-release.sh            # Baut das schlanke Plugin-ZIP (Allowlist + composer --no-dev)
+│   ├── generate-field-reference.php # Standalone-Generator für docs/FELD-REFERENZ.md
+│   └── compile-mo.py               # PO→MO-Compiler (ersetzt fehlendes msgfmt)
+├── docs/
+│   └── FELD-REFERENZ.md            # Generiert — nicht von Hand bearbeiten
+├── samples/                         # Beispieldateien für den Batch-Import (CSV/JSON)
 ├── tests/
 │   ├── test-fields.php             # ODW_Fields Methoden-Tests
 │   ├── test-fields-extended.php    # JSON-LD Builder Tests
@@ -132,6 +144,8 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Quality** | Qualitäts-Scoring & Caching | `calculate()`, `get_level()` |
 | **ODW_Admin** | Admin UI (Spalten, Intro-Seite, File-Upload Meta-Box) | `register_introduction_page()`, `render_column()`, `save_file_attachment()` |
 | **ODW_Rest_API** | REST Endpoints mit Transient-Caching | `get_catalog()`, `get_dataset()`, `get_delta()` |
+| **ODW_Rdf** | JSON-LD → Turtle (dependency-frei) für RDF-Harvester | `to_turtle()` |
+| **ODW_Field_Reference** | Erzeugt `docs/FELD-REFERENZ.md` aus `config/field-catalog.php` | `build()`, `write()`, `js_map()` |
 | **ODW_Settings** | Plugin-Einstellungsseite | `get()`, `filter_catalog_title()` |
 | **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
@@ -389,7 +403,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 
 #### Running Tests
 ```bash
-# Alle 94 Tests
+# Alle 188 Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -708,7 +722,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.5.1**
+Current: **v2.34.1**
 
 ---
 
@@ -731,16 +745,29 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Feld-Registry-Schema (v2.5.1):** `config/dcat-ap-fields.php` trägt deklarative Metadaten
   (`profile`, `tier`, `range`, `cardinality`, `entity`, `vocab`); abwärtskompatibel, durch
   `tests/test-registry-schema.php` abgesichert.
+- **Phase D — Mehrsprachige Literale (v2.2x):** `title`/`description`/`keyword` als
+  `@language`/`@value`, je Sprache über Übersetzungs-Repeater pflegbar.
+- **Phase E — Multi-Distribution:** wiederholbare Distributionen (`odw_extra_distributions`)
+  zusätzlich zur primären Distribution.
+- **Weitere DCAT-AP.de-Felder:** `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`,
+  `geocodingDescription` sowie Profi-UX („Erweiterte Angaben" in aufklappbaren Gruppen).
+- **UX-Paket B (v2.29.0–v2.32.0):** Pflichtfeld-Sternchen statt CF-`set_required` (Entwürfe bleiben
+  speicherbar), Fehlermeldungen mit Tab-Angabe + „Zum Feld springen", einheitliche Prozent-Anzeige
+  der Qualität, entschlacktes Tab 1, konsistente Begriffe („Thema"/„Schlagworte").
+- **Harvest-Endpoint für piveau/Civora (v2.33.0):** `/catalog?full=1` (vollständiger Katalog in einem
+  Dokument) + `&format=turtle` über den dependency-freien `ODW_Rdf`-Serializer; Admin-Box mit den
+  kopierfertigen URLs. Gegen die gebündelten SHACL-Shapes validiert (GovData DCAT-AP.de: konform).
+- **Reproduzierbare Abhängigkeiten (v2.34.0):** `vendor/` ist nicht mehr eingecheckt (siehe Quick Start).
 
 ### ☐ Noch offen / geplant
 
-- **Phase D — Mehrsprachige Literale:** Umstellung von `title`/`description`/`keyword` auf
-  `@language`/`@value` inkl. Datenmigration (WP-CLI) — Datenmodell-Änderung.
-- **Phase E — Multi-Distribution:** wiederholbare Distributionen (opt-in) statt der einen Distribution
-  pro Datensatz.
-- **Optional/künftig:** Profi-UX („Erweiterte Angaben" ausklappbar); weitere DCAT-AP.de-Felder
-  (`politicalGeocodingURI`, `legalBasis`, `qualityProcessURI`); weitere gebündelte Vokabulare
-  (`data-theme`, `access-right`, `language`); Registry-getriebenes Formular-/JSON-LD-Rendering.
+- **Content Negotiation vervollständigen:** Turtle auch für `/datasets/<id>`, Auswertung des
+  `Accept`-Headers, optional RDF/XML.
+- **Gutenberg-Block** für die Download-Card (Alternative zum Shortcode).
+- **Mehrsprachigkeit der Oberfläche** (WPML/Polylang) — das Datenmodell unterstützt Mehrsprachigkeit
+  bereits, die Integration fehlt.
+- **Optional/künftig:** weitere gebündelte Vokabulare (`access-right`, vollständige EU-Sprachliste);
+  Registry-getriebenes Formular-/JSON-LD-Rendering (Aufräumarbeit ohne sichtbaren Nutzen).
 
 > **Hinweis zu i18n:** Im aktuellen Container ist `msgfmt` nicht verfügbar. Die `.mo` wird daher per
 > gebündeltem, dependency-freiem PO→MO-Skript neu erzeugt:
@@ -831,6 +858,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.5.1 (Juni 2026)
+**Zuletzt aktualisiert**: Version 2.34.1 (Juli 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

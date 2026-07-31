@@ -1866,3 +1866,6 @@ msgstr "DCAT-AP.de · JSON-LD"
 
 msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall."
 msgstr "Tip: Before onboarding, validate the document against the official DCAT-AP SHACL validator (%s) and fix all violations. To onboard, send the Datenatlas team the chosen URL, the format, a desired catalog name and an update interval."
+
+msgid "Offene Daten, bereitgestellt von %s."
+msgstr "Open data provided by %s."

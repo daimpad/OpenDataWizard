@@ -149,6 +149,28 @@ class Test_ODW_Field_Catalog extends TestCase {
 	}
 
 	/**
+	 * Writing creates a missing target directory.
+	 *
+	 * A plugin installed from the release ZIP has no docs/ directory (the build
+	 * allowlist ships runtime files only), so `wp open-data-wizard docs` would
+	 * otherwise fail there with a misleading "could not be written" error.
+	 */
+	public function test_write_creates_missing_directory(): void {
+		$base   = sys_get_temp_dir() . '/odw-write-' . uniqid();
+		$target = $base . '/docs/FELD-REFERENZ.md';
+
+		$bytes = ODW_Field_Reference::write( $target );
+
+		$this->assertGreaterThan( 0, $bytes, 'write() should report written bytes' );
+		$this->assertFileExists( $target );
+
+		// Aufräumen.
+		unlink( $target );
+		rmdir( dirname( $target ) );
+		rmdir( $base );
+	}
+
+	/**
 	 * The committed docs/FELD-REFERENZ.md matches the generated output.
 	 *
 	 * Fails when the catalog changed but the doc was not regenerated

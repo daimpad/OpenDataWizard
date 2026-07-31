@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.32.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.34.1-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -347,7 +347,8 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Phase E: Multi-Distribution — wiederholbare Distributionen (opt-in)
 - [x] Phase 3 UX: Tooltip-Popups (ⓘ) und Live-Wizard-Vorschau (Tab 5)
 - [x] UX-Ausbau (Paket B, v2.29–2.32): Pflichtfeld-Sternchen + Publish-Validierung, Fehlermeldungen mit „Zum Feld springen", einheitliche Prozent-Qualitätsanzeige, entschlacktes Tab 1, konsistente Begriffe („Thema"/„Schlagworte"), Batch-Import im Admin-Design
-- [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
+- [x] Harvest-Endpoint für piveau/Civora: Voll-Katalog (`?full=1`) + **Turtle**-Serialisierung (v2.33.0)
+- [ ] Content Negotiation vervollständigen: Turtle auch für `/datasets/<id>`, Auswertung des `Accept`-Headers, optional RDF/XML
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
 

@@ -7,6 +7,35 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.34.1] — 2026-07-31
+
+Befunde aus einem Gesamt-Gegencheck (Funktion, UX, Code, i18n).
+
+### 🐛 Fixed
+- **`wp open-data-wizard docs` schlug auf jeder ZIP-Installation fehl.** Der Befehl schreibt nach
+  `docs/FELD-REFERENZ.md`, doch das Release-ZIP liefert (korrekterweise) kein `docs/`-Verzeichnis aus —
+  `file_put_contents()` scheiterte still und meldete nur „konnte nicht geschrieben werden".
+  `ODW_Field_Reference::write()` legt das Zielverzeichnis jetzt an (WordPress-unabhängig, damit der
+  Standalone-Generator weiter funktioniert). Durch einen Regressionstest abgesichert.
+- **Eine fehlende englische Übersetzung** ergänzt (`Offene Daten, bereitgestellt von %s.` — der in
+  v2.33.1 eingeführte Katalog-Beschreibungs-Fallback). `en_US` ist wieder lückenlos (620 Einträge,
+  per Tokenizer gegen den Quelltext geprüft).
+
+### 📄 Docs
+- **CLAUDE.md aktualisiert:** stand noch auf v2.5.1 und „94 Tests". Projektstruktur um `class-rdf.php`,
+  `class-field-reference.php`, `bin/`, `docs/`, `samples/` und die neuen `config/`-Dateien ergänzt;
+  Klassenübersicht um `ODW_Rdf` und `ODW_Field_Reference`; der Roadmap-Abschnitt führte Phase D und E
+  fälschlich noch als offen.
+- **README:** Version-Badge aktualisiert; die Roadmap weist den Harvest-Endpoint samt Turtle als
+  erledigt aus, offen bleibt die vollständige Content Negotiation (`Accept`-Header, `/datasets/<id>`).
+
+### ✅ Geprüft (ohne Befund)
+PHP-/JS-Syntax aller Dateien, Datei-Integrität (alle `require`- und Asset-Pfade existieren),
+Sprungziele und Pflichtfeld-Marker der neuen UX gegen die realen Feldnamen, Turtle-Ausgabe
+(valides RDF, GovData DCAT-AP.de `Conforms: True`), keine TODO/FIXME-Marker. 188 Tests grün.
+
+---
+
 ## [2.34.0] — 2026-07-31
 
 Reproduzierbare Abhängigkeiten: `vendor/` wird nicht mehr versioniert.

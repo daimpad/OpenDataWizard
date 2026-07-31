@@ -1484,3 +1484,6 @@ msgstr ""
 
 msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall."
 msgstr ""
+
+msgid "Offene Daten, bereitgestellt von %s."
+msgstr ""

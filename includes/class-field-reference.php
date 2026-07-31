@@ -160,6 +160,20 @@ class ODW_Field_Reference {
 	 * @return int Number of bytes written.
 	 */
 	public static function write( string $path ): int {
+		// Zielverzeichnis anlegen, falls es fehlt: In einer Plugin-Installation aus
+		// dem Release-ZIP existiert kein docs/ (die Allowlist in bin/build-release.sh
+		// liefert nur Laufzeit-Dateien aus) — ohne mkdir schlüge `wp open-data-wizard
+		// docs` dort mit einer irreführenden Meldung fehl.
+		$dir = dirname( $path );
+		if ( ! is_dir( $dir ) ) {
+			if ( function_exists( 'wp_mkdir_p' ) ) {
+				wp_mkdir_p( $dir );
+			} else {
+				// Standalone-Lauf (bin/generate-field-reference.php, ohne WordPress).
+				mkdir( $dir, 0755, true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
+			}
+		}
+
 		$bytes = file_put_contents( $path, self::build() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		return false === $bytes ? 0 : $bytes;
 	}
