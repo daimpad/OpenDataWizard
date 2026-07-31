@@ -967,12 +967,12 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * An unknown dct:format value carrying a scheme is routed through the shared
-	 * @id sanitiser (which hands it to esc_url_raw(), stripping javascript:/data:).
+	 * An unknown dct:format value carrying a scheme is sanitised.
 	 *
-	 * get_format_eu_uri() returns unknown formats verbatim, so without the
-	 * sanitiser a dangerous scheme would reach the public JSON-LD unchanged.
-	 * esc_url_raw() is mocked to a sentinel to prove the routing happens.
+	 * Such a value is routed through the shared identifier sanitiser, which hands
+	 * it to esc_url_raw() and thereby strips javascript:/data:. Without that step
+	 * a dangerous scheme would reach the public JSON-LD unchanged, because
+	 * get_format_eu_uri() returns unknown formats verbatim.
 	 */
 	public function test_build_distribution_format_id_is_sanitised(): void {
 		$this->load_fields();
@@ -1025,7 +1025,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * dcat:byteSize is emitted as an xsd:nonNegativeInteger typed literal.
+	 * The byte size is emitted as an xsd:nonNegativeInteger typed literal.
 	 *
 	 * DCAT-AP requires the typed literal; a bare number would serialise as
 	 * xsd:integer and fail SHACL validation.

@@ -298,7 +298,7 @@ class ODW_Rest_API {
 		// auf die WordPress-Seitenbeschreibung und schließlich einen generischen
 		// Satz zurückfallen, damit die Konformität gewahrt bleibt.
 		if ( '' === trim( $catalog_description ) ) {
-			$tagline = (string) get_bloginfo( 'description' );
+			$tagline             = (string) get_bloginfo( 'description' );
 			$catalog_description = '' !== trim( $tagline )
 				? $tagline
 				/* translators: %s: site name. */
