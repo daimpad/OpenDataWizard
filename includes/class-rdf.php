@@ -140,7 +140,17 @@ class ODW_Rdf {
 			if ( in_array( $key, self::SPECIAL_KEYS, true ) ) {
 				continue;
 			}
-			$parts[] = $key . ' ' . self::render_object( $value, $subjects, $seen );
+
+			$object = self::render_object( $value, $subjects, $seen );
+
+			// Eine leere Liste (z. B. ein Katalog ohne veröffentlichte Datensätze)
+			// liefert keinen Objektterm. Das Prädikat muss dann ganz entfallen —
+			// sonst entstünde "dcat:dataset ." und damit ungültiges Turtle.
+			if ( '' === $object ) {
+				continue;
+			}
+
+			$parts[] = $key . ' ' . $object;
 		}
 
 		return $parts;

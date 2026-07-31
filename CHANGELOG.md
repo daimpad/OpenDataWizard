@@ -7,6 +7,27 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.1] — 2026-07-31
+
+Fehler aus einem Robustheitstest der Turtle-Ausgabe.
+
+### 🐛 Fixed
+- **Ein leerer Katalog erzeugte ungültiges Turtle.** Ohne veröffentlichte Datensätze trägt das
+  Dokument `dcat:dataset => []`; der Serializer gab daraus `dcat:dataset .` aus — ein Prädikat
+  ohne Objekt, das **jeder RDF-Parser zurückweist**. Betroffen war damit genau der Fall einer
+  frischen Installation (oder wenn alle Datensätze noch Entwürfe sind): Ein Harvester hätte beim
+  ersten Abruf einen Syntaxfehler erhalten. Leere Werte lassen das Prädikat jetzt vollständig
+  entfallen. Durch einen Regressionstest abgesichert (ohne den Fix nachweislich rot).
+
+### ✅ Geprüft (ohne Befund)
+Robustheitstest der Turtle-Ausgabe mit gezielt unangenehmen Eingaben: Anführungszeichen,
+Backslashes, Zeilenumbrüche, Tabs, Steuerzeichen, Unicode/Emoji, ein **Turtle-Injektions-Versuch**,
+IRIs mit Sonderzeichen, 50-KB-Strings und verschachtelte Knoten — alle Ausgaben sind von `rdflib`
+parsebar, die Injektion wird sauber escaped (keine eingeschleusten Triples).
+Zusätzlich: JSON-LD- und Turtle-Ausgabe desselben Katalogs sind **graph-isomorph** (68 Triples),
+der Serializer ist damit unabhängig gegen den JSON-LD-Pfad verifiziert. Reguläre Ausgabe
+byte-identisch, weiterhin DCAT-AP.de-konform. 198 Tests grün.
+
 ## [2.35.0] — 2026-07-31
 
 Content Negotiation vervollständigt.
