@@ -294,6 +294,17 @@ class ODW_Rest_API {
 		 */
 		$catalog_description = (string) apply_filters( 'odw_catalog_description', '' );
 
+		// DCAT-AP verlangt dct:description am Katalog (min. 1). Ist keine gesetzt,
+		// auf die WordPress-Seitenbeschreibung und schließlich einen generischen
+		// Satz zurückfallen, damit die Konformität gewahrt bleibt.
+		if ( '' === trim( $catalog_description ) ) {
+			$tagline             = (string) get_bloginfo( 'description' );
+			$catalog_description = '' !== trim( $tagline )
+				? $tagline
+				/* translators: %s: site name. */
+				: sprintf( __( 'Offene Daten, bereitgestellt von %s.', 'open-data-wizard' ), get_bloginfo( 'name' ) );
+		}
+
 		$catalog = array(
 			'@context'      => self::JSONLD_CONTEXT,
 			'@id'           => rest_url( self::NAMESPACE . '/catalog' ),

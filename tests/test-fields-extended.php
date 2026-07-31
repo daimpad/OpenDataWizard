@@ -967,6 +967,96 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * An unknown dct:format value carrying a scheme is sanitised.
+	 *
+	 * Such a value is routed through the shared identifier sanitiser, which hands
+	 * it to esc_url_raw() and thereby strips javascript:/data:. Without that step
+	 * a dangerous scheme would reach the public JSON-LD unchanged, because
+	 * get_format_eu_uri() returns unknown formats verbatim.
+	 */
+	public function test_build_distribution_format_id_is_sanitised(): void {
+		$this->load_fields();
+
+		// Mirror the real esc_url_raw(): drop dangerous schemes, keep the rest.
+		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnUsing(
+			static function ( $url ) {
+				return preg_match( '#^(javascript|data|vbscript):#i', (string) $url ) ? '' : $url;
+			}
+		);
+
+		$node = odw_build_distribution_node(
+			array(
+				'access_url' => 'https://example.com/data.csv',
+				'format'     => 'javascript:alert(1)',
+			),
+			'de'
+		);
+
+		$this->assertIsArray( $node );
+		$this->assertSame( array( '@id' => '' ), $node['dct:format'] );
+		// The legitimate access URL is untouched.
+		$this->assertSame( 'https://example.com/data.csv', $node['dcat:accessURL']['@id'] );
+	}
+
+	/**
+	 * A legitimate EU file-type URI passes the @id sanitiser unchanged.
+	 */
+	public function test_build_distribution_format_id_keeps_eu_uri(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			126,
+			'odw_dataset',
+			array(
+				'odw_access_url' => 'https://example.com/data.csv',
+				'odw_format'     => 'CSV',
+				'odw_byte_size'  => '',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 126 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame(
+			array( '@id' => 'http://publications.europa.eu/resource/authority/file-type/CSV' ),
+			$dist['dct:format']
+		);
+	}
+
+	/**
+	 * The byte size is emitted as an xsd:nonNegativeInteger typed literal.
+	 *
+	 * DCAT-AP requires the typed literal; a bare number would serialise as
+	 * xsd:integer and fail SHACL validation.
+	 */
+	public function test_build_distribution_byte_size_is_typed_literal(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			124,
+			'odw_dataset',
+			array(
+				'odw_access_url' => 'https://example.com/data.csv',
+				'odw_format'     => 'CSV',
+				'odw_byte_size'  => '20480',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 124 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame(
+			array(
+				'@value' => '20480',
+				'@type'  => 'xsd:nonNegativeInteger',
+			),
+			$dist['dcat:byteSize']
+		);
+	}
+
+	/**
 	 * Distribution carries a license as dct:license @id.
 	 */
 	public function test_build_distribution_has_own_license(): void {
