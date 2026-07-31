@@ -162,9 +162,44 @@ GET https://deine-website.de/wp-json/datenatlas/v1/delta?since=<ISO8601>
 
 Diese URLs können bei einer Open-Data-Plattform als Harvest-Quelle eingetragen werden — einmalig, ohne weiteren Aufwand.
 
-**Catalog-Parameter:** `page`, `per_page`, `theme`, `license`, `format` (`jsonld` oder `json`)
+**Catalog-Parameter:** `page`, `per_page`, `theme`, `license`, `format` (`jsonld`, `json` oder `turtle`), `full`
 
 **Delta-Parameter:** `since` (erforderlich, ISO 8601), `page`, `per_page`, `format` — liefert nur Datensätze, die nach dem angegebenen Zeitstempel geändert wurden, plus Tombstones für gelöschte Datensätze
+
+### 🌾 Harvesting durch piveau/Civora (Datenatlas Zivilgesellschaft)
+
+Portale auf Basis von **piveau/Civora** — etwa der [Datenatlas Zivilgesellschaft](https://datenatlas-zivilgesellschaft.de) — holen Metadaten per **Pull-Harvesting** ab: Sie geben dem Betreiber **eine stabile URL**, unter der Ihr **kompletter Katalog als ein DCAT-AP.de-Dokument** liegt. Genau dafür bietet der Catalog-Endpoint einen **Voll-Modus**:
+
+```
+# Vollständiger Katalog als Turtle (empfohlen für RDF-Harvester)
+GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1&format=turtle   →  text/turtle
+
+# … oder als JSON-LD
+GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1                 →  application/ld+json
+```
+
+- **`full=1`** liefert **alle veröffentlichten Datensätze in einem Abruf** (ohne Paginierung) als `dcat:Catalog` → `dcat:Dataset` → `dcat:Distribution` — das Muster, das piveaus `importing-rdf`-Konnektor erwartet.
+- **`format=turtle`** serialisiert denselben Graphen als **Turtle** (`text/turtle`) — ohne externe RDF-Bibliothek. JSON-LD (`application/ld+json`) und `json` bleiben verfügbar.
+- Die Datensatz-URIs (`@id`) sind **über Releases stabil** (an die Post-ID gebunden), sodass Harvester Aktualisierungen/Löschungen korrekt zuordnen und keine Duplikate anlegen.
+
+Die fertigen Harvest-URLs zeigt das Plugin **kopierfertig unter _Datensätze → Einstellungen → Harvesting (piveau/Civora)_** an.
+
+#### So melden Sie den Katalog beim Datenatlas an
+1. **Vorab validieren** — das Dokument gegen den [EU-DCAT-AP-SHACL-Validator](https://www.itb.ec.europa.eu/shacl/dcat-ap/upload) **und** die [GovData-DCAT-AP.de-SHACL-Validation](https://github.com/GovDataOfficial/DCAT-AP.de-SHACL-Validation) prüfen; alle `sh:Violation` beheben (siehe [SHACL-Abschnitt](#-dcat-ap-validierung-shacl)).
+2. **Onboarding per E-Mail** — dem Datenatlas-Team **(a)** die gewählte URL, **(b)** die Serialisierung (Turtle/JSON-LD), **(c)** einen gewünschten Katalognamen und **(d)** ein Aktualisierungsintervall mitteilen. Einrichtung laut Datenatlas-Doku ca. 1–2 Wochen (Testläufe + Mapping).
+
+#### Vor der Anmeldung mit dem Betreiber (DKSR) zu klären
+1. **DCAT-AP-Version** — prüft Civora gegen DCAT-AP.de 2.0 oder 3.0 (bzw. reines DCAT-AP 3.0)?
+2. **Serialisierung/`inputFormat`** — Turtle, RDF/XML oder JSON-LD? Welcher `Content-Type`?
+3. **Identifier-Konvention** — Regeln für `dct:identifier`/Dataset-URIs (Idempotenz bei Updates)?
+4. **Delete-Semantik** — Vollabgleich (Datensatz verschwindet → gelöscht) oder explizites Statusfeld?
+5. **Paginierung** — ab welcher Katalogröße ist Hydra-Paginierung erwünscht?
+6. **Katalog-Ebene** — genau ein `dcat:Catalog` je Organisation? Wie wird der Katalogname/-slug festgelegt?
+7. **Domänenfelder** — sollen sozialwissenschaftliche Felder (CESSDA, GND) mit ausgeliefert werden?
+8. **Intervall & Monitoring** — welches Harvest-Intervall, und gibt es Zugang zu Job-/Fehlerberichten?
+9. **Pflichtfeld `dcat:theme`** — ist das EU-`data-theme`-Vokabular verpflichtend, und wie werden zivilgesellschaftliche Themen darauf gemappt?
+
+> **Push-API?** piveau bietet zwar einen API-Push (`PUT` mit `X-API-Key`), der Schlüssel liegt aber beim **Katalogbetreiber**, nicht beim Datenanbieter — und der Datenatlas dokumentiert keinen Anbieter-Push. Der richtige Weg für dieses Plugin ist daher der **Pull** über die obige Katalog-URL.
 
 ### ✅ DCAT-AP 3.0 Konformität
 Alle Ausgaben sind DCAT-AP 3.0 konform und in JSON-LD serialisiert.

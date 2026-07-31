@@ -166,6 +166,14 @@ class ODW_Settings {
 
 		add_settings_field( 'cache_ttl', __( 'Cache-Laufzeit (Sekunden)', 'open-data-wizard' ), array( self::class, 'field_cache_ttl' ), 'odw-settings', 'odw_section_api' );
 
+		// --- Harvesting (piveau/Civora) — reine Info-Sektion, keine Felder. ---
+		add_settings_section(
+			'odw_section_harvesting',
+			__( 'Harvesting (piveau/Civora)', 'open-data-wizard' ),
+			array( self::class, 'render_harvesting_info' ),
+			'odw-settings'
+		);
+
 		// --- Qualität (MQA) ---
 		add_settings_section(
 			'odw_section_quality',
@@ -185,6 +193,56 @@ class ODW_Settings {
 		);
 
 		add_settings_field( 'delete_on_uninstall', __( 'Daten löschen', 'open-data-wizard' ), array( self::class, 'field_delete_on_uninstall' ), 'odw-settings', 'odw_section_uninstall' );
+	}
+
+	// -------------------------------------------------------------------------
+	// Info-Sektionen
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Renders the harvesting info box: the stable, public catalog URLs an external
+	 * portal (piveau/Civora, e.g. the Datenatlas Zivilgesellschaft) can pull.
+	 */
+	public static function render_harvesting_info(): void {
+		$base   = rest_url( 'datenatlas/v1/catalog' );
+		$turtle = add_query_arg(
+			array(
+				'full'   => '1',
+				'format' => 'turtle',
+			),
+			$base
+		);
+		$jsonld = add_query_arg( array( 'full' => '1' ), $base );
+
+		echo '<p class="description" style="max-width: 780px;">';
+		echo esc_html__( 'Externe Portale wie piveau/Civora (z. B. der Datenatlas Zivilgesellschaft) holen Ihre Metadaten selbst ab („Pull-Harvesting"). Geben Sie dem Betreiber dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf.', 'open-data-wizard' );
+		echo '</p>';
+
+		self::render_harvest_url_row( __( 'DCAT-AP.de · Turtle (empfohlen)', 'open-data-wizard' ), (string) $turtle );
+		self::render_harvest_url_row( __( 'DCAT-AP.de · JSON-LD', 'open-data-wizard' ), (string) $jsonld );
+
+		echo '<p class="description" style="max-width: 780px; margin-top: 10px;">';
+		printf(
+			/* translators: %s: URL of the EU SHACL validator. */
+			esc_html__( 'Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall.', 'open-data-wizard' ),
+			'https://www.itb.ec.europa.eu/shacl/dcat-ap/upload'
+		);
+		echo '</p>';
+	}
+
+	/**
+	 * Renders one read-only, copyable harvest-URL row.
+	 *
+	 * @param string $label Label for the URL.
+	 * @param string $url   The harvest URL.
+	 */
+	private static function render_harvest_url_row( string $label, string $url ): void {
+		echo '<p style="margin: 6px 0;"><strong>' . esc_html( $label ) . '</strong><br>';
+		printf(
+			'<input type="text" class="regular-text code" readonly value="%s" onclick="this.select();" style="width: 100%%; max-width: 780px;">',
+			esc_attr( esc_url( $url ) )
+		);
+		echo '</p>';
 	}
 
 	// -------------------------------------------------------------------------

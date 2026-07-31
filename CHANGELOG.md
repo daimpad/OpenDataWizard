@@ -7,6 +7,30 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.33.0] — 2026-07-31
+
+Bereitstellung für Metadaten-Harvesting durch piveau/Civora (z. B. Datenatlas Zivilgesellschaft).
+
+### ✨ Added
+- **Voll-Katalog-Endpoint (`?full=1`):** Der Catalog-Endpoint liefert auf Wunsch **alle
+  veröffentlichten Datensätze in einem Abruf** (ohne Paginierung) als ein `dcat:Catalog`
+  → `dcat:Dataset` → `dcat:Distribution` — der Bereitstellungspunkt, den piveaus
+  `importing-rdf`-Konnektor erwartet. Der Katalog trägt ein stabiles `@id` und `foaf:homepage`.
+- **Turtle-Serialisierung (`?format=turtle`):** Neuer dependency-freier JSON-LD→Turtle-Serializer
+  (`includes/class-rdf.php`) liefert denselben Graphen als `text/turtle` (roh, via
+  `rest_pre_serve_request`). `json`/`jsonld` bleiben verfügbar. Format-Alias `ttl` wird akzeptiert.
+- **Admin-Harvest-Box:** Unter _Datensätze → Einstellungen → Harvesting (piveau/Civora)_ werden die
+  kopierfertigen Katalog-URLs (Turtle + JSON-LD) samt Onboarding-Hinweis angezeigt.
+- **README-Abschnitt „Harvesting durch piveau/Civora"** inkl. Onboarding-Schritten und der 9 mit
+  dem Betreiber (DKSR) zu klärenden Fragen.
+
+### ✅ Tests
+- Neuer Turtle-Serializer durch `tests/test-rdf.php` abgesichert (Prefixe, benannte Subjekte,
+  Blank Nodes, Sprach-/Typ-Literale, IRI-Referenzen, Escaping); zusätzlich per `rdflib` als valides
+  RDF gegengeprüft. Gesamt: 184.
+
+---
+
 ## [2.32.0] — 2026-07-30
 
 Aufgeräumtes Onboarding, Batch-Import im Admin-Design + vollständige Übersetzung
