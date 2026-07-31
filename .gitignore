@@ -8,6 +8,12 @@ Thumbs.db
 *.log
 *.tmp
 
+# Composer-Abhängigkeiten: NICHT committen.
+# Sie werden reproduzierbar aus composer.lock erzeugt — lokal und in der CI per
+# `composer install`, für das Release-ZIP per bin/build-release.sh (--no-dev).
+# So kann vendor/ nicht mehr vom Lock abweichen (siehe CHANGELOG 2.34.0).
+/vendor/
+
 # Node (nur für E2E/Build; nicht committen)
 node_modules/
 

@@ -7,6 +7,32 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.34.0] — 2026-07-31
+
+Reproduzierbare Abhängigkeiten: `vendor/` wird nicht mehr versioniert.
+
+### 🧹 Changed
+- **`vendor/` ist nicht mehr im Repository** (4.487 Dateien entfernt). Die Abhängigkeiten werden
+  ausschließlich aus `composer.lock` erzeugt — lokal und in der CI per `composer install`, für das
+  Release-ZIP per `bin/build-release.sh` (`--no-dev`).
+  *Hintergrund:* Das eingecheckte `vendor/` hing dem Lock hinterher (Dependabot aktualisierte den
+  Lock auf WPCS 3.4.1, das committete `vendor/` blieb bei 3.3.0). Dadurch prüfte die CI strenger
+  als die lokale Umgebung — mit dieser Umstellung kann die Klasse von Abweichung nicht mehr
+  entstehen. Die **Laufzeit**-Abhängigkeit (Carbon Fields) war nie betroffen.
+- **Updates laufen über das Release-ZIP** (`Release Asset: true`). Der GitHub-Updater zieht damit
+  das gebaute, schlanke Plugin-Paket statt eines Quell-Tarballs — der zuvor auch PHPUnit, PHPStan
+  und WPCS auf Produktionsseiten gebracht hätte.
+
+### 📄 Docs
+- README und CLAUDE.md weisen `composer install` als Pflichtschritt aus und erklären, dass ein
+  vergessenes `composer install` die typische Ursache abweichender PHPCS-/PHPStan-Ergebnisse ist.
+
+> **Hinweis für Entwickler:innen:** Nach dem Update einmalig `composer install` ausführen.
+> Am Auslieferungsweg für Endnutzer:innen ändert sich nichts — das Release-ZIP wird weiterhin
+> automatisch gebaut und veröffentlicht.
+
+---
+
 ## [2.33.1] — 2026-07-31
 
 DCAT-AP-Konformitätsfixes aus der SHACL-Validierung des Harvest-Endpoints.

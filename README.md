@@ -271,8 +271,12 @@ Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich.
 ```bash
 git clone https://github.com/daimpad/OpenDataWizard.git
 cd OpenDataWizard
-composer install   # inkl. PHPStan, WPCS, PHPUnit
+composer install   # erzeugt vendor/ (Carbon Fields + PHPStan, WPCS, PHPUnit)
 ```
+
+> **`composer install` ist zwingend erforderlich.** `vendor/` ist bewusst **nicht** im Repository —
+> es wird reproduzierbar aus `composer.lock` erzeugt (lokal, in der CI und beim Release-Build).
+> Ohne diesen Schritt fehlt Carbon Fields und das Plugin zeigt einen entsprechenden Admin-Hinweis.
 
 Den Plugin-Ordner in eine lokale WordPress-Instanz einbinden (z.B. via [LocalWP](https://localwp.com)).
 
