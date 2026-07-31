@@ -1851,3 +1851,18 @@ msgstr "Who publishes this data? What is it about? Which theme is the dataset as
 
 msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
 msgstr "Required fields are marked with a red asterisk (*). You can always save an incomplete draft — only publishing requires all mandatory fields to be filled in. Every field has helpful examples that you can reveal via the ⓘ icon."
+
+msgid "Harvesting (piveau/Civora)"
+msgstr "Harvesting (piveau/Civora)"
+
+msgid "Externe Portale wie piveau/Civora (z. B. der Datenatlas Zivilgesellschaft) holen Ihre Metadaten selbst ab („Pull-Harvesting\"). Geben Sie dem Betreiber dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf."
+msgstr "External portals such as piveau/Civora (e.g. the Datenatlas Zivilgesellschaft) fetch your metadata themselves (\"pull harvesting\"). Give the operator one of the following stable, publicly reachable catalog URLs. They deliver the complete catalog as a DCAT-AP.de document in a single request."
+
+msgid "DCAT-AP.de · Turtle (empfohlen)"
+msgstr "DCAT-AP.de · Turtle (recommended)"
+
+msgid "DCAT-AP.de · JSON-LD"
+msgstr "DCAT-AP.de · JSON-LD"
+
+msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall."
+msgstr "Tip: Before onboarding, validate the document against the official DCAT-AP SHACL validator (%s) and fix all violations. To onboard, send the Datenatlas team the chosen URL, the format, a desired catalog name and an update interval."

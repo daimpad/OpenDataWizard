@@ -66,6 +66,9 @@ class ODW_Rest_API {
 	public static function init(): void {
 		add_action( 'rest_api_init', array( self::class, 'register_routes' ) );
 
+		// Turtle-Antworten roh ausliefern (WP würde sonst JSON-kodieren).
+		add_filter( 'rest_pre_serve_request', array( self::class, 'serve_raw_rdf' ), 10, 2 );
+
 		// Cache invalidieren wenn ein Datensatz gespeichert oder gelöscht wird.
 		add_action( 'save_post_odw_dataset', array( self::class, 'invalidate_cache' ) );
 		add_action( 'trashed_post', array( self::class, 'invalidate_cache_on_trash' ) );
@@ -79,6 +82,13 @@ class ODW_Rest_API {
 			'default'           => 'jsonld',
 			'sanitize_callback' => 'sanitize_text_field',
 			'validate_callback' => fn( $v ) => in_array( $v, array( 'json', 'jsonld' ), true ),
+		);
+
+		// Der Katalog kann zusätzlich Turtle liefern (für RDF-Harvester wie piveau/Civora).
+		$catalog_format_arg = array(
+			'default'           => 'jsonld',
+			'sanitize_callback' => 'sanitize_text_field',
+			'validate_callback' => fn( $v ) => in_array( $v, array( 'json', 'jsonld', 'turtle', 'ttl' ), true ),
 		);
 
 		$pagination_args = array(
@@ -112,7 +122,15 @@ class ODW_Rest_API {
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
 						),
-						'format'  => $format_arg,
+						// full=1 liefert den vollständigen Katalog (alle veröffentlichten
+						// Datensätze) in einem Dokument — der Bereitstellungspunkt für
+						// Pull-Harvesting durch piveau/Civora.
+						'full'    => array(
+							'default'           => 0,
+							'sanitize_callback' => 'absint',
+							'validate_callback' => fn( $v ) => in_array( (int) $v, array( 0, 1 ), true ),
+						),
+						'format'  => $catalog_format_arg,
 					)
 				),
 			)
@@ -166,22 +184,21 @@ class ODW_Rest_API {
 	 * @return WP_REST_Response|WP_Error Response on success, WP_Error on failure.
 	 */
 	public static function get_catalog( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$page     = (int) $request->get_param( 'page' );
-		$per_page = (int) $request->get_param( 'per_page' );
-		$theme    = (string) $request->get_param( 'theme' );
-		$license  = (string) $request->get_param( 'license' );
+		$format  = self::normalize_format( (string) $request->get_param( 'format' ) );
+		$full    = 1 === (int) $request->get_param( 'full' );
+		$theme   = (string) $request->get_param( 'theme' );
+		$license = (string) $request->get_param( 'license' );
 
-		$cache_key = 'odw_catalog_' . md5( serialize( array( $page, $per_page, $theme, $license ) ) );
+		// full=1: der gesamte Katalog in einem Dokument (Harvest-Endpoint) — keine
+		// Paginierung. Sonst die angeforderte Seite.
+		$page     = $full ? 1 : (int) $request->get_param( 'page' );
+		$per_page = $full ? -1 : (int) $request->get_param( 'per_page' );
+
+		$cache_key = 'odw_catalog_' . md5( serialize( array( $full ? 'full' : 'page', $page, $per_page, $theme, $license ) ) );
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
-			$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
-			$response     = new WP_REST_Response( $cached['body'], 200 );
-			$response->header( 'Content-Type', $content_type );
-			$response->header( 'X-WP-Total', (string) $cached['total'] );
-			$response->header( 'X-WP-TotalPages', (string) $cached['pages'] );
-			$response->header( 'X-ODW-Cache', 'HIT' );
-			return $response;
+			return self::catalog_response( $cached['body'], (int) $cached['total'], (int) $cached['pages'], $format, 'HIT' );
 		}
 
 		$query_args = array(
@@ -230,6 +247,36 @@ class ODW_Rest_API {
 			}
 		}
 
+		$catalog = self::build_catalog_document( $datasets );
+
+		// Only cache non-empty result pages. This prevents unauthenticated
+		// requests with arbitrary theme/license/page values (which yield no
+		// datasets) from creating unbounded distinct transients.
+		if ( ! empty( $datasets ) ) {
+			set_transient(
+				$cache_key,
+				array(
+					'body'  => $catalog,
+					'total' => $total,
+					'pages' => $pages,
+				),
+				self::get_cache_ttl()
+			);
+		}
+
+		return self::catalog_response( $catalog, $total, $pages, $format, 'MISS' );
+	}
+
+	/**
+	 * Assemble the dcat:Catalog JSON-LD document from the given dataset nodes.
+	 *
+	 * The catalog carries a stable `@id` (its own endpoint URL) and a homepage so
+	 * RDF harvesters can dereference and de-duplicate it across runs.
+	 *
+	 * @param array<int, array<string, mixed>> $datasets Dataset JSON-LD nodes.
+	 * @return array<string, mixed>
+	 */
+	private static function build_catalog_document( array $datasets ): array {
 		/**
 		 * Filters the catalog title in the JSON-LD output.
 		 *
@@ -249,43 +296,103 @@ class ODW_Rest_API {
 
 		$catalog = array(
 			'@context'      => self::JSONLD_CONTEXT,
+			'@id'           => rest_url( self::NAMESPACE . '/catalog' ),
 			'@type'         => 'dcat:Catalog',
-			'dct:title'     => $catalog_title,
+			'dct:title'     => array(
+				'@value'    => $catalog_title,
+				'@language' => 'de',
+			),
 			'dct:publisher' => array(
 				'@type'     => 'foaf:Organization',
 				'foaf:name' => get_bloginfo( 'name' ),
 			),
+			'foaf:homepage' => array( '@id' => home_url( '/' ) ),
 			'dcat:dataset'  => $datasets,
 		);
 
 		if ( '' !== $catalog_description ) {
-			$catalog['dct:description'] = $catalog_description;
-		}
-
-		// Only cache non-empty result pages. This prevents unauthenticated
-		// requests with arbitrary theme/license/page values (which yield no
-		// datasets) from creating unbounded distinct transients.
-		if ( ! empty( $datasets ) ) {
-			set_transient(
-				$cache_key,
-				array(
-					'body'  => $catalog,
-					'total' => $total,
-					'pages' => $pages,
-				),
-				self::get_cache_ttl()
+			$catalog['dct:description'] = array(
+				'@value'    => $catalog_description,
+				'@language' => 'de',
 			);
 		}
 
-		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
+		return $catalog;
+	}
 
-		$response = new WP_REST_Response( $catalog, 200 );
+	/**
+	 * Build the catalog response in the requested serialisation.
+	 *
+	 * For `turtle` the body is a raw Turtle string (served verbatim via
+	 * serve_raw_rdf()); otherwise it is the JSON-LD array.
+	 *
+	 * @param array<string, mixed> $catalog     Catalog JSON-LD document.
+	 * @param int                  $total       Total datasets.
+	 * @param int                  $pages       Total pages.
+	 * @param string               $format      Normalised format (turtle|json|jsonld).
+	 * @param string               $cache_state HIT or MISS.
+	 * @return WP_REST_Response
+	 */
+	private static function catalog_response( array $catalog, int $total, int $pages, string $format, string $cache_state ): WP_REST_Response {
+		if ( 'turtle' === $format ) {
+			$body         = ODW_Rdf::to_turtle( $catalog );
+			$content_type = 'text/turtle; charset=UTF-8';
+		} else {
+			$body         = $catalog;
+			$content_type = self::resolve_content_type( $format );
+		}
+
+		$response = new WP_REST_Response( $body, 200 );
 		$response->header( 'Content-Type', $content_type );
 		$response->header( 'X-WP-Total', (string) $total );
 		$response->header( 'X-WP-TotalPages', (string) $pages );
-		$response->header( 'X-ODW-Cache', 'MISS' );
+		$response->header( 'X-ODW-Cache', $cache_state );
 
 		return $response;
+	}
+
+	/**
+	 * Normalise a format parameter (maps the `ttl` alias to `turtle`).
+	 *
+	 * @param string $format Raw format parameter.
+	 * @return string
+	 */
+	private static function normalize_format( string $format ): string {
+		return 'ttl' === $format ? 'turtle' : $format;
+	}
+
+	/**
+	 * Serve RDF (Turtle) responses verbatim instead of JSON-encoding them.
+	 *
+	 * WordPress' REST server always JSON-encodes response data; for a Turtle
+	 * string body we short-circuit and echo it raw with the right Content-Type.
+	 *
+	 * @param bool             $served  Whether the request was already served.
+	 * @param WP_HTTP_Response $result  Response object (a WP_REST_Response for REST routes).
+	 * @return bool
+	 */
+	public static function serve_raw_rdf( $served, $result ): bool {
+		if ( $served || ! $result instanceof WP_REST_Response ) {
+			return (bool) $served;
+		}
+
+		$headers      = $result->get_headers();
+		$content_type = (string) ( $headers['Content-Type'] ?? '' );
+		$data         = $result->get_data();
+
+		if ( false === strpos( $content_type, 'text/turtle' ) || ! is_string( $data ) ) {
+			return (bool) $served;
+		}
+
+		if ( ! headers_sent() ) {
+			foreach ( $headers as $key => $value ) {
+				header( $key . ': ' . $value );
+			}
+			status_header( $result->get_status() );
+		}
+
+		echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw Turtle body, correct Content-Type set.
+		return true;
 	}
 
 	/**

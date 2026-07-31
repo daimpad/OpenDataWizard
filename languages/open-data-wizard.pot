@@ -1469,3 +1469,18 @@ msgstr ""
 
 msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
 msgstr ""
+
+msgid "Harvesting (piveau/Civora)"
+msgstr ""
+
+msgid "Externe Portale wie piveau/Civora (z. B. der Datenatlas Zivilgesellschaft) holen Ihre Metadaten selbst ab („Pull-Harvesting\"). Geben Sie dem Betreiber dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf."
+msgstr ""
+
+msgid "DCAT-AP.de · Turtle (empfohlen)"
+msgstr ""
+
+msgid "DCAT-AP.de · JSON-LD"
+msgstr ""
+
+msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall."
+msgstr ""
