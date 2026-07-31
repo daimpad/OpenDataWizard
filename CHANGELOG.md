@@ -116,7 +116,7 @@ DCAT-AP-Konformitätsfixes aus der SHACL-Validierung des Harvest-Endpoints.
 ### ✅ Validierung
 - Die mit dem echten Plugin-Code erzeugte Turtle-Ausgabe wurde per **pySHACL** gegen die
   gebündelten offiziellen Shapes geprüft: **GovData DCAT-AP.de → `Conforms: True`**;
-  **EU DCAT-AP 3.0 → `Conforms: True`** (mit geladenen Vokabularen, wie im echten MQA/piveau).
+  **EU DCAT-AP 3.0 → `Conforms: True`** (mit geladenen Vokabularen, wie in produktiven Harvestern).
   Die im Standalone-Lauf verbleibenden `sh:class`-Meldungen betreffen ausschließlich nicht
   mitgeladene EU-Vokabulare, nicht die Ausgabe des Plugins.
 - Neue Regressionstests für das `byteSize`-Literal und die `dct:format`-Sanitisierung. Gesamt: 187.
@@ -125,20 +125,19 @@ DCAT-AP-Konformitätsfixes aus der SHACL-Validierung des Harvest-Endpoints.
 
 ## [2.33.0] — 2026-07-31
 
-Bereitstellung für Metadaten-Harvesting durch piveau/Civora (z. B. Datenatlas Zivilgesellschaft).
+Bereitstellung für Metadaten-Harvesting durch externe Open-Data-Portale.
 
 ### ✨ Added
 - **Voll-Katalog-Endpoint (`?full=1`):** Der Catalog-Endpoint liefert auf Wunsch **alle
   veröffentlichten Datensätze in einem Abruf** (ohne Paginierung) als ein `dcat:Catalog`
-  → `dcat:Dataset` → `dcat:Distribution` — der Bereitstellungspunkt, den piveaus
-  `importing-rdf`-Konnektor erwartet. Der Katalog trägt ein stabiles `@id` und `foaf:homepage`.
+  → `dcat:Dataset` → `dcat:Distribution` — der Bereitstellungspunkt, den RDF-Harvester
+  erwarten. Der Katalog trägt ein stabiles `@id` und `foaf:homepage`.
 - **Turtle-Serialisierung (`?format=turtle`):** Neuer dependency-freier JSON-LD→Turtle-Serializer
   (`includes/class-rdf.php`) liefert denselben Graphen als `text/turtle` (roh, via
   `rest_pre_serve_request`). `json`/`jsonld` bleiben verfügbar. Format-Alias `ttl` wird akzeptiert.
-- **Admin-Harvest-Box:** Unter _Datensätze → Einstellungen → Harvesting (piveau/Civora)_ werden die
+- **Admin-Harvest-Box:** Unter _Datensätze → Einstellungen → Harvesting_ werden die
   kopierfertigen Katalog-URLs (Turtle + JSON-LD) samt Onboarding-Hinweis angezeigt.
-- **README-Abschnitt „Harvesting durch piveau/Civora"** inkl. Onboarding-Schritten und der 9 mit
-  dem Betreiber (DKSR) zu klärenden Fragen.
+- **README-Abschnitt „Harvesting durch externe Open-Data-Portale"** mit den Harvest-URLs.
 
 ### ✅ Tests
 - Neuer Turtle-Serializer durch `tests/test-rdf.php` abgesichert (Prefixe, benannte Subjekte,

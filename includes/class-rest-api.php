@@ -84,7 +84,7 @@ class ODW_Rest_API {
 			'validate_callback' => fn( $v ) => in_array( $v, array( 'json', 'jsonld' ), true ),
 		);
 
-		// Der Katalog kann zusätzlich Turtle liefern (für RDF-Harvester wie piveau/Civora).
+		// Der Katalog kann zusätzlich Turtle liefern (für RDF-Harvester).
 		$catalog_format_arg = array(
 			'default'           => 'jsonld',
 			'sanitize_callback' => 'sanitize_text_field',
@@ -124,7 +124,7 @@ class ODW_Rest_API {
 						),
 						// full=1 liefert den vollständigen Katalog (alle veröffentlichten
 						// Datensätze) in einem Dokument — der Bereitstellungspunkt für
-						// Pull-Harvesting durch piveau/Civora.
+						// Pull-Harvesting durch externe Open-Data-Portale.
 						'full'    => array(
 							'default'           => 0,
 							'sanitize_callback' => 'absint',

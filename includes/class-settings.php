@@ -166,10 +166,10 @@ class ODW_Settings {
 
 		add_settings_field( 'cache_ttl', __( 'Cache-Laufzeit (Sekunden)', 'open-data-wizard' ), array( self::class, 'field_cache_ttl' ), 'odw-settings', 'odw_section_api' );
 
-		// --- Harvesting (piveau/Civora) — reine Info-Sektion, keine Felder. ---
+		// --- Harvesting — reine Info-Sektion, keine Felder. ---
 		add_settings_section(
 			'odw_section_harvesting',
-			__( 'Harvesting (piveau/Civora)', 'open-data-wizard' ),
+			__( 'Harvesting', 'open-data-wizard' ),
 			array( self::class, 'render_harvesting_info' ),
 			'odw-settings'
 		);
@@ -201,7 +201,7 @@ class ODW_Settings {
 
 	/**
 	 * Renders the harvesting info box: the stable, public catalog URLs an external
-	 * portal (piveau/Civora, e.g. the Datenatlas Zivilgesellschaft) can pull.
+	 * Open-Data-Portal can pull.
 	 */
 	public static function render_harvesting_info(): void {
 		$base   = rest_url( 'datenatlas/v1/catalog' );
@@ -215,7 +215,7 @@ class ODW_Settings {
 		$jsonld = add_query_arg( array( 'full' => '1' ), $base );
 
 		echo '<p class="description" style="max-width: 780px;">';
-		echo esc_html__( 'Externe Portale wie piveau/Civora (z. B. der Datenatlas Zivilgesellschaft) holen Ihre Metadaten selbst ab („Pull-Harvesting"). Geben Sie dem Betreiber dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf.', 'open-data-wizard' );
+		echo esc_html__( 'Externe Open-Data-Portale holen Ihre Metadaten in der Regel selbst ab („Pull-Harvesting"). Geben Sie dem Portal dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf.', 'open-data-wizard' );
 		echo '</p>';
 
 		self::render_harvest_url_row( __( 'DCAT-AP.de · Turtle (empfohlen)', 'open-data-wizard' ), (string) $turtle );
@@ -224,7 +224,7 @@ class ODW_Settings {
 		echo '<p class="description" style="max-width: 780px; margin-top: 10px;">';
 		printf(
 			/* translators: %s: URL of the EU SHACL validator. */
-			esc_html__( 'Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße. Zur Anmeldung schicken Sie dem Datenatlas-Team die gewählte URL, das Format, einen gewünschten Katalognamen und ein Aktualisierungsintervall.', 'open-data-wizard' ),
+			esc_html__( 'Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße.', 'open-data-wizard' ),
 			'https://www.itb.ec.europa.eu/shacl/dcat-ap/upload'
 		);
 		echo '</p>';

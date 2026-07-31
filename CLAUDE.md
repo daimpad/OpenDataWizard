@@ -754,9 +754,9 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **UX-Paket B (v2.29.0–v2.32.0):** Pflichtfeld-Sternchen statt CF-`set_required` (Entwürfe bleiben
   speicherbar), Fehlermeldungen mit Tab-Angabe + „Zum Feld springen", einheitliche Prozent-Anzeige
   der Qualität, entschlacktes Tab 1, konsistente Begriffe („Thema"/„Schlagworte").
-- **Harvest-Endpoint für piveau/Civora (v2.33.0):** `/catalog?full=1` (vollständiger Katalog in einem
+- **Harvest-Endpoint (v2.33.0):** `/catalog?full=1` (vollständiger Katalog in einem
   Dokument) + `&format=turtle` über den dependency-freien `ODW_Rdf`-Serializer; Admin-Box mit den
-  kopierfertigen URLs. Gegen die gebündelten SHACL-Shapes validiert (GovData DCAT-AP.de: konform).
+  kopierfertigen URLs. Gegen die gebündelten SHACL-Shapes validiert (DCAT-AP.de: konform).
 - **Reproduzierbare Abhängigkeiten (v2.34.0):** `vendor/` ist nicht mehr eingecheckt (siehe Quick Start).
 
 ### ☐ Noch offen / geplant
