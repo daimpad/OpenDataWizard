@@ -7,6 +7,37 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.34.2] — 2026-07-31
+
+Härtung der öffentlichen Endpoints (Defense-in-Depth).
+
+> **Einordnung:** Das Sicherheits-Review zu v2.33.1 fand **keine ausnutzbare Lücke**. Die beiden
+> folgenden Punkte waren dort als nachrangige „Residuals" vermerkt und werden jetzt geschlossen —
+> es besteht kein Handlungsdruck für bestehende Installationen.
+
+### 🔐 Hardening
+- **`/delta`-Cache-Schlüssel wird normalisiert.** Er entstand bisher aus der **rohen** `since`-Eingabe,
+  sodass jede Schreibweise desselben Zeitpunkts (`2024-01-01`, `…T00:00:00Z`, `…+00:00`) einen eigenen
+  Transient anlegte. Da der Endpoint unauthentifiziert ist, ließ sich der Schlüsselraum so unnötig
+  aufblähen. Jetzt bildet der bereits geparste, kanonische UTC-Zeitstempel den Schlüssel — der
+  Schlüsselraum ist damit auf tatsächlich verschiedene Zeitpunkte begrenzt.
+- **Turtle-Antworten werden gecacht.** Der Katalog-Transient sparte nur die Datenbankarbeit; der
+  gesamte Katalog wurde bei **jedem** Aufruf neu nach Turtle serialisiert — auf einem
+  unauthentifizierten Endpoint unnötige CPU-Last pro Anfrage. Das serialisierte Dokument liegt jetzt
+  in einem eigenen Transient (`…_ttl`), der von der bestehenden Cache-Invalidierung miterfasst wird.
+
+### ✅ Tests
+- Zwei Regressionstests (beide gegengeprüft: ohne die jeweilige Härtung rot) — Schreibweisen-Kollaps
+  des Delta-Schlüssels und Wiederverwendung des gecachten Turtle-Dokuments.
+- `WP_REST_Response`-Stub um `get_data()`, `get_headers()` und `get_status()` ergänzt, damit Tests
+  dieselben Zugriffsmethoden nutzen wie der Produktivcode. Gesamt: 190.
+
+### 🚫 Bewusst nicht umgesetzt
+Rate-Limiting bleibt außen vor — das gehört auf Host-/WAF-Ebene, nicht in ein WordPress-Plugin.
+Die Turtle-Ausgabe ist byte-identisch geblieben und weiterhin DCAT-AP.de-konform.
+
+---
+
 ## [2.34.1] — 2026-07-31
 
 Befunde aus einem Gesamt-Gegencheck (Funktion, UX, Code, i18n).

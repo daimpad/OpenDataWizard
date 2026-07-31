@@ -198,7 +198,7 @@ class ODW_Rest_API {
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
-			return self::catalog_response( $cached['body'], (int) $cached['total'], (int) $cached['pages'], $format, 'HIT' );
+			return self::catalog_response( $cached['body'], (int) $cached['total'], (int) $cached['pages'], $format, 'HIT', $cache_key );
 		}
 
 		$query_args = array(
@@ -264,7 +264,7 @@ class ODW_Rest_API {
 			);
 		}
 
-		return self::catalog_response( $catalog, $total, $pages, $format, 'MISS' );
+		return self::catalog_response( $catalog, $total, $pages, $format, 'MISS', $cache_key );
 	}
 
 	/**
@@ -342,11 +342,29 @@ class ODW_Rest_API {
 	 * @param int                  $pages       Total pages.
 	 * @param string               $format      Normalised format (turtle|json|jsonld).
 	 * @param string               $cache_state HIT or MISS.
+	 * @param string               $cache_key   Transient key of the catalogue ('' disables Turtle caching).
 	 * @return WP_REST_Response
 	 */
-	private static function catalog_response( array $catalog, int $total, int $pages, string $format, string $cache_state ): WP_REST_Response {
+	private static function catalog_response( array $catalog, int $total, int $pages, string $format, string $cache_state, string $cache_key = '' ): WP_REST_Response {
 		if ( 'turtle' === $format ) {
-			$body         = ODW_Rdf::to_turtle( $catalog );
+			// Die serialisierte Turtle-Fassung separat cachen. Der Transient oben
+			// spart die teure DB-Arbeit, die Serialisierung des gesamten Katalogs
+			// lief bisher aber bei JEDEM Aufruf erneut — auf einem
+			// unauthentifizierten Endpoint unnötige CPU-Last pro Anfrage.
+			// Der Schlüssel beginnt mit 'odw_catalog_' und wird daher von der
+			// bestehenden Invalidierung (delete_catalog_transients) miterfasst.
+			$turtle_key = '' !== $cache_key ? $cache_key . '_ttl' : '';
+			$cached_ttl = '' !== $turtle_key ? get_transient( $turtle_key ) : false;
+
+			if ( is_string( $cached_ttl ) && '' !== $cached_ttl ) {
+				$body = $cached_ttl;
+			} else {
+				$body = ODW_Rdf::to_turtle( $catalog );
+				if ( '' !== $turtle_key ) {
+					set_transient( $turtle_key, $body, self::get_cache_ttl() );
+				}
+			}
+
 			$content_type = 'text/turtle; charset=UTF-8';
 		} else {
 			$body         = $catalog;
@@ -498,7 +516,13 @@ class ODW_Rest_API {
 			);
 		}
 
-		$cache_key = 'odw_delta_' . md5( serialize( array( $since, $page, $per_page ) ) );
+		// Den Cache-Schlüssel aus dem NORMALISIERTEN Zeitstempel bilden, nicht aus der
+		// rohen Eingabe: Sonst erzeugt jede Schreibweise desselben Zeitpunkts
+		// ("2024-01-01", "2024-01-01T00:00:00Z", "…+00:00") einen eigenen Transient.
+		// Der Endpoint ist unauthentifiziert — so bleibt der Schlüsselraum auf
+		// tatsächlich verschiedene Zeitpunkte begrenzt statt auf beliebige Varianten.
+		$since_canonical = $since_dt->format( DATE_ATOM );
+		$cache_key       = 'odw_delta_' . md5( serialize( array( $since_canonical, $page, $per_page ) ) );
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {

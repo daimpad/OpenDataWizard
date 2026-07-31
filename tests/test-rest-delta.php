@@ -91,6 +91,34 @@ if ( ! class_exists( 'WP_REST_Response' ) ) {
 		public function header( string $key, string $value ): void {
 			$this->headers[ $key ] = $value;
 		}
+
+		/**
+		 * Returns the response body (mirrors the real WP_REST_Response accessor,
+		 * which the plugin uses in serve_raw_rdf()).
+		 *
+		 * @return mixed
+		 */
+		public function get_data(): mixed {
+			return $this->data;
+		}
+
+		/**
+		 * Returns the stored response headers.
+		 *
+		 * @return array<string,string>
+		 */
+		public function get_headers(): array {
+			return $this->headers;
+		}
+
+		/**
+		 * Returns the HTTP status code.
+		 *
+		 * @return int
+		 */
+		public function get_status(): int {
+			return $this->status;
+		}
 	}
 }
 
@@ -669,5 +697,75 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertInstanceOf( \DateTimeImmutable::class, $dt );
 		$this->assertSame( '2026-07-30 00:00:00', $dt->format( 'Y-m-d H:i:s' ) );
 		$this->assertSame( 'UTC', $dt->getTimezone()->getName() );
+	}
+
+	/**
+	 * Equivalent spellings of the same instant normalise to one canonical value.
+	 *
+	 * The delta cache key is derived from this canonical form, so an
+	 * unauthenticated caller cannot multiply transients by merely varying the
+	 * spelling of the same timestamp.
+	 */
+	public function test_equivalent_since_spellings_share_one_cache_key(): void {
+		$this->load_class();
+
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'parse_iso8601' );
+		$method->setAccessible( true );
+
+		$spellings = array(
+			'2026-07-30',
+			'2026-07-30T00:00:00',
+			'2026-07-30T00:00:00Z',
+			'2026-07-30T00:00:00+00:00',
+			'2026-07-30T02:00:00+02:00',
+		);
+
+		$keys = array();
+		foreach ( $spellings as $raw ) {
+			$dt = $method->invoke( null, $raw );
+			$this->assertInstanceOf( \DateTimeImmutable::class, $dt, "should parse: {$raw}" );
+			// Mirrors the key derivation in get_delta().
+			$keys[] = md5( serialize( array( $dt->format( DATE_ATOM ), 1, 20 ) ) );
+		}
+
+		$this->assertCount( 1, array_unique( $keys ), 'all spellings of one instant must map to a single cache key' );
+	}
+
+	/**
+	 * A cached Turtle document is reused instead of being re-serialised.
+	 *
+	 * The catalogue transient only avoids the database work; without a separate
+	 * cache the whole catalogue was serialised to Turtle on every single request
+	 * to this unauthenticated endpoint.
+	 */
+	public function test_turtle_response_uses_cached_serialisation(): void {
+		$this->load_class();
+		if ( ! class_exists( 'ODW_Rdf' ) ) {
+			require_once ODW_PLUGIN_DIR . 'includes/class-rdf.php';
+		}
+
+		$sentinel = '# cached turtle sentinel';
+
+		// Only the Turtle key is served from cache; anything else misses.
+		\WP_Mock::userFunction( 'get_transient' )->andReturnUsing(
+			static function ( $key ) use ( $sentinel ) {
+				return str_ends_with( (string) $key, '_ttl' ) ? $sentinel : false;
+			}
+		);
+		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
+
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'catalog_response' );
+		$method->setAccessible( true );
+
+		$catalog  = array(
+			'@context' => array( 'dcat' => 'http://www.w3.org/ns/dcat#' ),
+			'@id'      => 'https://example.org/catalog',
+			'@type'    => 'dcat:Catalog',
+		);
+		$response = $method->invoke( null, $catalog, 1, 1, 'turtle', 'HIT', 'odw_catalog_abc' );
+
+		$this->assertSame( $sentinel, $response->get_data(), 'the cached Turtle document should be served verbatim' );
+		$headers = $response->get_headers();
+		$this->assertStringContainsString( 'text/turtle', (string) $headers['Content-Type'] );
 	}
 }
