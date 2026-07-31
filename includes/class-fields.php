@@ -1617,7 +1617,12 @@ function odw_build_distribution_node( array $d, string $lang_tag ): ?array {
 
 	$byte_size = (int) ( $d['byte_size'] ?? 0 );
 	if ( $byte_size > 0 ) {
-		$node['dcat:byteSize'] = $byte_size;
+		// DCAT-AP verlangt xsd:nonNegativeInteger — als typisiertes Literal ausgeben,
+		// nicht als blanke Zahl (die sonst als xsd:integer serialisiert würde).
+		$node['dcat:byteSize'] = array(
+			'@value' => (string) $byte_size,
+			'@type'  => 'xsd:nonNegativeInteger',
+		);
 	}
 
 	$license = (string) ( $d['license'] ?? '' );

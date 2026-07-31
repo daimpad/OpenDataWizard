@@ -967,6 +967,38 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * dcat:byteSize is emitted as an xsd:nonNegativeInteger typed literal.
+	 *
+	 * DCAT-AP requires the typed literal; a bare number would serialise as
+	 * xsd:integer and fail SHACL validation.
+	 */
+	public function test_build_distribution_byte_size_is_typed_literal(): void {
+		$this->load_fields();
+
+		$this->setup_jsonld_mocks(
+			124,
+			'odw_dataset',
+			array(
+				'odw_access_url' => 'https://example.com/data.csv',
+				'odw_format'     => 'CSV',
+				'odw_byte_size'  => '20480',
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 124 );
+
+		$this->assertIsArray( $result );
+		$dist = $result['dcat:distribution'][0];
+		$this->assertSame(
+			array(
+				'@value' => '20480',
+				'@type'  => 'xsd:nonNegativeInteger',
+			),
+			$dist['dcat:byteSize']
+		);
+	}
+
+	/**
 	 * Distribution carries a license as dct:license @id.
 	 */
 	public function test_build_distribution_has_own_license(): void {
