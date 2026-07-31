@@ -139,6 +139,28 @@ class Test_ODW_Rdf extends TestCase {
 	}
 
 	/**
+	 * An empty list must not emit a predicate without an object.
+	 *
+	 * A catalogue without published datasets carries `dcat:dataset => []`. Without
+	 * this guard the serialiser produced "dcat:dataset ." — invalid Turtle that
+	 * every RDF parser rejects, i.e. a fresh installation would serve a broken
+	 * harvest document.
+	 */
+	public function test_empty_list_does_not_emit_dangling_predicate(): void {
+		$doc = array(
+			'@context'     => array( 'dcat' => 'http://www.w3.org/ns/dcat#' ),
+			'@id'          => 'https://example.org/catalog',
+			'@type'        => 'dcat:Catalog',
+			'dcat:dataset' => array(),
+		);
+
+		$ttl = ODW_Rdf::to_turtle( $doc );
+
+		$this->assertStringNotContainsString( 'dcat:dataset', $ttl, 'the empty predicate must be dropped entirely' );
+		$this->assertStringContainsString( '<https://example.org/catalog> a dcat:Catalog .', $ttl );
+	}
+
+	/**
 	 * Multiple @type values render as a comma-separated list.
 	 */
 	public function test_multiple_types(): void {
