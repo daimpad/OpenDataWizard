@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.28.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.32.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -63,14 +63,14 @@ Das Wizard-Formular wurde vollständig überarbeitet, um es auch ohne DCAT-AP-Ke
 - **Klare Fragen statt technischer Begriffe:** Statt „Herausgebende Organisation (dct:publisher)" fragt das Plugin: „Wer gibt diese Daten heraus?"
 - **Hilfreiche Beispiele:** Jedes Feld hat konkrete, praxisnahe Beispiele
 - **Ursprüngliche Labels in Hilfetexten:** DCAT-AP Bezeichnungen und technische Details bleiben in den Hilfetexten sichtbar
-- **Validierungsmeldungen in Klartext:** Fehler zeigen verständliche Feldnamen statt technischer Ausdrücke
+- **Validierungsmeldungen in Klartext, mit Ort:** Wird die Veröffentlichung blockiert, nennt die Meldung den Tab und den verständlichen Feldnamen (der technische DCAT-AP-Begriff steht nur klein daneben) — ein Klick auf „Zum Feld springen" öffnet den passenden Tab und hebt das Feld hervor
 
 ### 🧭 Geführter Wizard
-Fünf-Tab-Assistent mit Pflichtfeldprüfung und praktischen Beispielen:
+Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem roten Sternchen (`*`) gekennzeichnet; als **Entwurf** lässt sich jederzeit unvollständig speichern — erst zum **Veröffentlichen** müssen alle Pflichtangaben ausgefüllt sein.
 
-1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „In welche Kategorie gehört dieser Datensatz?"
-2. **Inhaltliche Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Stichworten finde ich diese Daten?", Zeitangaben, CESSDA-Themenklassifikation
-3. **Datenbereitstellung** — Distributionen (wiederholbar): Zugriffs-URL, Format, Dateigröße, **Lizenz (Pflichtfeld pro Distribution)**, Zuschreibungstext
+1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „Welchem Thema ist dieser Datensatz zugeordnet?". Weniger häufige Angaben (CESSDA-Themenklassifikation, ZiviZ-Engagementfeld, Titel-/Beschreibungs-Übersetzungen) liegen in einer aufklappbaren Untergruppe am Tab-Ende.
+2. **Inhaltliche Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Schlagworten finde ich diese Daten?", Veröffentlichungs- und Änderungsdatum
+3. **Datenbereitstellung** — Zugriffs-URL **oder** Datei-Upload (Mediathek), Format, Dateigröße, **Lizenz (Pflicht je Distribution)**, Namensnennungstext; optional weitere Distributionen (wiederholbar)
 4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, Verantwortlichkeiten (Urheber/pflegende Stelle, GovData-Contributor-ID), High-Value-Datensatz (HVD) Kategorie
 5. **Vorschau** — generiertes JSON-LD live einsehen
 
@@ -104,7 +104,7 @@ Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-
 - `license` — Lizenz (short code wie `cc-by` oder volle URI)
 
 **Optionale Felder:**
-- `theme` — Datenkategorie (z.B. SOCI, ECON, EDUC)
+- `theme` — Thema (z.B. SOCI, ECON, EDUC)
 - `language` — Sprache (z.B. de, en)
 - `format` — Dateiformat (z.B. CSV, JSON, PDF)
 - `issued` — Veröffentlichungsdatum
@@ -117,7 +117,11 @@ Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-
 - **Limit:** Bis zu **2.000 Datensätze** pro Import (Schutz vor Speicher-/Timeout-Problemen).
 - **Sicherheit:** Zell-Inhalte, die als Tabellen-Formel interpretiert werden könnten (Beginn mit `=` `+` `@` `-`), werden beim Import automatisch neutralisiert; Datei-Typ wird anhand der echten Endung geprüft, nicht des Browser-MIME-Typs.
 
+Die Batch-Import-Seite ist vollständig ins WordPress-Admin-Design integriert (Standard-Buttons, dezente Icons).
+
 [📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
+
+### 📎 Datei-Upload (Mediathek)
 Sidebar-Meta-Box — vollständig unabhängig von Carbon Fields:
 - „Datei auswählen / hochladen"-Button öffnet den nativen WordPress Media Library Frame
 - Beim Speichern werden `_odw_file_size` (Bytes) und `_odw_file_format` (z.B. „CSV") automatisch berechnet
@@ -131,16 +135,16 @@ Untermenü unter *Datensätze → Einstellungen* mit vier Bereichen:
 - **Deinstallation** — Opt-in Checkbox für vollständige Datenlöschung
 
 ### 📊 Qualitätsindikatoren
-Automatische Metadaten-Vollständigkeitsprüfung nach DCAT-AP 3.0 (0–100 Punkte, 4 Stufen):
+Automatische Metadaten-Qualitätsprüfung nach der [EU-MQA-Methodik](https://data.europa.eu/mqa/methodology). Der Leitwert ist überall **Prozent + Stufe** (z. B. „72 % · Gut"):
 
-| Stufe | Punkte | Bedeutung |
+| Stufe | Prozent | Bedeutung |
 |---|---|---|
-| Perfekt | 100 | Alle Felder ausgefüllt |
-| Gut | 56–99 | Über Mindestanforderung |
-| Ausreichend | 55 | Genau alle Pflichtfelder |
-| Verbesserungsbedarf | < 55 | Pflichtfelder unvollständig |
+| Ausgezeichnet | ≥ 87 % | nahezu vollständig |
+| Gut | 55–86 % | über der Mindestanforderung |
+| Ausreichend | 30–54 % | Grundangaben vorhanden |
+| Mangelhaft | < 30 % | wesentliche Angaben fehlen |
 
-Berechnung nach jedem Speichern; Ergebnis in der Admin-Listenansicht und als Meta-Box sichtbar.
+Berechnung nach jedem Speichern. Die **Listenspalte** zeigt Prozent + Stufe; die **Qualitäts-Meta-Box** ergänzt den MQA-Rohwert (z. B. „54 / 259 Punkte, von max. 405") als Detailzeile.
 
 ### 📥 Download-Card Shortcode
 ```
@@ -209,7 +213,7 @@ Feld ggf. nachzubessern ist.
 
 #### Verhältnis zum Qualitäts-Score
 
-Die integrierten **Qualitätsindikatoren** (siehe unten) decken die „gesetzt?"- und Vokabular-Prüfungen der
+Die integrierten **Qualitätsindikatoren** (siehe oben) decken die „gesetzt?"- und Vokabular-Prüfungen der
 [EU-MQA-Methodik](https://data.europa.eu/mqa/methodology) bereits offline ab. Die MQA-Metrik
 **„DCAT-AP-Konformität" (SHACL, 30 Punkte)** wird davon bewusst **nicht** automatisch bewertet, sondern über
 die hier beschriebene externe Validierung geprüft (Ansatz „achievable max"). Details im
@@ -300,12 +304,13 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Phase A: Konformitäts-Korrekturen, `@context`-Namespaces und Feld-Registry-Schema (v2.3.2 / 2.4.0 / 2.5.1)
 - [x] Phase B: DCAT-AP.de-Felder (contributorID, originator, maintainer, availability) + generisches Vokabular-Autosuggest (v2.5)
 - [x] Phase C: HVD-Unterstützung (`dcatap:hvdCategory` + `applicableLegislation`) (v2.4)
-- [ ] Phase D: Mehrsprachige Literale (`@language`/`@value`) inkl. Migration (v2.5)
-- [ ] Phase E: Multi-Distribution (opt-in) (v2.6)
+- [x] Phase D: Mehrsprachige Literale (`@language`/`@value`) — Titel, Beschreibung und Schlagworte je Sprache
+- [x] Phase E: Multi-Distribution — wiederholbare Distributionen (opt-in)
+- [x] Phase 3 UX: Tooltip-Popups (ⓘ) und Live-Wizard-Vorschau (Tab 5)
+- [x] UX-Ausbau (Paket B, v2.29–2.32): Pflichtfeld-Sternchen + Publish-Validierung, Fehlermeldungen mit „Zum Feld springen", einheitliche Prozent-Qualitätsanzeige, entschlacktes Tab 1, konsistente Begriffe („Thema"/„Schlagworte"), Batch-Import im Admin-Design
 - [ ] Content Negotiation: Turtle / RDF-XML Ausgabe
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
-- [ ] Phase 3 UX: Tooltip-Popups, Wizard-Vorschau
 
 ---
 
