@@ -164,10 +164,14 @@ class Test_ODW_Field_Catalog extends TestCase {
 		$this->assertGreaterThan( 0, $bytes, 'write() should report written bytes' );
 		$this->assertFileExists( $target );
 
-		// Aufräumen.
+		// Aufräumen des Temp-Verzeichnisses. WP_Filesystem/wp_delete_file() stehen im
+		// Unit-Test (kein WordPress geladen) nicht zur Verfügung, daher direkte
+		// PHP-Aufrufe.
+		// phpcs:disable WordPress.WP.AlternativeFunctions -- test teardown, no WP runtime available.
 		unlink( $target );
 		rmdir( dirname( $target ) );
 		rmdir( $base );
+		// phpcs:enable WordPress.WP.AlternativeFunctions
 	}
 
 	/**
