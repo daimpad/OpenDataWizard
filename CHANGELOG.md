@@ -19,13 +19,21 @@ DCAT-AP-Konformitätsfixes aus der SHACL-Validierung des Harvest-Endpoints.
   Beschreibung. Ist in den Einstellungen keine gesetzt, wird jetzt auf den WordPress-Untertitel
   und schließlich auf einen generischen Satz zurückgefallen.
 
+### 🔐 Security (Härtung)
+- **`dct:format` wird jetzt ebenfalls über den gemeinsamen `@id`-Sanitizer geführt.** Es war der
+  einzige `@id`-Wert im JSON-LD-Builder, der `odw_sanitize_jsonld_id()` übersprang; da
+  `get_format_eu_uri()` unbekannte Formate unverändert zurückgibt, konnte ein per Batch-Import
+  eingeschleustes Schema (`javascript:`/`data:`) theoretisch bis in die öffentliche Ausgabe
+  gelangen. Ein umfassendes Sicherheits-Review (6 Prüfdimensionen mit adversarialer Verifikation)
+  fand **keine ausnutzbare Lücke** — dies ist reine Defense-in-Depth/Konsistenz.
+
 ### ✅ Validierung
 - Die mit dem echten Plugin-Code erzeugte Turtle-Ausgabe wurde per **pySHACL** gegen die
   gebündelten offiziellen Shapes geprüft: **GovData DCAT-AP.de → `Conforms: True`**;
   **EU DCAT-AP 3.0 → `Conforms: True`** (mit geladenen Vokabularen, wie im echten MQA/piveau).
   Die im Standalone-Lauf verbleibenden `sh:class`-Meldungen betreffen ausschließlich nicht
   mitgeladene EU-Vokabulare, nicht die Ausgabe des Plugins.
-- Neuer Regressionstest für das `byteSize`-Literal. Gesamt: 185.
+- Neue Regressionstests für das `byteSize`-Literal und die `dct:format`-Sanitisierung. Gesamt: 187.
 
 ---
 

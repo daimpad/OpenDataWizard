@@ -1612,7 +1612,10 @@ function odw_build_distribution_node( array $d, string $lang_tag ): ?array {
 
 	$format = (string) ( $d['format'] ?? '' );
 	if ( '' !== $format ) {
-		$node['dct:format'] = array( '@id' => ODW_Fields::get_format_eu_uri( $format ) );
+		// get_format_eu_uri() gibt unbekannte Formate unverändert zurück; wie bei
+		// allen anderen @id-Werten durch den gemeinsamen Sanitizer schicken, damit
+		// kein gefährliches Schema (javascript:/data:) ins öffentliche JSON-LD gelangt.
+		$node['dct:format'] = array( '@id' => odw_sanitize_jsonld_id( ODW_Fields::get_format_eu_uri( $format ) ) );
 	}
 
 	$byte_size = (int) ( $d['byte_size'] ?? 0 );
