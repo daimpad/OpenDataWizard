@@ -78,17 +78,13 @@ class ODW_Rest_API {
 	 * Registers the /catalog, /datasets/<id>, and /delta REST routes.
 	 */
 	public static function register_routes(): void {
+		// Leerer Default bedeutet bewusst "nicht angegeben": Dann entscheidet der
+		// Accept-Header (siehe resolve_format). Alle Endpunkte liefern dieselben
+		// Serialisierungen, damit Harvester sich nicht je Route umstellen müssen.
 		$format_arg = array(
-			'default'           => 'jsonld',
+			'default'           => '',
 			'sanitize_callback' => 'sanitize_text_field',
-			'validate_callback' => fn( $v ) => in_array( $v, array( 'json', 'jsonld' ), true ),
-		);
-
-		// Der Katalog kann zusätzlich Turtle liefern (für RDF-Harvester).
-		$catalog_format_arg = array(
-			'default'           => 'jsonld',
-			'sanitize_callback' => 'sanitize_text_field',
-			'validate_callback' => fn( $v ) => in_array( $v, array( 'json', 'jsonld', 'turtle', 'ttl' ), true ),
+			'validate_callback' => fn( $v ) => in_array( $v, array( '', 'json', 'jsonld', 'turtle', 'ttl' ), true ),
 		);
 
 		$pagination_args = array(
@@ -130,7 +126,7 @@ class ODW_Rest_API {
 							'sanitize_callback' => 'absint',
 							'validate_callback' => fn( $v ) => in_array( (int) $v, array( 0, 1 ), true ),
 						),
-						'format'  => $catalog_format_arg,
+						'format'  => $format_arg,
 					)
 				),
 			)
@@ -184,7 +180,7 @@ class ODW_Rest_API {
 	 * @return WP_REST_Response|WP_Error Response on success, WP_Error on failure.
 	 */
 	public static function get_catalog( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-		$format  = self::normalize_format( (string) $request->get_param( 'format' ) );
+		$format  = self::resolve_format( $request );
 		$full    = 1 === (int) $request->get_param( 'full' );
 		$theme   = (string) $request->get_param( 'theme' );
 		$license = (string) $request->get_param( 'license' );
@@ -346,33 +342,12 @@ class ODW_Rest_API {
 	 * @return WP_REST_Response
 	 */
 	private static function catalog_response( array $catalog, int $total, int $pages, string $format, string $cache_state, string $cache_key = '' ): WP_REST_Response {
-		if ( 'turtle' === $format ) {
-			// Die serialisierte Turtle-Fassung separat cachen. Der Transient oben
-			// spart die teure DB-Arbeit, die Serialisierung des gesamten Katalogs
-			// lief bisher aber bei JEDEM Aufruf erneut — auf einem
-			// unauthentifizierten Endpoint unnötige CPU-Last pro Anfrage.
-			// Der Schlüssel beginnt mit 'odw_catalog_' und wird daher von der
-			// bestehenden Invalidierung (delete_catalog_transients) miterfasst.
-			$turtle_key = '' !== $cache_key ? $cache_key . '_ttl' : '';
-			$cached_ttl = '' !== $turtle_key ? get_transient( $turtle_key ) : false;
-
-			if ( is_string( $cached_ttl ) && '' !== $cached_ttl ) {
-				$body = $cached_ttl;
-			} else {
-				$body = ODW_Rdf::to_turtle( $catalog );
-				if ( '' !== $turtle_key ) {
-					set_transient( $turtle_key, $body, self::get_cache_ttl() );
-				}
-			}
-
-			$content_type = 'text/turtle; charset=UTF-8';
-		} else {
-			$body         = $catalog;
-			$content_type = self::resolve_content_type( $format );
-		}
+		list( $body, $content_type ) = self::serialize_document( $catalog, $format, $cache_key );
 
 		$response = new WP_REST_Response( $body, 200 );
 		$response->header( 'Content-Type', $content_type );
+		// Die Antwort hängt vom Accept-Header ab — Caches müssen danach variieren.
+		$response->header( 'Vary', 'Accept' );
 		$response->header( 'X-WP-Total', (string) $total );
 		$response->header( 'X-WP-TotalPages', (string) $pages );
 		$response->header( 'X-ODW-Cache', $cache_state );
@@ -388,6 +363,167 @@ class ODW_Rest_API {
 	 */
 	private static function normalize_format( string $format ): string {
 		return 'ttl' === $format ? 'turtle' : $format;
+	}
+
+	/**
+	 * Media types this API can serialise, mapped to the internal format key.
+	 * `application/x-turtle` is the legacy alias some clients still send.
+	 */
+	private const MEDIA_TYPES = array(
+		'text/turtle'          => 'turtle',
+		'application/x-turtle' => 'turtle',
+		'application/ld+json'  => 'jsonld',
+		'application/json'     => 'json',
+	);
+
+	/**
+	 * Determine the response serialisation for a request.
+	 *
+	 * An explicit `?format=` always wins — it is unambiguous and stays
+	 * copy-pasteable. Only when it is absent is the `Accept` header evaluated,
+	 * so RDF harvesters that negotiate purely via headers are served correctly.
+	 *
+	 * @param WP_REST_Request $request REST request.
+	 * @return string One of turtle|json|jsonld.
+	 */
+	private static function resolve_format( WP_REST_Request $request ): string {
+		$explicit = self::normalize_format( (string) $request->get_param( 'format' ) );
+
+		if ( '' !== $explicit ) {
+			return $explicit;
+		}
+
+		return self::negotiate_accept( (string) $request->get_header( 'accept' ) );
+	}
+
+	/**
+	 * Pick the best supported serialisation from an Accept header.
+	 *
+	 * Honours q-values (RFC 9110); equal weights keep the client's order. An
+	 * unknown or wildcard-only Accept falls back to JSON-LD, the DCAT-AP default.
+	 *
+	 * @param string $accept Raw Accept header value.
+	 * @return string One of turtle|json|jsonld.
+	 */
+	private static function negotiate_accept( string $accept ): string {
+		$accept = trim( $accept );
+		if ( '' === $accept ) {
+			return 'jsonld';
+		}
+
+		$candidates = array();
+
+		foreach ( explode( ',', $accept ) as $index => $part ) {
+			$segments   = explode( ';', $part );
+			$media_type = strtolower( trim( array_shift( $segments ) ) );
+
+			if ( '' === $media_type ) {
+				continue;
+			}
+
+			$quality = 1.0;
+			foreach ( $segments as $segment ) {
+				$segment = trim( $segment );
+				if ( 0 === stripos( $segment, 'q=' ) ) {
+					$quality = (float) substr( $segment, 2 );
+				}
+			}
+
+			// q=0 means "not acceptable" — skip entirely.
+			if ( $quality <= 0 ) {
+				continue;
+			}
+
+			$candidates[] = array(
+				'type'    => $media_type,
+				'quality' => $quality,
+				'order'   => $index,
+			);
+		}
+
+		// Highest q first; ties keep the order in which the client listed them.
+		usort(
+			$candidates,
+			static function ( array $a, array $b ): int {
+				if ( $a['quality'] === $b['quality'] ) {
+					return $a['order'] <=> $b['order'];
+				}
+				return $b['quality'] <=> $a['quality'];
+			}
+		);
+
+		foreach ( $candidates as $candidate ) {
+			if ( isset( self::MEDIA_TYPES[ $candidate['type'] ] ) ) {
+				return self::MEDIA_TYPES[ $candidate['type'] ];
+			}
+			// */* (or a type wildcard) accepts our default.
+			if ( '*/*' === $candidate['type'] || 'application/*' === $candidate['type'] ) {
+				return 'jsonld';
+			}
+		}
+
+		return 'jsonld';
+	}
+
+	/**
+	 * Serialise a JSON-LD document into the requested representation.
+	 *
+	 * Turtle is cached separately: the document transient only avoids the
+	 * database work, while serialising the whole graph would otherwise run on
+	 * every request to these unauthenticated endpoints.
+	 *
+	 * @param array<string, mixed> $doc       JSON-LD document.
+	 * @param string               $format    Normalised format (turtle|json|jsonld).
+	 * @param string               $cache_key Transient key of the document ('' disables Turtle caching).
+	 * @return array{0: array<string, mixed>|string, 1: string} Body and Content-Type.
+	 */
+	private static function serialize_document( array $doc, string $format, string $cache_key = '' ): array {
+		if ( 'turtle' !== $format ) {
+			return array( $doc, self::resolve_content_type( $format ) );
+		}
+
+		$turtle_key = '' !== $cache_key ? $cache_key . '_ttl' : '';
+		$cached_ttl = '' !== $turtle_key ? get_transient( $turtle_key ) : false;
+
+		if ( is_string( $cached_ttl ) && '' !== $cached_ttl ) {
+			return array( $cached_ttl, 'text/turtle; charset=UTF-8' );
+		}
+
+		$body = ODW_Rdf::to_turtle( $doc );
+		if ( '' !== $turtle_key ) {
+			set_transient( $turtle_key, $body, self::get_cache_ttl() );
+		}
+
+		return array( $body, 'text/turtle; charset=UTF-8' );
+	}
+
+	/**
+	 * Build a REST response for a single JSON-LD document.
+	 *
+	 * Shared by /datasets/<id> and /delta so every endpoint negotiates and caches
+	 * identically.
+	 *
+	 * @param array<string, mixed> $doc         JSON-LD document.
+	 * @param string               $format      Normalised format (turtle|json|jsonld).
+	 * @param string               $cache_state HIT or MISS.
+	 * @param string               $cache_key   Transient key ('' disables Turtle caching).
+	 * @param array<string,string> $headers     Additional response headers.
+	 * @return WP_REST_Response
+	 */
+	private static function document_response( array $doc, string $format, string $cache_state, string $cache_key = '', array $headers = array() ): WP_REST_Response {
+		list( $body, $content_type ) = self::serialize_document( $doc, $format, $cache_key );
+
+		$response = new WP_REST_Response( $body, 200 );
+		$response->header( 'Content-Type', $content_type );
+		// Die Antwort hängt vom Accept-Header ab — Caches müssen danach variieren.
+		$response->header( 'Vary', 'Accept' );
+		$response->header( 'X-ODW-Cache', $cache_state );
+
+		foreach ( $headers as $key => $value ) {
+			$response->header( $key, $value );
+		}
+
+		return $response;
 	}
 
 	/**
@@ -431,6 +567,7 @@ class ODW_Rest_API {
 	 * @return WP_REST_Response|WP_Error Response on success, WP_Error on failure.
 	 */
 	public static function get_dataset( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$format  = self::resolve_format( $request );
 		$post_id = (int) $request->get_param( 'id' );
 		$post    = get_post( $post_id );
 
@@ -456,11 +593,7 @@ class ODW_Rest_API {
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
-			$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
-			$response     = new WP_REST_Response( $cached, 200 );
-			$response->header( 'Content-Type', $content_type );
-			$response->header( 'X-ODW-Cache', 'HIT' );
-			return $response;
+			return self::document_response( $cached, $format, 'HIT', $cache_key );
 		}
 
 		$dataset = odw_build_dataset_jsonld( $post_id );
@@ -480,13 +613,7 @@ class ODW_Rest_API {
 
 		set_transient( $cache_key, $body, self::get_cache_ttl() );
 
-		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
-
-		$response = new WP_REST_Response( $body, 200 );
-		$response->header( 'Content-Type', $content_type );
-		$response->header( 'X-ODW-Cache', 'MISS' );
-
-		return $response;
+		return self::document_response( $body, $format, 'MISS', $cache_key );
 	}
 
 	/**
@@ -503,6 +630,7 @@ class ODW_Rest_API {
 	 * @return WP_REST_Response|WP_Error Response on success, WP_Error on invalid input.
 	 */
 	public static function get_delta( WP_REST_Request $request ): WP_REST_Response|WP_Error {
+		$format   = self::resolve_format( $request );
 		$since    = (string) $request->get_param( 'since' );
 		$page     = (int) $request->get_param( 'page' );
 		$per_page = (int) $request->get_param( 'per_page' );
@@ -526,15 +654,18 @@ class ODW_Rest_API {
 		$cached          = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
-			$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
-			$response     = new WP_REST_Response( $cached['body'], 200 );
-			$response->header( 'Content-Type', $content_type );
-			$response->header( 'X-WP-Total', (string) $cached['total'] );
-			$response->header( 'X-WP-TotalPages', (string) $cached['pages'] );
-			$response->header( 'X-ODW-Delta-Since', $since );
-			$response->header( 'X-ODW-Generated-At', $cached['generated_at'] );
-			$response->header( 'X-ODW-Cache', 'HIT' );
-			return $response;
+			return self::document_response(
+				$cached['body'],
+				$format,
+				'HIT',
+				$cache_key,
+				array(
+					'X-WP-Total'         => (string) $cached['total'],
+					'X-WP-TotalPages'    => (string) $cached['pages'],
+					'X-ODW-Delta-Since'  => $since,
+					'X-ODW-Generated-At' => (string) $cached['generated_at'],
+				)
+			);
 		}
 
 		// Compare against UTC-stored post_modified_gmt to avoid timezone drift.
@@ -624,17 +755,18 @@ class ODW_Rest_API {
 			);
 		}
 
-		$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
-
-		$response = new WP_REST_Response( $body, 200 );
-		$response->header( 'Content-Type', $content_type );
-		$response->header( 'X-WP-Total', (string) $total );
-		$response->header( 'X-WP-TotalPages', (string) $pages );
-		$response->header( 'X-ODW-Delta-Since', $since );
-		$response->header( 'X-ODW-Generated-At', $generated_at );
-		$response->header( 'X-ODW-Cache', 'MISS' );
-
-		return $response;
+		return self::document_response(
+			$body,
+			$format,
+			'MISS',
+			$cache_key,
+			array(
+				'X-WP-Total'         => (string) $total,
+				'X-WP-TotalPages'    => (string) $pages,
+				'X-ODW-Delta-Since'  => $since,
+				'X-ODW-Generated-At' => $generated_at,
+			)
+		);
 	}
 
 	/**

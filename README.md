@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.34.2-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.35.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -164,6 +164,8 @@ Diese URLs können bei einer Open-Data-Plattform als Harvest-Quelle eingetragen 
 
 **Catalog-Parameter:** `page`, `per_page`, `theme`, `license`, `format` (`jsonld`, `json` oder `turtle`), `full`
 
+**Content Negotiation:** Alle drei Endpunkte liefern `jsonld`, `json` und `turtle`. Ohne `?format=` entscheidet der **`Accept`-Header** (mit q-Werten); ein explizites `?format=` hat immer Vorrang. Antworten tragen `Vary: Accept`.
+
 **Delta-Parameter:** `since` (erforderlich, ISO 8601), `page`, `per_page`, `format` — liefert nur Datensätze, die nach dem angegebenen Zeitstempel geändert wurden, plus Tombstones für gelöschte Datensätze
 
 ### 🌾 Harvesting durch externe Open-Data-Portale
@@ -179,7 +181,7 @@ GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1               
 ```
 
 - **`full=1`** liefert **alle veröffentlichten Datensätze in einem Abruf** (ohne Paginierung) als `dcat:Catalog` → `dcat:Dataset` → `dcat:Distribution` — das Muster, das RDF-Harvester erwarten.
-- **`format=turtle`** serialisiert denselben Graphen als **Turtle** (`text/turtle`) — ohne externe RDF-Bibliothek. JSON-LD (`application/ld+json`) und `json` bleiben verfügbar.
+- **`format=turtle`** serialisiert denselben Graphen als **Turtle** (`text/turtle`) — ohne externe RDF-Bibliothek. JSON-LD (`application/ld+json`) und `json` bleiben verfügbar. Harvester, die rein über Header aushandeln, senden stattdessen `Accept: text/turtle`.
 - Die Datensatz-URIs (`@id`) sind **über Releases stabil** (an die Post-ID gebunden), sodass Harvester Aktualisierungen/Löschungen korrekt zuordnen und keine Duplikate anlegen.
 
 Die fertigen Harvest-URLs zeigt das Plugin **kopierfertig unter _Datensätze → Einstellungen → Harvesting_** an.
@@ -331,7 +333,8 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Phase 3 UX: Tooltip-Popups (ⓘ) und Live-Wizard-Vorschau (Tab 5)
 - [x] UX-Ausbau (Paket B, v2.29–2.32): Pflichtfeld-Sternchen + Publish-Validierung, Fehlermeldungen mit „Zum Feld springen", einheitliche Prozent-Qualitätsanzeige, entschlacktes Tab 1, konsistente Begriffe („Thema"/„Schlagworte"), Batch-Import im Admin-Design
 - [x] Harvest-Endpoint: Voll-Katalog (`?full=1`) + **Turtle**-Serialisierung (v2.33.0)
-- [ ] Content Negotiation vervollständigen: Turtle auch für `/datasets/<id>`, Auswertung des `Accept`-Headers, optional RDF/XML
+- [x] Content Negotiation: Turtle für alle Endpunkte + Auswertung des `Accept`-Headers (v2.35.0)
+- [ ] Optional: RDF/XML als weitere Serialisierung
 - [ ] Gutenberg Block für die Download-Card
 - [ ] Mehrsprachigkeit (WPML/Polylang)
 

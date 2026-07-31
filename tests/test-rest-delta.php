@@ -44,6 +44,33 @@ if ( ! class_exists( 'WP_REST_Request' ) ) {
 		public function get_param( string $key ): mixed {
 			return $this->params[ $key ] ?? null;
 		}
+
+		/**
+		 * Stored request headers (lower-cased keys), as used by content negotiation.
+		 *
+		 * @var array<string,string>
+		 */
+		private array $headers = array();
+
+		/**
+		 * Sets a request header.
+		 *
+		 * @param string $key   Header name.
+		 * @param string $value Header value.
+		 */
+		public function set_header( string $key, string $value ): void {
+			$this->headers[ strtolower( $key ) ] = $value;
+		}
+
+		/**
+		 * Returns a request header, mirroring the real WP_REST_Request accessor.
+		 *
+		 * @param string $key Header name.
+		 * @return string|null Header value, or null when absent.
+		 */
+		public function get_header( string $key ): ?string {
+			return $this->headers[ strtolower( $key ) ] ?? null;
+		}
 	}
 }
 
@@ -768,5 +795,124 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertSame( $sentinel, $response->get_data(), 'the cached Turtle document should be served verbatim' );
 		$headers = $response->get_headers();
 		$this->assertStringContainsString( 'text/turtle', (string) $headers['Content-Type'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// Content Negotiation
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Invokes the private Accept-header negotiation.
+	 *
+	 * @param string $accept Raw Accept header value.
+	 * @return string Negotiated format key.
+	 */
+	private function negotiate( string $accept ): string {
+		$this->load_class();
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'negotiate_accept' );
+		$method->setAccessible( true );
+		return (string) $method->invoke( null, $accept );
+	}
+
+	/**
+	 * Known RDF media types map to their serialisation.
+	 */
+	public function test_accept_maps_known_media_types(): void {
+		$this->assertSame( 'turtle', $this->negotiate( 'text/turtle' ) );
+		$this->assertSame( 'turtle', $this->negotiate( 'application/x-turtle' ) );
+		$this->assertSame( 'jsonld', $this->negotiate( 'application/ld+json' ) );
+		$this->assertSame( 'json', $this->negotiate( 'application/json' ) );
+	}
+
+	/**
+	 * Quality values decide which representation wins.
+	 */
+	public function test_accept_honours_quality_values(): void {
+		$this->assertSame( 'turtle', $this->negotiate( 'application/ld+json;q=0.5, text/turtle;q=0.9' ) );
+		$this->assertSame( 'jsonld', $this->negotiate( 'text/turtle;q=0.2, application/ld+json;q=0.8' ) );
+	}
+
+	/**
+	 * With equal weights the client order decides.
+	 */
+	public function test_accept_ties_keep_client_order(): void {
+		$this->assertSame( 'turtle', $this->negotiate( 'text/turtle, application/ld+json' ) );
+		$this->assertSame( 'jsonld', $this->negotiate( 'application/ld+json, text/turtle' ) );
+	}
+
+	/**
+	 * A quality of zero marks a type as unacceptable and must be skipped.
+	 */
+	public function test_accept_skips_zero_quality(): void {
+		$this->assertSame( 'jsonld', $this->negotiate( 'text/turtle;q=0, application/ld+json' ) );
+	}
+
+	/**
+	 * Wildcards, unknown types and an empty header fall back to JSON-LD.
+	 */
+	public function test_accept_falls_back_to_jsonld(): void {
+		$this->assertSame( 'jsonld', $this->negotiate( '*/*' ) );
+		$this->assertSame( 'jsonld', $this->negotiate( 'text/html' ) );
+		$this->assertSame( 'jsonld', $this->negotiate( '' ) );
+		// Browser-style header: HTML first, then a wildcard — no RDF type offered.
+		$this->assertSame( 'jsonld', $this->negotiate( 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8' ) );
+	}
+
+	/**
+	 * An explicit ?format= always beats the Accept header — the URL stays
+	 * unambiguous and copy-pasteable.
+	 */
+	public function test_explicit_format_overrides_accept_header(): void {
+		$this->load_class();
+
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'resolve_format' );
+		$method->setAccessible( true );
+
+		$request = new WP_REST_Request();
+		$request->set_param( 'format', 'turtle' );
+		$request->set_header( 'Accept', 'application/ld+json' );
+		$this->assertSame( 'turtle', $method->invoke( null, $request ) );
+
+		// Without ?format= the header decides.
+		$header_only = new WP_REST_Request();
+		$header_only->set_param( 'format', '' );
+		$header_only->set_header( 'Accept', 'text/turtle' );
+		$this->assertSame( 'turtle', $method->invoke( null, $header_only ) );
+
+		// The `ttl` alias is normalised.
+		$alias = new WP_REST_Request();
+		$alias->set_param( 'format', 'ttl' );
+		$this->assertSame( 'turtle', $method->invoke( null, $alias ) );
+	}
+
+	/**
+	 * A single dataset can be served as Turtle, with Vary: Accept set so caches
+	 * do not hand a Turtle document to a JSON-LD client.
+	 */
+	public function test_dataset_document_can_be_served_as_turtle(): void {
+		$this->load_class();
+		if ( ! class_exists( 'ODW_Rdf' ) ) {
+			require_once ODW_PLUGIN_DIR . 'includes/class-rdf.php';
+		}
+
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
+		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
+
+		$method = new \ReflectionMethod( 'ODW_Rest_API', 'document_response' );
+		$method->setAccessible( true );
+
+		$doc = array(
+			'@context' => array( 'dcat' => 'http://www.w3.org/ns/dcat#' ),
+			'@id'      => 'https://example.org/datasets/1',
+			'@type'    => 'dcat:Dataset',
+		);
+
+		$response = $method->invoke( null, $doc, 'turtle', 'MISS', 'odw_dataset_1' );
+		$headers  = $response->get_headers();
+
+		$this->assertIsString( $response->get_data() );
+		$this->assertStringContainsString( '<https://example.org/datasets/1> a dcat:Dataset', $response->get_data() );
+		$this->assertStringContainsString( 'text/turtle', (string) $headers['Content-Type'] );
+		$this->assertSame( 'Accept', $headers['Vary'] );
 	}
 }

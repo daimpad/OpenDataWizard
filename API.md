@@ -22,6 +22,11 @@ https://your-site.com/wp-json/datenatlas/v1
 
 - **JSON-LD** (default): `application/ld+json`
 - **JSON**: `application/json` (set `format=json`)
+- **Turtle**: `text/turtle` (set `format=turtle`, alias `ttl`)
+
+All endpoints also perform **content negotiation**: when `format` is omitted, the
+`Accept` header decides (q-values honoured). An explicit `format=` always wins.
+Responses carry `Vary: Accept`.
 
 ---
 
@@ -46,7 +51,7 @@ curl -X GET "https://example.com/wp-json/datenatlas/v1/catalog" \
 | `per_page` | integer | 20 | Items per page (max: 100) |
 | `theme` | string | — | Filter by theme (e.g., `Bildung`, `Umwelt`) |
 | `license` | string | — | Filter by license (short code: `cc-by`, `cc0`, `odc-odbl` or full URI) |
-| `format` | string | `jsonld` | Response format: `jsonld` or `json` |
+| `format` | string | — | Response format: `jsonld`, `json` or `turtle`. Omit to negotiate via `Accept` (default `jsonld`). |
 
 #### Response Headers
 
@@ -142,7 +147,7 @@ curl -X GET "https://example.com/wp-json/datenatlas/v1/datasets/123" \
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `format` | string | `jsonld` | Response format: `jsonld` or `json` |
+| `format` | string | — | Response format: `jsonld`, `json` or `turtle`. Omit to negotiate via `Accept` (default `jsonld`). |
 
 #### Response Example
 
@@ -207,7 +212,7 @@ curl -X GET "https://example.com/wp-json/datenatlas/v1/delta?since=2026-05-27T00
 | `since` | string (ISO 8601) | ✓ Yes | Timestamp to retrieve changes since. Format: `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DD` |
 | `page` | integer | — | Page number (default: 1) |
 | `per_page` | integer | — | Items per page (default: 20, max: 100) |
-| `format` | string | — | Response format: `jsonld` or `json` (default: `jsonld`) |
+| `format` | string | — | Response format: `jsonld`, `json` or `turtle`. Omit to negotiate via `Accept` (default `jsonld`). |
 
 #### Valid ISO 8601 Formats
 

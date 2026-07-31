@@ -7,6 +7,43 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.0] — 2026-07-31
+
+Content Negotiation vervollständigt.
+
+### ✨ Added
+- **Turtle für alle Endpunkte.** `/datasets/<id>` und `/delta` liefern jetzt ebenfalls
+  `text/turtle` — bisher konnte das nur der Katalog. Damit muss ein RDF-Harvester nicht
+  je Route die Serialisierung wechseln.
+- **Auswertung des `Accept`-Headers.** Fehlt `?format=`, entscheidet der Header über die
+  Serialisierung: `text/turtle` (inkl. der Alt-Bezeichnung `application/x-turtle`),
+  `application/ld+json` und `application/json` werden erkannt. **q-Werte** nach RFC 9110
+  werden berücksichtigt, bei Gleichstand gilt die Reihenfolge des Clients, `q=0` schließt
+  einen Typ aus. Wildcards (`*/*`), unbekannte Typen und ein leerer Header fallen auf
+  JSON-LD zurück — der DCAT-AP-Standardfall.
+- **`Vary: Accept`** auf allen Antworten, damit zwischengeschaltete Caches nicht ein
+  Turtle-Dokument an einen JSON-LD-Client ausliefern.
+
+### 💡 Verhalten
+Ein explizites **`?format=` hat immer Vorrang** vor dem Header — die URL bleibt damit
+eindeutig und kopierbar. Der Alias `ttl` wird weiterhin auf `turtle` normalisiert.
+
+### 🔧 Technisch
+- Gemeinsame Helfer `resolve_format()`, `negotiate_accept()`, `serialize_document()` und
+  `document_response()`; alle drei Endpunkte nutzen jetzt denselben Pfad für Aushandlung,
+  Serialisierung und Turtle-Caching (bisher nur im Katalog).
+- Die Format-Argumente der Routen sind vereinheitlicht; ein leerer Default bedeutet
+  „nicht angegeben" und aktiviert die Header-Aushandlung.
+
+### ✅ Tests
+- Sieben neue Tests: Media-Type-Zuordnung, q-Werte, Gleichstand, `q=0`, Fallbacks
+  (inkl. browsertypischem Header), Vorrang von `?format=` sowie Turtle-Ausgabe eines
+  Einzeldatensatzes samt `Vary: Accept`.
+- `WP_REST_Request`-Stub um `get_header()`/`set_header()` ergänzt. Gesamt: **197**.
+- Gegenprobe: Ein Einzeldatensatz als Turtle ergibt valides RDF (per `rdflib` geprüft).
+
+---
+
 ## [2.34.2] — 2026-07-31
 
 Härtung der öffentlichen Endpoints (Defense-in-Depth).
