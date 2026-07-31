@@ -28,7 +28,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (190 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (197 Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -403,7 +403,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 
 #### Running Tests
 ```bash
-# Alle 190 Tests
+# Alle 197 Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -722,7 +722,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.34.2**
+Current: **v2.35.0**
 
 ---
 
@@ -758,11 +758,14 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
   Dokument) + `&format=turtle` über den dependency-freien `ODW_Rdf`-Serializer; Admin-Box mit den
   kopierfertigen URLs. Gegen die gebündelten SHACL-Shapes validiert (DCAT-AP.de: konform).
 - **Reproduzierbare Abhängigkeiten (v2.34.0):** `vendor/` ist nicht mehr eingecheckt (siehe Quick Start).
+- **Content Negotiation (v2.35.0):** Alle drei Endpunkte liefern `jsonld`/`json`/`turtle`; ohne
+  `?format=` entscheidet der `Accept`-Header (q-Werte, `Vary: Accept`). Explizites `?format=`
+  hat Vorrang.
 
 ### ☐ Noch offen / geplant
 
-- **Content Negotiation vervollständigen:** Turtle auch für `/datasets/<id>`, Auswertung des
-  `Accept`-Headers, optional RDF/XML.
+- **Optional: RDF/XML** als weitere Serialisierung (Turtle und JSON-LD decken die gängigen
+  Harvester bereits ab).
 - **Gutenberg-Block** für die Download-Card (Alternative zum Shortcode).
 - **Mehrsprachigkeit der Oberfläche** (WPML/Polylang) — das Datenmodell unterstützt Mehrsprachigkeit
   bereits, die Integration fehlt.
@@ -858,6 +861,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.34.2 (Juli 2026)
+**Zuletzt aktualisiert**: Version 2.35.0 (Juli 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
