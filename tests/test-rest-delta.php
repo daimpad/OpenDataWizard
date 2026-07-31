@@ -725,6 +725,7 @@ class Test_ODW_Rest_Delta extends TestCase {
 			$dt = $method->invoke( null, $raw );
 			$this->assertInstanceOf( \DateTimeImmutable::class, $dt, "should parse: {$raw}" );
 			// Mirrors the key derivation in get_delta().
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- mirrors the cache-key derivation under test.
 			$keys[] = md5( serialize( array( $dt->format( DATE_ATOM ), 1, 20 ) ) );
 		}
 

@@ -523,7 +523,7 @@ class ODW_Rest_API {
 		// tatsächlich verschiedene Zeitpunkte begrenzt statt auf beliebige Varianten.
 		$since_canonical = $since_dt->format( DATE_ATOM );
 		$cache_key       = 'odw_delta_' . md5( serialize( array( $since_canonical, $page, $per_page ) ) );
-		$cached    = get_transient( $cache_key );
+		$cached          = get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
 			$content_type = self::resolve_content_type( (string) $request->get_param( 'format' ) );
