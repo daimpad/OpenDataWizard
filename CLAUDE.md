@@ -11,11 +11,17 @@ Umfassende Dokumentation für die Fortentwicklung des Open Data Wizard WordPress
 # Clone und Dependencies installieren
 git clone https://github.com/daimpad/OpenDataWizard.git
 cd OpenDataWizard
-composer install
+composer install   # PFLICHT: erzeugt vendor/ (nicht im Repo)
 
 # WordPress aktivieren (requires `wp` CLI)
 wp plugin activate open-data-wizard
 ```
+
+> **`vendor/` ist nicht eingecheckt** (seit v2.34.0) und wird ausschließlich aus `composer.lock`
+> erzeugt — lokal und in der CI per `composer install`, für das Release-ZIP per
+> `bin/build-release.sh` (`--no-dev`). Dadurch kann die Toolchain lokal nicht mehr vom Lock
+> abweichen. Läuft PHPCS/PHPStan lokal anders als in der CI, ist fast immer ein vergessenes
+> `composer install` die Ursache (z. B. nach einem Dependabot-Update des Locks).
 
 ### Schnelle Befehle
 ```bash
