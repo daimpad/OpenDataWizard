@@ -426,6 +426,22 @@
     color: var(--odw-color-text-muted);
 }
 
+/* =========================================================================
+   Vom Plugin gepflegte Felder (data-odw-readonly)
+   ========================================================================= */
+
+.odw-readonly-input {
+    background: var(--odw-color-bg-light);
+    color: var(--odw-color-text-muted);
+    cursor: default;
+}
+
+/* Klicks auf Feld und „Datum wählen“-Button dürfen den Datepicker nicht
+   öffnen — der Wert wird beim Speichern ohnehin überschrieben. */
+.odw-readonly-picker {
+    pointer-events: none;
+}
+
 /* Kurzes Aufblitzen des angesprungenen Feldes (B2). */
 .odw-field-flash {
     animation: odw-field-flash 1.6s ease-out;

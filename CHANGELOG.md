@@ -7,6 +7,28 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.3] — 2026-08-03
+
+Carbon-Fields-Warnung „Your site seems to be slightly misconfigured" beseitigt.
+
+### 🐛 Fixed
+- **Ungültiges Attribut am Änderungsdatum-Feld.** Das Feld „Zuletzt aktualisiert (automatisch)"
+  setzte seit v2.28.0 ein `readOnly`-Attribut. Carbon Fields erlaubt bei Datumsfeldern jedoch nur
+  `placeholder`, `autocomplete` und `data-*` — das Attribut wurde deshalb verworfen und löste im
+  Backend die Sammelmeldung „Your site seems to be slightly misconfigured … Only the following
+  attributes are allowed: placeholder, autocomplete, data-*" aus. Die Sperre ist jetzt über ein
+  `data-odw-readonly`-Attribut umgesetzt: Das Eingabefeld ist schreibgeschützt, aus der Tab-Reihenfolge
+  genommen und der Datepicker lässt sich nicht mehr öffnen. Das Datum wird beim Speichern ohnehin
+  automatisch gesetzt, eine manuelle Eingabe wurde bislang kommentarlos überschrieben.
+
+### 🧪 Tests
+- Neuer Regressionstest prüft **alle** `set_attribute()`-Aufrufe der Formulardefinition gegen die
+  Attribut-Allowlists der jeweiligen Carbon-Fields-Feldklasse. Ein unzulässiges Attribut wirft in
+  Produktion (ohne `WP_DEBUG`) keine Exception, sondern wird still verworfen — ohne diesen Test
+  fällt so etwas erst im Backend einer echten Installation auf.
+
+---
+
 ## [2.35.2] — 2026-08-03
 
 Verständliche Hilfe, wenn die Installation unvollständig ist.

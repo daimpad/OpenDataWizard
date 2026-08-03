@@ -775,6 +775,37 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// 6b. Read-only fields — inputs carrying [data-odw-readonly] hold a value the
+	// plugin maintains itself (currently only the modification date, which is
+	// overwritten on every save). Carbon Fields' date field does not accept a
+	// `readOnly` attribute, so the lock is applied here: the input becomes
+	// read-only and leaves the tab order, and the flatpickr wrapper stops taking
+	// pointer events so neither a click nor the "Select Date" button opens the
+	// picker.
+	// -------------------------------------------------------------------------
+	function initReadonlyFields() {
+		document.querySelectorAll( '[data-odw-readonly]' ).forEach( function ( input ) {
+			if ( input.dataset.odwReadonlyInit ) {
+				return;
+			}
+			input.dataset.odwReadonlyInit = '1';
+			input.readOnly = true;
+			input.tabIndex = -1;
+			input.setAttribute( 'aria-readonly', 'true' );
+			input.classList.add( 'odw-readonly-input' );
+
+			var picker = input.closest( '.cf-datetime__inner' );
+			if ( picker ) {
+				picker.classList.add( 'odw-readonly-picker' );
+			}
+			var button = picker && picker.querySelector( '.cf-datetime__button' );
+			if ( button ) {
+				button.disabled = true;
+			}
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// 7. "Zum Feld springen" (B2) — the publish-blocked admin notice renders a
 	// jump button per missing field. Clicking it switches to the field's tab,
 	// expands its collapsible section if needed, then scrolls to and focuses it.
@@ -888,6 +919,7 @@
 		initHelpTooltips();
 		initFieldMore();
 		initRequiredMarks();
+		initReadonlyFields();
 		initGotoLinks();
 		initLivePreview();
 		observeNewGroups();
@@ -906,6 +938,7 @@
 			initHelpTooltips();
 			initFieldMore();
 			initRequiredMarks();
+			initReadonlyFields();
 			initLivePreview();
 			if ( passes > 10 ) {
 				clearInterval( rerun );
