@@ -20,11 +20,17 @@ Open Data Wizard ermöglicht es Organisationen und Einzelpersonen, Datensätze d
 
 ## Das Problem
 
-Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Wer Daten auf einer Open-Data-Plattform einstellen will, landet schnell vor komplexen Formularen, unbekannten Fachbegriffen oder muss sich auf eine externe Infrastruktur verlassen, über die keine Kontrolle besteht.
+Offene Daten zu veröffentlichen ist schwieriger, als es sein müsste. Wer es versucht, stößt meist auf drei Hürden:
 
-Dabei besitzen viele Organisationen bereits eine WordPress-Website und damit eine Infrastruktur, die sie kennen und die sie kontrollieren.
+**Die Fachsprache.** Datenkataloge verlangen Metadaten nach dem europäischen Standard DCAT-AP: `dct:publisher`, `dcat:accessURL`, `dcatde:politicalGeocodingLevelURI`. Wer damit nicht täglich arbeitet, weiß nicht, was gemeint ist — und rät.
 
-**Hier kann der Open Data Wizard helfen.**
+**Die Plattformabhängigkeit.** Der übliche Weg führt über ein fremdes Portal: dort registrieren, dort einpflegen, dort pflegen. Die Organisation gibt Kontrolle ab und bindet sich an eine Infrastruktur, die ihr nicht gehört.
+
+**Der technische Aufwand.** Wer selbst hosten will, braucht einen Katalogserver, RDF-Kenntnisse und jemanden, der das betreibt. Für eine Organisation mit drei Datensätzen steht das in keinem Verhältnis.
+
+Dabei besitzen viele dieser Organisationen längst eine Infrastruktur, die sie kennen und kontrollieren: **eine WordPress-Website.**
+
+**Hier setzt der Open Data Wizard an.**
 
 ---
 
@@ -32,7 +38,9 @@ Dabei besitzen viele Organisationen bereits eine WordPress-Website und damit ein
 
 Das Plugin bringt einen geführten Metadaten-Wizard ins WordPress-Backend. Organisationen beschreiben ihre Datensätze dort, wo sie ohnehin arbeiten. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard **DCAT-AP 3.0** und stellt sie unter einer persistenten URL bereit.
 
-Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln. **Die Daten bleiben bei der Organisation. Die Plattform kommt zu ihr.**
+Open-Data-Portale binden diese URL als Harvest-Quelle ein und holen sich die Metadaten selbst ab — regelmäßig und automatisch.
+
+Der entscheidende Unterschied: **Die Daten bleiben bei der Organisation. Der Katalog kommt zu ihr.** Es wandern ausschließlich *Metadaten* — die Beschreibung der Daten — zum Portal, nie die Daten selbst. Und dieselben Metadaten lassen sich an beliebig viele Portale gleichzeitig ausliefern, ohne sie mehrfach zu pflegen.
 
 ---
 
@@ -46,10 +54,10 @@ Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Au
 
 ## Für wen ist das Plugin?
 
-- **Vereine, NGOs und gemeinnützige Organisationen**, die Daten transparent zugänglich machen möchten
-- **Forschungseinrichtungen und Bildungsträger**, die Daten unter offener Lizenz veröffentlichen wollen
-- **Kommunen und öffentliche Einrichtungen** mit WordPress-Infrastruktur
-- **Alle**, die offene Daten standardkonform veröffentlichen wollen — ohne Programmierkenntnisse
+- **Vereine, Stiftungen und NGOs** — Mitgliederstatistiken, Förderdaten, Wirkungsberichte, Messreihen. Meist ohne eigene IT-Abteilung, aber mit vorhandener WordPress-Seite.
+- **Forschungseinrichtungen und Bildungsträger** — Forschungsdaten unter offener Lizenz. Die CESSDA-Klassifikation und die Felder für Urheber, Version und Herkunft zielen genau darauf.
+- **Kommunen und öffentliche Einrichtungen** — Bereitstellungspflichten erfüllen, ohne ein eigenes Portal zu betreiben. Die DCAT-AP.de-Felder für amtliche Gebietsschlüssel und Verwaltungsebenen sind vorhanden.
+- **Portalbetreiber** profitieren indirekt: standardkonforme Quellen, die sich einfach anbinden lassen, statt manuell nachgepflegter Metadaten.
 
 ---
 
@@ -79,6 +87,23 @@ Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem rot
 - Unter der Auswahl erscheint eine allgemeinverständliche Erklärung, was die gewählte Lizenz erlaubt
 - Option „Sonstige" öffnet ein Freitextfeld mit Auto-Suggest aus `config/licenses.txt`
 - Lizenz ist **Pflichtfeld pro Distribution** (nicht am Datensatz selbst)
+
+### 🧾 Metadatenfelder & kontrollierte Vokabulare
+
+**53 dokumentierte Felder** — die vollständige Referenz mit DCAT-AP-Definition und
+allgemeinverständlicher Erklärung je Feld steht in [`docs/FELD-REFERENZ.md`](docs/FELD-REFERENZ.md).
+
+- **Pflicht:** `dct:title`, `dct:description`, `dct:publisher`, `dct:license` + `dcat:accessURL`
+- **DCAT-AP.de:** `dcatde:contributorID`, `originator`, `maintainer`, amtlicher Gebietsschlüssel
+  (`politicalGeocodingURI`), Verwaltungsebene, Rechtsgrundlage, Qualitätsprozess, Namensnennungstext
+- **High-Value-Datensätze:** `dcatap:hvdCategory` + `applicableLegislation` (EU-DVO 2023/138)
+- **Mehrsprachigkeit:** Titel, Beschreibung und Schlagworte je Sprache als `@language`/`@value`
+- **Mehrere Distributionen** je Datensatz — dieselben Daten z. B. als CSV *und* JSON, jeweils mit
+  eigener Lizenz, Größe und Format
+
+**Statt Freitext kontrollierte Vokabulare:** Themen, Dateiformate, Sprachen, Lizenzen, Zugriffsrechte
+und Aktualisierungsfrequenzen stammen aus den offiziellen EU- und DCAT-AP.de-Listen. Sie wählen
+„Umwelt" — gespeichert wird die dazugehörige URI.
 
 ### 🎓 CESSDA-Themenklassifikation
 Auswahlfeld aus der CESSDA Topic Classification 4.2.3 (95 deutsche Konzepte, SKOS/RDF, 24h Cache). Im Feld wird das sprechende Label (z. B. „Bildung") angezeigt; die zugehörige URI wird im Hintergrund gespeichert und als Hinweis eingeblendet.
@@ -186,8 +211,18 @@ GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1               
 
 Die fertigen Harvest-URLs zeigt das Plugin **kopierfertig unter _Datensätze → Einstellungen → Harvesting_** an.
 
-### ✅ DCAT-AP 3.0 Konformität
-Alle Ausgaben sind DCAT-AP 3.0 konform und in JSON-LD serialisiert.
+### ✅ DCAT-AP 3.0 Konformität — nachgewiesen, nicht behauptet
+
+Alle Ausgaben folgen DCAT-AP 3.0 / DCAT-AP.de. Die erzeugten Dokumente wurden gegen die
+**offiziellen SHACL-Regeldateien** geprüft — beide Profile melden `Conforms: True`:
+
+| Profil | Quelle | Ergebnis |
+|---|---|---|
+| **DCAT-AP.de** | GovData (v3.0) | ✅ konform |
+| **DCAT-AP 3.0 (EU)** | SEMICeu (Release 3.0.0) | ✅ konform |
+
+Diese Regeldateien liegen dem Plugin bei (siehe unten), sodass Sie **vor** der Anmeldung bei einem
+Portal selbst prüfen können.
 
 ### 🔎 DCAT-AP-Validierung (SHACL)
 
@@ -238,6 +273,20 @@ Die integrierten **Qualitätsindikatoren** (siehe oben) decken die „gesetzt?"-
 **„DCAT-AP-Konformität" (SHACL, 30 Punkte)** wird davon bewusst **nicht** automatisch bewertet, sondern über
 die hier beschriebene externe Validierung geprüft (Ansatz „achievable max"). Details im
 [MQA-Konzept](docs/MQA-KONZEPT.md).
+
+---
+
+## Was der Open Data Wizard *nicht* ist
+
+Eine ehrliche Abgrenzung hilft bei der Einordnung:
+
+- **Kein Datenportal.** Das Plugin hostet keine Suchoberfläche und keinen Katalog für Dritte — es
+  macht eine einzelne Organisation harvestbar.
+- **Kein Datenmanagement-System.** Die eigentlichen Dateien liegen, wo sie liegen: in der Mediathek,
+  auf einem Server, in einem Repositorium. Das Plugin *beschreibt* sie, es verwaltet sie nicht.
+- **Kein Ersatz für fachliche Sorgfalt.** Es prüft, *ob* eine Lizenz angegeben ist — nicht, ob es die
+  richtige ist. Es weist auf fehlende Angaben hin; die inhaltliche Qualität der Beschreibung bleibt
+  Aufgabe der Person, die sie schreibt.
 
 ---
 
@@ -353,6 +402,15 @@ Bitte öffne zunächst ein [Issue](https://github.com/daimpad/OpenDataWizard/iss
 Das Plugin löscht bei Deinstallation standardmäßig **keine** Daten (Opt-in).
 
 Um alle Plugin-Daten zu löschen, die Checkbox unter **Datensätze → Einstellungen → Deinstallation** aktivieren und dann das Plugin im WordPress-Backend deinstallieren. `uninstall.php` entfernt alle `odw_dataset`-Posts, alle `_odw_*`-Metafelder sowie die Plugin-Optionen.
+
+---
+
+## In einem Satz
+
+Der Open Data Wizard verwandelt eine gewöhnliche WordPress-Website in eine standardkonforme
+Open-Data-Quelle — bedienbar von Menschen ohne DCAT-AP-Kenntnisse, anschlussfähig für Portale, die
+europäische Standards erwarten, und ohne dass die Organisation Kontrolle über ihre Daten oder ihre
+Infrastruktur abgibt.
 
 ---
 
