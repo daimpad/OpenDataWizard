@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.35.1-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.35.2-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -294,11 +294,21 @@ Eine ehrliche Abgrenzung hilft bei der Einordnung:
 
 ### Für Anwender:innen
 
-1. ZIP-Datei aus den [Releases](https://github.com/daimpad/OpenDataWizard/releases) herunterladen
+1. ZIP-Datei aus den [Releases](https://github.com/daimpad/OpenDataWizard/releases/latest) herunterladen
 2. Im WordPress-Backend: **Plugins → Installieren → Plugin hochladen**
 3. Plugin aktivieren
 
 Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich.
+
+> **Wichtig: das Release-ZIP verwenden, nicht das Quellcode-Archiv.** Der grüne „Code"-Button auf
+> GitHub liefert ein Archiv **ohne** die benötigten Programmbibliotheken — damit bleibt das Plugin
+> inaktiv und meldet „Installation unvollständig". Nur das unter *Releases* verlinkte
+> `open-data-wizard-<version>.zip` ist vollständig.
+>
+> Dasselbe gilt, wenn Sie aus einer Version **vor 2.34.0** automatisch aktualisiert haben: Einmalig
+> das Release-ZIP hochladen behebt es dauerhaft; danach ziehen Updates automatisch das vollständige
+> Paket. Ihre Datensätze bleiben dabei erhalten — sie liegen in der Datenbank, nicht in den
+> Plugin-Dateien.
 
 ### Für Entwickler:innen
 

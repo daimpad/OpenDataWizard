@@ -678,8 +678,6 @@ msgstr ""
 msgid "Open Data Wizard: Carbon Fields konnte nicht initialisiert werden — %s"
 msgstr ""
 
-msgid "Open Data Wizard: Vendor-Abhängigkeiten fehlen. Bitte composer install im Plugin-Verzeichnis ausführen."
-msgstr ""
 
 msgid "Open Data Wizard: Veröffentlichung blockiert"
 msgstr ""
@@ -1489,4 +1487,22 @@ msgid "Externe Open-Data-Portale holen Ihre Metadaten in der Regel selbst ab (�
 msgstr ""
 
 msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße."
+msgstr ""
+
+msgid "Open Data Wizard: Installation unvollständig"
+msgstr ""
+
+msgid "Dem Plugin fehlen seine Programmbibliotheken, daher ist es derzeit inaktiv. Das passiert, wenn es aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert wurde."
+msgstr ""
+
+msgid "So beheben Sie das:"
+msgstr ""
+
+msgid "Laden Sie das fertige Plugin-Paket (ZIP) unter %s herunter und spielen Sie es über „Plugins → Installieren → Plugin hochladen\" ein. Ihre Datensätze bleiben dabei erhalten."
+msgstr ""
+
+msgid "Releases"
+msgstr ""
+
+msgid "Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install\" ausführen."
 msgstr ""
