@@ -329,4 +329,58 @@ class Test_ODW_Fields extends TestCase {
 		$this->assertSame( 'CSV', ODW_Fields::resolve_format_key( 'csv' ) );
 		$this->assertSame( '', ODW_Fields::resolve_format_key( 'nope' ) );
 	}
+
+	/**
+	 * Every set_attribute() call must use an attribute the target Carbon Fields
+	 * field type accepts. A disallowed one does not throw in production (WP_DEBUG
+	 * off) — it is silently dropped and surfaces as the "Your site seems to be
+	 * slightly misconfigured" admin notice. This test parses the field
+	 * definitions and compares each attribute against the allow-lists Carbon
+	 * Fields declares for the respective field class.
+	 */
+	public function test_set_attribute_calls_use_allowed_attributes(): void {
+		// Werte gespiegelt aus den allowed_attributes der jeweiligen
+		// Carbon-Fields-Feldklassen (Text_Field, Textarea_Field, Date_Field).
+		$allowed = array(
+			'text'      => array( 'list', 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type', 'is', 'inputmode', 'autocomplete' ),
+			'textarea'  => array( 'maxLength', 'minLength', 'placeholder', 'readOnly', 'is', 'autocomplete' ),
+			'date'      => array( 'placeholder', 'autocomplete' ),
+			'date_time' => array( 'placeholder', 'autocomplete' ),
+		);
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reads local source, not a remote request.
+		$source = (string) file_get_contents( ODW_PLUGIN_DIR . 'includes/class-fields.php' );
+
+		$matches = array();
+		preg_match_all(
+			"/Field::make\(\s*'([a-z_]+)'|->set_attribute\(\s*'([^']+)'/",
+			$source,
+			$matches,
+			PREG_SET_ORDER
+		);
+
+		$type       = '';
+		$violations = array();
+		foreach ( $matches as $match ) {
+			if ( '' !== ( $match[1] ?? '' ) ) {
+				$type = $match[1];
+				continue;
+			}
+
+			$attribute = $match[2] ?? '';
+			// data-* is always allowed, regardless of field type.
+			if ( 0 === strpos( strtolower( $attribute ), 'data-' ) ) {
+				continue;
+			}
+			if ( ! isset( $allowed[ $type ] ) ) {
+				$violations[] = sprintf( 'unbekannter Feldtyp "%s" mit Attribut "%s"', $type, $attribute );
+				continue;
+			}
+			if ( ! in_array( $attribute, $allowed[ $type ], true ) ) {
+				$violations[] = sprintf( '"%s" ist bei Feldtyp "%s" nicht erlaubt', $attribute, $type );
+			}
+		}
+
+		$this->assertSame( array(), $violations, implode( '; ', $violations ) );
+	}
 }

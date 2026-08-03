@@ -202,7 +202,12 @@ class ODW_Fields {
 
 					Field::make( 'date', 'odw_modified', __( 'Zuletzt aktualisiert (automatisch)', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_attribute( 'readOnly', true )
+						// Carbon Fields erlaubt bei Datumsfeldern nur `placeholder`,
+						// `autocomplete` und `data-*`. Ein `readOnly` löste hier eine
+						// Incorrect_Syntax_Exception aus („Your site seems to be
+						// slightly misconfigured") und blieb wirkungslos. Das Feld
+						// wird daher über dieses Data-Attribut im Admin-JS gesperrt.
+						->set_attribute( 'data-odw-readonly', '1' )
 						->set_picker_options(
 							array(
 								'dateFormat' => 'Y-m-d',
