@@ -1077,8 +1077,6 @@ msgstr "Open Data Wizard — Getting Started"
 msgid "Open Data Wizard: Carbon Fields konnte nicht initialisiert werden — %s"
 msgstr "Open Data Wizard: Carbon Fields could not be initialized — %s"
 
-msgid "Open Data Wizard: Vendor-Abhängigkeiten fehlen. Bitte composer install im Plugin-Verzeichnis ausführen."
-msgstr "Open Data Wizard: Vendor dependencies are missing. Please run composer install in the plugin directory."
 
 msgid "Open Data Wizard: Veröffentlichung blockiert"
 msgstr "Open Data Wizard: Publishing blocked"
@@ -1872,3 +1870,21 @@ msgstr "External open data portals usually fetch your metadata themselves (\"pul
 
 msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße."
 msgstr "Tip: Validate the document against the official DCAT-AP SHACL validator (%s) and fix all violations."
+
+msgid "Open Data Wizard: Installation unvollständig"
+msgstr "Open Data Wizard: incomplete installation"
+
+msgid "Dem Plugin fehlen seine Programmbibliotheken, daher ist es derzeit inaktiv. Das passiert, wenn es aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert wurde."
+msgstr "The plugin is missing its libraries and is therefore inactive. This happens when it is installed from the source archive instead of the ready-made plugin package."
+
+msgid "So beheben Sie das:"
+msgstr "How to fix this:"
+
+msgid "Laden Sie das fertige Plugin-Paket (ZIP) unter %s herunter und spielen Sie es über „Plugins → Installieren → Plugin hochladen\" ein. Ihre Datensätze bleiben dabei erhalten."
+msgstr "Download the ready-made plugin package (ZIP) from %s and install it via \"Plugins → Add New → Upload Plugin\". Your datasets are preserved."
+
+msgid "Releases"
+msgstr "Releases"
+
+msgid "Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install\" ausführen."
+msgstr "For developers: alternatively run \"composer install\" in the plugin directory."

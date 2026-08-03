@@ -3,7 +3,7 @@
  * Plugin Name:       Open Data Wizard
  * Plugin URI:        https://github.com/daimpad/OpenDataWizard
  * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für WordPress. Bereitstellung als maschinenlesbarer JSON-LD-Endpoint für offene Daten.
- * Version:           2.35.1
+ * Version:           2.35.2
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            nozilla
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ODW_VERSION', '2.35.1' );
+define( 'ODW_VERSION', '2.35.2' );
 define( 'ODW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ODW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ODW_PLUGIN_FILE', __FILE__ );
@@ -85,9 +85,30 @@ function odw_bootstrap(): void {
 		add_action(
 			'admin_notices',
 			function (): void {
-				echo '<div class="notice notice-error"><p>';
+				// Häufigste Ursache: Das Plugin wurde aus dem Quellcode-Archiv
+				// installiert (z. B. „Code herunterladen" auf GitHub oder ein
+				// Update aus einer Version vor 2.34.0). Dieses Archiv enthält
+				// bewusst keine Abhängigkeiten — nur das Release-ZIP ist
+				// vollständig. Die Anleitung nennt daher zuerst den Weg, den
+				// Redakteur:innen ohne Kommandozeile gehen können.
+				echo '<div class="notice notice-error"><p><strong>';
+				esc_html_e( 'Open Data Wizard: Installation unvollständig', 'open-data-wizard' );
+				echo '</strong></p><p>';
 				esc_html_e(
-					'Open Data Wizard: Vendor-Abhängigkeiten fehlen. Bitte composer install im Plugin-Verzeichnis ausführen.',
+					'Dem Plugin fehlen seine Programmbibliotheken, daher ist es derzeit inaktiv. Das passiert, wenn es aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert wurde.',
+					'open-data-wizard'
+				);
+				echo '</p><p><strong>';
+				esc_html_e( 'So beheben Sie das:', 'open-data-wizard' );
+				echo '</strong> ';
+				printf(
+					/* translators: %s: link to the releases page, already wrapped in an <a> tag. */
+					esc_html__( 'Laden Sie das fertige Plugin-Paket (ZIP) unter %s herunter und spielen Sie es über „Plugins → Installieren → Plugin hochladen" ein. Ihre Datensätze bleiben dabei erhalten.', 'open-data-wizard' ),
+					'<a href="https://github.com/daimpad/OpenDataWizard/releases/latest" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Releases', 'open-data-wizard' ) . ' ↗</a>'
+				);
+				echo '</p><p class="description">';
+				esc_html_e(
+					'Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install" ausführen.',
 					'open-data-wizard'
 				);
 				echo '</p></div>';

@@ -7,6 +7,30 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.2] — 2026-08-03
+
+Verständliche Hilfe, wenn die Installation unvollständig ist.
+
+### 🐛 Fixed
+- **Die Fehlermeldung bei fehlenden Abhängigkeiten war für die Zielgruppe unbrauchbar.** Sie riet zu
+  „composer install im Plugin-Verzeichnis ausführen" — eine Anweisung, die Redakteur:innen ohne
+  Kommandozeilenzugang nicht befolgen können. Die Meldung nennt jetzt zuerst den Weg über die
+  Oberfläche: fertiges Plugin-Paket (ZIP) von der Releases-Seite herunterladen und über
+  „Plugins → Installieren → Plugin hochladen" einspielen, mit dem ausdrücklichen Hinweis, dass die
+  eigenen Datensätze dabei erhalten bleiben. Der Composer-Hinweis bleibt als Zusatz für
+  Entwickler:innen erhalten.
+
+### ℹ️ Hintergrund
+Seit v2.34.0 enthält das **Quellcode-Archiv** des Repositorys bewusst keine Abhängigkeiten mehr —
+vollständig ist nur das automatisch gebaute **Release-ZIP**. Wer das Plugin aus dem Quellcode-Archiv
+installiert (oder aus einer Version vor 2.34.0 über den GitHub-Updater aktualisiert hat, dessen
+Header noch auf das Quellarchiv verwies), erhält daher eine unvollständige Installation. Einmalig das
+Release-ZIP einspielen behebt das dauerhaft: Ab dann verweist der Header auf das Release-Asset, und
+weitere Updates ziehen automatisch das vollständige Paket.
+
+### 🌍 i18n
+- Neue Meldungstexte ins en_US übersetzt, veralteter Eintrag entfernt (625 Einträge, lückenlos).
+
 ## [2.35.1] — 2026-07-31
 
 Fehler aus einem Robustheitstest der Turtle-Ausgabe.
