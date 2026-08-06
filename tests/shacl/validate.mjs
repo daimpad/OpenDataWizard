@@ -271,9 +271,10 @@ async function main() {
 
 	for (const fixturePath of FIXTURES) {
 		const absolutePath = join(projectRoot, fixturePath);
+		// raise on first file not found error
 		if (!existsSync(absolutePath)) {
-			console.warn(`⚠️  Fixture not found: ${fixturePath} (skipping)\n`);
-			continue;
+			console.error(`⚠️  Fixture not found: ${fixturePath} (skipping)\n`);
+			process.exit(1);
 		}
 
 		console.log(`Validating ${fixturePath}...`);

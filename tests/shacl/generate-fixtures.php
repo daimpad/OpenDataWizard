@@ -467,6 +467,9 @@ function generate_fixture( string $name, array $meta, bool $is_catalog = false )
 
 echo "Generating SHACL validation fixtures...\n\n";
 
+// make sure build/schacl exists, will warn if it exists, create if not
+mkdir(__DIR__ . "/../../build/shacl", recursive:TRUE);
+
 // Minimal dataset.
 generate_fixture( 'dataset-minimal', fixture_minimal() );
 
