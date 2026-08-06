@@ -267,12 +267,12 @@ class ODW_Rest_API {
 	 * Assemble the dcat:Catalog JSON-LD document from the given dataset nodes.
 	 *
 	 * The catalog carries a stable `@id` (its own endpoint URL) and a homepage so
-	 * RDF harvesters can dereference and de-duplicate it across runs.
+	 * RDF harvesters can dereference and de-duplicate it across runs. Public for fixture generation.
 	 *
 	 * @param array<int, array<string, mixed>> $datasets Dataset JSON-LD nodes.
 	 * @return array<string, mixed>
 	 */
-	private static function build_catalog_document( array $datasets ): array {
+	public static function build_catalog_document( array $datasets ): array {
 		/**
 		 * Filters the catalog title in the JSON-LD output.
 		 *
@@ -310,7 +310,7 @@ class ODW_Rest_API {
 				'@language' => 'de',
 			),
 			'dct:publisher' => array(
-				'@type'     => 'foaf:Organization',
+				'@type'     => array( 'foaf:Organization', 'foaf:Agent' ),
 				'foaf:name' => get_bloginfo( 'name' ),
 			),
 			'foaf:homepage' => array( '@id' => home_url( '/' ) ),

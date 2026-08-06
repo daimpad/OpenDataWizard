@@ -72,4 +72,8 @@
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
 		<exclude-pattern>../tests/*</exclude-pattern>
 	</rule>
+
+	<!-- CLI fixture generator: runs outside WordPress, the WP-Sniffs for output
+	     and filesystem do not apply here. -->
+	<exclude-pattern>../tests/shacl/*</exclude-pattern>
 </ruleset>

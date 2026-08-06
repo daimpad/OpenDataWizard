@@ -828,7 +828,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->assertArrayHasKey( 'dcat:contactPoint', $result );
 
 		$contact = $result['dcat:contactPoint'];
-		$this->assertSame( 'vcard:Organization', $contact['@type'] );
+		$this->assertSame( array( 'vcard:Organization', 'vcard:Kind' ), $contact['@type'] );
 		$this->assertSame( 'Max Mustermann', $contact['vcard:fn'] );
 		$this->assertSame( array( '@id' => 'mailto:max@example.org' ), $contact['vcard:hasEmail'] );
 	}

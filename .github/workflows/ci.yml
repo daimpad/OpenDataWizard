@@ -63,3 +63,33 @@ jobs:
 
       - name: Run PHPUnit
         run: composer test
+
+  shacl:
+    name: SHACL Validation (DCAT-AP + DCAT-AP.de)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      - name: Install composer dependencies
+        run: composer install --no-interaction --prefer-dist --dev
+
+      - name: Generate fixtures
+        run: php tests/shacl/generate-fixtures.php
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run SHACL validation (Tier 2)
+        run: npm run test:shacl
