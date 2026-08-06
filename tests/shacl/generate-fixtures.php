@@ -191,6 +191,7 @@ if ( ! defined( 'DAY_IN_SECONDS' ) ) {
 
 require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
 require_once ODW_PLUGIN_DIR . 'includes/class-rdf.php';
+require_once ODW_PLUGIN_DIR . 'includes/class-rest-api.php';
 
 // ----------------------------------------------------------
 // Fixture data definitions
@@ -342,65 +343,14 @@ function fixture_maximal(): array {
 /**
  * Builds a catalog document wrapping the given datasets.
  *
- * Mirrors ODW_Rest_API::build_catalog_document() logic but runs without WP.
+ * Delegates to ODW_Rest_API::build_catalog_document() so the fixture stays in
+ * sync with the production catalog (e.g. dct:publisher typing).
  *
  * @param array<int, array<string, mixed>> $datasets Dataset JSON-LD nodes.
  * @return array<string, mixed>
  */
 function build_catalog_fixture( array $datasets ): array {
-	$catalog_title       = get_bloginfo( 'name' ) . ' — Datenkatalog';
-	$catalog_description = get_bloginfo( 'description' );
-
-	if ( '' === trim( $catalog_description ) ) {
-		$catalog_description = sprintf(
-			'Offene Daten, bereitgestellt von %s.',
-			get_bloginfo( 'name' )
-		);
-	}
-
-	// Mirror the @context from class-rest-api.php.
-	$context = array(
-		'dcat'    => 'http://www.w3.org/ns/dcat#',
-		'dct'     => 'http://purl.org/dc/terms/',
-		'dcatde'  => 'http://dcat-ap.de/def/dcatde/',
-		'dcatap'  => 'http://data.europa.eu/r5r/',
-		'foaf'    => 'http://xmlns.com/foaf/0.1/',
-		'vcard'   => 'http://www.w3.org/2006/vcard/ns#',
-		'xsd'     => 'http://www.w3.org/2001/XMLSchema#',
-		'skos'    => 'http://www.w3.org/2004/02/skos/core#',
-		'rdfs'    => 'http://www.w3.org/2000/01/rdf-schema#',
-		'owl'     => 'http://www.w3.org/2002/07/owl#',
-		'adms'    => 'http://www.w3.org/ns/adms#',
-		'locn'    => 'http://www.w3.org/ns/locn#',
-		'prov'    => 'http://www.w3.org/ns/prov#',
-		'odrl'    => 'http://www.w3.org/ns/odrl/2/',
-		'spdx'    => 'http://spdx.org/rdf/terms#',
-	);
-
-	$catalog = array(
-		'@context'      => $context,
-		'@id'           => rest_url( 'datenatlas/v1/catalog' ),
-		'@type'         => 'dcat:Catalog',
-		'dct:title'     => array(
-			'@value'    => $catalog_title,
-			'@language' => 'de',
-		),
-		'dct:publisher' => array(
-			'@type'     => 'foaf:Organization',
-			'foaf:name' => get_bloginfo( 'name' ),
-		),
-		'foaf:homepage' => array( '@id' => home_url( '/' ) ),
-		'dcat:dataset'  => $datasets,
-	);
-
-	if ( '' !== $catalog_description ) {
-		$catalog['dct:description'] = array(
-			'@value'    => $catalog_description,
-			'@language' => 'de',
-		);
-	}
-
-	return $catalog;
+	return ODW_Rest_API::build_catalog_document( $datasets );
 }
 
 // ----------------------------------------------------------
