@@ -6,7 +6,7 @@
  * Runs offline (no remote ontology loading) with two tiers:
  *
  * - Tier 1: EU + SHACL-DE (~200 shapes)
- * - Tier 2: + german-additions + deprecated (stricter, default)
+ * - Tier 2: + german-additions + deprecated + FOAF/vCard ontologies (stricter, default)
  *
  * Usage:
  *   node tests/shacl/validate.mjs [--tier=1|2]
@@ -51,6 +51,8 @@ const TIERS = {
 		'config/shacl/dcat-ap-SHACL-DE.ttl',
 		'config/shacl/dcat-ap-spec-german-additions.ttl',
 		'config/shacl/dcat-ap-de-deprecated.ttl',
+		'config/shacl/foaf_0_1.rdf',
+		'config/shacl/vcard.ttl',
 	],
 };
 
@@ -62,19 +64,29 @@ const FIXTURES = [
 ];
 
 /**
- * Loads a Turtle file and returns a dataset.
+ * Loads an RDF file and returns a dataset (supports Turtle and RDF/XML).
  *
- * @param {string} path - Path to the Turtle file.
+ * @param {string} path - Path to the RDF file.
  * @returns {Promise<import('@rdfjs/types').DatasetCore>}
  */
-async function loadTurtle(path) {
+async function loadRdf(path) {
 	const absolutePath = join(projectRoot, path);
 	if (!existsSync(absolutePath)) {
 		throw new Error(`File not found: ${absolutePath}`);
 	}
 
+	// Detect format by file extension
+	let contentType;
+	if (path.endsWith('.ttl')) {
+		contentType = 'text/turtle';
+	} else if (path.endsWith('.rdf') || path.endsWith('.xml')) {
+		contentType = 'application/rdf+xml';
+	} else {
+		throw new Error(`Unsupported file format: ${path}`);
+	}
+
 	const content = readFileSync(absolutePath, 'utf-8');
-	const stream = $rdf.formats.parsers.import('text/turtle', Readable.from([content]));
+	const stream = $rdf.formats.parsers.import(contentType, Readable.from([content]));
 	return $rdf.dataset().import(stream);
 }
 
@@ -234,7 +246,7 @@ async function main() {
 
 	// Load and merge shapes.
 	const shapeFiles = TIERS[tier];
-	const shapeDatasets = await Promise.all(shapeFiles.map(loadTurtle));
+	const shapeDatasets = await Promise.all(shapeFiles.map(loadRdf));
 	const shapesGraph = mergeDatasets(shapeDatasets);
 
 	// Guard: ensure we have NodeShapes (prevent false green from SHACL-DE-only).

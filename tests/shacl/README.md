@@ -42,8 +42,9 @@ This directory contains the test harness for validating the plugin's DCAT-AP/DCA
 - Fast baseline check
 
 ### Tier 2: de_spec minus vocabs (default, recommended)
-- Tier 1 + `dcat-ap-spec-german-additions.ttl` + `dcat-ap-de-deprecated.ttl`
+- Tier 1 + `dcat-ap-spec-german-additions.ttl` + `dcat-ap-de-deprecated.ttl` + FOAF + vCard ontologies
 - Stricter (includes `foaf:Agent` subclass constraints)
+- Bundled ontologies enable minimal entailment (subclass relationships)
 - Fully offline
 - **CI uses this tier**
 
@@ -123,22 +124,31 @@ Matching rules:
 - Loading it alone → `conforms: true` without validation (false green)
 - Guard fails fast if shape count = 0
 
-## foaf:Agent Subclass Entailment (Phase 0b)
+## Explicit Parent Types for Non-Reasoning Validators
 
-`dcat-ap-spec-german-additions.ttl` has 3 constraints with `sh:class foaf:Agent`.
+DCAT-AP shapes require specific classes:
+- `dct:publisher` → `foaf:Agent`
+- `dcat:contactPoint` → `vcard:Kind`
 
-The plugin emits `foaf:Organization` for publisher/originator/maintainer.
+The plugin emits specific subclasses:
+- `foaf:Organization` (subclass of `foaf:Agent`)
+- `vcard:Organization` (subclass of `vcard:Kind`)
 
-**Without entailment:**
-- `foaf:Organization ⊑ foaf:Agent` is invisible → violations
-- Requires FOAF ontology loaded
+**Problem:**
+- `rdf-validate-shacl` doesn't perform RDFS reasoning by default
+- Without reasoning: `foaf:Organization ⊑ foaf:Agent` is invisible → violations
 
-**Solution (Tier 2):**
-- DCAT-AP.de bundles a FOAF mirror at `validator/resources/mirror/foaf_0_1.rdf`
-- `dcat-ap-de-imports.ttl` declares `owl:imports <mirror/foaf_0_1.rdf>`
-- **Not loaded in Tier 1/2** (offline constraint)
-- Empirical test: if Tier 2 passes without violations on `foaf:Organization`, entailment isn't needed for our output
-- If violations occur: either (a) add FOAF mirror to Tier 2, or (b) allowlist them with justification
+**Solution:**
+Emit BOTH parent and child types explicitly in JSON-LD:
+
+```json
+{
+  "@type": ["foaf:Organization", "foaf:Agent"],
+  "foaf:name": "Publisher Name"
+}
+```
+
+This is valid RDF and makes our data compatible with non-reasoning validators while maintaining semantic precision. The ontologies are still loaded in Tier 2 for documentation purposes, but the explicit types make entailment unnecessary.
 
 ## Scope Decision: Catalog + Per-Dataset
 

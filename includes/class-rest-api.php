@@ -310,7 +310,7 @@ class ODW_Rest_API {
 				'@language' => 'de',
 			),
 			'dct:publisher' => array(
-				'@type'     => 'foaf:Organization',
+				'@type'     => array( 'foaf:Organization', 'foaf:Agent' ),
 				'foaf:name' => get_bloginfo( 'name' ),
 			),
 			'foaf:homepage' => array( '@id' => home_url( '/' ) ),

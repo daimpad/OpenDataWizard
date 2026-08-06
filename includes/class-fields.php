@@ -1776,7 +1776,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		'dct:title'       => 1 === count( $title_literals ) ? $title_literals[0] : $title_literals,
 		'dct:description' => 1 === count( $description_literals ) ? $description_literals[0] : $description_literals,
 		'dct:publisher'   => array(
-			'@type'     => 'foaf:Organization',
+			'@type'     => array( 'foaf:Organization', 'foaf:Agent' ),
 			'foaf:name' => $publisher,
 		),
 	);
@@ -1993,7 +1993,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	}
 
 	if ( ! empty( $contact_name ) || ! empty( $contact_email ) ) {
-		$contact = array( '@type' => 'vcard:Organization' );
+		$contact = array( '@type' => array( 'vcard:Organization', 'vcard:Kind' ) );
 		if ( ! empty( $contact_name ) ) {
 			$contact['vcard:fn'] = $contact_name;
 		}
