@@ -271,9 +271,11 @@ async function main() {
 
 	for (const fixturePath of FIXTURES) {
 		const absolutePath = join(projectRoot, fixturePath);
-		// raise on first file not found error
+		// A missing fixture means generate-fixtures.php did not run or failed.
+		// Skipping here would report success without validating anything.
 		if (!existsSync(absolutePath)) {
-			console.error(`⚠️  Fixture not found: ${fixturePath} (skipping)\n`);
+			console.error(`❌ Fixture not found: ${fixturePath}`);
+			console.error('   Run "php tests/shacl/generate-fixtures.php" first.\n');
 			process.exit(1);
 		}
 

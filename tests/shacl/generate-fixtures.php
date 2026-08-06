@@ -392,12 +392,10 @@ function generate_fixture( string $name, array $meta, bool $is_catalog = false )
 	}
 
 	// Write JSON-LD.
-	$jsonld_path = __DIR__ . "/../../build/shacl/{$name}.jsonld";
-	file_put_contents(
-		$jsonld_path,
+	write_fixture(
+		__DIR__ . "/../../build/shacl/{$name}.jsonld",
 		json_encode( $doc, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . "\n"
 	);
-	echo "✓ {$jsonld_path}\n";
 
 	// Write Turtle.
 	$turtle = ODW_Rdf::to_turtle( $doc );
@@ -406,9 +404,24 @@ function generate_fixture( string $name, array $meta, bool $is_catalog = false )
 		return;
 	}
 
-	$turtle_path = __DIR__ . "/../../build/shacl/{$name}.ttl";
-	file_put_contents( $turtle_path, $turtle );
-	echo "✓ {$turtle_path}\n";
+	write_fixture( __DIR__ . "/../../build/shacl/{$name}.ttl", $turtle );
+}
+
+/**
+ * Writes one fixture file, aborting the run when the write fails.
+ *
+ * A silently failed write used to print a "✓" for a file that never appeared,
+ * which made the validator downstream look green while it validated nothing.
+ *
+ * @param string $path    Absolute target path.
+ * @param string $content File contents.
+ */
+function write_fixture( string $path, string $content ): void {
+	if ( false === file_put_contents( $path, $content ) ) {
+		fwrite( STDERR, "Write failed: {$path}\n" );
+		exit( 1 );
+	}
+	echo "✓ {$path}\n";
 }
 
 // ----------------------------------------------------------
@@ -417,8 +430,14 @@ function generate_fixture( string $name, array $meta, bool $is_catalog = false )
 
 echo "Generating SHACL validation fixtures...\n\n";
 
-// make sure build/schacl exists, will warn if it exists, create if not
-mkdir(__DIR__ . "/../../build/shacl", recursive:TRUE);
+// Output directory is gitignored, so it usually does not exist yet. Guard with
+// is_dir() so repeat runs stay quiet, and abort when it cannot be created —
+// otherwise every write below would fail and the validator would find nothing.
+$output_dir = __DIR__ . '/../../build/shacl';
+if ( ! is_dir( $output_dir ) && ! mkdir( $output_dir, 0755, true ) && ! is_dir( $output_dir ) ) {
+	fwrite( STDERR, "Cannot create {$output_dir}\n" );
+	exit( 1 );
+}
 
 // Minimal dataset.
 generate_fixture( 'dataset-minimal', fixture_minimal() );
