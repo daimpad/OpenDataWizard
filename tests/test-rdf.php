@@ -43,7 +43,7 @@ class Test_ODW_Rdf extends TestCase {
 				'@language' => 'de',
 			),
 			'dct:publisher' => array(
-				'@type'     => 'foaf:Organization',
+				'@type'     => array( 'foaf:Organization', 'foaf:Agent' ),
 				'foaf:name' => 'Verein XY e.V.',
 			),
 			'dcat:dataset'  => array(
@@ -96,7 +96,7 @@ class Test_ODW_Rdf extends TestCase {
 	public function test_node_without_id_becomes_blank_node(): void {
 		$ttl = ODW_Rdf::to_turtle( $this->sample_catalog() );
 
-		$this->assertStringContainsString( '[ a foaf:Organization ; foaf:name "Verein XY e.V." ]', $ttl );
+		$this->assertStringContainsString( '[ a foaf:Organization, foaf:Agent ; foaf:name "Verein XY e.V." ]', $ttl );
 	}
 
 	/**
