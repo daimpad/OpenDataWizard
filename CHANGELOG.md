@@ -29,7 +29,9 @@ Erste Runde aus einem Usability-Test des Formulars.
   eine Eingabe ging also kommentarlos verloren; ein gesperrtes Feld samt „Datum wählen"-Button
   vorzuhalten war Ballast. Der Wert bleibt in der Übersichtsspalte, im Qualitätsbericht und in der
   JSON-LD-Vorschau sichtbar. `ODW_Quality` und der Shortcode lesen ihn jetzt direkt aus der
-  Post-Meta statt über Carbon Fields.
+  Post-Meta statt über Carbon Fields. Im Feld-Katalog markiert ein neues Flag `auto` solche
+  Eigenschaften: Sie bleiben in `docs/FELD-REFERENZ.md` dokumentiert — sie stehen ja weiterhin im
+  JSON-LD —, sind aber von der Formular-Abdeckungsprüfung ausgenommen.
 - **Keine Scheingenauigkeit mehr im Qualitätsbericht.** Die Bewertung ist pro Metrik binär; „0 / 30"
   suggerierte eine Skala, die es nicht gibt. Offene Metriken zeigen jetzt „+30 möglich".
 - **Vier Beschriftungen verständlicher:** „gültig" → Zeitraum, den die Daten abdecken (`dct:temporal`);

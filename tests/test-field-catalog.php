@@ -94,8 +94,24 @@ class Test_ODW_Field_Catalog extends TestCase {
 		$catalog_keys = array_column( $this->catalog, 'key' );
 		sort( $catalog_keys );
 
+		// Einträge mit 'auto' => true beschreiben Eigenschaften, die das Plugin
+		// selbst befüllt (z. B. dct:modified). Sie gehören in die Feld-Referenz,
+		// haben aber bewusst kein Formularfeld. Der Schutz vor Drift bleibt:
+		// Das Flag muss pro Eintrag ausdrücklich gesetzt werden, und die
+		// Gegenrichtung — jedes Formularfeld braucht einen Katalogeintrag —
+		// gilt weiterhin ausnahmslos.
+		$auto_keys = array_column(
+			array_filter(
+				$this->catalog,
+				static function ( array $entry ): bool {
+					return ! empty( $entry['auto'] );
+				}
+			),
+			'key'
+		);
+
 		$missing_in_catalog = array_diff( $form_keys, $catalog_keys );
-		$missing_in_form    = array_diff( $catalog_keys, $form_keys );
+		$missing_in_form    = array_diff( $catalog_keys, $form_keys, $auto_keys );
 
 		$this->assertSame(
 			array(),

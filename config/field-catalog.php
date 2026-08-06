@@ -145,10 +145,15 @@ return array(
 		'tab'        => '2 — Inhaltliche Angaben',
 		'tier'       => 'recommended',
 		'vocab'      => '',
+		// Kein Formularfeld: Der Wert wird beim Speichern automatisch gesetzt.
+		// Das Flag nimmt den Eintrag von der Formular-Abdeckungsprüfung aus,
+		// ohne die Eigenschaft aus der Feld-Referenz zu entfernen — sie steht
+		// weiterhin im veröffentlichten JSON-LD.
+		'auto'       => true,
 		'q_dcat'     => 'Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?',
 		'q_human'    => 'Wann wurden diese Daten zuletzt aktualisiert?',
-		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin aktualisiert diesen Wert automatisch bei jeder Speicherung, kann aber manuell überschrieben werden.',
-		'desc_human' => 'Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind. Beispiel: 2026-04-22.',
+		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.',
+		'desc_human' => 'Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.',
 	),
 
 	// =========================================================================
