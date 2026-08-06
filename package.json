@@ -23,9 +23,12 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:chrome": "playwright test --project=chromium",
     "test:e2e:firefox": "playwright test --project=firefox",
-    "test:e2e:webkit": "playwright test --project=webkit"
+    "test:e2e:webkit": "playwright test --project=webkit",
+    "test:shacl": "node tests/shacl/validate.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.44.0"
+    "@playwright/test": "^1.44.0",
+    "@zazuko/env-node": "^2.1.3",
+    "rdf-validate-shacl": "^0.5.5"
   }
 }

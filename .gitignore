@@ -21,6 +21,9 @@ node_modules/
 /test-results/
 /playwright-report/
 
+# SHACL-Validierungs-Fixtures (generiert von tests/shacl/generate-fixtures.php)
+/build/
+
 # Release-Builds (bin/build-release.sh)
 /dist/
 __pycache__/
