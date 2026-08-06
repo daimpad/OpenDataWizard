@@ -21,6 +21,7 @@
 import { readFileSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { Readable } from 'stream';
 import SHACLValidator from 'rdf-validate-shacl';
 import $rdf from '@zazuko/env-node';
 
@@ -73,7 +74,7 @@ async function loadTurtle(path) {
 	}
 
 	const content = readFileSync(absolutePath, 'utf-8');
-	const stream = $rdf.formats.parsers.import('text/turtle', $rdf.Readable.from([content]));
+	const stream = $rdf.formats.parsers.import('text/turtle', Readable.from([content]));
 	return $rdf.dataset().import(stream);
 }
 
@@ -91,7 +92,7 @@ async function loadJsonLd(path) {
 
 	const content = readFileSync(absolutePath, 'utf-8');
 	const json = JSON.parse(content);
-	const stream = $rdf.formats.parsers.import('application/ld+json', $rdf.Readable.from([JSON.stringify(json)]));
+	const stream = $rdf.formats.parsers.import('application/ld+json', Readable.from([JSON.stringify(json)]));
 	return $rdf.dataset().import(stream);
 }
 
