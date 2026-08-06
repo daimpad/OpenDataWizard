@@ -231,9 +231,9 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Wann wurden diese Daten zuletzt aktualisiert?
 
-**3 · DCAT-AP-Langbeschreibung:** `dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin aktualisiert diesen Wert automatisch bei jeder Speicherung, kann aber manuell überschrieben werden.
+**3 · DCAT-AP-Langbeschreibung:** `dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.
 
-**4 · Verständliche Langbeschreibung:** Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind. Beispiel: 2026-04-22.
+**4 · Verständliche Langbeschreibung:** Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.
 
 ---
 

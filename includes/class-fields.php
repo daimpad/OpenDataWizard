@@ -102,7 +102,11 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-backing', 'cessda' )
 						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
 
-					Field::make( 'text', 'odw_engagementfeld', __( 'In welchem Engagementfeld ist die Organisation aktiv?', 'open-data-wizard' ) )
+					// Der Wert landet als dct:subject am Datensatz, nicht am Herausgeber.
+					// Die Frage muss das abbilden — sonst tragen Redakteur:innen das
+					// Tätigkeitsfeld ihrer Organisation ein und der Datensatz erhält
+					// eine inhaltlich falsche Sacherschließung.
+					Field::make( 'text', 'odw_engagementfeld', __( 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-vocab', 'engagementfeld' )
 						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
 						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
@@ -200,21 +204,19 @@ class ODW_Fields {
 						)
 						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_modified', __( 'Zuletzt aktualisiert (automatisch)', 'open-data-wizard' ) )
-						->set_storage_format( 'Y-m-d' )
-						// Carbon Fields erlaubt bei Datumsfeldern nur `placeholder`,
-						// `autocomplete` und `data-*`. Ein `readOnly` löste hier eine
-						// Incorrect_Syntax_Exception aus („Your site seems to be
-						// slightly misconfigured") und blieb wirkungslos. Das Feld
-						// wird daher über dieses Data-Attribut im Admin-JS gesperrt.
-						->set_attribute( 'data-odw-readonly', '1' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
-						->set_help_text( __( 'ÄNDERUNGSDATUM (dct:modified)', 'open-data-wizard' ) . "\n\n" . __( 'Wird bei jedem Speichern automatisch auf das heutige Datum gesetzt — eine manuelle Eingabe ist nicht nötig.', 'open-data-wizard' ) ),
+					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
+					// ODW_Fields::set_modified_date() überschreibt _odw_modified bei
+					// jedem Speichern, eine Eingabe ging also kommentarlos verloren.
+					// Ein gesperrtes Feld mitsamt „Datum wählen"-Button vorzuhalten,
+					// das niemand bedienen kann, ist Ballast. Der Wert bleibt in der
+					// Übersichtsspalte „Änderungsdatum", im Qualitätsbericht und in
+					// der JSON-LD-Vorschau sichtbar.
+					Field::make( 'html', 'odw_hint_modified' )
+						->set_html(
+							'<p class="description odw-hint-auto">'
+							. esc_html__( 'Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt.', 'open-data-wizard' )
+							. '</p>'
+						),
 				)
 			)
 
@@ -281,7 +283,7 @@ class ODW_Fields {
 							)
 						),
 
-					Field::make( 'select', 'odw_availability', __( 'Wie dauerhaft ist diese Datei verfügbar?', 'open-data-wizard' ) )
+					Field::make( 'select', 'odw_availability', __( 'Wie verlässlich bleibt diese Datei abrufbar?', 'open-data-wizard' ) )
 						->add_options( self::get_availability_options() )
 						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär', 'open-data-wizard' ) ),
 
@@ -325,6 +327,13 @@ class ODW_Fields {
 									->set_help_text( __( 'Kurze Beschreibung dieser Distribution (dct:description)', 'open-data-wizard' ) ),
 								Field::make( 'text', 'attribution', __( 'Namensnennungstext', 'open-data-wizard' ) )
 									->set_help_text( __( 'Nur bei Namensnennungslizenzen (dcatde:licenseAttributionByText)', 'open-data-wizard' ) ),
+								// Das einzige Feld, das der primären Distribution bislang
+								// voraus war. odw_build_distribution_node() wertet
+								// 'availability' für jede Distribution aus, es fehlte nur
+								// die Eingabemöglichkeit.
+								Field::make( 'select', 'availability', __( 'Verlässlichkeit der Abrufbarkeit', 'open-data-wizard' ) )
+									->add_options( self::get_availability_options() )
+									->set_help_text( __( 'Wie verlässlich bleibt diese Distribution abrufbar? (dcatap:availability)', 'open-data-wizard' ) ),
 								Field::make( 'text', 'rights', __( 'Nutzungsrechte', 'open-data-wizard' ) )
 									->set_help_text( __( 'Rechtlicher Hinweis über die Lizenz hinaus (dct:rights)', 'open-data-wizard' ) ),
 							)
@@ -342,7 +351,7 @@ class ODW_Fields {
 					Field::make( 'html', 'odw_ext_hint_landing' )
 					->set_html( '<h4 style="margin:0 0 4px">' . esc_html__( 'Projektseite & Aktualität', 'open-data-wizard' ) . '</h4>' ),
 
-					Field::make( 'text', 'odw_landing_page', __( 'Wo finde ich mehr Informationen zu diesem Projekt?', 'open-data-wizard' ) )
+					Field::make( 'text', 'odw_landing_page', __( 'Wo finde ich die Projektseite zu diesen Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/projekt' )
 						->set_help_text( __( 'PROJEKTSEITE (dcat:landingPage)', 'open-data-wizard' ) . "\n\n" . __( 'URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt', 'open-data-wizard' ) ),
@@ -372,7 +381,7 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-autosuggest', 'spatial' )
 						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) . "\n\n" . __( 'Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann sind diese Daten gültig?', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
 						->set_picker_options(
 							array(
@@ -382,7 +391,7 @@ class ODW_Fields {
 						)
 						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-01', 'open-data-wizard' ) ),
 
-					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann sind diese Daten gültig?', 'open-data-wizard' ) )
+					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
 						->set_picker_options(
 							array(
@@ -395,9 +404,12 @@ class ODW_Fields {
 					Field::make( 'html', 'odw_ext_hint_contact' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontakt', 'open-data-wizard' ) . '</h4>' ),
 
-					Field::make( 'text', 'odw_contact_name', __( 'Wer ist Ansprechperson für Fragen zu diesen Daten?', 'open-data-wizard' ) )
+					// "Ansprechperson" las sich so, als sei zwingend ein Mensch gemeint —
+					// dcat:contactPoint erlaubt aber ausdrücklich auch eine Stelle oder
+					// Organisation, und genau das zeigt das Beispiel im Hilfetext.
+					Field::make( 'text', 'odw_contact_name', __( 'An wen kann ich mich bei Fragen zu diesen Daten wenden?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
-						->set_help_text( __( 'Name oder Organisation der Ansprechperson.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'Name einer Person, eines Teams oder einer Organisation.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_contact_email', __( 'Unter welcher E-Mail-Adresse kann ich Fragen stellen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
@@ -551,11 +563,14 @@ class ODW_Fields {
 						->set_rows( 2 )
 						->set_help_text( __( 'HERKUNFT (dct:provenance)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext zur Entstehung und Herkunft der Daten.', 'open-data-wizard' ) ),
 
+					// Die Überschrift benennt ausdrücklich die primäre Distribution:
+					// Die Felder dieser Sektion sind Singular-Felder und gelten nicht
+					// für die Einträge des Repeaters „Weitere Distributionen".
 					Field::make( 'html', 'odw_ext_hint_dist' )
 					->set_html(
 						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="dist" aria-expanded="false">'
 						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'Distribution — erweitert', 'open-data-wizard' )
+						. esc_html__( 'Primäre Distribution — weitere Angaben', 'open-data-wizard' )
 						. '</button>'
 					),
 

@@ -311,7 +311,9 @@ class ODW_Shortcode {
 		}
 
 		$add( __( 'Veröffentlicht', 'open-data-wizard' ), self::meta( $post_id, 'odw_issued' ) );
-		$add( __( 'Aktualisiert', 'open-data-wizard' ), self::meta( $post_id, 'odw_modified' ) );
+		// Direkt aus der Post-Meta: Das Änderungsdatum hat kein Carbon-Fields-Feld,
+		// es wird beim Speichern automatisch geschrieben.
+		$add( __( 'Aktualisiert', 'open-data-wizard' ), trim( (string) get_post_meta( $post_id, '_odw_modified', true ) ) );
 		$add( __( 'Projektseite', 'open-data-wizard' ), self::meta( $post_id, 'odw_landing_page' ), true );
 		$add( __( 'Aktualisierungsfrequenz', 'open-data-wizard' ), self::label( 'periodicity', 'odw_accrual_periodicity', $post_id ) );
 		$add( __( 'Urheber', 'open-data-wizard' ), self::meta( $post_id, 'odw_originator_name' ) );

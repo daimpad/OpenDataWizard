@@ -54,6 +54,16 @@ class ODW_Quality {
 	private const DIMENSIONS = array( 'findability', 'accessibility', 'interoperability', 'reusability', 'contextuality' );
 
 	/**
+	 * Metriken, die das Plugin selbst erfüllt — ohne Zutun der Redaktion.
+	 *
+	 * `_odw_modified` wird von ODW_Fields::set_modified_date() bei jedem Speichern
+	 * geschrieben. Die Metrik ist damit schon nach dem ersten Speichern eines
+	 * leeren Entwurfs erfüllt, was ohne Kennzeichnung wie ein Rechenfehler wirkt
+	 * ("warum 2 %, wenn noch nichts ausgefüllt ist?").
+	 */
+	private const AUTO_FULFILLED = array( 'modified' );
+
+	/**
 	 * Registers WordPress hooks.
 	 */
 	public static function init(): void {
@@ -307,8 +317,9 @@ class ODW_Quality {
 				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_issued' ) );
 
 			case 'modified':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_modified' ) )
-					|| '' !== trim( (string) get_post_meta( $id, '_odw_modified', true ) );
+				// Kein Carbon-Fields-Feld mehr — set_modified_date() schreibt den
+				// Wert direkt in die Post-Meta, dort wird er auch gelesen.
+				return '' !== trim( (string) get_post_meta( $id, '_odw_modified', true ) );
 		}
 
 		return false;
@@ -767,6 +778,30 @@ class ODW_Quality {
 				</p>
 			</div>
 
+			<?php
+			// Erklärt den Startwert: Ein frisch gespeicherter, leerer Entwurf steht
+			// nicht bei 0 %, weil das Änderungsdatum automatisch gesetzt wird.
+			$auto_points = 0;
+			foreach ( self::AUTO_FULFILLED as $auto_key ) {
+				if ( 'passed' === ( $metrics[ $auto_key ]['status'] ?? '' ) ) {
+					$auto_points += (int) ( $metrics[ $auto_key ]['points'] ?? 0 );
+				}
+			}
+			if ( $auto_points > 0 ) :
+				?>
+			<p class="description" style="margin: 0 0 12px;">
+				<?php
+				echo esc_html(
+					sprintf(
+					/* translators: %d: MQA points the plugin fulfils by itself */
+						__( 'Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%.', 'open-data-wizard' ),
+						$auto_points
+					)
+				);
+				?>
+			</p>
+			<?php endif; ?>
+
 			<?php if ( $not_assessed > 0 ) : ?>
 			<p class="description" style="margin: 0 0 12px;">
 				<?php
@@ -800,7 +835,7 @@ class ODW_Quality {
 						. ( $d_ass !== $d_max ? esc_html( sprintf( ' (max. %d)', $d_max ) ) : '' )
 						. '</span></th></tr>';
 
-					foreach ( $metrics as $m ) {
+					foreach ( $metrics as $metric_key => $m ) {
 						if ( ( $m['dimension'] ?? '' ) !== $dim ) {
 							continue;
 						}
@@ -808,6 +843,9 @@ class ODW_Quality {
 						$status = $m['status'] ?? 'failed';
 						$pts    = (int) ( $m['points'] ?? 0 );
 
+						// Jede Metrik ist binär — es gibt keine Teilpunkte. "0 / 30"
+						// suggerierte eine Skala, die es nicht gibt; offene Metriken
+						// zeigen daher, was zu gewinnen ist, nicht einen Bruch.
 						if ( 'passed' === $status ) {
 							$icon        = '✓';
 							$row_class   = 'odw-quality-pass';
@@ -817,13 +855,22 @@ class ODW_Quality {
 							$row_class   = 'odw-quality-notassessed';
 							$pts_display = '–';
 						} else {
-							$icon        = '✗';
-							$row_class   = 'odw-quality-fail';
-							$pts_display = "0 / {$pts}";
+							// Der translators-Kommentar muss unmittelbar vor dem
+							// sprintf() stehen und trennt damit die Zuweisungsgruppe —
+							// $icon und $row_class richten sich daher nur aneinander aus.
+							$icon      = '✗';
+							$row_class = 'odw-quality-fail';
+							/* translators: %d: points obtainable for this metric */
+							$pts_display = sprintf( __( '+%d möglich', 'open-data-wizard' ), $pts );
+						}
+
+						$label = (string) $m['label'];
+						if ( 'passed' === $status && in_array( (string) $metric_key, self::AUTO_FULFILLED, true ) ) {
+							$label .= ' ' . __( '(automatisch)', 'open-data-wizard' );
 						}
 						?>
 						<tr class="<?php echo esc_attr( $row_class ); ?>">
-							<td><?php echo esc_html( (string) $m['label'] ); ?></td>
+							<td><?php echo esc_html( $label ); ?></td>
 							<td class="odw-quality-col-pts"><?php echo esc_html( $pts_display ); ?></td>
 							<td class="odw-quality-col-status"><?php echo esc_html( $icon ); ?></td>
 						</tr>

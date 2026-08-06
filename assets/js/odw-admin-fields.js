@@ -273,6 +273,10 @@
 	function applySection( btn, fields, open ) {
 		fields.forEach( function ( f ) {
 			f.classList.toggle( 'odw-pro-collapsed', ! open );
+			// Markiert die Zugehörigkeit zur Sektion, damit CSS im geöffneten
+			// Zustand eine Faltlinie ziehen kann — sonst ist nicht erkennbar,
+			// welche Felder der Button überhaupt ein- und ausklappt.
+			f.classList.add( 'odw-section-member' );
 		} );
 		btn.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
 		btn.classList.toggle( 'odw-section-open', open );
@@ -596,13 +600,16 @@
 			summary.textContent = cfg.toggle || 'Mehr erfahren';
 			details.appendChild( summary );
 
+			// Alltagssprache zuerst, DCAT-AP-Definition darunter: Die Zielgruppe
+			// sind Redakteur:innen ohne Metadaten-Vorkenntnisse, für die die
+			// formale Definition allein keine Hilfe ist.
 			var body = document.createElement( 'div' );
 			body.className = 'odw-field-more__body';
-			if ( f.desc_dcat ) {
-				body.appendChild( moreBlock( cfg.dcat, f.desc_dcat ) );
-			}
 			if ( f.desc_human ) {
 				body.appendChild( moreBlock( cfg.plain, f.desc_human ) );
+			}
+			if ( f.desc_dcat ) {
+				body.appendChild( moreBlock( cfg.dcat, f.desc_dcat ) );
 			}
 			details.appendChild( body );
 			field.appendChild( details );

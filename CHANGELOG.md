@@ -7,6 +7,50 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.5] — 2026-08-06
+
+Erste Runde aus einem Usability-Test des Formulars.
+
+### 🐛 Fixed
+- **Der Qualitätswert startete unerklärt bei 2 %.** `set_modified_date()` schreibt `_odw_modified`
+  bei jedem Speichern; die MQA-Metrik „Änderungsdatum" (5 Punkte von 295 bewertbaren) war damit
+  schon nach dem ersten Speichern eines leeren Entwurfs erfüllt. Der Bericht weist solche Metriken
+  jetzt als „(automatisch)" aus und erklärt den Startwert in einem Satz — statt eine Zahl zu
+  zeigen, die wie ein Rechenfehler wirkt.
+- **Das Engagementfeld war falsch beschriftet.** Die Frage lautete „In welchem Engagementfeld ist
+  die *Organisation* aktiv?", der Wert landet aber als `dct:subject` am *Datensatz*. Wer die
+  Beschriftung wörtlich nahm, erzeugte eine inhaltlich falsche Sacherschließung. Neu: „Welchem
+  Engagementfeld ist dieser Datensatz zuzuordnen?"
+- **Zusatz-Distributionen fehlte ein Feld.** `dcatap:availability` gab es nur für die primäre
+  Distribution, obwohl `odw_build_distribution_node()` es für jede Distribution auswertet.
+
+### 🔧 Changed
+- **Das Änderungsdatum hat kein Eingabefeld mehr.** Es wurde bei jedem Speichern überschrieben,
+  eine Eingabe ging also kommentarlos verloren; ein gesperrtes Feld samt „Datum wählen"-Button
+  vorzuhalten war Ballast. Der Wert bleibt in der Übersichtsspalte, im Qualitätsbericht und in der
+  JSON-LD-Vorschau sichtbar. `ODW_Quality` und der Shortcode lesen ihn jetzt direkt aus der
+  Post-Meta statt über Carbon Fields. Im Feld-Katalog markiert ein neues Flag `auto` solche
+  Eigenschaften: Sie bleiben in `docs/FELD-REFERENZ.md` dokumentiert — sie stehen ja weiterhin im
+  JSON-LD —, sind aber von der Formular-Abdeckungsprüfung ausgenommen.
+- **Keine Scheingenauigkeit mehr im Qualitätsbericht.** Die Bewertung ist pro Metrik binär; „0 / 30"
+  suggerierte eine Skala, die es nicht gibt. Offene Metriken zeigen jetzt „+30 möglich".
+- **Vier Beschriftungen verständlicher:** „gültig" → Zeitraum, den die Daten abdecken (`dct:temporal`);
+  „Wo finde ich mehr Informationen…" → „Wo finde ich die Projektseite zu diesen Daten?";
+  „Ansprechperson" → „An wen kann ich mich … wenden?" (erlaubt auch eine Stelle oder Organisation,
+  wie `dcat:contactPoint` es vorsieht); „Wie dauerhaft ist diese Datei verfügbar?" → „Wie verlässlich
+  bleibt diese Datei abrufbar?".
+- „Distribution — erweitert" heißt jetzt „Primäre Distribution — weitere Angaben" und beantwortet
+  damit, ob die Sektion alle Distributionen betrifft (nein).
+- Im Panel „Mehr erfahren" steht die alltagssprachliche Erklärung vor der DCAT-AP-Definition.
+- Der Ausklapp-Button ist so breit wie seine Beschriftung statt über die volle Spalte, und die
+  aufgeklappte Sektion bekommt eine Faltlinie — vorher war nicht erkennbar, worauf er sich bezieht.
+
+### 🌍 i18n
+- 8 geänderte, 3 entfallene und 6 neue Zeichenketten in `.pot`/`.po`; `.mo` neu kompiliert
+  (628 Einträge, 0 unübersetzt).
+
+---
+
 ## [2.35.4] — 2026-08-06
 
 Automatisierte SHACL-Validierung in der CI — Beitrag von [@jstet](https://github.com/jstet) (CorrelAid).
