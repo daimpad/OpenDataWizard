@@ -7,6 +7,46 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.4] — 2026-08-06
+
+Automatisierte SHACL-Validierung in der CI — Beitrag von [@jstet](https://github.com/jstet) (CorrelAid).
+
+### ✨ Added
+- **SHACL-Validierung bei jedem Commit.** Ein neuer CI-Job prüft die erzeugten JSON-LD- und
+  Turtle-Dokumente gegen die offiziellen SHACL-Shapes von DCAT-AP 3.0 (EU) und DCAT-AP.de
+  (GovData). Validiert werden ein minimaler und ein maximaler Datensatz sowie der vollständige
+  Katalog — die Fixtures entstehen dabei aus dem echten Produktivcode
+  (`odw_build_dataset_jsonld()`, `ODW_Rest_API::build_catalog_document()`, `ODW_Rdf::to_turtle()`),
+  nicht aus nachgebauten Beispieldokumenten. Bisher war die Konformität nur von Hand prüfbar und
+  Abweichungen fielen erst nach der Einreichung bei einem Portal auf.
+- Die fehlenden Vokabulare und Shapes liegen jetzt unter `config/shacl/` (DCAT-AP.de-Vokabulare,
+  Deprecation-Shapes, deutsche Ergänzungen, FOAF 0.1, vCard). Sie sind reine Referenzdaten und
+  werden von `bin/build-release.sh` nicht ins Release-ZIP übernommen.
+
+### 🐛 Fixed
+- **`dct:publisher` und `dcat:contactPoint` waren für strenge Validatoren nicht konform.**
+  Ausgegeben wurde nur die Unterklasse (`foaf:Organization` bzw. `vcard:Organization`). Validatoren
+  ohne OWL-Reasoning — und das sind die meisten europäischen Portale — können daraus die
+  Oberklasse nicht herleiten und beanstandeten die Ausgabe. Beide Typen werden nun explizit
+  ausgegeben (`foaf:Organization` + `foaf:Agent`, `vcard:Organization` + `vcard:Kind`). Das ist
+  gültiges JSON-LD und eine Obermenge der bisherigen Ausgabe — bestehende Harvester sind nicht
+  betroffen.
+
+### 🔧 Changed
+- `ODW_Rest_API::build_catalog_document()` ist `public static`, damit die Fixture-Erzeugung den
+  echten Katalog-Builder aufruft statt seine Logik zu kopieren.
+- `tests/shacl/` ist aus PHPUnit und PHPCS ausgenommen: Der Fixture-Generator ist ein
+  CLI-Skript, kein Test.
+
+### 🧹 Aufgeräumt
+- Der Fixture-Generator legt sein Ausgabeverzeichnis mit `is_dir()`-Guard an (keine
+  `mkdir()`-Warnung bei wiederholten Läufen) und bricht ab, wenn Verzeichnis oder Datei nicht
+  geschrieben werden können — vorher meldete er „✓" auch für Dateien, die nie entstanden.
+- `validate.mjs` nennt bei fehlendem Fixture den Grund und den nötigen Befehl, statt „(skipping)"
+  zu melden und trotzdem abzubrechen.
+
+---
+
 ## [2.35.3] — 2026-08-03
 
 Carbon-Fields-Warnung „Your site seems to be slightly misconfigured" beseitigt.
