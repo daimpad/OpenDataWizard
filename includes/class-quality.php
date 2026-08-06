@@ -855,8 +855,11 @@ class ODW_Quality {
 							$row_class   = 'odw-quality-notassessed';
 							$pts_display = '–';
 						} else {
-							$icon        = '✗';
-							$row_class   = 'odw-quality-fail';
+							// Der translators-Kommentar muss unmittelbar vor dem
+							// sprintf() stehen und trennt damit die Zuweisungsgruppe —
+							// $icon und $row_class richten sich daher nur aneinander aus.
+							$icon      = '✗';
+							$row_class = 'odw-quality-fail';
 							/* translators: %d: points obtainable for this metric */
 							$pts_display = sprintf( __( '+%d möglich', 'open-data-wizard' ), $pts );
 						}
