@@ -54,8 +54,8 @@ msgstr "UPDATE FREQUENCY (dct:accrualPeriodicity)"
 msgid "AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)"
 msgstr "OFFICIAL TERRITORY KEY (dcatde:politicalGeocodingURI)"
 
-msgid "Ab wann sind diese Daten gültig?"
-msgstr "From when are these data valid?"
+msgid "Ab wann reicht der Zeitraum, den die Daten abdecken?"
+msgstr "From when does the period covered by the data begin?"
 
 msgid "Abbrechen"
 msgstr "Cancel"
@@ -225,8 +225,8 @@ msgstr "Assessment according to the EU Metadata Quality Assessment methodology (
 msgid "Bildung, Kultur & Sport"
 msgstr "Education, Culture & Sport"
 
-msgid "Bis wann sind diese Daten gültig?"
-msgstr "Until when are these data valid?"
+msgid "Bis wann reicht der Zeitraum, den die Daten abdecken?"
+msgstr "Until when does the period covered by the data run?"
 
 msgid "Bitte einen positiven Wert eingeben."
 msgstr "Please enter a positive value."
@@ -474,8 +474,8 @@ msgstr "Distribution with URL (dcat:accessURL)"
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
 msgstr "Distribution with access URL (dcat:accessURL)"
 
-msgid "Distribution — erweitert"
-msgstr "Distribution — advanced"
+msgid "Primäre Distribution — weitere Angaben"
+msgstr "Primary distribution — further details"
 
 msgid "Distributionen"
 msgstr "Distributions"
@@ -759,8 +759,8 @@ msgstr "Insert into dataset"
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr "Which category does this dataset belong to?"
 
-msgid "In welchem Engagementfeld ist die Organisation aktiv?"
-msgstr "In which field of engagement is the organization active?"
+msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
+msgstr "Which field of civic engagement does this dataset belong to?"
 
 msgid "In welchem Format ist die Datei?"
 msgstr "What format is the file in?"
@@ -1011,8 +1011,8 @@ msgstr "ATTRIBUTION TEXT (dcatde:licenseAttributionByText)"
 msgid "Name der herausgebenden Organisation"
 msgstr "Name of the publishing organization"
 
-msgid "Name oder Organisation der Ansprechperson."
-msgstr "Name or organization of the contact person."
+msgid "Name einer Person, eines Teams oder einer Organisation."
+msgstr "Name of a person, a team or an organisation."
 
 msgid "Namensnennung"
 msgstr "Attribution"
@@ -1528,8 +1528,8 @@ msgstr "Who created this data?"
 msgid "Wer hat diese Daten ursprünglich erstellt?"
 msgstr "Who originally created this data?"
 
-msgid "Wer ist Ansprechperson für Fragen zu diesen Daten?"
-msgstr "Who is the contact person for questions about these data?"
+msgid "An wen kann ich mich bei Fragen zu diesen Daten wenden?"
+msgstr "Who can I contact with questions about these data?"
 
 msgid "Wer pflegt diese Daten laufend?"
 msgstr "Who maintains this data on an ongoing basis?"
@@ -1537,8 +1537,8 @@ msgstr "Who maintains this data on an ongoing basis?"
 msgid "Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden."
 msgstr "Like CC BY: use and modification allowed with attribution. In addition, modified data must be shared under the same license."
 
-msgid "Wie dauerhaft ist diese Datei verfügbar?"
-msgstr "How durably is this file available?"
+msgid "Wie verlässlich bleibt diese Datei abrufbar?"
+msgstr "How reliably will this file stay available?"
 
 msgid "Wie funktioniert es?"
 msgstr "How does it work?"
@@ -1570,9 +1570,6 @@ msgstr "Welcome to the Open Data Wizard"
 msgid "Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22"
 msgstr "Updated automatically on every save. Example: 2026-04-22"
 
-msgid "Wird bei jedem Speichern automatisch auf das heutige Datum gesetzt — eine manuelle Eingabe ist nicht nötig."
-msgstr "Automatically set to today’s date on every save — no manual entry needed."
-
 msgid "Wird im Feld „Herausgebende Organisation\" neuer Datensätze vorausgefüllt."
 msgstr "Pre-filled in the “Publishing organization” field of new datasets."
 
@@ -1582,8 +1579,8 @@ msgstr "Economy & Finance"
 msgid "Wissenschaft & Technologie"
 msgstr "Science & Technology"
 
-msgid "Wo finde ich mehr Informationen zu diesem Projekt?"
-msgstr "Where can I find more information about this project?"
+msgid "Wo finde ich die Projektseite zu diesen Daten?"
+msgstr "Where do I find the project page for these data?"
 
 msgid "Wo ist das Qualitätssicherungs-Verfahren dokumentiert?"
 msgstr "Where is the quality-assurance process documented?"
@@ -1675,9 +1672,6 @@ msgstr "Access rights set (dct:accessRights)"
 msgid "Zugänglichkeit"
 msgstr "Accessibility"
 
-msgid "Zuletzt aktualisiert (automatisch)"
-msgstr "Last updated (automatic)"
-
 msgid "Zum Datenatlas Zivilgesellschaft"
 msgstr "Go to the Datenatlas Zivilgesellschaft"
 
@@ -1734,9 +1728,6 @@ msgstr "e.g. environment"
 
 msgid "z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)"
 msgstr "e.g. § 12a EGovG, German Re-use of Public Sector Information Act (IWG)"
-
-msgid "ÄNDERUNGSDATUM (dct:modified)"
-msgstr "MODIFICATION DATE (dct:modified)"
 
 msgid "Änderungsdatum"
 msgstr "Modification date"
@@ -1888,3 +1879,21 @@ msgstr "Releases"
 
 msgid "Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install\" ausführen."
 msgstr "For developers: alternatively run \"composer install\" in the plugin directory."
+
+msgid "Verlässlichkeit der Abrufbarkeit"
+msgstr "Reliability of availability"
+
+msgid "Wie verlässlich bleibt diese Distribution abrufbar? (dcatap:availability)"
+msgstr "How reliably will this distribution stay available? (dcatap:availability)"
+
+msgid "Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt."
+msgstr "The modification date (dct:modified) is set automatically every time you save."
+
+msgid "+%d möglich"
+msgstr "+%d available"
+
+msgid "(automatisch)"
+msgstr "(automatic)"
+
+msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
+msgstr "Of these, the wizard contributes %d points itself: the modification date is set automatically every time you save. That is why even an empty dataset does not start at 0 %%."

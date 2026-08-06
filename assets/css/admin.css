@@ -710,11 +710,14 @@
 }
 
 /* Collapsible subsection headers (Tab 4 „Erweiterte Angaben") */
+/* Der Button ist so breit wie seine Beschriftung — über die volle Spaltenbreite
+   sah er wie eine Trennlinie aus und ließ offen, worauf er sich bezieht. */
 .odw-section-toggle {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	width: 100%;
+	width: auto;
+	max-width: 100%;
 	margin: 12px 0 4px;
 	padding: 8px 12px;
 	background: var( --odw-color-bg-light, #f6f7f7 );
@@ -739,6 +742,13 @@
 
 .odw-section-toggle.odw-section-open .odw-section-caret {
 	transform: rotate( 90deg );
+}
+
+/* Faltlinie: macht sichtbar, welche Felder zur aufgeklappten Sektion gehören. */
+.odw-section-member:not( .odw-pro-collapsed ) {
+	border-left: 2px solid var( --odw-color-border, #c3c4c7 );
+	margin-left: 3px;
+	padding-left: 13px;
 }
 
 /* -------------------------------------------------------------------------

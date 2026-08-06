@@ -33,7 +33,7 @@ msgstr ""
 msgid "AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)"
 msgstr ""
 
-msgid "Ab wann sind diese Daten gültig?"
+msgid "Ab wann reicht der Zeitraum, den die Daten abdecken?"
 msgstr ""
 
 msgid "Abbrechen"
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Bildung, Kultur & Sport"
 msgstr ""
 
-msgid "Bis wann sind diese Daten gültig?"
+msgid "Bis wann reicht der Zeitraum, den die Daten abdecken?"
 msgstr ""
 
 msgid "Bitte einen positiven Wert eingeben."
@@ -636,7 +636,7 @@ msgstr ""
 msgid "Name der herausgebenden Organisation"
 msgstr ""
 
-msgid "Name oder Organisation der Ansprechperson."
+msgid "Name einer Person, eines Teams oder einer Organisation."
 msgstr ""
 
 msgid "Neuen Datensatz anlegen"
@@ -907,7 +907,7 @@ msgstr ""
 msgid "Wer gibt diese Daten heraus? Worum geht es? In welche Kategorie gehört der Datensatz?"
 msgstr ""
 
-msgid "Wer ist Ansprechperson für Fragen zu diesen Daten?"
+msgid "An wen kann ich mich bei Fragen zu diesen Daten wenden?"
 msgstr ""
 
 msgid "Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden."
@@ -937,7 +937,7 @@ msgstr ""
 msgid "Wissenschaft & Technologie"
 msgstr ""
 
-msgid "Wo finde ich mehr Informationen zu diesem Projekt?"
+msgid "Wo finde ich die Projektseite zu diesen Daten?"
 msgstr ""
 
 msgid "Wo kann ich die Datei herunterladen?"
@@ -1006,9 +1006,6 @@ msgstr ""
 msgid "z.B. Umwelt"
 msgstr ""
 
-msgid "ÄNDERUNGSDATUM (dct:modified)"
-msgstr ""
-
 msgid "Änderungsdatum"
 msgstr ""
 
@@ -1069,7 +1066,7 @@ msgstr ""
 msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
 msgstr ""
 
-msgid "Wie dauerhaft ist diese Datei verfügbar?"
+msgid "Wie verlässlich bleibt diese Datei abrufbar?"
 msgstr ""
 
 msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
@@ -1243,7 +1240,7 @@ msgstr ""
 msgid "Weitere DCAT-AP-Felder (optional)"
 msgstr ""
 
-msgid "Distribution — erweitert"
+msgid "Primäre Distribution — weitere Angaben"
 msgstr ""
 
 msgid "Welche eindeutige Kennung hat dieser Datensatz?"
@@ -1505,4 +1502,25 @@ msgid "Releases"
 msgstr ""
 
 msgid "Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install\" ausführen."
+msgstr ""
+
+msgid "Verlässlichkeit der Abrufbarkeit"
+msgstr ""
+
+msgid "Wie verlässlich bleibt diese Distribution abrufbar? (dcatap:availability)"
+msgstr ""
+
+msgid "Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt."
+msgstr ""
+
+msgid "+%d möglich"
+msgstr ""
+
+msgid "(automatisch)"
+msgstr ""
+
+msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
+msgstr ""
+
+msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
 msgstr ""
