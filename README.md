@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.37.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.38.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -171,11 +171,27 @@ Automatische Metadaten-Qualitätsprüfung nach der [EU-MQA-Methodik](https://dat
 
 Berechnung nach jedem Speichern. Die **Listenspalte** zeigt Prozent + Stufe; die **Qualitäts-Meta-Box** ergänzt den MQA-Rohwert (z. B. „54 / 259 Punkte, von max. 405") als Detailzeile.
 
-### 📥 Download-Card Shortcode
+### 📥 Download-Card — Block oder Shortcode
+
+Zwei Wege zur selben Karte. **Empfohlen ist der Block:**
+
+Im Beitrags- oder Seiteneditor über das Plus-Symbol **„Datensatz-Karte"** einfügen und rechts in
+der Seitenleiste den Datensatz aus einer Liste wählen — keine ID zum Abtippen. Zur Auswahl stehen
+nur veröffentlichte Datensätze.
+
+Alternativ der Shortcode, etwa in klassischen Editoren oder Widgets:
+
 ```
 [odw_dataset id="123"]
 ```
-Rendert eine strukturierte Download-Card im Frontend: Titel, Thema-Badge, Lizenz, Schlagwörter als Tag-Pillen, Download-Button sowie einen **Metadaten-Download-Button (JSON-LD)**. CSS (`assets/css/frontend.css`) wird nur auf Seiten geladen, die den Shortcode enthalten.
+
+Beide rendern dieselbe strukturierte Download-Card im Frontend: Titel, Thema-Badge, Lizenz,
+Schlagwörter als Tag-Pillen, Download-Button sowie einen **Metadaten-Download-Button (JSON-LD)**.
+CSS (`assets/css/frontend.css`) wird nur auf Seiten geladen, die die Karte auch enthalten.
+
+Der Block speichert ausschließlich die Datensatz-ID und rendert beim Ausliefern — ein später
+umbenannter Datensatz erscheint also mit seinem aktuellen Titel, statt eine eingefrorene Kopie im
+Beitrag zu hinterlassen.
 
 ### 🔗 REST API Endpoints
 

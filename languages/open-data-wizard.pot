@@ -1521,3 +1521,24 @@ msgstr ""
 
 msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
 msgstr ""
+
+msgid "(ohne Titel, ID %d)"
+msgstr ""
+
+msgid "Datensatz-Karte"
+msgstr ""
+
+msgid "Es gibt noch keinen veröffentlichten Datensatz. Legen Sie zuerst einen an und veröffentlichen Sie ihn."
+msgstr ""
+
+msgid "Nur veröffentlichte Datensätze stehen zur Auswahl. Entwürfe erscheinen erst nach dem Veröffentlichen."
+msgstr ""
+
+msgid "Welcher Datensatz soll angezeigt werden?"
+msgstr ""
+
+msgid "Wählen Sie rechts in der Seitenleiste einen Datensatz aus."
+msgstr ""
+
+msgid "wird als Download-Karte ausgegeben"
+msgstr ""
