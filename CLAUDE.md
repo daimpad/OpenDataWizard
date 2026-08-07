@@ -730,7 +730,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.36.0**
+Current: **v2.37.0**
 
 ---
 
@@ -766,6 +766,9 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
   Dokument) + `&format=turtle` über den dependency-freien `ODW_Rdf`-Serializer; Admin-Box mit den
   kopierfertigen URLs. Gegen die gebündelten SHACL-Shapes validiert (DCAT-AP.de: konform).
 - **Reproduzierbare Abhängigkeiten (v2.34.0):** `vendor/` ist nicht mehr eingecheckt (siehe Quick Start).
+- **Gebündelte Vokabulare vervollständigt (v2.37.0):** `access-right` (3 Stufen) und `language`
+  (alle 24 EU-Amtssprachen) liegen unter `config/vocabularies/`. Die Sprachauswahl bot vorher nur
+  Deutsch und Englisch, obwohl `odw_resolve_language_tag()` alle 24 Codes bereits umsetzen konnte.
 - **Content Negotiation (v2.35.0):** Alle drei Endpunkte liefern `jsonld`/`json`/`turtle`; ohne
   `?format=` entscheidet der `Accept`-Header (q-Werte, `Vary: Accept`). Explizites `?format=`
   hat Vorrang.
@@ -777,8 +780,8 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Gutenberg-Block** für die Download-Card (Alternative zum Shortcode).
 - **Mehrsprachigkeit der Oberfläche** (WPML/Polylang) — das Datenmodell unterstützt Mehrsprachigkeit
   bereits, die Integration fehlt.
-- **Optional/künftig:** weitere gebündelte Vokabulare (`access-right`, vollständige EU-Sprachliste);
-  Registry-getriebenes Formular-/JSON-LD-Rendering (Aufräumarbeit ohne sichtbaren Nutzen).
+- **Optional/künftig:** Registry-getriebenes Formular-/JSON-LD-Rendering (Aufräumarbeit ohne
+  sichtbaren Nutzen).
 
 > **Hinweis zu i18n:** Im aktuellen Container ist `msgfmt` nicht verfügbar. Die `.mo` wird daher per
 > gebündeltem, dependency-freiem PO→MO-Skript neu erzeugt:
@@ -869,6 +872,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.36.0 (August 2026)
+**Zuletzt aktualisiert**: Version 2.37.0 (August 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
