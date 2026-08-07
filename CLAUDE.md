@@ -516,25 +516,33 @@ Caching: `odw_delta_` + MD5 key, TTL 5 min
 
 ## 🎯 CSS Spacing & Styling
 
-### Admin Interface Spacing
+### Admin Interface Spacing (ab v2.36.0)
+Abstände kommen vom Raster des Tab-Panels, nicht mehr von Margins je Feld —
+`gap` kollabiert nicht und verdoppelt sich nicht.
+
 ```css
-/* Formularfelder: Konsistente Abstände */
-.cf-field {
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-/* Tab-Inhalte */
 .cf-container__tab {
-    padding: 20px 0;
+    display: grid;
+    grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+    gap: var( --odw-space-5 ) var( --odw-space-4 );
+    padding: var( --odw-space-5 ) 20px var( --odw-space-6 );
 }
 
-/* Spezifische Fields mit data-Attribut */
-[data-odw-backing="byte_size"] {
-    padding-left: 20px;
-    padding-right: 20px;
+/* Alles über die volle Breite; halbe Breite ist ein Opt-in. */
+.cf-container__tab > * { grid-column: 1 / -1; }
+
+/* Ausgewählt über das name-Attribut, nicht über ein data-Attribut:
+   Carbon Fields reicht data-Attribute bei <select> nicht zuverlässig
+   ans DOM durch, der Meta-Key steht dagegen immer im Namen. */
+.cf-container__tab > .cf-field:has( [name$="[_odw_temporal_start]"] ) {
+    grid-column: span 1;
 }
 ```
+
+> **Achtung bei Carbon-Fields-Updates:** Alle Regeln, die an CF-Klassennamen
+> hängen, stehen gesammelt im Block `FORMULAR-DESIGN` am Ende von
+> `assets/css/admin.css`. Das ist die einzige Stelle, die nach einem Update
+> zu prüfen ist.
 
 ### CSS Variables (Admin)
 ```css
@@ -722,7 +730,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.35.8**
+Current: **v2.36.0**
 
 ---
 
@@ -861,6 +869,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.35.8 (August 2026)
+**Zuletzt aktualisiert**: Version 2.36.0 (August 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

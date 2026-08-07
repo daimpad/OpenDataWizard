@@ -7,6 +7,45 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.36.0] — 2026-08-07
+
+Überarbeitetes Formular-Design — Typografie, Abstände, Eingabefelder.
+
+### 🔧 Changed
+- **Abstände kommen jetzt vom Raster, nicht mehr von Rändern je Feld.** Das Tab-Panel ist ein
+  CSS-Grid mit `gap`; Margins an einzelnen Feldern kollabierten oder verdoppelten sich, je
+  nachdem was daneben stand. Das Ergebnis ist ein gleichmäßiger vertikaler Rhythmus.
+- **Zwei Spalten für zusammengehörige Felder.** Format und Dateigröße, Beginn und Ende des
+  Zeitraums, Name und E-Mail bei Urheber, pflegender Stelle und Ersteller sowie die beiden
+  Kontaktfelder stehen nebeneinander statt jeweils über die volle Breite. Unterhalb von 782 px —
+  der Bruchstelle des WordPress-Backends — wird wieder einspaltig umbrochen.
+- **Eingabefelder einheitlich und größer.** 40 statt rund 30 Pixel Höhe, weichere Rundung,
+  sichtbarer Fokus-Ring. Text-, Auswahl-, Zahlen- und Datumsfelder erbten bislang
+  unterschiedliche Standardhöhen von WordPress und sahen entsprechend uneinheitlich aus.
+- **Reiter mit Unterstrich** statt gerahmter Karteikarten-Optik.
+- **Wiederholbare Distributionen als Karten** mit eigener Kontur und ruhigem Kopfbereich.
+- **Datei-Upload als getönter Block** direkt unter der Zugriffs-URL — sichtbar die Alternative
+  zu dem Feld darüber, nicht ein weiteres Pflichtfeld daneben.
+- Hilfetexte nicht mehr kursiv und mit größerem Zeilenabstand. Betrifft die Anzeige ohne
+  JavaScript; mit JavaScript wandert der Text weiterhin in den ⓘ-Tooltip.
+
+### ℹ️ Wartungshinweis
+Alle Regeln, die an Klassennamen von Carbon Fields hängen, stehen gesammelt im Block
+**`FORMULAR-DESIGN`** am Ende von `assets/css/admin.css`. Das ist nach einem Carbon-Fields-Update
+die einzige Stelle, die zu prüfen ist. Die Abhängigkeit ist damit von acht auf rund zwanzig
+CF-Klassen gestiegen — der Preis für die Gestaltung, dafür an einem Ort statt verstreut.
+
+Die Zweispaltigkeit wählt Felder über ihr `name`-Attribut aus, nicht über ein `data`-Attribut:
+Carbon Fields reicht `data`-Attribute bei `<select>` nicht zuverlässig ans DOM durch, der
+Meta-Key steht dagegen immer im Namen. Dadurch war **keine Änderung an PHP nötig** — der
+Umbau ist reines CSS.
+
+### 🎨 Added
+- Token für Abstände, Radien, Feldhöhe und Schriftgrößen in `:root`. Werte stehen damit an einer
+  Stelle statt über 1.400 Zeilen verteilt.
+
+---
+
 ## [2.35.8] — 2026-08-07
 
 Datei-Upload steht dort, wo er hingehört.

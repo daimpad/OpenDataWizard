@@ -35,6 +35,31 @@
 
     --odw-radius:            4px;
     --odw-transition:        0.15s ease;
+
+    /* -----------------------------------------------------------------
+       Formular-Design (v2.36.0)
+
+       Abstände, Radien und Schriftgrößen als Token, damit sie an einer
+       Stelle stehen statt über die Datei verteilt. --odw-radius bleibt
+       unverändert bei 4px für Badges und Meldungen; das Formular nutzt
+       die weicheren Werte darunter.
+       ----------------------------------------------------------------- */
+    --odw-space-1:  4px;
+    --odw-space-2:  8px;
+    --odw-space-3: 12px;
+    --odw-space-4: 16px;
+    --odw-space-5: 22px;
+    --odw-space-6: 32px;
+
+    --odw-radius-field: 7px;
+    --odw-radius-card: 10px;
+
+    --odw-field-height: 40px;
+    --odw-font-label:   13.5px;
+    --odw-font-input:   14px;
+    --odw-font-help:    12.5px;
+
+    --odw-focus-ring: 0 0 0 3px rgba( 34, 113, 177, 0.16 );
 }
 
 /* =========================================================================
@@ -43,14 +68,17 @@
 
 /* Carbon Fields 3.6 rendert ul.cf-container__tabs-list > li.cf-container__tabs-item
    mit einem <button> als Klickfläche; aktiver Tab: --current. */
+/* Der aktive Reiter wird durch einen Unterstrich markiert statt durch einen
+   gerahmten Karteikartenreiter. Das nimmt der Leiste die Schwere und lässt
+   die Beschriftungen selbst führen. */
 .cf-container__tabs-list {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
-    margin: 0 0 0 -1px;
+    margin: 0;
     padding: 0;
     list-style: none;
-    border-bottom: 2px solid var(--odw-color-primary);
+    border-bottom: 1px solid var(--odw-color-border);
 }
 
 .cf-container__tabs-item {
@@ -63,32 +91,32 @@
 .cf-container__tabs-item button {
     display: block;
     width: 100%;
-    padding: 10px 18px;
+    padding: 11px 16px;
     font: inherit;
-    font-size: 13px;
+    font-size: var(--odw-font-label);
     font-weight: 500;
     text-align: left;
     cursor: pointer;
     color: var(--odw-color-text-muted);
-    background: var(--odw-color-bg-light);
-    border: 1px solid var(--odw-color-border);
-    border-bottom: none;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
     border-radius: var(--odw-radius) var(--odw-radius) 0 0;
-    transition: background var(--odw-transition), color var(--odw-transition);
+    margin-bottom: -1px;
+    transition: background var(--odw-transition), color var(--odw-transition), border-color var(--odw-transition);
     user-select: none;
 }
 
 .cf-container__tabs-item:hover button {
-    background: var(--odw-color-primary-bg);
+    background: var(--odw-color-bg-light);
     color: var(--odw-color-text);
 }
 
 .cf-container__tabs-item--current button {
-    background: var(--odw-color-primary-bg);
+    background: transparent;
     color: var(--odw-color-primary);
     font-weight: 600;
-    border-bottom: 2px solid var(--odw-color-primary-bg);
-    margin-bottom: -2px;
+    border-bottom-color: var(--odw-color-primary);
     z-index: 1;
     position: relative;
 }
@@ -102,23 +130,14 @@
    Tab Content
    ========================================================================= */
 
-.cf-container__tab {
-    padding: 20px 0;
-}
+/* Abstände und Raster des Tab-Inhalts stehen im Block „FORMULAR-DESIGN"
+   am Dateiende. Die früheren Einzelabstände je Feld sind entfallen: Mit
+   `gap` am Container entsteht ein gleichmäßiger Rhythmus, während Margins
+   an Feldern kollabieren oder sich verdoppeln.
 
+   .cf-field behält außerhalb des Tab-Panels seinen Innenabstand — Carbon
+   Fields verwendet dieselbe Klasse auch in anderen Containern. */
 .cf-field {
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-/* Consistent spacing for all form fields */
-.cf-container__tab .cf-field {
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-/* Specific spacing for the file size field */
-[data-odw-backing="byte_size"] {
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -1172,4 +1191,291 @@ input.odw-cessda-input,
     margin-top: 10px;
     color: var(--odw-color-text-muted);
     font-size: 14px;
+}
+
+/* =========================================================================
+   FORMULAR-DESIGN (v2.36.0)
+
+   Dieser Block hängt an Klassennamen von Carbon Fields und ist damit die
+   Stelle, die nach einem CF-Update zu prüfen ist. Betroffen sind:
+
+     .cf-container__tab
+     .cf-field, .cf-field__head, .cf-field__label, .cf-field__body,
+     .cf-field__help
+     .cf-complex, .cf-complex__group, .cf-complex__group-head,
+     .cf-complex__group-body, .cf-complex__group-index,
+     .cf-complex__group-title, .cf-complex__inserter-button
+
+   Ausschließlich Aussehen — keine Regel hier ändert Struktur, Reihenfolge
+   oder Verhalten des Formulars.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+ * Raster statt Margin-Stapel
+ *
+ * Das Tab-Panel ist der direkte Elternknoten aller Felder — auch der per
+ * JavaScript eingefügten Widgets (CESSDA-Label, Dateigröße). Alle Kinder
+ * laufen deshalb standardmäßig über die volle Breite; halbe Breite ist ein
+ * ausdrückliches Opt-in weiter unten.
+ *
+ * Der Innenabstand wandert vom Feld auf den Container: Mit `gap` entsteht
+ * ein gleichmäßiger Rhythmus, während Margins an Feldern kollabieren oder
+ * sich verdoppeln, je nachdem was daneben steht.
+ * ------------------------------------------------------------------------- */
+
+.cf-container__tab {
+	display: grid;
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	gap: var( --odw-space-5 ) var( --odw-space-4 );
+	align-items: start;
+	padding: var( --odw-space-5 ) 20px var( --odw-space-6 );
+}
+
+.cf-container__tab > * {
+	grid-column: 1 / -1;
+	min-width: 0;
+}
+
+/* Der horizontale Abstand kommt jetzt vom Container. */
+.cf-container__tab > .cf-field,
+.cf-container__tab > .odw-cessda-widget,
+.cf-container__tab > .odw-filesize-widget {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.cf-container__tab > .odw-cessda-widget,
+.cf-container__tab > .odw-filesize-widget {
+	margin: 0;
+}
+
+/* Zwei Felder pro Zeile für inhaltlich zusammengehörige Paare. Ausgewählt
+   über das name-Attribut statt über ein data-Attribut: Carbon Fields reicht
+   data-Attribute bei <select> nicht zuverlässig an das DOM-Element durch,
+   der Meta-Key steht dagegen immer im Namen. */
+.cf-container__tab > .cf-field:has( [name$="[_odw_format]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_byte_size]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_temporal_start]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_temporal_end]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_contact_email]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_contact_url]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_originator_name]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_originator_email]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_maintainer_name]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_maintainer_email]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_creator_name]"] ),
+.cf-container__tab > .cf-field:has( [name$="[_odw_creator_email]"] ) {
+	grid-column: span 1;
+}
+
+/* Das Dateigrößen-Widget ersetzt sein Feld optisch und gehört neben das
+   Format — dieselbe halbe Breite wie dort. */
+.cf-container__tab > .odw-filesize-widget {
+	grid-column: span 1;
+}
+
+/* Unter der WordPress-Admin-Bruchstelle wird alles einspaltig. */
+@media ( max-width: 782px ) {
+	.cf-container__tab {
+		grid-template-columns: minmax( 0, 1fr );
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
+	.cf-container__tab > .cf-field,
+	.cf-container__tab > .odw-filesize-widget {
+		grid-column: 1 / -1;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Beschriftung und Hilfetext
+ * ------------------------------------------------------------------------- */
+
+.cf-container__tab .cf-field__head {
+	margin-bottom: var( --odw-space-2 );
+}
+
+.cf-container__tab .cf-field__label {
+	display: block;
+	font-size: var( --odw-font-label );
+	font-weight: 600;
+	line-height: 1.4;
+	letter-spacing: -0.004em;
+	color: var( --odw-color-text );
+}
+
+/* Ohne JavaScript bleibt der Hilfetext an Ort und Stelle — dann soll er
+   lesbar sein und nicht wie eine kursive Fußnote wirken. Mit JavaScript
+   wandert er in den ⓘ-Tooltip und wird oben ausgeblendet. */
+.cf-container__tab .cf-field__help {
+	margin-top: var( --odw-space-2 );
+	font-size: var( --odw-font-help );
+	font-style: normal;
+	line-height: 1.55;
+	color: var( --odw-color-text-muted );
+}
+
+/* -------------------------------------------------------------------------
+ * Eingabefelder
+ *
+ * Text, Auswahl, Zahl und Datum sahen bislang unterschiedlich aus, weil sie
+ * von WordPress verschiedene Standardhöhen und -innenabstände erben.
+ * ------------------------------------------------------------------------- */
+
+.cf-container__tab .cf-field__body input[type="text"],
+.cf-container__tab .cf-field__body input[type="url"],
+.cf-container__tab .cf-field__body input[type="email"],
+.cf-container__tab .cf-field__body input[type="number"],
+.cf-container__tab .cf-field__body select,
+.cf-container__tab .cf-field__body textarea,
+.odw-cessda-input,
+.odw-filesize-row input[type="number"],
+.odw-filesize-row select {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+	min-height: var( --odw-field-height );
+	padding: 9px 12px;
+	border: 1px solid var( --odw-color-border );
+	border-radius: var( --odw-radius-field );
+	background: var( --odw-color-primary-bg );
+	color: var( --odw-color-text );
+	font-size: var( --odw-font-input );
+	line-height: 1.45;
+	transition: border-color var( --odw-transition ), box-shadow var( --odw-transition );
+}
+
+.cf-container__tab .cf-field__body textarea {
+	min-height: 84px;
+	padding: 10px 12px;
+}
+
+.cf-container__tab .cf-field__body input:focus,
+.cf-container__tab .cf-field__body select:focus,
+.cf-container__tab .cf-field__body textarea:focus,
+.odw-cessda-input:focus,
+.odw-filesize-row input[type="number"]:focus,
+.odw-filesize-row select:focus {
+	outline: 0;
+	border-color: var( --odw-color-primary );
+	box-shadow: var( --odw-focus-ring );
+}
+
+.cf-container__tab .cf-field__body input::placeholder,
+.cf-container__tab .cf-field__body textarea::placeholder,
+.odw-cessda-input::placeholder {
+	color: #8a92a3;
+}
+
+/* Das Dateigrößen-Widget hat zwei Felder nebeneinander — die dürfen nicht
+   beide auf 100 % gehen. */
+.odw-filesize-row input[type="number"] {
+	width: auto;
+	flex: 1 1 auto;
+}
+
+.odw-filesize-row select {
+	width: auto;
+	flex: 0 0 auto;
+}
+
+/* -------------------------------------------------------------------------
+ * Wiederholbare Gruppen als Karten
+ *
+ * .cf-complex__group ist ein echter Container in der Carbon-Fields-Ausgabe,
+ * anders als lose nebeneinanderstehende Felder. Eine Karte ist hier deshalb
+ * unkompliziert und macht sichtbar, was zusammengehört.
+ * ------------------------------------------------------------------------- */
+
+.cf-complex .cf-complex__group {
+	border: 1px solid #e4e6eb;
+	border-radius: var( --odw-radius-card );
+	overflow: hidden;
+	background: var( --odw-color-primary-bg );
+	box-shadow: 0 1px 2px rgba( 23, 26, 31, 0.04 );
+	margin-bottom: var( --odw-space-2 );
+}
+
+.cf-complex .cf-complex__group-head {
+	padding: var( --odw-space-3 ) var( --odw-space-4 );
+	background: #f7f8fa;
+	border-bottom: 1px solid #e4e6eb;
+	font-size: var( --odw-font-label );
+	font-weight: 600;
+}
+
+.cf-complex .cf-complex__group-index {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border: 1px solid #e4e6eb;
+	border-radius: 6px;
+	background: var( --odw-color-primary-bg );
+	color: var( --odw-color-text-muted );
+	font-size: 12px;
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+
+.cf-complex .cf-complex__group-body {
+	padding: var( --odw-space-4 );
+	display: grid;
+	gap: var( --odw-space-4 );
+}
+
+.cf-complex .cf-complex__group-body > .cf-field {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.cf-complex .cf-complex__inserter-button {
+	min-height: 38px;
+	padding: 8px 15px;
+	border-radius: var( --odw-radius-field );
+	font-weight: 500;
+}
+
+/* -------------------------------------------------------------------------
+ * Datei-Upload
+ *
+ * Steht seit v2.35.8 unmittelbar unter der Zugriffs-URL. Ein eigener, ruhig
+ * getönter Block macht sichtbar, dass er die Alternative zu dem Feld darüber
+ * ist und nicht ein weiteres Pflichtfeld daneben.
+ * ------------------------------------------------------------------------- */
+
+.cf-container__tab .odw-file-upload {
+	padding: var( --odw-space-4 );
+	background: #f4f7fa;
+	border: 1px solid #e4e6eb;
+	border-radius: var( --odw-radius-card );
+}
+
+.cf-container__tab .odw-file-preview {
+	padding: var( --odw-space-3 ) var( --odw-space-4 );
+	border-radius: var( --odw-radius-field );
+}
+
+/* -------------------------------------------------------------------------
+ * Abschnitts-Umschalter
+ *
+ * Ergänzt die Faltlinie aus v2.35.7 um ruhigere Farbgebung — der graue
+ * Vollbalken wirkte wie eine Trennlinie, nicht wie eine Schaltfläche.
+ * ------------------------------------------------------------------------- */
+
+.cf-container__tab .odw-section-toggle {
+	padding: 9px 14px 9px 12px;
+	background: transparent;
+	border-radius: var( --odw-radius-field );
+	color: var( --odw-color-text-muted );
+	transition: background var( --odw-transition ), border-color var( --odw-transition ), color var( --odw-transition );
+}
+
+.cf-container__tab .odw-section-toggle:hover {
+	background: #f7f8fa;
+	border-color: #c9cdd6;
+	color: var( --odw-color-text );
 }
