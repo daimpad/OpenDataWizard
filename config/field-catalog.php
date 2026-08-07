@@ -62,6 +62,18 @@ return array(
 		'desc_human' => 'Wählen Sie das Themengebiet, zu dem die Daten am besten passen — ähnlich einer Schublade, in die der Datensatz einsortiert wird. Das hilft anderen, Ihre Daten über Themenfilter zu finden. Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur.',
 	),
 	array(
+		'key'        => 'keywords',
+		'meta_key'   => '_odw_keywords',
+		'dcat_prop'  => 'dcat:keyword',
+		'tab'        => '1 — Grundlegende Informationen',
+		'tier'       => 'recommended',
+		'vocab'      => '',
+		'q_dcat'     => 'Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?',
+		'q_human'    => 'Mit welchen Schlagworten finde ich diese Daten?',
+		'desc_dcat'  => '`dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.',
+		'desc_human' => 'Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.',
+	),
+	array(
 		'key'        => 'cessda_topic',
 		'meta_key'   => '_odw_cessda_topic',
 		'dcat_prop'  => 'dct:subject',
@@ -81,7 +93,7 @@ return array(
 		'tier'       => 'optional',
 		'vocab'      => 'engagementfeld',
 		'q_dcat'     => 'Welches `dct:subject` (Engagementfeld) nach ZiviZ-Vokabular beschreibt den Datensatz?',
-		'q_human'    => 'In welchem Engagementfeld ist die Organisation aktiv?',
+		'q_human'    => 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?',
 		'desc_dcat'  => '`dct:subject` mit einem Konzept aus dem ZiviZ-Vokabular „Engagementfeld" (`https://ziviz.de/def/engagementfeld/`), das zivilgesellschaftliche Tätigkeitsfelder klassifiziert. Der Wert ist die Konzept-URI; die Label→URI-Auflösung erfolgt beim Speichern. Mehrfachangabe möglich (Kardinalität 0..n).',
 		'desc_human' => 'Optional für Organisationen der Zivilgesellschaft: Ordnen Sie den Datensatz einem Engagementfeld zu — also dem gesellschaftlichen Bereich, in dem Sie aktiv sind. Wählen Sie einen Eintrag aus der Liste; die passende Kennung wird automatisch gesetzt. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.',
 	),
@@ -99,61 +111,20 @@ return array(
 	),
 
 	// =========================================================================
-	// Tab 2 — Inhaltliche Angaben
+	// Tab 2 — Sprache & Übersetzungen
 	// =========================================================================
 
 	array(
 		'key'        => 'language',
 		'meta_key'   => '_odw_language',
 		'dcat_prop'  => 'dct:language',
-		'tab'        => '2 — Inhaltliche Angaben',
+		'tab'        => '2 — Sprache & Übersetzungen',
 		'tier'       => 'recommended',
 		'vocab'      => 'language',
 		'q_dcat'     => 'In welcher `dct:language` (Sprache) liegen die Daten vor?',
 		'q_human'    => 'In welcher Sprache sind die Daten?',
 		'desc_dcat'  => '`dct:language` gibt die Sprache des Datensatzes an, referenziert über das EU-Authority-Vokabular „Language" (`http://publications.europa.eu/resource/authority/language/`, z. B. `DEU`, `ENG`). Kardinalität 0..n — mehrsprachige Datensätze können mehrere Sprachen angeben.',
 		'desc_human' => 'Geben Sie an, in welcher Sprache die Inhalte der Daten verfasst sind (z. B. die Spaltenüberschriften und Texte). Das hilft Nutzenden einzuschätzen, ob sie die Daten verstehen. Beispiel: Deutsch, Englisch.',
-	),
-	array(
-		'key'        => 'keywords',
-		'meta_key'   => '_odw_keywords',
-		'dcat_prop'  => 'dcat:keyword',
-		'tab'        => '2 — Inhaltliche Angaben',
-		'tier'       => 'recommended',
-		'vocab'      => '',
-		'q_dcat'     => 'Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?',
-		'q_human'    => 'Mit welchen Schlagworten finde ich diese Daten?',
-		'desc_dcat'  => '`dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.',
-		'desc_human' => 'Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.',
-	),
-	array(
-		'key'        => 'issued',
-		'meta_key'   => '_odw_issued',
-		'dcat_prop'  => 'dct:issued',
-		'tab'        => '2 — Inhaltliche Angaben',
-		'tier'       => 'recommended',
-		'vocab'      => '',
-		'q_dcat'     => 'Wann wurde der Datensatz `dct:issued` (erstveröffentlicht)?',
-		'q_human'    => 'Wann wurden diese Daten zum ersten Mal veröffentlicht?',
-		'desc_dcat'  => '`dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Kardinalität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).',
-		'desc_human' => 'Geben Sie das Datum an, an dem die Daten erstmals veröffentlicht wurden. Das ist der „Geburtstag" des Datensatzes, nicht der Zeitraum, den die Daten abdecken. Beispiel: 2024-01-15.',
-	),
-	array(
-		'key'        => 'modified',
-		'meta_key'   => '_odw_modified',
-		'dcat_prop'  => 'dct:modified',
-		'tab'        => '2 — Inhaltliche Angaben',
-		'tier'       => 'recommended',
-		'vocab'      => '',
-		// Kein Formularfeld: Der Wert wird beim Speichern automatisch gesetzt.
-		// Das Flag nimmt den Eintrag von der Formular-Abdeckungsprüfung aus,
-		// ohne die Eigenschaft aus der Feld-Referenz zu entfernen — sie steht
-		// weiterhin im veröffentlichten JSON-LD.
-		'auto'       => true,
-		'q_dcat'     => 'Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?',
-		'q_human'    => 'Wann wurden diese Daten zuletzt aktualisiert?',
-		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.',
-		'desc_human' => 'Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.',
 	),
 
 	// =========================================================================
@@ -260,6 +231,35 @@ return array(
 		'q_human'    => 'Wo finde ich mehr Informationen zu diesem Projekt?',
 		'desc_dcat'  => '`dcat:landingPage` verweist auf eine menschenlesbare Webseite mit weiteren Informationen zum Datensatz (Range `foaf:Document`, Kardinalität 0..n). Anders als `dcat:accessURL` führt sie nicht direkt zu den Daten, sondern zu Kontext, Dokumentation oder Projektbeschreibung.',
 		'desc_human' => 'Verlinken Sie eine Webseite, auf der man mehr über die Daten oder das Projekt erfährt — etwa eine Projekt- oder Dokumentationsseite. Das ist nicht der direkte Download, sondern die „Über uns"-Seite zu den Daten. Beispiel: https://beispiel.de/projekt.',
+	),
+	array(
+		'key'        => 'issued',
+		'meta_key'   => '_odw_issued',
+		'dcat_prop'  => 'dct:issued',
+		'tab'        => '4 — Erweiterte Angaben',
+		'tier'       => 'recommended',
+		'vocab'      => '',
+		'q_dcat'     => 'Wann wurde der Datensatz `dct:issued` (erstveröffentlicht)?',
+		'q_human'    => 'Wann wurden diese Daten zum ersten Mal veröffentlicht?',
+		'desc_dcat'  => '`dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Kardinalität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).',
+		'desc_human' => 'Geben Sie das Datum an, an dem die Daten erstmals veröffentlicht wurden. Das ist der „Geburtstag" des Datensatzes, nicht der Zeitraum, den die Daten abdecken. Beispiel: 2024-01-15.',
+	),
+	array(
+		'key'        => 'modified',
+		'meta_key'   => '_odw_modified',
+		'dcat_prop'  => 'dct:modified',
+		'tab'        => '4 — Erweiterte Angaben',
+		'tier'       => 'recommended',
+		'vocab'      => '',
+		// Kein Formularfeld: Der Wert wird beim Speichern automatisch gesetzt.
+		// Das Flag nimmt den Eintrag von der Formular-Abdeckungsprüfung aus,
+		// ohne die Eigenschaft aus der Feld-Referenz zu entfernen — sie steht
+		// weiterhin im veröffentlichten JSON-LD.
+		'auto'       => true,
+		'q_dcat'     => 'Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?',
+		'q_human'    => 'Wann wurden diese Daten zuletzt aktualisiert?',
+		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.',
+		'desc_human' => 'Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.',
 	),
 	array(
 		'key'        => 'accrual_periodicity',

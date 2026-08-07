@@ -142,7 +142,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Fields** | Carbon Fields Formular (5 Tabs) + JSON-LD Builder | `register_required_fields()`, `odw_build_dataset_jsonld()` |
 | **ODW_Validation** | Publish-Blocking bei fehlenden Pflichtfeldern | `intercept_publish()`, `validate()` |
 | **ODW_Quality** | Qualitäts-Scoring & Caching | `calculate()`, `get_level()` |
-| **ODW_Admin** | Admin UI (Spalten, Intro-Seite, File-Upload Meta-Box) | `register_introduction_page()`, `render_column()`, `save_file_attachment()` |
+| **ODW_Admin** | Admin UI (Spalten, Intro-Seite, Datei-Upload-Widget in Tab 3) | `register_introduction_page()`, `render_column()`, `file_upload_html()`, `save_file_attachment()` |
 | **ODW_Rest_API** | REST Endpoints mit Transient-Caching | `get_catalog()`, `get_dataset()`, `get_delta()` |
 | **ODW_Rdf** | JSON-LD → Turtle (dependency-frei) für RDF-Harvester | `to_turtle()` |
 | **ODW_Field_Reference** | Erzeugt `docs/FELD-REFERENZ.md` aus `config/field-catalog.php` | `build()`, `write()`, `js_map()` |
@@ -213,30 +213,30 @@ Grund: Hohe Sichtbarkeit, mehrere Klassen verwenden sie, kein `self::`-Overhead.
 ```php
 - odw_publisher (REQUIRED)
   → Herausgebende Organisation (dct:publisher)
-  
-- odw_theme
-  → In welche Kategorie gehört dieser Datensatz? (dcat:theme)
-  
+
 - odw_description (REQUIRED)
   → Worum geht es in diesem Datensatz? (dct:description)
+
+- odw_theme
+  → In welche Kategorie gehört dieser Datensatz? (dcat:theme)
+
+- odw_keywords
+  → Mit welchen Schlagworten finde ich diese Daten? (dcat:keyword)
+
+// Aufklappbar „Weitere Einordnung (optional)":
+- odw_cessda_topic     → CESSDA Topic Classification (dct:subject)
+- odw_engagementfeld   → ZiviZ-Engagementfeld des Datensatzes (dct:subject)
 ```
 
-### Tab 2: Inhaltliche Angaben
+### Tab 2: Sprache & Übersetzungen
 ```php
 - odw_language
   → In welcher Sprache sind die Daten? (dct:language)
-  
-- odw_keywords
-  → Mit welchen Stichworten finde ich diese Daten? (dcat:keyword)
-  
-- odw_issued
-  → Veröffentlichungsdatum (dct:issued)
-  
-- odw_modified (Auto-Update!)
-  → Änderungsdatum (dct:modified) — wird bei jedem Save aktualisiert
-  
-- odw_cessda_topic
-  → CESSDA Topic Classification (Auto-Suggest aus CDV 4.2.3)
+
+// Übersetzungs-Repeater (mehrsprachige Literale):
+- odw_title_translations
+- odw_description_translations
+- odw_keyword_translations
 ```
 
 ### Tab 3: Datenbereitstellung (SIMPLIFIED v2.1.4!)
@@ -722,7 +722,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.35.6**
+Current: **v2.35.8**
 
 ---
 
@@ -861,6 +861,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.35.6 (August 2026)
+**Zuletzt aktualisiert**: Version 2.35.8 (August 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

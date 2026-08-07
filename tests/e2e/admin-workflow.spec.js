@@ -77,13 +77,13 @@ test.describe('Open Data Wizard Admin Workflow', () => {
     await page.goto(`${BASE_URL}/wp-admin/post-new.php?post_type=odw_dataset`);
 
     // Click Tab 2
-    const tab2Button = page.locator('.cf-container__tabs-nav >> text="2 — Inhaltliche Angaben"');
+    const tab2Button = page.locator('.cf-container__tabs-nav >> text="2 — Sprache & Übersetzungen"');
     if (await tab2Button.count() > 0) {
       await tab2Button.click();
 
       // Verify Tab 2 is now active
       const activeTab = page.locator('.cf-container__tabs-nav li.cf-tab--active');
-      await expect(activeTab).toContainText('2 — Inhaltliche Angaben');
+      await expect(activeTab).toContainText('2 — Sprache & Übersetzungen');
     }
   });
 

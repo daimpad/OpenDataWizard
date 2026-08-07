@@ -7,6 +7,62 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.8] — 2026-08-07
+
+Datei-Upload steht dort, wo er hingehört.
+
+### 🔧 Changed
+- **Der Datei-Upload ist keine Seitenleisten-Box mehr,** sondern steht in Tab 3 unmittelbar unter
+  der Zugriffs-URL — der Angabe, zu der er die Alternative ist. Vorher waren es zwei getrennte
+  Orte für denselben Sachverhalt: Link im Formular, Datei in der Seitenleiste. Das lud zu
+  widersprüchlichen Angaben ein, ohne dass die Oberfläche den Zusammenhang zeigte. Die Hilfetexte
+  beider Felder verweisen jetzt aufeinander.
+
+### ℹ️ Technische Hinweise
+- Das Widget ist ein Carbon-Fields-`html`-Feld, dessen Inhalt über einen **Callback** entsteht.
+  `Html_Field::to_json()` ruft ihn erst beim Rendern des Containers auf, dort steht der
+  Beitragskontext zur Verfügung — der aktuelle Dateizustand wird also weiterhin serverseitig
+  ausgegeben und hängt nicht davon ab, dass JavaScript ihn nachträgt.
+- `odw-file-upload.js` nutzt jetzt durchgehend **delegierte Handler** an `document` statt direkter
+  Bindung beim Laden. Carbon Fields hängt seine Felder erst nach `DOMContentLoaded` ein und kann
+  sie später neu rendern; direkt gebundene Handler hätten ins Leere gegriffen.
+- `save_file_attachment()` ist unverändert und bricht weiterhin ab, wenn die Nonce fehlt — sollte
+  das Widget einmal nicht rendern, geht eine bestehende Verknüpfung nicht verloren.
+
+---
+
+## [2.35.7] — 2026-08-06
+
+Zweite Runde aus dem Usability-Test: Gliederung und Verständlichkeit.
+
+### 🔧 Changed
+- **Tab-Zuschnitt nach inhaltlicher Zusammengehörigkeit.** Schlagworte stehen jetzt in Tab 1 bei
+  Thema, CESSDA-Klassifikation und Engagementfeld — alle vier beschreiben, worum es geht, und
+  gehörten nie zu Sprache und Datumsangaben. Die Erstveröffentlichung ist nach Tab 4 zur
+  Aktualisierungsfrequenz gewandert. Tab 2 heißt entsprechend **„Sprache & Übersetzungen"** und
+  trägt jetzt sämtliche Übersetzungs-Repeater (Titel, Beschreibung, Schlagworte), die vorher auf
+  zwei Tabs verteilt waren.
+- **Zugriffsrechte sind mit „Öffentlich" vorbelegt.** Für ein Open-Data-Plugin ist das der
+  Normalfall; die Vorbelegung steht sichtbar im Formular und lässt sich jederzeit ändern. Bewusst
+  kein Automatismus aus dem Beitragsstatus — Metadaten sollen nicht im Hintergrund entstehen.
+- **Die HVD-Felder sagen jetzt, für wen sie gedacht sind.** High-Value-Datensätze sind eine
+  Rechtskategorie der EU-Durchführungsverordnung 2023/138 für öffentliche Stellen. Beschriftung und
+  Hilfetext nennen das ausdrücklich, damit Vereine und Verbände die Felder überspringen können,
+  ohne zu rätseln. Für Kommunen bleiben sie unverändert nutzbar.
+
+### 🐛 Fixed
+- **Das CESSDA-Eingabefeld war viel zu schmal** und schnitt seinen Platzhalter ab. Das Widget wird
+  als Geschwister neben das ausgeblendete Carbon-Fields-Feld gesetzt und steht damit außerhalb von
+  `.cf-field` — dessen Breitenregeln griffen nicht, und der Browser fiel auf die Standardbreite
+  eines Textfelds zurück (`size=20`, rund 250 px).
+
+### 🌍 i18n
+- 11 geänderte Zeichenketten in `.pot`/`.po`, `.mo` neu kompiliert (628 Einträge, 0 unübersetzt).
+  Ein neues Prüfskript vergleicht alle übersetzbaren Zeichenketten des Quellcodes gegen den
+  Katalog — damit fällt eine vergessene Übersetzung künftig sofort auf.
+
+---
+
 ## [2.35.6] — 2026-08-06
 
 Automatische Updates laufen wieder.

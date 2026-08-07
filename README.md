@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.35.6-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.35.8-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -76,10 +76,10 @@ Das Wizard-Formular wurde vollständig überarbeitet, um es auch ohne DCAT-AP-Ke
 ### 🧭 Geführter Wizard
 Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem roten Sternchen (`*`) gekennzeichnet; als **Entwurf** lässt sich jederzeit unvollständig speichern — erst zum **Veröffentlichen** müssen alle Pflichtangaben ausgefüllt sein.
 
-1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „Welchem Thema ist dieser Datensatz zugeordnet?". Weniger häufige Angaben (CESSDA-Themenklassifikation, ZiviZ-Engagementfeld, Titel-/Beschreibungs-Übersetzungen) liegen in einer aufklappbaren Untergruppe am Tab-Ende.
-2. **Inhaltliche Angaben** — „In welcher Sprache sind die Daten?", „Mit welchen Schlagworten finde ich diese Daten?", Veröffentlichungs- und Änderungsdatum
+1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „Welchem Thema ist dieser Datensatz zugeordnet?", „Mit welchen Schlagworten finde ich diese Daten?". Weniger häufige Einordnungen (CESSDA-Themenklassifikation, ZiviZ-Engagementfeld) liegen in einer aufklappbaren Untergruppe am Tab-Ende.
+2. **Sprache & Übersetzungen** — die Sprache der Daten sowie Titel, Beschreibung und Schlagworte in weiteren Sprachen
 3. **Datenbereitstellung** — Zugriffs-URL **oder** Datei-Upload (Mediathek), Format, Dateigröße, **Lizenz (Pflicht je Distribution)**, Namensnennungstext; optional weitere Distributionen (wiederholbar)
-4. **Erweiterte Angaben** — Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, Verantwortlichkeiten (Urheber/pflegende Stelle, GovData-Contributor-ID), High-Value-Datensatz (HVD) Kategorie
+4. **Erweiterte Angaben** — Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, Verantwortlichkeiten (Urheber/pflegende Stelle, GovData-Contributor-ID), High-Value-Datensatz (HVD) Kategorie
 5. **Vorschau** — generiertes JSON-LD live einsehen
 
 ### 🏷 Lizenz-Auswahl
@@ -147,7 +147,7 @@ Die Batch-Import-Seite ist vollständig ins WordPress-Admin-Design integriert (S
 [📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
 
 ### 📎 Datei-Upload (Mediathek)
-Sidebar-Meta-Box — vollständig unabhängig von Carbon Fields:
+Steht in Tab 3 direkt unter der Zugriffs-URL, zu der er die Alternative ist:
 - „Datei auswählen / hochladen"-Button öffnet den nativen WordPress Media Library Frame
 - Beim Speichern werden `_odw_file_size` (Bytes) und `_odw_file_format` (z.B. „CSV") automatisch berechnet
 - Sicherheit: `wp_verify_nonce` + `current_user_can('edit_post')`

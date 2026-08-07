@@ -648,8 +648,17 @@
     font-size: 13px;
 }
 
-.odw-cessda-input {
+/* Das Widget wird als Geschwister neben das ausgeblendete .cf-field gesetzt,
+   liegt also außerhalb des Carbon-Fields-Kontexts. Dessen Breitenregeln für
+   Eingabefelder greifen hier deshalb nicht, und der Browser fiel auf die
+   Standardbreite (size=20, ~250 px) zurück — das Feld war sichtbar kürzer als
+   alle anderen und schnitt seinen Platzhalter ab. Die Selektorkette schlägt
+   die Admin-Regeln von WordPress und Carbon Fields sicher. */
+input.odw-cessda-input,
+.odw-cessda-widget .odw-cessda-input {
+    box-sizing: border-box;
     width: 100%;
+    max-width: 100%;
 }
 
 .odw-cessda-hint {

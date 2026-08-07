@@ -18,7 +18,7 @@ msgstr ""
 msgid "1 — Grundlegende Informationen"
 msgstr ""
 
-msgid "2 — Inhaltliche Angaben"
+msgid "2 — Sprache & Übersetzungen"
 msgstr ""
 
 msgid "3 — Datenbereitstellung"
@@ -210,7 +210,7 @@ msgstr ""
 msgid "Das Wizard-Formular ist in fünf einfache Schritte unterteilt:"
 msgstr ""
 
-msgid "Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt."
+msgid "Alternative zur Zugriffs-URL oben: Datei aus der Mediathek verknüpfen. Die URL wird daraus automatisch gesetzt und die Datei als Download-Button im [odw_dataset]-Shortcode angezeigt."
 msgstr ""
 
 msgid "Datei auswählen / hochladen"
@@ -331,9 +331,6 @@ msgid "Distribution mit URL (dcat:accessURL)"
 msgstr ""
 
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
-msgstr ""
-
-msgid "Download-Datei (Mediathek)"
 msgstr ""
 
 msgid "Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext."
@@ -706,7 +703,7 @@ msgstr ""
 msgid "Projektseite & Aktualität"
 msgstr ""
 
-msgid "Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen."
+msgid "Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen."
 msgstr ""
 
 msgid "Punkte"
@@ -1024,16 +1021,16 @@ msgstr ""
 msgid "Ja, dieser Datensatz ist ein High-Value-Datensatz"
 msgstr ""
 
-msgid "High-Value-Datensatz (HVD)"
+msgid "High-Value-Datensatz (HVD) — nur für öffentliche Stellen"
 msgstr ""
 
-msgid "Ist dies ein hochwertiger Datensatz (HVD)?"
+msgid "Nur für öffentliche Stellen: Ist dies ein hochwertiger Datensatz (HVD)?"
 msgstr ""
 
 msgid "HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)"
 msgstr ""
 
-msgid "Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie."
+msgid "Betrifft ausschließlich öffentliche Stellen — Vereine, Verbände und andere zivilgesellschaftliche Organisationen können dieses Feld leer lassen. Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie."
 msgstr ""
 
 msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
@@ -1174,7 +1171,7 @@ msgstr ""
 msgid "ZUGRIFFSRECHTE (dct:accessRights)"
 msgstr ""
 
-msgid "Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich"
+msgid "Zugriffs-Klassifikation des Datensatzes. Vorbelegt mit „Öffentlich“ — bitte ändern, wenn die Daten nur eingeschränkt oder gar nicht öffentlich zugänglich sind."
 msgstr ""
 
 msgid "Weiteres EU-Thema (Kategorie-URI)?"
@@ -1405,7 +1402,7 @@ msgstr ""
 msgid "Grundlegende Informationen"
 msgstr ""
 
-msgid "Inhaltliche Angaben"
+msgid "Sprache & Übersetzungen"
 msgstr ""
 
 msgid "Datenbereitstellung"
@@ -1423,7 +1420,7 @@ msgstr ""
 msgid "Mit welchen Schlagworten finde ich diese Daten?"
 msgstr ""
 
-msgid "Weitere Einordnung & Übersetzungen (optional)"
+msgid "Weitere Einordnung (optional)"
 msgstr ""
 
 msgid "Weiteres EU-Thema (Themen-URI)?"
@@ -1456,10 +1453,10 @@ msgstr ""
 msgid "von"
 msgstr ""
 
-msgid "Sprache, Schlagworte sowie Veröffentlichungs- und Änderungsdatum."
+msgid "Die Sprache der Daten und — falls gewünscht — Titel, Beschreibung und Schlagworte in weiteren Sprachen."
 msgstr ""
 
-msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Optional lassen sich unter „Weitere Einordnung & Übersetzungen\" auch eine Themenklassifikation, ein Engagementfeld und Übersetzungen ergänzen."
+msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
 msgstr ""
 
 msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
