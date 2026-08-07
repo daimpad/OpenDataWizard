@@ -81,13 +81,21 @@ class ODW_Block {
 
 		$datasets = array();
 		foreach ( $posts as $post ) {
-			$datasets[] = array(
-				'id'    => (int) $post->ID,
-				'title' => $post->post_title !== '' ? $post->post_title : sprintf(
+			$title = (string) $post->post_title;
+
+			// Ein Datensatz ohne Titel wäre in der Auswahlliste unsichtbar —
+			// die ID macht ihn wenigstens auffindbar.
+			if ( '' === trim( $title ) ) {
+				$title = sprintf(
 					/* translators: %d: post ID of an untitled dataset */
 					__( '(ohne Titel, ID %d)', 'open-data-wizard' ),
 					(int) $post->ID
-				),
+				);
+			}
+
+			$datasets[] = array(
+				'id'    => (int) $post->ID,
+				'title' => $title,
 			);
 		}
 
