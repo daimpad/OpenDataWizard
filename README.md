@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.35.5-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.35.6-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -309,6 +309,21 @@ Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich.
 > das Release-ZIP hochladen behebt es dauerhaft; danach ziehen Updates automatisch das vollständige
 > Paket. Ihre Datensätze bleiben dabei erhalten — sie liegen in der Datenbank, nicht in den
 > Plugin-Dateien.
+
+### Automatische Updates
+
+Das Plugin meldet neue Versionen im WordPress-Backend (via `GitHub Plugin URI`, ausgewertet von
+Git Updater o. ä.). Das Update-Paket kommt aus dem Branch **`release`**, den die CI bei jeder
+Veröffentlichung neu erzeugt: Er enthält exakt den Inhalt des Release-ZIPs, also das
+installationsfertige Plugin samt `vendor/`.
+
+Der Weg über einen Branch statt über das Release-Asset ist Absicht — er läuft über ein schlichtes
+Quellarchiv statt über die GitHub-API und braucht deshalb weder Zugriffstoken noch API-Kontingent.
+
+> **Umstieg auf 2.35.6:** Der Updater liest die Kopfzeilen der *installierten* Version. Wer von
+> 2.35.5 oder früher kommt, muss das Release-ZIP **einmalig** von Hand hochladen; ältere
+> Installationen zeigen sonst „Aktualisierung fehlgeschlagen. Das Aktualisierungspaket ist nicht
+> verfügbar." Ab 2.35.6 laufen Updates dann automatisch durch.
 
 ### Für Entwickler:innen
 
