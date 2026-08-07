@@ -7,6 +7,36 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.38.0] — 2026-08-07
+
+Gutenberg-Block „Datensatz-Karte" — keine IDs mehr abtippen.
+
+### ✨ Added
+- **Block „Datensatz-Karte"** als Alternative zum Shortcode `[odw_dataset id="123"]`. Im Editor
+  über das Plus-Symbol einfügen und den Datensatz aus einer Liste wählen; zur Auswahl stehen nur
+  veröffentlichte Datensätze. Wer den Shortcode bevorzugt oder klassische Editoren nutzt, kann
+  ihn unverändert weiterverwenden.
+
+### ℹ️ Umsetzung
+- **Dynamischer Block:** Gespeichert wird ausschließlich die Datensatz-ID, das Markup entsteht
+  beim Ausliefern über `ODW_Shortcode::render()`. Damit gibt es genau eine Quelle für die Karte —
+  Änderungen daran wirken auf Block und Shortcode gleichermaßen —, und ein später umbenannter
+  Datensatz erscheint mit seinem aktuellen Titel statt als eingefrorene Kopie im Beitrag.
+- **Kein Build-Schritt.** `blocks/dataset-card/` enthält `block.json` und ein Editor-Skript in
+  schlichtem JavaScript statt JSX. Das Projekt hat keine JS-Build-Kette für den Admin-Bereich,
+  und eine allein für diesen Block einzuführen wäre viel Apparat für wenig Ertrag.
+- **Auswahlliste über `wp_localize_script`,** nicht über den Core-Datenspeicher: Der Custom Post
+  Type ist bewusst nicht über die WP-REST-API exponiert (`show_in_rest => false`), dafür gibt es
+  die eigenen Endpunkte. Die Liste wird nur im Editor aufgebaut (`enqueue_block_editor_assets`)
+  und ist auf 200 Einträge begrenzt.
+- **Platzhalter statt Live-Vorschau im Editor.** Eine serverseitig gerenderte Vorschau bekäme das
+  Frontend-Stylesheet im Editor-Rahmen nicht mit und sähe dort kaputt aus; die Platzhalterkarte
+  nutzt WordPress' eigene `Placeholder`-Komponente und braucht deshalb kein eigenes CSS.
+- `bin/build-release.sh` kopiert `blocks/` mit ins Paket — ohne diese Ergänzung wäre der Block in
+  der Installation schlicht nicht vorhanden gewesen.
+
+---
+
 ## [2.37.0] — 2026-08-07
 
 Alle 24 EU-Amtssprachen statt zwei.

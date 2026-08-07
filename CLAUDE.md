@@ -147,6 +147,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Rdf** | JSON-LD → Turtle (dependency-frei) für RDF-Harvester | `to_turtle()` |
 | **ODW_Field_Reference** | Erzeugt `docs/FELD-REFERENZ.md` aus `config/field-catalog.php` | `build()`, `write()`, `js_map()` |
 | **ODW_Settings** | Plugin-Einstellungsseite | `get()`, `filter_catalog_title()` |
+| **ODW_Block** | Gutenberg-Block „Datensatz-Karte“ (dynamisch, rendert über ODW_Shortcode) | `register()`, `localize()`, `render()` |
 | **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
 | **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
@@ -730,7 +731,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.37.0**
+Current: **v2.38.0**
 
 ---
 
@@ -769,6 +770,10 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Gebündelte Vokabulare vervollständigt (v2.37.0):** `access-right` (3 Stufen) und `language`
   (alle 24 EU-Amtssprachen) liegen unter `config/vocabularies/`. Die Sprachauswahl bot vorher nur
   Deutsch und Englisch, obwohl `odw_resolve_language_tag()` alle 24 Codes bereits umsetzen konnte.
+- **Gutenberg-Block (v2.38.0):** „Datensatz-Karte“ als Alternative zum Shortcode. Dynamischer
+  Block ohne Build-Schritt — `blocks/dataset-card/` mit `block.json` und schlichtem JS; das
+  Rendern delegiert an `ODW_Shortcode::render()`. Die Auswahlliste kommt über
+  `wp_localize_script`, weil der CPT bewusst nicht über die WP-REST-API exponiert ist.
 - **Content Negotiation (v2.35.0):** Alle drei Endpunkte liefern `jsonld`/`json`/`turtle`; ohne
   `?format=` entscheidet der `Accept`-Header (q-Werte, `Vary: Accept`). Explizites `?format=`
   hat Vorrang.
@@ -777,7 +782,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 - **Optional: RDF/XML** als weitere Serialisierung (Turtle und JSON-LD decken die gängigen
   Harvester bereits ab).
-- **Gutenberg-Block** für die Download-Card (Alternative zum Shortcode).
 - **Mehrsprachigkeit der Oberfläche** (WPML/Polylang) — das Datenmodell unterstützt Mehrsprachigkeit
   bereits, die Integration fehlt.
 - **Optional/künftig:** Registry-getriebenes Formular-/JSON-LD-Rendering (Aufräumarbeit ohne
@@ -872,6 +876,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.37.0 (August 2026)
+**Zuletzt aktualisiert**: Version 2.38.0 (August 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

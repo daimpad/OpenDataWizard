@@ -3,7 +3,7 @@
 # build-release.sh — erzeugt ein installationsfertiges WordPress-Plugin-ZIP.
 #
 # Enthält ausschließlich die zur Laufzeit benötigten Dateien:
-#   - Plugin-Bootstrap, Klassen, Assets, Sprachen, Beispiel-Dateien
+#   - Plugin-Bootstrap, Klassen, Assets, Blöcke, Sprachen, Beispiel-Dateien
 #   - config/ (nur Datendateien; Dev-Configs und SHACL-Referenz entfallen)
 #   - vendor/ mit ausschließlich der Produktionsabhängigkeit (Carbon Fields),
 #     via `composer install --no-dev`, inkl. Bereinigung der Carbon-Fields-Dev-Dateien
@@ -43,7 +43,7 @@ mkdir -p "$PLUG_DIR"
 
 # --- Runtime-Quelldateien kopieren (Allowlist) -----------------------------
 cp "$ROOT_DIR/$SLUG.php" "$ROOT_DIR/uninstall.php" "$ROOT_DIR/README.md" "$ROOT_DIR/LICENSE" "$PLUG_DIR/"
-cp -R "$ROOT_DIR/includes" "$ROOT_DIR/assets" "$ROOT_DIR/languages" "$ROOT_DIR/samples" "$PLUG_DIR/"
+cp -R "$ROOT_DIR/includes" "$ROOT_DIR/assets" "$ROOT_DIR/blocks" "$ROOT_DIR/languages" "$ROOT_DIR/samples" "$PLUG_DIR/"
 
 # config/ vollständig kopieren, dann Dev-/Referenz-Anteile entfernen
 cp -R "$ROOT_DIR/config" "$PLUG_DIR/"
