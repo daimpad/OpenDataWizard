@@ -1187,12 +1187,22 @@ class ODW_Fields {
 	 * @return array<string, string>
 	 */
 	public static function get_language_options(): array {
-		$base = 'http://publications.europa.eu/resource/authority/language/';
-		return array(
-			''            => __( '— Bitte wählen —', 'open-data-wizard' ),
-			$base . 'DEU' => __( 'Deutsch (DE)', 'open-data-wizard' ),
-			$base . 'ENG' => __( 'Englisch (EN)', 'open-data-wizard' ),
-		);
+		$options = array( '' => __( '— Bitte wählen —', 'open-data-wizard' ) );
+
+		foreach ( self::load_vocabulary( 'language' ) as $entry ) {
+			$options[ $entry['value'] ] = $entry['label'];
+		}
+
+		// Rückfallebene, falls die Vokabulardatei fehlt oder unlesbar ist:
+		// Ohne mindestens eine Sprache ließen sich weder mehrsprachige Literale
+		// pflegen noch eine Standardsprache in den Einstellungen wählen.
+		if ( 1 === count( $options ) ) {
+			$base                     = 'http://publications.europa.eu/resource/authority/language/';
+			$options[ $base . 'DEU' ] = __( 'Deutsch (DE)', 'open-data-wizard' );
+			$options[ $base . 'ENG' ] = __( 'Englisch (EN)', 'open-data-wizard' );
+		}
+
+		return $options;
 	}
 
 	/**

@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.36.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.37.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
@@ -101,7 +101,7 @@ allgemeinverständlicher Erklärung je Feld steht in [`docs/FELD-REFERENZ.md`](d
 - **Mehrere Distributionen** je Datensatz — dieselben Daten z. B. als CSV *und* JSON, jeweils mit
   eigener Lizenz, Größe und Format
 
-**Statt Freitext kontrollierte Vokabulare:** Themen, Dateiformate, Sprachen, Lizenzen, Zugriffsrechte
+**Statt Freitext kontrollierte Vokabulare:** Themen, Dateiformate, Sprachen (alle 24 EU-Amtssprachen), Lizenzen, Zugriffsrechte
 und Aktualisierungsfrequenzen stammen aus den offiziellen EU- und DCAT-AP.de-Listen. Sie wählen
 „Umwelt" — gespeichert wird die dazugehörige URI.
 

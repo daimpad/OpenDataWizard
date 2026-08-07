@@ -7,6 +7,37 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.37.0] — 2026-08-07
+
+Alle 24 EU-Amtssprachen statt zwei.
+
+### ✨ Added
+- **Sprachauswahl als gebündeltes Vokabular** (`config/vocabularies/language.json`). Bisher standen
+  fest im Code nur Deutsch und Englisch zur Wahl — und zwar nicht nur beim Sprachfeld des
+  Datensatzes, sondern auch in allen drei Übersetzungs-Repeatern und bei der Standardsprache in
+  den Einstellungen. Mehrsprachige Metadaten waren damit praktisch auf Englisch beschränkt,
+  obwohl das Plugin sie als Funktion führt.
+
+### ℹ️ Hintergrund
+Die Begrenzung lag ausschließlich in der Auswahlliste: `odw_resolve_language_tag()` setzte alle
+24 EU-Sprachcodes schon vorher korrekt nach BCP-47 um (`DEU` → `de`, `POL` → `pl` …). Die
+JSON-LD-Ausgabe war also längst vorbereitet, das Formular bot die Sprachen nur nicht an.
+
+Deutsch und Englisch stehen weiterhin an erster Stelle, die übrigen 22 alphabetisch darunter.
+Bleibt die Vokabulardatei einmal aus, fällt die Auswahl auf Deutsch und Englisch zurück — ohne
+mindestens eine Sprache ließe sich weder eine Übersetzung pflegen noch eine Standardsprache
+wählen.
+
+Wie bei den anderen gebündelten Vokabularen stehen die Bezeichnungen in der JSON-Datei und
+durchlaufen damit nicht die Übersetzungsdateien. Das ISO-Kürzel im Label („Polnisch (PL)")
+macht den Eintrag trotzdem eindeutig.
+
+### 📝 Dokumentation
+- Die Roadmap in `CLAUDE.md` führte `access-right` und die EU-Sprachliste als offen. Das
+  `access-right`-Vokabular liegt seit Längerem vor; beide Punkte sind jetzt als erledigt vermerkt.
+
+---
+
 ## [2.36.0] — 2026-08-07
 
 Überarbeitetes Formular-Design — Typografie, Abstände, Eingabefelder.
