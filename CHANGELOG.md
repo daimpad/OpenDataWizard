@@ -7,6 +7,35 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.35.6] — 2026-08-06
+
+Automatische Updates laufen wieder.
+
+### 🐛 Fixed
+- **„Aktualisierung fehlgeschlagen. Das Aktualisierungspaket ist nicht verfügbar."** Das Update
+  wurde im Backend angezeigt, ließ sich aber nicht installieren: Der Updater meldete die neue
+  Version, konnte aber keine Download-URL liefern. Ursache war der Bezug über das Release-Asset —
+  der läuft über die GitHub-API und scheitert, sobald das unauthentifizierte Kontingent
+  (60 Anfragen pro Stunde und IP) erschöpft ist oder das Updater-Plugin Release-Assets nicht
+  unterstützt.
+
+### 🔧 Changed
+- **Update-Pakete kommen jetzt aus dem Branch `release`.** Die CI erzeugt ihn bei jeder
+  Veröffentlichung neu; er enthält exakt den Inhalt des Release-ZIPs, also das installationsfertige
+  Plugin samt `vendor/`. Der Updater lädt damit ein schlichtes Quellarchiv statt über die API —
+  kein Token, kein Rate-Limit, unabhängig vom eingesetzten Updater-Plugin. Die Kopfzeilen lauten
+  entsprechend `GitHub Branch: release` und `Release Asset: false`.
+- `main` bleibt unverändert frei von `vendor/`: Der Branch wird ausschließlich aus dem gebauten
+  ZIP erzeugt und bei jedem Release force-gepusht, wächst also nicht mit.
+
+### ℹ️ Einmaliger Zwischenschritt
+Der Updater liest die Kopfzeilen der **installierten** Version. Wer von 2.35.5 oder früher kommt,
+muss das Release-ZIP daher noch **einmal von Hand** über „Plugins → Installieren → Plugin hochladen"
+einspielen. Ab 2.35.6 laufen Updates automatisch. Datensätze bleiben erhalten — sie liegen in der
+Datenbank, nicht in den Plugin-Dateien.
+
+---
+
 ## [2.35.5] — 2026-08-06
 
 Erste Runde aus einem Usability-Test des Formulars.

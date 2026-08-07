@@ -92,3 +92,35 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "Open Data Wizard ${{ steps.ver.outputs.version }}" \
             --notes-file "${{ steps.notes.outputs.path }}"
+
+      # Der Branch `release` trägt exakt den Inhalt des Release-ZIPs — also das
+      # installationsfertige Plugin samt vendor/. Der Plugin-Updater zieht sein
+      # Paket von dort als schlichtes Quellarchiv (codeload) statt über die
+      # GitHub-API: kein Token nötig, kein Rate-Limit, unabhängig davon, ob das
+      # Updater-Plugin Release-Assets unterstützt.
+      #
+      # Der Branch wird bei jedem Release neu erzeugt und force-gepusht. Ein
+      # frisches `git init` sorgt dafür, dass die .gitignore des Repos hier
+      # nicht greift (vendor/ soll ja gerade mit) und der Branch nicht mit
+      # jedem Release weiterwächst.
+      - name: Release-Branch aktualisieren
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          WORK="${RUNNER_TEMP}/release-branch"
+          rm -rf "$WORK"
+          mkdir -p "$WORK"
+          unzip -q "dist/open-data-wizard-${VERSION}.zip" -d "$WORK"
+          cd "$WORK/open-data-wizard"
+          test -f vendor/autoload.php || { echo "vendor/autoload.php fehlt — Branch nicht veröffentlicht." >&2; exit 1; }
+          git init -q
+          git checkout -q -b release
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -A -f
+          git commit -q -m "Open Data Wizard ${VERSION}"
+          git push -q --force \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" release
+          echo "✓ Branch 'release' auf Version ${VERSION} gesetzt"
