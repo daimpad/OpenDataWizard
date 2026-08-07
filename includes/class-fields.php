@@ -47,7 +47,7 @@ class ODW_Fields {
 	 * Registers the tabbed meta container with all dataset fields.
 	 * Tab structure (v2.1+):
 	 *   1 — Grundlegende Informationen
-	 *   2 — Inhaltliche Angaben
+	 *   2 — Sprache & Übersetzungen
 	 *   3 — Datenbereitstellung (Lizenz + Distribution)
 	 *   4 — Erweiterte Angaben
 	 *   5 — Vorschau
@@ -87,14 +87,23 @@ class ODW_Fields {
 						->add_options( self::get_theme_options() )
 						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
 
-					// Weniger häufige Einordnungen (CESSDA, ZiviZ) und die Übersetzungen
-					// als aufklappbare Untergruppe ans Tab-Ende — entschlackt den Einstieg
-					// für die typische Nutzung (B3, Accordion-Muster wie Tab 4).
+					// Schlagworte gehören zur inhaltlichen Erschließung und stehen
+					// deshalb bei Thema, CESSDA und Engagementfeld statt bei Sprache
+					// und Übersetzungen. Sie bleiben oberhalb der aufklappbaren
+					// Untergruppe sichtbar — an ihnen hängen 30 MQA-Punkte.
+					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Schlagworten finde ich diese Daten?', 'open-data-wizard' ) )
+						->set_rows( 3 )
+						->set_attribute( 'placeholder', __( "Umwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) )
+						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) ),
+
+					// Weniger häufige Einordnungen (CESSDA, ZiviZ) als aufklappbare
+					// Untergruppe ans Tab-Ende — entschlackt den Einstieg für die
+					// typische Nutzung (B3, Accordion-Muster wie Tab 4).
 					Field::make( 'html', 'odw_hint_tab1_extra' )
 					->set_html(
 						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="tab1extra" aria-expanded="false">'
 						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'Weitere Einordnung & Übersetzungen (optional)', 'open-data-wizard' )
+						. esc_html__( 'Weitere Einordnung (optional)', 'open-data-wizard' )
 						. '</button>'
 					),
 
@@ -111,8 +120,27 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
 						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
 
+				)
+			)
+
+		// -----------------------------------------------------------------
+		// Tab 2 — Sprache & Übersetzungen
+		//
+		// Trägt alles Sprachbezogene an einem Ort: die Hauptsprache des
+		// Datensatzes und sämtliche Übersetzungs-Repeater. Titel- und
+		// Beschreibungsübersetzungen standen vorher in Tab 1, die
+		// Schlagwortübersetzungen hier — getrennt von ihresgleichen.
+		// -----------------------------------------------------------------
+			->add_tab(
+				__( '2 — Sprache & Übersetzungen', 'open-data-wizard' ),
+				array(
+					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
+						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
+						->add_options( self::get_language_options() )
+						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
+
 					Field::make( 'html', 'odw_hint_translations' )
-						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel und Beschreibung zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben oben bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
+						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel, Beschreibung und Schlagworte zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben in Tab 1 bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
 
 					Field::make( 'complex', 'odw_title_translations', __( 'Titel in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
@@ -154,24 +182,6 @@ class ODW_Fields {
 							)
 						)
 						->set_header_template( '<%- content || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' ),
-				)
-			)
-
-		// -----------------------------------------------------------------
-		// Tab 2 — Inhaltliche Angaben
-		// -----------------------------------------------------------------
-			->add_tab(
-				__( '2 — Inhaltliche Angaben', 'open-data-wizard' ),
-				array(
-					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
-						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
-						->add_options( self::get_language_options() )
-						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
-
-					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Schlagworten finde ich diese Daten?', 'open-data-wizard' ) )
-						->set_rows( 3 )
-						->set_attribute( 'placeholder', __( "Umwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) )
-						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) ),
 
 					Field::make( 'complex', 'odw_keyword_translations', __( 'Schlagworte in weiteren Sprachen', 'open-data-wizard' ) )
 						->set_collapsed( true )
@@ -194,29 +204,6 @@ class ODW_Fields {
 						)
 						->set_header_template( '<%- language || "' . esc_js( __( 'Übersetzung', 'open-data-wizard' ) ) . '" %>' ),
 
-					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
-						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
-						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
-
-					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
-					// ODW_Fields::set_modified_date() überschreibt _odw_modified bei
-					// jedem Speichern, eine Eingabe ging also kommentarlos verloren.
-					// Ein gesperrtes Feld mitsamt „Datum wählen"-Button vorzuhalten,
-					// das niemand bedienen kann, ist Ballast. Der Wert bleibt in der
-					// Übersichtsspalte „Änderungsdatum", im Qualitätsbericht und in
-					// der JSON-LD-Vorschau sichtbar.
-					Field::make( 'html', 'odw_hint_modified' )
-						->set_html(
-							'<p class="description odw-hint-auto">'
-							. esc_html__( 'Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt.', 'open-data-wizard' )
-							. '</p>'
-						),
 				)
 			)
 
@@ -356,6 +343,33 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', 'https://beispiel.de/projekt' )
 						->set_help_text( __( 'PROJEKTSEITE (dcat:landingPage)', 'open-data-wizard' ) . "\n\n" . __( 'URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt', 'open-data-wizard' ) ),
 
+					// Erstveröffentlichung und Aktualisierungsfrequenz beschreiben
+					// beide die Aktualität des Datensatzes und stehen deshalb hier
+					// beisammen — unter „Inhaltliche Angaben" war das Datum fehl am Platz.
+					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
+						->set_storage_format( 'Y-m-d' )
+						->set_picker_options(
+							array(
+								'dateFormat' => 'Y-m-d',
+								'locale'     => 'de',
+							)
+						)
+						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
+
+					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
+					// ODW_Fields::set_modified_date() überschreibt _odw_modified bei
+					// jedem Speichern, eine Eingabe ging also kommentarlos verloren.
+					// Ein gesperrtes Feld mitsamt „Datum wählen"-Button vorzuhalten,
+					// das niemand bedienen kann, ist Ballast. Der Wert bleibt in der
+					// Übersichtsspalte „Änderungsdatum", im Qualitätsbericht und in
+					// der JSON-LD-Vorschau sichtbar.
+					Field::make( 'html', 'odw_hint_modified' )
+						->set_html(
+							'<p class="description odw-hint-auto">'
+							. esc_html__( 'Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt.', 'open-data-wizard' )
+							. '</p>'
+						),
+
 					Field::make( 'select', 'odw_accrual_periodicity', __( 'Wie oft werden diese Daten aktualisiert?', 'open-data-wizard' ) )
 						->add_options( self::get_periodicity_options() )
 						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
@@ -479,9 +493,15 @@ class ODW_Fields {
 						. '</button>'
 					),
 
+					// „Öffentlich“ ist bei einem Open-Data-Plugin der Normalfall und
+					// steht deshalb vorausgewählt — sichtbar im Formular und jederzeit
+					// änderbar. Bewusst kein Hintergrund-Automatismus aus dem
+					// Beitragsstatus: Metadaten, die niemand gesehen hat, sollen nicht
+					// still entstehen.
 					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
 						->add_options( self::get_access_rights_options() )
-						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) . "\n\n" . __( 'Zugriffs-Klassifikation des Datensatzes. Beispiel: Öffentlich, Eingeschränkt, Nicht öffentlich', 'open-data-wizard' ) ),
+						->set_default_value( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' )
+						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) . "\n\n" . __( 'Zugriffs-Klassifikation des Datensatzes. Vorbelegt mit „Öffentlich“ — bitte ändern, wenn die Daten nur eingeschränkt oder gar nicht öffentlich zugänglich sind.', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Themen-URI)?', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-vocab', 'data-theme' )
@@ -492,13 +512,18 @@ class ODW_Fields {
 					->set_html(
 						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="hvd" aria-expanded="false">'
 						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'High-Value-Datensatz (HVD)', 'open-data-wizard' )
+						. esc_html__( 'High-Value-Datensatz (HVD) — nur für öffentliche Stellen', 'open-data-wizard' )
 						. '</button>'
 					),
 
-					Field::make( 'select', 'odw_is_hvd', __( 'Ist dies ein hochwertiger Datensatz (HVD)?', 'open-data-wizard' ) )
+					// HVD ist eine Rechtskategorie der EU-Durchführungsverordnung
+					// 2023/138 und richtet sich an öffentliche Stellen. Für Vereine
+					// und Verbände ist sie praktisch nie einschlägig, für Kommunen
+					// dagegen schon — deshalb bleiben die Felder, sagen aber selbst,
+					// für wen sie gedacht sind.
+					Field::make( 'select', 'odw_is_hvd', __( 'Nur für öffentliche Stellen: Ist dies ein hochwertiger Datensatz (HVD)?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_flag_options() )
-						->set_help_text( __( 'HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)', 'open-data-wizard' ) . "\n\n" . __( 'Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)', 'open-data-wizard' ) . "\n\n" . __( 'Betrifft ausschließlich öffentliche Stellen — Vereine, Verbände und andere zivilgesellschaftliche Organisationen können dieses Feld leer lassen. Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie.', 'open-data-wizard' ) ),
 
 					Field::make( 'select', 'odw_hvd_category', __( 'Welcher HVD-Kategorie gehört dieser Datensatz an?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_category_options() )

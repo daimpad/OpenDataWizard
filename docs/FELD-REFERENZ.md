@@ -19,14 +19,12 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 - **1 — Grundlegende Informationen**
   - [Wer gibt diese Daten heraus?](#wer-gibt-diese-daten-heraus)
   - [Welchem Thema ist dieser Datensatz zugeordnet?](#welchem-thema-ist-dieser-datensatz-zugeordnet)
-  - [Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?](#welchem-themenfeld-nach-cessda-ordnen-sie-den-datensatz-zu)
-  - [In welchem Engagementfeld ist die Organisation aktiv?](#in-welchem-engagementfeld-ist-die-organisation-aktiv)
-  - [Worum geht es in diesem Datensatz?](#worum-geht-es-in-diesem-datensatz)
-- **2 — Inhaltliche Angaben**
-  - [In welcher Sprache sind die Daten?](#in-welcher-sprache-sind-die-daten)
   - [Mit welchen Schlagworten finde ich diese Daten?](#mit-welchen-schlagworten-finde-ich-diese-daten)
-  - [Wann wurden diese Daten zum ersten Mal veröffentlicht?](#wann-wurden-diese-daten-zum-ersten-mal-veröffentlicht)
-  - [Wann wurden diese Daten zuletzt aktualisiert?](#wann-wurden-diese-daten-zuletzt-aktualisiert)
+  - [Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?](#welchem-themenfeld-nach-cessda-ordnen-sie-den-datensatz-zu)
+  - [Welchem Engagementfeld ist dieser Datensatz zuzuordnen?](#welchem-engagementfeld-ist-dieser-datensatz-zuzuordnen)
+  - [Worum geht es in diesem Datensatz?](#worum-geht-es-in-diesem-datensatz)
+- **2 — Sprache & Übersetzungen**
+  - [In welcher Sprache sind die Daten?](#in-welcher-sprache-sind-die-daten)
 - **3 — Datenbereitstellung**
   - [Wo kann man die Datei herunterladen oder ansehen?](#wo-kann-man-die-datei-herunterladen-oder-ansehen)
   - [In welchem Format ist die Datei?](#in-welchem-format-ist-die-datei)
@@ -37,6 +35,8 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
   - [Wie dauerhaft ist diese Datei verfügbar?](#wie-dauerhaft-ist-diese-datei-verfügbar)
 - **4 — Erweiterte Angaben**
   - [Wo finde ich mehr Informationen zu diesem Projekt?](#wo-finde-ich-mehr-informationen-zu-diesem-projekt)
+  - [Wann wurden diese Daten zum ersten Mal veröffentlicht?](#wann-wurden-diese-daten-zum-ersten-mal-veröffentlicht)
+  - [Wann wurden diese Daten zuletzt aktualisiert?](#wann-wurden-diese-daten-zuletzt-aktualisiert)
   - [Wie oft werden diese Daten aktualisiert?](#wie-oft-werden-diese-daten-aktualisiert)
   - [Auf welcher Verwaltungsebene wurden diese Daten erhoben?](#auf-welcher-verwaltungsebene-wurden-diese-daten-erhoben)
   - [Auf welches amtliche Gebiet beziehen sich die Daten?](#auf-welches-amtliche-gebiet-beziehen-sich-die-daten)
@@ -112,6 +112,23 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Wählen Sie das Themengebiet, zu dem die Daten am besten passen — ähnlich einer Schublade, in die der Datensatz einsortiert wird. Das hilft anderen, Ihre Daten über Themenfilter zu finden. Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur.
 
+### Mit welchen Schlagworten finde ich diese Daten?
+
+| Eigenschaft | Wert |
+|---|---|
+| DCAT-Property | `dcat:keyword` |
+| Meta-Key | `_odw_keywords` |
+| Stufe | Empfohlen |
+| Vokabular | — |
+
+**1 · DCAT-AP-Frage:** Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?
+
+**2 · Verständliche Frage:** Mit welchen Schlagworten finde ich diese Daten?
+
+**3 · DCAT-AP-Langbeschreibung:** `dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.
+
+**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.
+
 ### Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?
 
 | Eigenschaft | Wert |
@@ -129,7 +146,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Optional für sozial- und wirtschaftswissenschaftliche Daten: Ordnen Sie den Datensatz einem Fachthema aus dem CESSDA-Katalog zu (ein europäischer Standard für Forschungsdaten). Tippen Sie das Thema ein und wählen Sie aus der Vorschlagsliste. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik.
 
-### In welchem Engagementfeld ist die Organisation aktiv?
+### Welchem Engagementfeld ist dieser Datensatz zuzuordnen?
 
 | Eigenschaft | Wert |
 |---|---|
@@ -140,7 +157,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **1 · DCAT-AP-Frage:** Welches `dct:subject` (Engagementfeld) nach ZiviZ-Vokabular beschreibt den Datensatz?
 
-**2 · Verständliche Frage:** In welchem Engagementfeld ist die Organisation aktiv?
+**2 · Verständliche Frage:** Welchem Engagementfeld ist dieser Datensatz zuzuordnen?
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:subject` mit einem Konzept aus dem ZiviZ-Vokabular „Engagementfeld" (`https://ziviz.de/def/engagementfeld/`), das zivilgesellschaftliche Tätigkeitsfelder klassifiziert. Der Wert ist die Konzept-URI; die Label→URI-Auflösung erfolgt beim Speichern. Mehrfachangabe möglich (Kardinalität 0..n).
 
@@ -165,7 +182,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 ---
 
-## 2 — Inhaltliche Angaben
+## 2 — Sprache & Übersetzungen
 
 ### In welcher Sprache sind die Daten?
 
@@ -183,57 +200,6 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 **3 · DCAT-AP-Langbeschreibung:** `dct:language` gibt die Sprache des Datensatzes an, referenziert über das EU-Authority-Vokabular „Language" (`http://publications.europa.eu/resource/authority/language/`, z. B. `DEU`, `ENG`). Kardinalität 0..n — mehrsprachige Datensätze können mehrere Sprachen angeben.
 
 **4 · Verständliche Langbeschreibung:** Geben Sie an, in welcher Sprache die Inhalte der Daten verfasst sind (z. B. die Spaltenüberschriften und Texte). Das hilft Nutzenden einzuschätzen, ob sie die Daten verstehen. Beispiel: Deutsch, Englisch.
-
-### Mit welchen Schlagworten finde ich diese Daten?
-
-| Eigenschaft | Wert |
-|---|---|
-| DCAT-Property | `dcat:keyword` |
-| Meta-Key | `_odw_keywords` |
-| Stufe | Empfohlen |
-| Vokabular | — |
-
-**1 · DCAT-AP-Frage:** Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?
-
-**2 · Verständliche Frage:** Mit welchen Schlagworten finde ich diese Daten?
-
-**3 · DCAT-AP-Langbeschreibung:** `dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.
-
-**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.
-
-### Wann wurden diese Daten zum ersten Mal veröffentlicht?
-
-| Eigenschaft | Wert |
-|---|---|
-| DCAT-Property | `dct:issued` |
-| Meta-Key | `_odw_issued` |
-| Stufe | Empfohlen |
-| Vokabular | — |
-
-**1 · DCAT-AP-Frage:** Wann wurde der Datensatz `dct:issued` (erstveröffentlicht)?
-
-**2 · Verständliche Frage:** Wann wurden diese Daten zum ersten Mal veröffentlicht?
-
-**3 · DCAT-AP-Langbeschreibung:** `dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Kardinalität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).
-
-**4 · Verständliche Langbeschreibung:** Geben Sie das Datum an, an dem die Daten erstmals veröffentlicht wurden. Das ist der „Geburtstag" des Datensatzes, nicht der Zeitraum, den die Daten abdecken. Beispiel: 2024-01-15.
-
-### Wann wurden diese Daten zuletzt aktualisiert?
-
-| Eigenschaft | Wert |
-|---|---|
-| DCAT-Property | `dct:modified` |
-| Meta-Key | `_odw_modified` |
-| Stufe | Empfohlen |
-| Vokabular | — |
-
-**1 · DCAT-AP-Frage:** Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?
-
-**2 · Verständliche Frage:** Wann wurden diese Daten zuletzt aktualisiert?
-
-**3 · DCAT-AP-Langbeschreibung:** `dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.
-
-**4 · Verständliche Langbeschreibung:** Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.
 
 ---
 
@@ -378,6 +344,40 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:landingPage` verweist auf eine menschenlesbare Webseite mit weiteren Informationen zum Datensatz (Range `foaf:Document`, Kardinalität 0..n). Anders als `dcat:accessURL` führt sie nicht direkt zu den Daten, sondern zu Kontext, Dokumentation oder Projektbeschreibung.
 
 **4 · Verständliche Langbeschreibung:** Verlinken Sie eine Webseite, auf der man mehr über die Daten oder das Projekt erfährt — etwa eine Projekt- oder Dokumentationsseite. Das ist nicht der direkte Download, sondern die „Über uns"-Seite zu den Daten. Beispiel: https://beispiel.de/projekt.
+
+### Wann wurden diese Daten zum ersten Mal veröffentlicht?
+
+| Eigenschaft | Wert |
+|---|---|
+| DCAT-Property | `dct:issued` |
+| Meta-Key | `_odw_issued` |
+| Stufe | Empfohlen |
+| Vokabular | — |
+
+**1 · DCAT-AP-Frage:** Wann wurde der Datensatz `dct:issued` (erstveröffentlicht)?
+
+**2 · Verständliche Frage:** Wann wurden diese Daten zum ersten Mal veröffentlicht?
+
+**3 · DCAT-AP-Langbeschreibung:** `dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Kardinalität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).
+
+**4 · Verständliche Langbeschreibung:** Geben Sie das Datum an, an dem die Daten erstmals veröffentlicht wurden. Das ist der „Geburtstag" des Datensatzes, nicht der Zeitraum, den die Daten abdecken. Beispiel: 2024-01-15.
+
+### Wann wurden diese Daten zuletzt aktualisiert?
+
+| Eigenschaft | Wert |
+|---|---|
+| DCAT-Property | `dct:modified` |
+| Meta-Key | `_odw_modified` |
+| Stufe | Empfohlen |
+| Vokabular | — |
+
+**1 · DCAT-AP-Frage:** Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?
+
+**2 · Verständliche Frage:** Wann wurden diese Daten zuletzt aktualisiert?
+
+**3 · DCAT-AP-Langbeschreibung:** `dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.
+
+**4 · Verständliche Langbeschreibung:** Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.
 
 ### Wie oft werden diese Daten aktualisiert?
 

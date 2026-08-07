@@ -218,7 +218,7 @@ class ODW_Validation {
 	private static function tab_name( int $tab ): string {
 		$names = array(
 			1 => __( 'Grundlegende Informationen', 'open-data-wizard' ),
-			2 => __( 'Inhaltliche Angaben', 'open-data-wizard' ),
+			2 => __( 'Sprache & Übersetzungen', 'open-data-wizard' ),
 			3 => __( 'Datenbereitstellung', 'open-data-wizard' ),
 			4 => __( 'Erweiterte Angaben', 'open-data-wizard' ),
 			5 => __( 'Vorschau', 'open-data-wizard' ),

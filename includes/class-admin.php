@@ -750,11 +750,11 @@ class ODW_Admin {
 				<ol>
 					<li>
 						<strong><?php esc_html_e( '1 — Grundlegende Informationen', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Optional lassen sich unter „Weitere Einordnung & Übersetzungen" auch eine Themenklassifikation, ein Engagementfeld und Übersetzungen ergänzen.', 'open-data-wizard' ); ?>
+						<?php esc_html_e( 'Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung" eine Themenklassifikation und ein Engagementfeld ergänzen.', 'open-data-wizard' ); ?>
 					</li>
 					<li>
-						<strong><?php esc_html_e( '2 — Inhaltliche Angaben', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Sprache, Schlagworte sowie Veröffentlichungs- und Änderungsdatum.', 'open-data-wizard' ); ?>
+						<strong><?php esc_html_e( '2 — Sprache & Übersetzungen', 'open-data-wizard' ); ?></strong><br>
+						<?php esc_html_e( 'Die Sprache der Daten und — falls gewünscht — Titel, Beschreibung und Schlagworte in weiteren Sprachen.', 'open-data-wizard' ); ?>
 					</li>
 					<li>
 						<strong><?php esc_html_e( '3 — Datenbereitstellung', 'open-data-wizard' ); ?></strong><br>
@@ -762,7 +762,7 @@ class ODW_Admin {
 					</li>
 					<li>
 						<strong><?php esc_html_e( '4 — Erweiterte Angaben', 'open-data-wizard' ); ?></strong><br>
-						<?php esc_html_e( 'Projektseite, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen.', 'open-data-wizard' ); ?>
+						<?php esc_html_e( 'Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen.', 'open-data-wizard' ); ?>
 					</li>
 					<li>
 						<strong><?php esc_html_e( '5 — Vorschau', 'open-data-wizard' ); ?></strong><br>
