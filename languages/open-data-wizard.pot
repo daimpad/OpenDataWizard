@@ -210,7 +210,7 @@ msgstr ""
 msgid "Das Wizard-Formular ist in fünf einfache Schritte unterteilt:"
 msgstr ""
 
-msgid "Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt."
+msgid "Alternative zur Zugriffs-URL oben: Datei aus der Mediathek verknüpfen. Die URL wird daraus automatisch gesetzt und die Datei als Download-Button im [odw_dataset]-Shortcode angezeigt."
 msgstr ""
 
 msgid "Datei auswählen / hochladen"
@@ -331,9 +331,6 @@ msgid "Distribution mit URL (dcat:accessURL)"
 msgstr ""
 
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
-msgstr ""
-
-msgid "Download-Datei (Mediathek)"
 msgstr ""
 
 msgid "Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext."

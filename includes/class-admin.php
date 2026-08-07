@@ -48,7 +48,10 @@ class ODW_Admin {
 		add_action( 'add_meta_boxes', array( self::class, 'register_help_tabs' ) );
 		add_action( 'load-post.php', array( self::class, 'register_help_tabs' ) );
 		add_action( 'load-post-new.php', array( self::class, 'register_help_tabs' ) );
-		add_action( 'add_meta_boxes', array( self::class, 'register_file_meta_box' ) );
+		// Der Datei-Upload ist keine eigene Meta-Box mehr, sondern steht als
+		// html-Feld direkt unter der Zugriffs-URL in Tab 3 (siehe ODW_Fields).
+		// Zwei getrennte Orte für denselben Sachverhalt luden zu widersprüchlichen
+		// Angaben ein — Link hier, Datei dort.
 		// Auf 'save_post'@20 (nicht 'save_post_odw_dataset'): Carbon Fields
 		// speichert auf 'save_post'@10, und save_post_{post_type} feuert davor.
 		// Nur so bleibt die aus dem Upload abgeleitete Zugriffs-URL erhalten und
@@ -480,30 +483,27 @@ class ODW_Admin {
 	}
 
 	// -------------------------------------------------------------------------
-	// Download-Datei — Native Media Library Meta Box
+	// Download-Datei — Native Media Library
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the file-upload meta box on the dataset edit screen.
-	 */
-	public static function register_file_meta_box(): void {
-		add_meta_box(
-			'odw-file-upload',
-			__( 'Download-Datei (Mediathek)', 'open-data-wizard' ),
-			array( self::class, 'render_file_meta_box' ),
-			'odw_dataset',
-			'side',
-			'default'
-		);
-	}
-
-	/**
-	 * Render the file-upload meta box.
+	 * Build the file-upload widget markup for the wizard form.
 	 *
-	 * @param \WP_Post $post Current post object.
+	 * Wird als Callback an ein Carbon-Fields-html-Feld übergeben. Carbon Fields
+	 * ruft den Callback erst beim Rendern des Containers auf (Html_Field::to_json()),
+	 * daher steht hier der Beitragskontext zur Verfügung und der aktuelle
+	 * Dateizustand kann serverseitig ausgegeben werden — die Auswahl hängt nicht
+	 * davon ab, dass JavaScript sie nachträgt.
+	 *
+	 * @return string
 	 */
-	public static function render_file_meta_box( \WP_Post $post ): void {
-		$file_id  = (int) get_post_meta( $post->ID, '_odw_file_id', true );
+	public static function file_upload_html(): string {
+		$post_id = (int) get_the_ID();
+		if ( $post_id <= 0 ) {
+			return '';
+		}
+
+		$file_id  = (int) get_post_meta( $post_id, '_odw_file_id', true );
 		$has_file = $file_id > 0;
 
 		$file_name = '';
@@ -512,6 +512,7 @@ class ODW_Admin {
 			$file_name  = $attachment instanceof \WP_Post ? $attachment->post_title : '';
 		}
 
+		ob_start();
 		wp_nonce_field( 'odw_save_file_attachment', 'odw_file_upload_nonce' );
 		?>
 		<div class="odw-file-upload">
@@ -546,11 +547,12 @@ class ODW_Admin {
 			</div>
 
 			<p class="description">
-				<?php esc_html_e( 'Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt.', 'open-data-wizard' ); ?>
+				<?php esc_html_e( 'Alternative zur Zugriffs-URL oben: Datei aus der Mediathek verknüpfen. Die URL wird daraus automatisch gesetzt und die Datei als Download-Button im [odw_dataset]-Shortcode angezeigt.', 'open-data-wizard' ); ?>
 			</p>
 
 		</div>
 		<?php
+		return (string) ob_get_clean();
 	}
 
 	/**

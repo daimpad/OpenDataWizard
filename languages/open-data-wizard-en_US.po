@@ -318,8 +318,8 @@ msgstr "The Problem"
 msgid "Das Wizard-Formular ist in fünf einfache Schritte unterteilt:"
 msgstr "The wizard form is divided into five simple steps:"
 
-msgid "Datei aus der Mediathek verknüpfen — wird als Download-Button im [odw_dataset]-Shortcode angezeigt."
-msgstr "Link a file from the media library — shown as a download button in the [odw_dataset] shortcode."
+msgid "Alternative zur Zugriffs-URL oben: Datei aus der Mediathek verknüpfen. Die URL wird daraus automatisch gesetzt und die Datei als Download-Button im [odw_dataset]-Shortcode angezeigt."
+msgstr "Alternative to the access URL above: link a file from the media library. The URL is set from it automatically and the file is shown as a download button in the [odw_dataset] shortcode."
 
 msgid "Datei auswählen / hochladen"
 msgstr "Select / upload file"
@@ -479,9 +479,6 @@ msgstr "Primary distribution — further details"
 
 msgid "Distributionen"
 msgstr "Distributions"
-
-msgid "Download-Datei (Mediathek)"
-msgstr "Download file (media library)"
 
 msgid "Download-URL"
 msgstr "Download URL"
@@ -1681,8 +1678,8 @@ msgstr "To the dataset list"
 msgid "Zusammenfassung"
 msgstr "Summary"
 
-msgid "Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei in der Box „Download-Datei (Mediathek)\" hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen."
-msgstr "Two ways — one is enough: enter the link to your file here OR upload the file in the “Download file (media library)” box. On upload the URL is filled in automatically on save; you can then leave this field empty."
+msgid "Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei direkt darunter aus der Mediathek hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen."
+msgstr "Two ways — either will do: enter the link to your file here OR upload the file from the media library directly below. On upload the URL is taken over automatically when saving; you can then leave this field empty."
 
 msgid "Zweijährlich"
 msgstr "Biennial"

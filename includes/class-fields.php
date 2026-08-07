@@ -216,7 +216,22 @@ class ODW_Fields {
 					Field::make( 'text', 'odw_access_url', __( 'Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
 						->set_attribute( 'type', 'url' )
-						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei in der Box „Download-Datei (Mediathek)" hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei direkt darunter aus der Mediathek hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen.', 'open-data-wizard' ) ),
+
+					// Der Datei-Upload stand früher als eigene Meta-Box in der
+					// Seitenleiste — zwei Orte für denselben Sachverhalt, die zu
+					// widersprüchlichen Angaben einluden. Jetzt steht er unmittelbar
+					// unter der Zugriffs-URL, zu der er die Alternative ist.
+					//
+					// Als Closure statt als Array-Callable: is_callable() prüft beim
+					// Registrieren, ODW_Admin ist dann je nach Ladereihenfolge noch
+					// nicht bekannt. Der Aufruf selbst erfolgt erst beim Rendern.
+					Field::make( 'html', 'odw_file_upload' )
+						->set_html(
+							static function (): string {
+								return class_exists( 'ODW_Admin' ) ? ODW_Admin::file_upload_html() : '';
+							}
+						),
 
 					Field::make( 'select', 'odw_format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
 						->add_options( self::get_format_options() )

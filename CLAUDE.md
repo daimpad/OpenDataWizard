@@ -142,7 +142,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Fields** | Carbon Fields Formular (5 Tabs) + JSON-LD Builder | `register_required_fields()`, `odw_build_dataset_jsonld()` |
 | **ODW_Validation** | Publish-Blocking bei fehlenden Pflichtfeldern | `intercept_publish()`, `validate()` |
 | **ODW_Quality** | Qualitäts-Scoring & Caching | `calculate()`, `get_level()` |
-| **ODW_Admin** | Admin UI (Spalten, Intro-Seite, File-Upload Meta-Box) | `register_introduction_page()`, `render_column()`, `save_file_attachment()` |
+| **ODW_Admin** | Admin UI (Spalten, Intro-Seite, Datei-Upload-Widget in Tab 3) | `register_introduction_page()`, `render_column()`, `file_upload_html()`, `save_file_attachment()` |
 | **ODW_Rest_API** | REST Endpoints mit Transient-Caching | `get_catalog()`, `get_dataset()`, `get_delta()` |
 | **ODW_Rdf** | JSON-LD → Turtle (dependency-frei) für RDF-Harvester | `to_turtle()` |
 | **ODW_Field_Reference** | Erzeugt `docs/FELD-REFERENZ.md` aus `config/field-catalog.php` | `build()`, `write()`, `js_map()` |
@@ -722,7 +722,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.35.7**
+Current: **v2.35.8**
 
 ---
 
@@ -861,6 +861,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.35.7 (August 2026)
+**Zuletzt aktualisiert**: Version 2.35.8 (August 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
