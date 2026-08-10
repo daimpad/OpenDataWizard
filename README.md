@@ -7,7 +7,7 @@
 ![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.38.0-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.39.0-brightgreen?style=flat-square)
 ![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
 
 📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)

@@ -7,6 +7,40 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.39.0] — 2026-08-10
+
+Das Logo im Backend.
+
+### ✨ Added
+- **Logo als Menü-Icon** im Backend statt des generischen `dashicons-database`.
+- **Logo im Kopf der Einstiegs- und der Einstellungsseite**, neben der jeweiligen Überschrift.
+- `assets/images/` enthält jetzt `ODW-Logo.svg`, `ODW-Logo.png` und die zugeschnittene
+  Icon-Fassung `ODW-Icon.svg`.
+
+### ℹ️ Zwei Entscheidungen dahinter
+- **Eigene Icon-Fassung fürs Menü.** Menü-Icons sind 20 × 20 Pixel; die Wortmarke „ODW" wäre dort
+  ein unlesbarer Fleck. `ODW-Icon.svg` schneidet den `viewBox` auf das Zeichen zu und lässt die
+  drei Wortmarken-Pfade weg — dieselbe Zeichnung, anderer Ausschnitt, keine Änderung an den
+  übrigen Pfaden.
+- **Als URL eingebunden, nicht als base64-`data:`-URI.** WordPress dimmt Menü-Icons auf 60 Prozent
+  Deckkraft, bis man daraufzeigt; ein `data:`-SVG behält volle Deckkraft und stäche als einziges
+  Symbol im Menü heraus. Nebeneffekt: rund 7 KB Base64 weniger auf jeder Admin-Seite.
+
+Beides wurde vor dem Einbau in einem Browser gerendert und geprüft — bei 20 Pixeln auf dunklem
+wie hellem Menügrund, und die Kopfzeilen bei 40 bzw. 48 Pixeln.
+
+### 🎨 Styling
+- `.odw-page-title` / `.odw-page-logo` richten Logo und Überschrift aneinander aus. Nur die Höhe
+  ist festgelegt — das Logo ist mit 932 × 830 nicht quadratisch, eine feste Breite dazu würde es
+  verzerren.
+
+### ℹ️ Nicht eingebunden
+Die Download-Karte im Frontend bleibt ohne Logo: Sie steht auf fremden Websites, dort wäre unser
+Zeichen Absender statt Beiwerk. Und das README behält seinen bestehenden Kopf — zwei
+unterschiedliche Logos übereinander wären Rauschen.
+
+---
+
 ## [2.38.0] — 2026-08-07
 
 Gutenberg-Block „Datensatz-Karte" — keine IDs mehr abtippen.

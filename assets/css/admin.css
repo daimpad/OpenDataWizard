@@ -1479,3 +1479,29 @@ input.odw-cessda-input,
 	border-color: #c9cdd6;
 	color: var( --odw-color-text );
 }
+
+/* =========================================================================
+   Seitenkopf mit Logo (Einstieg, Einstellungen)
+   ========================================================================= */
+
+/* Das Logo ist Schmuck, kein Bedienelement — deshalb aria-hidden im Markup
+   und hier nur die Ausrichtung zur Überschrift. */
+.odw-page-title {
+	display: flex;
+	align-items: center;
+	gap: var( --odw-space-3 );
+}
+
+/* Nur die Höhe festlegen: Das Logo ist nicht quadratisch (932 × 830), eine
+   feste Breite dazu würde es verzerren. */
+.odw-page-logo {
+	flex: 0 0 auto;
+	width: auto;
+	height: 40px;
+}
+
+@media ( max-width: 782px ) {
+	.odw-page-logo {
+		height: 32px;
+	}
+}

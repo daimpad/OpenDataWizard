@@ -73,7 +73,17 @@ class ODW_Settings {
 		$recalculated = isset( $_GET['odw_recalculated'] ) ? absint( wp_unslash( $_GET['odw_recalculated'] ) ) : null;
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Open Data Wizard — Einstellungen', 'open-data-wizard' ); ?></h1>
+			<h1 class="odw-page-title">
+				<img
+					class="odw-page-logo"
+					src="<?php echo esc_url( ODW_PLUGIN_URL . 'assets/images/ODW-Logo.svg' ); ?>"
+					alt=""
+					aria-hidden="true"
+					width="45"
+					height="40"
+				>
+				<?php esc_html_e( 'Open Data Wizard — Einstellungen', 'open-data-wizard' ); ?>
+			</h1>
 
 			<?php if ( null !== $recalculated ) : ?>
 			<div class="notice notice-success is-dismissible">
