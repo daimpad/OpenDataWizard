@@ -31,9 +31,22 @@ updates:
     groups:
       # Die Werkzeugkette wird zusammen aktualisiert: PHPCS, WPCS, PHPStan,
       # PHPUnit und WP_Mock einzeln durchzureichen erzeugt nur Rauschen.
+      #
+      # Ausdrücklich inklusive `major` — aus demselben Grund wie bei npm: Ein
+      # Major-Sprung außerhalb der Gruppe bekäme einen eigenen Pull Request,
+      # und zwei gleichzeitig offene Pull Requests an derselben Lock-Datei
+      # führen beim Mergen zu genau dem Zustand, der am 10.08. main rot
+      # gemacht hat.
+      #
+      # Carbon Fields ist davon nicht betroffen: Die Gruppe greift nur bei
+      # `dependency-type: development`, die einzige Laufzeitabhängigkeit
+      # bekommt weiterhin ihren eigenen Pull Request. Das ist so gewollt —
+      # der Block FORMULAR-DESIGN in assets/css/admin.css hängt an rund
+      # zwanzig ihrer Klassennamen und muss bei einem Sprung geprüft werden.
       dev-werkzeuge:
         dependency-type: "development"
         update-types:
+          - "major"
           - "minor"
           - "patch"
 
@@ -42,6 +55,14 @@ updates:
   # rdf-validate-shacl und @zazuko/env-node für die SHACL-Prüfung in der CI.
   # Nichts davon wird ausgeliefert — node_modules/ ist gitignored und
   # bin/build-release.sh kopiert es nicht ins Plugin-Paket.
+  #
+  # EINE Gruppe über alles, ausdrücklich inklusive `major`. Vorher deckte die
+  # Gruppe nur `minor` und `patch` ab; ein Major-Sprung fiel heraus und bekam
+  # einen eigenen Pull Request. Genau das ist am 10.08. passiert und hat main
+  # rot gemacht: Zwei npm-Pull-Requests (#106 minor, #107 major) wurden
+  # nacheinander gemergt, der zweite nahm beim Merge die package.json-Änderung
+  # des ersten zurück, behielt aber dessen Lock-Eintrag — danach verweigerte
+  # `npm ci` den Dienst. Mit einer Gruppe kann dieser Fall nicht mehr auftreten.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -49,14 +70,16 @@ updates:
       day: "monday"
       time: "07:00"
       timezone: "Europe/Berlin"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
     groups:
-      npm-werkzeuge:
-        dependency-type: "development"
+      npm:
+        patterns:
+          - "*"
         update-types:
+          - "major"
           - "minor"
           - "patch"
 
