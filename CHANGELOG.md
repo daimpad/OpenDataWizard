@@ -7,6 +7,33 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.39.1] — 2026-08-10
+
+Wartungs-Release. **Am Plugin selbst ändert sich nichts** — keine Änderung an PHP, CSS oder
+JavaScript, Carbon Fields unverändert bei v3.6.9. Wer 2.39.0 installiert hat, verpasst nichts.
+
+### 📝 Dokumentation
+- **README-Kopf auf die Bildsprache des Logos umgestellt.** Das bisherige Banner hing an einer
+  GitHub-Attachment-URL — an den Upload gebunden, nicht an das Repository. Jetzt zeigt der Kopf
+  auf `assets/images/ODW-Logo.svg` aus dem Repository und funktioniert damit auch in einem Fork
+  oder lokalen Klon. Badges in den Markenfarben, Zauberer-Emoji entfallen.
+
+### 🔧 Nur im Repository, nicht im Paket
+- **`main` war zwischenzeitlich rot.** Zwei npm-Updates von Dependabot (#106, #107) wurden
+  nacheinander gemergt; der zweite nahm beim Merge die `package.json`-Änderung des ersten zurück,
+  behielt aber dessen Lock-Eintrag. `npm ci` verweigerte danach den Dienst und der SHACL-Job
+  scheiterte. Behoben, beide Upgrades zusammen verifiziert.
+- **Ursache in der Dependabot-Konfiguration abgestellt.** Die Gruppen deckten nur `minor` und
+  `patch` ab; ein Major-Sprung fiel heraus und bekam einen eigenen Pull Request — daher zwei
+  konkurrierende Änderungen an derselben Lock-Datei. Alle Gruppen umfassen jetzt sämtliche
+  Update-Typen. Carbon Fields bleibt bewusst ungruppiert und bekommt weiterhin einen eigenen
+  Pull Request.
+- Entwicklungsabhängigkeiten aktualisiert (PHPUnit, PHPStan, WP_Mock, php-parser,
+  `@zazuko/env-node` 3.x, `rdf-validate-shacl` 0.6.x) sowie GitHub Actions. Nichts davon wird
+  ausgeliefert.
+
+---
+
 ## [2.39.0] — 2026-08-10
 
 Das Logo im Backend.
