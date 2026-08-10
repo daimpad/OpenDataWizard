@@ -1,0 +1,80 @@
+# Dependabot — Abhängigkeiten aktuell halten
+#
+# Ohne diese Datei meldet sich Dependabot nur bei Sicherheitslücken. Damit
+# hier laufen zusätzlich reguläre Updates für die drei Ökosysteme, die das
+# Projekt tatsächlich verwendet: Composer, npm und GitHub Actions.
+#
+# Alles landet als Pull Request, nichts wird automatisch gemergt — die CI
+# (PHPCS, PHPStan, PHPUnit auf drei PHP-Versionen, SHACL) läuft jeweils mit
+# und zeigt vor dem Merge, ob das Update trägt.
+#
+# Bewusst NICHT ausgenommen: Carbon Fields. Ein größerer Versionssprung dort
+# ist genau der Fall, der geprüft werden muss — der Block `FORMULAR-DESIGN`
+# in assets/css/admin.css hängt an rund zwanzig Klassennamen der Bibliothek.
+# Der Pull Request ist dann das Signal, nicht das Ärgernis.
+
+version: 2
+
+updates:
+  # --- PHP (composer.json / composer.lock) ---------------------------------
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      # Die Werkzeugkette wird zusammen aktualisiert: PHPCS, WPCS, PHPStan,
+      # PHPUnit und WP_Mock einzeln durchzureichen erzeugt nur Rauschen.
+      dev-werkzeuge:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # --- JavaScript (package.json) ------------------------------------------
+  # Ausschließlich Entwicklungswerkzeuge: Playwright für die E2E-Tests sowie
+  # rdf-validate-shacl und @zazuko/env-node für die SHACL-Prüfung in der CI.
+  # Nichts davon wird ausgeliefert — node_modules/ ist gitignored und
+  # bin/build-release.sh kopiert es nicht ins Plugin-Paket.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      npm-werkzeuge:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # --- GitHub Actions (.github/workflows/) --------------------------------
+  # Betrifft actions/checkout, actions/setup-node und shivammathur/setup-php.
+  # Veraltete Actions sind der häufigste Grund für CI-Warnungen wie die
+  # aktuelle Meldung zur Node-20-Abkündigung.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns:
+          - "*"
