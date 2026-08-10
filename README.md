@@ -1,18 +1,30 @@
-<img width="6408" height="2002" alt="Vector-Logo-of-Open-Data-Wizard_white" src="https://github.com/user-attachments/assets/a6296bc2-2952-4c27-84c9-a6d531886335" />
+<p align="center">
+  <img src="assets/images/ODW-Logo.svg" alt="Open Data Wizard" width="180">
+</p>
 
+<h1 align="center">Open Data Wizard</h1>
 
-# Open Data Wizard 🧙 
+<p align="center">
+  <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
+  <img src="https://img.shields.io/badge/Version-2.39.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
+  <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
+  <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
+  <img src="https://img.shields.io/badge/PRs-willkommen-03FF9A?style=flat-square&labelColor=101010" alt="Pull Requests willkommen">
+</p>
 
-![Lizenz](https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=blue&label=Lizenz)
-![PHP Version](https://img.shields.io/badge/PHP-%3E%3D%208.1-8892BF?style=flat-square&logo=php&logoColor=white)
-![WordPress](https://img.shields.io/badge/WordPress-compatible-21759B?style=flat-square&logo=wordpress&logoColor=white)
-![DCAT-AP](https://img.shields.io/badge/DCAT--AP-3.0-brightgreen?style=flat-square)
-![Version](https://img.shields.io/badge/Version-2.39.0-brightgreen?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-willkommen-brightgreen?style=flat-square)
+<p align="center">
+  <a href="DOCUMENTATION.md">Dokumentation</a> ·
+  <a href="docs/FELD-REFERENZ.md">Feld-Referenz</a> ·
+  <a href="TECHNICAL-SPEC.md">Technische Spezifikation</a> ·
+  <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="SECURITY.md">Security</a> ·
+  <a href="LICENSE">Lizenz</a>
+</p>
 
-📖 [Dokumentation](DOCUMENTATION.md) · 📋 [Feld-Referenz](docs/FELD-REFERENZ.md) · 📐 [Technische Spezifikation](TECHNICAL-SPEC.md) · 📝 [Changelog](CHANGELOG.md) · 🛡️ [Security](SECURITY.md) · ⚖️ [Lizenz](LICENSE)
-
-**Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0**
+<p align="center">
+  <strong>Ein WordPress-Plugin zur einfachen Veröffentlichung offener Daten nach DCAT-AP 3.0</strong>
+</p>
 
 Open Data Wizard ermöglicht es Organisationen und Einzelpersonen, Datensätze direkt in WordPress zu beschreiben und als maschinenlesbare, standardkonforme Metadaten bereitzustellen — ohne technische Vorkenntnisse, ohne externe Plattformabhängigkeit.
 
