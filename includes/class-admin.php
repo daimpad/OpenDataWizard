@@ -727,7 +727,17 @@ class ODW_Admin {
 	public static function render_introduction_page(): void {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Open Data Wizard — Einstieg', 'open-data-wizard' ); ?></h1>
+			<h1 class="odw-page-title">
+				<img
+					class="odw-page-logo"
+					src="<?php echo esc_url( ODW_PLUGIN_URL . 'assets/images/ODW-Logo.svg' ); ?>"
+					alt=""
+					aria-hidden="true"
+					width="54"
+					height="48"
+				>
+				<?php esc_html_e( 'Open Data Wizard — Einstieg', 'open-data-wizard' ); ?>
+			</h1>
 
 			<div class="odw-introduction-page">
 				<h2><?php esc_html_e( 'Willkommen im Open Data Wizard', 'open-data-wizard' ); ?></h2>
