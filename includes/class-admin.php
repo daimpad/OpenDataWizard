@@ -832,8 +832,7 @@ class ODW_Admin {
 				font-size: 15px;
 				color: var(--odw-color-text, #1d2327);
 			}
-			/* Die Grafik trägt ihren eigenen dunklen Hintergrund und soll die
-			   volle Breite der Textspalte nutzen, ohne sie zu sprengen. */
+			/* Die Grafik trägt ihren eigenen dunklen Hintergrund. */
 			.odw-introduction-figure {
 				display: block;
 				width: 100%;
