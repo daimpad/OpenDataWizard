@@ -757,6 +757,12 @@ class ODW_Admin {
 					<?php esc_html_e( 'Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln.', 'open-data-wizard' ); ?>
 				</p>
 
+				<img
+					class="odw-introduction-figure"
+					src="<?php echo esc_url( ODW_PLUGIN_URL . 'assets/images/ODW-Ablauf.svg' ); ?>"
+					alt="<?php esc_attr_e( 'In drei Schritten: Formular ausfüllen, DCAT-AP.de-Metadaten erzeugen, Portale ernten den Katalog ab.', 'open-data-wizard' ); ?>"
+				>
+
 				<h3><?php esc_html_e( 'Wie funktioniert es?', 'open-data-wizard' ); ?></h3>
 				<p><?php esc_html_e( 'Das Wizard-Formular ist in fünf einfache Schritte unterteilt:', 'open-data-wizard' ); ?></p>
 				<ol>
@@ -825,6 +831,13 @@ class ODW_Admin {
 			.odw-introduction-page .description {
 				font-size: 15px;
 				color: var(--odw-color-text, #1d2327);
+			}
+			/* Die Grafik trägt ihren eigenen dunklen Hintergrund. */
+			.odw-introduction-figure {
+				display: block;
+				width: 100%;
+				height: auto;
+				margin: 24px 0 8px;
 			}
 		</style>
 		<?php
