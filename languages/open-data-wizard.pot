@@ -474,6 +474,9 @@ msgstr ""
 msgid "In Datensatz einfügen"
 msgstr ""
 
+msgid "In drei Schritten: Formular ausfüllen, DCAT-AP.de-Metadaten erzeugen, Portale ernten den Katalog ab."
+msgstr ""
+
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr ""
 

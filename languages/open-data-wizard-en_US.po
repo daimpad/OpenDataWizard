@@ -753,6 +753,9 @@ msgstr "Import in progress…"
 msgid "In Datensatz einfügen"
 msgstr "Insert into dataset"
 
+msgid "In drei Schritten: Formular ausfüllen, DCAT-AP.de-Metadaten erzeugen, Portale ernten den Katalog ab."
+msgstr "In three steps: fill in the form, generate DCAT-AP.de metadata, portals harvest the catalogue."
+
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr "Which category does this dataset belong to?"
 

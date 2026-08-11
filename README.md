@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.39.1-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.40.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -53,6 +53,10 @@ Das Plugin bringt einen geführten Metadaten-Wizard ins WordPress-Backend. Organ
 Open-Data-Portale binden diese URL als Harvest-Quelle ein und holen sich die Metadaten selbst ab — regelmäßig und automatisch.
 
 Der entscheidende Unterschied: **Die Daten bleiben bei der Organisation. Der Katalog kommt zu ihr.** Es wandern ausschließlich *Metadaten* — die Beschreibung der Daten — zum Portal, nie die Daten selbst. Und dieselben Metadaten lassen sich an beliebig viele Portale gleichzeitig ausliefern, ohne sie mehrfach zu pflegen.
+
+<p align="center">
+  <img src="assets/images/ODW-Ablauf.svg" alt="Drei Schritte: Formular ausfüllen, DCAT-AP.de erzeugen, Portale ernten ab" width="900">
+</p>
 
 ---
 

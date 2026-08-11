@@ -7,6 +7,28 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.40.0] — 2026-08-11
+
+Eine Ablaufgrafik, die erklärt, was das Plugin eigentlich tut.
+
+### ✨ Added
+- **`assets/images/ODW-Ablauf.svg`** — „Vom Formular ins Datenportal" in drei Schritten:
+  Formular ausfüllen → DCAT-AP.de-Metadaten erzeugen → Portale ernten den Katalog ab.
+  Eingebunden im README (unter „Die Idee") und auf der Einstiegsseite im Backend.
+
+### ℹ️ Zwei Entscheidungen dahinter
+- **Nur Begriffe, die das Plugin auch wirklich ausgibt.** Die Vorlage zeigte unter anderem
+  `dct:filleout`, `dct:snapet` und `dct:name` — die ersten beiden existieren im Vokabular
+  nicht, und der Herausgebername ist `foaf:name`, nicht `dct:name`. Die Grafik zeigt jetzt
+  `dcat:Catalog`, `dct:title`, `dct:publisher`, `foaf:name`, `dcat:dataset`, `dct:description`
+  und `dcat:distribution` — jeder Begriff gegen `class-fields.php` und `class-rest-api.php`
+  geprüft. Eine Erklärgrafik mit erfundenen Fachbegriffen erklärt das Falsche.
+- **SVG statt Rasterbild.** Text bleibt Text: scharf auf jedem Bildschirm, durchsuchbar, und
+  mit `<title>`/`<desc>` auch für Screenreader beschrieben. Die Datei ist rund 7 KB groß und
+  liegt im Repository statt an einer Attachment-URL — sie funktioniert damit auch im Fork.
+
+---
+
 ## [2.39.1] — 2026-08-10
 
 Wartungs-Release. **Am Plugin selbst ändert sich nichts** — keine Änderung an PHP, CSS oder
