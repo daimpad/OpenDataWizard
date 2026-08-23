@@ -51,18 +51,27 @@ die Node- und wp-env-Dateien. Nichts davon wird ausgeliefert.
   JSON-Einzelobjekt gegen JSON-Liste, Pflichtfeldprüfung, URL-Schemata (`javascript:` und
   `data:` werden abgewiesen), ganzzahlige Dateigröße, Lizenz-Kurzcodes, Formel-Injektion
   (`=`, `+`, `@`, Tabulator) sowie die Anlage der Datensätze samt Meta-Zuordnung, Lizenz-URI
-  und Schlagwort-Normalisierung. Suite gesamt: 199 → 239 Tests.
+  und Schlagwort-Normalisierung. Suite gesamt: 199 → 243 Tests (40 hier, vier weitere für die
+  Sekundenbruchteile im Delta-Endpunkt).
 - **Drei Sniff-Ausnahmen für `tests/`.** Tests laufen ohne WordPress: `wp_delete_file()`,
   `WP_Filesystem` und `wp_parse_url()` gibt es dort nicht. Fixture-Dateien werden daher direkt
   geschrieben und gelöscht, und der `wp_parse_url()`-Mock muss `parse_url()` aufrufen — das ist
   genau die Verhaltensweise, die er nachbildet.
-- **Drei Gründe, warum die alten E2E-Tests nie liefen** — alle erst im ersten CI-Lauf sichtbar
-  geworden: `mappings` in `.wp-env.json` bildet *Verzeichnisse* ab, keine einzelnen Dateien
-  (die Saat lief deshalb nicht); mit den Standard-Permalinks gibt es `/wp-json/` überhaupt nicht,
-  alle Endpunkte antworteten 404; und die Reiter-Selektoren zeigten auf `cf-container__tabs-nav`
-  / `cf-tab--active`, während Carbon Fields 3.6 `cf-container__tabs-list`,
-  `cf-container__tabs-item` und `--current` rendert — was im Kommentar über dem Block
-  `FORMULAR-DESIGN` in `assets/css/admin.css` seit jeher richtig steht.
+- **Fünf Gründe, warum die alten E2E-Tests nie liefen** — jeder erst durch den jeweiligen
+  CI-Lauf sichtbar geworden:
+  1. `mappings` in `.wp-env.json` bildet *Verzeichnisse* ab, keine einzelnen Dateien — die Saat
+     lief deshalb nicht.
+  2. Mit den Standard-Permalinks gibt es `/wp-json/` überhaupt nicht; alle Endpunkte antworteten
+     404. `wp rewrite structure` braucht dafür `--hard`, sonst wird die `.htaccess` nicht
+     geschrieben.
+  3. Die Testumgebung lief auf `en_US`, wo die mitgelieferte Übersetzung greift — die deutschen
+     Beschriftungen, auf die die Tests zielen, waren dort nicht zu finden.
+  4. Die Reiter-Selektoren zeigten auf `cf-container__tabs-nav` / `cf-tab--active`, während
+     Carbon Fields 3.6 `cf-container__tabs-list`, `cf-container__tabs-item` und `--current`
+     rendert — was im Kommentar über dem Block `FORMULAR-DESIGN` in `assets/css/admin.css`
+     seit jeher richtig steht.
+  5. Zwei Zusicherungen waren schlicht falsch: Die Katalog-URL steht in einem `value`, nicht im
+     Text, und WordPress rendert die Spaltenköpfe der Listentabelle zweimal (thead und tfoot).
 - **Die End-to-End-Tests laufen wieder — und prüfen jetzt etwas.** `tests/e2e/` enthielt zwei
   Spec-Dateien, die niemand ausführte: Es gab keine WordPress-Instanz, die Anmeldung klickte auf
   einen `button[type=submit]`, den das WordPress-Login gar nicht hat, und die Datensatz-ID wurde
@@ -70,7 +79,8 @@ die Node- und wp-env-Dateien. Nichts davon wird ausgeliefert.
   samt Plugin, ein neuer CI-Job fährt Chromium dagegen.
 - **Keine bedingten Zusicherungen mehr.** Der Großteil der alten Tests stand in einem
   `if (await x.count() > 0)` — sie waren grün, wenn das geprüfte Element fehlte. Genau die
-  Konstruktion also, die eine kaputte Oberfläche als bestanden meldet. `tests/e2e/seed.php` legt
+  Konstruktion also, die eine kaputte Oberfläche als bestanden meldet.
+  `tests/e2e/mu-plugins/odw-e2e-seed.php` legt
   als mu-plugin zwei veröffentlichte Datensätze an, damit die Zusicherungen unbedingt sein können:
   der Katalog enthält *mindestens zwei* Einträge, der Themenfilter liefert *genau* den passenden,
   der zweite Abruf kommt aus dem Cache, `/wp/v2/odw_dataset` antwortet mit 404.
