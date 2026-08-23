@@ -9,9 +9,10 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-Zwei Lücken in der Absicherung geschlossen. **Am Plugin selbst ändert sich nichts** —
-die Änderungen liegen ausschließlich in `.github/` und `bin/` und werden nicht ausgeliefert.
-Deshalb auch keine neue Version: Das ZIP wäre bis auf die Versionsnummer identisch.
+Absicherung nachgezogen: zwei Lücken in der CI geschlossen und die größte ungetestete Klasse
+getestet. **Am Plugin selbst ändert sich nichts** — die Änderungen liegen in `.github/`, `bin/`,
+`tests/` und `config/phpcs.xml`, nichts davon wird ausgeliefert. Deshalb auch keine neue Version:
+Das ZIP wäre bis auf die Versionsnummer identisch.
 
 ### 🔧 Nur im Repository, nicht im Paket
 - **Das Release-ZIP wird jetzt geprüft.** Bisher liefen PHPCS, PHPStan, PHPUnit und SHACL
@@ -32,6 +33,18 @@ Deshalb auch keine neue Version: Das ZIP wäre bis auf die Versionsnummer identi
 - **`bin/check-i18n.py` läuft jetzt in der CI.** Das Skript existierte, wurde aber nur von
   Hand aufgerufen. Eine beim Umformulieren vergessene Übersetzung hätte auf englischen
   Installationen mitten im Backend einen deutschen Satz gezeigt.
+- **40 Testfälle für den Batch-Import.** `includes/class-batch-import.php` war mit 571 Zeilen die
+  größte ungetestete Klasse — und die einzige Stelle im Plugin, an der fremde Dateien auf den
+  Code treffen. Abgedeckt sind jetzt: Formaterkennung (auch über den ursprünglichen Dateinamen
+  bei temporären Uploads), UTF-8-BOM aus Excel-Exporten, verrutschte Spaltenzahl, Leerzeilen,
+  JSON-Einzelobjekt gegen JSON-Liste, Pflichtfeldprüfung, URL-Schemata (`javascript:` und
+  `data:` werden abgewiesen), ganzzahlige Dateigröße, Lizenz-Kurzcodes, Formel-Injektion
+  (`=`, `+`, `@`, Tabulator) sowie die Anlage der Datensätze samt Meta-Zuordnung, Lizenz-URI
+  und Schlagwort-Normalisierung. Suite gesamt: 199 → 239 Tests.
+- **Drei Sniff-Ausnahmen für `tests/`.** Tests laufen ohne WordPress: `wp_delete_file()`,
+  `WP_Filesystem` und `wp_parse_url()` gibt es dort nicht. Fixture-Dateien werden daher direkt
+  geschrieben und gelöscht, und der `wp_parse_url()`-Mock muss `parse_url()` aufrufen — das ist
+  genau die Verhaltensweise, die er nachbildet.
 
 ---
 

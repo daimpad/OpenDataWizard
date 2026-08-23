@@ -73,6 +73,23 @@
 		<exclude-pattern>../tests/*</exclude-pattern>
 	</rule>
 
+	<!--
+		Tests laufen ohne WordPress: wp_delete_file(), WP_Filesystem und
+		wp_parse_url() existieren dort nicht. Fixture-Dateien werden daher
+		direkt geschrieben und gelöscht, und der wp_parse_url()-Mock muss
+		parse_url() aufrufen — genau das ist ja die Verhaltensweise, die er
+		nachbildet.
+	-->
+	<rule ref="WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents">
+		<exclude-pattern>../tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.unlink_unlink">
+		<exclude-pattern>../tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.parse_url_parse_url">
+		<exclude-pattern>../tests/*</exclude-pattern>
+	</rule>
+
 	<!-- CLI fixture generator: runs outside WordPress, the WP-Sniffs for output
 	     and filesystem do not apply here. -->
 	<exclude-pattern>../tests/shacl/*</exclude-pattern>
