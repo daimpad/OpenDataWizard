@@ -17,7 +17,7 @@
     "url": "https://github.com/daimpad/OpenDataWizard.git"
   },
   "scripts": {
-    "env:start": "wp-env start && wp-env run cli wp rewrite structure '/%postname%/' && wp-env run tests-cli wp rewrite structure '/%postname%/'",
+    "env:start": "wp-env start && wp-env run cli wp rewrite structure '/%postname%/' --hard && wp-env run tests-cli wp rewrite structure '/%postname%/' --hard",
     "env:stop": "wp-env stop",
     "env:clean": "wp-env clean tests",
     "test:e2e": "playwright test --project=chromium",

@@ -168,20 +168,37 @@ jobs:
         run: npm run env:start
 
       # Scheitert die Einrichtung, soll sie das hier sagen — nicht als
-      # zwanzig unverständliche Testfehler weiter unten.
+      # zwanzig unverständliche Testfehler weiter unten. Die harte Zusicherung
+      # am Ende ist der Katalog-Abruf: Antwortet der nicht mit 200, ist die
+      # Umgebung kaputt und jeder folgende Test würde nur Folgefehler melden.
       - name: Verify test environment
         run: |
-          echo "--- aktive Plugins ---"
-          npx wp-env run tests-cli wp plugin list --status=active --field=name
-          echo "--- Permalink-Struktur ---"
-          npx wp-env run tests-cli wp option get permalink_structure
-          echo "--- veröffentlichte Datensätze ---"
-          npx wp-env run tests-cli wp post list --post_type=odw_dataset --post_status=publish --format=count
-          echo "--- Saat gelaufen? (Option odw_e2e_seeded) ---"
-          npm run env:verify
+          echo "::group::Aktive Plugins"
+          npx wp-env run tests-cli wp plugin list --status=active --field=name || true
+          echo "::endgroup::"
+          echo "::group::Permalink-Struktur"
+          npx wp-env run tests-cli wp option get permalink_structure || true
+          echo "::endgroup::"
+          echo "::group::Datensätze"
+          npx wp-env run tests-cli wp post list --post_type=odw_dataset --post_status=publish --fields=ID,post_title || true
+          npx wp-env run tests-cli wp option get odw_e2e_seeded || true
+          echo "::endgroup::"
+          echo "--- Katalog über die Testumgebung ---"
+          STATUS="$(curl -sS -o "$RUNNER_TEMP/catalog.json" -w '%{http_code}' 'http://localhost:8889/wp-json/datenatlas/v1/catalog' || echo 000)"
+          echo "HTTP $STATUS"
+          head -c 600 "$RUNNER_TEMP/catalog.json" || true
+          echo
+          test "$STATUS" = "200"
 
-      - name: Run end-to-end tests
-        run: npm run test:e2e
+      # Zwei Schritte statt einem, und der zweite läuft auch nach einem
+      # Fehlschlag des ersten: Sonst steht die Ausgabe des einen Laufs so weit
+      # oben im Log, dass sie beim Nachlesen nicht mehr auffindbar ist.
+      - name: End-to-end tests — Harvest-Endpunkte
+        run: npx playwright test --project=chromium tests/e2e/api-endpoints.spec.js
+
+      - name: End-to-end tests — Backend
+        if: always()
+        run: npx playwright test --project=chromium tests/e2e/admin-workflow.spec.js
 
       - name: Upload Playwright report on failure
         if: failure()
