@@ -794,11 +794,19 @@ class ODW_Rest_API {
 		// Formats tried in descending specificity. Das führende '!' setzt alle
 		// nicht angegebenen Teile auf 0 — ohne '!' würde bei 'Y-m-d' die AKTUELLE
 		// Uhrzeit übernommen und same-day-Änderungen im Delta verschluckt.
+		// Die Varianten mit Sekundenbruchteilen stehen zuerst: Ohne sie wies der
+		// Endpunkt genau die Zeitstempel ab, die Harvester am ehesten erzeugen —
+		// JavaScripts toISOString() hängt immer Millisekunden an, Pythons
+		// datetime.isoformat() Mikrosekunden. RFC 3339 erlaubt beides
+		// ausdrücklich (time-secfrac).
 		$formats = array(
-			'!Y-m-d\TH:i:sP',  // Numeric timezone offset notation.
-			'!Y-m-d\TH:i:s\Z', // UTC Z suffix.
-			'!Y-m-d\TH:i:s',   // No timezone (assumed UTC).
-			'!Y-m-d',           // Date only, start of day UTC.
+			'!Y-m-d\TH:i:s.uP',  // Sekundenbruchteile + numerischer Offset.
+			'!Y-m-d\TH:i:s.u\Z', // Sekundenbruchteile, UTC-Z.
+			'!Y-m-d\TH:i:s.u',   // Sekundenbruchteile ohne Zeitzone.
+			'!Y-m-d\TH:i:sP',    // Numeric timezone offset notation.
+			'!Y-m-d\TH:i:s\Z',   // UTC Z suffix.
+			'!Y-m-d\TH:i:s',     // No timezone (assumed UTC).
+			'!Y-m-d',             // Date only, start of day UTC.
 		);
 
 		foreach ( $formats as $format ) {

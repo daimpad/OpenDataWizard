@@ -7,15 +7,25 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
-## [Unreleased]
+## [2.40.1] — 2026-08-23
 
-Absicherung nachgezogen: zwei Lücken in der CI geschlossen, die größte ungetestete Klasse
-getestet und die brachliegenden End-to-End-Tests wieder in Betrieb genommen. **Am Plugin
-selbst ändert sich nichts** — die Änderungen liegen in `.github/`, `bin/`, `tests/`, `config/`
-sowie in den Node- und wp-env-Dateien; nichts davon wird ausgeliefert. Deshalb auch keine neue
-Version: Das ZIP wäre bis auf die Versionsnummer identisch.
+Ein Fehler im Delta-Endpunkt, gefunden von den wiederbelebten End-to-End-Tests — und die
+Absicherung drumherum: zwei Lücken in der CI geschlossen, die größte ungetestete Klasse
+getestet, die brachliegenden E2E-Tests wieder in Betrieb genommen.
+
+### 🐛 Fixed
+- **`/delta?since=…` wies Zeitstempel mit Sekundenbruchteilen ab.** Wer den Parameter so
+  erzeugt, wie es am nächsten liegt — JavaScripts `toISOString()` hängt immer Millisekunden an,
+  Pythons `datetime.isoformat()` Mikrosekunden —, bekam HTTP 400 statt seiner Daten. RFC 3339
+  erlaubt Sekundenbruchteile ausdrücklich (`time-secfrac`); die Formatliste in `parse_iso8601()`
+  kannte sie schlicht nicht. Aufgefallen ist es, weil der neue E2E-Test genau so einen
+  Zeitstempel baut. Genau dafür sind diese Tests da: Der Unit-Test prüfte bis dahin nur
+  Schreibweisen, die jemand von Hand tippt.
 
 ### 🔧 Nur im Repository, nicht im Paket
+Die folgenden Punkte betreffen ausschließlich `.github/`, `bin/`, `tests/`, `config/` sowie
+die Node- und wp-env-Dateien. Nichts davon wird ausgeliefert.
+
 - **Das Release-ZIP wird jetzt geprüft.** Bisher liefen PHPCS, PHPStan, PHPUnit und SHACL
   alle gegen das Repository — das Paket, das Anwender:innen installieren, sah keine von
   ihnen an. Eine vergessene Zeile in der Allowlist von `bin/build-release.sh` erzeugte
