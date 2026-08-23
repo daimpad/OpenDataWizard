@@ -34,12 +34,28 @@ wp plugin activate open-data-wizard
 # Spezifische Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml tests/test-fields.php
 ./vendor/bin/phpunit --configuration=config/phpunit.xml --filter testMethodName
+
+# Paket & Übersetzungen (ohne Composer lauffähig)
+python3 bin/check-i18n.py                                      # fehlende Übersetzungen
+bash bin/build-release.sh                                      # ZIP bauen
+python3 bin/verify-package.py dist/open-data-wizard-<ver>.zip   # Paket prüfen
 ```
 
 ### CI/CD Pipeline
 - Runs auf **PHP 8.1, 8.2, 8.3** via GitHub Actions (`.github/workflows/ci.yml`)
-- **Jeder Push zu `main`** triggert: PHPCS + PHPStan + PHPUnit auf allen PHP-Versionen
+- Sechs Jobs: PHPCS, PHPStan, PHPUnit (drei PHP-Versionen), SHACL, **Release-Paket**, **Übersetzungen**
 - **Pull Requests** werden geblocked, wenn CI fehlschlägt
+
+> **Warum ein eigener Paket-Job?** Alle übrigen Prüfungen laufen gegen das
+> Repository — das ausgelieferte ZIP sieht keine von ihnen an. Eine vergessene
+> Zeile in der Allowlist von `bin/build-release.sh` erzeugt deshalb ein Paket,
+> das in grüner CI entsteht und trotzdem in einer echten Installation Fehler
+> wirft (so geschehen mit `blocks/` in v2.38.0). `bin/verify-package.py` baut das
+> ZIP, liest jeden über `ODW_PLUGIN_DIR`/`ODW_PLUGIN_URL` gebildeten Pfad aus den
+> **im Paket enthaltenen** PHP-Dateien und prüft, ob er dort liegt. Die Liste ist
+> damit nie veraltet. Zusätzlich: Autoloader, `block.json`, `.mo` sowie die
+> Gleichheit von Plugin-Header, `ODW_VERSION` und oberstem CHANGELOG-Eintrag.
+> Bewusste Ausnahmen stehen mit Begründung in `KNOWN_ABSENT`.
 
 ---
 

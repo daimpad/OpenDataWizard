@@ -7,6 +7,34 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [Unreleased]
+
+Zwei Lücken in der Absicherung geschlossen. **Am Plugin selbst ändert sich nichts** —
+die Änderungen liegen ausschließlich in `.github/` und `bin/` und werden nicht ausgeliefert.
+Deshalb auch keine neue Version: Das ZIP wäre bis auf die Versionsnummer identisch.
+
+### 🔧 Nur im Repository, nicht im Paket
+- **Das Release-ZIP wird jetzt geprüft.** Bisher liefen PHPCS, PHPStan, PHPUnit und SHACL
+  alle gegen das Repository — das Paket, das Anwender:innen installieren, sah keine von
+  ihnen an. Eine vergessene Zeile in der Allowlist von `bin/build-release.sh` erzeugte
+  daher ein ZIP, das in grüner CI entstand und trotzdem in einer echten Installation
+  Fehler warf; genau das ist bei `blocks/` in v2.38.0 passiert und fiel nur beim manuellen
+  Entpacken auf. Der neue Job „Release-Paket prüfen" baut das ZIP bei jedem Push und prüft
+  es mit `bin/verify-package.py`.
+- **Die Prüfliste pflegt sich selbst.** Das Skript liest jeden Pfad, den der Code über
+  `ODW_PLUGIN_DIR`/`ODW_PLUGIN_URL` bildet, aus den *im Paket enthaltenen* PHP-Dateien —
+  aktuell 35 — und sieht nach, ob er dort liegt. Eine handgepflegte Liste würde veralten,
+  diese wächst automatisch mit. Dazu Autoloader, `block.json` und die kompilierte `.mo`,
+  die kein solcher Ausdruck nennt. Bewusste Ausnahmen stehen mit Begründung im Skript.
+- **Versionsgleichheit wird erzwungen.** Plugin-Header, `ODW_VERSION` und der oberste
+  CHANGELOG-Eintrag werden von Hand an drei Stellen gepflegt; weichen sie ab, zeigt
+  WordPress die falsche Version an und der Updater vergleicht gegen den falschen Stand.
+- **`bin/check-i18n.py` läuft jetzt in der CI.** Das Skript existierte, wurde aber nur von
+  Hand aufgerufen. Eine beim Umformulieren vergessene Übersetzung hätte auf englischen
+  Installationen mitten im Backend einen deutschen Satz gezeigt.
+
+---
+
 ## [2.40.0] — 2026-08-11
 
 Eine Ablaufgrafik, die erklärt, was das Plugin eigentlich tut.
