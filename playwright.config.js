@@ -2,26 +2,36 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
- * Playwright Configuration for Open Data Wizard E2E Tests
+ * Playwright-Konfiguration für die End-to-End-Tests.
  *
- * Run tests with:
- *   npm run test:e2e              # Run all tests (headless)
- *   npm run test:e2e:ui           # Interactive UI mode
- *   npm run test:e2e:headed       # Run with visible browser
- *   npm run test:e2e:debug        # Debugger mode
+ * Die Tests brauchen eine laufende WordPress-Installation mit aktiviertem
+ * Plugin. Die liefert `wp-env` (Docker):
+ *
+ *   npm run env:start        # WordPress starten, Plugin einhängen, Saat legen
+ *   npm run test:e2e         # Tests gegen die Testumgebung (Port 8889)
+ *   npm run env:stop
+ *
+ * Gegen eine andere Installation: BASE_URL, WP_ADMIN_USER und WP_ADMIN_PASSWORD
+ * setzen.
  */
+
+// Die Testumgebung von wp-env, nicht die Entwicklungsumgebung (8888): Sie wird
+// bei jedem `wp-env clean tests` zurückgesetzt und stört die lokale Spielwiese
+// nicht.
+const BASE_URL = process.env.BASE_URL || 'http://localhost:8889';
 
 module.exports = defineConfig({
   testDir: './tests/e2e',
+  testMatch: '**/*.spec.js',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: 'html',
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
 
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:10003',
+    baseURL: BASE_URL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -41,10 +51,4 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
   ],
-
-  webServer: {
-    command: 'echo "Make sure WordPress is running on $BASE_URL or http://localhost:10003"',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
 });

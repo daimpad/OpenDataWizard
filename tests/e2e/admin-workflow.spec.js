@@ -2,179 +2,164 @@
 const { test, expect } = require('@playwright/test');
 
 /**
- * Open Data Wizard Admin Workflow Tests
+ * Der Weg, den Redakteur:innen im Backend tatsächlich gehen.
  *
- * Prerequisites:
- * - WordPress running with Open Data Wizard plugin activated
- * - Admin user with manage_open_data capability
- * - BASE_URL environment variable or default: http://localhost:10003
+ * Die Testumgebung läuft auf Deutsch (siehe `env:start` in package.json). Das
+ * ist kein Detail: Die Quellsprache des Plugins ist Deutsch, die mitgelieferte
+ * en_US-Übersetzung überschreibt sie auf englischen Installationen. Ein
+ * WordPress in en_US zeigt daher die *Übersetzung* — die Beschriftungen, um
+ * die es der Redaktion geht, stehen nur im deutschen Original.
+ *
+ * Bewusst ohne `if (await x.count() > 0)`: Eine Zusicherung, die bei fehlendem
+ * Element übersprungen wird, ist grün, wenn die Oberfläche kaputt ist. Was hier
+ * geprüft wird, muss da sein — der Datenbestand aus tests/e2e/seed.php sorgt
+ * dafür, dass es da sein kann.
  */
 
 const ADMIN_USER = process.env.WP_ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.WP_ADMIN_PASSWORD || 'password';
-const BASE_URL = process.env.BASE_URL || 'http://localhost:10003';
 
-test.describe('Open Data Wizard Admin Workflow', () => {
-  test.beforeEach(async ({ page }) => {
-    // Login to WordPress admin
-    await page.goto(`${BASE_URL}/wp-login.php`);
-    await page.fill('input[name="log"]', ADMIN_USER);
-    await page.fill('input[name="pwd"]', ADMIN_PASSWORD);
-    await page.click('button[type="submit"]');
+/** Basis-URL der Datensatzliste — alle Unterseiten hängen an diesem Menüpunkt. */
+const LIST_URL = '/wp-admin/edit.php?post_type=odw_dataset';
 
-    // Wait for redirect to dashboard
-    await page.waitForURL(`${BASE_URL}/wp-admin/`);
-    await expect(page).toHaveURL(/wp-admin/);
-  });
+/**
+ * Selektor für ein Carbon-Fields-Eingabefeld.
+ *
+ * Über das name-Attribut, nicht über data-Attribute: Carbon Fields reicht
+ * data-Attribute nicht zuverlässig ans DOM durch, der Meta-Key steht dagegen
+ * immer im Namen.
+ *
+ * @param {string} metaKey Meta-Key ohne führenden Unterstrich, z. B. "odw_publisher".
+ * @returns {string}
+ */
+function cfField(metaKey) {
+  return `[name$="[_${metaKey}]"]`;
+}
 
-  test('should navigate to Datasets menu', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/edit.php?post_type=odw_dataset`);
+test.beforeEach(async ({ page }) => {
+  await page.goto('/wp-login.php');
+  await page.fill('#user_login', ADMIN_USER);
+  await page.fill('#user_pass', ADMIN_PASSWORD);
+  await page.click('#wp-submit');
 
-    // Check page title
-    const pageTitle = page.locator('h1');
-    await expect(pageTitle).toContainText('Datensätze');
-  });
+  await expect(page.locator('#wpadminbar')).toBeVisible();
+});
 
-  test('should create new dataset', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/post-new.php?post_type=odw_dataset`);
+test.describe('Datensatzliste', () => {
+  test('zeigt die Datensätze mit allen Zusatzspalten', async ({ page }) => {
+    await page.goto(LIST_URL);
 
-    // Fill title
-    const titleInput = page.locator('#title');
-    await titleInput.fill('Test Dataset: Population 2024');
+    await expect(page.locator('h1.wp-heading-inline')).toContainText('Datensätze');
 
-    // Check form exists
-    const formTabs = page.locator('.cf-container__tabs-nav');
-    await expect(formTabs).toBeVisible();
-
-    // Verify Tab 1 is active
-    const tab1 = page.locator('.cf-container__tabs-nav li.cf-tab--active');
-    await expect(tab1).toBeVisible();
-  });
-
-  test('should fill Tab 1 - Grundlegende Informationen', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/post-new.php?post_type=odw_dataset`);
-
-    // Fill title
-    await page.fill('#title', 'Test Dataset: Tax Data');
-
-    // Fill publisher (required)
-    const publisherInput = page.locator('input[data-carbon-field="odw_publisher"]');
-    if (await publisherInput.count() > 0) {
-      await publisherInput.fill('Test Organization');
+    // Auf thead eingegrenzt: WordPress rendert dieselben Spaltenköpfe ein
+    // zweites Mal im tfoot, ein ungebundener Selektor trifft also zwei
+    // Elemente und Playwright bricht mit einer Strict-Mode-Verletzung ab.
+    for (const column of ['odw_license', 'odw_theme', 'odw_quality', 'odw_status', 'odw_shortcode']) {
+      await expect(page.locator(`thead th.column-${column}`)).toBeVisible();
     }
 
-    // Fill description (required)
-    const descriptionInput = page.locator('textarea[data-carbon-field="odw_description"]');
-    if (await descriptionInput.count() > 0) {
-      await descriptionInput.fill('This is a test dataset for population statistics.');
-    }
-
-    // Verify fields are filled
-    await expect(page.locator('#title')).toHaveValue('Test Dataset: Tax Data');
+    await expect(page.locator('table.wp-list-table tbody tr')).not.toHaveCount(0);
+    await expect(page.locator('table.wp-list-table tbody')).toContainText('Schulstandorte');
   });
 
-  test('should navigate between tabs', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/post-new.php?post_type=odw_dataset`);
+  test('zeigt Qualitätsbadge und Shortcode je Zeile', async ({ page }) => {
+    await page.goto(LIST_URL);
 
-    // Click Tab 2
-    const tab2Button = page.locator('.cf-container__tabs-nav >> text="2 — Sprache & Übersetzungen"');
-    if (await tab2Button.count() > 0) {
-      await tab2Button.click();
+    // Nicht `.first()` ohne Filter: Ein noch nicht berechneter Datensatz zeigt
+    // „—" statt einer Prozentzahl, und in welcher Reihenfolge die Zeilen stehen,
+    // hängt am Anlagezeitpunkt.
+    const badge = page.locator('.odw-quality-badge', { hasText: '%' }).first();
+    await expect(badge).toBeVisible();
 
-      // Verify Tab 2 is now active
-      const activeTab = page.locator('.cf-container__tabs-nav li.cf-tab--active');
-      await expect(activeTab).toContainText('2 — Sprache & Übersetzungen');
-    }
+    const shortcode = page.locator('.odw-shortcode-input').first();
+    await expect(shortcode).toBeVisible();
+    await expect(shortcode).toHaveAttribute('readonly', '');
+    await expect(shortcode).toHaveValue(/\[odw_dataset id="\d+"\]/);
+  });
+});
+
+test.describe('Formular', () => {
+  test('öffnet mit fünf Reitern, der erste ist aktiv', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Carbon Fields 3.6 rendert ul.cf-container__tabs-list > li.cf-container__tabs-item
+    // mit einem <button> als Klickfläche; der aktive Reiter trägt --current.
+    // Dieselben Klassennamen adressiert der Block FORMULAR-DESIGN in
+    // assets/css/admin.css — ändert Carbon Fields sie, fällt es hier auf.
+    const tabs = page.locator('.cf-container__tabs-list .cf-container__tabs-item');
+    await expect(tabs).toHaveCount(5);
+    await expect(tabs.first()).toContainText('Grundlegende Informationen');
+    await expect(page.locator('.cf-container__tabs-item--current')).toHaveCount(1);
   });
 
-  test('should show validation errors on publish without required fields', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/post-new.php?post_type=odw_dataset`);
+  test('nimmt Titel, Herausgeber und Beschreibung entgegen', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    // Try to publish without filling required fields
-    const publishButton = page.locator('input#publish');
-    await publishButton.click();
+    await page.fill('#title', 'E2E: Radverkehrszählstellen');
+    await page.fill(cfField('odw_publisher'), 'Stadt Musterstadt');
+    await page.fill(cfField('odw_description'), 'Zählstellen für den Radverkehr, stündliche Werte.');
 
-    // Wait for response
-    await page.waitForTimeout(1000);
-
-    // Check if we're still on the edit page (not published)
-    const url = page.url();
-    expect(url).toContain('post-new.php');
+    await expect(page.locator('#title')).toHaveValue('E2E: Radverkehrszählstellen');
+    await expect(page.locator(cfField('odw_publisher'))).toHaveValue('Stadt Musterstadt');
   });
 
-  test('should view dataset list', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/edit.php?post_type=odw_dataset`);
+  test('wechselt auf den zweiten Reiter', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    // Check list table exists
-    const listTable = page.locator('table.wp-list-table');
-    await expect(listTable).toBeVisible();
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Sprache' }).click();
 
-    // Check columns exist
-    const licenseColumn = page.locator('th.column-odw_license');
-    const qualityColumn = page.locator('th.column-odw_quality');
-    const statusColumn = page.locator('th.column-odw_status');
-
-    await expect(licenseColumn).toBeVisible();
-    await expect(qualityColumn).toBeVisible();
-    await expect(statusColumn).toBeVisible();
+    await expect(page.locator('.cf-container__tabs-item--current')).toContainText('Sprache');
+    await expect(page.locator(cfField('odw_language'))).toBeVisible();
   });
 
-  test('should access Einstieg (Introduction) page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/admin.php?page=odw-einstieg`);
+  test('blockt die Veröffentlichung ohne Pflichtangaben und benennt die Felder', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    // Check page title or intro content
-    const pageContent = page.locator('div.wrap');
-    await expect(pageContent).toBeVisible();
+    await page.fill('#title', 'E2E: Unvollständig');
+    await page.click('#publish');
+
+    // Der Beitrag darf nicht veröffentlicht sein, und die Meldung muss sagen,
+    // was fehlt — „konnte nicht gespeichert werden" allein hilft niemandem.
+    const notice = page.locator('.notice-error');
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText('Herausgeb');
+    await expect(page.locator('#post-status-display')).toContainText('Entwurf');
   });
 
-  test('should access Settings page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/admin.php?page=odw-settings`);
+  test('speichert einen unvollständigen Entwurf', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    // Check settings form exists
-    const settingsForm = page.locator('form');
-    await expect(settingsForm).toBeVisible();
+    await page.fill('#title', 'E2E: Entwurf ohne Pflichtfelder');
+    await page.click('#save-post');
 
-    // Check expected sections
-    const catalogSection = page.locator('h2');
-    await expect(catalogSection).toContainText(/Katalog|Einstellungen/i);
+    await expect(page.locator('#message.notice-success')).toBeVisible();
+    await expect(page.locator('#title')).toHaveValue('E2E: Entwurf ohne Pflichtfelder');
+  });
+});
+
+test.describe('Plugin-Seiten', () => {
+  test('Einstiegsseite erklärt den Ablauf', async ({ page }) => {
+    await page.goto(`${LIST_URL}&page=odw-einstieg`);
+
+    await expect(page.locator('h1.odw-page-title')).toContainText('Einstieg');
+    await expect(page.locator('.odw-introduction-page')).toBeVisible();
+    await expect(page.locator('img.odw-introduction-figure')).toBeVisible();
+    await expect(
+      page.locator('.odw-introduction-page a.button-primary')
+    ).toContainText('Neuen Datensatz erstellen');
   });
 
-  test('should display help tabs', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/post.php?post_type=odw_dataset&action=edit&post=1`);
+  test('Einstellungsseite zeigt die Harvest-URLs', async ({ page }) => {
+    await page.goto(`${LIST_URL}&page=odw-settings`);
 
-    // Check if help tab area exists
-    const helpArea = page.locator('#contextual-help-link');
-    if (await helpArea.count() > 0) {
-      // Help tabs should be present if a published dataset exists
-      await expect(helpArea).toBeVisible();
-    }
-  });
+    // Der WP-Admin bringt eigene Formulare mit (Suche, Bildschirmoptionen);
+    // hier zählt nur, dass die Seite überhaupt eines rendert.
+    await expect(page.locator('.wrap form').first()).toBeVisible();
 
-  test('should show quality badge in list', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/edit.php?post_type=odw_dataset`);
-
-    // Look for quality badges
-    const qualityBadges = page.locator('.odw-quality-badge');
-
-    // If datasets exist, quality badges should be shown
-    if (await qualityBadges.count() > 0) {
-      const firstBadge = qualityBadges.first();
-      await expect(firstBadge).toBeVisible();
-    }
-  });
-
-  test('should display shortcode in list', async ({ page }) => {
-    await page.goto(`${BASE_URL}/wp-admin/edit.php?post_type=odw_dataset`);
-
-    // Look for shortcode inputs
-    const shortcodeInputs = page.locator('.odw-shortcode-input');
-
-    if (await shortcodeInputs.count() > 0) {
-      const firstShortcode = shortcodeInputs.first();
-      await expect(firstShortcode).toBeVisible();
-
-      // Verify it's readonly
-      await expect(firstShortcode).toHaveAttribute('readonly', '');
-    }
+    // Die Katalog-URLs stehen in schreibgeschützten Eingabefeldern (zum
+    // Markieren per Klick). Ihr Wert ist kein Textknoten — toContainText
+    // findet ihn deshalb nie, egal wie die Seite aussieht.
+    const harvestUrl = page.locator('.wrap input[readonly]').first();
+    await expect(harvestUrl).toHaveValue(/datenatlas\/v1\/catalog/);
   });
 });

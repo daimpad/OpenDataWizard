@@ -13,6 +13,7 @@
     <testsuite name="Open Data Wizard">
       <directory suffix=".php">../tests/</directory>
       <exclude>../tests/shacl/</exclude>
+      <exclude>../tests/e2e/</exclude>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -130,3 +130,92 @@ jobs:
       # zeigt dort sonst mitten im englischen Backend einen deutschen Satz.
       - name: Katalog gegen die Quellzeichenketten prüfen
         run: python3 bin/check-i18n.py
+
+  e2e:
+    name: End-to-End-Tests (WordPress)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      # wp-env hängt das Repository als Plugin ein — ohne vendor/ bricht der
+      # Bootstrap ab und jeder Test liefe gegen ein inaktives Plugin.
+      - name: Install composer dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Startet WordPress samt Datenbank in Docker, aktiviert das Plugin und
+      # hängt tests/e2e/mu-plugins/ ein, das den Datenbestand anlegt. Das
+      # Skript setzt außerdem sprechende Permalinks — mit den Standard-
+      # Permalinks gibt es /wp-json/ nicht, und jeder Endpunkt antwortet 404.
+      - name: Start WordPress (wp-env)
+        run: npm run env:start
+
+      # Scheitert die Einrichtung, soll sie das hier sagen — nicht als
+      # zwanzig unverständliche Testfehler weiter unten. Die harte Zusicherung
+      # am Ende ist der Katalog-Abruf: Antwortet der nicht mit 200, ist die
+      # Umgebung kaputt und jeder folgende Test würde nur Folgefehler melden.
+      - name: Verify test environment
+        run: |
+          echo "::group::Aktive Plugins"
+          npx wp-env run tests-cli wp plugin list --status=active --field=name || true
+          echo "::endgroup::"
+          echo "::group::Permalink-Struktur"
+          npx wp-env run tests-cli wp option get permalink_structure || true
+          echo "::endgroup::"
+          echo "::group::Datensätze"
+          npx wp-env run tests-cli wp post list --post_type=odw_dataset --post_status=publish --fields=ID,post_title || true
+          npx wp-env run tests-cli wp option get odw_e2e_seeded || true
+          echo "::endgroup::"
+          echo "--- Katalog über die Testumgebung ---"
+          STATUS="$(curl -sS -o "$RUNNER_TEMP/catalog.json" -w '%{http_code}' 'http://localhost:8889/wp-json/datenatlas/v1/catalog' || echo 000)"
+          echo "HTTP $STATUS"
+          head -c 600 "$RUNNER_TEMP/catalog.json" || true
+          echo
+          test "$STATUS" = "200"
+
+      # Zwei Schritte statt einem, und der zweite läuft auch nach einem
+      # Fehlschlag des ersten: Sonst steht die Ausgabe des einen Laufs so weit
+      # oben im Log, dass sie beim Nachlesen nicht mehr auffindbar ist.
+      - name: End-to-end tests — Harvest-Endpunkte
+        run: npx playwright test --project=chromium tests/e2e/api-endpoints.spec.js
+
+      - name: End-to-end tests — Backend
+        if: always()
+        run: npx playwright test --project=chromium tests/e2e/admin-workflow.spec.js
+
+      # WP_DEBUG_LOG schreibt PHP-Notices und -Fatals nach wp-content/debug.log.
+      # Am Ende ausgegeben, weil eine leer gerenderte Admin-Seite sonst nur als
+      # „Element nicht gefunden" erscheint und die Ursache unsichtbar bleibt.
+      - name: WordPress-Debug-Log
+        if: always()
+        run: |
+          npx wp-env run tests-cli wp eval 'echo @file_get_contents( WP_CONTENT_DIR . "/debug.log" );' || true
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Stop WordPress
+        if: always()
+        run: npx wp-env stop

@@ -21,6 +21,9 @@ node_modules/
 /test-results/
 /playwright-report/
 
+# wp-env: lokale Abweichungen von .wp-env.json (eigene WP-Version, Ports)
+.wp-env.override.json
+
 # SHACL-Validierungs-Fixtures (generiert von tests/shacl/generate-fixtures.php)
 /build/
 

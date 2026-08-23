@@ -39,11 +39,17 @@ wp plugin activate open-data-wizard
 python3 bin/check-i18n.py                                      # fehlende Übersetzungen
 bash bin/build-release.sh                                      # ZIP bauen
 python3 bin/verify-package.py dist/open-data-wizard-<ver>.zip   # Paket prüfen
+
+# End-to-End (braucht Docker)
+npm run env:start                                              # WordPress + Plugin + Saat
+npm run test:e2e                                               # Chromium gegen Port 8889
+npm run env:stop
 ```
 
 ### CI/CD Pipeline
 - Runs auf **PHP 8.1, 8.2, 8.3** via GitHub Actions (`.github/workflows/ci.yml`)
-- Sechs Jobs: PHPCS, PHPStan, PHPUnit (drei PHP-Versionen), SHACL, **Release-Paket**, **Übersetzungen**
+- Sieben Jobs: PHPCS, PHPStan, PHPUnit (drei PHP-Versionen), SHACL, **Release-Paket**,
+  **Übersetzungen**, **End-to-End**
 - **Pull Requests** werden geblocked, wenn CI fehlschlägt
 
 > **Warum ein eigener Paket-Job?** Alle übrigen Prüfungen laufen gegen das
@@ -56,6 +62,18 @@ python3 bin/verify-package.py dist/open-data-wizard-<ver>.zip   # Paket prüfen
 > damit nie veraltet. Zusätzlich: Autoloader, `block.json`, `.mo` sowie die
 > Gleichheit von Plugin-Header, `ODW_VERSION` und oberstem CHANGELOG-Eintrag.
 > Bewusste Ausnahmen stehen mit Begründung in `KNOWN_ABSENT`.
+
+> **End-to-End-Tests.** `npm run env:start` startet über `wp-env` (Docker) ein
+> WordPress mit eingehängtem Plugin, schaltet es auf **Deutsch** und setzt
+> **sprechende Permalinks** (`--hard`, damit die `.htaccess` geschrieben wird —
+> ohne sie gibt es `/wp-json/` nicht). Beides ist nötig, sonst scheitert jeder
+> Test: In einem en_US-WordPress greift die mitgelieferte Übersetzung, und die
+> deutschen Beschriftungen sind nicht zu finden. `tests/e2e/seed.php` wird dabei als
+> mu-plugin gemountet und legt einmalig zwei veröffentlichte Datensätze an —
+> deshalb können die Zusicherungen unbedingt sein. Ein `if (await x.count() > 0)`
+> in einem E2E-Test besteht auch dann, wenn die Oberfläche kaputt ist; solche
+> Konstruktionen gehören nicht in diese Dateien. Die CI fährt nur Chromium,
+> lokal stehen über `npm run test:e2e:all` auch Firefox und WebKit bereit.
 
 ---
 

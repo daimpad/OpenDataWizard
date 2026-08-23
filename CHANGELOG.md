@@ -7,13 +7,25 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
-## [Unreleased]
+## [2.40.1] — 2026-08-23
 
-Zwei Lücken in der Absicherung geschlossen. **Am Plugin selbst ändert sich nichts** —
-die Änderungen liegen ausschließlich in `.github/` und `bin/` und werden nicht ausgeliefert.
-Deshalb auch keine neue Version: Das ZIP wäre bis auf die Versionsnummer identisch.
+Ein Fehler im Delta-Endpunkt, gefunden von den wiederbelebten End-to-End-Tests — und die
+Absicherung drumherum: zwei Lücken in der CI geschlossen, die größte ungetestete Klasse
+getestet, die brachliegenden E2E-Tests wieder in Betrieb genommen.
+
+### 🐛 Fixed
+- **`/delta?since=…` wies Zeitstempel mit Sekundenbruchteilen ab.** Wer den Parameter so
+  erzeugt, wie es am nächsten liegt — JavaScripts `toISOString()` hängt immer Millisekunden an,
+  Pythons `datetime.isoformat()` Mikrosekunden —, bekam HTTP 400 statt seiner Daten. RFC 3339
+  erlaubt Sekundenbruchteile ausdrücklich (`time-secfrac`); die Formatliste in `parse_iso8601()`
+  kannte sie schlicht nicht. Aufgefallen ist es, weil der neue E2E-Test genau so einen
+  Zeitstempel baut. Genau dafür sind diese Tests da: Der Unit-Test prüfte bis dahin nur
+  Schreibweisen, die jemand von Hand tippt.
 
 ### 🔧 Nur im Repository, nicht im Paket
+Die folgenden Punkte betreffen ausschließlich `.github/`, `bin/`, `tests/`, `config/` sowie
+die Node- und wp-env-Dateien. Nichts davon wird ausgeliefert.
+
 - **Das Release-ZIP wird jetzt geprüft.** Bisher liefen PHPCS, PHPStan, PHPUnit und SHACL
   alle gegen das Repository — das Paket, das Anwender:innen installieren, sah keine von
   ihnen an. Eine vergessene Zeile in der Allowlist von `bin/build-release.sh` erzeugte
@@ -32,6 +44,42 @@ Deshalb auch keine neue Version: Das ZIP wäre bis auf die Versionsnummer identi
 - **`bin/check-i18n.py` läuft jetzt in der CI.** Das Skript existierte, wurde aber nur von
   Hand aufgerufen. Eine beim Umformulieren vergessene Übersetzung hätte auf englischen
   Installationen mitten im Backend einen deutschen Satz gezeigt.
+- **40 Testfälle für den Batch-Import.** `includes/class-batch-import.php` war mit 571 Zeilen die
+  größte ungetestete Klasse — und die einzige Stelle im Plugin, an der fremde Dateien auf den
+  Code treffen. Abgedeckt sind jetzt: Formaterkennung (auch über den ursprünglichen Dateinamen
+  bei temporären Uploads), UTF-8-BOM aus Excel-Exporten, verrutschte Spaltenzahl, Leerzeilen,
+  JSON-Einzelobjekt gegen JSON-Liste, Pflichtfeldprüfung, URL-Schemata (`javascript:` und
+  `data:` werden abgewiesen), ganzzahlige Dateigröße, Lizenz-Kurzcodes, Formel-Injektion
+  (`=`, `+`, `@`, Tabulator) sowie die Anlage der Datensätze samt Meta-Zuordnung, Lizenz-URI
+  und Schlagwort-Normalisierung. Suite gesamt: 199 → 239 Tests.
+- **Drei Sniff-Ausnahmen für `tests/`.** Tests laufen ohne WordPress: `wp_delete_file()`,
+  `WP_Filesystem` und `wp_parse_url()` gibt es dort nicht. Fixture-Dateien werden daher direkt
+  geschrieben und gelöscht, und der `wp_parse_url()`-Mock muss `parse_url()` aufrufen — das ist
+  genau die Verhaltensweise, die er nachbildet.
+- **Drei Gründe, warum die alten E2E-Tests nie liefen** — alle erst im ersten CI-Lauf sichtbar
+  geworden: `mappings` in `.wp-env.json` bildet *Verzeichnisse* ab, keine einzelnen Dateien
+  (die Saat lief deshalb nicht); mit den Standard-Permalinks gibt es `/wp-json/` überhaupt nicht,
+  alle Endpunkte antworteten 404; und die Reiter-Selektoren zeigten auf `cf-container__tabs-nav`
+  / `cf-tab--active`, während Carbon Fields 3.6 `cf-container__tabs-list`,
+  `cf-container__tabs-item` und `--current` rendert — was im Kommentar über dem Block
+  `FORMULAR-DESIGN` in `assets/css/admin.css` seit jeher richtig steht.
+- **Die End-to-End-Tests laufen wieder — und prüfen jetzt etwas.** `tests/e2e/` enthielt zwei
+  Spec-Dateien, die niemand ausführte: Es gab keine WordPress-Instanz, die Anmeldung klickte auf
+  einen `button[type=submit]`, den das WordPress-Login gar nicht hat, und die Datensatz-ID wurde
+  aus einem `p=`-Parameter gelesen, den `@id` nie enthielt. `npx wp-env` startet nun WordPress
+  samt Plugin, ein neuer CI-Job fährt Chromium dagegen.
+- **Keine bedingten Zusicherungen mehr.** Der Großteil der alten Tests stand in einem
+  `if (await x.count() > 0)` — sie waren grün, wenn das geprüfte Element fehlte. Genau die
+  Konstruktion also, die eine kaputte Oberfläche als bestanden meldet. `tests/e2e/seed.php` legt
+  als mu-plugin zwei veröffentlichte Datensätze an, damit die Zusicherungen unbedingt sein können:
+  der Katalog enthält *mindestens zwei* Einträge, der Themenfilter liefert *genau* den passenden,
+  der zweite Abruf kommt aus dem Cache, `/wp/v2/odw_dataset` antwortet mit 404.
+- **Im Backend geprüft:** alle sieben Spalten der Datensatzliste, Qualitätsbadge mit Prozentwert,
+  schreibgeschützter Shortcode, fünf Reiter im Formular, Reiterwechsel, blockierte Veröffentlichung
+  samt Nennung des fehlenden Feldes, speicherbarer unvollständiger Entwurf, Einstiegsseite mit
+  Ablaufgrafik und die Harvest-URLs auf der Einstellungsseite.
+- Die `version` in `package.json` stand seit v2.1.4 still und zeigt jetzt wieder auf die
+  Plugin-Version. Sie wird nicht ausgeliefert, war aber beim Nachsehen schlicht irreführend.
 
 ---
 

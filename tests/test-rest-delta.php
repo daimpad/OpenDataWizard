@@ -361,6 +361,37 @@ class Test_ODW_Rest_Delta extends TestCase {
 	}
 
 	/**
+	 * Accepts fractional seconds — the form harvesters produce by default.
+	 *
+	 * JavaScripts `toISOString()` hängt immer Millisekunden an, Pythons
+	 * `datetime.isoformat()` Mikrosekunden. RFC 3339 erlaubt beides
+	 * (`time-secfrac`); vor v2.40.1 wies der Endpunkt genau diese Zeitstempel
+	 * mit HTTP 400 ab.
+	 *
+	 * @dataProvider provide_fractional_second_timestamps
+	 *
+	 * @param string $value Timestamp under test.
+	 */
+	public function test_validate_since_accepts_fractional_seconds( string $value ): void {
+		$this->load_class();
+		$this->assertTrue( ODW_Rest_API::validate_since_param( $value ) );
+	}
+
+	/**
+	 * Timestamps with fractional seconds in the notations that occur in practice.
+	 *
+	 * @return array<string, array{0: string}>
+	 */
+	public function provide_fractional_second_timestamps(): array {
+		return array(
+			'Millisekunden, UTC-Z'     => array( '2024-06-15T12:30:00.123Z' ),
+			'Mikrosekunden, UTC-Z'     => array( '2024-06-15T12:30:00.123456Z' ),
+			'Millisekunden, Offset'    => array( '2024-06-15T12:30:00.123+02:00' ),
+			'Millisekunden, ohne Zone' => array( '2024-06-15T12:30:00.123' ),
+		);
+	}
+
+	/**
 	 * Rejects a free-text string that is not a date.
 	 */
 	public function test_validate_since_rejects_free_text(): void {
