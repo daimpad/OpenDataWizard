@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
 	"plugins": [ "." ],
 	"mappings": {
-		"wp-content/mu-plugins/odw-e2e-seed.php": "./tests/e2e/seed.php"
+		"wp-content/mu-plugins": "./tests/e2e/mu-plugins"
 	},
 	"config": {
 		"WP_DEBUG": true,

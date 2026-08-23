@@ -17,7 +17,7 @@
     "url": "https://github.com/daimpad/OpenDataWizard.git"
   },
   "scripts": {
-    "env:start": "wp-env start",
+    "env:start": "wp-env start && wp-env run cli wp rewrite structure '/%postname%/' && wp-env run tests-cli wp rewrite structure '/%postname%/'",
     "env:stop": "wp-env stop",
     "env:clean": "wp-env clean tests",
     "test:e2e": "playwright test --project=chromium",
@@ -25,11 +25,12 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
-    "test:shacl": "node tests/shacl/validate.mjs"
+    "test:shacl": "node tests/shacl/validate.mjs",
+    "env:verify": "wp-env run tests-cli wp option get odw_e2e_seeded"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
-    "@wordpress/env": "^10.0.0",
+    "@wordpress/env": "^10.39.0",
     "@zazuko/env-node": "^3.1.0",
     "rdf-validate-shacl": "^0.6.5"
   }

@@ -1,12 +1,15 @@
 <?php
 /**
  * Plugin Name: Open Data Wizard — E2E-Saat
- * Description: Legt für die End-to-End-Tests einen bekannten Datenbestand an. Wird ausschließlich über .wp-env.json als mu-plugin eingehängt und ist nie Teil des Release-Pakets.
+ * Description: Legt für die End-to-End-Tests einen bekannten Datenbestand an. Das Verzeichnis tests/e2e/mu-plugins wird über .wp-env.json nach wp-content/mu-plugins gemountet; nichts davon ist Teil des Release-Pakets.
  *
  * Warum ein mu-plugin und nicht ein paar WP-CLI-Aufrufe im Workflow: Die Saat
  * läuft damit lokal und in der CI über denselben Weg, ohne Ausgaben von
  * `wp-env run` zu parsen, und sie ist idempotent — ein zweiter Start legt
  * nichts doppelt an.
+ *
+ * `mappings` in .wp-env.json bildet Verzeichnisse ab, keine einzelnen Dateien.
+ * Deshalb liegt die Datei in einem eigenen Ordner und nicht direkt in tests/e2e.
  *
  * @package OpenDataWizard
  */
@@ -36,12 +39,12 @@ function odw_e2e_seed(): void {
 		return;
 	}
 
-	// Die Tests rufen /wp-json/… auf, wie ein Harvester es täte. Ohne
-	// sprechende Permalinks gibt es diesen Pfad nicht.
-	if ( '' === (string) get_option( 'permalink_structure' ) ) {
-		update_option( 'permalink_structure', '/%postname%/' );
-		flush_rewrite_rules( false );
-	}
+	// Einmalige Umleitung auf die Einstiegsseite und die Willkommensmeldung
+	// abräumen: Beide werden bei der Aktivierung gesetzt und würden die ersten
+	// Seitenaufrufe der Tests je nach Reihenfolge unterschiedlich aussehen
+	// lassen. Tests sollen an der Software scheitern, nicht am Zufall.
+	delete_transient( 'odw_activation_redirect' );
+	delete_option( 'odw_show_welcome' );
 
 	$datasets = array(
 		array(

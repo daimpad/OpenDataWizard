@@ -46,6 +46,13 @@ Version: Das ZIP wäre bis auf die Versionsnummer identisch.
   `WP_Filesystem` und `wp_parse_url()` gibt es dort nicht. Fixture-Dateien werden daher direkt
   geschrieben und gelöscht, und der `wp_parse_url()`-Mock muss `parse_url()` aufrufen — das ist
   genau die Verhaltensweise, die er nachbildet.
+- **Drei Gründe, warum die alten E2E-Tests nie liefen** — alle erst im ersten CI-Lauf sichtbar
+  geworden: `mappings` in `.wp-env.json` bildet *Verzeichnisse* ab, keine einzelnen Dateien
+  (die Saat lief deshalb nicht); mit den Standard-Permalinks gibt es `/wp-json/` überhaupt nicht,
+  alle Endpunkte antworteten 404; und die Reiter-Selektoren zeigten auf `cf-container__tabs-nav`
+  / `cf-tab--active`, während Carbon Fields 3.6 `cf-container__tabs-list`,
+  `cf-container__tabs-item` und `--current` rendert — was im Kommentar über dem Block
+  `FORMULAR-DESIGN` in `assets/css/admin.css` seit jeher richtig steht.
 - **Die End-to-End-Tests laufen wieder — und prüfen jetzt etwas.** `tests/e2e/` enthielt zwei
   Spec-Dateien, die niemand ausführte: Es gab keine WordPress-Instanz, die Anmeldung klickte auf
   einen `button[type=submit]`, den das WordPress-Login gar nicht hat, und die Datensatz-ID wurde

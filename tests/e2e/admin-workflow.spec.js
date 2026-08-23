@@ -73,10 +73,14 @@ test.describe('Formular', () => {
   test('öffnet mit fünf Reitern, der erste ist aktiv', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    const tabs = page.locator('.cf-container__tabs-nav li');
+    // Carbon Fields 3.6 rendert ul.cf-container__tabs-list > li.cf-container__tabs-item
+    // mit einem <button> als Klickfläche; der aktive Reiter trägt --current.
+    // Dieselben Klassennamen adressiert der Block FORMULAR-DESIGN in
+    // assets/css/admin.css — ändert Carbon Fields sie, fällt es hier auf.
+    const tabs = page.locator('.cf-container__tabs-list .cf-container__tabs-item');
     await expect(tabs).toHaveCount(5);
     await expect(tabs.first()).toContainText('Grundlegende Informationen');
-    await expect(page.locator('.cf-container__tabs-nav li.cf-tab--active')).toHaveCount(1);
+    await expect(page.locator('.cf-container__tabs-item--current')).toHaveCount(1);
   });
 
   test('nimmt Titel, Herausgeber und Beschreibung entgegen', async ({ page }) => {
@@ -93,9 +97,9 @@ test.describe('Formular', () => {
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
-    await page.locator('.cf-container__tabs-nav li', { hasText: 'Sprache' }).click();
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Sprache' }).click();
 
-    await expect(page.locator('.cf-container__tabs-nav li.cf-tab--active')).toContainText('Sprache');
+    await expect(page.locator('.cf-container__tabs-item--current')).toContainText('Sprache');
     await expect(page.locator(cfField('odw_language'))).toBeVisible();
   });
 

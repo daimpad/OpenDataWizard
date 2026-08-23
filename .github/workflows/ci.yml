@@ -161,9 +161,24 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       # Startet WordPress samt Datenbank in Docker, aktiviert das Plugin und
-      # hängt tests/e2e/seed.php als mu-plugin ein, das den Datenbestand anlegt.
+      # hängt tests/e2e/mu-plugins/ ein, das den Datenbestand anlegt. Das
+      # Skript setzt außerdem sprechende Permalinks — mit den Standard-
+      # Permalinks gibt es /wp-json/ nicht, und jeder Endpunkt antwortet 404.
       - name: Start WordPress (wp-env)
-        run: npx wp-env start
+        run: npm run env:start
+
+      # Scheitert die Einrichtung, soll sie das hier sagen — nicht als
+      # zwanzig unverständliche Testfehler weiter unten.
+      - name: Verify test environment
+        run: |
+          echo "--- aktive Plugins ---"
+          npx wp-env run tests-cli wp plugin list --status=active --field=name
+          echo "--- Permalink-Struktur ---"
+          npx wp-env run tests-cli wp option get permalink_structure
+          echo "--- veröffentlichte Datensätze ---"
+          npx wp-env run tests-cli wp post list --post_type=odw_dataset --post_status=publish --format=count
+          echo "--- Saat gelaufen? (Option odw_e2e_seeded) ---"
+          npm run env:verify
 
       - name: Run end-to-end tests
         run: npm run test:e2e
