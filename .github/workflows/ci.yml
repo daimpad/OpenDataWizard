@@ -93,3 +93,40 @@ jobs:
 
       - name: Run SHACL validation (Tier 2)
         run: npm run test:shacl
+
+  package:
+    name: Release-Paket prüfen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      # Die anderen Jobs prüfen das Repository. Dieser baut das ZIP, das
+      # Anwender:innen tatsächlich installieren, und sieht hinein — eine
+      # vergessene Zeile in der Allowlist von bin/build-release.sh fällt sonst
+      # erst in einer echten WordPress-Installation auf (so geschehen mit
+      # blocks/ in v2.38.0).
+      - name: Plugin-ZIP bauen
+        run: bash bin/build-release.sh
+
+      - name: Paket gegen die Laufzeit-Pfade prüfen
+        run: |
+          VERSION="$(grep -oE "define\( *'ODW_VERSION', *'[^']+'" open-data-wizard.php | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+          python3 bin/verify-package.py "dist/open-data-wizard-${VERSION}.zip"
+
+  i18n:
+    name: Übersetzungen vollständig
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Die Quellsprache ist Deutsch; die englische Fassung überschreibt sie auf
+      # en_US-Installationen. Eine beim Umformulieren vergessene Übersetzung
+      # zeigt dort sonst mitten im englischen Backend einen deutschen Satz.
+      - name: Katalog gegen die Quellzeichenketten prüfen
+        run: python3 bin/check-i18n.py
