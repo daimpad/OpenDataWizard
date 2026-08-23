@@ -4,6 +4,12 @@ const { test, expect } = require('@playwright/test');
 /**
  * Der Weg, den Redakteur:innen im Backend tatsächlich gehen.
  *
+ * Die Testumgebung läuft auf Deutsch (siehe `env:start` in package.json). Das
+ * ist kein Detail: Die Quellsprache des Plugins ist Deutsch, die mitgelieferte
+ * en_US-Übersetzung überschreibt sie auf englischen Installationen. Ein
+ * WordPress in en_US zeigt daher die *Übersetzung* — die Beschriftungen, um
+ * die es der Redaktion geht, stehen nur im deutschen Original.
+ *
  * Bewusst ohne `if (await x.count() > 0)`: Eine Zusicherung, die bei fehlendem
  * Element übersprungen wird, ist grün, wenn die Oberfläche kaputt ist. Was hier
  * geprüft wird, muss da sein — der Datenbestand aus tests/e2e/seed.php sorgt
@@ -146,8 +152,11 @@ test.describe('Plugin-Seiten', () => {
     // Der WP-Admin bringt eigene Formulare mit (Suche, Bildschirmoptionen);
     // hier zählt nur, dass die Seite überhaupt eines rendert.
     await expect(page.locator('.wrap form').first()).toBeVisible();
-    // Auf .wrap eingegrenzt statt auf body: Schlägt es fehl, druckt Playwright
-    // den Text des geprüften Elements — bei body ist das die halbe Admin-Seite.
-    await expect(page.locator('.wrap')).toContainText('datenatlas/v1/catalog');
+
+    // Die Katalog-URLs stehen in schreibgeschützten Eingabefeldern (zum
+    // Markieren per Klick). Ihr Wert ist kein Textknoten — toContainText
+    // findet ihn deshalb nie, egal wie die Seite aussieht.
+    const harvestUrl = page.locator('.wrap input[readonly]').first();
+    await expect(harvestUrl).toHaveValue(/datenatlas\/v1\/catalog/);
   });
 });

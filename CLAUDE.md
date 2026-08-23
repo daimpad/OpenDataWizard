@@ -64,7 +64,11 @@ npm run env:stop
 > Bewusste Ausnahmen stehen mit Begründung in `KNOWN_ABSENT`.
 
 > **End-to-End-Tests.** `npm run env:start` startet über `wp-env` (Docker) ein
-> WordPress mit eingehängtem Plugin. `tests/e2e/seed.php` wird dabei als
+> WordPress mit eingehängtem Plugin, schaltet es auf **Deutsch** und setzt
+> **sprechende Permalinks** (`--hard`, damit die `.htaccess` geschrieben wird —
+> ohne sie gibt es `/wp-json/` nicht). Beides ist nötig, sonst scheitert jeder
+> Test: In einem en_US-WordPress greift die mitgelieferte Übersetzung, und die
+> deutschen Beschriftungen sind nicht zu finden. `tests/e2e/seed.php` wird dabei als
 > mu-plugin gemountet und legt einmalig zwei veröffentlichte Datensätze an —
 > deshalb können die Zusicherungen unbedingt sein. Ein `if (await x.count() > 0)`
 > in einem E2E-Test besteht auch dann, wenn die Oberfläche kaputt ist; solche
