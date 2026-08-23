@@ -51,8 +51,11 @@ test.describe('Datensatzliste', () => {
 
     await expect(page.locator('h1.wp-heading-inline')).toContainText('Datensätze');
 
+    // Auf thead eingegrenzt: WordPress rendert dieselben Spaltenköpfe ein
+    // zweites Mal im tfoot, ein ungebundener Selektor trifft also zwei
+    // Elemente und Playwright bricht mit einer Strict-Mode-Verletzung ab.
     for (const column of ['odw_license', 'odw_theme', 'odw_quality', 'odw_status', 'odw_shortcode']) {
-      await expect(page.locator(`th.column-${column}`)).toBeVisible();
+      await expect(page.locator(`thead th.column-${column}`)).toBeVisible();
     }
 
     await expect(page.locator('table.wp-list-table tbody tr')).not.toHaveCount(0);
