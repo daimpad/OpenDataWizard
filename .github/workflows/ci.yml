@@ -200,6 +200,14 @@ jobs:
         if: always()
         run: npx playwright test --project=chromium tests/e2e/admin-workflow.spec.js
 
+      # WP_DEBUG_LOG schreibt PHP-Notices und -Fatals nach wp-content/debug.log.
+      # Am Ende ausgegeben, weil eine leer gerenderte Admin-Seite sonst nur als
+      # „Element nicht gefunden" erscheint und die Ursache unsichtbar bleibt.
+      - name: WordPress-Debug-Log
+        if: always()
+        run: |
+          npx wp-env run tests-cli wp eval 'echo @file_get_contents( WP_CONTENT_DIR . "/debug.log" );' || true
+
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v4

@@ -146,6 +146,8 @@ test.describe('Plugin-Seiten', () => {
     // Der WP-Admin bringt eigene Formulare mit (Suche, Bildschirmoptionen);
     // hier zählt nur, dass die Seite überhaupt eines rendert.
     await expect(page.locator('.wrap form').first()).toBeVisible();
-    await expect(page.locator('body')).toContainText('datenatlas/v1/catalog');
+    // Auf .wrap eingegrenzt statt auf body: Schlägt es fehl, druckt Playwright
+    // den Text des geprüften Elements — bei body ist das die halbe Admin-Seite.
+    await expect(page.locator('.wrap')).toContainText('datenatlas/v1/catalog');
   });
 });
