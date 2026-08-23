@@ -9,10 +9,11 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-Absicherung nachgezogen: zwei Lücken in der CI geschlossen und die größte ungetestete Klasse
-getestet. **Am Plugin selbst ändert sich nichts** — die Änderungen liegen in `.github/`, `bin/`,
-`tests/` und `config/phpcs.xml`, nichts davon wird ausgeliefert. Deshalb auch keine neue Version:
-Das ZIP wäre bis auf die Versionsnummer identisch.
+Absicherung nachgezogen: zwei Lücken in der CI geschlossen, die größte ungetestete Klasse
+getestet und die brachliegenden End-to-End-Tests wieder in Betrieb genommen. **Am Plugin
+selbst ändert sich nichts** — die Änderungen liegen in `.github/`, `bin/`, `tests/`, `config/`
+sowie in den Node- und wp-env-Dateien; nichts davon wird ausgeliefert. Deshalb auch keine neue
+Version: Das ZIP wäre bis auf die Versionsnummer identisch.
 
 ### 🔧 Nur im Repository, nicht im Paket
 - **Das Release-ZIP wird jetzt geprüft.** Bisher liefen PHPCS, PHPStan, PHPUnit und SHACL
@@ -45,6 +46,23 @@ Das ZIP wäre bis auf die Versionsnummer identisch.
   `WP_Filesystem` und `wp_parse_url()` gibt es dort nicht. Fixture-Dateien werden daher direkt
   geschrieben und gelöscht, und der `wp_parse_url()`-Mock muss `parse_url()` aufrufen — das ist
   genau die Verhaltensweise, die er nachbildet.
+- **Die End-to-End-Tests laufen wieder — und prüfen jetzt etwas.** `tests/e2e/` enthielt zwei
+  Spec-Dateien, die niemand ausführte: Es gab keine WordPress-Instanz, die Anmeldung klickte auf
+  einen `button[type=submit]`, den das WordPress-Login gar nicht hat, und die Datensatz-ID wurde
+  aus einem `p=`-Parameter gelesen, den `@id` nie enthielt. `npx wp-env` startet nun WordPress
+  samt Plugin, ein neuer CI-Job fährt Chromium dagegen.
+- **Keine bedingten Zusicherungen mehr.** Der Großteil der alten Tests stand in einem
+  `if (await x.count() > 0)` — sie waren grün, wenn das geprüfte Element fehlte. Genau die
+  Konstruktion also, die eine kaputte Oberfläche als bestanden meldet. `tests/e2e/seed.php` legt
+  als mu-plugin zwei veröffentlichte Datensätze an, damit die Zusicherungen unbedingt sein können:
+  der Katalog enthält *mindestens zwei* Einträge, der Themenfilter liefert *genau* den passenden,
+  der zweite Abruf kommt aus dem Cache, `/wp/v2/odw_dataset` antwortet mit 404.
+- **Im Backend geprüft:** alle sieben Spalten der Datensatzliste, Qualitätsbadge mit Prozentwert,
+  schreibgeschützter Shortcode, fünf Reiter im Formular, Reiterwechsel, blockierte Veröffentlichung
+  samt Nennung des fehlenden Feldes, speicherbarer unvollständiger Entwurf, Einstiegsseite mit
+  Ablaufgrafik und die Harvest-URLs auf der Einstellungsseite.
+- Die `version` in `package.json` stand seit v2.1.4 still und zeigt jetzt wieder auf die
+  Plugin-Version. Sie wird nicht ausgeliefert, war aber beim Nachsehen schlicht irreführend.
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "open-data-wizard",
-  "version": "2.1.4",
+  "version": "2.40.0",
   "description": "WordPress plugin for publishing open data as DCAT-AP 3.0 compliant metadata",
   "author": "Open Data Wizard Team",
   "license": "GPL-2.0-or-later",
@@ -17,17 +17,19 @@
     "url": "https://github.com/daimpad/OpenDataWizard.git"
   },
   "scripts": {
-    "test:e2e": "playwright test",
+    "env:start": "wp-env start",
+    "env:stop": "wp-env stop",
+    "env:clean": "wp-env clean tests",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:all": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
-    "test:e2e:chrome": "playwright test --project=chromium",
-    "test:e2e:firefox": "playwright test --project=firefox",
-    "test:e2e:webkit": "playwright test --project=webkit",
     "test:shacl": "node tests/shacl/validate.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
+    "@wordpress/env": "^10.0.0",
     "@zazuko/env-node": "^3.1.0",
     "rdf-validate-shacl": "^0.6.5"
   }

@@ -130,3 +130,52 @@ jobs:
       # zeigt dort sonst mitten im englischen Backend einen deutschen Satz.
       - name: Katalog gegen die Quellzeichenketten prüfen
         run: python3 bin/check-i18n.py
+
+  e2e:
+    name: End-to-End-Tests (WordPress)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer:v2
+
+      # wp-env hängt das Repository als Plugin ein — ohne vendor/ bricht der
+      # Bootstrap ab und jeder Test liefe gegen ein inaktives Plugin.
+      - name: Install composer dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Startet WordPress samt Datenbank in Docker, aktiviert das Plugin und
+      # hängt tests/e2e/seed.php als mu-plugin ein, das den Datenbestand anlegt.
+      - name: Start WordPress (wp-env)
+        run: npx wp-env start
+
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Stop WordPress
+        if: always()
+        run: npx wp-env stop
