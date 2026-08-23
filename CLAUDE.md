@@ -28,7 +28,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (198 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (243 Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -68,7 +68,7 @@ npm run env:stop
 > **sprechende Permalinks** (`--hard`, damit die `.htaccess` geschrieben wird —
 > ohne sie gibt es `/wp-json/` nicht). Beides ist nötig, sonst scheitert jeder
 > Test: In einem en_US-WordPress greift die mitgelieferte Übersetzung, und die
-> deutschen Beschriftungen sind nicht zu finden. `tests/e2e/seed.php` wird dabei als
+> deutschen Beschriftungen sind nicht zu finden. `tests/e2e/mu-plugins/odw-e2e-seed.php` wird dabei als
 > mu-plugin gemountet und legt einmalig zwei veröffentlichte Datensätze an —
 > deshalb können die Zusicherungen unbedingt sein. Ein `if (await x.count() > 0)`
 > in einem E2E-Test besteht auch dann, wenn die Oberfläche kaputt ist; solche
@@ -438,7 +438,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 
 #### Running Tests
 ```bash
-# Alle 198 Tests
+# Alle 243 Tests
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -891,7 +891,7 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 1. **Write tests for new features** — Aim for >80% coverage
 2. **Mock all WordPress functions** — WP_Mock does the heavy lifting
 3. **Test edge cases** — null values, empty strings, large datasets
-4. **Run full test suite before pushing** — 94 tests must pass
+4. **Run full test suite before pushing** — alle Tests müssen grün sein
 
 ### Performance
 1. **Never call `odw_build_dataset_jsonld()` in loops** — expensive, cache it
