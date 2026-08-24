@@ -820,8 +820,11 @@ class ODW_Admin {
 				color: var(--odw-color-primary, #2271b1);
 				font-size: 16px;
 			}
+			/* Ohne Aufzählungszeichen: Die Schritte tragen ihre Nummer schon im */
+			/* Text („1 — Grundlegende Informationen"), passend zu den Reitern im */
+			/* Formular. Der Zähler der Liste stünde als zweite Nummer daneben. */
 			.odw-introduction-page ol {
-				list-style-position: inside;
+				list-style: none;
 				padding-left: 0;
 			}
 			.odw-introduction-page li {
