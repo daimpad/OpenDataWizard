@@ -7,6 +7,25 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.40.2] — 2026-08-23
+
+Zwei Rückmeldungen aus dem Backend.
+
+### 🐛 Fixed
+- **Doppelte Nummern auf der Einstiegsseite.** Die fünf Schritte standen in einer `<ol>`, deren
+  Zähler zusätzlich zu der Nummer erschien, die schon im Text steht („1 — Grundlegende
+  Informationen"). Ergebnis: „1. 1 — Grundlegende Informationen". Die Liste zeigt jetzt keine
+  eigenen Aufzählungszeichen mehr; die Nummern im Text bleiben, weil sie den
+  Reiterbeschriftungen im Formular entsprechen.
+
+### 🎨 Changed
+- **Menü-Icon ist wieder ein Dashicon** (`dashicons-database`) statt der zugeschnittenen
+  Logo-Fassung. Im WordPress-Menü sind alle Symbole gleich gezeichnet und werden bis zum
+  Daraufzeigen gedimmt; eine Marke an dieser Stelle fällt aus der Reihe, statt sich einzufügen.
+  `assets/images/ODW-Icon.svg` war ausschließlich dafür da und entfällt damit.
+
+---
+
 ## [2.40.1] — 2026-08-23
 
 Ein Fehler im Delta-Endpunkt, gefunden von den wiederbelebten End-to-End-Tests — und die

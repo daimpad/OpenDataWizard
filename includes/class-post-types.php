@@ -79,12 +79,11 @@ class ODW_Post_Types {
 			'has_archive'        => false,
 			'hierarchical'       => false,
 			'menu_position'      => 20,
-			// Zugeschnittene Fassung des Logos ohne Wortmarke: Bei 20 Pixeln
-			// wäre der Schriftzug „ODW" ein unlesbarer Fleck. Als URL statt als
-			// data-URI eingebunden — WordPress dimmt Menü-Icons auf 60 Prozent,
-			// bis man daraufzeigt, und die volle Deckkraft eines base64-SVG
-			// würde als einziges Symbol im Menü herausstechen.
-			'menu_icon'          => ODW_PLUGIN_URL . 'assets/images/ODW-Icon.svg',
+			// Ein Dashicon aus dem WordPress-Vorrat, kein eigenes Logo: Im
+			// Admin-Menü sind alle Symbole gleich gezeichnet und werden bis zum
+			// Daraufzeigen gedimmt. Eine Marke an dieser Stelle fällt aus der
+			// Reihe, statt sich einzufügen.
+			'menu_icon'          => 'dashicons-database',
 			'supports'           => array( 'title', 'revisions' ),
 			'taxonomies'         => array(),
 		);
