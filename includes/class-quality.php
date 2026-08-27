@@ -202,16 +202,28 @@ class ODW_Quality {
 	private static function evaluate_metric( array $metric, \WP_Post $post ): ?bool {
 		$type = (string) ( $metric['type'] ?? '' );
 
+		// Ein Auto-Entwurf ist nichts, was jemand gespeichert hat: WordPress legt
+		// ihn beim Öffnen von „Neuer Datensatz" selbst an. Carbon Fields liefert
+		// für ungespeicherte Felder ihren Vorgabewert zurück — bei den
+		// Zugriffsrechten etwa „öffentlich". Ohne diese Abfrage zählte der Bericht
+		// also, was das Formular vorschlägt, statt was jemand eingetragen hat, und
+		// ein frisch geöffnetes Formular stünde nicht bei 0 %.
+		//
+		// Nicht erfüllt, nicht „nicht bewertbar": Die Metrik ist prüfbar, sie ist
+		// nur (noch) nicht erfüllt. Sonst schrumpfte der Nenner und 0 von 0
+		// Punkten ergäbe wieder eine Zahl, die niemand erwartet.
+		$ungespeichert = 'auto-draft' === $post->post_status;
+
 		if ( 'present' === $type ) {
-			return self::check_metric( (string) $metric['check'], $post );
+			return $ungespeichert ? false : self::check_metric( (string) $metric['check'], $post );
 		}
 
 		if ( 'vocab' === $type ) {
-			return self::check_vocab_metric( (string) $metric['check'], $post );
+			return $ungespeichert ? false : self::check_vocab_metric( (string) $metric['check'], $post );
 		}
 
 		if ( 'reachable' === $type && self::url_checks_enabled() ) {
-			return self::check_reachable_metric( (string) $metric['check'], $post );
+			return $ungespeichert ? false : self::check_reachable_metric( (string) $metric['check'], $post );
 		}
 
 		// SHACL (und Erreichbarkeit bei deaktivierter Einstellung) folgt in Phase 3+.
@@ -779,8 +791,8 @@ class ODW_Quality {
 			</div>
 
 			<?php
-			// Erklärt den Startwert: Ein frisch gespeicherter, leerer Entwurf steht
-			// nicht bei 0 %, weil das Änderungsdatum automatisch gesetzt wird.
+			// Erklärt den Sprung nach dem ersten Speichern: Das Änderungsdatum wird
+			// automatisch gesetzt, ein leerer Entwurf steht danach also über 0 %.
 			$auto_points = 0;
 			foreach ( self::AUTO_FULFILLED as $auto_key ) {
 				if ( 'passed' === ( $metrics[ $auto_key ]['status'] ?? '' ) ) {
@@ -794,7 +806,7 @@ class ODW_Quality {
 				echo esc_html(
 					sprintf(
 					/* translators: %d: MQA points the plugin fulfils by itself */
-						__( 'Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%.', 'open-data-wizard' ),
+						__( 'Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Ein neu angelegter Datensatz steht deshalb bei 0 %% und steigt mit dem ersten Speichern — zusammen mit den Feldern, die das Formular vorbelegt (etwa die Zugriffsrechte).', 'open-data-wizard' ),
 						$auto_points
 					)
 				);

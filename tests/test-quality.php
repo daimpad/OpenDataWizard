@@ -9,6 +9,41 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+if ( ! class_exists( 'WP_Post' ) ) {
+	/**
+	 * Minimaler WP_Post-Ersatz.
+	 *
+	 * ODW_Quality::calculate() und evaluate_metric() sind auf \WP_Post typisiert,
+	 * WP_Mock bringt die Klasse aber nicht mit. Mehr als diese drei Felder liest
+	 * der Qualitätsbericht nicht.
+	 *
+	 * @package OpenDataWizard
+	 */
+	class WP_Post {
+
+		/**
+		 * Post ID.
+		 *
+		 * @var int
+		 */
+		public $ID = 0;
+
+		/**
+		 * Post type.
+		 *
+		 * @var string
+		 */
+		public $post_type = 'odw_dataset';
+
+		/**
+		 * Post status.
+		 *
+		 * @var string
+		 */
+		public $post_status = 'draft';
+	}
+}
+
 /**
  * Unit tests for ODW_Quality.
  *
@@ -549,5 +584,78 @@ class Test_ODW_Quality extends TestCase {
 		$rows = $this->call_private( 'all_distributions', 5 );
 
 		$this->assertSame( 'http://dcat-ap.de/def/licenses/cc-by/4.0', $rows[1]['license'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// Startwert eines frisch geöffneten Formulars
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Baut ein Post-Objekt für die Bewertung.
+	 *
+	 * @param string $status Post-Status.
+	 * @return \WP_Post
+	 */
+	private function post_with_status( string $status ): \WP_Post {
+		$post              = new \WP_Post();
+		$post->ID          = 42;
+		$post->post_type   = 'odw_dataset';
+		$post->post_status = $status;
+
+		return $post;
+	}
+
+	/**
+	 * Auf einem Auto-Entwurf zählt kein Wert — auch keiner, der dasteht.
+	 *
+	 * WordPress legt den Auto-Entwurf beim Öffnen von „Neuer Datensatz" selbst
+	 * an. Carbon Fields liefert für ungespeicherte Felder ihren Vorgabewert
+	 * zurück; ohne die Abfrage zählte der Bericht also, was das Formular
+	 * vorschlägt. Derselbe Meta-Wert, einmal je Status: Nur der Entwurf zählt.
+	 */
+	public function test_evaluate_metric_counts_nothing_on_auto_draft(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'get_post_meta' )->andReturn( '2026-08-27' );
+
+		$metric = array(
+			'key'   => 'modified',
+			'type'  => 'present',
+			'check' => 'modified',
+		);
+
+		$this->assertTrue(
+			$this->call_private( 'evaluate_metric', $metric, $this->post_with_status( 'draft' ) ),
+			'Ein gespeicherter Entwurf mit Änderungsdatum muss die Metrik erfüllen.'
+		);
+
+		$this->assertFalse(
+			$this->call_private( 'evaluate_metric', $metric, $this->post_with_status( 'auto-draft' ) ),
+			'Auf dem Auto-Entwurf darf derselbe Wert nicht zählen.'
+		);
+	}
+
+	/**
+	 * „Neuen Datensatz anlegen" startet bei 0 %, nicht bei 7 %.
+	 *
+	 * Die Mocks liefern absichtlich für jedes Feld einen gefüllten Wert: Der Test
+	 * hält damit nicht bloß fest, dass ein leeres Formular 0 ergibt, sondern dass
+	 * der Auto-Entwurf gar nichts anrechnet. Der Nenner muss stehen bleiben —
+	 * 0 von 0 Punkten ergäbe sonst wieder eine überraschende Zahl.
+	 */
+	public function test_calculate_scores_a_fresh_form_at_zero(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $this->post_with_status( 'auto-draft' ) );
+		\WP_Mock::userFunction( 'carbon_get_post_meta' )->andReturn( 'irgendein Wert' );
+		\WP_Mock::userFunction( 'get_post_meta' )->andReturn( '2026-08-27' );
+		\WP_Mock::userFunction( 'current_time' )->andReturn( '2026-08-27 10:00:00' );
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$result = ODW_Quality::calculate( 42 );
+
+		$this->assertSame( 0, $result['achieved'] );
+		$this->assertSame( 0, $result['score'] );
+		$this->assertGreaterThan( 0, $result['assessable'], 'Die Metriken bleiben bewertbar, sie sind nur nicht erfüllt.' );
 	}
 }

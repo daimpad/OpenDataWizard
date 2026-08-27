@@ -7,6 +7,24 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.41.1] — 2026-08-27
+
+Ein Nachtrag zum Usability-Test: der Startwert der Qualitätsprüfung.
+
+### 🐛 Fixed
+- **„Neuen Datensatz anlegen" startete bei 7 %, nicht bei 0 %.** Zwei Ursachen, beide
+  dieselbe Sorte Fehler — der Wizard rechnete sich an, was er selbst vorgibt. WordPress legt
+  beim Öffnen des Formulars einen Auto-Entwurf an und feuert dabei `save_post`: Das
+  Änderungsdatum wurde gestempelt (5 Punkte), obwohl niemand etwas gespeichert hatte. Und
+  Carbon Fields liefert für ungespeicherte Felder ihren Vorgabewert zurück — die Zugriffsrechte
+  stehen auf „öffentlich", das zählte als Angabe plus Vokabulartreffer (10 + 5 Punkte).
+  Zusammen 20 von 295 bewertbaren Punkten. Der Bericht wertet auf einem Auto-Entwurf jetzt
+  nichts als erfüllt, und `set_modified_date()` überspringt ihn. Der Nenner bleibt dabei
+  stehen: Die Metriken sind prüfbar, sie sind nur noch nicht erfüllt — 0 von 0 Punkten ergäbe
+  wieder eine überraschende Zahl. Zwei Unit-Tests und ein E2E-Test halten die 0 fest.
+
+---
+
 ## [2.41.0] — 2026-08-27
 
 Fünf Punkte aus dem Usability-Test. Hilfetexte haben jetzt je einen Ort, die Definition zeigt

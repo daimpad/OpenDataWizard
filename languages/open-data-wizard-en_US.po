@@ -1910,8 +1910,8 @@ msgstr "+%d available"
 msgid "(automatisch)"
 msgstr "(automatic)"
 
-msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
-msgstr "Of these, the wizard contributes %d points itself: the modification date is set automatically every time you save. That is why even an empty dataset does not start at 0 %%."
+msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Ein neu angelegter Datensatz steht deshalb bei 0 %% und steigt mit dem ersten Speichern — zusammen mit den Feldern, die das Formular vorbelegt (etwa die Zugriffsrechte)."
+msgstr "Of these, the wizard contributes %d points by itself: the modification date is set automatically on every save. A newly created dataset therefore starts at 0 %% and rises with the first save — together with the fields the form pre-fills (the access rights, for instance)."
 
 msgid "(ohne Titel, ID %d)"
 msgstr "(untitled, ID %d)"

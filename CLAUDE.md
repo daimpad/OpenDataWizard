@@ -765,7 +765,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.39.1**
+Current: **v2.41.1**
 
 ---
 

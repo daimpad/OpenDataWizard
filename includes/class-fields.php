@@ -695,6 +695,15 @@ class ODW_Fields {
 			return;
 		}
 
+		// Auto-Entwürfe überspringen: WordPress legt sie beim Öffnen von „Neuer
+		// Datensatz" an und feuert dabei save_post. Ein dct:modified zu schreiben,
+		// bevor überhaupt jemand etwas eingetragen hat, datiert den Datensatz auf
+		// das Aufrufen des Formulars — und ließ die Qualitätsprüfung mit Punkten
+		// starten, die niemand verdient hatte.
+		if ( 'auto-draft' === $post->post_status ) {
+			return;
+		}
+
 		remove_action( 'save_post', array( self::class, 'set_modified_date' ), 20 );
 		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
 		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
