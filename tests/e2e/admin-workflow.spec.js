@@ -103,6 +103,110 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_publisher'))).toHaveValue('Stadt Musterstadt');
   });
 
+  test('„Mehr erfahren" zeigt Merkmale, Erklärung und Definition', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Das Panel hängt am Feld, nicht am Reiter — der Herausgeber steht in Tab 1.
+    const panel = page.locator('.cf-field', { has: page.locator(cfField('odw_publisher')) })
+      .locator('details.odw-field-more');
+    await expect(panel).toBeVisible();
+    await panel.locator('summary').click();
+
+    // Zwei Merkmalszeilen über der Definition: Eigenschaft und Multiplizität.
+    // Beide standen vorher nur mitten im Fließtext.
+    const facts = panel.locator('.odw-field-more__facts');
+    await expect(facts.locator('dt')).toHaveText(['Eigenschaft', 'Multiplizität']);
+    await expect(facts.locator('dd')).toHaveText(['dct:publisher', '1..1']);
+
+    // Darunter unverändert beide Langtexte.
+    await expect(panel).toContainText('Einfach erklärt');
+    await expect(panel).toContainText('DCAT-AP-Definition');
+
+    // Und ein Link auf den Abschnitt der Spezifikation, der zu dieser
+    // Profil-Klasse gehört — der Herausgeber steht am Datensatz.
+    const spec = panel.locator('a.odw-field-more__spec');
+    await expect(spec).toHaveAttribute(
+      'href',
+      'https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz'
+    );
+    await expect(spec).toContainText('Datensatz');
+  });
+
+  test('das Tooltip trägt nur noch den Fachbegriff', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Rollentrennung: Im ⓘ steht der DCAT-AP-Begriff, alles Erklärende liegt
+    // im Panel. Das Beispiel, das früher hier stand, darf nicht zurückkehren.
+    const tip = page.locator('.cf-field', { has: page.locator(cfField('odw_publisher')) })
+      .locator('.odw-help-pop');
+    await expect(tip).toContainText('dct:publisher');
+    await expect(tip).not.toContainText('Beispiel');
+  });
+
+  test('Thema ist eine Mehrfachauswahl mit den EU-Themen', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Seit v2.41.0 ein Mehrfachfeld: dcat:theme erlaubt 0..n Themen. Vorher
+    // gab es ein Auswahlfeld hier und ein Tipp-Feld unter „Erweiterte Angaben".
+    const themeField = page.locator('.cf-field', { has: page.locator(cfField('odw_theme')) });
+    await expect(themeField).toBeVisible();
+    // Carbon Fields 3.6 rendert multiselect über react-select: ein <div> mit der
+    // Klasse cf-multiselect__select, kein <select multiple>. Die Klasse
+    // „cf-multiselect" allein gibt es nicht — sie ist nur der classNamePrefix
+    // für cf-multiselect__control, __menu und so weiter.
+    await expect(themeField.locator('.cf-multiselect__select')).toHaveCount(1);
+
+    // Das frühere Zusatzfeld gibt es nicht mehr.
+    await expect(page.locator(cfField('odw_theme_uri'))).toHaveCount(0);
+  });
+
+  test('Engagementfeld ist eine Mehrfachauswahl, keine Vorschlagsliste', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Seit v2.41.0 ein Mehrfachfeld mit den 16 ZiviZ-Feldern. Vorher ein
+    // Textfeld mit datalist — die Auswahl war erst nach dem Tippen zu sehen.
+    await page.locator('[data-odw-section-toggle="tab1extra"]').click();
+
+    const feld = page.locator('.cf-field', { has: page.locator(cfField('odw_engagementfeld')) });
+    await expect(feld.locator('.cf-multiselect__select')).toHaveCount(1);
+
+    // react-select hängt die Optionen erst ins DOM, wenn das Menü offen ist —
+    // ohne den Klick steht dort nur der Platzhalter, und eine Zusicherung auf
+    // den Optionstext wäre grün, egal welche Optionen das Feld hat.
+    await feld.locator('.cf-multiselect__control').click();
+    await expect(feld.locator('.cf-multiselect__menu')).toContainText('Umwelt- und Naturschutz');
+  });
+
+  test('die CESSDA-Vorschläge öffnen sich beim Anklicken', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    await page.locator('[data-odw-section-toggle="tab1extra"]').click();
+
+    // Eigene Liste statt <datalist>: Ein natives datalist ist Browser-Chrome
+    // und für Playwright unsichtbar — und es öffnet erst beim Tippen, was der
+    // Tester bemängelt hatte.
+    const eingabe = page.locator('.odw-cessda-input');
+    const liste = page.locator('.odw-suggest__list');
+
+    await expect(liste).toBeHidden();
+    await eingabe.click();
+    await expect(liste).toBeVisible();
+
+    // Leeres Feld zeigt alles, Tippen grenzt ein.
+    const alle = await liste.locator('li:not([hidden])').count();
+    expect(alle).toBeGreaterThan(1);
+
+    await eingabe.fill('Migration');
+    const gefiltert = await liste.locator('li:not([hidden])').count();
+    expect(gefiltert).toBeLessThan(alle);
+
+    // Ein Klick auf den Vorschlag trägt das Label ein und legt die URI im
+    // verborgenen Feld ab — das ist der Wert, der als dct:subject rausgeht.
+    await liste.locator('li:not([hidden])').first().click();
+    await expect(liste).toBeHidden();
+    await expect(page.locator(cfField('odw_cessda_topic'))).toHaveValue(/^https?:\/\//);
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 

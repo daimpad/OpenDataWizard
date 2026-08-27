@@ -48,27 +48,27 @@ function odw_e2e_seed(): void {
 
 	$datasets = array(
 		array(
-			'title' => 'E2E: Schulstandorte',
-			'meta'  => array(
+			'title'  => 'E2E: Schulstandorte',
+			'themes' => array( 'Bildung' ),
+			'meta'   => array(
 				'_odw_publisher'   => 'Stadt Musterstadt',
 				'_odw_description' => 'Standorte aller allgemeinbildenden Schulen im Stadtgebiet.',
 				'_odw_access_url'  => 'https://example.org/schulstandorte.csv',
 				'_odw_license'     => 'https://creativecommons.org/licenses/by/4.0/',
 				'_odw_format'      => 'CSV',
-				'_odw_theme'       => 'Bildung',
 				'_odw_language'    => 'http://publications.europa.eu/resource/authority/language/DEU',
 				'_odw_keywords'    => "Schule\nBildung\nStandorte",
 			),
 		),
 		array(
-			'title' => 'E2E: Vereinsregister',
-			'meta'  => array(
+			'title'  => 'E2E: Vereinsregister',
+			'themes' => array( 'Soziales' ),
+			'meta'   => array(
 				'_odw_publisher'   => 'Musterorganisation e.V.',
 				'_odw_description' => 'Liste der eingetragenen Vereine mit Gründungsjahr.',
 				'_odw_access_url'  => 'https://example.org/vereine.json',
 				'_odw_license'     => 'https://creativecommons.org/publicdomain/zero/1.0/',
 				'_odw_format'      => 'JSON',
-				'_odw_theme'       => 'Soziales',
 				'_odw_language'    => 'http://publications.europa.eu/resource/authority/language/DEU',
 				'_odw_keywords'    => "Vereine\nZivilgesellschaft",
 			),
@@ -92,6 +92,14 @@ function odw_e2e_seed(): void {
 
 		foreach ( $dataset['meta'] as $key => $value ) {
 			update_post_meta( $post_id, $key, $value );
+		}
+
+		// Themen sind seit v2.41.0 eine Mehrfachauswahl: Carbon Fields legt sie
+		// unter eigenen Meta-Keys ab, ein update_post_meta( '_odw_theme' ) wäre
+		// unsichtbar. Deshalb über die öffentliche Schreib-API.
+		if ( ! empty( $dataset['themes'] ) && function_exists( 'carbon_set_post_meta' ) && class_exists( 'ODW_Fields' ) ) {
+			carbon_set_post_meta( $post_id, 'odw_theme', ODW_Fields::normalize_themes( $dataset['themes'] ) );
+			ODW_Fields::sync_theme_index( $post_id );
 		}
 
 		if ( class_exists( 'ODW_Quality' ) ) {

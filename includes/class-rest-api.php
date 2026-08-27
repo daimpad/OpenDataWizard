@@ -210,9 +210,20 @@ class ODW_Rest_API {
 		$meta_query = array();
 
 		if ( ! empty( $theme ) ) {
+			// Dieselbe Auflösung wie beim Schreiben des Index (normalize_themes),
+			// nicht bloß resolve_theme_uri: Sonst findet `?theme=Bildung` nichts,
+			// weil das EU-Vokabular diesen Namen gar nicht kennt — es heißt dort
+			// „Bildung, Kultur und Sport". Harvester, die den alten deutschen
+			// Kurznamen verwenden, sollen weiter Treffer bekommen.
+			$theme_uri = $theme;
+			if ( class_exists( 'ODW_Fields' ) ) {
+				$aufgeloest = ODW_Fields::normalize_themes( $theme );
+				$theme_uri  = $aufgeloest[0] ?? $theme;
+			}
+
 			$meta_query[] = array(
-				'key'   => '_odw_theme',
-				'value' => class_exists( 'ODW_Fields' ) ? ODW_Fields::resolve_theme_uri( $theme ) : $theme,
+				'key'   => '_odw_theme_index',
+				'value' => $theme_uri,
 			);
 		}
 

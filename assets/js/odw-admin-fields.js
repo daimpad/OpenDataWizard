@@ -4,7 +4,7 @@
  *
  * Handles:
  *  1. Auto-suggest datalist for license_custom (inside distributions)
- *  2. Auto-suggest datalist for CESSDA topic classification
+ *  2. Vorschlagsliste für die CESSDA-Themenklassifikation (öffnet beim Klick)
  *  3. Composite file-size widget (Zahl + Einheit → Bytes in backing field)
  *     Widget HTML is built via JS so no CF html-field is needed inside
  *     the complex field (CF5 React renderer crashes on html fields there).
@@ -55,6 +55,144 @@
 	}
 
 	// -------------------------------------------------------------------------
+	// Eigene Vorschlagsliste statt <datalist>
+	//
+	// Ein natives datalist öffnet erst beim Tippen — bei mehreren hundert
+	// Konzepten (CESSDA) sieht man ohne Anfangsbuchstaben also gar nichts und
+	// muss raten, was überhaupt zur Auswahl steht. Diese Liste klappt beim
+	// Anklicken auf und grenzt beim Tippen ein. Nebeneffekt: Das Verhalten ist
+	// in allen Browsern dasselbe und im E2E-Test überhaupt prüfbar — ein
+	// datalist-Popup ist Browser-Chrome und für Playwright unsichtbar.
+	//
+	// @param {HTMLInputElement} input   Sichtbares Eingabefeld.
+	// @param {Array}            options Einträge mit label (und optional value).
+	// @param {Function}         onPick  Wird nach der Auswahl gerufen.
+	// -------------------------------------------------------------------------
+	function attachSuggestList( input, options, onPick ) {
+		var list = document.createElement( 'ul' );
+		list.className = 'odw-suggest__list';
+		list.hidden    = true;
+		list.setAttribute( 'role', 'listbox' );
+
+		// Eigener Container um genau das Eingabefeld: Die Liste wird absolut
+		// darunter positioniert, und im umgebenden Feld stehen noch Beschriftung
+		// und Hinweiszeile — an denen würde sie sonst hängen.
+		var host = document.createElement( 'div' );
+		host.className = 'odw-suggest';
+		input.parentNode.insertBefore( host, input );
+		host.appendChild( input );
+		host.appendChild( list );
+
+		var aktiv = -1;
+
+		function sichtbare() {
+			return Array.prototype.slice.call( list.querySelectorAll( 'li:not([hidden])' ) );
+		}
+
+		function markiere( index ) {
+			var eintraege = sichtbare();
+			eintraege.forEach( function ( li ) {
+				li.classList.remove( 'is-active' );
+			} );
+			aktiv = index;
+			if ( index >= 0 && eintraege[ index ] ) {
+				eintraege[ index ].classList.add( 'is-active' );
+				eintraege[ index ].scrollIntoView( { block: 'nearest' } );
+			}
+		}
+
+		function schliesse() {
+			list.hidden = true;
+			input.setAttribute( 'aria-expanded', 'false' );
+			markiere( -1 );
+		}
+
+		function oeffne() {
+			filtere();
+			list.hidden = false;
+			input.setAttribute( 'aria-expanded', 'true' );
+		}
+
+		// Leeres Feld zeigt alles — genau der Fall, in dem die Liste gebraucht wird.
+		function filtere() {
+			var suche  = input.value.trim().toLowerCase();
+			var treffer = 0;
+			Array.prototype.forEach.call( list.children, function ( li ) {
+				var passt = '' === suche || li.textContent.toLowerCase().indexOf( suche ) !== -1;
+				li.hidden = ! passt;
+				if ( passt ) {
+					treffer++;
+				}
+			} );
+			return treffer;
+		}
+
+		options.forEach( function ( opt ) {
+			var li         = document.createElement( 'li' );
+			li.className   = 'odw-suggest__option';
+			li.textContent = opt.label;
+			li.setAttribute( 'role', 'option' );
+			// mousedown statt click: Ein click käme erst nach dem blur des
+			// Eingabefelds — und das schließt die Liste, bevor der Treffer steht.
+			li.addEventListener( 'mousedown', function ( ev ) {
+				ev.preventDefault();
+				setInputValue( input, opt.label );
+				schliesse();
+				if ( onPick ) {
+					onPick( opt );
+				}
+			} );
+			list.appendChild( li );
+		} );
+
+		input.setAttribute( 'role', 'combobox' );
+		input.setAttribute( 'aria-expanded', 'false' );
+		input.setAttribute( 'autocomplete', 'off' );
+
+		input.addEventListener( 'focus', oeffne );
+		input.addEventListener( 'click', oeffne );
+		input.addEventListener( 'input', oeffne );
+		input.addEventListener( 'blur', schliesse );
+
+		input.addEventListener( 'keydown', function ( ev ) {
+			if ( 'Escape' === ev.key ) {
+				schliesse();
+				return;
+			}
+			if ( 'ArrowDown' !== ev.key && 'ArrowUp' !== ev.key && 'Enter' !== ev.key ) {
+				return;
+			}
+			if ( list.hidden ) {
+				if ( 'Enter' === ev.key ) {
+					return;
+				}
+				oeffne();
+			}
+			var eintraege = sichtbare();
+			if ( ! eintraege.length ) {
+				return;
+			}
+			if ( 'Enter' === ev.key ) {
+				if ( aktiv >= 0 && eintraege[ aktiv ] ) {
+					ev.preventDefault();
+					// Der Klick-Handler trägt den Wert ein; hier reicht es, ihn auszulösen.
+					eintraege[ aktiv ].dispatchEvent( new MouseEvent( 'mousedown' ) );
+				}
+				return;
+			}
+			ev.preventDefault();
+			var naechster = 'ArrowDown' === ev.key ? aktiv + 1 : aktiv - 1;
+			if ( naechster < 0 ) {
+				naechster = eintraege.length - 1;
+			}
+			if ( naechster >= eintraege.length ) {
+				naechster = 0;
+			}
+			markiere( naechster );
+		} );
+	}
+
+	// -------------------------------------------------------------------------
 	// 1. License auto-suggest (inside distribution complex groups)
 	// -------------------------------------------------------------------------
 	function initLicenseAutosuggest() {
@@ -83,19 +221,6 @@
 			labelToUri[ o.label ] = o.value;
 			uriToLabel[ o.value ] = o.label;
 		} );
-
-		// Shared datalist of human-readable labels.
-		var listId = 'odw-cessda-label-datalist';
-		if ( ! document.getElementById( listId ) ) {
-			var dl = document.createElement( 'datalist' );
-			dl.id  = listId;
-			opts.forEach( function ( o ) {
-				var el   = document.createElement( 'option' );
-				el.value = o.label;
-				dl.appendChild( el );
-			} );
-			document.body.appendChild( dl );
-		}
 
 		document.querySelectorAll( 'input[data-odw-backing="cessda"]' ).forEach( function ( backing ) {
 			if ( backing.dataset.odwCessdaInit ) {
@@ -126,7 +251,6 @@
 			input.type        = 'text';
 			input.className    = 'odw-cessda-input';
 			input.placeholder  = w.placeholder || '';
-			input.setAttribute( 'list', listId );
 
 			var hint = document.createElement( 'span' );
 			hint.className = 'odw-cessda-hint description';
@@ -158,6 +282,10 @@
 
 			input.addEventListener( 'input',  sync );
 			input.addEventListener( 'change', sync );
+
+			// Die Liste hängt am Eingabefeld — deshalb erst jetzt, wenn es im
+			// Dokument steht und einen Elternknoten zum Positionieren hat.
+			attachSuggestList( input, opts, sync );
 		} );
 	}
 
@@ -216,32 +344,6 @@
 		document.querySelectorAll( 'input[data-odw-autosuggest="spatial"]' ).forEach( function ( input ) {
 			attachDatalist( input, 'odw-spatial-datalist', data.spatialOptions );
 		} );
-	}
-
-	// -------------------------------------------------------------------------
-	// 2d. Generic vocabulary auto-suggest — any input[data-odw-vocab="<id>"]
-	// pulls its options from data.vocabularies[<id>] (bundled JSON vocab).
-	// -------------------------------------------------------------------------
-	function attachVocab( input ) {
-		var id = input.getAttribute( 'data-odw-vocab' );
-		if ( ! id ) {
-			return;
-		}
-		var vocab = ( data.vocabularies || {} )[ id ];
-		if ( ! vocab || ! vocab.length ) {
-			return;
-		}
-		// Suggest the human-readable label as the field value (so the user can
-		// type a name to filter in every browser and never sees a raw URI). The
-		// label→URI resolution happens server-side in odw_resolve_vocab_uri().
-		var opts = vocab.map( function ( o ) {
-			return { value: o.label, label: '' };
-		} );
-		attachDatalist( input, 'odw-vocab-datalist-' + id, opts );
-	}
-
-	function initVocabAutosuggest() {
-		document.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
 	}
 
 	// -------------------------------------------------------------------------
@@ -574,6 +676,34 @@
 		return p;
 	}
 
+	// Zwei Merkmale über der Definition: die DCAT-AP-Eigenschaft und die
+	// Multiplizität. Beide stehen bisher nur mitten im Fließtext — als eigene
+	// Zeilen sind sie auf einen Blick erfassbar.
+	function moreFacts( cfg, field ) {
+		var rows = [
+			[ cfg.prop || 'Eigenschaft', field.dcat_prop ],
+			[ cfg.mult || 'Multiplizität', field.cardinality ]
+		].filter( function ( row ) {
+			return row[ 1 ];
+		} );
+
+		if ( ! rows.length ) {
+			return null;
+		}
+
+		var dl = document.createElement( 'dl' );
+		dl.className = 'odw-field-more__facts';
+		rows.forEach( function ( row ) {
+			var dt = document.createElement( 'dt' );
+			dt.textContent = row[ 0 ];
+			var dd = document.createElement( 'dd' );
+			dd.textContent = row[ 1 ];
+			dl.appendChild( dt );
+			dl.appendChild( dd );
+		} );
+		return dl;
+	}
+
 	function initFieldMore() {
 		var cfg     = data.fieldMore || {};
 		var catalog = data.fieldCatalog || [];
@@ -605,11 +735,29 @@
 			// formale Definition allein keine Hilfe ist.
 			var body = document.createElement( 'div' );
 			body.className = 'odw-field-more__body';
+			var facts = moreFacts( cfg, f );
+			if ( facts ) {
+				body.appendChild( facts );
+			}
 			if ( f.desc_human ) {
 				body.appendChild( moreBlock( cfg.plain, f.desc_human ) );
 			}
 			if ( f.desc_dcat ) {
 				body.appendChild( moreBlock( cfg.dcat, f.desc_dcat ) );
+			}
+			if ( f.spec_url ) {
+				// Ein Link je Profil-Klasse, nicht je Feld: Die feldgenauen Anker
+				// der Spezifikation ließen sich nicht überprüfen — hier landet man
+				// im schlimmsten Fall am Anfang des richtigen Dokuments.
+				var names = cfg.ent || {};
+				var link  = document.createElement( 'a' );
+				link.className   = 'odw-field-more__spec';
+				link.href        = f.spec_url;
+				link.target      = '_blank';
+				link.rel         = 'noopener noreferrer';
+				link.textContent = ( cfg.spec || 'Im Standard nachlesen' ) +
+					( names[ f.entity ] ? ': ' + names[ f.entity ] : '' ) + ' ↗';
+				body.appendChild( link );
 			}
 			details.appendChild( body );
 			field.appendChild( details );
@@ -902,7 +1050,6 @@
 					node.querySelectorAll( 'input[data-odw-backing="byte_size"]' ).forEach( function ( backing ) {
 						initFileSizeWidget( backing );
 					} );
-					node.querySelectorAll( 'input[data-odw-vocab]' ).forEach( attachVocab );
 					initHelpTooltips();
 					initFieldMore();
 				} );
@@ -920,7 +1067,6 @@
 		initLicenseInfo();
 		initCessdaWidget();
 		initSpatialAutosuggest();
-		initVocabAutosuggest();
 		initProSection();
 		initFileSizeWidgets();
 		initHelpTooltips();
@@ -939,7 +1085,6 @@
 			initLicenseInfo();
 			initCessdaWidget();
 			initSpatialAutosuggest();
-			initVocabAutosuggest();
 			initProSection();
 			initFileSizeWidgets();
 			initHelpTooltips();

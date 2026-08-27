@@ -32,6 +32,11 @@ class ODW_Fields {
 		// save_post_{post_type} grundsätzlich DAVOR — nur mit 'save_post'@20 läuft
 		// das Auto-Update nach CF und wird nicht vom Formularwert überschrieben.
 		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
+		// Auf 'save_post'@30, NICHT auf save_post_odw_dataset: WordPress feuert
+		// save_post_{post_type} vor save_post, die Spiegelung liefe dann vor
+		// Carbon Fields und läse den alten Wert. Die Typprüfung steht in der
+		// Methode.
+		add_action( 'save_post', array( self::class, 'sync_theme_index' ), 30 );
 	}
 
 	/**
@@ -72,7 +77,7 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-required', '1' )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_publisher' ) : '' )
 						->set_attribute( 'placeholder', __( 'z.B. Musterorganisation e.V.', 'open-data-wizard' ) )
-						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'HERAUSGEBENDE ORGANISATION (dct:publisher)', 'open-data-wizard' ) ),
 
 					// Beschreibung direkt nach dem Herausgeber (beide Pflicht), damit die
 					// zwei wichtigsten Angaben oben stehen (B3).
@@ -81,11 +86,15 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-required', '1' )
 						->set_rows( 5 )
 						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
-						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_theme', __( 'Welchem Thema ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
-						->add_options( self::get_theme_options() )
-						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
+					// Mehrfachauswahl statt Einzelauswahl: dcat:theme erlaubt laut Profil
+					// 0..n Themen. Vorher gab es ein Auswahlfeld hier und ein
+					// Vorschlagsfeld unter „Erweiterte Angaben" — zwei Bedienarten
+					// für dieselbe Sache, zusammen höchstens zwei Themen.
+					Field::make( 'multiselect', 'odw_theme', __( 'Welchen Themen ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
+						->add_options( self::get_theme_options_multi() )
+						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) ),
 
 					// Schlagworte gehören zur inhaltlichen Erschließung und stehen
 					// deshalb bei Thema, CESSDA und Engagementfeld statt bei Sprache
@@ -94,7 +103,7 @@ class ODW_Fields {
 					Field::make( 'textarea', 'odw_keywords', __( 'Mit welchen Schlagworten finde ich diese Daten?', 'open-data-wizard' ) )
 						->set_rows( 3 )
 						->set_attribute( 'placeholder', __( "Umwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) )
-						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) . "\n\n" . __( "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung", 'open-data-wizard' ) ),
+						->set_help_text( __( 'SCHLAGWORTE (dcat:keyword)', 'open-data-wizard' ) ),
 
 					// Weniger häufige Einordnungen (CESSDA, ZiviZ) als aufklappbare
 					// Untergruppe ans Tab-Ende — entschlackt den Einstieg für die
@@ -109,16 +118,20 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_cessda_topic', __( 'Ordnen Sie den Datensatz einem oder mehreren Themenfeld nach CESSDA-Vokabular zu', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-backing', 'cessda' )
-						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik', 'open-data-wizard' ) ),
+						->set_help_text( __( 'CESSDA THEMENKLASSIFIKATION (dct:subject)', 'open-data-wizard' ) ),
 
 					// Der Wert landet als dct:subject am Datensatz, nicht am Herausgeber.
 					// Die Frage muss das abbilden — sonst tragen Redakteur:innen das
 					// Tätigkeitsfeld ihrer Organisation ein und der Datensatz erhält
 					// eine inhaltlich falsche Sacherschließung.
-					Field::make( 'text', 'odw_engagementfeld', __( 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'engagementfeld' )
-						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
-						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.', 'open-data-wizard' ) ),
+					// Mehrfachauswahl statt Tipp-Feld: 16 Einträge passen in eine
+					// Liste, und dct:subject erlaubt 0..n. Der Tester fragte
+					// ausdrücklich nach einem Dropdown, das aussieht wie die
+					// übrigen — statt einer Vorschlagsliste, die erst nach dem
+					// Tippen zeigt, dass es überhaupt eine Auswahl gibt.
+					Field::make( 'multiselect', 'odw_engagementfeld', __( 'Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?', 'open-data-wizard' ) )
+						->add_options( self::vocabulary_options( 'engagementfeld' ) )
+						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) ),
 
 				)
 			)
@@ -137,7 +150,7 @@ class ODW_Fields {
 					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
 						->add_options( self::get_language_options() )
-						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
+						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_hint_translations' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel, Beschreibung und Schlagworte zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben in Tab 1 bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
@@ -216,7 +229,7 @@ class ODW_Fields {
 					Field::make( 'text', 'odw_access_url', __( 'Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
 						->set_attribute( 'type', 'url' )
-						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) . "\n\n" . __( 'Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei direkt darunter aus der Mediathek hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZUGRIFFS-URL (dcat:accessURL)', 'open-data-wizard' ) ),
 
 					// Der Datei-Upload stand früher als eigene Meta-Box in der
 					// Seitenleiste — zwei Orte für denselben Sachverhalt, die zu
@@ -235,7 +248,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
 						->add_options( self::get_format_options() )
-						->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
+						->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'number' )
@@ -247,7 +260,7 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-required', '1' )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
 						->add_options( self::get_license_options() )
-						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_license_info' )
 						->set_html( '<div class="odw-license-info" data-odw-license-info hidden></div>' ),
@@ -255,7 +268,7 @@ class ODW_Fields {
 					Field::make( 'text', 'odw_license_custom', __( 'Lizenz-URI eingeben oder auswählen', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'https://example.org/meine-lizenz', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-autosuggest', 'license_custom' )
-						->set_help_text( __( 'EIGENE LIZENZ-URI', 'open-data-wizard' ) . "\n\n" . __( 'Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/', 'open-data-wizard' ) )
+						->set_help_text( __( 'EIGENE LIZENZ-URI (dct:license)', 'open-data-wizard' ) )
 						->set_conditional_logic(
 							array(
 								array(
@@ -268,7 +281,7 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_attribution_text', __( 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'optional – nur bei CC BY oder CC BY-SA', 'open-data-wizard' ) )
-						->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) . "\n\n" . __( 'Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0', 'open-data-wizard' ) )
+						->set_help_text( __( 'NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)', 'open-data-wizard' ) )
 						->set_conditional_logic(
 							array(
 								'relation' => 'OR',
@@ -287,7 +300,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_availability', __( 'Wie verlässlich bleibt diese Datei abrufbar?', 'open-data-wizard' ) )
 						->add_options( self::get_availability_options() )
-						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär', 'open-data-wizard' ) ),
+						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) ),
 
 					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
 						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
@@ -356,7 +369,7 @@ class ODW_Fields {
 					Field::make( 'text', 'odw_landing_page', __( 'Wo finde ich die Projektseite zu diesen Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/projekt' )
-						->set_help_text( __( 'PROJEKTSEITE (dcat:landingPage)', 'open-data-wizard' ) . "\n\n" . __( 'URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'PROJEKTSEITE (dcat:landingPage)', 'open-data-wizard' ) ),
 
 					// Erstveröffentlichung und Aktualisierungsfrequenz beschreiben
 					// beide die Aktualität des Datensatzes und stehen deshalb hier
@@ -369,7 +382,7 @@ class ODW_Fields {
 								'locale'     => 'de',
 							)
 						)
-						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-15', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) ),
 
 					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
 					// ODW_Fields::set_modified_date() überschreibt _odw_modified bei
@@ -387,28 +400,28 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_accrual_periodicity', __( 'Wie oft werden diese Daten aktualisiert?', 'open-data-wizard' ) )
 						->add_options( self::get_periodicity_options() )
-						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
+						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_coverage' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'select', 'odw_political_geocoding_level', __( 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?', 'open-data-wizard' ) )
 						->add_options( self::get_political_geocoding_level_options() )
-						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Gemeinde, Landkreis, Land, Bund', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_political_geocoding_uri', __( 'Auf welches amtliche Gebiet beziehen sich die Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'http://dcat-ap.de/def/politicalGeocoding/regionalKey/09' )
-						->set_help_text( __( 'AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)', 'open-data-wizard' ) . "\n\n" . __( 'URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09', 'open-data-wizard' ) ),
+						->set_help_text( __( 'AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_geocoding_description', __( 'Wie lässt sich der räumliche Bezug in Worten beschreiben?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Stadtgebiet Musterstadt ohne Ortsteil X', 'open-data-wizard' ) )
-						->set_help_text( __( 'RÄUMLICHE BESCHREIBUNG (dcatde:geocodingDescription)', 'open-data-wizard' ) . "\n\n" . __( 'Freitextbeschreibung des räumlichen Bezugs, ergänzend zum amtlichen Gebietsschlüssel. Beispiel: Stadtgebiet Musterstadt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'RÄUMLICHE BESCHREIBUNG (dcatde:geocodingDescription)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_spatial', __( 'Welche geografische Region betreffen diese Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'Region aus der Liste wählen oder eintippen…', 'open-data-wizard' ) )
 						->set_attribute( 'data-odw-autosuggest', 'spatial' )
-						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) . "\n\n" . __( 'Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin', 'open-data-wizard' ) ),
+						->set_help_text( __( 'GEOGRAPHISCHE ABDECKUNG (dct:spatial)', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
@@ -418,7 +431,7 @@ class ODW_Fields {
 								'locale'     => 'de',
 							)
 						)
-						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-01-01', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
@@ -428,7 +441,7 @@ class ODW_Fields {
 								'locale'     => 'de',
 							)
 						)
-						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: 2024-12-31', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_contact' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Kontakt', 'open-data-wizard' ) . '</h4>' ),
@@ -438,17 +451,17 @@ class ODW_Fields {
 					// Organisation, und genau das zeigt das Beispiel im Hilfetext.
 					Field::make( 'text', 'odw_contact_name', __( 'An wen kann ich mich bei Fragen zu diesen Daten wenden?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
-						->set_help_text( __( 'Name einer Person, eines Teams oder einer Organisation.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Open Data Team, Statistisches Landesamt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_contact_email', __( 'Unter welcher E-Mail-Adresse kann ich Fragen stellen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
 						->set_attribute( 'placeholder', 'opendata@beispiel.de' )
-						->set_help_text( __( 'E-Mail-Adresse für Rückfragen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: opendata@beispiel.de', 'open-data-wizard' ) ),
+						->set_help_text( __( 'KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_contact_url', __( 'Auf welcher Website finde ich weitere Kontaktinformationen?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/kontakt' )
-						->set_help_text( __( 'Website mit weiteren Kontaktinformationen.', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: https://beispiel.de/kontakt', 'open-data-wizard' ) ),
+						->set_help_text( __( 'KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)', 'open-data-wizard' ) ),
 
 					// "Erweiterte Angaben" — the groups below are individually
 					// collapsible (progressive enhancement via odw-admin-fields.js:
@@ -467,14 +480,15 @@ class ODW_Fields {
 						. '</button>'
 					),
 
-					Field::make( 'text', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'contributors' )
-						->set_attribute( 'placeholder', __( 'Stelle eintippen oder auswählen…', 'open-data-wizard' ) )
-						->set_help_text( __( 'CONTRIBUTOR-ID (dcatde:contributorID)', 'open-data-wizard' ) . "\n\n" . __( 'Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet.', 'open-data-wizard' ) ),
+					// Auswahlfeld statt Tipp-Feld: 69 Einträge sind für eine Liste
+					// noch handhabbar, und die Stelle wird genau einmal gewählt.
+					Field::make( 'select', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
+						->add_options( self::vocabulary_options( 'contributors', __( '— Keine Angabe —', 'open-data-wizard' ) ) )
+						->set_help_text( __( 'CONTRIBUTOR-ID (dcatde:contributorID)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_originator_name', __( 'Wer hat diese Daten ursprünglich erstellt?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Statistisches Landesamt', 'open-data-wizard' ) )
-						->set_help_text( __( 'URHEBER (dcatde:originator)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle, von der die Daten ursprünglich stammen (kann von Herausgeber abweichen).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'URHEBER (dcatde:originator)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_originator_email', __( 'E-Mail des Urhebers', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
@@ -483,7 +497,7 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_maintainer_name', __( 'Wer pflegt diese Daten laufend?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z.B. Open Data Team', 'open-data-wizard' ) )
-						->set_help_text( __( 'PFLEGENDE STELLE (dcatde:maintainer)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle, die für die laufende Pflege/Aktualisierung der Daten zuständig ist.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'PFLEGENDE STELLE (dcatde:maintainer)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_maintainer_email', __( 'E-Mail der pflegenden Stelle', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
@@ -493,12 +507,12 @@ class ODW_Fields {
 					Field::make( 'textarea', 'odw_legal_basis', __( 'Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?', 'open-data-wizard' ) )
 						->set_rows( 2 )
 						->set_attribute( 'placeholder', __( 'z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)', 'open-data-wizard' ) )
-						->set_help_text( __( 'RECHTSGRUNDLAGE (dcatde:legalBasis)', 'open-data-wizard' ) . "\n\n" . __( 'Gesetz/Verordnung, das die Bereitstellung regelt. Beispiel: § 12a EGovG', 'open-data-wizard' ) ),
+						->set_help_text( __( 'RECHTSGRUNDLAGE (dcatde:legalBasis)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_quality_process_uri', __( 'Wo ist das Qualitätssicherungs-Verfahren dokumentiert?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/qualitaetssicherung' )
-						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) . "\n\n" . __( 'URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_access' )
 					->set_html(
@@ -516,12 +530,7 @@ class ODW_Fields {
 					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
 						->add_options( self::get_access_rights_options() )
 						->set_default_value( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' )
-						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) . "\n\n" . __( 'Zugriffs-Klassifikation des Datensatzes. Vorbelegt mit „Öffentlich“ — bitte ändern, wenn die Daten nur eingeschränkt oder gar nicht öffentlich zugänglich sind.', 'open-data-wizard' ) ),
-
-					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Themen-URI)?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'data-theme' )
-						->set_attribute( 'placeholder', __( 'EU-Datenthema eintippen oder auswählen…', 'open-data-wizard' ) )
-						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt das Thema aus Tab 1).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html(
@@ -538,11 +547,11 @@ class ODW_Fields {
 					// für wen sie gedacht sind.
 					Field::make( 'select', 'odw_is_hvd', __( 'Nur für öffentliche Stellen: Ist dies ein hochwertiger Datensatz (HVD)?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_flag_options() )
-						->set_help_text( __( 'HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)', 'open-data-wizard' ) . "\n\n" . __( 'Betrifft ausschließlich öffentliche Stellen — Vereine, Verbände und andere zivilgesellschaftliche Organisationen können dieses Feld leer lassen. Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)', 'open-data-wizard' ) ),
 
 					Field::make( 'select', 'odw_hvd_category', __( 'Welcher HVD-Kategorie gehört dieser Datensatz an?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_category_options() )
-						->set_help_text( __( 'HVD-KATEGORIE (dcatap:hvdCategory)', 'open-data-wizard' ) . "\n\n" . __( 'Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität', 'open-data-wizard' ) )
+						->set_help_text( __( 'HVD-KATEGORIE (dcatap:hvdCategory)', 'open-data-wizard' ) )
 						->set_conditional_logic(
 							array(
 								array(
@@ -563,16 +572,16 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_identifier', __( 'Welche eindeutige Kennung hat dieser Datensatz?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z. B. DOI oder interne ID', 'open-data-wizard' ) )
-						->set_help_text( __( 'IDENTIFIER (dct:identifier)', 'open-data-wizard' ) . "\n\n" . __( 'Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd', 'open-data-wizard' ) ),
+						->set_help_text( __( 'IDENTIFIER (dct:identifier)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_type', __( 'Um welchen Typ von Datensatz handelt es sich?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'http://publications.europa.eu/resource/authority/dataset-type/...' )
-						->set_help_text( __( 'DATENSATZ-TYP (dct:type)', 'open-data-wizard' ) . "\n\n" . __( 'URI aus der EU-Liste „dataset-type". Beispiel: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL', 'open-data-wizard' ) ),
+						->set_help_text( __( 'DATENSATZ-TYP (dct:type)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_creator_name', __( 'Wer hat diese Daten erstellt?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z. B. Statistisches Amt', 'open-data-wizard' ) )
-						->set_help_text( __( 'ERSTELLER (dct:creator)', 'open-data-wizard' ) . "\n\n" . __( 'Stelle oder Person, die die Daten erstellt hat (kann vom Herausgeber abweichen).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ERSTELLER (dct:creator)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_creator_email', __( 'E-Mail-Adresse des Erstellers (optional).', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'email' )
@@ -580,28 +589,28 @@ class ODW_Fields {
 
 					Field::make( 'text', 'odw_version', __( 'Welche Version hat dieser Datensatz?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z. B. 1.0', 'open-data-wizard' ) )
-						->set_help_text( __( 'VERSION (owl:versionInfo)', 'open-data-wizard' ) . "\n\n" . __( 'Versionsbezeichnung des Datensatzes. Beispiel: 1.0, 2024-Q1', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERSION (owl:versionInfo)', 'open-data-wizard' ) ),
 
 					Field::make( 'textarea', 'odw_version_notes', __( 'Was hat sich in dieser Version geändert?', 'open-data-wizard' ) )
 						->set_rows( 2 )
-						->set_help_text( __( 'VERSIONSHINWEISE (adms:versionNotes)', 'open-data-wizard' ) . "\n\n" . __( 'Kurze Beschreibung der Änderungen gegenüber der Vorversion.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERSIONSHINWEISE (adms:versionNotes)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_spatial_resolution', __( 'Welche räumliche Auflösung haben die Daten (in Metern)?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', __( 'z. B. 30', 'open-data-wizard' ) )
-						->set_help_text( __( 'RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)', 'open-data-wizard' ) . "\n\n" . __( 'Kleinste räumlich auflösbare Distanz in Metern (nur Zahl). Beispiel: 30', 'open-data-wizard' ) ),
+						->set_help_text( __( 'RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_temporal_resolution', __( 'Welche zeitliche Auflösung haben die Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', 'P1D' )
-						->set_help_text( __( 'ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)', 'open-data-wizard' ) . "\n\n" . __( 'Als ISO-8601-Dauer. Beispiel: P1D (täglich), PT1H (stündlich)', 'open-data-wizard' ) ),
+						->set_help_text( __( 'ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_conforms_to', __( 'Welchem Standard oder Schema entsprechen die Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://…' )
-						->set_help_text( __( 'KONFORM ZU (dct:conformsTo)', 'open-data-wizard' ) . "\n\n" . __( 'URI des Standards/Anwendungsprofils, dem die Daten folgen.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'KONFORM ZU (dct:conformsTo)', 'open-data-wizard' ) ),
 
 					Field::make( 'textarea', 'odw_provenance', __( 'Woher stammen die Daten und wie sind sie entstanden?', 'open-data-wizard' ) )
 						->set_rows( 2 )
-						->set_help_text( __( 'HERKUNFT (dct:provenance)', 'open-data-wizard' ) . "\n\n" . __( 'Freitext zur Entstehung und Herkunft der Daten.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'HERKUNFT (dct:provenance)', 'open-data-wizard' ) ),
 
 					// Die Überschrift benennt ausdrücklich die primäre Distribution:
 					// Die Felder dieser Sektion sind Singular-Felder und gelten nicht
@@ -615,7 +624,7 @@ class ODW_Fields {
 					),
 
 					Field::make( 'text', 'odw_dist_title', __( 'Wie heißt die bereitgestellte Datei/Distribution?', 'open-data-wizard' ) )
-						->set_help_text( __( 'TITEL DER DISTRIBUTION (dct:title)', 'open-data-wizard' ) . "\n\n" . __( 'Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV', 'open-data-wizard' ) ),
+						->set_help_text( __( 'TITEL DER DISTRIBUTION (dct:title)', 'open-data-wizard' ) ),
 
 					Field::make( 'textarea', 'odw_dist_description', __( 'Wie lässt sich die Distribution beschreiben?', 'open-data-wizard' ) )
 						->set_rows( 2 )
@@ -624,14 +633,14 @@ class ODW_Fields {
 					Field::make( 'text', 'odw_download_url', __( 'Direkter Download-Link zur Datei?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/daten/datei.csv' )
-						->set_help_text( __( 'DOWNLOAD-URL (dcat:downloadURL)', 'open-data-wizard' ) . "\n\n" . __( 'Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL).', 'open-data-wizard' ) ),
+						->set_help_text( __( 'DOWNLOAD-URL (dcat:downloadURL)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_media_type', __( 'Welchen Medientyp (MIME) hat die Datei?', 'open-data-wizard' ) )
 						->set_attribute( 'placeholder', 'https://www.iana.org/assignments/media-types/text/csv' )
-						->set_help_text( __( 'MEDIENTYP (dcat:mediaType)', 'open-data-wizard' ) . "\n\n" . __( 'IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv', 'open-data-wizard' ) ),
+						->set_help_text( __( 'MEDIENTYP (dcat:mediaType)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_dist_rights', __( 'Welche Nutzungsrechte gelten für die Datei?', 'open-data-wizard' ) )
-						->set_help_text( __( 'RECHTE (dct:rights)', 'open-data-wizard' ) . "\n\n" . __( 'URI oder Freitext zu den Nutzungsrechten der Distribution.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'RECHTE (dct:rights)', 'open-data-wizard' ) ),
 				)
 			)
 
@@ -1036,11 +1045,196 @@ class ODW_Fields {
 			case 'cessda':
 				$map = self::load_cessda_options();
 				break;
+			case 'engagementfeld':
+			case 'contributors':
+				// Gebündelte Vokabulare: seit v2.41.0 Auswahlfelder, deren
+				// gespeicherte URI im Frontend als Label erscheinen soll.
+				$map = self::vocabulary_options( $vocab );
+				break;
 			default:
 				$map = array();
 		}
 
 		return isset( $map[ $value ] ) && '' !== (string) $map[ $value ] ? (string) $map[ $value ] : $value;
+	}
+
+	/**
+	 * Ein gebündeltes Vokabular als URI → Label Map für Auswahlfelder.
+	 *
+	 * @param string $id          Vokabular-ID (Dateiname ohne .json).
+	 * @param string $placeholder Optionaler Platzhalter-Eintrag mit leerem Wert.
+	 * @return array<string, string>
+	 */
+	public static function vocabulary_options( string $id, string $placeholder = '' ): array {
+		$options = array();
+		if ( '' !== $placeholder ) {
+			$options[''] = $placeholder;
+		}
+		foreach ( self::load_vocabulary( $id ) as $entry ) {
+			$options[ $entry['value'] ] = $entry['label'];
+		}
+		return $options;
+	}
+
+	/**
+	 * Bringt einen gespeicherten Vokabularwert auf eine Liste von URIs.
+	 *
+	 * Wie normalize_themes(), aber für die gebündelten Vokabulare: Array
+	 * (Mehrfachauswahl), einzelner String oder ein Label, das vor der Umstellung
+	 * im Textfeld stand und erst aufgelöst werden muss.
+	 *
+	 * @param mixed  $value Gespeicherter Wert.
+	 * @param string $vocab Vokabular-ID.
+	 * @return array<int, string>
+	 */
+	public static function normalize_vocabulary( $value, string $vocab ): array {
+		$werte = is_array( $value ) ? $value : array( $value );
+		$out   = array();
+
+		foreach ( $werte as $einzeln ) {
+			$einzeln = trim( (string) $einzeln );
+			if ( '' === $einzeln ) {
+				continue;
+			}
+			$uri = odw_resolve_vocab_uri( $einzeln, $vocab );
+			if ( '' !== $uri && ! in_array( $uri, $out, true ) ) {
+				$out[] = $uri;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Flache Spiegelung der gewählten Themen für Abfragen.
+	 *
+	 * Carbon Fields legt Mehrfachwerte unter `_odw_theme|||N|value` ab. Eine
+	 * meta_query auf `_odw_theme` findet sie deshalb nicht — und genau darauf
+	 * beruhten der Themenfilter des Katalogs und die Sortierung der Listenspalte.
+	 * Diese Methode schreibt die Auswahl zusätzlich flach:
+	 *   `_odw_theme_index` — eine Zeile je Thema, für den Filter,
+	 *   `_odw_theme_sort`  — Label des ersten Themas, für die Sortierung.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 */
+	public static function sync_theme_index( int $post_id ): void {
+		if ( 'odw_dataset' !== get_post_type( $post_id ) ) {
+			return;
+		}
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		$themes = self::normalize_themes( carbon_get_post_meta( $post_id, 'odw_theme' ) );
+
+		delete_post_meta( $post_id, '_odw_theme_index' );
+		foreach ( $themes as $uri ) {
+			add_post_meta( $post_id, '_odw_theme_index', $uri );
+		}
+
+		$sort = '';
+		if ( isset( $themes[0] ) ) {
+			$sort = self::resolve_label( 'theme', $themes[0] );
+		}
+		update_post_meta( $post_id, '_odw_theme_sort', $sort );
+	}
+
+	/**
+	 * Labels aller gewählten Themen, in Auswahlreihenfolge.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 * @return array<int, string>
+	 */
+	public static function theme_labels( int $post_id ): array {
+		$out = array();
+		foreach ( self::normalize_themes( carbon_get_post_meta( $post_id, 'odw_theme' ) ) as $uri ) {
+			$label = self::resolve_label( 'theme', $uri );
+			$out[] = '' !== $label ? $label : $uri;
+		}
+		return $out;
+	}
+
+	/**
+	 * Labels aller gewählten Konzepte eines gebündelten Vokabulars.
+	 *
+	 * Gegenstück zu theme_labels() für die übrigen Mehrfachauswahlen; kann eine
+	 * URI nicht aufgelöst werden, steht sie selbst da statt einer Lücke.
+	 *
+	 * @param int    $post_id Dataset post ID.
+	 * @param string $field   Carbon-Feld-Schlüssel, z. B. "odw_engagementfeld".
+	 * @param string $vocab   Vokabular-ID.
+	 * @return array<int, string>
+	 */
+	public static function vocabulary_labels( int $post_id, string $field, string $vocab ): array {
+		$out = array();
+		foreach ( self::normalize_vocabulary( carbon_get_post_meta( $post_id, $field ), $vocab ) as $uri ) {
+			$label = self::resolve_label( $vocab, $uri );
+			$out[] = '' !== $label ? $label : $uri;
+		}
+		return $out;
+	}
+
+	/**
+	 * Bringt den gespeicherten Themenwert auf eine Liste von EU-URIs.
+	 *
+	 * Drei Formen können auftreten:
+	 *   - Array von URIs — die Mehrfachauswahl seit v2.41.0.
+	 *   - Einzelner String — Datensätze vor der Migration und Tests mit altem Mock.
+	 *   - Deutsches Kurzlabel („Bildung", „Soziales") — die Auswahlliste vor
+	 *     v2.5.0 speicherte Labels statt URIs; der Demo-Datensatz tut es bis heute.
+	 *
+	 * @param mixed $value Gespeicherter Wert.
+	 * @return array<int, string> Liste eindeutiger URIs, leere Werte entfallen.
+	 */
+	public static function normalize_themes( $value ): array {
+		$base   = 'http://publications.europa.eu/resource/authority/data-theme/';
+		$legacy = array(
+			'Bildung'    => $base . 'EDUC',
+			'Gesundheit' => $base . 'HEAL',
+			'Soziales'   => $base . 'SOCI',
+			'Umwelt'     => $base . 'ENVI',
+			'Wirtschaft' => $base . 'ECON',
+			'Kultur'     => $base . 'EDUC',
+			'Sport'      => $base . 'EDUC',
+			'Sonstiges'  => $base . 'GOVE',
+		);
+
+		$werte = is_array( $value ) ? $value : array( $value );
+		$out   = array();
+
+		foreach ( $werte as $einzeln ) {
+			$einzeln = trim( (string) $einzeln );
+			if ( '' === $einzeln ) {
+				continue;
+			}
+			if ( isset( $legacy[ $einzeln ] ) ) {
+				$einzeln = $legacy[ $einzeln ];
+			} else {
+				// Labels aus dem Vokabular ebenfalls auflösen; eine bereits
+				// eingetragene URI reicht resolve_theme_uri() unverändert durch.
+				$einzeln = self::resolve_theme_uri( $einzeln );
+			}
+			if ( '' !== $einzeln && ! in_array( $einzeln, $out, true ) ) {
+				$out[] = $einzeln;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Themen-Vokabular ohne den Platzhalter-Eintrag.
+	 *
+	 * Die Mehrfachauswahl braucht kein „— Bitte wählen —": Nichts auszuwählen
+	 * ist dort bereits der leere Zustand, und ein Eintrag mit leerem Wert würde
+	 * als auswählbares Thema erscheinen.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_theme_options_multi(): array {
+		$options = self::get_theme_options();
+		unset( $options[''] );
+		return $options;
 	}
 
 	/**
@@ -1766,7 +1960,6 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$language            = carbon_get_post_meta( $post_id, 'odw_language' );
 	$keywords            = carbon_get_post_meta( $post_id, 'odw_keywords' );
 	$theme               = carbon_get_post_meta( $post_id, 'odw_theme' );
-	$theme_uri           = (string) carbon_get_post_meta( $post_id, 'odw_theme_uri' );
 	$issued              = carbon_get_post_meta( $post_id, 'odw_issued' );
 	$modified            = get_post_meta( $post_id, '_odw_modified', true );
 	$dist_access_url     = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
@@ -1777,7 +1970,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$dist_attribution    = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
 	$dist_availability   = (string) carbon_get_post_meta( $post_id, 'odw_availability' );
 	$cessda_topic        = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
-	$engagementfeld      = (string) carbon_get_post_meta( $post_id, 'odw_engagementfeld' );
+	$engagementfeld      = carbon_get_post_meta( $post_id, 'odw_engagementfeld' );
 
 	// Extended DCAT-AP fields (Tab 4).
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
@@ -1882,27 +2075,12 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$dataset['dcat:keyword'] = $keyword_literals;
 	}
 
+	// Seit v2.41.0 ist odw_theme eine Mehrfachauswahl und liefert ein Array.
+	// Ein einzelner String kann trotzdem auftreten: bei Datensätzen, die vor der
+	// Migration angelegt wurden, und in Tests, die den alten Wert mocken.
 	$themes = array();
-	if ( ! empty( $theme ) ) {
-		$theme_base   = 'http://publications.europa.eu/resource/authority/data-theme/';
-		$theme_legacy = array(
-			'Bildung'    => $theme_base . 'EDUC',
-			'Gesundheit' => $theme_base . 'HEAL',
-			'Soziales'   => $theme_base . 'SOCI',
-			'Umwelt'     => $theme_base . 'ENVI',
-			'Wirtschaft' => $theme_base . 'ECON',
-			'Kultur'     => $theme_base . 'EDUC',
-			'Sport'      => $theme_base . 'EDUC',
-			'Sonstiges'  => $theme_base . 'GOVE',
-		);
-		$themes[]     = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
-	}
-	// Optional additional EU data-theme (advanced field, bundled vocabulary).
-	// The field stores the human-readable label; resolve it to the official URI
-	// (a directly entered URI passes through unchanged).
-	$theme_uri_resolved = odw_resolve_vocab_uri( $theme_uri, 'data-theme' );
-	if ( '' !== $theme_uri_resolved ) {
-		$themes[] = array( '@id' => odw_sanitize_jsonld_id( $theme_uri_resolved ) );
+	foreach ( ODW_Fields::normalize_themes( $theme ) as $theme_uri_value ) {
+		$themes[] = array( '@id' => odw_sanitize_jsonld_id( $theme_uri_value ) );
 	}
 	if ( 1 === count( $themes ) ) {
 		$dataset['dcat:theme'] = $themes[0];
@@ -1917,11 +2095,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( ! empty( $cessda_topic ) ) {
 		$subjects[] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
 	}
-	if ( ! empty( $engagementfeld ) ) {
-		$engagement_uri = odw_resolve_vocab_uri( $engagementfeld, 'engagementfeld' );
-		if ( '' !== $engagement_uri ) {
-			$subjects[] = array( '@id' => odw_sanitize_jsonld_id( $engagement_uri ) );
-		}
+	// Seit v2.41.0 ist das Engagementfeld eine Mehrfachauswahl. normalize_vocabulary()
+	// nimmt daneben weiterhin den einzelnen String entgegen, den Datensätze vor der
+	// Migration tragen, und löst ein Label zur URI auf.
+	foreach ( ODW_Fields::normalize_vocabulary( $engagementfeld, 'engagementfeld' ) as $engagement_uri ) {
+		$subjects[] = array( '@id' => odw_sanitize_jsonld_id( $engagement_uri ) );
 	}
 	if ( ! empty( $subjects ) ) {
 		$dataset['dct:subject'] = 1 === count( $subjects ) ? $subjects[0] : $subjects;

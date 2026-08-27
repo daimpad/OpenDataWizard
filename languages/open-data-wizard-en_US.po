@@ -33,6 +33,9 @@ msgstr "(optional)"
 msgid "(von max. %d)"
 msgstr "(of max. %d)"
 
+msgid "* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "* Required for publishing. You can save the dataset as a draft at any time."
+
 msgid "1 — Grundlegende Informationen"
 msgstr "1 — Basic Information"
 
@@ -156,32 +159,14 @@ msgstr "Example: 2024-01-15"
 msgid "Beispiel: 2024-12-31"
 msgstr "Example: 2024-12-31"
 
-msgid "Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen."
-msgstr "Example: CC0 1.0, CC-BY 4.0 – this determines how others may use the data."
-
-msgid "Beispiel: CSV, JSON, PDF"
-msgstr "Example: CSV, JSON, PDF"
-
-msgid "Beispiel: Deutsch, Englisch"
-msgstr "Example: German, English"
-
 msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
 msgstr "Example: An overview of the most populous cities in Germany with statistical data on population and development."
-
-msgid "Beispiel: Gemeinde, Landkreis, Land, Bund"
-msgstr "Example: municipality, district, state, federal"
 
 msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
 msgstr "Example: Sampletown Statistics Office, Federal Environment Agency, Consumer Advice Center"
 
 msgid "Beispiel: Open Data Team, Statistisches Landesamt"
 msgstr "Example: Open Data Team, State Statistical Office"
-
-msgid "Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig"
-msgstr "Example: daily, monthly, yearly, irregular"
-
-msgid "Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur"
-msgstr "Example: environment, education, health, economy, culture"
 
 msgid "Beispiel: Zivilgesellschaftliche Organisationen"
 msgstr "Example: Civil society organizations"
@@ -414,6 +399,9 @@ msgstr "Uninstallation"
 msgid "Demo-Datensatz bearbeiten"
 msgstr "Edit demo dataset"
 
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again. You can save the dataset as a draft at any time."
+
 msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
 msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again."
 
@@ -435,6 +423,9 @@ msgstr "The Idea"
 msgid "Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis."
 msgstr "The JSON-LD view below shows the last saved result."
 
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren\" die ausführliche Erklärung mit Beispielen."
+msgstr "Required fields are marked with a red asterisk (*). You can save the dataset as a draft at any time — only publishing requires every mandatory field. Each field comes with guidance: the ⓘ icon shows the DCAT-AP term, \"Learn more\" the full explanation with examples."
+
 msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
 msgstr "The quality check evaluates the completeness of the metadata. The values are recalculated each time you save – changes in the form only affect the result after saving."
 
@@ -443,6 +434,9 @@ msgstr "The preview shows the generated JSON-LD based on the most recently saved
 
 msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
 msgstr "These values are pre-filled automatically when creating a new dataset."
+
+msgid "Diese bestimmt, wie andere die Daten nutzen dürfen."
+msgstr "This determines how others may use the data."
 
 msgid "Dieser Datensatz ist nicht veröffentlicht."
 msgstr "This dataset is not published."
@@ -473,6 +467,36 @@ msgstr "Distribution with URL (dcat:accessURL)"
 
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
 msgstr "Distribution with access URL (dcat:accessURL)"
+
+msgid "EIGENE LIZENZ-URI (dct:license)"
+msgstr "CUSTOM LICENCE URI (dct:license)"
+
+msgid "Eigenschaft"
+msgstr "Property"
+
+msgid "Eine der sechs EU-Themenkategorien."
+msgstr "One of the six EU thematic categories."
+
+msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
+msgstr "HIGH-VALUE DATASET (dcatap:applicableLegislation)"
+
+msgid "Im Standard nachlesen"
+msgstr "Read it in the standard"
+
+msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
+msgstr "CONTACT POINT · EMAIL (dcat:contactPoint / vcard:hasEmail)"
+
+msgid "KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)"
+msgstr "CONTACT POINT · NAME (dcat:contactPoint / vcard:fn)"
+
+msgid "KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+msgstr "CONTACT POINT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+
+msgid "Multiplizität"
+msgstr "Multiplicity"
+
+msgid "Pflichtfeld für die Veröffentlichung"
+msgstr "Required for publishing"
 
 msgid "Primäre Distribution — weitere Angaben"
 msgstr "Primary distribution — further details"
@@ -533,9 +557,6 @@ msgstr "A demo dataset with a sample CSV was created automatically. Insert this 
 
 msgid "Ein Fehler ist aufgetreten."
 msgstr "An error occurred."
-
-msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
-msgstr "One of the six EU thematic categories. Example: Geospatial, Meteorological, Mobility"
 
 msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
 msgstr "A unique identifier of the dataset (e.g. DOI or internal ID). Example: 10.1234/abcd"
@@ -759,8 +780,11 @@ msgstr "In three steps: fill in the form, generate DCAT-AP.de metadata, portals 
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr "Which category does this dataset belong to?"
 
-msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
-msgstr "Which field of civic engagement does this dataset belong to?"
+msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"
+msgstr "Which fields of civic engagement does this dataset belong to?"
+
+msgid "— Keine Angabe —"
+msgstr "— Not specified —"
 
 msgid "In welchem Format ist die Datei?"
 msgstr "What format is the file in?"
@@ -1507,6 +1531,9 @@ msgstr "Which standard or schema does the data conform to?"
 msgid "Welchen Medientyp (MIME) hat die Datei?"
 msgstr "What media type (MIME) does the file have?"
 
+msgid "Welchen Themen ist dieser Datensatz zugeordnet?"
+msgstr "Which themes is this dataset assigned to?"
+
 msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
 msgstr "Which HVD category does this dataset belong to?"
 
@@ -1558,8 +1585,8 @@ msgstr "How can the distribution be described?"
 msgid "Wie oft werden diese Daten aktualisiert?"
 msgstr "How often are these data updated?"
 
-msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
-msgstr "How reliable/durable is access to this file planned to be? Example: Stable, Available, Temporary"
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?"
+msgstr "How reliable/permanent is access to this file intended to be?"
 
 msgid "Wiederverwendbarkeit"
 msgstr "Reusability"
@@ -1766,12 +1793,6 @@ msgstr "Tab %s"
 msgid "Zum Feld springen"
 msgstr "Go to field"
 
-msgid "Pflichtfeld zum Veröffentlichen"
-msgstr "Required for publishing"
-
-msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr "* Required for publishing. You can always save an incomplete draft."
-
 msgid "Link zur Datei oder Datei-Upload"
 msgstr "Link to the file or file upload"
 
@@ -1789,9 +1810,6 @@ msgstr "Data provision"
 
 msgid "Folgende Pflichtangaben fehlen oder sind leer:"
 msgstr "The following required fields are missing or empty:"
-
-msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr "The dataset was saved as a draft. Please complete all required fields and publish again. You can always save an incomplete draft."
 
 msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
 msgstr "Which theme is this dataset assigned to?"
@@ -1837,9 +1855,6 @@ msgstr "The language of the data and — if desired — title, description and k
 
 msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
 msgstr "Who publishes these data? What are they about? Which theme is the dataset assigned to? And which keywords lead people to it? Optionally, a topic classification and a field of civic engagement can be added under \"Further classification\"."
-
-msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
-msgstr "Required fields are marked with a red asterisk (*). You can always save an incomplete draft — only publishing requires all mandatory fields to be filled in. Every field has helpful examples that you can reveal via the ⓘ icon."
 
 
 

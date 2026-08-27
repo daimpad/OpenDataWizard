@@ -351,6 +351,59 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * Das Engagementfeld ist seit v2.41.0 eine Mehrfachauswahl: Alle gewählten
+	 * Konzepte stehen unter dct:subject, zusammen mit dem CESSDA-Thema.
+	 */
+	public function test_build_emits_all_engagement_fields_as_dct_subject(): void {
+		$this->load_fields();
+
+		$base   = 'https://ziviz.de/def/engagementfeld/';
+		$cessda = 'https://vocabularies.cessda.eu/urn/urn:ddi:int.cessda.cv:TopicClassification:4.2.3:de:1.0';
+
+		$this->setup_jsonld_mocks(
+			22,
+			'odw_dataset',
+			array(
+				'odw_cessda_topic'   => $cessda,
+				'odw_engagementfeld' => array( $base . 'sport', $base . 'kultur' ),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 22 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array(
+				array( '@id' => $cessda ),
+				array( '@id' => $base . 'sport' ),
+				array( '@id' => $base . 'kultur' ),
+			),
+			$result['dct:subject']
+		);
+	}
+
+	/**
+	 * Ein einzelner String — so lagen die Werte vor der Migration — ergibt
+	 * weiterhin genau ein dct:subject, kein verschachteltes Array.
+	 */
+	public function test_build_accepts_engagement_field_as_single_string(): void {
+		$this->load_fields();
+
+		$uri = 'https://ziviz.de/def/engagementfeld/medien';
+
+		$this->setup_jsonld_mocks(
+			23,
+			'odw_dataset',
+			array( 'odw_engagementfeld' => $uri )
+		);
+
+		$result = odw_build_dataset_jsonld( 23 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dct:subject'] );
+	}
+
+	/**
 	 * When a dataset is flagged HVD with a category, both dcatap:hvdCategory and
 	 * dcatap:applicableLegislation are emitted (the latter pinned to Reg 2023/138).
 	 */
@@ -617,7 +670,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	 * An additional theme URI is appended to the curated theme, producing a
 	 * dcat:theme array with both entries.
 	 */
-	public function test_build_appends_additional_theme_uri(): void {
+	public function test_build_emits_all_selected_themes(): void {
 		$this->load_fields();
 
 		$extra = 'http://publications.europa.eu/resource/authority/data-theme/ENER';
@@ -626,8 +679,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 			20,
 			'odw_dataset',
 			array(
-				'odw_theme'     => 'Bildung',
-				'odw_theme_uri' => $extra,
+				'odw_theme' => array( 'Bildung', $extra ),
 			)
 		);
 
@@ -641,7 +693,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	/**
 	 * A theme URI on its own yields a single dcat:theme object (not an array).
 	 */
-	public function test_build_theme_uri_alone_is_single_object(): void {
+	public function test_build_single_theme_is_single_object(): void {
 		$this->load_fields();
 
 		$extra = 'http://publications.europa.eu/resource/authority/data-theme/TECH';
@@ -649,7 +701,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->setup_jsonld_mocks(
 			20,
 			'odw_dataset',
-			array( 'odw_theme_uri' => $extra )
+			array( 'odw_theme' => array( $extra ) )
 		);
 
 		$result = odw_build_dataset_jsonld( 20 );
@@ -659,11 +711,10 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * The additional theme field stores a human-readable label (autosuggest);
-	 * it is resolved to the official EU data-theme URI for the @id (mirrors the
-	 * contributorID behaviour). Regression test for the label-as-@id bug.
+	 * A theme stored as a human-readable label resolves to the official EU
+	 * data-theme URI for the @id. Regression test for the label-as-@id bug.
 	 */
-	public function test_build_resolves_additional_theme_label_to_uri(): void {
+	public function test_build_resolves_theme_label_to_uri(): void {
 		$this->load_fields();
 
 		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
@@ -677,7 +728,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->setup_jsonld_mocks(
 			21,
 			'odw_dataset',
-			array( 'odw_theme_uri' => 'Energie' )
+			array( 'odw_theme' => array( 'Energie' ) )
 		);
 
 		$result = odw_build_dataset_jsonld( 21 );

@@ -35,7 +35,7 @@ parameters:
 
         # WP_CLI and progress bar not in stubs
         - identifier: function.notFound
-          message: '/Function WP_CLI.*not found|Function carbon_get_post_meta not found/'
+          message: '/Function WP_CLI.*not found|Function carbon_(get|set)_post_meta not found/'
 
         # Plugin constants are defined at runtime, not recognized by static analysis
         - identifier: constant.notFound

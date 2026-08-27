@@ -82,9 +82,10 @@ class Test_ODW_Field_Catalog extends TestCase {
 
 		$this->assertNotSame( '', $source, 'class-fields.php could not be read' );
 
-		// Collect the internal keys of all scalar data fields (text/textarea/select/date).
+		// Collect the internal keys of all scalar data fields
+		// (text/textarea/select/multiselect/date).
 		preg_match_all(
-			"/Field::make\\(\\s*'(?:text|textarea|select|date)',\\s*'odw_([a-z_]+)'/",
+			"/Field::make\\(\\s*'(?:text|textarea|select|multiselect|date)',\\s*'odw_([a-z_]+)'/",
 			$source,
 			$matches
 		);
@@ -155,7 +156,10 @@ class Test_ODW_Field_Catalog extends TestCase {
 		}
 
 		$this->assertArrayHasKey( 'theme', $by_key );
-		$this->assertStringContainsString( 'Thema', $by_key['theme']['q_human'] );
+		// „Thema" bleibt der Begriff — seit das Feld eine Mehrfachauswahl ist,
+		// steht er dort im Plural („Welchen Themen …"). Verboten bleibt der
+		// Zweitbegriff „Kategorie".
+		$this->assertMatchesRegularExpression( '/Them(a|en)/', $by_key['theme']['q_human'] );
 		$this->assertStringNotContainsString( 'Kategorie', $by_key['theme']['q_human'] );
 
 		$this->assertArrayHasKey( 'keywords', $by_key );
@@ -209,5 +213,103 @@ class Test_ODW_Field_Catalog extends TestCase {
 			$committed,
 			'docs/FELD-REFERENZ.md is out of date — run: php bin/generate-field-reference.php'
 		);
+	}
+
+	/**
+	 * Every entry carries an explicit multiplicity.
+	 *
+	 * Die Angabe steuert seit v2.41.0 die Merkmalsliste im „Mehr erfahren"-Panel.
+	 * Fehlt sie, bleibt die Zeile dort still leer — deshalb hier eine harte Zusage.
+	 */
+	public function test_every_entry_has_a_cardinality(): void {
+		foreach ( $this->catalog as $field ) {
+			$this->assertMatchesRegularExpression(
+				'/^[01]\.\.[1n]$/',
+				(string) ( $field['cardinality'] ?? '' ),
+				'Feld ' . $field['key'] . ' hat keine gültige Multiplizität.'
+			);
+		}
+	}
+
+	/**
+	 * The structured multiplicity agrees with the one stated in the prose.
+	 *
+	 * Beide Angaben stehen im selben Eintrag und werden von Hand gepflegt. Ohne
+	 * diese Prüfung laufen sie auseinander, sobald jemand nur eine der beiden
+	 * anfasst — und das Panel zeigt dann etwas anderes als die Definition darunter.
+	 */
+	public function test_cardinality_matches_the_prose(): void {
+		foreach ( $this->catalog as $field ) {
+			$matched = preg_match( '/Multiplizität\s+([01]\.\.[1n])/u', (string) $field['desc_dcat'], $m );
+			$this->assertSame( 1, $matched, 'Feld ' . $field['key'] . ' nennt keine Multiplizität im Definitionstext.' );
+			$this->assertSame(
+				(string) $field['cardinality'],
+				$m[1],
+				'Feld ' . $field['key'] . ': strukturierte Multiplizität und Definitionstext weichen ab.'
+			);
+		}
+	}
+
+	/**
+	 * Every entry names the profile class it belongs to.
+	 *
+	 * Die Klasse steuert den Link auf den passenden Abschnitt der
+	 * DCAT-AP.de-Spezifikation. Fehlt sie, verschwindet der Link stillschweigend.
+	 */
+	public function test_every_entry_has_an_entity(): void {
+		foreach ( $this->catalog as $field ) {
+			$this->assertContains(
+				(string) ( $field['entity'] ?? '' ),
+				array( 'dataset', 'distribution', 'catalog' ),
+				'Feld ' . $field['key'] . ' hat keine gültige Profil-Klasse.'
+			);
+		}
+	}
+
+	/**
+	 * Each entity resolves to a spec URL on the official domain.
+	 */
+	public function test_entity_resolves_to_a_spec_url(): void {
+		foreach ( $this->catalog as $field ) {
+			$url = ODW_Field_Reference::spec_url( (string) $field['entity'] );
+			$this->assertStringStartsWith(
+				'https://www.dcat-ap.de/def/dcatde/3.0/spec/#',
+				$url,
+				'Feld ' . $field['key'] . ' liefert keine Spezifikations-URL.'
+			);
+		}
+	}
+
+	/**
+	 * Distribution-level fields are exactly those the distribution node builds.
+	 *
+	 * Die Zuordnung stammt aus odw_build_distribution_node(); läuft sie
+	 * auseinander, verweist der Link auf den falschen Abschnitt.
+	 */
+	public function test_distribution_fields_match_the_builder(): void {
+		$erwartet = array(
+			'access_url',
+			'attribution_text',
+			'availability',
+			'byte_size',
+			'dist_description',
+			'dist_rights',
+			'dist_title',
+			'download_url',
+			'format',
+			'license',
+			'license_custom',
+			'media_type',
+		);
+
+		$tatsaechlich = array();
+		foreach ( $this->catalog as $field ) {
+			if ( 'distribution' === ( $field['entity'] ?? '' ) ) {
+				$tatsaechlich[] = (string) $field['key'];
+			}
+		}
+		sort( $tatsaechlich );
+
+		$this->assertSame( $erwartet, $tatsaechlich );
 	}
 }

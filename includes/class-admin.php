@@ -137,8 +137,8 @@ class ODW_Admin {
 				break;
 
 			case 'odw_theme':
-				$theme = (string) carbon_get_post_meta( $post_id, 'odw_theme' );
-				echo esc_html( '' !== $theme ? ODW_Fields::resolve_label( 'theme', $theme ) : '—' );
+				$themes = ODW_Fields::theme_labels( $post_id );
+				echo esc_html( array() !== $themes ? implode( ', ', $themes ) : '—' );
 				break;
 
 			case 'odw_status':
@@ -236,7 +236,7 @@ class ODW_Admin {
 		}
 
 		if ( 'odw_theme' === $query->get( 'orderby' ) ) {
-			$query->set( 'meta_key', '_odw_theme' );
+			$query->set( 'meta_key', '_odw_theme_sort' );
 			$query->set( 'orderby', 'meta_value' );
 		}
 
@@ -403,11 +403,6 @@ class ODW_Admin {
 					'licenseDescriptions' => (object) ODW_Fields::get_license_descriptions(),
 					'cessdaOptions'       => $cessda_options,
 					'spatialOptions'      => $spatial_options,
-					'vocabularies'        => array(
-						'contributors'   => ODW_Fields::load_vocabulary( 'contributors' ),
-						'data-theme'     => ODW_Fields::load_vocabulary( 'data-theme' ),
-						'engagementfeld' => ODW_Fields::load_vocabulary( 'engagementfeld' ),
-					),
 					'cessdaWidget'        => array(
 						'label'       => __( 'CESSDA Themenklassifikation', 'open-data-wizard' ),
 						'placeholder' => __( 'Thema eintippen oder auswählen…', 'open-data-wizard' ),
@@ -419,8 +414,8 @@ class ODW_Admin {
 					),
 					'required'            => array(
 						'star'      => '*',
-						'starTitle' => __( 'Pflichtfeld zum Veröffentlichen', 'open-data-wizard' ),
-						'legend'    => __( '* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern.', 'open-data-wizard' ),
+						'starTitle' => __( 'Pflichtfeld für die Veröffentlichung', 'open-data-wizard' ),
+						'legend'    => __( '* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern.', 'open-data-wizard' ),
 						'keys'      => array( '_odw_publisher', '_odw_description', '_odw_license' ),
 					),
 					'livePreview'         => array(
@@ -446,6 +441,14 @@ class ODW_Admin {
 						'toggle' => __( 'Mehr erfahren', 'open-data-wizard' ),
 						'dcat'   => __( 'DCAT-AP-Definition', 'open-data-wizard' ),
 						'plain'  => __( 'Einfach erklärt', 'open-data-wizard' ),
+						'prop'   => __( 'Eigenschaft', 'open-data-wizard' ),
+						'mult'   => __( 'Multiplizität', 'open-data-wizard' ),
+						'spec'   => __( 'Im Standard nachlesen', 'open-data-wizard' ),
+						'ent'    => array(
+							'dataset'      => __( 'Datensatz', 'open-data-wizard' ),
+							'distribution' => __( 'Distribution', 'open-data-wizard' ),
+							'catalog'      => __( 'Katalog', 'open-data-wizard' ),
+						),
 					),
 				)
 			);
@@ -790,7 +793,7 @@ class ODW_Admin {
 
 				<h3><?php esc_html_e( 'Erste Schritte', 'open-data-wizard' ); ?></h3>
 				<p>
-					<?php esc_html_e( 'Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden.', 'open-data-wizard' ); ?>
+					<?php esc_html_e( 'Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren" die ausführliche Erklärung mit Beispielen.', 'open-data-wizard' ); ?>
 				</p>
 
 				<p class="submit">

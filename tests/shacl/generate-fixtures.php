@@ -225,8 +225,11 @@ function fixture_maximal(): array {
 		'odw_license'     => 'https://creativecommons.org/licenses/by/4.0/',
 
 		// Theme + additional theme.
-		'odw_theme'     => 'http://publications.europa.eu/resource/authority/data-theme/SOCI',
-		'odw_theme_uri' => 'Energie', // Resolved to EU URI.
+		// Mehrfachauswahl seit v2.41.0: zwei Themen in einem Feld.
+		'odw_theme'     => array(
+			'http://publications.europa.eu/resource/authority/data-theme/SOCI',
+			'Energie', // Wird zur EU-URI aufgelöst.
+		),
 
 		// Language + keywords.
 		'odw_language' => 'http://publications.europa.eu/resource/authority/language/DEU',

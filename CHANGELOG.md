@@ -7,6 +7,138 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.41.0] — 2026-08-27
+
+Fünf Punkte aus dem Usability-Test. Hilfetexte haben jetzt je einen Ort, die Definition zeigt
+ihre Struktur und verweist auf den Standard — und wo ein Feld eine feste Auswahl hat, ist es
+auch eine Auswahl und kein Textfeld, das seine Optionen erst nach dem Tippen preisgibt.
+
+### ✨ Added
+- **Merkmalsliste über jeder Definition.** Das „Mehr erfahren"-Panel nennt oben in zwei Zeilen
+  die DCAT-AP-Eigenschaft und die Multiplizität, darunter folgen wie bisher Alltagssprache und
+  Definition. Der Tester hatte bemerkt, dass die Definitionstexte einer festen Struktur folgen,
+  diese aber nur im Fließtext steht.
+- **`cardinality` als eigenes Feld im Katalog** — für alle 53 Einträge. Zwei neue Tests halten
+  den strukturierten Wert und die Angabe im Definitionstext zusammen; ohne sie laufen beide
+  auseinander, sobald jemand nur eine Seite anfasst.
+- **Link auf die Spezifikation je Profil-Klasse.** Am Fuß jedes Panels steht „Im Standard
+  nachlesen: Datensatz" bzw. „: Distribution" mit Verweis auf den passenden Abschnitt von
+  DCAT-AP.de 3.0. Bewusst je Klasse und nicht je Feld: Die feldgenauen Anker ließen sich von
+  hier aus nicht überprüfen — bei den drei Klassen-Ankern führt ein Irrtum schlimmstenfalls an
+  den Anfang des richtigen Dokuments. Die Zuordnung der 12 Distributions-Felder stammt aus
+  `odw_build_distribution_node()` und wird von einem Test dagegen gehalten.
+- **`entity` als eigenes Feld im Katalog** — 41 Datensatz-, 12 Distributions-Felder,
+  gegengeprüft gegen die Registry.
+
+### ✨ Added (Fortsetzung)
+- **Thema ist eine Mehrfachauswahl.** `dcat:theme` erlaubt laut Profil 0..n Themen; das Formular
+  bot ein Auswahlfeld in Tab 1 und ein Tipp-Feld unter „Erweiterte Angaben" — zusammen höchstens
+  zwei, auf zwei verschiedene Arten. Beide sind durch ein Mehrfachfeld mit den EU-Themen ersetzt.
+  Der Batch-Import nimmt jetzt ebenfalls mehrere Themen an (Komma- oder Zeilentrennung).
+- **Engagementfeld ist eine Mehrfachauswahl, Contributor-ID ein Auswahlfeld.** Beide waren
+  Textfelder mit einer `<datalist>` dahinter — man musste erst tippen, um überhaupt zu sehen,
+  dass es eine Auswahl gibt, und wer daneben tippte, bekam einen Wert ohne URI. 16 bzw. 69
+  Einträge passen in eine Liste. `dct:subject` erlaubt 0..n, deshalb ist das Engagementfeld
+  mehrfach wählbar; die Contributor-ID bleibt einfach.
+- **Die CESSDA-Vorschläge öffnen sich beim Anklicken.** Mit mehreren hundert Konzepten bleibt
+  hier eine Vorschlagsliste richtig — aber eine, die zeigt, was zur Auswahl steht. Sie ersetzt
+  das native `<datalist>` durch eine eigene Liste mit Tastaturbedienung (Pfeiltasten, Enter,
+  Escape). Nebeneffekt: Das Verhalten ist in allen Browsern dasselbe und im E2E-Test überhaupt
+  prüfbar — ein datalist-Popup ist Browser-Chrome und für Playwright unsichtbar.
+
+### 🎨 Changed
+- **Tooltip und „Mehr erfahren" haben getrennte Rollen.** Das ⓘ trägt nur noch den DCAT-AP-Begriff,
+  alles Erklärende steht im Panel. Vorher stand beides an beiden Orten — beim Herausgeber sogar
+  mit unterschiedlichen Beispielen. Betrifft 42 Felder.
+- **Fünf Felder hatten gar keinen Fachbegriff im Tooltip**, sondern schon dort Prosa: die drei
+  Kontaktfelder, die eigene Lizenz-URI und die HVD-Kennzeichnung. Sie tragen jetzt ihren
+  tatsächlich ausgegebenen Begriff (`vcard:fn`, `vcard:hasEmail`, `vcard:hasURL`, `dct:license`,
+  `dcatap:applicableLegislation`).
+- **Das Schlagwort-Beispiel widersprach seiner eigenen Regel.** Der Text verlangte ein Wort je
+  Zeile und nannte dann ein Beispiel mit Kommas — wer nur den Katalog las, tippte genau die
+  falsche Form.
+
+### 🐛 Fixed
+- **Migration der Themen, damit nichts verlorengeht.** Carbon Fields legt Mehrfachwerte unter
+  eigenen Meta-Keys ab (`_odw_theme|||0|value`), die alten flachen Zeilen wären unsichtbar
+  geworden. Eine einmalige Umschreibung überführt beim ersten Aufruf des Backends alle
+  Datensätze — über `carbon_set_post_meta()`, nicht über selbstgebaute Schlüssel, weil deren
+  Format ein Interna der Bibliothek ist.
+- **Themenfilter und Sortierung wären still kaputtgegangen.** Beide fragten die Datenbank auf
+  `_odw_theme` ab und hätten Mehrfachwerte nicht mehr gefunden. Das Plugin schreibt die Auswahl
+  deshalb zusätzlich flach: `_odw_theme_index` (eine Zeile je Thema) für den Katalogfilter,
+  `_odw_theme_sort` für die Spaltensortierung. Der bestehende E2E-Test auf `?theme=Bildung`
+  prüft das mit — und fand dabei gleich noch, dass der Katalogfilter den Parameter anders
+  auflöste als der Index geschrieben wird: `resolve_theme_uri()` kennt nur die EU-Bezeichnungen,
+  und „Bildung" heißt dort „Bildung, Kultur und Sport". Der Filter nimmt jetzt dieselbe
+  Auflösung wie das Speichern, damit Harvester mit dem alten deutschen Kurznamen weiter
+  Treffer bekommen.
+- **Das Engagementfeld hätte seinen Wert verloren.** Wie beim Thema ändert die Mehrfachauswahl
+  das Speicherformat; dieselbe einmalige Umschreibung überführt jetzt beide Felder und löst
+  dabei einen von Hand eingetippten Namen zur Vokabular-URI auf.
+- **`bin/check-i18n.py` übersah `config/`.** `mqa-metrics.php` und `dcat-ap-fields.php` führen
+  ihre Beschriftungen über `__()`, standen aber nicht in der Dateiliste der Prüfung — für 31
+  Zeichenketten hätte eine fehlende Übersetzung also nie jemand gemeldet. Aufgefallen ist es,
+  weil ich beim Aufräumen der Kataloge beinahe genau diese Einträge gelöscht hätte.
+
+### 🧹 Removed
+- **Das generische Vokabular-Autosuggest (`data-odw-vocab`) ist entfallen** — mit Thema,
+  Engagementfeld und Contributor-ID hatte es keine Nutzer mehr. Damit entfällt auch die
+  Auslieferung der drei Vokabulare an jede Admin-Seite; die Optionen stehen jetzt im Formular
+  selbst. Die Vokabulardateien unter `config/vocabularies/` bleiben unverändert.
+
+### ℹ️ Eine Ausnahme mit Begründung
+Das Wiederholfeld für weitere Distributionen behält seinen Hilfetext: Für dieses Feld gibt es
+keinen Katalogeintrag, das Panel erscheint dort also gar nicht — der Tooltip ist die einzige
+Erklärung, die es hat.
+
+---
+
+## [2.40.3] — 2026-08-27
+
+Vier Punkte aus einem Usability-Test — und was beim Nachprüfen sonst noch auffiel.
+
+### 🐛 Fixed
+- **`dct:subject` war fälschlich als DCAT-AP-Definition ausgewiesen.** Die Eigenschaft (CESSDA-
+  Themenklassifikation, ZiviZ-Engagementfeld) gehört nicht zum Profil — in den mitgelieferten
+  offiziellen SHACL-Shapes taucht sie für Datensätze nirgends auf. Zulässig ist sie trotzdem,
+  RDF erlaubt zusätzliche Aussagen, und sie bleibt bewusst erhalten; die Feld-Referenz sagt jetzt
+  aber dazu, dass streng profilkonforme Portale sie ignorieren dürfen. Beim systematischen
+  Abgleich aller 43 Katalog-Eigenschaften gegen die Shapes fiel ein zweiter Fall auf:
+  `dcatap:hvdCategory` stammt aus der HVD-Erweiterung (EU-Verordnung 2023/138), nicht aus dem
+  Kernprofil DCAT-AP 3.0. Auch vermerkt.
+- **Die Verwaltungsebene nannte Optionen, die es nicht gibt.** Die Beschreibung sprach von
+  „Kreis" und „Kommune", die Auswahlliste bietet „Landkreis" und „Gemeinde". Betraf beide
+  Beschreibungstexte, den allgemeinverständlichen und den fachlichen.
+
+### 🎨 Changed
+- **Pflichtfeld-Hinweis umformuliert:** „* Pflichtfeld für die Veröffentlichung. Als Entwurf
+  können Sie den Datensatz jederzeit speichern." Der bisherige Satz stolperte über sich selbst.
+- **Beispiele aus den Tooltips fester Auswahllisten entfernt.** Ein Beispiel, das nur die
+  Optionen des Dropdowns wiederholt, hilft niemandem. Der Tester fand einen Fall — es waren
+  acht: Thema, Sprache, Format, Lizenz, Verfügbarkeit, Aktualisierungsfrequenz, Verwaltungsebene
+  und HVD-Kategorie. Erklärende Sätze sind geblieben, gestrichen wurde nur der Beispielteil.
+- **„Kardinalität" heißt jetzt durchgängig „Multiplizität"** — den Begriff verwendet die
+  deutsche Spezifikation DCAT-AP.de. Betrifft 52 Stellen im Feld-Katalog, die daraus generierte
+  Feld-Referenz und `TECHNICAL-SPEC.md`. Dort auch die Spaltenabkürzung „Norm-Kard." →
+  „Norm-Mult.": Eine reine Wortersetzung hätte sie nicht erfasst, und eine Legende, die eine
+  Abkürzung auf ein anderes Wort auflöst, ist schlimmer als der alte Begriff.
+- **Der neue Pflichtfeld-Wortlaut gilt jetzt überall.** Beim ersten Anlauf hatte ich nur die
+  Legende unter dem Formular geändert; „Als Entwurf können Sie jederzeit unvollständig
+  speichern" stand weiter in der Meldung nach blockierter Veröffentlichung, auf der
+  Einstiegsseite und im README.
+- **Die Einstiegsseite versprach Beispiele, die es nicht mehr gibt.** „Jedes Feld hat hilfreiche
+  Beispiele, die Sie über das ⓘ-Symbol einblenden" stimmte nach dem Entfernen der acht Beispiele
+  nicht mehr. Der Satz benennt jetzt die tatsächliche Aufteilung: ⓘ zeigt den DCAT-AP-Begriff,
+  „Mehr erfahren" die ausführliche Erklärung.
+
+### 🧹 Aufgeräumt
+- Zehn verwaiste Übersetzungseinträge entfernt, die durch die Textänderungen ohne Fundstelle
+  im Code zurückgeblieben waren. `bin/check-i18n.py` prüft nur auf fehlende, nicht auf
+  überzählige Einträge — die CI hätte das nicht gemeldet.
+
+---
+
 ## [2.40.2] — 2026-08-23
 
 Zwei Rückmeldungen aus dem Backend.

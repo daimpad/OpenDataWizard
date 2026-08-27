@@ -15,6 +15,9 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
+msgid "* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr ""
+
 msgid "1 — Grundlegende Informationen"
 msgstr ""
 
@@ -87,31 +90,13 @@ msgstr ""
 msgid "Beispiel: 2024-12-31"
 msgstr ""
 
-msgid "Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen."
-msgstr ""
-
-msgid "Beispiel: CSV, JSON, PDF"
-msgstr ""
-
-msgid "Beispiel: Deutsch, Englisch"
-msgstr ""
-
 msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
-msgstr ""
-
-msgid "Beispiel: Gemeinde, Landkreis, Land, Bund"
 msgstr ""
 
 msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
 msgstr ""
 
 msgid "Beispiel: Open Data Team, Statistisches Landesamt"
-msgstr ""
-
-msgid "Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig"
-msgstr ""
-
-msgid "Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur"
 msgstr ""
 
 msgid "Beispiel: Zivilgesellschaftliche Organisationen"
@@ -291,6 +276,9 @@ msgstr ""
 msgid "Demo-Datensatz bearbeiten"
 msgstr ""
 
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr ""
+
 msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
 msgstr ""
 
@@ -309,6 +297,9 @@ msgstr ""
 msgid "Die Idee"
 msgstr ""
 
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren\" die ausführliche Erklärung mit Beispielen."
+msgstr ""
+
 msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
 msgstr ""
 
@@ -316,6 +307,9 @@ msgid "Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespe
 msgstr ""
 
 msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
+msgstr ""
+
+msgid "Diese bestimmt, wie andere die Daten nutzen dürfen."
 msgstr ""
 
 msgid "Dieser Datensatz ist nicht veröffentlicht."
@@ -342,10 +336,19 @@ msgstr ""
 msgid "EIGENE LIZENZ-URI"
 msgstr ""
 
+msgid "EIGENE LIZENZ-URI (dct:license)"
+msgstr ""
+
+msgid "Eigenschaft"
+msgstr ""
+
 msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:"
 msgstr ""
 
 msgid "Ein Fehler ist aufgetreten."
+msgstr ""
+
+msgid "Eine der sechs EU-Themenkategorien."
 msgstr ""
 
 msgid "Einheit"
@@ -447,6 +450,9 @@ msgstr ""
 msgid "HERAUSGEBENDE ORGANISATION (dct:publisher)"
 msgstr ""
 
+msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
+msgstr ""
+
 msgid "Harvest-Endpoint"
 msgstr ""
 
@@ -463,6 +469,9 @@ msgid "Herunterladen"
 msgstr ""
 
 msgid "Hinweis ausblenden"
+msgstr ""
+
+msgid "Im Standard nachlesen"
 msgstr ""
 
 msgid "Import abgeschlossen!"
@@ -517,6 +526,15 @@ msgid "Justiz & Sicherheit"
 msgstr ""
 
 msgid "Jährlich"
+msgstr ""
+
+msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
+msgstr ""
+
+msgid "KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)"
+msgstr ""
+
+msgid "KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
 msgstr ""
 
 msgid "Katalog"
@@ -627,6 +645,9 @@ msgstr ""
 msgid "Monatlich"
 msgstr ""
 
+msgid "Multiplizität"
+msgstr ""
+
 msgid "Musterorganisation e.V."
 msgstr ""
 
@@ -698,6 +719,9 @@ msgid "Perfekt"
 msgstr ""
 
 msgid "Pflichtangaben"
+msgstr ""
+
+msgid "Pflichtfeld für die Veröffentlichung"
 msgstr ""
 
 msgid "Pflichtfelder"
@@ -898,6 +922,9 @@ msgstr ""
 msgid "Welche geografische Region betreffen diese Daten?"
 msgstr ""
 
+msgid "Welchen Themen ist dieser Datensatz zugeordnet?"
+msgstr ""
+
 msgid "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?"
 msgstr ""
 
@@ -920,6 +947,9 @@ msgid "Wie lange Catalog- und Dataset-Antworten gecacht werden. Standard: 300 (5
 msgstr ""
 
 msgid "Wie oft werden diese Daten aktualisiert?"
+msgstr ""
+
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?"
 msgstr ""
 
 msgid "Willkommen im Open Data Wizard"
@@ -1042,9 +1072,6 @@ msgstr ""
 msgid "HVD-KATEGORIE (dcatap:hvdCategory)"
 msgstr ""
 
-msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
-msgstr ""
-
 msgid "Georaum (Geospatial)"
 msgstr ""
 
@@ -1070,9 +1097,6 @@ msgid "Wie verlässlich bleibt diese Datei abrufbar?"
 msgstr ""
 
 msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
-msgstr ""
-
-msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
 msgstr ""
 
 msgid "Verfügbar (mittelfristige Planung)"
@@ -1390,12 +1414,6 @@ msgstr ""
 msgid "Zum Feld springen"
 msgstr ""
 
-msgid "Pflichtfeld zum Veröffentlichen"
-msgstr ""
-
-msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr ""
-
 msgid "Link zur Datei oder Datei-Upload"
 msgstr ""
 
@@ -1412,9 +1430,6 @@ msgid "Datenbereitstellung"
 msgstr ""
 
 msgid "Folgende Pflichtangaben fehlen oder sind leer:"
-msgstr ""
-
-msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
 msgstr ""
 
 msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
@@ -1460,9 +1475,6 @@ msgid "Die Sprache der Daten und — falls gewünscht — Titel, Beschreibung un
 msgstr ""
 
 msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
-msgstr ""
-
-msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
 msgstr ""
 
 
@@ -1522,7 +1534,10 @@ msgstr ""
 msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
 msgstr ""
 
-msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
+msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"
+msgstr ""
+
+msgid "— Keine Angabe —"
 msgstr ""
 
 msgid "(ohne Titel, ID %d)"

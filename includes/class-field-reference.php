@@ -44,6 +44,38 @@ class ODW_Field_Reference {
 	);
 
 	/**
+	 * Abschnitt der DCAT-AP.de-Spezifikation je Profil-Klasse.
+	 *
+	 * Bewusst grobkörnig — ein Link je Klasse statt je Feld. Die feldgenauen
+	 * Anker (etwa `#datensatz-herausgeber`) ließen sich hier nicht überprüfen,
+	 * weil dcat-ap.de aus der Entwicklungsumgebung nicht erreichbar ist; ein
+	 * falscher Anker führte zu 53 Links, von denen einige ins Leere zeigen.
+	 * Bei den drei Klassen-Ankern ist der Schaden im Fehlerfall null: Der
+	 * Browser landet dann am Seitenanfang, also weiterhin im richtigen Dokument.
+	 *
+	 * @var array<string, string>
+	 */
+	private const SPEC_ANCHORS = array(
+		'dataset'      => 'datensatz',
+		'distribution' => 'distribution',
+		'catalog'      => 'katalog',
+	);
+
+	/** Basis-URL der Spezifikation. */
+	private const SPEC_BASE = 'https://www.dcat-ap.de/def/dcatde/3.0/spec/';
+
+	/**
+	 * Returns the spec section URL for a profile class, or '' when unknown.
+	 *
+	 * @param string $entity Profile class ('dataset', 'distribution', 'catalog').
+	 * @return string
+	 */
+	public static function spec_url( string $entity ): string {
+		$anchor = self::SPEC_ANCHORS[ $entity ] ?? '';
+		return '' !== $anchor ? self::SPEC_BASE . '#' . $anchor : '';
+	}
+
+	/**
 	 * Loads the field catalog array.
 	 *
 	 * @return array<int, array<string, string>>
@@ -62,17 +94,22 @@ class ODW_Field_Reference {
 	 * Returns a compact catalog map for the admin JS ("Mehr erfahren" panels).
 	 *
 	 * Only the fields needed on the client are exposed: the distribution meta key
-	 * (to locate the DOM field) and the two long descriptions.
+	 * (to locate the DOM field), the two long descriptions und die beiden
+	 * Merkmale, die das Panel als Kurzangabe über der Definition zeigt.
 	 *
-	 * @return array<int, array{meta_key: string, desc_dcat: string, desc_human: string}>
+	 * @return array<int, array{meta_key: string, dcat_prop: string, cardinality: string, entity: string, spec_url: string, desc_dcat: string, desc_human: string}>
 	 */
 	public static function js_map(): array {
 		$map = array();
 		foreach ( self::load_catalog() as $field ) {
 			$map[] = array(
-				'meta_key'   => (string) $field['meta_key'],
-				'desc_dcat'  => (string) $field['desc_dcat'],
-				'desc_human' => (string) $field['desc_human'],
+				'meta_key'    => (string) $field['meta_key'],
+				'dcat_prop'   => (string) ( $field['dcat_prop'] ?? '' ),
+				'cardinality' => (string) ( $field['cardinality'] ?? '' ),
+				'entity'      => (string) ( $field['entity'] ?? '' ),
+				'spec_url'    => self::spec_url( (string) ( $field['entity'] ?? '' ) ),
+				'desc_dcat'   => (string) $field['desc_dcat'],
+				'desc_human'  => (string) $field['desc_human'],
 			);
 		}
 		return $map;
@@ -137,6 +174,11 @@ class ODW_Field_Reference {
 			$out[] = '|---|---|';
 			$out[] = '| DCAT-Property | `' . $field['dcat_prop'] . '` |';
 			$out[] = '| Meta-Key | `' . ( '' !== $field['meta_key'] ? $field['meta_key'] : '—' ) . '` |';
+			$out[] = '| Multiplizität | `' . ( '' !== ( $field['cardinality'] ?? '' ) ? $field['cardinality'] : '—' ) . '` |';
+			$spec  = self::spec_url( (string) ( $field['entity'] ?? '' ) );
+			$out[] = '| Profil-Klasse | ' . ( '' !== $spec
+				? '[' . ( 'distribution' === $field['entity'] ? 'Distribution' : 'Datensatz' ) . '](' . $spec . ') |'
+				: '— |' );
 			$out[] = '| Stufe | ' . $tier . ' |';
 			$out[] = '| Vokabular | ' . $vocab . ' |';
 			$out[] = '';

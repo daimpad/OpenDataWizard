@@ -40,7 +40,7 @@ Bausatz:
 
 | Baustein (piveau) | Inhalt | ODW-Pendant |
 |---|---|---|
-| `input-definition.ts` | Alle Felder: Typ, DCAT-Prädikat, Kardinalität, Validierung, Vokabular | `config/dcat-ap-fields.php` (erweiterbar) |
+| `input-definition.ts` | Alle Felder: Typ, DCAT-Prädikat, Multiplizität, Validierung, Vokabular | `config/dcat-ap-fields.php` (erweiterbar) |
 | `page-content-config.js` | Zuordnung Feld → Wizard-Schritt (Essentials/Additionals) | Tab-Zuordnung in `class-fields.php` |
 | `prefixes.js` | Namespace-Präfixe für JSON-LD | `odw_build_dataset_jsonld()` (`@context`) |
 | `vocab-prefixes.js` | Basis-URIs der kontrollierten Vokabulare | `dct-format-list.php`, `licenses.txt`, CESSDA-RDF |
@@ -99,19 +99,22 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 | `corporate-body` | `http://publications.europa.eu/resource/authority/corporate-body/` | `dct:publisher` | ⚠️ Freitext |
 | `iana-media-types` | `https://www.iana.org/assignments/media-types/` | `dcat:mediaType` | ❌ |
 
-> **Wiederverwendbares Muster:** Der bestehende CESSDA-Auto-Suggest (`odw-admin-fields.js` + SKOS/RDF) ist die
-> Blaupause für ein generisches „Vokabular-Autosuggest"-Widget, das künftig `data-theme`, `access-right`,
-> `planned-availability` etc. aus lokal gebündelten Vokabulardateien bedient (keine externe Abhängigkeit).
+> **Muster nach Vokabulargröße (Stand v2.41.0):** Ein Vokabular mit überschaubar vielen Konzepten wird ein
+> Auswahlfeld (`select`/`multiselect`, Optionen aus der gebündelten JSON-Datei) — `data-theme` (13),
+> `engagementfeld` (16), `contributors` (69), `access-right` (3), `language` (24). Nur wo die Liste zu lang
+> für ein Auswahlfeld ist, bleibt eine Vorschlagsliste: CESSDA mit mehreren hundert Konzepten. Diese Liste
+> klappt seit v2.41.0 beim Anklicken auf (`odw-suggest` in `odw-admin-fields.js`) statt erst beim Tippen —
+> ein `<datalist>` verrät sonst nicht, dass es überhaupt eine Auswahl gibt.
 
 ### 4. Vollständiger DCAT-AP-Feldkatalog & Gap-Analyse
 
 **Legende** — Profil: `AP` = DCAT-AP 3.0 · `DE` = DCAT-AP.de 2.0 · `HVD` = High-Value-Dataset-Pflicht ·
-Norm-Kard.: Kardinalität laut Standard (`M`andatory/`R`ecommended/`O`ptional) ·
+Norm-Mult.: Multiplizität laut Standard (`M`andatory/`R`ecommended/`O`ptional) ·
 ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 
 #### 4.1 Dataset (`dcat:Dataset`)
 
-| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+| DCAT-Prädikat | Range | Profil | Norm-Mult. | ODW |
 |---|---|---|---|---|
 | `dct:title` | lang-Literal | AP | M (1..n) | ✅ |
 | `dct:description` | lang-Literal | AP | M (1..n) | ✅ |
@@ -139,7 +142,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
 | `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ✅ |
 | `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
-| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Autosuggest) |
+| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Auswahlfeld) |
 | `dcatde:legalBasis` | lang-Literal | DE | O | ✅ |
 | `dcatde:qualityProcessURI` | URI | DE | O | ✅ |
 | `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ✅ |
@@ -149,7 +152,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 
 #### 4.2 Distribution (`dcat:Distribution`)
 
-| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+| DCAT-Prädikat | Range | Profil | Norm-Mult. | ODW |
 |---|---|---|---|---|
 | `dcat:accessURL` | URI | AP | M (1..n) | ✅ |
 | `dcat:downloadURL` | URI | AP | O (0..n) | ✅ |
@@ -184,7 +187,7 @@ unterstützt; `dct:license`, `dct:language`, `dcat:themeTaxonomy` und `dct:spati
 
 Jeder Registry-Eintrag trägt die Basis-Schlüssel `key`, `meta_key`, `dcat_prop`, `label`, `points`, `required`
 sowie seit v2.5.1 die **deklarativen Schema-Metadaten** `profile`, `tier`, `range`, `cardinality`, `entity`, `vocab`.
-Damit ist die Registry die dokumentierte Single Source of Truth für Pflichtigkeit, Kardinalität und Wertform
+Damit ist die Registry die dokumentierte Single Source of Truth für Pflichtigkeit, Multiplizität und Wertform
 (wie piveaus `input-definition.ts`). Die Metadaten sind **abwärtskompatibel** — bestehende Konsumenten
 (Qualität, Validierung) lesen weiterhin nur die Basis-Schlüssel; das 0–100-Punkteschema bleibt unverändert.
 Eine Schema-Validierung sichert die Invarianten (`tests/test-registry-schema.php`):
@@ -211,7 +214,7 @@ array(
 
 - `profile`/`tier`/`cardinality` steuern Validierung und Qualitäts-Scoring deklarativ.
 - `range` steuert die JSON-LD-Serialisierung (`uri` → `{"@id": …}`, `literal-lang` → `{"@value":…,"@language":…}`).
-- `vocab` aktiviert das Vokabular-Autosuggest-Widget.
+- `vocab` benennt das gebündelte Vokabular, aus dem die Optionen des Feldes stammen.
 - `tab`/`entity` steuern die automatische Einsortierung im Carbon-Fields-Formular.
 
 ### 6. Mapping piveau-FormKit → Carbon Fields
@@ -223,7 +226,7 @@ array(
 | `text` / `simpleInput` | `Field::make( 'text', … )` | mit Sanitization |
 | `textarea` | `Field::make( 'textarea', … )` | |
 | `select` / `simpleSelect` | `Field::make( 'select', … )` | Optionen aus Vokabular |
-| `auto` (Vokabular-Autocomplete) | `text` + Autosuggest-JS | CESSDA-Muster generalisieren |
+| `auto` (Vokabular-Autocomplete) | `select`/`multiselect` aus dem Vokabular | Vorschlagsliste nur bei sehr großen Vokabularen (CESSDA) |
 | `repeatable` (group) | `Field::make( 'complex', … )` | wiederholbare Gruppen |
 | `group` / `formkitGroup` | `complex` (max. 1) | strukturierter Knoten |
 | `simpleConditional` | `text/select` + `->set_conditional_logic()` | Vokabular ODER manuell |
@@ -248,7 +251,7 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 
 #### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt
 - ✅ DCAT-AP.de-Felder: `dcatde:contributorID`, `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (zzgl. `dcatde:politicalGeocodingLevelURI` aus v2.3).
-- ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge).
+- ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge). Das Autosuggest ist in v2.41.0 durch Auswahlfelder ersetzt worden (siehe Abschnitt 3); die Vokabulardateien sind geblieben.
 - ✅ DCAT-AP.de-Felder `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI` (v2.6.0).
 - ✅ Gebündelte Vokabulare `access-right` (Feld `dct:accessRights`) und `data-theme` (Zusatz-Theme) (v2.7.0).
 - ☐ Offen (optional): vollständige EU-Sprachliste als Autosuggest (bewusst zurückgestellt).
