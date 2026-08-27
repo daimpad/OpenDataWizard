@@ -32,6 +32,11 @@ class ODW_Fields {
 		// save_post_{post_type} grundsätzlich DAVOR — nur mit 'save_post'@20 läuft
 		// das Auto-Update nach CF und wird nicht vom Formularwert überschrieben.
 		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
+		// Auf 'save_post'@30, NICHT auf save_post_odw_dataset: WordPress feuert
+		// save_post_{post_type} vor save_post, die Spiegelung liefe dann vor
+		// Carbon Fields und läse den alten Wert. Die Typprüfung steht in der
+		// Methode.
+		add_action( 'save_post', array( self::class, 'sync_theme_index' ), 30 );
 	}
 
 	/**
@@ -83,8 +88,12 @@ class ODW_Fields {
 						->set_attribute( 'placeholder', __( 'Kurze Beschreibung des Datensatzes…', 'open-data-wizard' ) )
 						->set_help_text( __( 'BESCHREIBUNG (dct:description)', 'open-data-wizard' ) ),
 
-					Field::make( 'select', 'odw_theme', __( 'Welchem Thema ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
-						->add_options( self::get_theme_options() )
+					// Mehrfachauswahl statt Einzelauswahl: dcat:theme erlaubt laut Profil
+					// 0..n Themen. Vorher gab es ein Auswahlfeld hier und ein
+					// Vorschlagsfeld unter „Erweiterte Angaben" — zwei Bedienarten
+					// für dieselbe Sache, zusammen höchstens zwei Themen.
+					Field::make( 'multiselect', 'odw_theme', __( 'Welchen Themen ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
+						->add_options( self::get_theme_options_multi() )
 						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) ),
 
 					// Schlagworte gehören zur inhaltlichen Erschließung und stehen
@@ -517,11 +526,6 @@ class ODW_Fields {
 						->add_options( self::get_access_rights_options() )
 						->set_default_value( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' )
 						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) ),
-
-					Field::make( 'text', 'odw_theme_uri', __( 'Weiteres EU-Thema (Themen-URI)?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'data-theme' )
-						->set_attribute( 'placeholder', __( 'EU-Datenthema eintippen oder auswählen…', 'open-data-wizard' ) )
-						->set_help_text( __( 'ZUSÄTZLICHES THEMA (dcat:theme)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html(
@@ -1041,6 +1045,118 @@ class ODW_Fields {
 		}
 
 		return isset( $map[ $value ] ) && '' !== (string) $map[ $value ] ? (string) $map[ $value ] : $value;
+	}
+
+	/**
+	 * Flache Spiegelung der gewählten Themen für Abfragen.
+	 *
+	 * Carbon Fields legt Mehrfachwerte unter `_odw_theme|||N|value` ab. Eine
+	 * meta_query auf `_odw_theme` findet sie deshalb nicht — und genau darauf
+	 * beruhten der Themenfilter des Katalogs und die Sortierung der Listenspalte.
+	 * Diese Methode schreibt die Auswahl zusätzlich flach:
+	 *   `_odw_theme_index` — eine Zeile je Thema, für den Filter,
+	 *   `_odw_theme_sort`  — Label des ersten Themas, für die Sortierung.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 */
+	public static function sync_theme_index( int $post_id ): void {
+		if ( 'odw_dataset' !== get_post_type( $post_id ) ) {
+			return;
+		}
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		$themes = self::normalize_themes( carbon_get_post_meta( $post_id, 'odw_theme' ) );
+
+		delete_post_meta( $post_id, '_odw_theme_index' );
+		foreach ( $themes as $uri ) {
+			add_post_meta( $post_id, '_odw_theme_index', $uri );
+		}
+
+		$sort = '';
+		if ( isset( $themes[0] ) ) {
+			$sort = self::resolve_label( 'theme', $themes[0] );
+		}
+		update_post_meta( $post_id, '_odw_theme_sort', $sort );
+	}
+
+	/**
+	 * Labels aller gewählten Themen, in Auswahlreihenfolge.
+	 *
+	 * @param int $post_id Dataset post ID.
+	 * @return array<int, string>
+	 */
+	public static function theme_labels( int $post_id ): array {
+		$out = array();
+		foreach ( self::normalize_themes( carbon_get_post_meta( $post_id, 'odw_theme' ) ) as $uri ) {
+			$label = self::resolve_label( 'theme', $uri );
+			$out[] = '' !== $label ? $label : $uri;
+		}
+		return $out;
+	}
+
+	/**
+	 * Bringt den gespeicherten Themenwert auf eine Liste von EU-URIs.
+	 *
+	 * Drei Formen können auftreten:
+	 *   - Array von URIs — die Mehrfachauswahl seit v2.41.0.
+	 *   - Einzelner String — Datensätze vor der Migration und Tests mit altem Mock.
+	 *   - Deutsches Kurzlabel („Bildung", „Soziales") — die Auswahlliste vor
+	 *     v2.5.0 speicherte Labels statt URIs; der Demo-Datensatz tut es bis heute.
+	 *
+	 * @param mixed $value Gespeicherter Wert.
+	 * @return array<int, string> Liste eindeutiger URIs, leere Werte entfallen.
+	 */
+	public static function normalize_themes( $value ): array {
+		$base   = 'http://publications.europa.eu/resource/authority/data-theme/';
+		$legacy = array(
+			'Bildung'    => $base . 'EDUC',
+			'Gesundheit' => $base . 'HEAL',
+			'Soziales'   => $base . 'SOCI',
+			'Umwelt'     => $base . 'ENVI',
+			'Wirtschaft' => $base . 'ECON',
+			'Kultur'     => $base . 'EDUC',
+			'Sport'      => $base . 'EDUC',
+			'Sonstiges'  => $base . 'GOVE',
+		);
+
+		$werte = is_array( $value ) ? $value : array( $value );
+		$out   = array();
+
+		foreach ( $werte as $einzeln ) {
+			$einzeln = trim( (string) $einzeln );
+			if ( '' === $einzeln ) {
+				continue;
+			}
+			if ( isset( $legacy[ $einzeln ] ) ) {
+				$einzeln = $legacy[ $einzeln ];
+			} else {
+				// Labels aus dem Vokabular ebenfalls auflösen; eine bereits
+				// eingetragene URI reicht resolve_theme_uri() unverändert durch.
+				$einzeln = self::resolve_theme_uri( $einzeln );
+			}
+			if ( '' !== $einzeln && ! in_array( $einzeln, $out, true ) ) {
+				$out[] = $einzeln;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Themen-Vokabular ohne den Platzhalter-Eintrag.
+	 *
+	 * Die Mehrfachauswahl braucht kein „— Bitte wählen —": Nichts auszuwählen
+	 * ist dort bereits der leere Zustand, und ein Eintrag mit leerem Wert würde
+	 * als auswählbares Thema erscheinen.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_theme_options_multi(): array {
+		$options = self::get_theme_options();
+		unset( $options[''] );
+		return $options;
 	}
 
 	/**
@@ -1766,7 +1882,6 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$language            = carbon_get_post_meta( $post_id, 'odw_language' );
 	$keywords            = carbon_get_post_meta( $post_id, 'odw_keywords' );
 	$theme               = carbon_get_post_meta( $post_id, 'odw_theme' );
-	$theme_uri           = (string) carbon_get_post_meta( $post_id, 'odw_theme_uri' );
 	$issued              = carbon_get_post_meta( $post_id, 'odw_issued' );
 	$modified            = get_post_meta( $post_id, '_odw_modified', true );
 	$dist_access_url     = (string) carbon_get_post_meta( $post_id, 'odw_access_url' );
@@ -1882,27 +1997,12 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 		$dataset['dcat:keyword'] = $keyword_literals;
 	}
 
+	// Seit v2.41.0 ist odw_theme eine Mehrfachauswahl und liefert ein Array.
+	// Ein einzelner String kann trotzdem auftreten: bei Datensätzen, die vor der
+	// Migration angelegt wurden, und in Tests, die den alten Wert mocken.
 	$themes = array();
-	if ( ! empty( $theme ) ) {
-		$theme_base   = 'http://publications.europa.eu/resource/authority/data-theme/';
-		$theme_legacy = array(
-			'Bildung'    => $theme_base . 'EDUC',
-			'Gesundheit' => $theme_base . 'HEAL',
-			'Soziales'   => $theme_base . 'SOCI',
-			'Umwelt'     => $theme_base . 'ENVI',
-			'Wirtschaft' => $theme_base . 'ECON',
-			'Kultur'     => $theme_base . 'EDUC',
-			'Sport'      => $theme_base . 'EDUC',
-			'Sonstiges'  => $theme_base . 'GOVE',
-		);
-		$themes[]     = array( '@id' => odw_sanitize_jsonld_id( $theme_legacy[ (string) $theme ] ?? (string) $theme ) );
-	}
-	// Optional additional EU data-theme (advanced field, bundled vocabulary).
-	// The field stores the human-readable label; resolve it to the official URI
-	// (a directly entered URI passes through unchanged).
-	$theme_uri_resolved = odw_resolve_vocab_uri( $theme_uri, 'data-theme' );
-	if ( '' !== $theme_uri_resolved ) {
-		$themes[] = array( '@id' => odw_sanitize_jsonld_id( $theme_uri_resolved ) );
+	foreach ( ODW_Fields::normalize_themes( $theme ) as $theme_uri_value ) {
+		$themes[] = array( '@id' => odw_sanitize_jsonld_id( $theme_uri_value ) );
 	}
 	if ( 1 === count( $themes ) ) {
 		$dataset['dcat:theme'] = $themes[0];

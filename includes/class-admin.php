@@ -137,8 +137,8 @@ class ODW_Admin {
 				break;
 
 			case 'odw_theme':
-				$theme = (string) carbon_get_post_meta( $post_id, 'odw_theme' );
-				echo esc_html( '' !== $theme ? ODW_Fields::resolve_label( 'theme', $theme ) : '—' );
+				$themes = ODW_Fields::theme_labels( $post_id );
+				echo esc_html( array() !== $themes ? implode( ', ', $themes ) : '—' );
 				break;
 
 			case 'odw_status':
@@ -236,7 +236,7 @@ class ODW_Admin {
 		}
 
 		if ( 'odw_theme' === $query->get( 'orderby' ) ) {
-			$query->set( 'meta_key', '_odw_theme' );
+			$query->set( 'meta_key', '_odw_theme_sort' );
 			$query->set( 'orderby', 'meta_value' );
 		}
 

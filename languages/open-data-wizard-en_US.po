@@ -1528,6 +1528,9 @@ msgstr "Which standard or schema does the data conform to?"
 msgid "Welchen Medientyp (MIME) hat die Datei?"
 msgstr "What media type (MIME) does the file have?"
 
+msgid "Welchen Themen ist dieser Datensatz zugeordnet?"
+msgstr "Which themes is this dataset assigned to?"
+
 msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
 msgstr "Which HVD category does this dataset belong to?"
 

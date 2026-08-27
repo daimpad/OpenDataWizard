@@ -18,7 +18,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 - **1 — Grundlegende Informationen**
   - [Wer gibt diese Daten heraus?](#wer-gibt-diese-daten-heraus)
-  - [Welchem Thema ist dieser Datensatz zugeordnet?](#welchem-thema-ist-dieser-datensatz-zugeordnet)
+  - [Welchen Themen ist dieser Datensatz zugeordnet?](#welchen-themen-ist-dieser-datensatz-zugeordnet)
   - [Mit welchen Schlagworten finde ich diese Daten?](#mit-welchen-schlagworten-finde-ich-diese-daten)
   - [Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?](#welchem-themenfeld-nach-cessda-ordnen-sie-den-datensatz-zu)
   - [Welchem Engagementfeld ist dieser Datensatz zuzuordnen?](#welchem-engagementfeld-ist-dieser-datensatz-zuzuordnen)
@@ -55,7 +55,6 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
   - [Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?](#auf-welcher-rechtlichen-grundlage-werden-die-daten-bereitgestellt)
   - [Wo ist das Qualitätssicherungs-Verfahren dokumentiert?](#wo-ist-das-qualitätssicherungs-verfahren-dokumentiert)
   - [Wer darf auf diese Daten zugreifen?](#wer-darf-auf-diese-daten-zugreifen)
-  - [Welches weitere EU-Thema möchten Sie ergänzen?](#welches-weitere-eu-thema-möchten-sie-ergänzen)
   - [Ist dies ein hochwertiger Datensatz (HVD)?](#ist-dies-ein-hochwertiger-datensatz-hvd)
   - [Welcher HVD-Kategorie gehört dieser Datensatz an?](#welcher-hvd-kategorie-gehört-dieser-datensatz-an)
   - [Welche eindeutige Kennung hat dieser Datensatz?](#welche-eindeutige-kennung-hat-dieser-datensatz)
@@ -97,7 +96,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Tragen Sie hier die Organisation ein, die die Daten offiziell veröffentlicht — also wer dafür verantwortlich ist, dass die Daten bereitstehen. Das ist oft eine Behörde, ein Amt oder ein Verein. Beispiel: „Statistisches Landesamt Musterstadt" oder „Umweltbundesamt".
 
-### Welchem Thema ist dieser Datensatz zugeordnet?
+### Welchen Themen ist dieser Datensatz zugeordnet?
 
 | Eigenschaft | Wert |
 |---|---|
@@ -110,11 +109,11 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **1 · DCAT-AP-Frage:** Welchem `dcat:theme` (Datenthema) ist der Datensatz zugeordnet?
 
-**2 · Verständliche Frage:** Welchem Thema ist dieser Datensatz zugeordnet?
+**2 · Verständliche Frage:** Welchen Themen ist dieser Datensatz zugeordnet?
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:theme` ordnet den Datensatz einer oder mehreren Kategorien zu. In DCAT-AP wird das kontrollierte EU-Vokabular „Data Theme" (`http://publications.europa.eu/resource/authority/data-theme/`) verwendet, z. B. `ENVI` (Umwelt) oder `EDUC` (Bildung). Multiplizität 0..n.
 
-**4 · Verständliche Langbeschreibung:** Wählen Sie das Themengebiet, zu dem die Daten am besten passen — ähnlich einer Schublade, in die der Datensatz einsortiert wird. Das hilft anderen, Ihre Daten über Themenfilter zu finden. Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur.
+**4 · Verständliche Langbeschreibung:** Wählen Sie ein oder mehrere Themengebiete, zu denen die Daten passen — ähnlich einer Schublade, in die der Datensatz einsortiert wird. Das hilft anderen, Ihre Daten über Themenfilter zu finden. Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur.
 
 ### Mit welchen Schlagworten finde ich diese Daten?
 
@@ -754,25 +753,6 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 **3 · DCAT-AP-Langbeschreibung:** `dct:accessRights` klassifiziert den Zugriffsstatus über das EU-Vokabular „Access Right" (`PUBLIC`, `RESTRICTED`, `NON_PUBLIC`). Multiplizität 0..1. Relevant für die MQA-Dimension Wiederverwendbarkeit.
 
 **4 · Verständliche Langbeschreibung:** Geben Sie an, ob die Daten für alle offen (öffentlich), nur eingeschränkt oder gar nicht öffentlich zugänglich sind. Für offene Daten ist das in der Regel „öffentlich". Beispiel: Öffentlich. „Öffentlich" ist bereits vorausgewählt — ändern Sie die Angabe nur, wenn der Zugriff eingeschränkt oder gar nicht öffentlich ist.
-
-### Welches weitere EU-Thema möchten Sie ergänzen?
-
-| Eigenschaft | Wert |
-|---|---|
-| DCAT-Property | `dcat:theme` |
-| Meta-Key | `_odw_theme_uri` |
-| Multiplizität | `0..n` |
-| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
-| Stufe | Optional |
-| Vokabular | `data-theme` |
-
-**1 · DCAT-AP-Frage:** Welches zusätzliche `dcat:theme` (EU-Themen-URI) gilt für den Datensatz?
-
-**2 · Verständliche Frage:** Welches weitere EU-Thema möchten Sie ergänzen?
-
-**3 · DCAT-AP-Langbeschreibung:** Zusätzliches `dcat:theme` als direkte EU-Themen-URI (`http://publications.europa.eu/resource/authority/data-theme/…`). Ergänzt die Themen-Auswahl aus Tab 1 um weitere Themen. Multiplizität 0..n.
-
-**4 · Verständliche Langbeschreibung:** Falls Ihr Datensatz zu mehr als einem Thema passt, ergänzen Sie hier ein weiteres EU-Thema aus der Vorschlagsliste. Das erhöht die Auffindbarkeit über mehrere Themenfilter. Beispiel: Umwelt zusätzlich zu Gesundheit.
 
 ### Ist dies ein hochwertiger Datensatz (HVD)?
 

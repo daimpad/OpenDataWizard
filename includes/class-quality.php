@@ -245,7 +245,7 @@ class ODW_Quality {
 				return ! empty( $keywords );
 
 			case 'theme':
-				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_theme' ) );
+				return array() !== ODW_Fields::normalize_themes( carbon_get_post_meta( $id, 'odw_theme' ) );
 
 			case 'spatial':
 				return '' !== trim( (string) carbon_get_post_meta( $id, 'odw_spatial' ) );

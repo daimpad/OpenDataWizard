@@ -617,7 +617,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	 * An additional theme URI is appended to the curated theme, producing a
 	 * dcat:theme array with both entries.
 	 */
-	public function test_build_appends_additional_theme_uri(): void {
+	public function test_build_emits_all_selected_themes(): void {
 		$this->load_fields();
 
 		$extra = 'http://publications.europa.eu/resource/authority/data-theme/ENER';
@@ -626,8 +626,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 			20,
 			'odw_dataset',
 			array(
-				'odw_theme'     => 'Bildung',
-				'odw_theme_uri' => $extra,
+				'odw_theme' => array( 'Bildung', $extra ),
 			)
 		);
 
@@ -641,7 +640,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 	/**
 	 * A theme URI on its own yields a single dcat:theme object (not an array).
 	 */
-	public function test_build_theme_uri_alone_is_single_object(): void {
+	public function test_build_single_theme_is_single_object(): void {
 		$this->load_fields();
 
 		$extra = 'http://publications.europa.eu/resource/authority/data-theme/TECH';
@@ -649,7 +648,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->setup_jsonld_mocks(
 			20,
 			'odw_dataset',
-			array( 'odw_theme_uri' => $extra )
+			array( 'odw_theme' => array( $extra ) )
 		);
 
 		$result = odw_build_dataset_jsonld( 20 );
@@ -659,11 +658,10 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
-	 * The additional theme field stores a human-readable label (autosuggest);
-	 * it is resolved to the official EU data-theme URI for the @id (mirrors the
-	 * contributorID behaviour). Regression test for the label-as-@id bug.
+	 * A theme stored as a human-readable label resolves to the official EU
+	 * data-theme URI for the @id. Regression test for the label-as-@id bug.
 	 */
-	public function test_build_resolves_additional_theme_label_to_uri(): void {
+	public function test_build_resolves_theme_label_to_uri(): void {
 		$this->load_fields();
 
 		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
@@ -677,7 +675,7 @@ class Test_ODW_Fields_Extended extends TestCase {
 		$this->setup_jsonld_mocks(
 			21,
 			'odw_dataset',
-			array( 'odw_theme_uri' => 'Energie' )
+			array( 'odw_theme' => array( 'Energie' ) )
 		);
 
 		$result = odw_build_dataset_jsonld( 21 );

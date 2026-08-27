@@ -284,7 +284,11 @@ class ODW_Shortcode {
 
 		$add( __( 'Herausgeber', 'open-data-wizard' ), self::meta( $post_id, 'odw_publisher' ) );
 		$add( __( 'Beschreibung', 'open-data-wizard' ), self::meta( $post_id, 'odw_description' ) );
-		$add( __( 'Thema', 'open-data-wizard' ), self::label( 'theme', 'odw_theme', $post_id ) );
+		// Themen sind seit v2.41.0 eine Mehrfachauswahl — alle gewählten anzeigen.
+		$add(
+			__( 'Thema', 'open-data-wizard' ),
+			class_exists( 'ODW_Fields' ) ? implode( ', ', ODW_Fields::theme_labels( $post_id ) ) : ''
+		);
 		$add( __( 'CESSDA-Themenfeld', 'open-data-wizard' ), self::label( 'cessda', 'odw_cessda_topic', $post_id ) );
 		$add( __( 'Engagementfeld', 'open-data-wizard' ), self::meta( $post_id, 'odw_engagementfeld' ) );
 		$add( __( 'Sprache', 'open-data-wizard' ), self::label( 'language', 'odw_language', $post_id ) );

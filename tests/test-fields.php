@@ -383,4 +383,49 @@ class Test_ODW_Fields extends TestCase {
 
 		$this->assertSame( array(), $violations, implode( '; ', $violations ) );
 	}
+
+	/**
+	 * Accepts every shape the stored theme value can take.
+	 *
+	 * Drei Formen kommen in echten Installationen vor: das Array der
+	 * Mehrfachauswahl (ab v2.41.0), ein einzelner String (Datensätze vor der
+	 * Migration) und ein deutsches Kurzlabel („Bildung"), das die Auswahlliste
+	 * vor v2.5.0 gespeichert hat. Die Migration verlässt sich darauf.
+	 *
+	 * @dataProvider provide_theme_values
+	 *
+	 * @param mixed              $value    Gespeicherter Wert.
+	 * @param array<int, string> $expected Erwartete URI-Liste.
+	 */
+	public function test_normalize_themes( $value, array $expected ): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		if ( ! class_exists( 'ODW_Fields' ) ) {
+			require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+		}
+
+		$this->assertSame( $expected, ODW_Fields::normalize_themes( $value ) );
+	}
+
+	/**
+	 * Stored theme values and the URI list they must produce.
+	 *
+	 * @return array<string, array{0: mixed, 1: array<int, string>}>
+	 */
+	public function provide_theme_values(): array {
+		$base = 'http://publications.europa.eu/resource/authority/data-theme/';
+
+		return array(
+			'Array von URIs'       => array(
+				array( $base . 'EDUC', $base . 'HEAL' ),
+				array( $base . 'EDUC', $base . 'HEAL' ),
+			),
+			'einzelner String'     => array( $base . 'ENVI', array( $base . 'ENVI' ) ),
+			'Alt-Label'            => array( 'Bildung', array( $base . 'EDUC' ) ),
+			'Alt-Labels doppelt'   => array( array( 'Bildung', 'Kultur' ), array( $base . 'EDUC' ) ),
+			'leerer String'        => array( '', array() ),
+			'leeres Array'         => array( array(), array() ),
+			'Leerwerte dazwischen' => array( array( '', 'Bildung', '  ' ), array( $base . 'EDUC' ) ),
+		);
+	}
 }

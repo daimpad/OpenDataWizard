@@ -143,6 +143,19 @@ test.describe('Formular', () => {
     await expect(tip).not.toContainText('Beispiel');
   });
 
+  test('Thema ist eine Mehrfachauswahl mit den EU-Themen', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Seit v2.41.0 ein Mehrfachfeld: dcat:theme erlaubt 0..n Themen. Vorher
+    // gab es ein Auswahlfeld hier und ein Tipp-Feld unter „Erweiterte Angaben".
+    const themeField = page.locator('.cf-field', { has: page.locator(cfField('odw_theme')) });
+    await expect(themeField).toBeVisible();
+    await expect(themeField.locator('select[multiple], .cf-multiselect')).toHaveCount(1);
+
+    // Das frühere Zusatzfeld gibt es nicht mehr.
+    await expect(page.locator(cfField('odw_theme_uri'))).toHaveCount(0);
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 

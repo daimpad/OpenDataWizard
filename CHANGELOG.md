@@ -29,6 +29,12 @@ und die Definition zeigt ihre Struktur.
 - **`entity` als eigenes Feld im Katalog** — 41 Datensatz-, 12 Distributions-Felder,
   gegengeprüft gegen die Registry.
 
+### ✨ Added (Fortsetzung)
+- **Thema ist eine Mehrfachauswahl.** `dcat:theme` erlaubt laut Profil 0..n Themen; das Formular
+  bot ein Auswahlfeld in Tab 1 und ein Tipp-Feld unter „Erweiterte Angaben" — zusammen höchstens
+  zwei, auf zwei verschiedene Arten. Beide sind durch ein Mehrfachfeld mit den EU-Themen ersetzt.
+  Der Batch-Import nimmt jetzt ebenfalls mehrere Themen an (Komma- oder Zeilentrennung).
+
 ### 🎨 Changed
 - **Tooltip und „Mehr erfahren" haben getrennte Rollen.** Das ⓘ trägt nur noch den DCAT-AP-Begriff,
   alles Erklärende steht im Panel. Vorher stand beides an beiden Orten — beim Herausgeber sogar
@@ -42,6 +48,16 @@ und die Definition zeigt ihre Struktur.
   falsche Form.
 
 ### 🐛 Fixed
+- **Migration der Themen, damit nichts verlorengeht.** Carbon Fields legt Mehrfachwerte unter
+  eigenen Meta-Keys ab (`_odw_theme|||0|value`), die alten flachen Zeilen wären unsichtbar
+  geworden. Eine einmalige Umschreibung überführt beim ersten Aufruf des Backends alle
+  Datensätze — über `carbon_set_post_meta()`, nicht über selbstgebaute Schlüssel, weil deren
+  Format ein Interna der Bibliothek ist.
+- **Themenfilter und Sortierung wären still kaputtgegangen.** Beide fragten die Datenbank auf
+  `_odw_theme` ab und hätten Mehrfachwerte nicht mehr gefunden. Das Plugin schreibt die Auswahl
+  deshalb zusätzlich flach: `_odw_theme_index` (eine Zeile je Thema) für den Katalogfilter,
+  `_odw_theme_sort` für die Spaltensortierung. Der bestehende E2E-Test auf `?theme=Bildung`
+  prüft das mit.
 - **`bin/check-i18n.py` übersah `config/`.** `mqa-metrics.php` und `dcat-ap-fields.php` führen
   ihre Beschriftungen über `__()`, standen aber nicht in der Dateiliste der Prüfung — für 31
   Zeichenketten hätte eine fehlende Übersetzung also nie jemand gemeldet. Aufgefallen ist es,

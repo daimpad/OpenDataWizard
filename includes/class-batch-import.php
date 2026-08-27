@@ -479,13 +479,15 @@ class ODW_Batch_Import {
 			if ( isset( $record[ $field ] ) && ! empty( $record[ $field ] ) ) {
 				$value = (string) $record[ $field ];
 
+				if ( 'theme' === $field ) {
+					// Themen werden weiter unten gesetzt: Seit v2.41.0 ist das Feld
+					// eine Mehrfachauswahl und muss über die Carbon-Fields-API
+					// geschrieben werden, nicht über den flachen Meta-Key.
+					continue;
+				}
+
 				if ( 'byte_size' === $field ) {
 					$value = (string) absint( $value );
-				} elseif ( 'theme' === $field ) {
-					// Code (SOCI) oder Label → gespeicherte EU-URI.
-					$value = class_exists( 'ODW_Fields' )
-						? ODW_Fields::resolve_theme_uri( sanitize_text_field( $value ) )
-						: sanitize_text_field( $value );
 				} elseif ( 'keywords' === $field ) {
 					// Schlagworte werden intern zeilengetrennt gespeichert. Import
 					// erlaubt Komma- ODER Zeilentrennung — beides zu Zeilen normalisieren.
@@ -506,6 +508,20 @@ class ODW_Batch_Import {
 				}
 
 				update_post_meta( $post_id, $meta_key, $value );
+			}
+		}
+
+		// Themen: Mehrfachauswahl seit v2.41.0. Der Import erlaubt Komma- oder
+		// Zeilentrennung, jeder Eintrag wird zur EU-URI aufgelöst. Geschrieben
+		// wird über carbon_set_post_meta(), weil Carbon Fields Mehrfachwerte
+		// unter eigenen Meta-Keys ablegt; die flache Spiegelung zieht danach nach.
+		if ( isset( $record['theme'] ) && '' !== trim( (string) $record['theme'] ) && class_exists( 'ODW_Fields' ) ) {
+			$split  = preg_split( '/[\r\n,]+/', self::neutralize_formula( (string) $record['theme'] ) );
+			$themes = ODW_Fields::normalize_themes( is_array( $split ) ? $split : array() );
+
+			if ( array() !== $themes ) {
+				carbon_set_post_meta( $post_id, 'odw_theme', $themes );
+				ODW_Fields::sync_theme_index( $post_id );
 			}
 		}
 

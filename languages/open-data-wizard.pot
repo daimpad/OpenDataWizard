@@ -922,6 +922,9 @@ msgstr ""
 msgid "Welche geografische Region betreffen diese Daten?"
 msgstr ""
 
+msgid "Welchen Themen ist dieser Datensatz zugeordnet?"
+msgstr ""
+
 msgid "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?"
 msgstr ""
 

@@ -82,9 +82,10 @@ class Test_ODW_Field_Catalog extends TestCase {
 
 		$this->assertNotSame( '', $source, 'class-fields.php could not be read' );
 
-		// Collect the internal keys of all scalar data fields (text/textarea/select/date).
+		// Collect the internal keys of all scalar data fields
+		// (text/textarea/select/multiselect/date).
 		preg_match_all(
-			"/Field::make\\(\\s*'(?:text|textarea|select|date)',\\s*'odw_([a-z_]+)'/",
+			"/Field::make\\(\\s*'(?:text|textarea|select|multiselect|date)',\\s*'odw_([a-z_]+)'/",
 			$source,
 			$matches
 		);
@@ -155,7 +156,10 @@ class Test_ODW_Field_Catalog extends TestCase {
 		}
 
 		$this->assertArrayHasKey( 'theme', $by_key );
-		$this->assertStringContainsString( 'Thema', $by_key['theme']['q_human'] );
+		// „Thema" bleibt der Begriff — seit das Feld eine Mehrfachauswahl ist,
+		// steht er dort im Plural („Welchen Themen …"). Verboten bleibt der
+		// Zweitbegriff „Kategorie".
+		$this->assertMatchesRegularExpression( '/Them(a|en)/', $by_key['theme']['q_human'] );
 		$this->assertStringNotContainsString( 'Kategorie', $by_key['theme']['q_human'] );
 
 		$this->assertArrayHasKey( 'keywords', $by_key );

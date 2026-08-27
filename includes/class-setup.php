@@ -25,6 +25,7 @@ class ODW_Setup {
 	private const DEMO_OPTION     = 'odw_demo_post_id';
 	private const WELCOME_OPTION  = 'odw_show_welcome';
 	private const REDIRECT_OPTION = 'odw_activation_redirect';
+	private const THEME_MIGRATED  = 'odw_theme_multi_migrated';
 
 	/**
 	 * Custom capability, die Batch-Import & Co. schützt.
@@ -49,8 +50,61 @@ class ODW_Setup {
 		add_action( 'admin_init', array( self::class, 'maybe_grant_capability' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_redirect_to_intro' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_create_demo' ) );
+		add_action( 'admin_init', array( self::class, 'maybe_migrate_themes' ) );
 		add_action( 'admin_init', array( self::class, 'handle_dismiss' ) );
 		add_action( 'admin_notices', array( self::class, 'render_welcome_notice' ) );
+	}
+
+	/**
+	 * Überführt Einzel-Themen in die Mehrfachauswahl (einmalig, ab v2.41.0).
+	 *
+	 * Bis v2.40.x war `odw_theme` ein Auswahlfeld und lag flach unter
+	 * `_odw_theme`; ein zweites Thema konnte unter `_odw_theme_uri` stehen.
+	 * Carbon Fields legt Mehrfachwerte unter eigenen Meta-Keys ab, die alten
+	 * Zeilen wären also unsichtbar geworden — deshalb diese Umschreibung.
+	 *
+	 * Geschrieben wird über carbon_set_post_meta(), nicht über selbstgebaute
+	 * Meta-Keys: Das Schlüsselformat ist ein Interna von Carbon Fields und
+	 * darf sich ändern.
+	 */
+	public static function maybe_migrate_themes(): void {
+		if ( get_option( self::THEME_MIGRATED ) ) {
+			return;
+		}
+		if ( ! function_exists( 'carbon_set_post_meta' ) || ! class_exists( 'ODW_Fields' ) ) {
+			return;
+		}
+
+		$posts = get_posts(
+			array(
+				'post_type'        => 'odw_dataset',
+				'post_status'      => 'any',
+				'numberposts'      => -1,
+				'fields'           => 'ids',
+				'suppress_filters' => true,
+			)
+		);
+
+		foreach ( $posts as $post_id ) {
+			$post_id = (int) $post_id;
+			$alt     = get_post_meta( $post_id, '_odw_theme', true );
+			$alt_uri = get_post_meta( $post_id, '_odw_theme_uri', true );
+
+			$themes = ODW_Fields::normalize_themes( array( $alt, $alt_uri ) );
+
+			if ( array() !== $themes ) {
+				carbon_set_post_meta( $post_id, 'odw_theme', $themes );
+				ODW_Fields::sync_theme_index( $post_id );
+			}
+
+			// Die alten flachen Zeilen entfernen: Sie würden sonst neben den
+			// neuen stehen bleiben und bei einer erneuten Migration wieder
+			// eingelesen — mit dann womöglich überholten Werten.
+			delete_post_meta( $post_id, '_odw_theme' );
+			delete_post_meta( $post_id, '_odw_theme_uri' );
+		}
+
+		update_option( self::THEME_MIGRATED, '1', false );
 	}
 
 	/**
@@ -152,7 +206,10 @@ class ODW_Setup {
 		update_post_meta( $post_id, '_odw_license', 'https://creativecommons.org/publicdomain/zero/1.0/' );
 		update_post_meta( $post_id, '_odw_language', 'de' );
 		update_post_meta( $post_id, '_odw_keywords', "Zivilgesellschaft\nEngagement\nOrganisationen\nDemo" );
-		update_post_meta( $post_id, '_odw_theme', 'Soziales' );
+		if ( function_exists( 'carbon_set_post_meta' ) && class_exists( 'ODW_Fields' ) ) {
+			carbon_set_post_meta( $post_id, 'odw_theme', ODW_Fields::normalize_themes( 'Soziales' ) );
+			ODW_Fields::sync_theme_index( $post_id );
+		}
 		update_post_meta( $post_id, '_odw_issued', current_time( 'Y-m-d' ) );
 		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
 
