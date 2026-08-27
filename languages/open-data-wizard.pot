@@ -1531,7 +1531,7 @@ msgstr ""
 msgid "(automatisch)"
 msgstr ""
 
-msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
+msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Ein neu angelegter Datensatz steht deshalb bei 0 %% und steigt mit dem ersten Speichern — zusammen mit den Feldern, die das Formular vorbelegt (etwa die Zugriffsrechte)."
 msgstr ""
 
 msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"

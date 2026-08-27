@@ -207,6 +207,17 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_cessda_topic'))).toHaveValue(/^https?:\/\//);
   });
 
+  test('ein frisch geöffnetes Formular startet bei 0 %', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // WordPress legt beim Öffnen einen Auto-Entwurf an und feuert dabei
+    // save_post. Vorher zählte der Bericht dessen Vorgabewerte mit — die
+    // Zugriffsrechte stehen auf „öffentlich", das Änderungsdatum wurde
+    // gestempelt — und das leere Formular startete bei 7 %.
+    const box = page.locator('#odw-quality-report');
+    await expect(box.locator('.odw-quality-percent')).toHaveText('0 %');
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
