@@ -210,4 +210,39 @@ class Test_ODW_Field_Catalog extends TestCase {
 			'docs/FELD-REFERENZ.md is out of date — run: php bin/generate-field-reference.php'
 		);
 	}
+
+	/**
+	 * Every entry carries an explicit multiplicity.
+	 *
+	 * Die Angabe steuert seit v2.41.0 die Merkmalsliste im „Mehr erfahren"-Panel.
+	 * Fehlt sie, bleibt die Zeile dort still leer — deshalb hier eine harte Zusage.
+	 */
+	public function test_every_entry_has_a_cardinality(): void {
+		foreach ( $this->catalog as $field ) {
+			$this->assertMatchesRegularExpression(
+				'/^[01]\.\.[1n]$/',
+				(string) ( $field['cardinality'] ?? '' ),
+				'Feld ' . $field['key'] . ' hat keine gültige Multiplizität.'
+			);
+		}
+	}
+
+	/**
+	 * The structured multiplicity agrees with the one stated in the prose.
+	 *
+	 * Beide Angaben stehen im selben Eintrag und werden von Hand gepflegt. Ohne
+	 * diese Prüfung laufen sie auseinander, sobald jemand nur eine der beiden
+	 * anfasst — und das Panel zeigt dann etwas anderes als die Definition darunter.
+	 */
+	public function test_cardinality_matches_the_prose(): void {
+		foreach ( $this->catalog as $field ) {
+			$matched = preg_match( '/Multiplizität\s+([01]\.\.[1n])/u', (string) $field['desc_dcat'], $m );
+			$this->assertSame( 1, $matched, 'Feld ' . $field['key'] . ' nennt keine Multiplizität im Definitionstext.' );
+			$this->assertSame(
+				(string) $field['cardinality'],
+				$m[1],
+				'Feld ' . $field['key'] . ': strukturierte Multiplizität und Definitionstext weichen ab.'
+			);
+		}
+	}
 }

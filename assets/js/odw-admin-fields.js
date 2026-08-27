@@ -574,6 +574,34 @@
 		return p;
 	}
 
+	// Zwei Merkmale über der Definition: die DCAT-AP-Eigenschaft und die
+	// Multiplizität. Beide stehen bisher nur mitten im Fließtext — als eigene
+	// Zeilen sind sie auf einen Blick erfassbar.
+	function moreFacts( cfg, field ) {
+		var rows = [
+			[ cfg.prop || 'Eigenschaft', field.dcat_prop ],
+			[ cfg.mult || 'Multiplizität', field.cardinality ]
+		].filter( function ( row ) {
+			return row[ 1 ];
+		} );
+
+		if ( ! rows.length ) {
+			return null;
+		}
+
+		var dl = document.createElement( 'dl' );
+		dl.className = 'odw-field-more__facts';
+		rows.forEach( function ( row ) {
+			var dt = document.createElement( 'dt' );
+			dt.textContent = row[ 0 ];
+			var dd = document.createElement( 'dd' );
+			dd.textContent = row[ 1 ];
+			dl.appendChild( dt );
+			dl.appendChild( dd );
+		} );
+		return dl;
+	}
+
 	function initFieldMore() {
 		var cfg     = data.fieldMore || {};
 		var catalog = data.fieldCatalog || [];
@@ -605,6 +633,10 @@
 			// formale Definition allein keine Hilfe ist.
 			var body = document.createElement( 'div' );
 			body.className = 'odw-field-more__body';
+			var facts = moreFacts( cfg, f );
+			if ( facts ) {
+				body.appendChild( facts );
+			}
 			if ( f.desc_human ) {
 				body.appendChild( moreBlock( cfg.plain, f.desc_human ) );
 			}

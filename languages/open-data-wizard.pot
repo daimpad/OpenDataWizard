@@ -336,6 +336,12 @@ msgstr ""
 msgid "EIGENE LIZENZ-URI"
 msgstr ""
 
+msgid "EIGENE LIZENZ-URI (dct:license)"
+msgstr ""
+
+msgid "Eigenschaft"
+msgstr ""
+
 msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:"
 msgstr ""
 
@@ -444,6 +450,9 @@ msgstr ""
 msgid "HERAUSGEBENDE ORGANISATION (dct:publisher)"
 msgstr ""
 
+msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
+msgstr ""
+
 msgid "Harvest-Endpoint"
 msgstr ""
 
@@ -514,6 +523,15 @@ msgid "Justiz & Sicherheit"
 msgstr ""
 
 msgid "Jährlich"
+msgstr ""
+
+msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
+msgstr ""
+
+msgid "KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)"
+msgstr ""
+
+msgid "KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
 msgstr ""
 
 msgid "Katalog"
@@ -622,6 +640,9 @@ msgid "Mit welchen Stichworten finde ich diese Daten?"
 msgstr ""
 
 msgid "Monatlich"
+msgstr ""
+
+msgid "Multiplizität"
 msgstr ""
 
 msgid "Musterorganisation e.V."

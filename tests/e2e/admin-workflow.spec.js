@@ -103,6 +103,37 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_publisher'))).toHaveValue('Stadt Musterstadt');
   });
 
+  test('„Mehr erfahren" zeigt Merkmale, Erklärung und Definition', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Das Panel hängt am Feld, nicht am Reiter — der Herausgeber steht in Tab 1.
+    const panel = page.locator('.cf-field', { has: page.locator(cfField('odw_publisher')) })
+      .locator('details.odw-field-more');
+    await expect(panel).toBeVisible();
+    await panel.locator('summary').click();
+
+    // Zwei Merkmalszeilen über der Definition: Eigenschaft und Multiplizität.
+    // Beide standen vorher nur mitten im Fließtext.
+    const facts = panel.locator('.odw-field-more__facts');
+    await expect(facts.locator('dt')).toHaveText(['Eigenschaft', 'Multiplizität']);
+    await expect(facts.locator('dd')).toHaveText(['dct:publisher', '1..1']);
+
+    // Darunter unverändert beide Langtexte.
+    await expect(panel).toContainText('Einfach erklärt');
+    await expect(panel).toContainText('DCAT-AP-Definition');
+  });
+
+  test('das Tooltip trägt nur noch den Fachbegriff', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Rollentrennung: Im ⓘ steht der DCAT-AP-Begriff, alles Erklärende liegt
+    // im Panel. Das Beispiel, das früher hier stand, darf nicht zurückkehren.
+    const tip = page.locator('.cf-field', { has: page.locator(cfField('odw_publisher')) })
+      .locator('.odw-help-pop');
+    await expect(tip).toContainText('dct:publisher');
+    await expect(tip).not.toContainText('Beispiel');
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 

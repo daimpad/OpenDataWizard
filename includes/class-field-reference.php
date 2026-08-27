@@ -62,17 +62,20 @@ class ODW_Field_Reference {
 	 * Returns a compact catalog map for the admin JS ("Mehr erfahren" panels).
 	 *
 	 * Only the fields needed on the client are exposed: the distribution meta key
-	 * (to locate the DOM field) and the two long descriptions.
+	 * (to locate the DOM field), the two long descriptions und die beiden
+	 * Merkmale, die das Panel als Kurzangabe über der Definition zeigt.
 	 *
-	 * @return array<int, array{meta_key: string, desc_dcat: string, desc_human: string}>
+	 * @return array<int, array{meta_key: string, dcat_prop: string, cardinality: string, desc_dcat: string, desc_human: string}>
 	 */
 	public static function js_map(): array {
 		$map = array();
 		foreach ( self::load_catalog() as $field ) {
 			$map[] = array(
-				'meta_key'   => (string) $field['meta_key'],
-				'desc_dcat'  => (string) $field['desc_dcat'],
-				'desc_human' => (string) $field['desc_human'],
+				'meta_key'    => (string) $field['meta_key'],
+				'dcat_prop'   => (string) ( $field['dcat_prop'] ?? '' ),
+				'cardinality' => (string) ( $field['cardinality'] ?? '' ),
+				'desc_dcat'   => (string) $field['desc_dcat'],
+				'desc_human'  => (string) $field['desc_human'],
 			);
 		}
 		return $map;
@@ -137,6 +140,7 @@ class ODW_Field_Reference {
 			$out[] = '|---|---|';
 			$out[] = '| DCAT-Property | `' . $field['dcat_prop'] . '` |';
 			$out[] = '| Meta-Key | `' . ( '' !== $field['meta_key'] ? $field['meta_key'] : '—' ) . '` |';
+			$out[] = '| Multiplizität | `' . ( '' !== ( $field['cardinality'] ?? '' ) ? $field['cardinality'] : '—' ) . '` |';
 			$out[] = '| Stufe | ' . $tier . ' |';
 			$out[] = '| Vokabular | ' . $vocab . ' |';
 			$out[] = '';

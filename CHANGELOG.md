@@ -7,6 +7,45 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.41.0] — 2026-08-27
+
+Zwei Punkte aus dem Usability-Test, die zusammengehören: Hilfetexte haben jetzt je einen Ort,
+und die Definition zeigt ihre Struktur.
+
+### ✨ Added
+- **Merkmalsliste über jeder Definition.** Das „Mehr erfahren"-Panel nennt oben in zwei Zeilen
+  die DCAT-AP-Eigenschaft und die Multiplizität, darunter folgen wie bisher Alltagssprache und
+  Definition. Der Tester hatte bemerkt, dass die Definitionstexte einer festen Struktur folgen,
+  diese aber nur im Fließtext steht.
+- **`cardinality` als eigenes Feld im Katalog** — für alle 53 Einträge. Zwei neue Tests halten
+  den strukturierten Wert und die Angabe im Definitionstext zusammen; ohne sie laufen beide
+  auseinander, sobald jemand nur eine Seite anfasst.
+
+### 🎨 Changed
+- **Tooltip und „Mehr erfahren" haben getrennte Rollen.** Das ⓘ trägt nur noch den DCAT-AP-Begriff,
+  alles Erklärende steht im Panel. Vorher stand beides an beiden Orten — beim Herausgeber sogar
+  mit unterschiedlichen Beispielen. Betrifft 42 Felder.
+- **Fünf Felder hatten gar keinen Fachbegriff im Tooltip**, sondern schon dort Prosa: die drei
+  Kontaktfelder, die eigene Lizenz-URI und die HVD-Kennzeichnung. Sie tragen jetzt ihren
+  tatsächlich ausgegebenen Begriff (`vcard:fn`, `vcard:hasEmail`, `vcard:hasURL`, `dct:license`,
+  `dcatap:applicableLegislation`).
+- **Das Schlagwort-Beispiel widersprach seiner eigenen Regel.** Der Text verlangte ein Wort je
+  Zeile und nannte dann ein Beispiel mit Kommas — wer nur den Katalog las, tippte genau die
+  falsche Form.
+
+### 🐛 Fixed
+- **`bin/check-i18n.py` übersah `config/`.** `mqa-metrics.php` und `dcat-ap-fields.php` führen
+  ihre Beschriftungen über `__()`, standen aber nicht in der Dateiliste der Prüfung — für 31
+  Zeichenketten hätte eine fehlende Übersetzung also nie jemand gemeldet. Aufgefallen ist es,
+  weil ich beim Aufräumen der Kataloge beinahe genau diese Einträge gelöscht hätte.
+
+### ℹ️ Eine Ausnahme mit Begründung
+Das Wiederholfeld für weitere Distributionen behält seinen Hilfetext: Für dieses Feld gibt es
+keinen Katalogeintrag, das Panel erscheint dort also gar nicht — der Tooltip ist die einzige
+Erklärung, die es hat.
+
+---
+
 ## [2.40.3] — 2026-08-27
 
 Vier Punkte aus einem Usability-Test — und was beim Nachprüfen sonst noch auffiel.

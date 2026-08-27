@@ -37,6 +37,10 @@ def source_strings():
     found = set()
     files = [os.path.join(ROOT, 'open-data-wizard.php')]
     files += sorted(glob.glob(os.path.join(ROOT, 'includes', '*.php')))
+    # config/ ebenfalls: mqa-metrics.php und dcat-ap-fields.php führen ihre
+    # Labels über __(). Sie standen bis v2.41.0 nicht in dieser Liste — die
+    # Prüfung meldete für sie also nie eine fehlende Übersetzung.
+    files += sorted(glob.glob(os.path.join(ROOT, 'config', '*.php')))
 
     for path in files:
         src = io.open(path, encoding='utf-8').read()

@@ -84,6 +84,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:publisher` |
 | Meta-Key | `_odw_publisher` |
+| Multiplizität | `1..1` |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -101,6 +102,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:theme` |
 | Meta-Key | `_odw_theme` |
+| Multiplizität | `0..n` |
 | Stufe | Empfohlen |
 | Vokabular | `data-theme` |
 
@@ -118,6 +120,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:keyword` |
 | Meta-Key | `_odw_keywords` |
+| Multiplizität | `0..n` |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -127,7 +130,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Multiplizität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.
 
-**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.
+**4 · Verständliche Langbeschreibung:** Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: erst „Umwelt", darunter „Wasser", darunter „Luftverschmutzung". Trennen Sie die Schlagwörter nicht mit Komma.
 
 ### Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?
 
@@ -135,6 +138,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:subject` |
 | Meta-Key | `_odw_cessda_topic` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | `cessda` |
 
@@ -152,6 +156,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:subject` |
 | Meta-Key | `_odw_engagementfeld` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | `engagementfeld` |
 
@@ -169,6 +174,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:description` |
 | Meta-Key | `_odw_description` |
+| Multiplizität | `1..n` |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -190,6 +196,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:language` |
 | Meta-Key | `_odw_language` |
+| Multiplizität | `0..n` |
 | Stufe | Empfohlen |
 | Vokabular | `language` |
 
@@ -211,6 +218,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:accessURL` |
 | Meta-Key | `_odw_access_url` |
+| Multiplizität | `1..n` |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -228,6 +236,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:format` |
 | Meta-Key | `_odw_format` |
+| Multiplizität | `0..1` |
 | Stufe | Empfohlen |
 | Vokabular | `file-type` |
 
@@ -245,6 +254,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:byteSize` |
 | Meta-Key | `_odw_byte_size` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -262,6 +272,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:license` |
 | Meta-Key | `_odw_license` |
+| Multiplizität | `0..1` |
 | Stufe | Pflicht |
 | Vokabular | `licenses` |
 
@@ -269,7 +280,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Unter welcher Lizenz sind diese Daten verfügbar?
 
-**3 · DCAT-AP-Langbeschreibung:** `dct:license` benennt das rechtliche Dokument, unter dem die Distribution bereitgestellt wird (Range `dct:LicenseDocument`, referenziert per URI). Verpflichtend für die Wiederverwendbarkeit. Empfohlen werden URIs offener Lizenzen (Creative Commons, Datenlizenz Deutschland, DCAT-AP.de-Lizenzregister).
+**3 · DCAT-AP-Langbeschreibung:** `dct:license` benennt das rechtliche Dokument, unter dem die Distribution bereitgestellt wird (Range `dct:LicenseDocument`, referenziert per URI). Multiplizität 0..1 je Distribution; das Plugin erzwingt die Angabe, weil ohne Lizenz keine Nachnutzung möglich ist. Empfohlen werden URIs offener Lizenzen (Creative Commons, Datenlizenz Deutschland, DCAT-AP.de-Lizenzregister).
 
 **4 · Verständliche Langbeschreibung:** Legen Sie fest, was andere mit Ihren Daten tun dürfen — das regelt die Lizenz. Wählen Sie eine der vorgeschlagenen Standardlizenzen; „offene" Lizenzen erlauben die freie Weiternutzung. Ohne Lizenz sind Daten rechtlich unklar und kaum nachnutzbar. Beispiel: CC-BY 4.0 (Namensnennung).
 
@@ -279,6 +290,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:license` |
 | Meta-Key | `_odw_license_custom` |
+| Multiplizität | `0..1` |
 | Stufe | Bedingt |
 | Vokabular | `licenses` |
 
@@ -286,7 +298,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Welche eigene Lizenz-URI möchten Sie angeben?
 
-**3 · DCAT-AP-Langbeschreibung:** Nur relevant, wenn im Lizenzfeld „Sonstige" gewählt wurde: Hier wird die `dct:license`-URI einer nicht in der Standardliste enthaltenen Lizenz eingetragen. Das Auto-Suggest bietet zusätzlich die URIs des DCAT-AP.de-Lizenzregisters (`http://dcat-ap.de/def/licenses/…`) an.
+**3 · DCAT-AP-Langbeschreibung:** Nur relevant, wenn im Lizenzfeld „Sonstige" gewählt wurde: Hier wird die `dct:license`-URI einer nicht in der Standardliste enthaltenen Lizenz eingetragen. Das Auto-Suggest bietet zusätzlich die URIs des DCAT-AP.de-Lizenzregisters (`http://dcat-ap.de/def/licenses/…`) an. Multiplizität 0..1 je Distribution — es ist dieselbe Eigenschaft wie oben.
 
 **4 · Verständliche Langbeschreibung:** Dieses Feld erscheint nur, wenn Sie oben „Sonstige" Lizenz gewählt haben. Tragen Sie dann die Web-Adresse (URI) Ihrer Lizenz ein oder wählen Sie eine aus der Vorschlagsliste. Beispiel: http://dcat-ap.de/def/licenses/dl-by-de/2.0.
 
@@ -296,6 +308,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:licenseAttributionByText` |
 | Meta-Key | `_odw_attribution_text` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -313,6 +326,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatap:availability` |
 | Meta-Key | `_odw_availability` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `planned-availability` |
 
@@ -334,6 +348,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:landingPage` |
 | Meta-Key | `_odw_landing_page` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -351,6 +366,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:issued` |
 | Meta-Key | `_odw_issued` |
+| Multiplizität | `0..1` |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -368,6 +384,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:modified` |
 | Meta-Key | `_odw_modified` |
+| Multiplizität | `0..1` |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -385,6 +402,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:accrualPeriodicity` |
 | Meta-Key | `_odw_accrual_periodicity` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `frequency` |
 
@@ -402,6 +420,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:politicalGeocodingLevelURI` |
 | Meta-Key | `_odw_political_geocoding_level` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `politicalGeocodingLevel` |
 
@@ -419,6 +438,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:politicalGeocodingURI` |
 | Meta-Key | `_odw_political_geocoding_uri` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -436,6 +456,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:geocodingDescription` |
 | Meta-Key | `_odw_geocoding_description` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -453,6 +474,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:spatial` |
 | Meta-Key | `_odw_spatial` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -462,7 +484,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:spatial` beschreibt die räumliche Abdeckung des Datensatzes (Range `dct:Location`). Als Wert dient eine Gebiets-URI (z. B. GeoNames, EU-Continents) oder eine Freitext-Ortsangabe. Multiplizität 0..n.
 
-**4 · Verständliche Langbeschreibung:** Geben Sie an, welches geografische Gebiet die Daten abdecken — eine Stadt, ein Bundesland, ein Land oder eine Region. So finden Nutzende Daten zu ihrer Gegend. Beispiel: Musterstadt oder Bayern.
+**4 · Verständliche Langbeschreibung:** Geben Sie an, welches geografische Gebiet die Daten abdecken — eine Stadt, ein Bundesland, ein Land oder eine Region. So finden Nutzende Daten zu ihrer Gegend. Beispiel: Musterstadt oder Bayern. Wählen Sie die Region aus der Vorschlagsliste — dann wird die passende Kennung automatisch gesetzt — oder tippen Sie das Gebiet einfach selbst ein.
 
 ### Ab wann sind diese Daten gültig?
 
@@ -470,6 +492,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:temporal` |
 | Meta-Key | `_odw_temporal_start` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -487,6 +510,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:temporal` |
 | Meta-Key | `_odw_temporal_end` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -504,6 +528,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_name` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -511,7 +536,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Wer ist Ansprechperson für Fragen zu diesen Daten?
 
-**3 · DCAT-AP-Langbeschreibung:** Teil des `dcat:contactPoint` (Range `vcard:Kind`): `vcard:fn` benennt die Kontaktstelle oder -person für Rückfragen zum Datensatz. Multiplizität des Kontaktpunkts 0..n. Name, E-Mail und URL bilden zusammen einen Kontaktpunkt.
+**3 · DCAT-AP-Langbeschreibung:** Teil des `dcat:contactPoint` (Range `vcard:Kind`): `vcard:fn` benennt die Kontaktstelle oder -person für Rückfragen zum Datensatz. Multiplizität 0..1 je Kontaktpunkt; ein Datensatz kann mehrere Kontaktpunkte tragen (0..n). Name, E-Mail und URL bilden zusammen einen Kontaktpunkt.
 
 **4 · Verständliche Langbeschreibung:** Nennen Sie, an wen sich Nutzende bei Fragen wenden können — eine Person oder eine Abteilung. So ist klar, wer für die Daten zuständig ist. Beispiel: Open-Data-Team der Stadt Musterstadt.
 
@@ -521,6 +546,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_email` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -538,6 +564,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_url` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -555,6 +582,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:contributorID` |
 | Meta-Key | `_odw_contributor_id` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | `contributors` |
 
@@ -572,6 +600,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:originator` |
 | Meta-Key | `_odw_originator_name` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -589,6 +618,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:originator` |
 | Meta-Key | `_odw_originator_email` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -606,6 +636,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:maintainer` |
 | Meta-Key | `_odw_maintainer_name` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -623,6 +654,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:maintainer` |
 | Meta-Key | `_odw_maintainer_email` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -640,6 +672,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:legalBasis` |
 | Meta-Key | `_odw_legal_basis` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -657,6 +690,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatde:qualityProcessURI` |
 | Meta-Key | `_odw_quality_process_uri` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -674,6 +708,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:accessRights` |
 | Meta-Key | `_odw_access_rights` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `access-right` |
 
@@ -683,7 +718,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:accessRights` klassifiziert den Zugriffsstatus über das EU-Vokabular „Access Right" (`PUBLIC`, `RESTRICTED`, `NON_PUBLIC`). Multiplizität 0..1. Relevant für die MQA-Dimension Wiederverwendbarkeit.
 
-**4 · Verständliche Langbeschreibung:** Geben Sie an, ob die Daten für alle offen (öffentlich), nur eingeschränkt oder gar nicht öffentlich zugänglich sind. Für offene Daten ist das in der Regel „öffentlich". Beispiel: Öffentlich.
+**4 · Verständliche Langbeschreibung:** Geben Sie an, ob die Daten für alle offen (öffentlich), nur eingeschränkt oder gar nicht öffentlich zugänglich sind. Für offene Daten ist das in der Regel „öffentlich". Beispiel: Öffentlich. „Öffentlich" ist bereits vorausgewählt — ändern Sie die Angabe nur, wenn der Zugriff eingeschränkt oder gar nicht öffentlich ist.
 
 ### Welches weitere EU-Thema möchten Sie ergänzen?
 
@@ -691,6 +726,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:theme` |
 | Meta-Key | `_odw_theme_uri` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | `data-theme` |
 
@@ -708,6 +744,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatap:applicableLegislation` |
 | Meta-Key | `_odw_is_hvd` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -715,9 +752,9 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Ist dies ein hochwertiger Datensatz (HVD)?
 
-**3 · DCAT-AP-Langbeschreibung:** Kennzeichen, ob der Datensatz ein High-Value-Dataset im Sinne der EU-Durchführungsverordnung 2023/138 ist. Ist es gesetzt, wird `dcatap:applicableLegislation` (Verweis auf die Verordnung) ausgegeben und das Feld HVD-Kategorie relevant.
+**3 · DCAT-AP-Langbeschreibung:** Kennzeichen, ob der Datensatz ein High-Value-Dataset im Sinne der EU-Durchführungsverordnung 2023/138 ist. Ist es gesetzt, wird `dcatap:applicableLegislation` (Verweis auf die Verordnung) ausgegeben und das Feld HVD-Kategorie relevant. Multiplizität 0..1.
 
-**4 · Verständliche Langbeschreibung:** „High-Value-Datasets" sind von der EU als besonders wertvoll eingestufte Datensätze (z. B. Geo-, Umwelt- oder Mobilitätsdaten). Setzen Sie dies nur, wenn Ihr Datensatz in eine der offiziellen HVD-Kategorien fällt — im Zweifel „Nein". Beispiel: Ja, bei amtlichen Geodaten.
+**4 · Verständliche Langbeschreibung:** „High-Value-Datasets" sind von der EU als besonders wertvoll eingestufte Datensätze (z. B. Geo-, Umwelt- oder Mobilitätsdaten). Setzen Sie dies nur, wenn Ihr Datensatz in eine der offiziellen HVD-Kategorien fällt — im Zweifel „Nein". Beispiel: Ja, bei amtlichen Geodaten. Das betrifft ausschließlich öffentliche Stellen — Vereine, Verbände und andere zivilgesellschaftliche Organisationen können das Feld leer lassen.
 
 ### Welcher HVD-Kategorie gehört dieser Datensatz an?
 
@@ -725,6 +762,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcatap:hvdCategory` |
 | Meta-Key | `_odw_hvd_category` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | `hvd-category` |
 
@@ -742,6 +780,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:identifier` |
 | Meta-Key | `_odw_identifier` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -751,7 +790,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:identifier` ist eine eindeutige, im System der Herausgeberin vergebene Kennung des Datensatzes (Freitext/`literal`). Multiplizität 0..n. Ermöglicht die stabile Referenzierung über Systemgrenzen hinweg.
 
-**4 · Verständliche Langbeschreibung:** Falls Ihr Datensatz eine feste Kennnummer aus Ihrem eigenen System hat, tragen Sie sie hier ein. So bleibt der Datensatz eindeutig identifizierbar. Beispiel: DS-2026-00042.
+**4 · Verständliche Langbeschreibung:** Falls Ihr Datensatz eine feste Kennnummer aus Ihrem eigenen System hat, tragen Sie sie hier ein. So bleibt der Datensatz eindeutig identifizierbar. Beispiel: DS-2026-00042. Neben einer internen Nummer können Sie hier auch eine dauerhafte, extern vergebene Kennung wie einen DOI eintragen.
 
 ### Um welchen Typ von Datensatz handelt es sich?
 
@@ -759,6 +798,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:type` |
 | Meta-Key | `_odw_type` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `dataset-type` |
 
@@ -768,7 +808,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:type` klassifiziert die Art des Datensatzes, idealerweise über das EU-Vokabular „Dataset Type". Multiplizität 0..1. Unterscheidet z. B. Erhebungsdaten, Registerdaten oder Geodaten.
 
-**4 · Verständliche Langbeschreibung:** Geben Sie an, um welche Art von Datensatz es sich grundsätzlich handelt. Das hilft bei der groben Einordnung. Beispiel: Statistische Erhebung, Geodaten.
+**4 · Verständliche Langbeschreibung:** Geben Sie an, um welche Art von Datensatz es sich grundsätzlich handelt. Das hilft bei der groben Einordnung. Beispiel: Statistische Erhebung, Geodaten. Einzutragen ist die vollständige Web-Adresse des passenden Eintrags aus der EU-Liste der Datensatz-Typen, nicht die Bezeichnung als Text.
 
 ### Wer hat diese Daten erstellt?
 
@@ -776,6 +816,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:creator` |
 | Meta-Key | `_odw_creator_name` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -793,6 +834,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:creator` |
 | Meta-Key | `_odw_creator_email` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -810,6 +852,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `owl:versionInfo` |
 | Meta-Key | `_odw_version` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -827,6 +870,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `adms:versionNotes` |
 | Meta-Key | `_odw_version_notes` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -844,6 +888,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:spatialResolutionInMeters` |
 | Meta-Key | `_odw_spatial_resolution` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -853,7 +898,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:spatialResolutionInMeters` gibt die kleinste räumlich unterscheidbare Einheit in Metern an (`xsd:decimal`). Multiplizität 0..n. Relevant vor allem für Geodaten und Rasterdaten.
 
-**4 · Verständliche Langbeschreibung:** Bei Geodaten: Geben Sie an, wie fein die Daten räumlich aufgelöst sind — der kleinste unterscheidbare Abstand in Metern. Ein kleiner Wert bedeutet detailliertere Daten. Beispiel: 10 (Raster von 10 Metern).
+**4 · Verständliche Langbeschreibung:** Bei Geodaten: Geben Sie an, wie fein die Daten räumlich aufgelöst sind — der kleinste unterscheidbare Abstand in Metern. Ein kleiner Wert bedeutet detailliertere Daten. Beispiel: 10 (Raster von 10 Metern). Tragen Sie dabei nur die Zahl ein, ohne die Einheit dahinterzuschreiben.
 
 ### Welche zeitliche Auflösung haben die Daten?
 
@@ -861,6 +906,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:temporalResolution` |
 | Meta-Key | `_odw_temporal_resolution` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -878,6 +924,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:conformsTo` |
 | Meta-Key | `_odw_conforms_to` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -887,7 +934,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dct:conformsTo` verweist auf einen implementierten Standard, ein Anwendungsprofil oder ein Schema, dem die Daten entsprechen (Range `dct:Standard`, per URI oder Bezeichnung). Multiplizität 0..n.
 
-**4 · Verständliche Langbeschreibung:** Falls Ihre Daten einem bestimmten Standard oder Schema folgen, nennen Sie ihn hier. So können Systeme die Daten korrekt interpretieren. Beispiel: INSPIRE, XÖV oder ein fachliches Datenschema.
+**4 · Verständliche Langbeschreibung:** Falls Ihre Daten einem bestimmten Standard oder Schema folgen, nennen Sie ihn hier. So können Systeme die Daten korrekt interpretieren. Beispiel: INSPIRE, XÖV oder ein fachliches Datenschema. Einzutragen ist die Web-Adresse, unter der der Standard beschrieben ist.
 
 ### Woher stammen die Daten und wie sind sie entstanden?
 
@@ -895,6 +942,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:provenance` |
 | Meta-Key | `_odw_provenance` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -912,6 +960,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:title` |
 | Meta-Key | `_odw_dist_title` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -929,6 +978,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:description` |
 | Meta-Key | `_odw_dist_description` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -946,6 +996,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:downloadURL` |
 | Meta-Key | `_odw_download_url` |
+| Multiplizität | `0..n` |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -963,6 +1014,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dcat:mediaType` |
 | Meta-Key | `_odw_media_type` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | `iana-media-type` |
 
@@ -972,7 +1024,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **3 · DCAT-AP-Langbeschreibung:** `dcat:mediaType` gibt den Medientyp der Distribution als IANA-Media-Type an (z. B. `text/csv`, `application/json`), referenziert über das IANA-Media-Types-Register. Multiplizität 0..1. Ergänzt `dct:format` um den technischen MIME-Typ.
 
-**4 · Verständliche Langbeschreibung:** Der technische Medientyp der Datei (MIME-Typ) — die maschinenlesbare Entsprechung zum Format. Systeme erkennen daran, wie sie die Datei behandeln müssen. Beispiel: text/csv, application/json.
+**4 · Verständliche Langbeschreibung:** Der technische Medientyp der Datei (MIME-Typ) — die maschinenlesbare Entsprechung zum Format. Systeme erkennen daran, wie sie die Datei behandeln müssen. Beispiel: text/csv, application/json. Einzutragen ist die vollständige Web-Adresse aus dem IANA-Verzeichnis, zum Beispiel https://www.iana.org/assignments/media-types/text/csv.
 
 ### Welche Nutzungsrechte gelten für die Datei?
 
@@ -980,6 +1032,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 |---|---|
 | DCAT-Property | `dct:rights` |
 | Meta-Key | `_odw_dist_rights` |
+| Multiplizität | `0..1` |
 | Stufe | Optional |
 | Vokabular | — |
 

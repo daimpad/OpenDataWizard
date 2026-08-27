@@ -468,8 +468,29 @@ msgstr "Distribution with URL (dcat:accessURL)"
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
 msgstr "Distribution with access URL (dcat:accessURL)"
 
+msgid "EIGENE LIZENZ-URI (dct:license)"
+msgstr "CUSTOM LICENCE URI (dct:license)"
+
+msgid "Eigenschaft"
+msgstr "Property"
+
 msgid "Eine der sechs EU-Themenkategorien."
 msgstr "One of the six EU thematic categories."
+
+msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
+msgstr "HIGH-VALUE DATASET (dcatap:applicableLegislation)"
+
+msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
+msgstr "CONTACT POINT · EMAIL (dcat:contactPoint / vcard:hasEmail)"
+
+msgid "KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)"
+msgstr "CONTACT POINT · NAME (dcat:contactPoint / vcard:fn)"
+
+msgid "KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+msgstr "CONTACT POINT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+
+msgid "Multiplizität"
+msgstr "Multiplicity"
 
 msgid "Pflichtfeld für die Veröffentlichung"
 msgstr "Required for publishing"

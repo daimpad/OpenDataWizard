@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.40.3-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.41.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -85,8 +85,8 @@ Eigener Bereich im WordPress-Backend mit Übersicht, Filterung und Statusverwalt
 ### 😊 Benutzerfreundliche Formularsprache
 Das Wizard-Formular wurde vollständig überarbeitet, um es auch ohne DCAT-AP-Kenntnisse intuitiv zu machen:
 - **Klare Fragen statt technischer Begriffe:** Statt „Herausgebende Organisation (dct:publisher)" fragt das Plugin: „Wer gibt diese Daten heraus?"
-- **Hilfreiche Beispiele:** Jedes Feld hat konkrete, praxisnahe Beispiele
-- **Ursprüngliche Labels in Hilfetexten:** DCAT-AP Bezeichnungen und technische Details bleiben in den Hilfetexten sichtbar
+- **Zwei Hilfen mit klaren Rollen:** Das ⓘ-Symbol zeigt den DCAT-AP-Begriff des Feldes — der schnelle Blick für alle, die wissen wollen, was das im Standard ist. „Mehr erfahren" klappt die ausführliche Erklärung auf: die DCAT-AP-Eigenschaft und ihre Multiplizität als Kurzangabe, darunter eine Erklärung in Alltagssprache mit Beispiel und die normkonforme Definition
+- **Jede Information an genau einem Ort:** Dadurch können Kurzhilfe und Langtext sich nicht mehr widersprechen
 - **Validierungsmeldungen in Klartext, mit Ort:** Wird die Veröffentlichung blockiert, nennt die Meldung den Tab und den verständlichen Feldnamen (der technische DCAT-AP-Begriff steht nur klein daneben) — ein Klick auf „Zum Feld springen" öffnet den passenden Tab und hebt das Feld hervor
 
 ### 🧭 Geführter Wizard

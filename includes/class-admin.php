@@ -446,6 +446,8 @@ class ODW_Admin {
 						'toggle' => __( 'Mehr erfahren', 'open-data-wizard' ),
 						'dcat'   => __( 'DCAT-AP-Definition', 'open-data-wizard' ),
 						'plain'  => __( 'Einfach erklärt', 'open-data-wizard' ),
+						'prop'   => __( 'Eigenschaft', 'open-data-wizard' ),
+						'mult'   => __( 'Multiplizität', 'open-data-wizard' ),
 					),
 				)
 			);
