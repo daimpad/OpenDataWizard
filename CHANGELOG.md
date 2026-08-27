@@ -68,7 +68,11 @@ auch eine Auswahl und kein Textfeld, das seine Optionen erst nach dem Tippen pre
   `_odw_theme` ab und hätten Mehrfachwerte nicht mehr gefunden. Das Plugin schreibt die Auswahl
   deshalb zusätzlich flach: `_odw_theme_index` (eine Zeile je Thema) für den Katalogfilter,
   `_odw_theme_sort` für die Spaltensortierung. Der bestehende E2E-Test auf `?theme=Bildung`
-  prüft das mit.
+  prüft das mit — und fand dabei gleich noch, dass der Katalogfilter den Parameter anders
+  auflöste als der Index geschrieben wird: `resolve_theme_uri()` kennt nur die EU-Bezeichnungen,
+  und „Bildung" heißt dort „Bildung, Kultur und Sport". Der Filter nimmt jetzt dieselbe
+  Auflösung wie das Speichern, damit Harvester mit dem alten deutschen Kurznamen weiter
+  Treffer bekommen.
 - **Das Engagementfeld hätte seinen Wert verloren.** Wie beim Thema ändert die Mehrfachauswahl
   das Speicherformat; dieselbe einmalige Umschreibung überführt jetzt beide Felder und löst
   dabei einen von Hand eingetippten Namen zur Vokabular-URI auf.

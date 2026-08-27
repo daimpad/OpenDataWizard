@@ -150,7 +150,11 @@ test.describe('Formular', () => {
     // gab es ein Auswahlfeld hier und ein Tipp-Feld unter „Erweiterte Angaben".
     const themeField = page.locator('.cf-field', { has: page.locator(cfField('odw_theme')) });
     await expect(themeField).toBeVisible();
-    await expect(themeField.locator('select[multiple], .cf-multiselect')).toHaveCount(1);
+    // Carbon Fields 3.6 rendert multiselect über react-select: ein <div> mit der
+    // Klasse cf-multiselect__select, kein <select multiple>. Die Klasse
+    // „cf-multiselect" allein gibt es nicht — sie ist nur der classNamePrefix
+    // für cf-multiselect__control, __menu und so weiter.
+    await expect(themeField.locator('.cf-multiselect__select')).toHaveCount(1);
 
     // Das frühere Zusatzfeld gibt es nicht mehr.
     await expect(page.locator(cfField('odw_theme_uri'))).toHaveCount(0);
@@ -164,8 +168,13 @@ test.describe('Formular', () => {
     await page.locator('[data-odw-section-toggle="tab1extra"]').click();
 
     const feld = page.locator('.cf-field', { has: page.locator(cfField('odw_engagementfeld')) });
-    await expect(feld.locator('select[multiple], .cf-multiselect')).toHaveCount(1);
-    await expect(feld).toContainText('Umwelt- und Naturschutz');
+    await expect(feld.locator('.cf-multiselect__select')).toHaveCount(1);
+
+    // react-select hängt die Optionen erst ins DOM, wenn das Menü offen ist —
+    // ohne den Klick steht dort nur der Platzhalter, und eine Zusicherung auf
+    // den Optionstext wäre grün, egal welche Optionen das Feld hat.
+    await feld.locator('.cf-multiselect__control').click();
+    await expect(feld.locator('.cf-multiselect__menu')).toContainText('Umwelt- und Naturschutz');
   });
 
   test('die CESSDA-Vorschläge öffnen sich beim Anklicken', async ({ page }) => {
