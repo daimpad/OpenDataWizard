@@ -1,0 +1,1935 @@
+# Open Data Wizard — English (en_US) translation.
+# This file is distributed under the same license as the plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Open Data Wizard 2.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-06-27 00:00+0000\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: open-data-wizard\n"
+
+msgid " erstellt und sind dann zur Bearbeitung verfügbar."
+msgstr " created and are then available for editing."
+
+msgid "%1$d von %2$d Pflichtangaben ausgefüllt"
+msgstr "%1$d of %2$d required fields completed"
+
+msgid "%d Punkte konnten nicht automatisch bewertet werden (in der Tabelle mit „–\" markiert)."
+msgstr "%d points could not be assessed automatically (marked with “–” in the table)."
+
+msgid "%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit und DCAT-AP-SHACL-Prüfung folgen)."
+msgstr "%d points are currently not assessed (URL reachability and DCAT-AP SHACL checks are coming)."
+
+msgid "%d Punkte werden derzeit nicht bewertet (URL-Erreichbarkeit, Vokabular- und DCAT-AP-SHACL-Prüfung folgen)."
+msgstr "%d points are currently not assessed (URL reachability, vocabulary and DCAT-AP SHACL checks are coming)."
+
+msgid "(optional)"
+msgstr "(optional)"
+
+msgid "(von max. %d)"
+msgstr "(of max. %d)"
+
+msgid "* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "* Required for publishing. You can save the dataset as a draft at any time."
+
+msgid "1 — Grundlegende Informationen"
+msgstr "1 — Basic Information"
+
+msgid "2 — Sprache & Übersetzungen"
+msgstr "2 — Language & translations"
+
+msgid "3 — Datenbereitstellung"
+msgstr "3 — Data Provision"
+
+msgid "4 — Erweiterte Angaben"
+msgstr "4 — Advanced Details"
+
+msgid "5 — Vorschau"
+msgstr "5 — Preview"
+
+msgid "AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)"
+msgstr "UPDATE FREQUENCY (dct:accrualPeriodicity)"
+
+msgid "AMTLICHER GEBIETSSCHLÜSSEL (dcatde:politicalGeocodingURI)"
+msgstr "OFFICIAL TERRITORY KEY (dcatde:politicalGeocodingURI)"
+
+msgid "Ab wann reicht der Zeitraum, den die Daten abdecken?"
+msgstr "From when does the period covered by the data begin?"
+
+msgid "Abbrechen"
+msgstr "Cancel"
+
+msgid "Abdeckung"
+msgstr "Coverage"
+
+msgid "AccessURL erreichbar (dcat:accessURL)"
+msgstr "AccessURL reachable (dcat:accessURL)"
+
+msgid "Aktualisiert"
+msgstr "Updated"
+
+msgid "Aktualisiert sich automatisch, während Sie die Felder ausfüllen — ohne Speichern."
+msgstr "Updates automatically as you fill in the fields — no saving required."
+
+msgid "Aktualisierungsfrequenz"
+msgstr "Update frequency"
+
+msgid "Alle Datensätze"
+msgstr "All Datasets"
+
+msgid "Alle Datensätze, Metadaten und Plugin-Optionen beim Deinstallieren unwiderruflich löschen."
+msgstr "Irreversibly delete all datasets, metadata and plugin options on uninstall."
+
+msgid "Alle Metadaten anzeigen"
+msgstr "Show all metadata"
+
+msgid "Alle Pflichtangaben ausgefüllt"
+msgstr "All required fields completed"
+
+msgid "Alle Qualitätsscores neu berechnen"
+msgstr "Recalculate all quality scores"
+
+msgid "Alle Status"
+msgstr "All Statuses"
+
+msgid "Als ISO-8601-Dauer. Beispiel: P1D (täglich), PT1H (stündlich)"
+msgstr "As an ISO 8601 duration. Example: P1D (daily), PT1H (hourly)"
+
+msgid "Als Vorschaubild verwenden"
+msgstr "Use as featured image"
+
+msgid "Amtliche Datenlizenz Deutschland ohne Namensnennung. Die Daten dürfen ohne Einschränkungen und ohne Quellenangabe – auch kommerziell – weiterverwendet werden."
+msgstr "Official German data licence without attribution. The data may be reused without restrictions and without crediting the source — including commercially."
+
+msgid "Amtliche Datenlizenz Deutschland. Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle genannt wird (Namensnennung)."
+msgstr "Official German data licence. The data may be used, modified and shared freely — including commercially — provided the source is credited (attribution)."
+
+msgid "Auf dem Datenatlas Zivilgesellschaft veröffentlichen"
+msgstr "Publish on the Datenatlas Zivilgesellschaft"
+
+msgid "Auf welcher Verwaltungsebene wurden diese Daten erhoben?"
+msgstr "At which administrative level were these data collected?"
+
+msgid "Auf welcher Website finde ich weitere Kontaktinformationen?"
+msgstr "On which website can I find further contact information?"
+
+msgid "Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?"
+msgstr "On what legal basis are the data provided?"
+
+msgid "Auf welches amtliche Gebiet beziehen sich die Daten?"
+msgstr "Which official territory do the data refer to?"
+
+msgid "Auffindbarkeit"
+msgstr "Findability"
+
+msgid "Aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Beispiel: Volkszählungen, Migration, Wirtschaftspolitik"
+msgstr "From the CESSDA Controlled Vocabulary (version 4.2.3, German). Example: censuses, migration, economic policy"
+
+msgid "Ausgezeichnet"
+msgstr "Excellent"
+
+msgid "Ausreichend"
+msgstr "Sufficient"
+
+msgid "Ausstellungsdatum (dct:issued)"
+msgstr "Issue date (dct:issued)"
+
+msgid "Auswählen"
+msgstr "Select"
+
+msgid "BESCHREIBUNG (dct:description)"
+msgstr "DESCRIPTION (dct:description)"
+
+msgid "BESCHREIBUNG DER DISTRIBUTION (dct:description)"
+msgstr "DISTRIBUTION DESCRIPTION (dct:description)"
+
+msgid "Batch-Import"
+msgstr "Batch Import"
+
+msgid "Beispiel: 2024-01-01"
+msgstr "Example: 2024-01-01"
+
+msgid "Beispiel: 2024-01-15"
+msgstr "Example: 2024-01-15"
+
+msgid "Beispiel: 2024-12-31"
+msgstr "Example: 2024-12-31"
+
+msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
+msgstr "Example: An overview of the most populous cities in Germany with statistical data on population and development."
+
+msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
+msgstr "Example: Sampletown Statistics Office, Federal Environment Agency, Consumer Advice Center"
+
+msgid "Beispiel: Open Data Team, Statistisches Landesamt"
+msgstr "Example: Open Data Team, State Statistical Office"
+
+msgid "Beispiel: Zivilgesellschaftliche Organisationen"
+msgstr "Example: Civil society organizations"
+
+msgid "Beispiel: https://beispiel.de/daten/datei.csv"
+msgstr "Example: https://example.com/data/file.csv"
+
+msgid "Beispiel: https://beispiel.de/kontakt"
+msgstr "Example: https://example.com/contact"
+
+msgid "Beispiel: opendata@beispiel.de"
+msgstr "Example: opendata@example.com"
+
+msgid "Bereit zum Importieren! Alle ausgewählten Datensätze werden als "
+msgstr "Ready to import! All selected datasets are created as "
+
+msgid "Beschreiben Sie Ihre Datensätze dort, wo Sie ohnehin arbeiten – direkt in WordPress. Das Plugin generiert daraus eine maschinenlesbare Beschreibung nach dem internationalen Standard DCAT-AP 3.0 und stellt sie unter einer persistenten URL bereit."
+msgstr "Describe your datasets right where you already work – directly in WordPress. The plugin generates a machine-readable description according to the international DCAT-AP 3.0 standard and makes it available at a persistent URL."
+
+msgid "Beschreibung"
+msgstr "Description"
+
+msgid "Beschreibung (dct:description)"
+msgstr "Description (dct:description)"
+
+msgid "Beschreibung der Distribution"
+msgstr "Distribution description"
+
+msgid "Beschreibung des Datensatzes"
+msgstr "Description of the dataset"
+
+msgid "Beschreibung in weiteren Sprachen"
+msgstr "Description in additional languages"
+
+msgid "Bevölkerung & Gesellschaft"
+msgstr "Population & Society"
+
+msgid "Bewertung nach der EU-Metadata-Quality-Assessment-Methodik (data.europa.eu). Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern aus."
+msgstr "Assessment according to the EU Metadata Quality Assessment methodology (data.europa.eu). The values are recalculated on every save – changes in the form only take effect after saving."
+
+msgid "Bildung, Kultur & Sport"
+msgstr "Education, Culture & Sport"
+
+msgid "Bis wann reicht der Zeitraum, den die Daten abdecken?"
+msgstr "Until when does the period covered by the data run?"
+
+msgid "Bitte einen positiven Wert eingeben."
+msgstr "Please enter a positive value."
+
+msgid "Bitte geben Sie die ungefähre Größe der Datei an und wählen Sie die passende Einheit. 1 MB = 1.024 KB"
+msgstr "Please enter the approximate file size and select the matching unit. 1 MB = 1,024 KB"
+
+msgid "Bitte wähle eine Datei aus."
+msgstr "Please select a file."
+
+msgid "Bitte wählen Sie eine Datei aus."
+msgstr "Please select a file."
+
+msgid "Bund (Federal)"
+msgstr "Federal"
+
+msgid "Bytes"
+msgstr "bytes"
+
+msgid "CC BY 4.0 — Namensnennung"
+msgstr "CC BY 4.0 — Attribution"
+
+msgid "CC BY-SA 4.0 — Namensnennung, Weitergabe unter gleichen Bedingungen"
+msgstr "CC BY-SA 4.0 — Attribution, ShareAlike"
+
+msgid "CC0 1.0 — Gemeinfreiheit (keine Rechte vorbehalten)"
+msgstr "CC0 1.0 — Public Domain (no rights reserved)"
+
+msgid "CESSDA THEMENKLASSIFIKATION (cessda:topic)"
+msgstr "CESSDA TOPIC CLASSIFICATION (cessda:topic)"
+
+msgid "CESSDA THEMENKLASSIFIKATION (dct:subject)"
+msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
+
+msgid "CESSDA Themenklassifikation"
+msgstr "CESSDA Topic Classification"
+
+msgid "CESSDA-THEMENKLASSIFIKATION (dct:subject)"
+msgstr "CESSDA TOPIC CLASSIFICATION (dct:subject)"
+
+msgid "CESSDA-Themenfeld"
+msgstr "CESSDA topic"
+
+msgid "CONTRIBUTOR-ID (dcatde:contributorID)"
+msgstr "CONTRIBUTOR ID (dcatde:contributorID)"
+
+msgid "CSV oder JSON Datei"
+msgstr "CSV or JSON file"
+
+msgid "CSV-Beispiel herunterladen"
+msgstr "Download CSV example"
+
+msgid "CSV-Datei ist leer oder ungültig."
+msgstr "CSV file is empty or invalid."
+
+msgid "CSV-Datei konnte nicht geöffnet werden."
+msgstr "CSV file could not be opened."
+
+msgid "Cache-Laufzeit (Sekunden)"
+msgstr "Cache lifetime (seconds)"
+
+msgid "Catalog-Endpoint (REST API)"
+msgstr "Catalog endpoint (REST API)"
+
+msgid "Cleared %d transient cache(s)."
+msgstr "Cleared %d transient cache(s)."
+
+msgid "DATENSATZ-TYP (dct:type)"
+msgstr "DATASET TYPE (dct:type)"
+
+msgid "DCAT-AP 3.0 Pflichtfelder"
+msgstr "DCAT-AP 3.0 required fields"
+
+msgid "DCAT-AP 3.0 konforme Datensatz-Metadaten"
+msgstr "DCAT-AP 3.0 compliant dataset metadata"
+
+msgid "DCAT-AP-Definition"
+msgstr "DCAT-AP definition"
+
+msgid "DCAT-AP-Konformität (SHACL)"
+msgstr "DCAT-AP compliance (SHACL)"
+
+msgid "DOWNLOAD-URL (dcat:downloadURL)"
+msgstr "DOWNLOAD URL (dcat:downloadURL)"
+
+msgid "Das Problem"
+msgstr "The Problem"
+
+msgid "Das Wizard-Formular ist in fünf einfache Schritte unterteilt:"
+msgstr "The wizard form is divided into five simple steps:"
+
+msgid "Alternative zur Zugriffs-URL oben: Datei aus der Mediathek verknüpfen. Die URL wird daraus automatisch gesetzt und die Datei als Download-Button im [odw_dataset]-Shortcode angezeigt."
+msgstr "Alternative to the access URL above: link a file from the media library. The URL is set from it automatically and the file is shown as a download button in the [odw_dataset] shortcode."
+
+msgid "Datei auswählen / hochladen"
+msgstr "Select / upload file"
+
+msgid "Datei auswählen oder hochladen"
+msgstr "Select or upload file"
+
+msgid "Datei herunterladen"
+msgstr "Download file"
+
+msgid "Datei hochladen"
+msgstr "Upload file"
+
+msgid "Datei konnte nicht hochgeladen werden."
+msgstr "File could not be uploaded."
+
+msgid "Datei nicht gefunden."
+msgstr "File not found."
+
+msgid "Datei wird analysiert…"
+msgstr "Analyzing file…"
+
+msgid "Datei zu groß (max. 10MB)."
+msgstr "File too large (max. 10MB)."
+
+msgid "Dateiformat dieser Distribution (dct:format)"
+msgstr "File format of this distribution (dct:format)"
+
+msgid "Dateigröße"
+msgstr "File size"
+
+msgid "Dateigröße (Bytes)"
+msgstr "File size (bytes)"
+
+msgid "Dateigröße (dcat:byteSize)"
+msgstr "File size (dcat:byteSize)"
+
+msgid "Dateigröße Zahlenwert"
+msgstr "File size numeric value"
+
+msgid "Daten löschen"
+msgstr "Delete data"
+
+msgid "Datenlizenz Deutschland — Namensnennung 2.0 (DL-DE BY)"
+msgstr "Data licence Germany — Attribution 2.0 (DL-DE BY)"
+
+msgid "Datenlizenz Deutschland — Zero 2.0 (DL-DE Zero)"
+msgstr "Data licence Germany — Zero 2.0 (DL-DE Zero)"
+
+msgid "Datensatz"
+msgstr "Dataset"
+
+msgid "Datensatz ansehen"
+msgstr "View dataset"
+
+msgid "Datensatz bearbeiten"
+msgstr "Edit dataset"
+
+msgid "Datensatz konnte nicht gebaut werden."
+msgstr "Dataset could not be built."
+
+msgid "Datensatz nicht gefunden."
+msgstr "Dataset not found."
+
+msgid "Datensatz-Archiv"
+msgstr "Dataset archive"
+
+msgid "Datensatzliste"
+msgstr "Dataset list"
+
+msgid "Datensatzliste Navigation"
+msgstr "Dataset list navigation"
+
+msgid "Datensatzliste filtern"
+msgstr "Filter dataset list"
+
+msgid "Datensätze"
+msgstr "Datasets"
+
+msgid "Datensätze importieren"
+msgstr "Import datasets"
+
+msgid "Datensätze suchen"
+msgstr "Search datasets"
+
+msgid "Datenverwaltung"
+msgstr "Data management"
+
+msgid "Deinstallation"
+msgstr "Uninstallation"
+
+msgid "Demo-Datensatz bearbeiten"
+msgstr "Edit demo dataset"
+
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again. You can save the dataset as a draft at any time."
+
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
+msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again."
+
+msgid "Der Open Data Wizard ermöglicht es Ihnen, Datensätze direkt in WordPress zu beschreiben und als maschinenlesbare, standardkonforme Metadaten bereitzustellen — ohne technische Vorkenntnisse."
+msgstr "The Open Data Wizard lets you describe datasets directly in WordPress and provide them as machine-readable, standards-compliant metadata — without technical knowledge."
+
+msgid "Deutsch (DE)"
+msgstr "German (DE)"
+
+msgid "Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle (Namensnennung) angegeben wird."
+msgstr "The data may be used, modified and redistributed freely – including commercially – provided the source is credited (attribution)."
+
+msgid "Die Daten sind gemeinfrei. Sie dürfen ohne Einschränkungen und ohne Namensnennung kopiert, verändert und – auch kommerziell – weiterverwendet werden."
+msgstr "The data are in the public domain. They may be copied, modified and reused – including commercially – without restrictions and without attribution."
+
+msgid "Die Idee"
+msgstr "The Idea"
+
+msgid "Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis."
+msgstr "The JSON-LD view below shows the last saved result."
+
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren\" die ausführliche Erklärung mit Beispielen."
+msgstr "Required fields are marked with a red asterisk (*). You can save the dataset as a draft at any time — only publishing requires every mandatory field. Each field comes with guidance: the ⓘ icon shows the DCAT-AP term, \"Learn more\" the full explanation with examples."
+
+msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
+msgstr "The quality check evaluates the completeness of the metadata. The values are recalculated each time you save – changes in the form only affect the result after saving."
+
+msgid "Die Vorschau zeigt das generierte JSON-LD basierend auf den zuletzt gespeicherten Feldinhalten."
+msgstr "The preview shows the generated JSON-LD based on the most recently saved field contents."
+
+msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
+msgstr "These values are pre-filled automatically when creating a new dataset."
+
+msgid "Diese bestimmt, wie andere die Daten nutzen dürfen."
+msgstr "This determines how others may use the data."
+
+msgid "Dieser Datensatz ist nicht veröffentlicht."
+msgstr "This dataset is not published."
+
+msgid "Dieser Demo-Datensatz enthält eine Beispielliste zivilgesellschaftlicher Organisationen. Er wurde automatisch bei der Plugin-Installation erstellt und kann als Vorlage oder zum Testen des [odw_dataset]-Shortcodes verwendet werden."
+msgstr "This demo dataset contains a sample list of civil society organizations. It was created automatically during plugin installation and can be used as a template or to test the [odw_dataset] shortcode."
+
+msgid "Direkte URL zum Herunterladen der Datei (im Gegensatz zur Zugriffs-URL)."
+msgstr "Direct URL to download the file (as opposed to the access URL)."
+
+msgid "Direkter Download dieser Distribution (dcat:downloadURL)"
+msgstr "Direct download of this distribution (dcat:downloadURL)"
+
+msgid "Direkter Download-Link"
+msgstr "Direct download link"
+
+msgid "Direkter Download-Link zur Datei?"
+msgstr "Direct download link to the file?"
+
+msgid "Distribution"
+msgstr "Distribution"
+
+msgid "Distribution %d"
+msgstr "Distribution %d"
+
+msgid "Distribution mit URL (dcat:accessURL)"
+msgstr "Distribution with URL (dcat:accessURL)"
+
+msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
+msgstr "Distribution with access URL (dcat:accessURL)"
+
+msgid "EIGENE LIZENZ-URI (dct:license)"
+msgstr "CUSTOM LICENCE URI (dct:license)"
+
+msgid "Eigenschaft"
+msgstr "Property"
+
+msgid "Eine der sechs EU-Themenkategorien."
+msgstr "One of the six EU thematic categories."
+
+msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
+msgstr "HIGH-VALUE DATASET (dcatap:applicableLegislation)"
+
+msgid "Im Standard nachlesen"
+msgstr "Read it in the standard"
+
+msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
+msgstr "CONTACT POINT · EMAIL (dcat:contactPoint / vcard:hasEmail)"
+
+msgid "KONTAKTPUNKT · NAME (dcat:contactPoint / vcard:fn)"
+msgstr "CONTACT POINT · NAME (dcat:contactPoint / vcard:fn)"
+
+msgid "KONTAKTPUNKT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+msgstr "CONTACT POINT · WEBSITE (dcat:contactPoint / vcard:hasURL)"
+
+msgid "Multiplizität"
+msgstr "Multiplicity"
+
+msgid "Pflichtfeld für die Veröffentlichung"
+msgstr "Required for publishing"
+
+msgid "Primäre Distribution — weitere Angaben"
+msgstr "Primary distribution — further details"
+
+msgid "Distributionen"
+msgstr "Distributions"
+
+msgid "Download-URL"
+msgstr "Download URL"
+
+msgid "Download-URL, Format, Dateigröße, Lizenz und Zuschreibungstext."
+msgstr "Download URL, format, file size, license and attribution text."
+
+msgid "DownloadURL erreichbar (dcat:downloadURL)"
+msgstr "DownloadURL reachable (dcat:downloadURL)"
+
+msgid "DownloadURL gesetzt (dcat:downloadURL)"
+msgstr "DownloadURL set (dcat:downloadURL)"
+
+msgid "E-MAIL DES ERSTELLERS (foaf:mbox)"
+msgstr "CREATOR E-MAIL (foaf:mbox)"
+
+msgid "E-Mail der pflegenden Stelle"
+msgstr "Maintainer e-mail"
+
+msgid "E-Mail des Urhebers"
+msgstr "Originator e-mail"
+
+msgid "E-Mail-Adresse der pflegenden Stelle (optional)."
+msgstr "Maintainer e-mail address (optional)."
+
+msgid "E-Mail-Adresse des Erstellers (optional)."
+msgstr "Creator's e-mail address (optional)."
+
+msgid "E-Mail-Adresse des Urhebers (optional)."
+msgstr "Originator e-mail address (optional)."
+
+msgid "E-Mail-Adresse für Rückfragen."
+msgstr "Email address for inquiries."
+
+msgid "EIGENE LIZENZ-URI"
+msgstr "CUSTOM LICENSE URI"
+
+msgid "ENGAGEMENTFELD (ZiviZ, dct:subject)"
+msgstr "FIELD OF ENGAGEMENT (ZiviZ, dct:subject)"
+
+msgid "ERSTELLER (dct:creator)"
+msgstr "CREATOR (dct:creator)"
+
+msgid "EU-Datenthema eintippen oder auswählen…"
+msgstr "Type or select an EU data theme…"
+
+msgid "Eigene Lizenz-URI (bei „Sonstige\")"
+msgstr "Custom license URI (when “Other”)"
+
+msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:"
+msgstr "A demo dataset with a sample CSV was created automatically. Insert this shortcode into a post or page to display the download card:"
+
+msgid "Ein Fehler ist aufgetreten."
+msgstr "An error occurred."
+
+msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
+msgstr "A unique identifier of the dataset (e.g. DOI or internal ID). Example: 10.1234/abcd"
+
+msgid "Einfach erklärt"
+msgstr "In plain language"
+
+msgid "Einheit"
+msgstr "Unit"
+
+msgid "Einstellungen"
+msgstr "Settings"
+
+msgid "Einstellungen speichern"
+msgstr "Save settings"
+
+msgid "Einstieg"
+msgstr "Getting Started"
+
+msgid "Einzelner Datensatz"
+msgstr "Single dataset"
+
+msgid "Element %d: Erwarte Objekt."
+msgstr "Element %d: object expected."
+
+msgid "Empfohlen bei CC BY und CC BY-SA Lizenzen. Beispiel: Datensatz von Musterorganisation e.V., bereitgestellt unter CC BY 4.0"
+msgstr "Recommended for CC BY and CC BY-SA licenses. Example: Dataset by Sample Organization, provided under CC BY 4.0"
+
+msgid "Empfohlene Felder"
+msgstr "Recommended fields"
+
+msgid "Energie"
+msgstr "Energy"
+
+msgid "Engagementfeld"
+msgstr "Field of engagement"
+
+msgid "Engagementfeld eintippen oder auswählen…"
+msgstr "Type or select a field of engagement…"
+
+msgid "Englisch (EN)"
+msgstr "English (EN)"
+
+msgid "Entfernen"
+msgstr "Remove"
+
+msgid "Entwurf"
+msgstr "Draft"
+
+msgid "Entwürfe"
+msgstr "Drafts"
+
+msgid "Erdbeobachtung und Umwelt"
+msgstr "Earth observation and environment"
+
+msgid "Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch"
+msgstr "Add the link to your dataset or upload the file to the media library"
+
+msgid "Erste Schritte"
+msgstr "First Steps"
+
+msgid "Erstellt:"
+msgstr "Created:"
+
+msgid "Erweiterte Angaben"
+msgstr "Advanced details"
+
+msgid "Erweiterte Angaben (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr "Show advanced fields (DCAT-AP.de, HVD, access rights)"
+
+msgid "Erweiterte Angaben (optional)"
+msgstr "Advanced details (optional)"
+
+msgid "Erweiterte Angaben für Profis (DCAT-AP.de, HVD, Zugriffsrechte) anzeigen"
+msgstr "Show advanced fields for pros (DCAT-AP.de, HVD, access rights)"
+
+msgid "Experimentell"
+msgstr "Experimental"
+
+msgid "FORMAT (dct:format)"
+msgstr "FORMAT (dct:format)"
+
+msgid "Fachliche Einordnung Ihres Datensatzes aus dem CESSDA Controlled Vocabulary (Version 4.2.3, Deutsch). Tippen Sie ein Thema ein oder wählen Sie eines aus der Liste — die passende URI wird automatisch verknüpft. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik."
+msgstr "A subject classification of your dataset from the CESSDA Controlled Vocabulary (version 4.2.3, German). Type a topic or pick one from the list — the matching URI is linked automatically. Example: censuses, migration, economic policy."
+
+msgid "Fehler gefunden:"
+msgstr "Errors found:"
+
+msgid "Fehler:"
+msgstr "Errors:"
+
+msgid "Felder"
+msgstr "Fields"
+
+msgid "Filter nach Lizenz (Kurzform)"
+msgstr "Filter by license (short code)"
+
+msgid "Filter nach Thema"
+msgstr "Filter by theme"
+
+msgid "Folgende Pflichtfelder fehlen oder sind leer:"
+msgstr "The following required fields are missing or empty:"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Format der Distribution (dct:format)"
+msgstr "Format of the distribution (dct:format)"
+
+msgid "Format gesetzt (dct:format)"
+msgstr "Format set (dct:format)"
+
+msgid "Format nicht unterstützt (nur CSV oder JSON)."
+msgstr "Format not supported (CSV or JSON only)."
+
+msgid "Format/Media-Type aus Vokabular"
+msgstr "Format/media type from vocabulary"
+
+msgid "Freitext zur Entstehung und Herkunft der Daten."
+msgstr "Free text on the origin and provenance of the data."
+
+msgid "Freitextbeschreibung des räumlichen Bezugs, ergänzend zum amtlichen Gebietsschlüssel. Beispiel: Stadtgebiet Musterstadt"
+msgstr "Free-text description of the spatial coverage, complementing the official area code. Example: city of Musterstadt"
+
+msgid "Füllen Sie die Pflichtfelder aus (mit * gekennzeichnet) und speichern Sie den Datensatz. Sie können ihn später noch bearbeiten. Jedes Feld hat hilfreiche Beispiele – schauen Sie in den Hilfetexten vorbei!"
+msgstr "Fill in the required fields (marked with *) and save the dataset. You can edit it later. Every field has helpful examples – take a look at the help texts!"
+
+msgid "Für Profis: DCAT-AP.de-, HVD- und weitere Detailfelder. Öffnen Sie gezielt nur die Gruppen, die Sie brauchen."
+msgstr "For power users: DCAT-AP.de, HVD and further detail fields. Open only the groups you need."
+
+msgid "GEOGRAPHISCHE ABDECKUNG (dct:spatial)"
+msgstr "GEOGRAPHIC COVERAGE (dct:spatial)"
+
+msgid "Gemeinde"
+msgstr "Municipality"
+
+msgid "Generiertes JSON-LD live einsehen und über die REST-API abrufen."
+msgstr "View the generated JSON-LD live and retrieve it via the REST API."
+
+msgid "Georaum (Geospatial)"
+msgstr "Geospatial"
+
+msgid "Gesetz/Verordnung, das die Bereitstellung regelt. Beispiel: § 12a EGovG"
+msgstr "Law/regulation governing the provision. Example: § 12a EGovG"
+
+msgid "Gesundheit"
+msgstr "Health"
+
+msgid "Größe in Bytes, nur Zahl (dcat:byteSize)"
+msgstr "Size in bytes, number only (dcat:byteSize)"
+
+msgid "Gut"
+msgstr "Good"
+
+msgid "Gültige Datensätze:"
+msgstr "Valid datasets:"
+
+msgid "HERAUSGEBENDE ORGANISATION (dct:publisher)"
+msgstr "PUBLISHING ORGANIZATION (dct:publisher)"
+
+msgid "HERKUNFT (dct:provenance)"
+msgstr "PROVENANCE (dct:provenance)"
+
+msgid "HIGH-VALUE-DATENSATZ (EU-Durchführungsverordnung 2023/138)"
+msgstr "HIGH-VALUE DATASET (EU Implementing Regulation 2023/138)"
+
+msgid "HVD-KATEGORIE (dcatap:hvdCategory)"
+msgstr "HVD CATEGORY (dcatap:hvdCategory)"
+
+msgid "HVD-Kategorie auswählen (dcatap:hvdCategory)"
+msgstr "Select an HVD category (dcatap:hvdCategory)"
+
+msgid "Harvest-Endpoint"
+msgstr "Harvest endpoint"
+
+msgid "Herausgebende Organisation"
+msgstr "Publishing organization"
+
+msgid "Herausgeber"
+msgstr "Publisher"
+
+msgid "Herausgeber (dct:publisher)"
+msgstr "Publisher (dct:publisher)"
+
+msgid "Herunterladen"
+msgstr "Download"
+
+msgid "High-Value-Datensatz (HVD) — nur für öffentliche Stellen"
+msgstr "High-value dataset (HVD) — public sector bodies only"
+
+msgid "Hilfe anzeigen"
+msgstr "Show help"
+
+msgid "Hinweis ausblenden"
+msgstr "Dismiss notice"
+
+msgid "Betrifft ausschließlich öffentliche Stellen — Vereine, Verbände und andere zivilgesellschaftliche Organisationen können dieses Feld leer lassen. Hochwertige Datensätze (HVD) sind von der EU festgelegte Datensätze mit besonderem Nutzen für Wirtschaft und Gesellschaft. Falls zutreffend, wählen Sie unten die passende Kategorie."
+msgstr "Applies to public sector bodies only — associations, federations and other civil-society organisations can leave this field empty. High-value datasets (HVD) are datasets designated by the EU as being of particular benefit to the economy and society. If applicable, choose the matching category below."
+
+msgid "IANA-Media-Type als URI. Beispiel: https://www.iana.org/assignments/media-types/text/csv"
+msgstr "IANA media type as a URI. Example: https://www.iana.org/assignments/media-types/text/csv"
+
+msgid "IANA-Medientyp, z. B. application/json (dcat:mediaType)"
+msgstr "IANA media type, e.g. application/json (dcat:mediaType)"
+
+msgid "IDENTIFIER (dct:identifier)"
+msgstr "IDENTIFIER (dct:identifier)"
+
+msgid "Import abgeschlossen!"
+msgstr "Import complete!"
+
+msgid "Import läuft…"
+msgstr "Import in progress…"
+
+msgid "In Datensatz einfügen"
+msgstr "Insert into dataset"
+
+msgid "In drei Schritten: Formular ausfüllen, DCAT-AP.de-Metadaten erzeugen, Portale ernten den Katalog ab."
+msgstr "In three steps: fill in the form, generate DCAT-AP.de metadata, portals harvest the catalogue."
+
+msgid "In welche Kategorie gehört dieser Datensatz?"
+msgstr "Which category does this dataset belong to?"
+
+msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"
+msgstr "Which fields of civic engagement does this dataset belong to?"
+
+msgid "— Keine Angabe —"
+msgstr "— Not specified —"
+
+msgid "In welchem Format ist die Datei?"
+msgstr "What format is the file in?"
+
+msgid "In welcher Sprache sind die Daten?"
+msgstr "What language are the data in?"
+
+msgid "Indikator"
+msgstr "Indicator"
+
+msgid "Internationale Themen"
+msgstr "International Topics"
+
+msgid "Interoperabilität"
+msgstr "Interoperability"
+
+msgid "Nur für öffentliche Stellen: Ist dies ein hochwertiger Datensatz (HVD)?"
+msgstr "Public sector bodies only: is this a high-value dataset (HVD)?"
+
+msgid "JSON-Beispiel"
+msgstr "JSON example"
+
+msgid "JSON-Datei konnte nicht gelesen werden."
+msgstr "JSON file could not be read."
+
+msgid "JSON-Format ist ungültig."
+msgstr "JSON format is invalid."
+
+msgid "Ja, dieser Datensatz ist ein High-Value-Datensatz"
+msgstr "Yes, this dataset is a high-value dataset"
+
+msgid "Jede Distribution benötigt eine Lizenzangabe (dct:license)"
+msgstr "Each distribution requires a license (dct:license)"
+
+msgid "Jeder Datensatz benötigt mindestens eine Distribution mit einer Zugriffs-URL (dcat:accessURL). Mehrere Distributionen (z.B. CSV + JSON) können hinzugefügt werden."
+msgstr "Each dataset requires at least one distribution with an access URL (dcat:accessURL). Multiple distributions (e.g. CSV + JSON) can be added."
+
+msgid "Jedes Schlagwort in eine eigene Zeile (nicht mit Komma trennen). Beispiel:\nUmwelt\nWasser\nLuftverschmutzung"
+msgstr "One keyword per line (do not separate with commas). Example:\nEnvironment\nWater\nAir pollution"
+
+msgid "Jedes Schlagwort in einer eigenen Zeile. Beispiel: Umwelt, Wasser, Luftverschmutzung"
+msgstr "One keyword per line. Example: environment, water, air pollution"
+
+msgid "Jedes übersetzte Schlagwort in einer eigenen Zeile."
+msgstr "Each translated keyword on its own line."
+
+msgid "Jetzt importieren"
+msgstr "Import now"
+
+msgid "Justiz & Sicherheit"
+msgstr "Justice & Security"
+
+msgid "Jährlich"
+msgstr "Yearly"
+
+msgid "KONFORM ZU (dct:conformsTo)"
+msgstr "CONFORMS TO (dct:conformsTo)"
+
+msgid "Katalog"
+msgstr "Catalog"
+
+msgid "Katalog-Beschreibung"
+msgstr "Catalog description"
+
+msgid "Katalog-Titel"
+msgstr "Catalog title"
+
+msgid "Kategorien (dcat:theme)"
+msgstr "Categories (dcat:theme)"
+
+msgid "Keine Berechtigung."
+msgstr "No permission."
+
+msgid "Keine Datei ausgewählt"
+msgstr "No file selected"
+
+msgid "Keine Datei hochgeladen."
+msgstr "No file uploaded."
+
+msgid "Keine Datensätze ausgewählt."
+msgstr "No datasets selected."
+
+msgid "Keine Datensätze gefunden."
+msgstr "No datasets found."
+
+msgid "Keine Datensätze im Papierkorb."
+msgstr "No datasets in the trash."
+
+msgid "Keine Datensätze zum Importieren."
+msgstr "No datasets to import."
+
+msgid "Keine gültige Upload-Datei."
+msgstr "No valid upload file."
+
+msgid "Keine gültigen Datensätze gefunden."
+msgstr "No valid datasets found."
+
+msgid "Keine gültigen Zeilen gefunden."
+msgstr "No valid rows found."
+
+msgid "Kleinste räumlich auflösbare Distanz in Metern (nur Zahl). Beispiel: 30"
+msgstr "Smallest spatially resolvable distance in meters (number only). Example: 30"
+
+msgid "Klicken zum Markieren"
+msgstr "Click to select"
+
+msgid "Kontakt"
+msgstr "Contact"
+
+msgid "Kontakt-Website"
+msgstr "Contact website"
+
+msgid "Kontaktpunkt (dcat:contactPoint)"
+msgstr "Contact point (dcat:contactPoint)"
+
+msgid "Kontext"
+msgstr "Context"
+
+msgid "Kurze Beschreibung der Änderungen gegenüber der Vorversion."
+msgstr "Short description of the changes from the previous version."
+
+msgid "Kurze Beschreibung des Datensatzes…"
+msgstr "Short description of the dataset…"
+
+msgid "Kurze Beschreibung des Katalogs — erscheint als dct:description in der REST-API-Antwort (Pflichtfeld gemäß DCAT-AP.de)."
+msgstr "Short description of the catalog — appears as dct:description in the REST API response (required field per DCAT-AP.de)."
+
+msgid "Kurze Beschreibung dieser Distribution (dct:description)"
+msgstr "Short description of this distribution (dct:description)"
+
+msgid "Kurzer Titel der Distribution. Beispiel: Gesamtdaten als CSV"
+msgstr "Short title of the distribution. Example: Full data as CSV"
+
+msgid "Kurzer Titel dieser Distribution (dct:title)"
+msgstr "Short title of this distribution (dct:title)"
+
+msgid "LIZENZ (dct:license)"
+msgstr "LICENSE (dct:license)"
+
+msgid "Land (Bundesland)"
+msgstr "State (Bundesland)"
+
+msgid "Landkreis"
+msgstr "District"
+
+msgid "Landwirtschaft & Ernährung"
+msgstr "Agriculture & Food"
+
+msgid "Leer lassen für den automatischen Wert (Seitenname + „ — Datenkatalog\")."
+msgstr "Leave empty for the automatic value (site name + “ — Data Catalog”)."
+
+msgid "Letzte Berechnung: %s · Wird bei jedem Speichern aktualisiert."
+msgstr "Last calculation: %s · Updated on every save."
+
+msgid "Liefert alle veröffentlichten Datensätze als dcat:Catalog (JSON-LD). Unterstützt:"
+msgstr "Returns all published datasets as dcat:Catalog (JSON-LD). Supports:"
+
+msgid "Live-Vorschau"
+msgstr "Live preview"
+
+msgid "Lizenz"
+msgstr "License"
+
+msgid "Lizenz (dct:license)"
+msgstr "License (dct:license)"
+
+msgid "Lizenz aus Vokabular"
+msgstr "License from vocabulary"
+
+msgid "Lizenz aus dem kontrollierten Vokabular"
+msgstr "License from the controlled vocabulary"
+
+msgid "Lizenz dieser Distribution (dct:license)"
+msgstr "License of this distribution (dct:license)"
+
+msgid "Lizenz gesetzt (dct:license)"
+msgstr "License set (dct:license)"
+
+msgid "Lizenz-URI eingeben oder auswählen"
+msgstr "Enter or select a license URI"
+
+msgid "MEDIENTYP (dcat:mediaType)"
+msgstr "MEDIA TYPE (dcat:mediaType)"
+
+msgid "MEHRERE DISTRIBUTIONEN (dcat:distribution)"
+msgstr "MULTIPLE DISTRIBUTIONS (dcat:distribution)"
+
+msgid "Mangelhaft"
+msgstr "Poor"
+
+msgid "Maschinenlesbares Format"
+msgstr "Machine-readable format"
+
+msgid "Maximale Anzahl von %d Datensätzen erreicht — weitere Elemente wurden ignoriert."
+msgstr "Maximum of %d datasets reached — further elements were ignored."
+
+msgid "Maximale Anzahl von %d Datensätzen erreicht — weitere Zeilen wurden ignoriert."
+msgstr "Maximum of %d datasets reached — further rows were ignored."
+
+msgid "Media-Type"
+msgstr "Media type"
+
+msgid "Media-Type (MIME)"
+msgstr "Media type (MIME)"
+
+msgid "Media-Type gesetzt (dcat:mediaType)"
+msgstr "Media type set (dcat:mediaType)"
+
+msgid "Mehr erfahren"
+msgstr "Learn more"
+
+msgid "Metadaten (JSON-LD)"
+msgstr "Metadata (JSON-LD)"
+
+msgid "Metadaten JSON"
+msgstr "Metadata JSON"
+
+msgid "Metadaten des Datenkatalogs — erscheinen in der REST-API-Antwort des Catalog-Endpoints."
+msgstr "Metadata of the data catalog — appears in the REST API response of the catalog endpoint."
+
+msgid "Meteorologie"
+msgstr "Meteorological"
+
+msgid "Mindestens eine Distribution mit Zugriffs-URL (dcat:accessURL)"
+msgstr "At least one distribution with an access URL (dcat:accessURL)"
+
+msgid "Mit dem Batch-Import legen Sie mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Laden Sie eine CSV- oder JSON-Datei hoch, prüfen Sie in der Vorschau die erkannten Datensätze und importieren Sie die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass Sie sie vor der Veröffentlichung noch bearbeiten können. Nutzen Sie die Beispieldatei unten als Vorlage für den Aufbau."
+msgstr "Batch import lets you create several datasets at once instead of entering them one by one. Upload a CSV or JSON file, review the detected datasets in the preview and import the desired entries with one click. All imported datasets are created as drafts first, so you can edit them before publishing. Use the sample file below as a template."
+
+msgid "Mit dem Batch-Import legst du mehrere Datensätze auf einmal an, statt sie einzeln zu erfassen. Lade eine CSV- oder JSON-Datei hoch, prüfe in der Vorschau die erkannten Datensätze und importiere die gewünschten Einträge mit einem Klick. Alle importierten Datensätze werden zunächst als Entwürfe angelegt, sodass du sie vor der Veröffentlichung noch bearbeiten kannst. Nutze die Beispieldatei unten als Vorlage für den Aufbau."
+msgstr "With the batch import you create several datasets at once instead of entering them one by one. Upload a CSV or JSON file, check the detected datasets in the preview and import the desired entries with one click. All imported datasets are initially created as drafts, so you can still edit them before publishing. Use the sample file below as a template for the structure."
+
+msgid "Mit welchen Stichworten finde ich diese Daten?"
+msgstr "Which keywords help find these data?"
+
+msgid "Mobilität"
+msgstr "Mobility"
+
+msgid "Monatlich"
+msgstr "Monthly"
+
+msgid "Musterorganisation e.V."
+msgstr "Sample Organization"
+
+msgid "NAMENSNENNUNGSTEXT (dcatde:licenseAttributionByText)"
+msgstr "ATTRIBUTION TEXT (dcatde:licenseAttributionByText)"
+
+msgid "Name der herausgebenden Organisation"
+msgstr "Name of the publishing organization"
+
+msgid "Name einer Person, eines Teams oder einer Organisation."
+msgstr "Name of a person, a team or an organisation."
+
+msgid "Namensnennung"
+msgstr "Attribution"
+
+msgid "Namensnennungstext"
+msgstr "Attribution text"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Neuen Datensatz anlegen"
+msgstr "Create new dataset"
+
+msgid "Neuen Datensatz erstellen"
+msgstr "Create a new dataset"
+
+msgid "Neuer Datensatz"
+msgstr "New dataset"
+
+msgid "Nicht-proprietäres Format"
+msgstr "Non-proprietary format"
+
+msgid "Noch keine Daten vorhanden. Bitte erst Pflichtfelder befüllen und speichern."
+msgstr "No data yet. Please fill in the required fields and save first."
+
+msgid "Noch keine Qualitätsanalyse vorhanden. Datensatz speichern, um die Prüfung auszuführen."
+msgstr "No quality analysis yet. Save the dataset to run the check."
+
+msgid "Noch nicht berechnet"
+msgstr "Not yet calculated"
+
+msgid "Nur ausfüllen, wenn oben „Sonstige\" gewählt wurde."
+msgstr "Only fill in when “Other” was selected above."
+
+msgid "Nur bei Namensnennungslizenzen (dcatde:licenseAttributionByText)"
+msgstr "Only for attribution licenses (dcatde:licenseAttributionByText)"
+
+msgid "Nutzungsrechte"
+msgstr "Usage rights"
+
+msgid "Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt."
+msgstr "Publishing open data is harder than it needs to be. Complex forms and unfamiliar jargon make the work difficult. The Open Data Wizard simplifies this by guiding you through the process with easy-to-understand questions."
+
+msgid "Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet."
+msgstr "Official identifier of the providing body from the DCAT-AP.de registry. Choose a body from the list; the corresponding official URI is used automatically."
+
+msgid "Open Data Wizard"
+msgstr "Open Data Wizard"
+
+msgid "Open Data Wizard erfolgreich installiert!"
+msgstr "Open Data Wizard installed successfully!"
+
+msgid "Open Data Wizard — Demo-Datensatz (CSV)"
+msgstr "Open Data Wizard — Demo Dataset (CSV)"
+
+msgid "Open Data Wizard — Einstellungen"
+msgstr "Open Data Wizard — Settings"
+
+msgid "Open Data Wizard — Einstieg"
+msgstr "Open Data Wizard — Getting Started"
+
+msgid "Open Data Wizard: Carbon Fields konnte nicht initialisiert werden — %s"
+msgstr "Open Data Wizard: Carbon Fields could not be initialized — %s"
+
+
+msgid "Open Data Wizard: Veröffentlichung blockiert"
+msgstr "Open Data Wizard: Publishing blocked"
+
+msgid "Open-Data-Plattformen können diese URL als Harvest-Quelle einbinden und die Metadaten automatisch einsammeln."
+msgstr "Open data platforms can add this URL as a harvest source and collect the metadata automatically."
+
+msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt die Kategorie aus Tab 1)."
+msgstr "Optionally an additional theme from the official EU theme list (supplements the category from tab 1)."
+
+msgid "Optional: Machen Sie diesen Datensatz zusätzlich auf dem Datenatlas Zivilgesellschaft auffindbar."
+msgstr "Optional: also make this dataset discoverable on the Datenatlas Zivilgesellschaft."
+
+msgid "Optional: Ordnen Sie den Datensatz einem Engagementfeld der Zivilgesellschaft nach dem ZiviZ-Vokabular zu. Feld aus der Liste wählen — die zugehörige URI wird automatisch verwendet. Beispiel: Kultur, Sport, Umwelt- und Naturschutz."
+msgstr "Optional: assign the dataset to a civil-society field of engagement from the ZiviZ vocabulary. Pick one from the list — the matching URI is used automatically. Example: Culture, Sports, Environmental and nature protection."
+
+msgid "Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution."
+msgstr "Optional: additional access points for this dataset — e.g. the same data in another format or at a different URL. The file entered above remains the primary distribution."
+
+msgid "Optional: übersetzte Schlagworte je Sprache (dcat:keyword @language)."
+msgstr "Optional: translated keywords per language (dcat:keyword @language)."
+
+msgid "Optionale Angaben"
+msgstr "Optional details"
+
+msgid "Ordnen Sie den Datensatz einem oder mehreren Themenfeld nach CESSDA-Vokabular zu"
+msgstr "Assign the dataset to a topic from the CESSDA vocabulary"
+
+msgid "PFLEGENDE STELLE (dcatde:maintainer)"
+msgstr "MAINTAINER (dcatde:maintainer)"
+
+msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
+msgstr "PLANNED AVAILABILITY (dcatap:availability)"
+
+msgid "PROJEKTSEITE (dcat:landingPage)"
+msgstr "PROJECT PAGE (dcat:landingPage)"
+
+msgid "Paginierung"
+msgstr "Pagination"
+
+msgid "Perfekt"
+msgstr "Perfect"
+
+msgid "Pflegende Stelle"
+msgstr "Maintainer"
+
+msgid "Pflichtangaben"
+msgstr "Required information"
+
+msgid "Pflichtfelder"
+msgstr "Required fields"
+
+msgid "Projektseite"
+msgstr "Project page"
+
+msgid "Projektseite & Aktualität"
+msgstr "Project page & timeliness"
+
+msgid "Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen."
+msgstr "Project page, first publication, update frequency, geographic and temporal coverage, contact information."
+
+msgid "Punkte"
+msgstr "Points"
+
+msgid "QUALITÄTSPROZESS (dcatde:qualityProcessURI)"
+msgstr "QUALITY PROCESS (dcatde:qualityProcessURI)"
+
+msgid "Qualität"
+msgstr "Quality"
+
+msgid "Qualitätsprüfung"
+msgstr "Quality Check"
+
+msgid "Qualitätsprüfung (MQA)"
+msgstr "Quality Check (MQA)"
+
+msgid "Qualitätsscores aller vorhandenen Datensätze neu berechnen — z.B. nach Änderungen an der Scoring-Logik."
+msgstr "Recalculate quality scores of all existing datasets — e.g. after changes to the scoring logic."
+
+msgid "Qualitätsscores neu berechnet: %d Datensätze aktualisiert."
+msgstr "Quality scores recalculated: %d datasets updated."
+
+msgid "RECHTE (dct:rights)"
+msgstr "RIGHTS (dct:rights)"
+
+msgid "RECHTSGRUNDLAGE (dcatde:legalBasis)"
+msgstr "LEGAL BASIS (dcatde:legalBasis)"
+
+msgid "REST API"
+msgstr "REST API"
+
+msgid "REST-Endpoint öffnen"
+msgstr "Open REST endpoint"
+
+msgid "Recalculated quality scores for %d dataset(s)."
+msgstr "Recalculated quality scores for %d dataset(s)."
+
+msgid "Rechte (dct:rights)"
+msgstr "Rights (dct:rights)"
+
+msgid "Rechtlicher Hinweis über die Lizenz hinaus (dct:rights)"
+msgstr "Legal note beyond the license (dct:rights)"
+
+msgid "Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin"
+msgstr "Select a region from the list (linked to GeoNames) or enter free text/URI. Example: Germany, Bavaria, Berlin"
+
+msgid "Region aus der Liste wählen oder eintippen…"
+msgstr "Select a region from the list or type…"
+
+msgid "Regionen & Städte"
+msgstr "Regions & Cities"
+
+msgid "RÄUMLICHE AUFLÖSUNG IN METERN (dcat:spatialResolutionInMeters)"
+msgstr "SPATIAL RESOLUTION IN METERS (dcat:spatialResolutionInMeters)"
+
+msgid "RÄUMLICHE BESCHREIBUNG (dcatde:geocodingDescription)"
+msgstr "SPATIAL DESCRIPTION (dcatde:geocodingDescription)"
+
+msgid "Räumliche Abdeckung"
+msgstr "Spatial coverage"
+
+msgid "Räumliche Abdeckung (dct:spatial)"
+msgstr "Spatial coverage (dct:spatial)"
+
+msgid "Räumliche Beschreibung"
+msgstr "Spatial description"
+
+msgid "SCHLAGWORTE (dcat:keyword)"
+msgstr "KEYWORDS (dcat:keyword)"
+
+msgid "SPRACHE (dct:language)"
+msgstr "LANGUAGE (dct:language)"
+
+msgid "Schlagworte"
+msgstr "Keywords"
+
+msgid "Schlagworte (dcat:keyword)"
+msgstr "Keywords (dcat:keyword)"
+
+msgid "Schlagworte in weiteren Sprachen"
+msgstr "Keywords in additional languages"
+
+msgid "Schlüsselwörter (dcat:keyword)"
+msgstr "Keywords (dcat:keyword)"
+
+msgid "Sekunden"
+msgstr "Seconds"
+
+msgid "Sendet ausgehende Anfragen an die angegebenen Datensatz-URLs. Ergebnisse werden 24 Stunden zwischengespeichert. Standardmäßig deaktiviert."
+msgstr "Sends outbound requests to the given dataset URLs. Results are cached for 24 hours. Disabled by default."
+
+msgid "Shortcode"
+msgstr "Shortcode"
+
+msgid "Sicherheitsüberprüfung fehlgeschlagen."
+msgstr "Security check failed."
+
+msgid "Sonstige Lizenz…"
+msgstr "Other license…"
+
+msgid "Speichern Sie den Datensatz, um die Vorschau zu aktualisieren."
+msgstr "Save the dataset to update the preview."
+
+msgid "Speichern Sie den Datensatz, um sie zu aktualisieren."
+msgstr "Save the dataset to update it."
+
+msgid "Sprache"
+msgstr "Language"
+
+msgid "Sprache (dct:language)"
+msgstr "Language (dct:language)"
+
+msgid "Sprache dieser Schlagworte"
+msgstr "Language of these keywords"
+
+msgid "Sprache dieser Übersetzung (dct:description @language)"
+msgstr "Language of this translation (dct:description @language)"
+
+msgid "Sprache dieser Übersetzung (dct:title @language)"
+msgstr "Language of this translation (dct:title @language)"
+
+msgid "Sprache, Schlagworte, Veröffentlichungs- und Änderungsdatum, Themenklassifikation."
+msgstr "Language, keywords, publication and modification date, topic classification."
+
+msgid "Stabil (langfristig verfügbar)"
+msgstr "Stable (available long-term)"
+
+msgid "Standard-Lizenz"
+msgstr "Default license"
+
+msgid "Standard-Sprache"
+msgstr "Default language"
+
+msgid "Standardwerte für neue Datensätze"
+msgstr "Default values for new datasets"
+
+msgid "Statistik"
+msgstr "Statistics"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Stelle eintippen oder auswählen…"
+msgstr "Type or select a body…"
+
+msgid "Stelle oder Person, die die Daten erstellt hat (kann vom Herausgeber abweichen)."
+msgstr "Body or person that created the data (may differ from the publisher)."
+
+msgid "Stelle, die für die laufende Pflege/Aktualisierung der Daten zuständig ist."
+msgstr "The body responsible for the ongoing maintenance/updating of the data."
+
+msgid "Stelle, von der die Daten ursprünglich stammen (kann von Herausgeber abweichen)."
+msgstr "The body the data originally comes from (may differ from the publisher)."
+
+msgid "THEMA (dcat:theme)"
+msgstr "THEME (dcat:theme)"
+
+msgid "TITEL DER DISTRIBUTION (dct:title)"
+msgstr "DISTRIBUTION TITLE (dct:title)"
+
+msgid "Tab 4 enthält optionale DCAT-AP Felder: Projektseite (dcat:landingPage), Aktualisierungsfrequenz (dct:accrualPeriodicity), geographische und zeitliche Abdeckung sowie einen Kontaktpunkt (dcat:contactPoint)."
+msgstr "Tab 4 contains optional DCAT-AP fields: project page (dcat:landingPage), update frequency (dct:accrualPeriodicity), geographic and temporal coverage, and a contact point (dcat:contactPoint)."
+
+msgid "Tab 5 zeigt das generierte JSON-LD nach dem Speichern. Dort finden Sie auch den direkten Link zum REST-Endpoint."
+msgstr "Tab 5 shows the generated JSON-LD after saving. There you will also find the direct link to the REST endpoint."
+
+msgid "Temporär (kann jederzeit entfallen)"
+msgstr "Temporary (may be removed at any time)"
+
+msgid "Thema"
+msgstr "Theme"
+
+msgid "Thema (dcat:theme)"
+msgstr "Theme (dcat:theme)"
+
+msgid "Thema eintippen oder auswählen…"
+msgstr "Type or select a topic…"
+
+msgid "Titel"
+msgstr "Title"
+
+msgid "Titel (dct:title)"
+msgstr "Title (dct:title)"
+
+msgid "Titel der Distribution"
+msgstr "Distribution title"
+
+msgid "Titel des Datensatzes (WordPress-Titel-Feld)"
+msgstr "Title of the dataset (WordPress title field)"
+
+msgid "Titel in weiteren Sprachen"
+msgstr "Title in additional languages"
+
+msgid "Titel, Beschreibung und Schlagworte zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben in Tab 1 bleiben die Hauptsprache."
+msgstr "Title, description and keywords additionally in further languages — for multilingual, DCAT-AP compliant metadata. The entries in tab 1 remain the main language."
+
+msgid "Täglich"
+msgstr "Daily"
+
+msgid "URHEBER (dcatde:originator)"
+msgstr "ORIGINATOR (dcatde:originator)"
+
+msgid "URI aus der EU-Liste „dataset-type\". Beispiel: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"
+msgstr "URI from the EU \"dataset-type\" list. Example: http://publications.europa.eu/resource/authority/dataset-type/STATISTICAL"
+
+msgid "URI des Standards/Anwendungsprofils, dem die Daten folgen."
+msgstr "URI of the standard/application profile the data follows."
+
+msgid "URI des amtlichen Regional-/Gemeindeschlüssels (AGS/ARS). Beispiel: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09"
+msgstr "URI of the official regional/municipality key (AGS/ARS). Example: http://dcat-ap.de/def/politicalGeocoding/regionalKey/09"
+
+msgid "URI oder Freitext zu den Nutzungsrechten der Distribution."
+msgstr "URI or free text on the usage rights of the distribution."
+
+msgid "URL der Projektwebsite oder des Datenportals mit weiteren Informationen zum Datensatz. Beispiel: https://beispiel.de/projekt"
+msgstr "URL of the project website or data portal with further information about the dataset. Example: https://example.com/project"
+
+msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
+msgstr "URL describing the quality-assurance process (optional)."
+
+msgid "URL-Erreichbarkeit prüfen"
+msgstr "Check URL reachability"
+
+msgid "Um welchen Typ von Datensatz handelt es sich?"
+msgstr "What type of dataset is this?"
+
+msgid "Umwelt"
+msgstr "Environment"
+
+msgid "Umwelt\nWasser\nLuftverschmutzung"
+msgstr "Environment\nWater\nAir pollution"
+
+msgid "Unbekannt"
+msgstr "Unknown"
+
+msgid "Ungültiger Dateityp (nur CSV oder JSON)."
+msgstr "Invalid file type (CSV or JSON only)."
+
+msgid "Ungültiges Datumsformat für \"since\". Bitte ISO 8601 verwenden (z. B. 2024-01-01T00:00:00Z)."
+msgstr "Invalid date format for \"since\". Please use ISO 8601 (e.g. 2024-01-01T00:00:00Z)."
+
+msgid "Unregelmäßig"
+msgstr "Irregular"
+
+msgid "Unter welcher E-Mail-Adresse kann ich Fragen stellen?"
+msgstr "At which email address can I ask questions?"
+
+msgid "Unter welcher Lizenz sind diese Daten verfügbar?"
+msgstr "Under which license are these data available?"
+
+msgid "Unternehmen und Eigentümerschaft von Unternehmen"
+msgstr "Companies and company ownership"
+
+msgid "Urheber"
+msgstr "Originator"
+
+msgid "VERSION (owl:versionInfo)"
+msgstr "VERSION (owl:versionInfo)"
+
+msgid "VERSIONSHINWEISE (adms:versionNotes)"
+msgstr "VERSION NOTES (adms:versionNotes)"
+
+msgid "VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)"
+msgstr "ADMINISTRATIVE LEVEL (dcatde:politicalGeocodingLevelURI)"
+
+msgid "VERÖFFENTLICHUNGSDATUM (dct:issued)"
+msgstr "PUBLICATION DATE (dct:issued)"
+
+msgid "Verantwortlichkeiten & Herkunft"
+msgstr "Responsibilities & Provenance"
+
+msgid "Verbesserungsbedarf"
+msgstr "Needs improvement"
+
+msgid "Verfügbar (mittelfristige Planung)"
+msgstr "Available (medium-term planning)"
+
+msgid "Verkehr"
+msgstr "Transport"
+
+msgid "Verknüpfte URI:"
+msgstr "Linked URI:"
+
+msgid "Versionsbezeichnung des Datensatzes. Beispiel: 1.0, 2024-Q1"
+msgstr "Version label of the dataset. Example: 1.0, 2024-Q1"
+
+msgid "Verwaltung & öffentlicher Sektor"
+msgstr "Government & Public Sector"
+
+msgid "Veröffentlicht"
+msgstr "Published"
+
+msgid "Veröffentlichungsdatum (dct:issued)"
+msgstr "Publication date (dct:issued)"
+
+msgid "Vierteljährlich"
+msgstr "Quarterly"
+
+msgid "Vollständige URI der Lizenz eingeben oder aus der Liste auswählen. Beispiel: https://creativecommons.org/licenses/by/4.0/"
+msgstr "Enter the full license URI or select it from the list. Example: https://creativecommons.org/licenses/by/4.0/"
+
+msgid "Vorausgewählte Lizenz bei neuen Datensätzen."
+msgstr "Pre-selected license for new datasets."
+
+msgid "Vorschau"
+msgstr "Preview"
+
+msgid "Vorschaubild"
+msgstr "Featured image"
+
+msgid "Vorschaubild entfernen"
+msgstr "Remove featured image"
+
+msgid "Vorschaubild festlegen"
+msgstr "Set featured image"
+
+msgid "Wann wurden diese Daten zuletzt aktualisiert?"
+msgstr "When were these data last updated?"
+
+msgid "Wann wurden diese Daten zum ersten Mal veröffentlicht?"
+msgstr "When were these data first published?"
+
+msgid "Was hat sich in dieser Version geändert?"
+msgstr "What changed in this version?"
+
+msgid "Website mit weiteren Kontaktinformationen."
+msgstr "Website with further contact information."
+
+msgid "Weitere DCAT-AP-Felder (optional)"
+msgstr "More DCAT-AP fields (optional)"
+
+msgid "Weitere Distribution"
+msgstr "Additional distribution"
+
+msgid "Weitere Distributionen"
+msgstr "Additional distributions"
+
+msgid "Weitere Informationen:"
+msgstr "Further information:"
+
+msgid "Weiteres EU-Thema (Kategorie-URI)?"
+msgstr "Additional EU theme (category URI)?"
+
+msgid "Welche Nutzungsrechte gelten für die Datei?"
+msgstr "What usage rights apply to the file?"
+
+msgid "Welche Stelle stellt diese Daten im GovData-Verbund bereit?"
+msgstr "Which body provides this data within the GovData network?"
+
+msgid "Welche Version hat dieser Datensatz?"
+msgstr "What version is this dataset?"
+
+msgid "Welche eindeutige Kennung hat dieser Datensatz?"
+msgstr "What unique identifier does this dataset have?"
+
+msgid "Welche geografische Region betreffen diese Daten?"
+msgstr "Which geographic region do these data concern?"
+
+msgid "Welche räumliche Auflösung haben die Daten (in Metern)?"
+msgstr "What spatial resolution does the data have (in meters)?"
+
+msgid "Welche zeitliche Auflösung haben die Daten?"
+msgstr "What temporal resolution does the data have?"
+
+msgid "Welchem Standard oder Schema entsprechen die Daten?"
+msgstr "Which standard or schema does the data conform to?"
+
+msgid "Welchen Medientyp (MIME) hat die Datei?"
+msgstr "What media type (MIME) does the file have?"
+
+msgid "Welchen Themen ist dieser Datensatz zugeordnet?"
+msgstr "Which themes is this dataset assigned to?"
+
+msgid "Welcher HVD-Kategorie gehört dieser Datensatz an?"
+msgstr "Which HVD category does this dataset belong to?"
+
+msgid "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?"
+msgstr "What attribution text should be given for reuse?"
+
+msgid "Wer darf auf diese Daten zugreifen?"
+msgstr "Who may access this data?"
+
+msgid "Wer gibt diese Daten heraus?"
+msgstr "Who publishes these data?"
+
+msgid "Wer gibt diese Daten heraus? Worum geht es? In welche Kategorie gehört der Datensatz?"
+msgstr "Who publishes these data? What are they about? Which category does the dataset belong to?"
+
+msgid "Wer hat diese Daten erstellt?"
+msgstr "Who created this data?"
+
+msgid "Wer hat diese Daten ursprünglich erstellt?"
+msgstr "Who originally created this data?"
+
+msgid "An wen kann ich mich bei Fragen zu diesen Daten wenden?"
+msgstr "Who can I contact with questions about these data?"
+
+msgid "Wer pflegt diese Daten laufend?"
+msgstr "Who maintains this data on an ongoing basis?"
+
+msgid "Wie CC BY: Nutzung und Bearbeitung erlaubt mit Namensnennung. Zusätzlich müssen bearbeitete Daten unter derselben Lizenz weitergegeben werden."
+msgstr "Like CC BY: use and modification allowed with attribution. In addition, modified data must be shared under the same license."
+
+msgid "Wie verlässlich bleibt diese Datei abrufbar?"
+msgstr "How reliably will this file stay available?"
+
+msgid "Wie funktioniert es?"
+msgstr "How does it work?"
+
+msgid "Wie heißt die bereitgestellte Datei/Distribution?"
+msgstr "What is the name of the provided file/distribution?"
+
+msgid "Wie lange Catalog- und Dataset-Antworten gecacht werden. Standard: 300 (5 Minuten). Min: 60, Max: 86400 (24 h)."
+msgstr "How long catalog and dataset responses are cached. Default: 300 (5 minutes). Min: 60, Max: 86400 (24 h)."
+
+msgid "Wie lässt sich der räumliche Bezug in Worten beschreiben?"
+msgstr "How can the spatial coverage be described in words?"
+
+msgid "Wie lässt sich die Distribution beschreiben?"
+msgstr "How can the distribution be described?"
+
+msgid "Wie oft werden diese Daten aktualisiert?"
+msgstr "How often are these data updated?"
+
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?"
+msgstr "How reliable/permanent is access to this file intended to be?"
+
+msgid "Wiederverwendbarkeit"
+msgstr "Reusability"
+
+msgid "Willkommen im Open Data Wizard"
+msgstr "Welcome to the Open Data Wizard"
+
+msgid "Wird automatisch bei jeder Speicherung aktualisiert. Beispiel: 2026-04-22"
+msgstr "Updated automatically on every save. Example: 2026-04-22"
+
+msgid "Wird im Feld „Herausgebende Organisation\" neuer Datensätze vorausgefüllt."
+msgstr "Pre-filled in the “Publishing organization” field of new datasets."
+
+msgid "Wirtschaft & Finanzen"
+msgstr "Economy & Finance"
+
+msgid "Wissenschaft & Technologie"
+msgstr "Science & Technology"
+
+msgid "Wo finde ich die Projektseite zu diesen Daten?"
+msgstr "Where do I find the project page for these data?"
+
+msgid "Wo ist das Qualitätssicherungs-Verfahren dokumentiert?"
+msgstr "Where is the quality-assurance process documented?"
+
+msgid "Wo kann diese Distribution abgerufen werden? (dcat:accessURL)"
+msgstr "Where can this distribution be accessed? (dcat:accessURL)"
+
+msgid "Wo kann ich die Datei herunterladen?"
+msgstr "Where can I download the file?"
+
+msgid "Woher stammen die Daten und wie sind sie entstanden?"
+msgstr "Where does the data come from and how was it created?"
+
+msgid "Worum geht es in diesem Datensatz?"
+msgstr "What is this dataset about?"
+
+msgid "Wöchentlich"
+msgstr "Weekly"
+
+msgid "ZEITLICHE AUFLÖSUNG (dcat:temporalResolution)"
+msgstr "TEMPORAL RESOLUTION (dcat:temporalResolution)"
+
+msgid "ZEITLICHER BEZUG — ENDE (dct:temporal)"
+msgstr "TEMPORAL COVERAGE — END (dct:temporal)"
+
+msgid "ZEITLICHER BEZUG — START (dct:temporal)"
+msgstr "TEMPORAL COVERAGE — START (dct:temporal)"
+
+msgid "ZUGRIFFS-URL (dcat:accessURL)"
+msgstr "ACCESS URL (dcat:accessURL)"
+
+msgid "ZUGRIFFSRECHTE (dct:accessRights)"
+msgstr "ACCESS RIGHTS (dct:accessRights)"
+
+msgid "ZUSÄTZLICHES THEMA (dcat:theme)"
+msgstr "ADDITIONAL THEME (dcat:theme)"
+
+msgid "Zeile %1$d: Dateigröße muss eine ganze Zahl in Bytes sein: %2$s"
+msgstr "Row %1$d: file size must be a whole number in bytes: %2$s"
+
+msgid "Zeile %1$d: Pflichtfeld \"%2$s\" fehlt."
+msgstr "Row %1$d: required field \"%2$s\" is missing."
+
+msgid "Zeile %1$d: Ungültige Lizenz: %2$s"
+msgstr "Row %1$d: invalid license: %2$s"
+
+msgid "Zeile %1$d: Ungültige URL: %2$s"
+msgstr "Row %1$d: invalid URL: %2$s"
+
+msgid "Zeile %d: Konnte Post nicht erstellen."
+msgstr "Row %d: could not create post."
+
+msgid "Zeile %d: Spaltenanzahl stimmt nicht überein."
+msgstr "Row %d: column count does not match."
+
+msgid "Zeitliche Abdeckung (dct:temporal)"
+msgstr "Temporal coverage (dct:temporal)"
+
+msgid "Zeitraum"
+msgstr "Time period"
+
+msgid "Zu diesem Datensatz hochgeladen"
+msgstr "Uploaded to this dataset"
+
+msgid "Zugriff & weitere Auffindbarkeit"
+msgstr "Access & further discoverability"
+
+msgid "Zugriff verweigert."
+msgstr "Access denied."
+
+msgid "Zugriffs- und Download-URLs beim Speichern per HTTP-HEAD auf Erreichbarkeit prüfen (MQA-Zugänglichkeit, +80 Punkte)."
+msgstr "Check access and download URLs for reachability via HTTP HEAD on save (MQA accessibility, +80 points)."
+
+msgid "Zugriffs-Klassifikation des Datensatzes. Vorbelegt mit „Öffentlich“ — bitte ändern, wenn die Daten nur eingeschränkt oder gar nicht öffentlich zugänglich sind."
+msgstr "Access classification of the dataset. Preset to \"Public\" — please change it if the data are only available on a restricted basis or not publicly at all."
+
+msgid "Zugriffs-URL"
+msgstr "Access URL"
+
+msgid "Zugriffsrechte"
+msgstr "Access rights"
+
+msgid "Zugriffsrechte aus Vokabular"
+msgstr "Access rights from vocabulary"
+
+msgid "Zugriffsrechte gesetzt (dct:accessRights)"
+msgstr "Access rights set (dct:accessRights)"
+
+msgid "Zugänglichkeit"
+msgstr "Accessibility"
+
+msgid "Zum Datenatlas Zivilgesellschaft"
+msgstr "Go to the Datenatlas Zivilgesellschaft"
+
+msgid "Zur Datensatzliste"
+msgstr "To the dataset list"
+
+msgid "Zusammenfassung"
+msgstr "Summary"
+
+msgid "Zwei Wege — einer genügt: Tragen Sie hier den Link zu Ihrer Datei ein ODER laden Sie die Datei direkt darunter aus der Mediathek hoch. Bei einem Upload wird die URL beim Speichern automatisch übernommen; dieses Feld können Sie dann leer lassen."
+msgstr "Two ways — either will do: enter the link to your file here OR upload the file from the media library directly below. On upload the URL is taken over automatically when saving; you can then leave this field empty."
+
+msgid "Zweijährlich"
+msgstr "Biennial"
+
+msgid "https://example.org/meine-lizenz"
+msgstr "https://example.org/my-license"
+
+msgid "noch leer"
+msgstr "still empty"
+
+msgid "optional – nur bei CC BY oder CC BY-SA"
+msgstr "optional – only for CC BY or CC BY-SA"
+
+msgid "z. B. 1.0"
+msgstr "e.g. 1.0"
+
+msgid "z. B. 2.5"
+msgstr "e.g. 2.5"
+
+msgid "z. B. 30"
+msgstr "e.g. 30"
+
+msgid "z. B. DOI oder interne ID"
+msgstr "e.g. DOI or internal ID"
+
+msgid "z. B. Statistisches Amt"
+msgstr "e.g. Statistical Office"
+
+msgid "z.B. Musterorganisation e.V."
+msgstr "e.g. Sample Organization"
+
+msgid "z.B. Open Data Team"
+msgstr "e.g. Open Data Team"
+
+msgid "z.B. Stadtgebiet Musterstadt ohne Ortsteil X"
+msgstr "e.g. city of Musterstadt excluding district X"
+
+msgid "z.B. Statistisches Landesamt"
+msgstr "e.g. State Statistical Office"
+
+msgid "z.B. Umwelt"
+msgstr "e.g. environment"
+
+msgid "z.B. § 12a EGovG, Informationsweiterverwendungsgesetz (IWG)"
+msgstr "e.g. § 12a EGovG, German Re-use of Public Sector Information Act (IWG)"
+
+msgid "Änderungsdatum"
+msgstr "Modification date"
+
+msgid "Änderungsdatum (dct:modified)"
+msgstr "Modification date (dct:modified)"
+
+msgid "Übersetzte Beschreibung"
+msgstr "Translated description"
+
+msgid "Übersetzter Titel"
+msgstr "Translated title"
+
+msgid "Übersetzung"
+msgstr "Translation"
+
+msgid "Übersetzungen"
+msgstr "Translations"
+
+msgid "Übersetzungen (optional)"
+msgstr "Translations (optional)"
+
+msgid "— Bitte wählen —"
+msgstr "— Please select —"
+
+msgid "— Kein Standard —"
+msgstr "— No default —"
+
+msgid "💾 Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10MB"
+msgstr "💾 Supported formats: CSV, JSON  •  Maximum size: 10MB"
+
+
+msgid "Tab %s"
+msgstr "Tab %s"
+
+msgid "Zum Feld springen"
+msgstr "Go to field"
+
+msgid "Link zur Datei oder Datei-Upload"
+msgstr "Link to the file or file upload"
+
+msgid "HVD-Kategorie"
+msgstr "HVD category"
+
+msgid "Grundlegende Informationen"
+msgstr "Basic information"
+
+msgid "Sprache & Übersetzungen"
+msgstr "Language & translations"
+
+msgid "Datenbereitstellung"
+msgstr "Data provision"
+
+msgid "Folgende Pflichtangaben fehlen oder sind leer:"
+msgstr "The following required fields are missing or empty:"
+
+msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
+msgstr "Which theme is this dataset assigned to?"
+
+msgid "Mit welchen Schlagworten finde ich diese Daten?"
+msgstr "Which keywords help people find this data?"
+
+msgid "Weitere Einordnung (optional)"
+msgstr "Further classification (optional)"
+
+msgid "Weiteres EU-Thema (Themen-URI)?"
+msgstr "Additional EU theme (theme URI)?"
+
+msgid "Optional ein weiteres Thema aus der offiziellen EU-Themenliste (ergänzt das Thema aus Tab 1)."
+msgstr "Optionally add another theme from the official EU theme list (complements the theme from tab 1)."
+
+msgid "%1$s · %2$d %% Metadatenqualität"
+msgstr "%1$s · %2$d %% metadata quality"
+
+msgid "(MQA %1$d/%2$d Punkte)"
+msgstr "(MQA %1$d/%2$d points)"
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte (von max. %3$d)"
+msgstr "MQA raw score: %1$d / %2$d points (of max. %3$d)"
+
+msgid "MQA-Rohwert: %1$d / %2$d Punkte"
+msgstr "MQA raw score: %1$d / %2$d points"
+
+msgid "CSV- oder JSON-Datei"
+msgstr "CSV or JSON file"
+
+msgid "Unterstützte Formate: CSV, JSON  •  Maximale Größe: 10 MB"
+msgstr "Supported formats: CSV, JSON  •  Maximum size: 10 MB"
+
+msgid "JSON-Beispiel herunterladen"
+msgstr "Download JSON example"
+
+msgid "von"
+msgstr "of"
+
+msgid "Die Sprache der Daten und — falls gewünscht — Titel, Beschreibung und Schlagworte in weiteren Sprachen."
+msgstr "The language of the data and — if desired — title, description and keywords in further languages."
+
+msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
+msgstr "Who publishes these data? What are they about? Which theme is the dataset assigned to? And which keywords lead people to it? Optionally, a topic classification and a field of civic engagement can be added under \"Further classification\"."
+
+
+
+msgid "DCAT-AP.de · Turtle (empfohlen)"
+msgstr "DCAT-AP.de · Turtle (recommended)"
+
+msgid "DCAT-AP.de · JSON-LD"
+msgstr "DCAT-AP.de · JSON-LD"
+
+
+msgid "Offene Daten, bereitgestellt von %s."
+msgstr "Open data provided by %s."
+
+msgid "Harvesting"
+msgstr "Harvesting"
+
+msgid "Externe Open-Data-Portale holen Ihre Metadaten in der Regel selbst ab („Pull-Harvesting\"). Geben Sie dem Portal dazu eine der folgenden stabilen, öffentlich erreichbaren Katalog-URLs. Sie liefern den vollständigen Katalog als DCAT-AP.de-Dokument in einem Abruf."
+msgstr "External open data portals usually fetch your metadata themselves (\"pull harvesting\"). Give the portal one of the following stable, publicly reachable catalog URLs. They deliver the complete catalog as a DCAT-AP.de document in a single request."
+
+msgid "Tipp: Prüfen Sie das Dokument vor der Anmeldung gegen den offiziellen DCAT-AP-SHACL-Validator (%s) und beheben Sie alle Verstöße."
+msgstr "Tip: Validate the document against the official DCAT-AP SHACL validator (%s) and fix all violations."
+
+msgid "Open Data Wizard: Installation unvollständig"
+msgstr "Open Data Wizard: incomplete installation"
+
+msgid "Dem Plugin fehlen seine Programmbibliotheken, daher ist es derzeit inaktiv. Das passiert, wenn es aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert wurde."
+msgstr "The plugin is missing its libraries and is therefore inactive. This happens when it is installed from the source archive instead of the ready-made plugin package."
+
+msgid "So beheben Sie das:"
+msgstr "How to fix this:"
+
+msgid "Laden Sie das fertige Plugin-Paket (ZIP) unter %s herunter und spielen Sie es über „Plugins → Installieren → Plugin hochladen\" ein. Ihre Datensätze bleiben dabei erhalten."
+msgstr "Download the ready-made plugin package (ZIP) from %s and install it via \"Plugins → Add New → Upload Plugin\". Your datasets are preserved."
+
+msgid "Releases"
+msgstr "Releases"
+
+msgid "Für Entwickler:innen: Alternativ im Plugin-Verzeichnis „composer install\" ausführen."
+msgstr "For developers: alternatively run \"composer install\" in the plugin directory."
+
+msgid "Verlässlichkeit der Abrufbarkeit"
+msgstr "Reliability of availability"
+
+msgid "Wie verlässlich bleibt diese Distribution abrufbar? (dcatap:availability)"
+msgstr "How reliably will this distribution stay available? (dcatap:availability)"
+
+msgid "Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt."
+msgstr "The modification date (dct:modified) is set automatically every time you save."
+
+msgid "+%d möglich"
+msgstr "+%d available"
+
+msgid "(automatisch)"
+msgstr "(automatic)"
+
+msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Ein neu angelegter Datensatz steht deshalb bei 0 %% und steigt mit dem ersten Speichern — zusammen mit den Feldern, die das Formular vorbelegt (etwa die Zugriffsrechte)."
+msgstr "Of these, the wizard contributes %d points by itself: the modification date is set automatically on every save. A newly created dataset therefore starts at 0 %% and rises with the first save — together with the fields the form pre-fills (the access rights, for instance)."
+
+msgid "(ohne Titel, ID %d)"
+msgstr "(untitled, ID %d)"
+
+msgid "Datensatz-Karte"
+msgstr "Dataset card"
+
+msgid "Es gibt noch keinen veröffentlichten Datensatz. Legen Sie zuerst einen an und veröffentlichen Sie ihn."
+msgstr "There is no published dataset yet. Create one first and publish it."
+
+msgid "Nur veröffentlichte Datensätze stehen zur Auswahl. Entwürfe erscheinen erst nach dem Veröffentlichen."
+msgstr "Only published datasets can be selected. Drafts appear once they are published."
+
+msgid "Welcher Datensatz soll angezeigt werden?"
+msgstr "Which dataset should be shown?"
+
+msgid "Wählen Sie rechts in der Seitenleiste einen Datensatz aus."
+msgstr "Choose a dataset in the sidebar on the right."
+
+msgid "wird als Download-Karte ausgegeben"
+msgstr "will be output as a download card"
