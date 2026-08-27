@@ -245,4 +245,67 @@ class Test_ODW_Field_Catalog extends TestCase {
 			);
 		}
 	}
+
+	/**
+	 * Every entry names the profile class it belongs to.
+	 *
+	 * Die Klasse steuert den Link auf den passenden Abschnitt der
+	 * DCAT-AP.de-Spezifikation. Fehlt sie, verschwindet der Link stillschweigend.
+	 */
+	public function test_every_entry_has_an_entity(): void {
+		foreach ( $this->catalog as $field ) {
+			$this->assertContains(
+				(string) ( $field['entity'] ?? '' ),
+				array( 'dataset', 'distribution', 'catalog' ),
+				'Feld ' . $field['key'] . ' hat keine gültige Profil-Klasse.'
+			);
+		}
+	}
+
+	/**
+	 * Each entity resolves to a spec URL on the official domain.
+	 */
+	public function test_entity_resolves_to_a_spec_url(): void {
+		foreach ( $this->catalog as $field ) {
+			$url = ODW_Field_Reference::spec_url( (string) $field['entity'] );
+			$this->assertStringStartsWith(
+				'https://www.dcat-ap.de/def/dcatde/3.0/spec/#',
+				$url,
+				'Feld ' . $field['key'] . ' liefert keine Spezifikations-URL.'
+			);
+		}
+	}
+
+	/**
+	 * Distribution-level fields are exactly those the distribution node builds.
+	 *
+	 * Die Zuordnung stammt aus odw_build_distribution_node(); läuft sie
+	 * auseinander, verweist der Link auf den falschen Abschnitt.
+	 */
+	public function test_distribution_fields_match_the_builder(): void {
+		$erwartet = array(
+			'access_url',
+			'attribution_text',
+			'availability',
+			'byte_size',
+			'dist_description',
+			'dist_rights',
+			'dist_title',
+			'download_url',
+			'format',
+			'license',
+			'license_custom',
+			'media_type',
+		);
+
+		$tatsaechlich = array();
+		foreach ( $this->catalog as $field ) {
+			if ( 'distribution' === ( $field['entity'] ?? '' ) ) {
+				$tatsaechlich[] = (string) $field['key'];
+			}
+		}
+		sort( $tatsaechlich );
+
+		$this->assertSame( $erwartet, $tatsaechlich );
+	}
 }

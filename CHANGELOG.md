@@ -20,6 +20,14 @@ und die Definition zeigt ihre Struktur.
 - **`cardinality` als eigenes Feld im Katalog** — für alle 53 Einträge. Zwei neue Tests halten
   den strukturierten Wert und die Angabe im Definitionstext zusammen; ohne sie laufen beide
   auseinander, sobald jemand nur eine Seite anfasst.
+- **Link auf die Spezifikation je Profil-Klasse.** Am Fuß jedes Panels steht „Im Standard
+  nachlesen: Datensatz" bzw. „: Distribution" mit Verweis auf den passenden Abschnitt von
+  DCAT-AP.de 3.0. Bewusst je Klasse und nicht je Feld: Die feldgenauen Anker ließen sich von
+  hier aus nicht überprüfen — bei den drei Klassen-Ankern führt ein Irrtum schlimmstenfalls an
+  den Anfang des richtigen Dokuments. Die Zuordnung der 12 Distributions-Felder stammt aus
+  `odw_build_distribution_node()` und wird von einem Test dagegen gehalten.
+- **`entity` als eigenes Feld im Katalog** — 41 Datensatz-, 12 Distributions-Felder,
+  gegengeprüft gegen die Registry.
 
 ### 🎨 Changed
 - **Tooltip und „Mehr erfahren" haben getrennte Rollen.** Das ⓘ trägt nur noch den DCAT-AP-Begriff,

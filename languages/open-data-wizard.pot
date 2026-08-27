@@ -471,6 +471,9 @@ msgstr ""
 msgid "Hinweis ausblenden"
 msgstr ""
 
+msgid "Im Standard nachlesen"
+msgstr ""
+
 msgid "Import abgeschlossen!"
 msgstr ""
 

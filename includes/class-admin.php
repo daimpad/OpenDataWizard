@@ -448,6 +448,12 @@ class ODW_Admin {
 						'plain'  => __( 'Einfach erklärt', 'open-data-wizard' ),
 						'prop'   => __( 'Eigenschaft', 'open-data-wizard' ),
 						'mult'   => __( 'Multiplizität', 'open-data-wizard' ),
+						'spec'   => __( 'Im Standard nachlesen', 'open-data-wizard' ),
+						'ent'    => array(
+							'dataset'      => __( 'Datensatz', 'open-data-wizard' ),
+							'distribution' => __( 'Distribution', 'open-data-wizard' ),
+							'catalog'      => __( 'Katalog', 'open-data-wizard' ),
+						),
 					),
 				)
 			);

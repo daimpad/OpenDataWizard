@@ -643,6 +643,20 @@
 			if ( f.desc_dcat ) {
 				body.appendChild( moreBlock( cfg.dcat, f.desc_dcat ) );
 			}
+			if ( f.spec_url ) {
+				// Ein Link je Profil-Klasse, nicht je Feld: Die feldgenauen Anker
+				// der Spezifikation ließen sich nicht überprüfen — hier landet man
+				// im schlimmsten Fall am Anfang des richtigen Dokuments.
+				var names = cfg.ent || {};
+				var link  = document.createElement( 'a' );
+				link.className   = 'odw-field-more__spec';
+				link.href        = f.spec_url;
+				link.target      = '_blank';
+				link.rel         = 'noopener noreferrer';
+				link.textContent = ( cfg.spec || 'Im Standard nachlesen' ) +
+					( names[ f.entity ] ? ': ' + names[ f.entity ] : '' ) + ' ↗';
+				body.appendChild( link );
+			}
 			details.appendChild( body );
 			field.appendChild( details );
 		} );

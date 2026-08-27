@@ -121,6 +121,15 @@ test.describe('Formular', () => {
     // Darunter unverändert beide Langtexte.
     await expect(panel).toContainText('Einfach erklärt');
     await expect(panel).toContainText('DCAT-AP-Definition');
+
+    // Und ein Link auf den Abschnitt der Spezifikation, der zu dieser
+    // Profil-Klasse gehört — der Herausgeber steht am Datensatz.
+    const spec = panel.locator('a.odw-field-more__spec');
+    await expect(spec).toHaveAttribute(
+      'href',
+      'https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz'
+    );
+    await expect(spec).toContainText('Datensatz');
   });
 
   test('das Tooltip trägt nur noch den Fachbegriff', async ({ page }) => {

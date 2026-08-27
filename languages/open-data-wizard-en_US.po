@@ -480,6 +480,9 @@ msgstr "One of the six EU thematic categories."
 msgid "HOCHWERTIGER DATENSATZ (dcatap:applicableLegislation)"
 msgstr "HIGH-VALUE DATASET (dcatap:applicableLegislation)"
 
+msgid "Im Standard nachlesen"
+msgstr "Read it in the standard"
+
 msgid "KONTAKTPUNKT · E-MAIL (dcat:contactPoint / vcard:hasEmail)"
 msgstr "CONTACT POINT · EMAIL (dcat:contactPoint / vcard:hasEmail)"
 

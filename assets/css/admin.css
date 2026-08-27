@@ -1066,6 +1066,18 @@ input.odw-cessda-input,
 	color: var(--odw-color-text, #1d2327);
 }
 
+.odw-field-more__spec {
+	display: inline-block;
+	margin-top: 2px;
+	color: var( --odw-color-primary, #2271b1 );
+	text-decoration: none;
+}
+
+.odw-field-more__spec:hover,
+.odw-field-more__spec:focus-visible {
+	text-decoration: underline;
+}
+
 .odw-field-more__block {
 	margin: 0 0 8px;
 	line-height: 1.5;

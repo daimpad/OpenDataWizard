@@ -85,6 +85,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:publisher` |
 | Meta-Key | `_odw_publisher` |
 | Multiplizität | `1..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -103,6 +104,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:theme` |
 | Meta-Key | `_odw_theme` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Empfohlen |
 | Vokabular | `data-theme` |
 
@@ -121,6 +123,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:keyword` |
 | Meta-Key | `_odw_keywords` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -139,6 +142,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:subject` |
 | Meta-Key | `_odw_cessda_topic` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `cessda` |
 
@@ -157,6 +161,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:subject` |
 | Meta-Key | `_odw_engagementfeld` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `engagementfeld` |
 
@@ -175,6 +180,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:description` |
 | Meta-Key | `_odw_description` |
 | Multiplizität | `1..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -197,6 +203,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:language` |
 | Meta-Key | `_odw_language` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Empfohlen |
 | Vokabular | `language` |
 
@@ -219,6 +226,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:accessURL` |
 | Meta-Key | `_odw_access_url` |
 | Multiplizität | `1..n` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Pflicht |
 | Vokabular | — |
 
@@ -237,6 +245,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:format` |
 | Meta-Key | `_odw_format` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Empfohlen |
 | Vokabular | `file-type` |
 
@@ -255,6 +264,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:byteSize` |
 | Meta-Key | `_odw_byte_size` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -273,6 +283,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:license` |
 | Meta-Key | `_odw_license` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Pflicht |
 | Vokabular | `licenses` |
 
@@ -291,6 +302,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:license` |
 | Meta-Key | `_odw_license_custom` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Bedingt |
 | Vokabular | `licenses` |
 
@@ -309,6 +321,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:licenseAttributionByText` |
 | Meta-Key | `_odw_attribution_text` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -327,6 +340,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatap:availability` |
 | Meta-Key | `_odw_availability` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | `planned-availability` |
 
@@ -349,6 +363,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:landingPage` |
 | Meta-Key | `_odw_landing_page` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -367,6 +382,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:issued` |
 | Meta-Key | `_odw_issued` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -385,6 +401,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:modified` |
 | Meta-Key | `_odw_modified` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Empfohlen |
 | Vokabular | — |
 
@@ -403,6 +420,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:accrualPeriodicity` |
 | Meta-Key | `_odw_accrual_periodicity` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `frequency` |
 
@@ -421,6 +439,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:politicalGeocodingLevelURI` |
 | Meta-Key | `_odw_political_geocoding_level` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `politicalGeocodingLevel` |
 
@@ -439,6 +458,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:politicalGeocodingURI` |
 | Meta-Key | `_odw_political_geocoding_uri` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -457,6 +477,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:geocodingDescription` |
 | Meta-Key | `_odw_geocoding_description` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -475,6 +496,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:spatial` |
 | Meta-Key | `_odw_spatial` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -493,6 +515,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:temporal` |
 | Meta-Key | `_odw_temporal_start` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -511,6 +534,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:temporal` |
 | Meta-Key | `_odw_temporal_end` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -529,6 +553,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_name` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -547,6 +572,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_email` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -565,6 +591,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:contactPoint` |
 | Meta-Key | `_odw_contact_url` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -583,6 +610,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:contributorID` |
 | Meta-Key | `_odw_contributor_id` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `contributors` |
 
@@ -601,6 +629,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:originator` |
 | Meta-Key | `_odw_originator_name` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -619,6 +648,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:originator` |
 | Meta-Key | `_odw_originator_email` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -637,6 +667,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:maintainer` |
 | Meta-Key | `_odw_maintainer_name` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -655,6 +686,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:maintainer` |
 | Meta-Key | `_odw_maintainer_email` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -673,6 +705,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:legalBasis` |
 | Meta-Key | `_odw_legal_basis` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -691,6 +724,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatde:qualityProcessURI` |
 | Meta-Key | `_odw_quality_process_uri` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -709,6 +743,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:accessRights` |
 | Meta-Key | `_odw_access_rights` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `access-right` |
 
@@ -727,6 +762,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:theme` |
 | Meta-Key | `_odw_theme_uri` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `data-theme` |
 
@@ -745,6 +781,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatap:applicableLegislation` |
 | Meta-Key | `_odw_is_hvd` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -763,6 +800,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcatap:hvdCategory` |
 | Meta-Key | `_odw_hvd_category` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `hvd-category` |
 
@@ -781,6 +819,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:identifier` |
 | Meta-Key | `_odw_identifier` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -799,6 +838,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:type` |
 | Meta-Key | `_odw_type` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | `dataset-type` |
 
@@ -817,6 +857,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:creator` |
 | Meta-Key | `_odw_creator_name` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -835,6 +876,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:creator` |
 | Meta-Key | `_odw_creator_email` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -853,6 +895,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `owl:versionInfo` |
 | Meta-Key | `_odw_version` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -871,6 +914,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `adms:versionNotes` |
 | Meta-Key | `_odw_version_notes` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -889,6 +933,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:spatialResolutionInMeters` |
 | Meta-Key | `_odw_spatial_resolution` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -907,6 +952,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:temporalResolution` |
 | Meta-Key | `_odw_temporal_resolution` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -925,6 +971,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:conformsTo` |
 | Meta-Key | `_odw_conforms_to` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -943,6 +990,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:provenance` |
 | Meta-Key | `_odw_provenance` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Datensatz](https://www.dcat-ap.de/def/dcatde/3.0/spec/#datensatz) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -961,6 +1009,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:title` |
 | Meta-Key | `_odw_dist_title` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -979,6 +1028,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:description` |
 | Meta-Key | `_odw_dist_description` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -997,6 +1047,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:downloadURL` |
 | Meta-Key | `_odw_download_url` |
 | Multiplizität | `0..n` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
@@ -1015,6 +1066,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dcat:mediaType` |
 | Meta-Key | `_odw_media_type` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | `iana-media-type` |
 
@@ -1033,6 +1085,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 | DCAT-Property | `dct:rights` |
 | Meta-Key | `_odw_dist_rights` |
 | Multiplizität | `0..1` |
+| Profil-Klasse | [Distribution](https://www.dcat-ap.de/def/dcatde/3.0/spec/#distribution) |
 | Stufe | Optional |
 | Vokabular | — |
 
