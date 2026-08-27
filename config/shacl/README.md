@@ -22,7 +22,7 @@ Grundlage, gegen die diese Ausgabe geprüft wird (u. a. für die MQA-Metrik „D
 
 ### Datei-Beschreibungen
 
-- **`dcat-ap-SHACL.ttl`** — Die generischen DCAT-AP-3.0-Constraints der EU (SEMIC). Enthält alle Pflichtfelder und Kardinalitäten für DCAT-AP-konforme Metadaten.
+- **`dcat-ap-SHACL.ttl`** — Die generischen DCAT-AP-3.0-Constraints der EU (SEMIC). Enthält alle Pflichtfelder und Multiplizitäten für DCAT-AP-konforme Metadaten.
 - **`dcat-ap-SHACL-DE.ttl`** — Die DCAT-AP.de-Ergänzungen/-Anpassungen. Enthält deutschsprachige Fehlermeldungen, deaktivierte Shapes und Severity-Overrides. Für dieses Plugin besonders relevant, da `dcatde:`-Felder ausgegeben werden.
 - **`dcat-ap-spec-german-additions.ttl`** — Zusätzliche deutsche Shapes (u.a. `foaf:Agent`-Constraints für `dcatde:originator`/`maintainer`).
 - **`dcat-ap-de-deprecated.ttl`** — Deprecation-Hinweise für veraltete Felder.

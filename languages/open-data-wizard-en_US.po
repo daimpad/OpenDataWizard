@@ -33,6 +33,9 @@ msgstr "(optional)"
 msgid "(von max. %d)"
 msgstr "(of max. %d)"
 
+msgid "* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "* Required for publishing. You can save the dataset as a draft at any time."
+
 msgid "1 — Grundlegende Informationen"
 msgstr "1 — Basic Information"
 
@@ -156,32 +159,14 @@ msgstr "Example: 2024-01-15"
 msgid "Beispiel: 2024-12-31"
 msgstr "Example: 2024-12-31"
 
-msgid "Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen."
-msgstr "Example: CC0 1.0, CC-BY 4.0 – this determines how others may use the data."
-
-msgid "Beispiel: CSV, JSON, PDF"
-msgstr "Example: CSV, JSON, PDF"
-
-msgid "Beispiel: Deutsch, Englisch"
-msgstr "Example: German, English"
-
 msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
 msgstr "Example: An overview of the most populous cities in Germany with statistical data on population and development."
-
-msgid "Beispiel: Gemeinde, Landkreis, Land, Bund"
-msgstr "Example: municipality, district, state, federal"
 
 msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
 msgstr "Example: Sampletown Statistics Office, Federal Environment Agency, Consumer Advice Center"
 
 msgid "Beispiel: Open Data Team, Statistisches Landesamt"
 msgstr "Example: Open Data Team, State Statistical Office"
-
-msgid "Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig"
-msgstr "Example: daily, monthly, yearly, irregular"
-
-msgid "Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur"
-msgstr "Example: environment, education, health, economy, culture"
 
 msgid "Beispiel: Zivilgesellschaftliche Organisationen"
 msgstr "Example: Civil society organizations"
@@ -444,6 +429,9 @@ msgstr "The preview shows the generated JSON-LD based on the most recently saved
 msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
 msgstr "These values are pre-filled automatically when creating a new dataset."
 
+msgid "Diese bestimmt, wie andere die Daten nutzen dürfen."
+msgstr "This determines how others may use the data."
+
 msgid "Dieser Datensatz ist nicht veröffentlicht."
 msgstr "This dataset is not published."
 
@@ -473,6 +461,12 @@ msgstr "Distribution with URL (dcat:accessURL)"
 
 msgid "Distribution mit Zugriffs-URL (dcat:accessURL)"
 msgstr "Distribution with access URL (dcat:accessURL)"
+
+msgid "Eine der sechs EU-Themenkategorien."
+msgstr "One of the six EU thematic categories."
+
+msgid "Pflichtfeld für die Veröffentlichung"
+msgstr "Required for publishing"
 
 msgid "Primäre Distribution — weitere Angaben"
 msgstr "Primary distribution — further details"
@@ -533,9 +527,6 @@ msgstr "A demo dataset with a sample CSV was created automatically. Insert this 
 
 msgid "Ein Fehler ist aufgetreten."
 msgstr "An error occurred."
-
-msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
-msgstr "One of the six EU thematic categories. Example: Geospatial, Meteorological, Mobility"
 
 msgid "Eine eindeutige Kennung des Datensatzes (z. B. DOI oder interne ID). Beispiel: 10.1234/abcd"
 msgstr "A unique identifier of the dataset (e.g. DOI or internal ID). Example: 10.1234/abcd"
@@ -1558,8 +1549,8 @@ msgstr "How can the distribution be described?"
 msgid "Wie oft werden diese Daten aktualisiert?"
 msgstr "How often are these data updated?"
 
-msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
-msgstr "How reliable/durable is access to this file planned to be? Example: Stable, Available, Temporary"
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?"
+msgstr "How reliable/permanent is access to this file intended to be?"
 
 msgid "Wiederverwendbarkeit"
 msgstr "Reusability"
@@ -1765,12 +1756,6 @@ msgstr "Tab %s"
 
 msgid "Zum Feld springen"
 msgstr "Go to field"
-
-msgid "Pflichtfeld zum Veröffentlichen"
-msgstr "Required for publishing"
-
-msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr "* Required for publishing. You can always save an incomplete draft."
 
 msgid "Link zur Datei oder Datei-Upload"
 msgstr "Link to the file or file upload"

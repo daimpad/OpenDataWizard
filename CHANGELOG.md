@@ -7,6 +7,40 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.40.3] — 2026-08-27
+
+Vier Punkte aus einem Usability-Test — und was beim Nachprüfen sonst noch auffiel.
+
+### 🐛 Fixed
+- **`dct:subject` war fälschlich als DCAT-AP-Definition ausgewiesen.** Die Eigenschaft (CESSDA-
+  Themenklassifikation, ZiviZ-Engagementfeld) gehört nicht zum Profil — in den mitgelieferten
+  offiziellen SHACL-Shapes taucht sie für Datensätze nirgends auf. Zulässig ist sie trotzdem,
+  RDF erlaubt zusätzliche Aussagen, und sie bleibt bewusst erhalten; die Feld-Referenz sagt jetzt
+  aber dazu, dass streng profilkonforme Portale sie ignorieren dürfen. Beim systematischen
+  Abgleich aller 43 Katalog-Eigenschaften gegen die Shapes fiel ein zweiter Fall auf:
+  `dcatap:hvdCategory` stammt aus der HVD-Erweiterung (EU-Verordnung 2023/138), nicht aus dem
+  Kernprofil DCAT-AP 3.0. Auch vermerkt.
+- **Die Verwaltungsebene nannte Optionen, die es nicht gibt.** Die Beschreibung sprach von
+  „Kreis" und „Kommune", die Auswahlliste bietet „Landkreis" und „Gemeinde".
+
+### 🎨 Changed
+- **Pflichtfeld-Hinweis umformuliert:** „* Pflichtfeld für die Veröffentlichung. Als Entwurf
+  können Sie den Datensatz jederzeit speichern." Der bisherige Satz stolperte über sich selbst.
+- **Beispiele aus den Tooltips fester Auswahllisten entfernt.** Ein Beispiel, das nur die
+  Optionen des Dropdowns wiederholt, hilft niemandem. Der Tester fand einen Fall — es waren
+  acht: Thema, Sprache, Format, Lizenz, Verfügbarkeit, Aktualisierungsfrequenz, Verwaltungsebene
+  und HVD-Kategorie. Erklärende Sätze sind geblieben, gestrichen wurde nur der Beispielteil.
+- **„Kardinalität" heißt jetzt durchgängig „Multiplizität"** — den Begriff verwendet die
+  deutsche Spezifikation DCAT-AP.de. Betrifft 52 Stellen im Feld-Katalog und die daraus
+  generierte Feld-Referenz.
+
+### 🧹 Aufgeräumt
+- Zehn verwaiste Übersetzungseinträge entfernt, die durch die Textänderungen ohne Fundstelle
+  im Code zurückgeblieben waren. `bin/check-i18n.py` prüft nur auf fehlende, nicht auf
+  überzählige Einträge — die CI hätte das nicht gemeldet.
+
+---
+
 ## [2.40.2] — 2026-08-23
 
 Zwei Rückmeldungen aus dem Backend.

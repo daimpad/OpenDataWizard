@@ -419,8 +419,8 @@ class ODW_Admin {
 					),
 					'required'            => array(
 						'star'      => '*',
-						'starTitle' => __( 'Pflichtfeld zum Veröffentlichen', 'open-data-wizard' ),
-						'legend'    => __( '* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern.', 'open-data-wizard' ),
+						'starTitle' => __( 'Pflichtfeld für die Veröffentlichung', 'open-data-wizard' ),
+						'legend'    => __( '* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern.', 'open-data-wizard' ),
 						'keys'      => array( '_odw_publisher', '_odw_description', '_odw_license' ),
 					),
 					'livePreview'         => array(

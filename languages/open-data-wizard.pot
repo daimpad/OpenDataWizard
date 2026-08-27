@@ -15,6 +15,9 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
+msgid "* Pflichtfeld für die Veröffentlichung. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr ""
+
 msgid "1 — Grundlegende Informationen"
 msgstr ""
 
@@ -87,31 +90,13 @@ msgstr ""
 msgid "Beispiel: 2024-12-31"
 msgstr ""
 
-msgid "Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen."
-msgstr ""
-
-msgid "Beispiel: CSV, JSON, PDF"
-msgstr ""
-
-msgid "Beispiel: Deutsch, Englisch"
-msgstr ""
-
 msgid "Beispiel: Ein Überblick über die bevölkerungsreichsten Städte in Deutschland mit statistischen Daten zu Einwohnerzahl und Entwicklung."
-msgstr ""
-
-msgid "Beispiel: Gemeinde, Landkreis, Land, Bund"
 msgstr ""
 
 msgid "Beispiel: Musterstadt Statistikamt, Umweltbundesamt, Verbraucherzentrale e.V."
 msgstr ""
 
 msgid "Beispiel: Open Data Team, Statistisches Landesamt"
-msgstr ""
-
-msgid "Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig"
-msgstr ""
-
-msgid "Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur"
 msgstr ""
 
 msgid "Beispiel: Zivilgesellschaftliche Organisationen"
@@ -318,6 +303,9 @@ msgstr ""
 msgid "Diese Werte werden beim Anlegen eines neuen Datensatzes automatisch vorausgefüllt."
 msgstr ""
 
+msgid "Diese bestimmt, wie andere die Daten nutzen dürfen."
+msgstr ""
+
 msgid "Dieser Datensatz ist nicht veröffentlicht."
 msgstr ""
 
@@ -346,6 +334,9 @@ msgid "Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Si
 msgstr ""
 
 msgid "Ein Fehler ist aufgetreten."
+msgstr ""
+
+msgid "Eine der sechs EU-Themenkategorien."
 msgstr ""
 
 msgid "Einheit"
@@ -700,6 +691,9 @@ msgstr ""
 msgid "Pflichtangaben"
 msgstr ""
 
+msgid "Pflichtfeld für die Veröffentlichung"
+msgstr ""
+
 msgid "Pflichtfelder"
 msgstr ""
 
@@ -922,6 +916,9 @@ msgstr ""
 msgid "Wie oft werden diese Daten aktualisiert?"
 msgstr ""
 
+msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?"
+msgstr ""
+
 msgid "Willkommen im Open Data Wizard"
 msgstr ""
 
@@ -1042,9 +1039,6 @@ msgstr ""
 msgid "HVD-KATEGORIE (dcatap:hvdCategory)"
 msgstr ""
 
-msgid "Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität"
-msgstr ""
-
 msgid "Georaum (Geospatial)"
 msgstr ""
 
@@ -1070,9 +1064,6 @@ msgid "Wie verlässlich bleibt diese Datei abrufbar?"
 msgstr ""
 
 msgid "PLANBARE VERFÜGBARKEIT (dcatap:availability)"
-msgstr ""
-
-msgid "Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär"
 msgstr ""
 
 msgid "Verfügbar (mittelfristige Planung)"
@@ -1388,12 +1379,6 @@ msgid "Tab %s"
 msgstr ""
 
 msgid "Zum Feld springen"
-msgstr ""
-
-msgid "Pflichtfeld zum Veröffentlichen"
-msgstr ""
-
-msgid "* Pflichtfeld zum Veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
 msgstr ""
 
 msgid "Link zur Datei oder Datei-Upload"

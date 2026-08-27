@@ -17,7 +17,7 @@
  *   profile     — 'ap' (DCAT-AP 3.0) | 'ap.de' (DCAT-AP.de) | 'hvd' (High-Value-Dataset)
  *   tier        — 'mandatory' | 'recommended' | 'optional' (vom Plugin erzwungene Stufe)
  *   range       — 'literal' | 'literal-lang' | 'uri' | 'node' (JSON-LD-Wertform)
- *   cardinality — '0..1' | '0..n' | '1..1' | '1..n' (Kardinalität laut Profil)
+ *   cardinality — '0..1' | '0..n' | '1..1' | '1..n' (Multiplizität laut Profil)
  *   entity      — 'dataset' | 'distribution' | 'catalog' (Ziel-Entität)
  *   vocab       — ID eines kontrollierten Vokabulars (falls zutreffend), sonst ''
  *

@@ -46,7 +46,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche Stelle ist `dct:publisher` (verantwortliche Herausgeberin) des Datensatzes?',
 		'q_human'    => 'Wer gibt diese Daten heraus?',
-		'desc_dcat'  => '`dct:publisher` benennt die für die Bereitstellung des Datensatzes verantwortliche Stelle (eine `foaf:Agent`-Entität). In DCAT-AP 3.0 ist die Angabe verpflichtend (Kardinalität 1..1). Idealerweise wird die Organisation über eine URI referenziert; als Minimalform genügt der Name (`foaf:name`).',
+		'desc_dcat'  => '`dct:publisher` benennt die für die Bereitstellung des Datensatzes verantwortliche Stelle (eine `foaf:Agent`-Entität). In DCAT-AP 3.0 ist die Angabe verpflichtend (Multiplizität 1..1). Idealerweise wird die Organisation über eine URI referenziert; als Minimalform genügt der Name (`foaf:name`).',
 		'desc_human' => 'Tragen Sie hier die Organisation ein, die die Daten offiziell veröffentlicht — also wer dafür verantwortlich ist, dass die Daten bereitstehen. Das ist oft eine Behörde, ein Amt oder ein Verein. Beispiel: „Statistisches Landesamt Musterstadt" oder „Umweltbundesamt".',
 	),
 	array(
@@ -58,7 +58,7 @@ return array(
 		'vocab'      => 'data-theme',
 		'q_dcat'     => 'Welchem `dcat:theme` (Datenthema) ist der Datensatz zugeordnet?',
 		'q_human'    => 'Welchem Thema ist dieser Datensatz zugeordnet?',
-		'desc_dcat'  => '`dcat:theme` ordnet den Datensatz einer oder mehreren Kategorien zu. In DCAT-AP wird das kontrollierte EU-Vokabular „Data Theme" (`http://publications.europa.eu/resource/authority/data-theme/`) verwendet, z. B. `ENVI` (Umwelt) oder `EDUC` (Bildung). Kardinalität 0..n.',
+		'desc_dcat'  => '`dcat:theme` ordnet den Datensatz einer oder mehreren Kategorien zu. In DCAT-AP wird das kontrollierte EU-Vokabular „Data Theme" (`http://publications.europa.eu/resource/authority/data-theme/`) verwendet, z. B. `ENVI` (Umwelt) oder `EDUC` (Bildung). Multiplizität 0..n.',
 		'desc_human' => 'Wählen Sie das Themengebiet, zu dem die Daten am besten passen — ähnlich einer Schublade, in die der Datensatz einsortiert wird. Das hilft anderen, Ihre Daten über Themenfilter zu finden. Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur.',
 	),
 	array(
@@ -70,7 +70,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dcat:keyword` (Schlagwörter) beschreiben den Datensatz?',
 		'q_human'    => 'Mit welchen Schlagworten finde ich diese Daten?',
-		'desc_dcat'  => '`dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Kardinalität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.',
+		'desc_dcat'  => '`dcat:keyword` sind freie, sprachlich getaggte Schlagwörter zur Verbesserung der Auffindbarkeit (`literal-lang`, Multiplizität 0..n). Anders als `dcat:theme` sind sie nicht an ein kontrolliertes Vokabular gebunden. Je Schlagwort ein Wert.',
 		'desc_human' => 'Tragen Sie einzelne Schlagwörter ein, unter denen man Ihre Daten suchen würde — jedes Wort in eine eigene Zeile. Sie ergänzen das Thema und machen die Daten leichter auffindbar. Beispiel: Umwelt, Wasser, Luftverschmutzung.',
 	),
 	array(
@@ -82,7 +82,7 @@ return array(
 		'vocab'      => 'cessda',
 		'q_dcat'     => 'Welches `dct:subject` (Fachthema) nach CESSDA-Vokabular beschreibt den Datensatz?',
 		'q_human'    => 'Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?',
-		'desc_dcat'  => '`dct:subject` verweist auf ein fachliches Thema aus einem kontrollierten Vokabular — hier die CESSDA Topic Classification (Version 4.2.3). Der Wert ist die Konzept-URI aus dem CESSDA-Vokabular. Mehrfachangabe möglich (Kardinalität 0..n); erscheint zusammen mit anderen Themenzuordnungen als Liste.',
+		'desc_dcat'  => '`dct:subject` verweist auf ein fachliches Thema aus einem kontrollierten Vokabular — hier die CESSDA Topic Classification (Version 4.2.3). Der Wert ist die Konzept-URI aus dem CESSDA-Vokabular. Mehrfachangabe möglich (Multiplizität 0..n); erscheint zusammen mit anderen Themenzuordnungen als Liste. Hinweis: `dct:subject` gehört nicht zum DCAT-AP.de-Profil — die offiziellen SHACL-Shapes kennen die Eigenschaft für Datensätze nicht. Als Dublin-Core-Angabe ist sie zulässig (RDF erlaubt zusätzliche Aussagen) und wird hier bewusst ausgegeben; streng profilkonforme Portale können sie ignorieren.',
 		'desc_human' => 'Optional für sozial- und wirtschaftswissenschaftliche Daten: Ordnen Sie den Datensatz einem Fachthema aus dem CESSDA-Katalog zu (ein europäischer Standard für Forschungsdaten). Tippen Sie das Thema ein und wählen Sie aus der Vorschlagsliste. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik.',
 	),
 	array(
@@ -94,7 +94,7 @@ return array(
 		'vocab'      => 'engagementfeld',
 		'q_dcat'     => 'Welches `dct:subject` (Engagementfeld) nach ZiviZ-Vokabular beschreibt den Datensatz?',
 		'q_human'    => 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?',
-		'desc_dcat'  => '`dct:subject` mit einem Konzept aus dem ZiviZ-Vokabular „Engagementfeld" (`https://ziviz.de/def/engagementfeld/`), das zivilgesellschaftliche Tätigkeitsfelder klassifiziert. Der Wert ist die Konzept-URI; die Label→URI-Auflösung erfolgt beim Speichern. Mehrfachangabe möglich (Kardinalität 0..n).',
+		'desc_dcat'  => '`dct:subject` mit einem Konzept aus dem ZiviZ-Vokabular „Engagementfeld" (`https://ziviz.de/def/engagementfeld/`), das zivilgesellschaftliche Tätigkeitsfelder klassifiziert. Der Wert ist die Konzept-URI; die Label→URI-Auflösung erfolgt beim Speichern. Mehrfachangabe möglich (Multiplizität 0..n). Hinweis: `dct:subject` gehört nicht zum DCAT-AP.de-Profil — die offiziellen SHACL-Shapes kennen die Eigenschaft für Datensätze nicht. Als Dublin-Core-Angabe ist sie zulässig (RDF erlaubt zusätzliche Aussagen) und wird hier bewusst ausgegeben; streng profilkonforme Portale können sie ignorieren.',
 		'desc_human' => 'Optional für Organisationen der Zivilgesellschaft: Ordnen Sie den Datensatz einem Engagementfeld zu — also dem gesellschaftlichen Bereich, in dem Sie aktiv sind. Wählen Sie einen Eintrag aus der Liste; die passende Kennung wird automatisch gesetzt. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.',
 	),
 	array(
@@ -106,7 +106,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie lautet die `dct:description` (Freitextbeschreibung) des Datensatzes?',
 		'q_human'    => 'Worum geht es in diesem Datensatz?',
-		'desc_dcat'  => '`dct:description` ist eine frei formulierte, sprachlich getaggte Beschreibung des Datensatzes (`literal-lang`). In DCAT-AP 3.0 verpflichtend (Kardinalität 1..n je Sprache). Sie ergänzt den Titel um Inhalt, Kontext, Erhebungsmethode und Abgrenzung des Datensatzes.',
+		'desc_dcat'  => '`dct:description` ist eine frei formulierte, sprachlich getaggte Beschreibung des Datensatzes (`literal-lang`). In DCAT-AP 3.0 verpflichtend (Multiplizität 1..n je Sprache). Sie ergänzt den Titel um Inhalt, Kontext, Erhebungsmethode und Abgrenzung des Datensatzes.',
 		'desc_human' => 'Beschreiben Sie in eigenen Worten, was in den Daten steckt: Worum geht es, was kann man damit machen, was ist enthalten? Ein bis zwei Absätze reichen. Beispiel: „Überblick über die bevölkerungsreichsten Städte Deutschlands mit Einwohnerzahlen und Entwicklung seit 2010."',
 	),
 
@@ -123,7 +123,7 @@ return array(
 		'vocab'      => 'language',
 		'q_dcat'     => 'In welcher `dct:language` (Sprache) liegen die Daten vor?',
 		'q_human'    => 'In welcher Sprache sind die Daten?',
-		'desc_dcat'  => '`dct:language` gibt die Sprache des Datensatzes an, referenziert über das EU-Authority-Vokabular „Language" (`http://publications.europa.eu/resource/authority/language/`, z. B. `DEU`, `ENG`). Kardinalität 0..n — mehrsprachige Datensätze können mehrere Sprachen angeben.',
+		'desc_dcat'  => '`dct:language` gibt die Sprache des Datensatzes an, referenziert über das EU-Authority-Vokabular „Language" (`http://publications.europa.eu/resource/authority/language/`, z. B. `DEU`, `ENG`). Multiplizität 0..n — mehrsprachige Datensätze können mehrere Sprachen angeben.',
 		'desc_human' => 'Geben Sie an, in welcher Sprache die Inhalte der Daten verfasst sind (z. B. die Spaltenüberschriften und Texte). Das hilft Nutzenden einzuschätzen, ob sie die Daten verstehen. Beispiel: Deutsch, Englisch.',
 	),
 
@@ -140,7 +140,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Unter welcher `dcat:accessURL` ist die Distribution erreichbar?',
 		'q_human'    => 'Wo kann man die Datei herunterladen oder ansehen?',
-		'desc_dcat'  => '`dcat:accessURL` verweist auf eine Ressource, über die auf die Distribution zugegriffen werden kann (Range `rdfs:Resource`, Kardinalität 1..n je Distribution). Sie kann auf eine Landing-Page, einen Feed, einen Endpunkt oder — bei direktem Download — dieselbe Ressource wie `dcat:downloadURL` zeigen. Pflichtangabe je Distribution.',
+		'desc_dcat'  => '`dcat:accessURL` verweist auf eine Ressource, über die auf die Distribution zugegriffen werden kann (Range `rdfs:Resource`, Multiplizität 1..n je Distribution). Sie kann auf eine Landing-Page, einen Feed, einen Endpunkt oder — bei direktem Download — dieselbe Ressource wie `dcat:downloadURL` zeigen. Pflichtangabe je Distribution.',
 		'desc_human' => 'Tragen Sie den Link ein, unter dem Ihre Daten zu finden sind — die Adresse einer Datei zum Herunterladen oder einer Seite, auf der die Daten liegen. Alternativ laden Sie die Datei über die Mediathek-Box hoch; dann wird dieser Link automatisch gesetzt und Sie müssen ihn nicht selbst eintippen. Beispiel: https://beispiel.de/daten/statistik.csv.',
 	),
 	array(
@@ -152,7 +152,7 @@ return array(
 		'vocab'      => 'file-type',
 		'q_dcat'     => 'Welches `dct:format` (Dateiformat) hat die Distribution?',
 		'q_human'    => 'In welchem Format ist die Datei?',
-		'desc_dcat'  => '`dct:format` gibt das Format der Distribution an, referenziert über das EU-Authority-Vokabular „File Type" (`http://publications.europa.eu/resource/authority/file-type/`, z. B. `CSV`, `JSON`, `PDF`). Kardinalität 0..1. Ergänzt `dcat:mediaType` (MIME-Typ) um das anwendungsnahe Format.',
+		'desc_dcat'  => '`dct:format` gibt das Format der Distribution an, referenziert über das EU-Authority-Vokabular „File Type" (`http://publications.europa.eu/resource/authority/file-type/`, z. B. `CSV`, `JSON`, `PDF`). Multiplizität 0..1. Ergänzt `dcat:mediaType` (MIME-Typ) um das anwendungsnahe Format.',
 		'desc_human' => 'Wählen Sie das Format der bereitgestellten Datei. Daran erkennen Nutzende, mit welchem Programm sie die Daten öffnen können. Maschinenlesbare, offene Formate wie CSV oder JSON sind besonders empfehlenswert. Beispiel: CSV, JSON, PDF.',
 	),
 	array(
@@ -164,7 +164,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie groß ist die Distribution laut `dcat:byteSize` (in Bytes)?',
 		'q_human'    => 'Wie groß ist die Datei?',
-		'desc_dcat'  => '`dcat:byteSize` gibt die Größe der Distribution in Bytes als nicht-negative Ganzzahl an (`xsd:nonNegativeInteger`, Kardinalität 0..1). Bei einem Mediathek-Upload wird der Wert automatisch aus der Datei ermittelt.',
+		'desc_dcat'  => '`dcat:byteSize` gibt die Größe der Distribution in Bytes als nicht-negative Ganzzahl an (`xsd:nonNegativeInteger`, Multiplizität 0..1). Bei einem Mediathek-Upload wird der Wert automatisch aus der Datei ermittelt.',
 		'desc_human' => 'Die Dateigröße in Bytes — nur die reine Zahl. Nutzende sehen so vorab, wie viel sie herunterladen. Bei hochgeladenen Dateien wird die Größe automatisch berechnet. Beispiel: 2048576 (das sind rund 2 MB).',
 	),
 	array(
@@ -200,7 +200,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welcher `dcatde:licenseAttributionByText` (Namensnennungstext) ist bei Nachnutzung anzugeben?',
 		'q_human'    => 'Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?',
-		'desc_dcat'  => '`dcatde:licenseAttributionByText` (DCAT-AP.de) enthält den exakten Namensnennungstext, den Nachnutzende bei Lizenzen mit Namensnennungspflicht (z. B. CC-BY, DL-DE-BY) zitieren müssen. Freitext (`literal`), Kardinalität 0..1.',
+		'desc_dcat'  => '`dcatde:licenseAttributionByText` (DCAT-AP.de) enthält den exakten Namensnennungstext, den Nachnutzende bei Lizenzen mit Namensnennungspflicht (z. B. CC-BY, DL-DE-BY) zitieren müssen. Freitext (`literal`), Multiplizität 0..1.',
 		'desc_human' => 'Bei Lizenzen mit Namensnennung („BY") geben Sie hier vor, wie andere Sie nennen sollen, wenn sie Ihre Daten verwenden. So bekommen Sie korrekt Credit. Beispiel: „Datenquelle: Stadt Musterstadt, 2026".',
 	),
 	array(
@@ -212,7 +212,7 @@ return array(
 		'vocab'      => 'planned-availability',
 		'q_dcat'     => 'Welche `dcatap:availability` (Verfügbarkeitsgarantie) hat die Distribution?',
 		'q_human'    => 'Wie dauerhaft ist diese Datei verfügbar?',
-		'desc_dcat'  => '`dcatap:availability` beschreibt die geplante Verfügbarkeit einer Distribution über das EU-Vokabular „Planned Availability" (z. B. `AVAILABLE`, `TEMPORARY`, `EXPERIMENTAL`, `STABLE`). Kardinalität 0..1. Gibt Nachnutzenden Planungssicherheit.',
+		'desc_dcat'  => '`dcatap:availability` beschreibt die geplante Verfügbarkeit einer Distribution über das EU-Vokabular „Planned Availability" (z. B. `AVAILABLE`, `TEMPORARY`, `EXPERIMENTAL`, `STABLE`). Multiplizität 0..1. Gibt Nachnutzenden Planungssicherheit.',
 		'desc_human' => 'Geben Sie an, wie verlässlich die Datei langfristig erreichbar bleibt — dauerhaft, nur vorübergehend oder experimentell. Das hilft anderen einzuschätzen, ob sie sich auf den Link verlassen können. Beispiel: Dauerhaft verfügbar.',
 	),
 
@@ -229,7 +229,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dcat:landingPage` (Projekt-/Infoseite) gehört zum Datensatz?',
 		'q_human'    => 'Wo finde ich mehr Informationen zu diesem Projekt?',
-		'desc_dcat'  => '`dcat:landingPage` verweist auf eine menschenlesbare Webseite mit weiteren Informationen zum Datensatz (Range `foaf:Document`, Kardinalität 0..n). Anders als `dcat:accessURL` führt sie nicht direkt zu den Daten, sondern zu Kontext, Dokumentation oder Projektbeschreibung.',
+		'desc_dcat'  => '`dcat:landingPage` verweist auf eine menschenlesbare Webseite mit weiteren Informationen zum Datensatz (Range `foaf:Document`, Multiplizität 0..n). Anders als `dcat:accessURL` führt sie nicht direkt zu den Daten, sondern zu Kontext, Dokumentation oder Projektbeschreibung.',
 		'desc_human' => 'Verlinken Sie eine Webseite, auf der man mehr über die Daten oder das Projekt erfährt — etwa eine Projekt- oder Dokumentationsseite. Das ist nicht der direkte Download, sondern die „Über uns"-Seite zu den Daten. Beispiel: https://beispiel.de/projekt.',
 	),
 	array(
@@ -241,7 +241,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wann wurde der Datensatz `dct:issued` (erstveröffentlicht)?',
 		'q_human'    => 'Wann wurden diese Daten zum ersten Mal veröffentlicht?',
-		'desc_dcat'  => '`dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Kardinalität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).',
+		'desc_dcat'  => '`dct:issued` ist das Datum der formalen Erstveröffentlichung des Datensatzes, typisiert als `xsd:date` bzw. `xsd:dateTime`. Multiplizität 0..1. Nicht zu verwechseln mit `dct:modified` (letzte Änderung) oder dem Erhebungszeitraum (`dct:temporal`).',
 		'desc_human' => 'Geben Sie das Datum an, an dem die Daten erstmals veröffentlicht wurden. Das ist der „Geburtstag" des Datensatzes, nicht der Zeitraum, den die Daten abdecken. Beispiel: 2024-01-15.',
 	),
 	array(
@@ -258,7 +258,7 @@ return array(
 		'auto'       => true,
 		'q_dcat'     => 'Wann wurde der Datensatz zuletzt `dct:modified` (geändert)?',
 		'q_human'    => 'Wann wurden diese Daten zuletzt aktualisiert?',
-		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Kardinalität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.',
+		'desc_dcat'  => '`dct:modified` gibt das Datum der letzten inhaltlichen Änderung des Datensatzes an (`xsd:date`/`xsd:dateTime`, Multiplizität 0..1). Das Plugin setzt diesen Wert bei jeder Speicherung automatisch; ein Eingabefeld gibt es bewusst nicht, da eine manuelle Angabe beim nächsten Speichern überschrieben würde.',
 		'desc_human' => 'Das Datum der letzten Aktualisierung. Es wird beim Speichern automatisch gesetzt, sodass Nutzende immer sehen, wie aktuell die Daten sind — Sie müssen dafür nichts eintragen. Beispiel: 2026-04-22.',
 	),
 	array(
@@ -270,7 +270,7 @@ return array(
 		'vocab'      => 'frequency',
 		'q_dcat'     => 'Welche `dct:accrualPeriodicity` (Aktualisierungsfrequenz) hat der Datensatz?',
 		'q_human'    => 'Wie oft werden diese Daten aktualisiert?',
-		'desc_dcat'  => '`dct:accrualPeriodicity` gibt an, in welchem Rhythmus der Datensatz aktualisiert wird, referenziert über das EU-Vokabular „Frequency" (`http://publications.europa.eu/resource/authority/frequency/`, z. B. `DAILY`, `MONTHLY`, `ANNUAL`). Kardinalität 0..1.',
+		'desc_dcat'  => '`dct:accrualPeriodicity` gibt an, in welchem Rhythmus der Datensatz aktualisiert wird, referenziert über das EU-Vokabular „Frequency" (`http://publications.europa.eu/resource/authority/frequency/`, z. B. `DAILY`, `MONTHLY`, `ANNUAL`). Multiplizität 0..1.',
 		'desc_human' => 'Geben Sie an, wie regelmäßig neue Daten hinzukommen — täglich, monatlich, jährlich oder unregelmäßig. Nutzende wissen dann, wie oft sich ein erneuter Blick lohnt. Beispiel: Jährlich.',
 	),
 	array(
@@ -282,8 +282,8 @@ return array(
 		'vocab'      => 'politicalGeocodingLevel',
 		'q_dcat'     => 'Welche `dcatde:politicalGeocodingLevelURI` (Verwaltungsebene) betrifft der Datensatz?',
 		'q_human'    => 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?',
-		'desc_dcat'  => '`dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular (Bund, Land, Kreis, Kommune). Kardinalität 0..1. Ergänzt die konkrete Gebietsangabe.',
-		'desc_human' => 'Wählen Sie, auf welcher staatlichen Ebene die Daten angesiedelt sind — Bund, Land, Kreis oder Kommune. Das ordnet die Daten geografisch-administrativ ein. Beispiel: Kommune.',
+		'desc_dcat'  => '`dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular (Bund, Land, Kreis, Kommune). Multiplizität 0..1. Ergänzt die konkrete Gebietsangabe.',
+		'desc_human' => 'Wählen Sie, auf welcher staatlichen Ebene die Daten angesiedelt sind — Bund, Land, Landkreis oder Gemeinde. Das ordnet die Daten geografisch-administrativ ein. Beispiel: Gemeinde.',
 	),
 	array(
 		'key'        => 'political_geocoding_uri',
@@ -294,7 +294,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welches `dcatde:politicalGeocodingURI` (amtliches Gebiet) beschreibt den räumlichen Bezug?',
 		'q_human'    => 'Auf welches amtliche Gebiet beziehen sich die Daten?',
-		'desc_dcat'  => '`dcatde:politicalGeocodingURI` (DCAT-AP.de) referenziert ein konkretes amtliches Gebiet über eine URI (z. B. amtlicher Regionalschlüssel/AGS als URI). Kardinalität 0..n. Ermöglicht die eindeutige, maschinenlesbare Verortung.',
+		'desc_dcat'  => '`dcatde:politicalGeocodingURI` (DCAT-AP.de) referenziert ein konkretes amtliches Gebiet über eine URI (z. B. amtlicher Regionalschlüssel/AGS als URI). Multiplizität 0..n. Ermöglicht die eindeutige, maschinenlesbare Verortung.',
 		'desc_human' => 'Verlinken Sie das genaue amtliche Gebiet, auf das sich die Daten beziehen — als offizielle Kennung (z. B. Gemeindeschlüssel). Damit ist eindeutig, welche Region gemeint ist. Beispiel: die URI zum amtlichen Gemeindeschlüssel Ihrer Stadt.',
 	),
 	array(
@@ -306,7 +306,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie lautet die `dcatde:geocodingDescription` (textuelle Beschreibung des räumlichen Bezugs)?',
 		'q_human'    => 'Wie lässt sich der räumliche Bezug in Worten beschreiben?',
-		'desc_dcat'  => '`dcatde:geocodingDescription` (DCAT-AP.de) ist eine frei formulierte textuelle Beschreibung der räumlichen Abdeckung (`literal`/`literal-lang`). Kardinalität 0..n. Ergänzt die maschinenlesbaren Angaben `dct:spatial` und `dcatde:politicalGeocodingURI` um eine menschenlesbare Erläuterung.',
+		'desc_dcat'  => '`dcatde:geocodingDescription` (DCAT-AP.de) ist eine frei formulierte textuelle Beschreibung der räumlichen Abdeckung (`literal`/`literal-lang`). Multiplizität 0..n. Ergänzt die maschinenlesbaren Angaben `dct:spatial` und `dcatde:politicalGeocodingURI` um eine menschenlesbare Erläuterung.',
 		'desc_human' => 'Beschreiben Sie den räumlichen Bezug zusätzlich in Worten — etwa wenn ein Gebietsschlüssel allein nicht genau genug ist. Das hilft Nutzenden, die Abdeckung einzuordnen. Beispiel: „Stadtgebiet Musterstadt ohne den Ortsteil X".',
 	),
 	array(
@@ -318,7 +318,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dct:spatial` (geografische Abdeckung) hat der Datensatz?',
 		'q_human'    => 'Welche geografische Region betreffen diese Daten?',
-		'desc_dcat'  => '`dct:spatial` beschreibt die räumliche Abdeckung des Datensatzes (Range `dct:Location`). Als Wert dient eine Gebiets-URI (z. B. GeoNames, EU-Continents) oder eine Freitext-Ortsangabe. Kardinalität 0..n.',
+		'desc_dcat'  => '`dct:spatial` beschreibt die räumliche Abdeckung des Datensatzes (Range `dct:Location`). Als Wert dient eine Gebiets-URI (z. B. GeoNames, EU-Continents) oder eine Freitext-Ortsangabe. Multiplizität 0..n.',
 		'desc_human' => 'Geben Sie an, welches geografische Gebiet die Daten abdecken — eine Stadt, ein Bundesland, ein Land oder eine Region. So finden Nutzende Daten zu ihrer Gegend. Beispiel: Musterstadt oder Bayern.',
 	),
 	array(
@@ -330,7 +330,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Ab welchem `dct:temporal`-Startdatum gilt der Abdeckungszeitraum?',
 		'q_human'    => 'Ab wann sind diese Daten gültig?',
-		'desc_dcat'  => '`dct:temporal` beschreibt den Zeitraum, den die Daten inhaltlich abdecken (Range `dct:PeriodOfTime`). Dieses Feld liefert die Startangabe (`dcat:startDate`) des Intervalls. Kardinalität 0..1. Nicht zu verwechseln mit `dct:issued` (Veröffentlichung).',
+		'desc_dcat'  => '`dct:temporal` beschreibt den Zeitraum, den die Daten inhaltlich abdecken (Range `dct:PeriodOfTime`). Dieses Feld liefert die Startangabe (`dcat:startDate`) des Intervalls. Multiplizität 0..1. Nicht zu verwechseln mit `dct:issued` (Veröffentlichung).',
 		'desc_human' => 'Der Beginn des Zeitraums, den die Daten inhaltlich beschreiben — also ab wann die erfassten Werte gelten. Das ist der abgedeckte Zeitraum, nicht das Veröffentlichungsdatum. Beispiel: 2020-01-01.',
 	),
 	array(
@@ -342,7 +342,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Bis zu welchem `dct:temporal`-Enddatum gilt der Abdeckungszeitraum?',
 		'q_human'    => 'Bis wann sind diese Daten gültig?',
-		'desc_dcat'  => '`dct:temporal` liefert hier die Endangabe (`dcat:endDate`) des abgedeckten Zeitintervalls (Range `dct:PeriodOfTime`). Kardinalität 0..1. Zusammen mit dem Startdatum ergibt sich der vollständige Abdeckungszeitraum.',
+		'desc_dcat'  => '`dct:temporal` liefert hier die Endangabe (`dcat:endDate`) des abgedeckten Zeitintervalls (Range `dct:PeriodOfTime`). Multiplizität 0..1. Zusammen mit dem Startdatum ergibt sich der vollständige Abdeckungszeitraum.',
 		'desc_human' => 'Das Ende des Zeitraums, den die Daten abdecken — bis wann die erfassten Werte reichen. Bleibt das Feld leer, gilt der Zeitraum als offen (bis heute fortlaufend). Beispiel: 2025-12-31.',
 	),
 	array(
@@ -354,7 +354,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie lautet der `vcard:fn` (Name) des `dcat:contactPoint`?',
 		'q_human'    => 'Wer ist Ansprechperson für Fragen zu diesen Daten?',
-		'desc_dcat'  => 'Teil des `dcat:contactPoint` (Range `vcard:Kind`): `vcard:fn` benennt die Kontaktstelle oder -person für Rückfragen zum Datensatz. Kardinalität des Kontaktpunkts 0..n. Name, E-Mail und URL bilden zusammen einen Kontaktpunkt.',
+		'desc_dcat'  => 'Teil des `dcat:contactPoint` (Range `vcard:Kind`): `vcard:fn` benennt die Kontaktstelle oder -person für Rückfragen zum Datensatz. Multiplizität des Kontaktpunkts 0..n. Name, E-Mail und URL bilden zusammen einen Kontaktpunkt.',
 		'desc_human' => 'Nennen Sie, an wen sich Nutzende bei Fragen wenden können — eine Person oder eine Abteilung. So ist klar, wer für die Daten zuständig ist. Beispiel: Open-Data-Team der Stadt Musterstadt.',
 	),
 	array(
@@ -366,7 +366,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `vcard:hasEmail` gehört zum `dcat:contactPoint`?',
 		'q_human'    => 'Unter welcher E-Mail-Adresse kann ich Fragen stellen?',
-		'desc_dcat'  => 'Teil des `dcat:contactPoint`: `vcard:hasEmail` liefert die E-Mail-Adresse der Kontaktstelle (als `mailto:`-URI serialisiert). Kardinalität 0..1 je Kontaktpunkt.',
+		'desc_dcat'  => 'Teil des `dcat:contactPoint`: `vcard:hasEmail` liefert die E-Mail-Adresse der Kontaktstelle (als `mailto:`-URI serialisiert). Multiplizität 0..1 je Kontaktpunkt.',
 		'desc_human' => 'Die E-Mail-Adresse, unter der man Fragen zu den Daten stellen kann. Das ist der einfachste Weg für Nachnutzende, Sie zu erreichen. Beispiel: opendata@musterstadt.de.',
 	),
 	array(
@@ -378,7 +378,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `vcard:hasURL` gehört zum `dcat:contactPoint`?',
 		'q_human'    => 'Auf welcher Website finde ich weitere Kontaktinformationen?',
-		'desc_dcat'  => 'Teil des `dcat:contactPoint`: `vcard:hasURL` verweist auf eine Webseite mit weiteren Kontaktinformationen der zuständigen Stelle. Kardinalität 0..1 je Kontaktpunkt.',
+		'desc_dcat'  => 'Teil des `dcat:contactPoint`: `vcard:hasURL` verweist auf eine Webseite mit weiteren Kontaktinformationen der zuständigen Stelle. Multiplizität 0..1 je Kontaktpunkt.',
 		'desc_human' => 'Verlinken Sie optional eine Kontakt- oder Impressumsseite mit weiteren Wegen, Sie zu erreichen. Ergänzt E-Mail und Name um eine Anlaufstelle im Web. Beispiel: https://musterstadt.de/kontakt.',
 	),
 	array(
@@ -390,7 +390,7 @@ return array(
 		'vocab'      => 'contributors',
 		'q_dcat'     => 'Welche `dcatde:contributorID` (bereitstellende Stelle) gilt im GovData-Verbund?',
 		'q_human'    => 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?',
-		'desc_dcat'  => '`dcatde:contributorID` (DCAT-AP.de) ist die offizielle Kennung der im GovData-Verbund bereitstellenden Stelle, referenziert über das gebündelte Contributors-Vokabular. Kardinalität 0..n. Dient der Zuordnung im nationalen Metadatenverbund.',
+		'desc_dcat'  => '`dcatde:contributorID` (DCAT-AP.de) ist die offizielle Kennung der im GovData-Verbund bereitstellenden Stelle, referenziert über das gebündelte Contributors-Vokabular. Multiplizität 0..n. Dient der Zuordnung im nationalen Metadatenverbund.',
 		'desc_human' => 'Nur für Stellen, die im deutschen GovData-Verbund veröffentlichen: Wählen Sie Ihre Stelle aus der Liste; die zugehörige offizielle Kennung wird automatisch verwendet. Für die meisten Nutzenden ist dieses Feld nicht relevant. Beispiel: Bundesministerium des Innern.',
 	),
 	array(
@@ -402,7 +402,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wer ist `dcatde:originator` (ursprünglicher Urheber) der Daten?',
 		'q_human'    => 'Wer hat diese Daten ursprünglich erstellt?',
-		'desc_dcat'  => '`dcatde:originator` (DCAT-AP.de) benennt die Stelle, von der die Daten ursprünglich stammen (Range `foaf:Agent`). Kann von Herausgeber (`dct:publisher`) und Ersteller (`dct:creator`) abweichen. Kardinalität 0..n.',
+		'desc_dcat'  => '`dcatde:originator` (DCAT-AP.de) benennt die Stelle, von der die Daten ursprünglich stammen (Range `foaf:Agent`). Kann von Herausgeber (`dct:publisher`) und Ersteller (`dct:creator`) abweichen. Multiplizität 0..n.',
 		'desc_human' => 'Nennen Sie die Stelle, von der die Daten ursprünglich stammen — das kann eine andere sein als die, die sie jetzt veröffentlicht. So bleibt die Herkunft nachvollziehbar. Beispiel: Statistisches Landesamt.',
 	),
 	array(
@@ -414,7 +414,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche E-Mail-Adresse gehört zum `dcatde:originator`?',
 		'q_human'    => 'Wie lautet die E-Mail-Adresse des Urhebers?',
-		'desc_dcat'  => 'Ergänzt `dcatde:originator` um eine E-Mail-Adresse des ursprünglichen Urhebers (als `mailto:`-URI). Optional, Kardinalität 0..1.',
+		'desc_dcat'  => 'Ergänzt `dcatde:originator` um eine E-Mail-Adresse des ursprünglichen Urhebers (als `mailto:`-URI). Optional, Multiplizität 0..1.',
 		'desc_human' => 'Optional die E-Mail-Adresse der ursprünglichen Urheber-Stelle, falls abweichend erreichbar. Beispiel: statistik@landesamt.de.',
 	),
 	array(
@@ -426,7 +426,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wer ist `dcatde:maintainer` (pflegende Stelle) der Daten?',
 		'q_human'    => 'Wer pflegt diese Daten laufend?',
-		'desc_dcat'  => '`dcatde:maintainer` (DCAT-AP.de) benennt die für die laufende Pflege und Aktualisierung zuständige Stelle (Range `foaf:Agent`). Kardinalität 0..n. Kann von Herausgeber und Urheber abweichen.',
+		'desc_dcat'  => '`dcatde:maintainer` (DCAT-AP.de) benennt die für die laufende Pflege und Aktualisierung zuständige Stelle (Range `foaf:Agent`). Multiplizität 0..n. Kann von Herausgeber und Urheber abweichen.',
 		'desc_human' => 'Nennen Sie, wer die Daten laufend betreut und aktuell hält. Das ist die Stelle, die sich um Updates kümmert — nicht unbedingt die, die sie erstellt hat. Beispiel: Open-Data-Team.',
 	),
 	array(
@@ -438,7 +438,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche E-Mail-Adresse gehört zum `dcatde:maintainer`?',
 		'q_human'    => 'Wie lautet die E-Mail-Adresse der pflegenden Stelle?',
-		'desc_dcat'  => 'Ergänzt `dcatde:maintainer` um eine E-Mail-Adresse der pflegenden Stelle (als `mailto:`-URI). Optional, Kardinalität 0..1.',
+		'desc_dcat'  => 'Ergänzt `dcatde:maintainer` um eine E-Mail-Adresse der pflegenden Stelle (als `mailto:`-URI). Optional, Multiplizität 0..1.',
 		'desc_human' => 'Optional die E-Mail-Adresse der Stelle, die die Daten pflegt. Beispiel: opendata@beispiel.de.',
 	),
 	array(
@@ -450,7 +450,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Auf welcher `dcatde:legalBasis` (Rechtsgrundlage) beruht die Bereitstellung?',
 		'q_human'    => 'Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?',
-		'desc_dcat'  => '`dcatde:legalBasis` (DCAT-AP.de) nennt das Gesetz oder die Verordnung, die die Bereitstellung der Daten regelt (Freitext, `literal`). Kardinalität 0..n.',
+		'desc_dcat'  => '`dcatde:legalBasis` (DCAT-AP.de) nennt das Gesetz oder die Verordnung, die die Bereitstellung der Daten regelt (Freitext, `literal`). Multiplizität 0..n.',
 		'desc_human' => 'Falls es eine gesetzliche Grundlage für die Veröffentlichung gibt, nennen Sie sie hier. Das schafft Transparenz über die rechtliche Verpflichtung oder Erlaubnis. Beispiel: § 12a EGovG (E-Government-Gesetz).',
 	),
 	array(
@@ -462,7 +462,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dcatde:qualityProcessURI` dokumentiert das Qualitätssicherungs-Verfahren?',
 		'q_human'    => 'Wo ist das Qualitätssicherungs-Verfahren dokumentiert?',
-		'desc_dcat'  => '`dcatde:qualityProcessURI` (DCAT-AP.de) verweist per URI auf eine Beschreibung des Qualitätssicherungs-Prozesses des Datensatzes. Kardinalität 0..1.',
+		'desc_dcat'  => '`dcatde:qualityProcessURI` (DCAT-AP.de) verweist per URI auf eine Beschreibung des Qualitätssicherungs-Prozesses des Datensatzes. Multiplizität 0..1.',
 		'desc_human' => 'Verlinken Sie optional eine Seite, die beschreibt, wie Sie die Qualität der Daten sichern (z. B. Prüfschritte). Das stärkt das Vertrauen in Ihre Daten. Beispiel: https://beispiel.de/qualitaetssicherung.',
 	),
 	array(
@@ -474,7 +474,7 @@ return array(
 		'vocab'      => 'access-right',
 		'q_dcat'     => 'Welche `dct:accessRights` (Zugriffsklassifikation) gelten für den Datensatz?',
 		'q_human'    => 'Wer darf auf diese Daten zugreifen?',
-		'desc_dcat'  => '`dct:accessRights` klassifiziert den Zugriffsstatus über das EU-Vokabular „Access Right" (`PUBLIC`, `RESTRICTED`, `NON_PUBLIC`). Kardinalität 0..1. Relevant für die MQA-Dimension Wiederverwendbarkeit.',
+		'desc_dcat'  => '`dct:accessRights` klassifiziert den Zugriffsstatus über das EU-Vokabular „Access Right" (`PUBLIC`, `RESTRICTED`, `NON_PUBLIC`). Multiplizität 0..1. Relevant für die MQA-Dimension Wiederverwendbarkeit.',
 		'desc_human' => 'Geben Sie an, ob die Daten für alle offen (öffentlich), nur eingeschränkt oder gar nicht öffentlich zugänglich sind. Für offene Daten ist das in der Regel „öffentlich". Beispiel: Öffentlich.',
 	),
 	array(
@@ -486,7 +486,7 @@ return array(
 		'vocab'      => 'data-theme',
 		'q_dcat'     => 'Welches zusätzliche `dcat:theme` (EU-Themen-URI) gilt für den Datensatz?',
 		'q_human'    => 'Welches weitere EU-Thema möchten Sie ergänzen?',
-		'desc_dcat'  => 'Zusätzliches `dcat:theme` als direkte EU-Themen-URI (`http://publications.europa.eu/resource/authority/data-theme/…`). Ergänzt die Themen-Auswahl aus Tab 1 um weitere Themen. Kardinalität 0..n.',
+		'desc_dcat'  => 'Zusätzliches `dcat:theme` als direkte EU-Themen-URI (`http://publications.europa.eu/resource/authority/data-theme/…`). Ergänzt die Themen-Auswahl aus Tab 1 um weitere Themen. Multiplizität 0..n.',
 		'desc_human' => 'Falls Ihr Datensatz zu mehr als einem Thema passt, ergänzen Sie hier ein weiteres EU-Thema aus der Vorschlagsliste. Das erhöht die Auffindbarkeit über mehrere Themenfilter. Beispiel: Umwelt zusätzlich zu Gesundheit.',
 	),
 	array(
@@ -510,7 +510,7 @@ return array(
 		'vocab'      => 'hvd-category',
 		'q_dcat'     => 'Welcher `dcatap:hvdCategory` (HVD-Kategorie) gehört der Datensatz an?',
 		'q_human'    => 'Welcher HVD-Kategorie gehört dieser Datensatz an?',
-		'desc_dcat'  => '`dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Kardinalität 0..n.',
+		'desc_dcat'  => '`dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Multiplizität 0..n. Hinweis: Die Eigenschaft stammt aus der HVD-Erweiterung zu DCAT-AP (EU-Durchführungsverordnung 2023/138), nicht aus dem Kernprofil DCAT-AP 3.0; die mitgelieferten Kern-Shapes prüfen sie deshalb nicht.',
 		'desc_human' => 'Wenn es ein hochwertiger Datensatz ist, wählen Sie hier die passende der sechs EU-HVD-Kategorien. Damit ordnen Sie den Datensatz korrekt in das EU-Schema ein. Beispiel: Georaum, Mobilität, Statistik.',
 	),
 	array(
@@ -522,7 +522,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welcher `dct:identifier` (eindeutige Kennung) identifiziert den Datensatz?',
 		'q_human'    => 'Welche eindeutige Kennung hat dieser Datensatz?',
-		'desc_dcat'  => '`dct:identifier` ist eine eindeutige, im System der Herausgeberin vergebene Kennung des Datensatzes (Freitext/`literal`). Kardinalität 0..n. Ermöglicht die stabile Referenzierung über Systemgrenzen hinweg.',
+		'desc_dcat'  => '`dct:identifier` ist eine eindeutige, im System der Herausgeberin vergebene Kennung des Datensatzes (Freitext/`literal`). Multiplizität 0..n. Ermöglicht die stabile Referenzierung über Systemgrenzen hinweg.',
 		'desc_human' => 'Falls Ihr Datensatz eine feste Kennnummer aus Ihrem eigenen System hat, tragen Sie sie hier ein. So bleibt der Datensatz eindeutig identifizierbar. Beispiel: DS-2026-00042.',
 	),
 	array(
@@ -534,7 +534,7 @@ return array(
 		'vocab'      => 'dataset-type',
 		'q_dcat'     => 'Welchen `dct:type` (Datensatz-Typ) hat der Datensatz?',
 		'q_human'    => 'Um welchen Typ von Datensatz handelt es sich?',
-		'desc_dcat'  => '`dct:type` klassifiziert die Art des Datensatzes, idealerweise über das EU-Vokabular „Dataset Type". Kardinalität 0..1. Unterscheidet z. B. Erhebungsdaten, Registerdaten oder Geodaten.',
+		'desc_dcat'  => '`dct:type` klassifiziert die Art des Datensatzes, idealerweise über das EU-Vokabular „Dataset Type". Multiplizität 0..1. Unterscheidet z. B. Erhebungsdaten, Registerdaten oder Geodaten.',
 		'desc_human' => 'Geben Sie an, um welche Art von Datensatz es sich grundsätzlich handelt. Das hilft bei der groben Einordnung. Beispiel: Statistische Erhebung, Geodaten.',
 	),
 	array(
@@ -546,7 +546,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wer ist `dct:creator` (Ersteller) des Datensatzes?',
 		'q_human'    => 'Wer hat diese Daten erstellt?',
-		'desc_dcat'  => '`dct:creator` benennt die primär für die Erstellung des Datensatzes verantwortliche Stelle oder Person (Range `foaf:Agent`). Kardinalität 0..n. Unterscheidet sich vom Herausgeber (`dct:publisher`), der für die Bereitstellung verantwortlich ist.',
+		'desc_dcat'  => '`dct:creator` benennt die primär für die Erstellung des Datensatzes verantwortliche Stelle oder Person (Range `foaf:Agent`). Multiplizität 0..n. Unterscheidet sich vom Herausgeber (`dct:publisher`), der für die Bereitstellung verantwortlich ist.',
 		'desc_human' => 'Nennen Sie, wer die Daten inhaltlich erstellt hat — die Person oder Stelle, die die eigentliche Arbeit gemacht hat. Das kann von der herausgebenden Organisation abweichen. Beispiel: Forschungsgruppe Stadtklima.',
 	),
 	array(
@@ -558,7 +558,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche E-Mail-Adresse gehört zum `dct:creator`?',
 		'q_human'    => 'Wie lautet die E-Mail-Adresse des Erstellers?',
-		'desc_dcat'  => 'Ergänzt `dct:creator` um eine E-Mail-Adresse der erstellenden Stelle (als `mailto:`-URI). Optional, Kardinalität 0..1.',
+		'desc_dcat'  => 'Ergänzt `dct:creator` um eine E-Mail-Adresse der erstellenden Stelle (als `mailto:`-URI). Optional, Multiplizität 0..1.',
 		'desc_human' => 'Optional die E-Mail-Adresse der erstellenden Person oder Stelle. Beispiel: forschung@beispiel.de.',
 	),
 	array(
@@ -570,7 +570,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `owl:versionInfo` (Versionsbezeichnung) hat der Datensatz?',
 		'q_human'    => 'Welche Version hat dieser Datensatz?',
-		'desc_dcat'  => '`owl:versionInfo` gibt die Versionsbezeichnung des Datensatzes als Freitext an (`literal`). Kardinalität 0..1. Erlaubt die Unterscheidung aufeinanderfolgender Ausgaben desselben Datensatzes.',
+		'desc_dcat'  => '`owl:versionInfo` gibt die Versionsbezeichnung des Datensatzes als Freitext an (`literal`). Multiplizität 0..1. Erlaubt die Unterscheidung aufeinanderfolgender Ausgaben desselben Datensatzes.',
 		'desc_human' => 'Falls es mehrere Ausgaben Ihrer Daten gibt, tragen Sie die Versionsnummer ein. So wissen Nutzende, welche Fassung sie vor sich haben. Beispiel: 2.0.',
 	),
 	array(
@@ -582,7 +582,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `adms:versionNotes` (Änderungshinweise) beschreiben diese Version?',
 		'q_human'    => 'Was hat sich in dieser Version geändert?',
-		'desc_dcat'  => '`adms:versionNotes` beschreibt die Änderungen gegenüber der Vorversion als sprachlich getaggten Freitext (`literal-lang`). Kardinalität 0..n. Ergänzt `owl:versionInfo` um den inhaltlichen Änderungsverlauf.',
+		'desc_dcat'  => '`adms:versionNotes` beschreibt die Änderungen gegenüber der Vorversion als sprachlich getaggten Freitext (`literal-lang`). Multiplizität 0..n. Ergänzt `owl:versionInfo` um den inhaltlichen Änderungsverlauf.',
 		'desc_human' => 'Beschreiben Sie kurz, was sich gegenüber der letzten Version geändert hat — wie ein Änderungsprotokoll. Nutzende sehen so, ob sich ein erneuter Download lohnt. Beispiel: „Daten für 2025 ergänzt, Tippfehler korrigiert."',
 	),
 	array(
@@ -594,7 +594,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dcat:spatialResolutionInMeters` (räumliche Auflösung) haben die Daten?',
 		'q_human'    => 'Welche räumliche Auflösung haben die Daten (in Metern)?',
-		'desc_dcat'  => '`dcat:spatialResolutionInMeters` gibt die kleinste räumlich unterscheidbare Einheit in Metern an (`xsd:decimal`). Kardinalität 0..n. Relevant vor allem für Geodaten und Rasterdaten.',
+		'desc_dcat'  => '`dcat:spatialResolutionInMeters` gibt die kleinste räumlich unterscheidbare Einheit in Metern an (`xsd:decimal`). Multiplizität 0..n. Relevant vor allem für Geodaten und Rasterdaten.',
 		'desc_human' => 'Bei Geodaten: Geben Sie an, wie fein die Daten räumlich aufgelöst sind — der kleinste unterscheidbare Abstand in Metern. Ein kleiner Wert bedeutet detailliertere Daten. Beispiel: 10 (Raster von 10 Metern).',
 	),
 	array(
@@ -606,7 +606,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dcat:temporalResolution` (zeitliche Auflösung) haben die Daten?',
 		'q_human'    => 'Welche zeitliche Auflösung haben die Daten?',
-		'desc_dcat'  => '`dcat:temporalResolution` gibt die kleinste zeitlich unterscheidbare Einheit als ISO-8601-Dauer an (`xsd:duration`). Kardinalität 0..1. Beschreibt z. B. den Messabstand einer Zeitreihe.',
+		'desc_dcat'  => '`dcat:temporalResolution` gibt die kleinste zeitlich unterscheidbare Einheit als ISO-8601-Dauer an (`xsd:duration`). Multiplizität 0..1. Beschreibt z. B. den Messabstand einer Zeitreihe.',
 		'desc_human' => 'Bei Zeitreihen: Geben Sie an, in welchem zeitlichen Abstand die Werte erfasst sind — z. B. stündlich, täglich, monatlich. Format ist die ISO-8601-Dauer. Beispiel: P1D (ein Tag) oder PT1H (eine Stunde).',
 	),
 	array(
@@ -618,7 +618,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welchem `dct:conformsTo` (Standard/Schema) entsprechen die Daten?',
 		'q_human'    => 'Welchem Standard oder Schema entsprechen die Daten?',
-		'desc_dcat'  => '`dct:conformsTo` verweist auf einen implementierten Standard, ein Anwendungsprofil oder ein Schema, dem die Daten entsprechen (Range `dct:Standard`, per URI oder Bezeichnung). Kardinalität 0..n.',
+		'desc_dcat'  => '`dct:conformsTo` verweist auf einen implementierten Standard, ein Anwendungsprofil oder ein Schema, dem die Daten entsprechen (Range `dct:Standard`, per URI oder Bezeichnung). Multiplizität 0..n.',
 		'desc_human' => 'Falls Ihre Daten einem bestimmten Standard oder Schema folgen, nennen Sie ihn hier. So können Systeme die Daten korrekt interpretieren. Beispiel: INSPIRE, XÖV oder ein fachliches Datenschema.',
 	),
 	array(
@@ -630,7 +630,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dct:provenance` (Herkunft/Entstehung) hat der Datensatz?',
 		'q_human'    => 'Woher stammen die Daten und wie sind sie entstanden?',
-		'desc_dcat'  => '`dct:provenance` beschreibt die Herkunft und Entstehungsgeschichte des Datensatzes (Range `dct:ProvenanceStatement`, Freitext). Kardinalität 0..n. Dokumentiert Erhebungs- und Verarbeitungsschritte.',
+		'desc_dcat'  => '`dct:provenance` beschreibt die Herkunft und Entstehungsgeschichte des Datensatzes (Range `dct:ProvenanceStatement`, Freitext). Multiplizität 0..n. Dokumentiert Erhebungs- und Verarbeitungsschritte.',
 		'desc_human' => 'Beschreiben Sie, woher die Daten kommen und wie sie entstanden sind — z. B. aus welcher Erhebung oder welchem Verfahren. Das macht die Daten nachvollziehbar und vertrauenswürdig. Beispiel: „Erhoben im Rahmen der Bürgerbefragung 2025, anonymisiert aufbereitet."',
 	),
 	array(
@@ -642,7 +642,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie lautet der `dct:title` der Distribution?',
 		'q_human'    => 'Wie heißt die bereitgestellte Datei/Distribution?',
-		'desc_dcat'  => '`dct:title` auf Ebene der Distribution benennt die konkrete bereitgestellte Ressource (`literal-lang`). Kardinalität 0..n. Nützlich, wenn der Distributionsname vom Datensatztitel abweicht.',
+		'desc_dcat'  => '`dct:title` auf Ebene der Distribution benennt die konkrete bereitgestellte Ressource (`literal-lang`). Multiplizität 0..n. Nützlich, wenn der Distributionsname vom Datensatztitel abweicht.',
 		'desc_human' => 'Geben Sie der bereitgestellten Datei einen eigenen Namen, falls er sich vom Titel des Datensatzes unterscheidet. Beispiel: „Rohdaten CSV 2025".',
 	),
 	array(
@@ -654,7 +654,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Wie lautet die `dct:description` der Distribution?',
 		'q_human'    => 'Wie lässt sich die Distribution beschreiben?',
-		'desc_dcat'  => '`dct:description` auf Distributionsebene beschreibt die konkrete Datei/Ressource (`literal-lang`). Kardinalität 0..n. Ergänzt die Datensatzbeschreibung um distributionsspezifische Hinweise (z. B. Spaltenaufbau).',
+		'desc_dcat'  => '`dct:description` auf Distributionsebene beschreibt die konkrete Datei/Ressource (`literal-lang`). Multiplizität 0..n. Ergänzt die Datensatzbeschreibung um distributionsspezifische Hinweise (z. B. Spaltenaufbau).',
 		'desc_human' => 'Beschreiben Sie die konkrete Datei näher — etwa welche Spalten sie enthält oder wie sie aufgebaut ist. Das hilft beim direkten Umgang mit der Datei. Beispiel: „Spalten: Jahr, Stadt, Einwohner; Trennzeichen Semikolon."',
 	),
 	array(
@@ -666,7 +666,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Unter welcher `dcat:downloadURL` ist die Datei direkt herunterladbar?',
 		'q_human'    => 'Wie lautet der direkte Download-Link zur Datei?',
-		'desc_dcat'  => '`dcat:downloadURL` verweist auf eine direkt herunterladbare Datei (Range `rdfs:Resource`). Anders als `dcat:accessURL` garantiert sie einen unmittelbaren Download derselben Ressource. Kardinalität 0..n. Relevant für die MQA-Dimension Zugänglichkeit.',
+		'desc_dcat'  => '`dcat:downloadURL` verweist auf eine direkt herunterladbare Datei (Range `rdfs:Resource`). Anders als `dcat:accessURL` garantiert sie einen unmittelbaren Download derselben Ressource. Multiplizität 0..n. Relevant für die MQA-Dimension Zugänglichkeit.',
 		'desc_human' => 'Falls es einen direkten Link gibt, der die Datei sofort herunterlädt (ohne Umweg über eine Seite), tragen Sie ihn hier ein. Das ist der bequemste Weg für Nachnutzende. Beispiel: https://beispiel.de/daten/statistik.csv.',
 	),
 	array(
@@ -678,7 +678,7 @@ return array(
 		'vocab'      => 'iana-media-type',
 		'q_dcat'     => 'Welchen `dcat:mediaType` (IANA-MIME-Typ) hat die Distribution?',
 		'q_human'    => 'Welchen Medientyp (MIME) hat die Datei?',
-		'desc_dcat'  => '`dcat:mediaType` gibt den Medientyp der Distribution als IANA-Media-Type an (z. B. `text/csv`, `application/json`), referenziert über das IANA-Media-Types-Register. Kardinalität 0..1. Ergänzt `dct:format` um den technischen MIME-Typ.',
+		'desc_dcat'  => '`dcat:mediaType` gibt den Medientyp der Distribution als IANA-Media-Type an (z. B. `text/csv`, `application/json`), referenziert über das IANA-Media-Types-Register. Multiplizität 0..1. Ergänzt `dct:format` um den technischen MIME-Typ.',
 		'desc_human' => 'Der technische Medientyp der Datei (MIME-Typ) — die maschinenlesbare Entsprechung zum Format. Systeme erkennen daran, wie sie die Datei behandeln müssen. Beispiel: text/csv, application/json.',
 	),
 	array(
@@ -690,7 +690,7 @@ return array(
 		'vocab'      => '',
 		'q_dcat'     => 'Welche `dct:rights` (Nutzungsrechte) gelten für die Distribution?',
 		'q_human'    => 'Welche Nutzungsrechte gelten für die Datei?',
-		'desc_dcat'  => '`dct:rights` beschreibt rechtliche Hinweise zur Distribution jenseits der Lizenz — etwa Urheberrechts- oder Zugriffsvermerke (Range `dct:RightsStatement`, Freitext oder URI). Kardinalität 0..1.',
+		'desc_dcat'  => '`dct:rights` beschreibt rechtliche Hinweise zur Distribution jenseits der Lizenz — etwa Urheberrechts- oder Zugriffsvermerke (Range `dct:RightsStatement`, Freitext oder URI). Multiplizität 0..1.',
 		'desc_human' => 'Ergänzende rechtliche Hinweise zur Datei, die über die Lizenz hinausgehen — z. B. Urheberrechtsvermerke. Für viele offene Datensätze bleibt das leer. Beispiel: „© Stadt Musterstadt 2026".',
 	),
 );

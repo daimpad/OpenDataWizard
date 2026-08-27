@@ -85,7 +85,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_theme', __( 'Welchem Thema ist dieser Datensatz zugeordnet?', 'open-data-wizard' ) )
 						->add_options( self::get_theme_options() )
-						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Umwelt, Bildung, Gesundheit, Wirtschaft, Kultur', 'open-data-wizard' ) ),
+						->set_help_text( __( 'THEMA (dcat:theme)', 'open-data-wizard' ) ),
 
 					// Schlagworte gehören zur inhaltlichen Erschließung und stehen
 					// deshalb bei Thema, CESSDA und Engagementfeld statt bei Sprache
@@ -137,7 +137,7 @@ class ODW_Fields {
 					Field::make( 'select', 'odw_language', __( 'In welcher Sprache sind die Daten?', 'open-data-wizard' ) )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_language' ) : '' )
 						->add_options( self::get_language_options() )
-						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Deutsch, Englisch', 'open-data-wizard' ) ),
+						->set_help_text( __( 'SPRACHE (dct:language)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_hint_translations' )
 						->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Übersetzungen (optional)', 'open-data-wizard' ) . '</h4><p class="description" style="margin:0">' . esc_html__( 'Titel, Beschreibung und Schlagworte zusätzlich in weiteren Sprachen — für mehrsprachige, DCAT-AP-konforme Metadaten. Die Angaben in Tab 1 bleiben die Hauptsprache.', 'open-data-wizard' ) . '</p>' ),
@@ -235,7 +235,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_format', __( 'In welchem Format ist die Datei?', 'open-data-wizard' ) )
 						->add_options( self::get_format_options() )
-						->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CSV, JSON, PDF', 'open-data-wizard' ) ),
+						->set_help_text( __( 'FORMAT (dct:format)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_byte_size', __( 'Dateigröße (Bytes)', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'number' )
@@ -247,7 +247,7 @@ class ODW_Fields {
 						->set_attribute( 'data-odw-required', '1' )
 						->set_default_value( class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '' )
 						->add_options( self::get_license_options() )
-						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: CC0 1.0, CC-BY 4.0 – Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
+						->set_help_text( __( 'LIZENZ (dct:license)', 'open-data-wizard' ) . "\n\n" . __( 'Diese bestimmt, wie andere die Daten nutzen dürfen.', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_license_info' )
 						->set_html( '<div class="odw-license-info" data-odw-license-info hidden></div>' ),
@@ -287,7 +287,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_availability', __( 'Wie verlässlich bleibt diese Datei abrufbar?', 'open-data-wizard' ) )
 						->add_options( self::get_availability_options() )
-						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant? Beispiel: Stabil, Verfügbar, Temporär', 'open-data-wizard' ) ),
+						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) . "\n\n" . __( 'Wie verlässlich/dauerhaft ist der Zugriff auf diese Datei geplant?', 'open-data-wizard' ) ),
 
 					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
 						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
@@ -387,14 +387,14 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_accrual_periodicity', __( 'Wie oft werden diese Daten aktualisiert?', 'open-data-wizard' ) )
 						->add_options( self::get_periodicity_options() )
-						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Täglich, Monatlich, Jährlich, Unregelmäßig', 'open-data-wizard' ) ),
+						->set_help_text( __( 'AKTUALISIERUNGSFREQUENZ (dct:accrualPeriodicity)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_coverage' )
 					->set_html( '<h4 style="margin:16px 0 4px">' . esc_html__( 'Abdeckung', 'open-data-wizard' ) . '</h4>' ),
 
 					Field::make( 'select', 'odw_political_geocoding_level', __( 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?', 'open-data-wizard' ) )
 						->add_options( self::get_political_geocoding_level_options() )
-						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) . "\n\n" . __( 'Beispiel: Gemeinde, Landkreis, Land, Bund', 'open-data-wizard' ) ),
+						->set_help_text( __( 'VERWALTUNGSEBENE (dcatde:politicalGeocodingLevelURI)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_political_geocoding_uri', __( 'Auf welches amtliche Gebiet beziehen sich die Daten?', 'open-data-wizard' ) )
 						->set_attribute( 'type', 'url' )
@@ -542,7 +542,7 @@ class ODW_Fields {
 
 					Field::make( 'select', 'odw_hvd_category', __( 'Welcher HVD-Kategorie gehört dieser Datensatz an?', 'open-data-wizard' ) )
 						->add_options( self::get_hvd_category_options() )
-						->set_help_text( __( 'HVD-KATEGORIE (dcatap:hvdCategory)', 'open-data-wizard' ) . "\n\n" . __( 'Eine der sechs EU-Themenkategorien. Beispiel: Georaum, Meteorologie, Mobilität', 'open-data-wizard' ) )
+						->set_help_text( __( 'HVD-KATEGORIE (dcatap:hvdCategory)', 'open-data-wizard' ) . "\n\n" . __( 'Eine der sechs EU-Themenkategorien.', 'open-data-wizard' ) )
 						->set_conditional_logic(
 							array(
 								array(
