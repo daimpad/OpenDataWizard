@@ -276,6 +276,9 @@ msgstr ""
 msgid "Demo-Datensatz bearbeiten"
 msgstr ""
 
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr ""
+
 msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
 msgstr ""
 
@@ -292,6 +295,9 @@ msgid "Die Daten sind gemeinfrei. Sie dürfen ohne Einschränkungen und ohne Nam
 msgstr ""
 
 msgid "Die Idee"
+msgstr ""
+
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren\" die ausführliche Erklärung mit Beispielen."
 msgstr ""
 
 msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
@@ -1399,9 +1405,6 @@ msgstr ""
 msgid "Folgende Pflichtangaben fehlen oder sind leer:"
 msgstr ""
 
-msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr ""
-
 msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
 msgstr ""
 
@@ -1445,9 +1448,6 @@ msgid "Die Sprache der Daten und — falls gewünscht — Titel, Beschreibung un
 msgstr ""
 
 msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
-msgstr ""
-
-msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
 msgstr ""
 
 

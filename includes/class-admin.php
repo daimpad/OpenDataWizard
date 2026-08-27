@@ -790,7 +790,7 @@ class ODW_Admin {
 
 				<h3><?php esc_html_e( 'Erste Schritte', 'open-data-wizard' ); ?></h3>
 				<p>
-					<?php esc_html_e( 'Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden.', 'open-data-wizard' ); ?>
+					<?php esc_html_e( 'Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren" die ausführliche Erklärung mit Beispielen.', 'open-data-wizard' ); ?>
 				</p>
 
 				<p class="submit">

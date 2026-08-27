@@ -40,7 +40,7 @@ Bausatz:
 
 | Baustein (piveau) | Inhalt | ODW-Pendant |
 |---|---|---|
-| `input-definition.ts` | Alle Felder: Typ, DCAT-Prädikat, Kardinalität, Validierung, Vokabular | `config/dcat-ap-fields.php` (erweiterbar) |
+| `input-definition.ts` | Alle Felder: Typ, DCAT-Prädikat, Multiplizität, Validierung, Vokabular | `config/dcat-ap-fields.php` (erweiterbar) |
 | `page-content-config.js` | Zuordnung Feld → Wizard-Schritt (Essentials/Additionals) | Tab-Zuordnung in `class-fields.php` |
 | `prefixes.js` | Namespace-Präfixe für JSON-LD | `odw_build_dataset_jsonld()` (`@context`) |
 | `vocab-prefixes.js` | Basis-URIs der kontrollierten Vokabulare | `dct-format-list.php`, `licenses.txt`, CESSDA-RDF |
@@ -106,12 +106,12 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 ### 4. Vollständiger DCAT-AP-Feldkatalog & Gap-Analyse
 
 **Legende** — Profil: `AP` = DCAT-AP 3.0 · `DE` = DCAT-AP.de 2.0 · `HVD` = High-Value-Dataset-Pflicht ·
-Norm-Kard.: Kardinalität laut Standard (`M`andatory/`R`ecommended/`O`ptional) ·
+Norm-Mult.: Multiplizität laut Standard (`M`andatory/`R`ecommended/`O`ptional) ·
 ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 
 #### 4.1 Dataset (`dcat:Dataset`)
 
-| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+| DCAT-Prädikat | Range | Profil | Norm-Mult. | ODW |
 |---|---|---|---|---|
 | `dct:title` | lang-Literal | AP | M (1..n) | ✅ |
 | `dct:description` | lang-Literal | AP | M (1..n) | ✅ |
@@ -149,7 +149,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 
 #### 4.2 Distribution (`dcat:Distribution`)
 
-| DCAT-Prädikat | Range | Profil | Norm-Kard. | ODW |
+| DCAT-Prädikat | Range | Profil | Norm-Mult. | ODW |
 |---|---|---|---|---|
 | `dcat:accessURL` | URI | AP | M (1..n) | ✅ |
 | `dcat:downloadURL` | URI | AP | O (0..n) | ✅ |
@@ -184,7 +184,7 @@ unterstützt; `dct:license`, `dct:language`, `dcat:themeTaxonomy` und `dct:spati
 
 Jeder Registry-Eintrag trägt die Basis-Schlüssel `key`, `meta_key`, `dcat_prop`, `label`, `points`, `required`
 sowie seit v2.5.1 die **deklarativen Schema-Metadaten** `profile`, `tier`, `range`, `cardinality`, `entity`, `vocab`.
-Damit ist die Registry die dokumentierte Single Source of Truth für Pflichtigkeit, Kardinalität und Wertform
+Damit ist die Registry die dokumentierte Single Source of Truth für Pflichtigkeit, Multiplizität und Wertform
 (wie piveaus `input-definition.ts`). Die Metadaten sind **abwärtskompatibel** — bestehende Konsumenten
 (Qualität, Validierung) lesen weiterhin nur die Basis-Schlüssel; das 0–100-Punkteschema bleibt unverändert.
 Eine Schema-Validierung sichert die Invarianten (`tests/test-registry-schema.php`):

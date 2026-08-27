@@ -282,7 +282,7 @@ return array(
 		'vocab'      => 'politicalGeocodingLevel',
 		'q_dcat'     => 'Welche `dcatde:politicalGeocodingLevelURI` (Verwaltungsebene) betrifft der Datensatz?',
 		'q_human'    => 'Auf welcher Verwaltungsebene wurden diese Daten erhoben?',
-		'desc_dcat'  => '`dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular (Bund, Land, Kreis, Kommune). Multiplizität 0..1. Ergänzt die konkrete Gebietsangabe.',
+		'desc_dcat'  => '`dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular; im Formular wählbar als Bund, Land, Landkreis und Gemeinde. Multiplizität 0..1. Ergänzt die konkrete Gebietsangabe.',
 		'desc_human' => 'Wählen Sie, auf welcher staatlichen Ebene die Daten angesiedelt sind — Bund, Land, Landkreis oder Gemeinde. Das ordnet die Daten geografisch-administrativ ein. Beispiel: Gemeinde.',
 	),
 	array(
@@ -510,7 +510,7 @@ return array(
 		'vocab'      => 'hvd-category',
 		'q_dcat'     => 'Welcher `dcatap:hvdCategory` (HVD-Kategorie) gehört der Datensatz an?',
 		'q_human'    => 'Welcher HVD-Kategorie gehört dieser Datensatz an?',
-		'desc_dcat'  => '`dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Multiplizität 0..n. Hinweis: Die Eigenschaft stammt aus der HVD-Erweiterung zu DCAT-AP (EU-Durchführungsverordnung 2023/138), nicht aus dem Kernprofil DCAT-AP 3.0; die mitgelieferten Kern-Shapes prüfen sie deshalb nicht.',
+		'desc_dcat'  => '`dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Multiplizität 0..n. Hinweis: Die Eigenschaft stammt aus der HVD-Erweiterung zu DCAT-AP (EU-Durchführungsverordnung 2023/138), nicht aus dem Kernprofil DCAT-AP 3.0; keine der mitgelieferten SHACL-Shapes prüft sie deshalb.',
 		'desc_human' => 'Wenn es ein hochwertiger Datensatz ist, wählen Sie hier die passende der sechs EU-HVD-Kategorien. Damit ordnen Sie den Datensatz korrekt in das EU-Schema ein. Beispiel: Georaum, Mobilität, Statistik.',
 	),
 	array(

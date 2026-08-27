@@ -21,7 +21,8 @@ Vier Punkte aus einem Usability-Test — und was beim Nachprüfen sonst noch auf
   `dcatap:hvdCategory` stammt aus der HVD-Erweiterung (EU-Verordnung 2023/138), nicht aus dem
   Kernprofil DCAT-AP 3.0. Auch vermerkt.
 - **Die Verwaltungsebene nannte Optionen, die es nicht gibt.** Die Beschreibung sprach von
-  „Kreis" und „Kommune", die Auswahlliste bietet „Landkreis" und „Gemeinde".
+  „Kreis" und „Kommune", die Auswahlliste bietet „Landkreis" und „Gemeinde". Betraf beide
+  Beschreibungstexte, den allgemeinverständlichen und den fachlichen.
 
 ### 🎨 Changed
 - **Pflichtfeld-Hinweis umformuliert:** „* Pflichtfeld für die Veröffentlichung. Als Entwurf
@@ -31,8 +32,18 @@ Vier Punkte aus einem Usability-Test — und was beim Nachprüfen sonst noch auf
   acht: Thema, Sprache, Format, Lizenz, Verfügbarkeit, Aktualisierungsfrequenz, Verwaltungsebene
   und HVD-Kategorie. Erklärende Sätze sind geblieben, gestrichen wurde nur der Beispielteil.
 - **„Kardinalität" heißt jetzt durchgängig „Multiplizität"** — den Begriff verwendet die
-  deutsche Spezifikation DCAT-AP.de. Betrifft 52 Stellen im Feld-Katalog und die daraus
-  generierte Feld-Referenz.
+  deutsche Spezifikation DCAT-AP.de. Betrifft 52 Stellen im Feld-Katalog, die daraus generierte
+  Feld-Referenz und `TECHNICAL-SPEC.md`. Dort auch die Spaltenabkürzung „Norm-Kard." →
+  „Norm-Mult.": Eine reine Wortersetzung hätte sie nicht erfasst, und eine Legende, die eine
+  Abkürzung auf ein anderes Wort auflöst, ist schlimmer als der alte Begriff.
+- **Der neue Pflichtfeld-Wortlaut gilt jetzt überall.** Beim ersten Anlauf hatte ich nur die
+  Legende unter dem Formular geändert; „Als Entwurf können Sie jederzeit unvollständig
+  speichern" stand weiter in der Meldung nach blockierter Veröffentlichung, auf der
+  Einstiegsseite und im README.
+- **Die Einstiegsseite versprach Beispiele, die es nicht mehr gibt.** „Jedes Feld hat hilfreiche
+  Beispiele, die Sie über das ⓘ-Symbol einblenden" stimmte nach dem Entfernen der acht Beispiele
+  nicht mehr. Der Satz benennt jetzt die tatsächliche Aufteilung: ⓘ zeigt den DCAT-AP-Begriff,
+  „Mehr erfahren" die ausführliche Erklärung.
 
 ### 🧹 Aufgeräumt
 - Zehn verwaiste Übersetzungseinträge entfernt, die durch die Textänderungen ohne Fundstelle

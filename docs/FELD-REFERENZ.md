@@ -409,7 +409,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Auf welcher Verwaltungsebene wurden diese Daten erhoben?
 
-**3 · DCAT-AP-Langbeschreibung:** `dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular (Bund, Land, Kreis, Kommune). Multiplizität 0..1. Ergänzt die konkrete Gebietsangabe.
+**3 · DCAT-AP-Langbeschreibung:** `dcatde:politicalGeocodingLevelURI` (DCAT-AP.de) klassifiziert die administrative Ebene des räumlichen Bezugs über das GovData-Vokabular; im Formular wählbar als Bund, Land, Landkreis und Gemeinde. Multiplizität 0..1. Ergänzt die konkrete Gebietsangabe.
 
 **4 · Verständliche Langbeschreibung:** Wählen Sie, auf welcher staatlichen Ebene die Daten angesiedelt sind — Bund, Land, Landkreis oder Gemeinde. Das ordnet die Daten geografisch-administrativ ein. Beispiel: Gemeinde.
 
@@ -732,7 +732,7 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **2 · Verständliche Frage:** Welcher HVD-Kategorie gehört dieser Datensatz an?
 
-**3 · DCAT-AP-Langbeschreibung:** `dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Multiplizität 0..n. Hinweis: Die Eigenschaft stammt aus der HVD-Erweiterung zu DCAT-AP (EU-Durchführungsverordnung 2023/138), nicht aus dem Kernprofil DCAT-AP 3.0; die mitgelieferten Kern-Shapes prüfen sie deshalb nicht.
+**3 · DCAT-AP-Langbeschreibung:** `dcatap:hvdCategory` ordnet ein High-Value-Dataset einer der sechs HVD-Kategorien der EU zu (Geospatial, Erdbeobachtung/Umwelt, Meteorologie, Statistik, Unternehmen, Mobilität), referenziert per EU-URI. Nur relevant, wenn HVD gesetzt ist. Multiplizität 0..n. Hinweis: Die Eigenschaft stammt aus der HVD-Erweiterung zu DCAT-AP (EU-Durchführungsverordnung 2023/138), nicht aus dem Kernprofil DCAT-AP 3.0; keine der mitgelieferten SHACL-Shapes prüft sie deshalb.
 
 **4 · Verständliche Langbeschreibung:** Wenn es ein hochwertiger Datensatz ist, wählen Sie hier die passende der sechs EU-HVD-Kategorien. Damit ordnen Sie den Datensatz korrekt in das EU-Schema ein. Beispiel: Georaum, Mobilität, Statistik.
 

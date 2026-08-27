@@ -399,6 +399,9 @@ msgstr "Uninstallation"
 msgid "Demo-Datensatz bearbeiten"
 msgstr "Edit demo dataset"
 
+msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern."
+msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again. You can save the dataset as a draft at any time."
+
 msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtfelder befüllen und erneut veröffentlichen."
 msgstr "The dataset was saved as a draft. Please fill in all required fields and publish again."
 
@@ -419,6 +422,9 @@ msgstr "The Idea"
 
 msgid "Die JSON-LD-Ansicht unten zeigt das zuletzt gespeicherte Ergebnis."
 msgstr "The JSON-LD view below shows the last saved result."
+
+msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie den Datensatz jederzeit speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Zu jedem Feld gibt es Erläuterungen: Das ⓘ-Symbol zeigt den DCAT-AP-Begriff, „Mehr erfahren\" die ausführliche Erklärung mit Beispielen."
+msgstr "Required fields are marked with a red asterisk (*). You can save the dataset as a draft at any time — only publishing requires every mandatory field. Each field comes with guidance: the ⓘ icon shows the DCAT-AP term, \"Learn more\" the full explanation with examples."
 
 msgid "Die Qualitätsprüfung bewertet die Vollständigkeit der Metadaten. Die Werte werden bei jedem Speichern neu berechnet – Änderungen im Formular wirken sich erst nach dem Speichern auf das Ergebnis aus."
 msgstr "The quality check evaluates the completeness of the metadata. The values are recalculated each time you save – changes in the form only affect the result after saving."
@@ -1775,9 +1781,6 @@ msgstr "Data provision"
 msgid "Folgende Pflichtangaben fehlen oder sind leer:"
 msgstr "The following required fields are missing or empty:"
 
-msgid "Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern."
-msgstr "The dataset was saved as a draft. Please complete all required fields and publish again. You can always save an incomplete draft."
-
 msgid "Welchem Thema ist dieser Datensatz zugeordnet?"
 msgstr "Which theme is this dataset assigned to?"
 
@@ -1822,9 +1825,6 @@ msgstr "The language of the data and — if desired — title, description and k
 
 msgid "Wer gibt diese Daten heraus? Worum geht es? Welchem Thema ist der Datensatz zugeordnet? Und mit welchen Schlagworten findet man ihn? Optional lassen sich unter „Weitere Einordnung\" eine Themenklassifikation und ein Engagementfeld ergänzen."
 msgstr "Who publishes these data? What are they about? Which theme is the dataset assigned to? And which keywords lead people to it? Optionally, a topic classification and a field of civic engagement can be added under \"Further classification\"."
-
-msgid "Die Pflichtfelder sind mit einem roten Sternchen (*) gekennzeichnet. Als Entwurf können Sie jederzeit unvollständig speichern – erst zum Veröffentlichen müssen alle Pflichtfelder ausgefüllt sein. Jedes Feld hat hilfreiche Beispiele, die Sie über das ⓘ-Symbol einblenden."
-msgstr "Required fields are marked with a red asterisk (*). You can always save an incomplete draft — only publishing requires all mandatory fields to be filled in. Every field has helpful examples that you can reveal via the ⓘ icon."
 
 
 

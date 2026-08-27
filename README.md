@@ -90,7 +90,7 @@ Das Wizard-Formular wurde vollständig überarbeitet, um es auch ohne DCAT-AP-Ke
 - **Validierungsmeldungen in Klartext, mit Ort:** Wird die Veröffentlichung blockiert, nennt die Meldung den Tab und den verständlichen Feldnamen (der technische DCAT-AP-Begriff steht nur klein daneben) — ein Klick auf „Zum Feld springen" öffnet den passenden Tab und hebt das Feld hervor
 
 ### 🧭 Geführter Wizard
-Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem roten Sternchen (`*`) gekennzeichnet; als **Entwurf** lässt sich jederzeit unvollständig speichern — erst zum **Veröffentlichen** müssen alle Pflichtangaben ausgefüllt sein.
+Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem roten Sternchen (`*`) gekennzeichnet; als **Entwurf** lässt sich der Datensatz jederzeit speichern — erst zum **Veröffentlichen** müssen alle Pflichtangaben ausgefüllt sein.
 
 1. **Grundlegende Informationen** — „Wer gibt diese Daten heraus?", „Worum geht es in diesem Datensatz?", „Welchem Thema ist dieser Datensatz zugeordnet?", „Mit welchen Schlagworten finde ich diese Daten?". Weniger häufige Einordnungen (CESSDA-Themenklassifikation, ZiviZ-Engagementfeld) liegen in einer aufklappbaren Untergruppe am Tab-Ende.
 2. **Sprache & Übersetzungen** — die Sprache der Daten sowie Titel, Beschreibung und Schlagworte in weiteren Sprachen

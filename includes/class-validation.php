@@ -484,7 +484,7 @@ class ODW_Validation {
 		}
 
 		echo '</ul>';
-		echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie jederzeit unvollständig speichern.', 'open-data-wizard' ) . '</p>';
+		echo '<p>' . esc_html__( 'Der Datensatz wurde als Entwurf gespeichert. Bitte alle Pflichtangaben befüllen und erneut veröffentlichen. Als Entwurf können Sie den Datensatz jederzeit speichern.', 'open-data-wizard' ) . '</p>';
 		echo '</div>';
 	}
 }
