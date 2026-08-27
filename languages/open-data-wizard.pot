@@ -1534,7 +1534,10 @@ msgstr ""
 msgid "Davon steuert der Wizard %d Punkte selbst bei: Das Änderungsdatum wird bei jedem Speichern automatisch gesetzt. Deshalb steht auch ein noch leerer Datensatz nicht bei 0 %%."
 msgstr ""
 
-msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
+msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"
+msgstr ""
+
+msgid "— Keine Angabe —"
 msgstr ""
 
 msgid "(ohne Titel, ID %d)"

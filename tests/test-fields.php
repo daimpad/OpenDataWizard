@@ -428,4 +428,57 @@ class Test_ODW_Fields extends TestCase {
 			'Leerwerte dazwischen' => array( array( '', 'Bildung', '  ' ), array( $base . 'EDUC' ) ),
 		);
 	}
+
+	/**
+	 * Dasselbe für die gebündelten Vokabulare (Engagementfeld & Co.).
+	 *
+	 * Anders als beim Thema gibt es hier keine Alt-Labels aus einer früheren
+	 * Auswahlliste — wohl aber Werte, die vor v2.41.0 von Hand ins Textfeld
+	 * getippt wurden und deshalb das Label statt der URI enthalten.
+	 *
+	 * @dataProvider provide_vocabulary_values
+	 *
+	 * @param mixed              $value    Gespeicherter Wert.
+	 * @param array<int, string> $expected Erwartete URI-Liste.
+	 */
+	public function test_normalize_vocabulary( $value, array $expected ): void {
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+			define( 'DAY_IN_SECONDS', 86400 );
+		}
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
+		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
+		if ( ! class_exists( 'ODW_Fields' ) ) {
+			require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+		}
+
+		$this->assertSame( $expected, ODW_Fields::normalize_vocabulary( $value, 'engagementfeld' ) );
+	}
+
+	/**
+	 * Stored engagement-field values and the URI list they must produce.
+	 *
+	 * @return array<string, array{0: mixed, 1: array<int, string>}>
+	 */
+	public function provide_vocabulary_values(): array {
+		$base = 'https://ziviz.de/def/engagementfeld/';
+
+		return array(
+			'Array von URIs'      => array(
+				array( $base . 'sport', $base . 'kultur' ),
+				array( $base . 'sport', $base . 'kultur' ),
+			),
+			'einzelner String'    => array( $base . 'sport', array( $base . 'sport' ) ),
+			'Label statt URI'     => array( 'Bildung und Erziehung', array( $base . 'bildungUNDerziehung' ) ),
+			'Duplikat entfaellt'  => array(
+				array( $base . 'sport', $base . 'sport' ),
+				array( $base . 'sport' ),
+			),
+			'unbekanntes Label'   => array( 'Gibt es nicht', array() ),
+			'leerer String'       => array( '', array() ),
+			'leeres Array'        => array( array(), array() ),
+			'Leerwert dazwischen' => array( array( '', $base . 'sport' ), array( $base . 'sport' ) ),
+		);
+	}
 }

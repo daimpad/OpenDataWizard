@@ -156,6 +156,48 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_theme_uri'))).toHaveCount(0);
   });
 
+  test('Engagementfeld ist eine Mehrfachauswahl, keine Vorschlagsliste', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Seit v2.41.0 ein Mehrfachfeld mit den 16 ZiviZ-Feldern. Vorher ein
+    // Textfeld mit datalist — die Auswahl war erst nach dem Tippen zu sehen.
+    await page.locator('[data-odw-section-toggle="tab1extra"]').click();
+
+    const feld = page.locator('.cf-field', { has: page.locator(cfField('odw_engagementfeld')) });
+    await expect(feld.locator('select[multiple], .cf-multiselect')).toHaveCount(1);
+    await expect(feld).toContainText('Umwelt- und Naturschutz');
+  });
+
+  test('die CESSDA-Vorschläge öffnen sich beim Anklicken', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    await page.locator('[data-odw-section-toggle="tab1extra"]').click();
+
+    // Eigene Liste statt <datalist>: Ein natives datalist ist Browser-Chrome
+    // und für Playwright unsichtbar — und es öffnet erst beim Tippen, was der
+    // Tester bemängelt hatte.
+    const eingabe = page.locator('.odw-cessda-input');
+    const liste = page.locator('.odw-suggest__list');
+
+    await expect(liste).toBeHidden();
+    await eingabe.click();
+    await expect(liste).toBeVisible();
+
+    // Leeres Feld zeigt alles, Tippen grenzt ein.
+    const alle = await liste.locator('li:not([hidden])').count();
+    expect(alle).toBeGreaterThan(1);
+
+    await eingabe.fill('Migration');
+    const gefiltert = await liste.locator('li:not([hidden])').count();
+    expect(gefiltert).toBeLessThan(alle);
+
+    // Ein Klick auf den Vorschlag trägt das Label ein und legt die URI im
+    // verborgenen Feld ab — das ist der Wert, der als dct:subject rausgeht.
+    await liste.locator('li:not([hidden])').first().click();
+    await expect(liste).toBeHidden();
+    await expect(page.locator(cfField('odw_cessda_topic'))).toHaveValue(/^https?:\/\//);
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 

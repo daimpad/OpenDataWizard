@@ -124,9 +124,13 @@ class ODW_Fields {
 					// Die Frage muss das abbilden — sonst tragen Redakteur:innen das
 					// Tätigkeitsfeld ihrer Organisation ein und der Datensatz erhält
 					// eine inhaltlich falsche Sacherschließung.
-					Field::make( 'text', 'odw_engagementfeld', __( 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'engagementfeld' )
-						->set_attribute( 'placeholder', __( 'Engagementfeld eintippen oder auswählen…', 'open-data-wizard' ) )
+					// Mehrfachauswahl statt Tipp-Feld: 16 Einträge passen in eine
+					// Liste, und dct:subject erlaubt 0..n. Der Tester fragte
+					// ausdrücklich nach einem Dropdown, das aussieht wie die
+					// übrigen — statt einer Vorschlagsliste, die erst nach dem
+					// Tippen zeigt, dass es überhaupt eine Auswahl gibt.
+					Field::make( 'multiselect', 'odw_engagementfeld', __( 'Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?', 'open-data-wizard' ) )
+						->add_options( self::vocabulary_options( 'engagementfeld' ) )
 						->set_help_text( __( 'ENGAGEMENTFELD (ZiviZ, dct:subject)', 'open-data-wizard' ) ),
 
 				)
@@ -476,9 +480,10 @@ class ODW_Fields {
 						. '</button>'
 					),
 
-					Field::make( 'text', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
-						->set_attribute( 'data-odw-vocab', 'contributors' )
-						->set_attribute( 'placeholder', __( 'Stelle eintippen oder auswählen…', 'open-data-wizard' ) )
+					// Auswahlfeld statt Tipp-Feld: 69 Einträge sind für eine Liste
+					// noch handhabbar, und die Stelle wird genau einmal gewählt.
+					Field::make( 'select', 'odw_contributor_id', __( 'Welche Stelle stellt diese Daten im GovData-Verbund bereit?', 'open-data-wizard' ) )
+						->add_options( self::vocabulary_options( 'contributors', __( '— Keine Angabe —', 'open-data-wizard' ) ) )
 						->set_help_text( __( 'CONTRIBUTOR-ID (dcatde:contributorID)', 'open-data-wizard' ) ),
 
 					Field::make( 'text', 'odw_originator_name', __( 'Wer hat diese Daten ursprünglich erstellt?', 'open-data-wizard' ) )
@@ -1040,11 +1045,64 @@ class ODW_Fields {
 			case 'cessda':
 				$map = self::load_cessda_options();
 				break;
+			case 'engagementfeld':
+			case 'contributors':
+				// Gebündelte Vokabulare: seit v2.41.0 Auswahlfelder, deren
+				// gespeicherte URI im Frontend als Label erscheinen soll.
+				$map = self::vocabulary_options( $vocab );
+				break;
 			default:
 				$map = array();
 		}
 
 		return isset( $map[ $value ] ) && '' !== (string) $map[ $value ] ? (string) $map[ $value ] : $value;
+	}
+
+	/**
+	 * Ein gebündeltes Vokabular als URI → Label Map für Auswahlfelder.
+	 *
+	 * @param string $id          Vokabular-ID (Dateiname ohne .json).
+	 * @param string $placeholder Optionaler Platzhalter-Eintrag mit leerem Wert.
+	 * @return array<string, string>
+	 */
+	public static function vocabulary_options( string $id, string $placeholder = '' ): array {
+		$options = array();
+		if ( '' !== $placeholder ) {
+			$options[''] = $placeholder;
+		}
+		foreach ( self::load_vocabulary( $id ) as $entry ) {
+			$options[ $entry['value'] ] = $entry['label'];
+		}
+		return $options;
+	}
+
+	/**
+	 * Bringt einen gespeicherten Vokabularwert auf eine Liste von URIs.
+	 *
+	 * Wie normalize_themes(), aber für die gebündelten Vokabulare: Array
+	 * (Mehrfachauswahl), einzelner String oder ein Label, das vor der Umstellung
+	 * im Textfeld stand und erst aufgelöst werden muss.
+	 *
+	 * @param mixed  $value Gespeicherter Wert.
+	 * @param string $vocab Vokabular-ID.
+	 * @return array<int, string>
+	 */
+	public static function normalize_vocabulary( $value, string $vocab ): array {
+		$werte = is_array( $value ) ? $value : array( $value );
+		$out   = array();
+
+		foreach ( $werte as $einzeln ) {
+			$einzeln = trim( (string) $einzeln );
+			if ( '' === $einzeln ) {
+				continue;
+			}
+			$uri = odw_resolve_vocab_uri( $einzeln, $vocab );
+			if ( '' !== $uri && ! in_array( $uri, $out, true ) ) {
+				$out[] = $uri;
+			}
+		}
+
+		return $out;
 	}
 
 	/**
@@ -1091,6 +1149,26 @@ class ODW_Fields {
 		$out = array();
 		foreach ( self::normalize_themes( carbon_get_post_meta( $post_id, 'odw_theme' ) ) as $uri ) {
 			$label = self::resolve_label( 'theme', $uri );
+			$out[] = '' !== $label ? $label : $uri;
+		}
+		return $out;
+	}
+
+	/**
+	 * Labels aller gewählten Konzepte eines gebündelten Vokabulars.
+	 *
+	 * Gegenstück zu theme_labels() für die übrigen Mehrfachauswahlen; kann eine
+	 * URI nicht aufgelöst werden, steht sie selbst da statt einer Lücke.
+	 *
+	 * @param int    $post_id Dataset post ID.
+	 * @param string $field   Carbon-Feld-Schlüssel, z. B. "odw_engagementfeld".
+	 * @param string $vocab   Vokabular-ID.
+	 * @return array<int, string>
+	 */
+	public static function vocabulary_labels( int $post_id, string $field, string $vocab ): array {
+		$out = array();
+		foreach ( self::normalize_vocabulary( carbon_get_post_meta( $post_id, $field ), $vocab ) as $uri ) {
+			$label = self::resolve_label( $vocab, $uri );
 			$out[] = '' !== $label ? $label : $uri;
 		}
 		return $out;
@@ -1892,7 +1970,7 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	$dist_attribution    = (string) carbon_get_post_meta( $post_id, 'odw_attribution_text' );
 	$dist_availability   = (string) carbon_get_post_meta( $post_id, 'odw_availability' );
 	$cessda_topic        = (string) carbon_get_post_meta( $post_id, 'odw_cessda_topic' );
-	$engagementfeld      = (string) carbon_get_post_meta( $post_id, 'odw_engagementfeld' );
+	$engagementfeld      = carbon_get_post_meta( $post_id, 'odw_engagementfeld' );
 
 	// Extended DCAT-AP fields (Tab 4).
 	$landing_page              = (string) carbon_get_post_meta( $post_id, 'odw_landing_page' );
@@ -2017,11 +2095,11 @@ function odw_build_dataset_jsonld( int $post_id ): ?array {
 	if ( ! empty( $cessda_topic ) ) {
 		$subjects[] = array( '@id' => odw_sanitize_jsonld_id( (string) $cessda_topic ) );
 	}
-	if ( ! empty( $engagementfeld ) ) {
-		$engagement_uri = odw_resolve_vocab_uri( $engagementfeld, 'engagementfeld' );
-		if ( '' !== $engagement_uri ) {
-			$subjects[] = array( '@id' => odw_sanitize_jsonld_id( $engagement_uri ) );
-		}
+	// Seit v2.41.0 ist das Engagementfeld eine Mehrfachauswahl. normalize_vocabulary()
+	// nimmt daneben weiterhin den einzelnen String entgegen, den Datensätze vor der
+	// Migration tragen, und löst ein Label zur URI auf.
+	foreach ( ODW_Fields::normalize_vocabulary( $engagementfeld, 'engagementfeld' ) as $engagement_uri ) {
+		$subjects[] = array( '@id' => odw_sanitize_jsonld_id( $engagement_uri ) );
 	}
 	if ( ! empty( $subjects ) ) {
 		$dataset['dct:subject'] = 1 === count( $subjects ) ? $subjects[0] : $subjects;

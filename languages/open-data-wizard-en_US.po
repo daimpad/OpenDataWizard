@@ -780,8 +780,11 @@ msgstr "In three steps: fill in the form, generate DCAT-AP.de metadata, portals 
 msgid "In welche Kategorie gehört dieser Datensatz?"
 msgstr "Which category does this dataset belong to?"
 
-msgid "Welchem Engagementfeld ist dieser Datensatz zuzuordnen?"
-msgstr "Which field of civic engagement does this dataset belong to?"
+msgid "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?"
+msgstr "Which fields of civic engagement does this dataset belong to?"
+
+msgid "— Keine Angabe —"
+msgstr "— Not specified —"
 
 msgid "In welchem Format ist die Datei?"
 msgstr "What format is the file in?"

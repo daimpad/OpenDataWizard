@@ -99,9 +99,12 @@ DCAT-AP verlangt für viele Felder URIs aus EU-Authority-Tables statt Freitext. 
 | `corporate-body` | `http://publications.europa.eu/resource/authority/corporate-body/` | `dct:publisher` | ⚠️ Freitext |
 | `iana-media-types` | `https://www.iana.org/assignments/media-types/` | `dcat:mediaType` | ❌ |
 
-> **Wiederverwendbares Muster:** Der bestehende CESSDA-Auto-Suggest (`odw-admin-fields.js` + SKOS/RDF) ist die
-> Blaupause für ein generisches „Vokabular-Autosuggest"-Widget, das künftig `data-theme`, `access-right`,
-> `planned-availability` etc. aus lokal gebündelten Vokabulardateien bedient (keine externe Abhängigkeit).
+> **Muster nach Vokabulargröße (Stand v2.41.0):** Ein Vokabular mit überschaubar vielen Konzepten wird ein
+> Auswahlfeld (`select`/`multiselect`, Optionen aus der gebündelten JSON-Datei) — `data-theme` (13),
+> `engagementfeld` (16), `contributors` (69), `access-right` (3), `language` (24). Nur wo die Liste zu lang
+> für ein Auswahlfeld ist, bleibt eine Vorschlagsliste: CESSDA mit mehreren hundert Konzepten. Diese Liste
+> klappt seit v2.41.0 beim Anklicken auf (`odw-suggest` in `odw-admin-fields.js`) statt erst beim Tippen —
+> ein `<datalist>` verrät sonst nicht, dass es überhaupt eine Auswahl gibt.
 
 ### 4. Vollständiger DCAT-AP-Feldkatalog & Gap-Analyse
 
@@ -139,7 +142,7 @@ ODW: ✅ vorhanden · ⚠️ teilweise/Freitext · ❌ fehlt.
 | `dcatde:politicalGeocodingLevelURI` | URI | DE | R (DE) | ✅ |
 | `dcatde:politicalGeocodingURI` | URI | DE | O (0..n) | ✅ |
 | `dcatde:geocodingDescription` | lang-Literal | DE | O | ❌ |
-| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Autosuggest) |
+| `dcatde:contributorID` | URI (`contributors`) | DE | R (DE) | ✅ (Auswahlfeld) |
 | `dcatde:legalBasis` | lang-Literal | DE | O | ✅ |
 | `dcatde:qualityProcessURI` | URI | DE | O | ✅ |
 | `dcatde:originator` / `dcatde:maintainer` | `foaf:Agent` | DE | O | ✅ |
@@ -211,7 +214,7 @@ array(
 
 - `profile`/`tier`/`cardinality` steuern Validierung und Qualitäts-Scoring deklarativ.
 - `range` steuert die JSON-LD-Serialisierung (`uri` → `{"@id": …}`, `literal-lang` → `{"@value":…,"@language":…}`).
-- `vocab` aktiviert das Vokabular-Autosuggest-Widget.
+- `vocab` benennt das gebündelte Vokabular, aus dem die Optionen des Feldes stammen.
 - `tab`/`entity` steuern die automatische Einsortierung im Carbon-Fields-Formular.
 
 ### 6. Mapping piveau-FormKit → Carbon Fields
@@ -223,7 +226,7 @@ array(
 | `text` / `simpleInput` | `Field::make( 'text', … )` | mit Sanitization |
 | `textarea` | `Field::make( 'textarea', … )` | |
 | `select` / `simpleSelect` | `Field::make( 'select', … )` | Optionen aus Vokabular |
-| `auto` (Vokabular-Autocomplete) | `text` + Autosuggest-JS | CESSDA-Muster generalisieren |
+| `auto` (Vokabular-Autocomplete) | `select`/`multiselect` aus dem Vokabular | Vorschlagsliste nur bei sehr großen Vokabularen (CESSDA) |
 | `repeatable` (group) | `Field::make( 'complex', … )` | wiederholbare Gruppen |
 | `group` / `formkitGroup` | `complex` (max. 1) | strukturierter Knoten |
 | `simpleConditional` | `text/select` + `->set_conditional_logic()` | Vokabular ODER manuell |
@@ -248,7 +251,7 @@ Priorisiert nach Nutzen/Aufwand; jede Phase ist eigenständig auslieferbar.
 
 #### Phase B — DCAT-AP.de & Vokabulare (v2.5) — ✅ weitgehend umgesetzt
 - ✅ DCAT-AP.de-Felder: `dcatde:contributorID`, `dcatde:originator`, `dcatde:maintainer`, `dcatap:availability` (zzgl. `dcatde:politicalGeocodingLevelURI` aus v2.3).
-- ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge).
+- ✅ Generisches Vokabular-Autosuggest (`data-odw-vocab="<id>"`) + lokal gebündelte Vokabulardateien unter `config/vocabularies/` (Start: `contributors`, 69 Einträge). Das Autosuggest ist in v2.41.0 durch Auswahlfelder ersetzt worden (siehe Abschnitt 3); die Vokabulardateien sind geblieben.
 - ✅ DCAT-AP.de-Felder `politicalGeocodingURI`, `legalBasis`, `qualityProcessURI` (v2.6.0).
 - ✅ Gebündelte Vokabulare `access-right` (Feld `dct:accessRights`) und `data-theme` (Zusatz-Theme) (v2.7.0).
 - ☐ Offen (optional): vollständige EU-Sprachliste als Autosuggest (bewusst zurückgestellt).

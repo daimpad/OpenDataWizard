@@ -9,8 +9,9 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ## [2.41.0] — 2026-08-27
 
-Zwei Punkte aus dem Usability-Test, die zusammengehören: Hilfetexte haben jetzt je einen Ort,
-und die Definition zeigt ihre Struktur.
+Fünf Punkte aus dem Usability-Test. Hilfetexte haben jetzt je einen Ort, die Definition zeigt
+ihre Struktur und verweist auf den Standard — und wo ein Feld eine feste Auswahl hat, ist es
+auch eine Auswahl und kein Textfeld, das seine Optionen erst nach dem Tippen preisgibt.
 
 ### ✨ Added
 - **Merkmalsliste über jeder Definition.** Das „Mehr erfahren"-Panel nennt oben in zwei Zeilen
@@ -34,6 +35,16 @@ und die Definition zeigt ihre Struktur.
   bot ein Auswahlfeld in Tab 1 und ein Tipp-Feld unter „Erweiterte Angaben" — zusammen höchstens
   zwei, auf zwei verschiedene Arten. Beide sind durch ein Mehrfachfeld mit den EU-Themen ersetzt.
   Der Batch-Import nimmt jetzt ebenfalls mehrere Themen an (Komma- oder Zeilentrennung).
+- **Engagementfeld ist eine Mehrfachauswahl, Contributor-ID ein Auswahlfeld.** Beide waren
+  Textfelder mit einer `<datalist>` dahinter — man musste erst tippen, um überhaupt zu sehen,
+  dass es eine Auswahl gibt, und wer daneben tippte, bekam einen Wert ohne URI. 16 bzw. 69
+  Einträge passen in eine Liste. `dct:subject` erlaubt 0..n, deshalb ist das Engagementfeld
+  mehrfach wählbar; die Contributor-ID bleibt einfach.
+- **Die CESSDA-Vorschläge öffnen sich beim Anklicken.** Mit mehreren hundert Konzepten bleibt
+  hier eine Vorschlagsliste richtig — aber eine, die zeigt, was zur Auswahl steht. Sie ersetzt
+  das native `<datalist>` durch eine eigene Liste mit Tastaturbedienung (Pfeiltasten, Enter,
+  Escape). Nebeneffekt: Das Verhalten ist in allen Browsern dasselbe und im E2E-Test überhaupt
+  prüfbar — ein datalist-Popup ist Browser-Chrome und für Playwright unsichtbar.
 
 ### 🎨 Changed
 - **Tooltip und „Mehr erfahren" haben getrennte Rollen.** Das ⓘ trägt nur noch den DCAT-AP-Begriff,
@@ -58,10 +69,19 @@ und die Definition zeigt ihre Struktur.
   deshalb zusätzlich flach: `_odw_theme_index` (eine Zeile je Thema) für den Katalogfilter,
   `_odw_theme_sort` für die Spaltensortierung. Der bestehende E2E-Test auf `?theme=Bildung`
   prüft das mit.
+- **Das Engagementfeld hätte seinen Wert verloren.** Wie beim Thema ändert die Mehrfachauswahl
+  das Speicherformat; dieselbe einmalige Umschreibung überführt jetzt beide Felder und löst
+  dabei einen von Hand eingetippten Namen zur Vokabular-URI auf.
 - **`bin/check-i18n.py` übersah `config/`.** `mqa-metrics.php` und `dcat-ap-fields.php` führen
   ihre Beschriftungen über `__()`, standen aber nicht in der Dateiliste der Prüfung — für 31
   Zeichenketten hätte eine fehlende Übersetzung also nie jemand gemeldet. Aufgefallen ist es,
   weil ich beim Aufräumen der Kataloge beinahe genau diese Einträge gelöscht hätte.
+
+### 🧹 Removed
+- **Das generische Vokabular-Autosuggest (`data-odw-vocab`) ist entfallen** — mit Thema,
+  Engagementfeld und Contributor-ID hatte es keine Nutzer mehr. Damit entfällt auch die
+  Auslieferung der drei Vokabulare an jede Admin-Seite; die Optionen stehen jetzt im Formular
+  selbst. Die Vokabulardateien unter `config/vocabularies/` bleiben unverändert.
 
 ### ℹ️ Eine Ausnahme mit Begründung
 Das Wiederholfeld für weitere Distributionen behält seinen Hilfetext: Für dieses Feld gibt es

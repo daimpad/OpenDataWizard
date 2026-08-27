@@ -351,6 +351,59 @@ class Test_ODW_Fields_Extended extends TestCase {
 	}
 
 	/**
+	 * Das Engagementfeld ist seit v2.41.0 eine Mehrfachauswahl: Alle gewählten
+	 * Konzepte stehen unter dct:subject, zusammen mit dem CESSDA-Thema.
+	 */
+	public function test_build_emits_all_engagement_fields_as_dct_subject(): void {
+		$this->load_fields();
+
+		$base   = 'https://ziviz.de/def/engagementfeld/';
+		$cessda = 'https://vocabularies.cessda.eu/urn/urn:ddi:int.cessda.cv:TopicClassification:4.2.3:de:1.0';
+
+		$this->setup_jsonld_mocks(
+			22,
+			'odw_dataset',
+			array(
+				'odw_cessda_topic'   => $cessda,
+				'odw_engagementfeld' => array( $base . 'sport', $base . 'kultur' ),
+			)
+		);
+
+		$result = odw_build_dataset_jsonld( 22 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame(
+			array(
+				array( '@id' => $cessda ),
+				array( '@id' => $base . 'sport' ),
+				array( '@id' => $base . 'kultur' ),
+			),
+			$result['dct:subject']
+		);
+	}
+
+	/**
+	 * Ein einzelner String — so lagen die Werte vor der Migration — ergibt
+	 * weiterhin genau ein dct:subject, kein verschachteltes Array.
+	 */
+	public function test_build_accepts_engagement_field_as_single_string(): void {
+		$this->load_fields();
+
+		$uri = 'https://ziviz.de/def/engagementfeld/medien';
+
+		$this->setup_jsonld_mocks(
+			23,
+			'odw_dataset',
+			array( 'odw_engagementfeld' => $uri )
+		);
+
+		$result = odw_build_dataset_jsonld( 23 );
+
+		$this->assertIsArray( $result );
+		$this->assertSame( array( '@id' => $uri ), $result['dct:subject'] );
+	}
+
+	/**
 	 * When a dataset is flagged HVD with a category, both dcatap:hvdCategory and
 	 * dcatap:applicableLegislation are emitted (the latter pinned to Reg 2023/138).
 	 */

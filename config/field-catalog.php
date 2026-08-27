@@ -91,7 +91,7 @@ return array(
 		'q_dcat'      => 'Welches `dct:subject` (Fachthema) nach CESSDA-Vokabular beschreibt den Datensatz?',
 		'q_human'     => 'Welchem Themenfeld nach CESSDA ordnen Sie den Datensatz zu?',
 		'desc_dcat'   => '`dct:subject` verweist auf ein fachliches Thema aus einem kontrollierten Vokabular — hier die CESSDA Topic Classification (Version 4.2.3). Der Wert ist die Konzept-URI aus dem CESSDA-Vokabular. Mehrfachangabe möglich (Multiplizität 0..n); erscheint zusammen mit anderen Themenzuordnungen als Liste. Hinweis: `dct:subject` gehört nicht zum DCAT-AP.de-Profil — die offiziellen SHACL-Shapes kennen die Eigenschaft für Datensätze nicht. Als Dublin-Core-Angabe ist sie zulässig (RDF erlaubt zusätzliche Aussagen) und wird hier bewusst ausgegeben; streng profilkonforme Portale können sie ignorieren.',
-		'desc_human'  => 'Optional für sozial- und wirtschaftswissenschaftliche Daten: Ordnen Sie den Datensatz einem Fachthema aus dem CESSDA-Katalog zu (ein europäischer Standard für Forschungsdaten). Tippen Sie das Thema ein und wählen Sie aus der Vorschlagsliste. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik.',
+		'desc_human'  => 'Optional für sozial- und wirtschaftswissenschaftliche Daten: Ordnen Sie den Datensatz einem Fachthema aus dem CESSDA-Katalog zu (ein europäischer Standard für Forschungsdaten). Klicken Sie ins Feld, um die Vorschläge zu sehen, oder tippen Sie, um die Liste einzugrenzen. Beispiel: Volkszählungen, Migration, Wirtschaftspolitik.',
 	),
 	array(
 		'key'         => 'engagementfeld',
@@ -103,9 +103,9 @@ return array(
 		'tier'        => 'optional',
 		'vocab'       => 'engagementfeld',
 		'q_dcat'      => 'Welches `dct:subject` (Engagementfeld) nach ZiviZ-Vokabular beschreibt den Datensatz?',
-		'q_human'     => 'Welchem Engagementfeld ist dieser Datensatz zuzuordnen?',
+		'q_human'     => 'Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?',
 		'desc_dcat'   => '`dct:subject` mit einem Konzept aus dem ZiviZ-Vokabular „Engagementfeld" (`https://ziviz.de/def/engagementfeld/`), das zivilgesellschaftliche Tätigkeitsfelder klassifiziert. Der Wert ist die Konzept-URI; die Label→URI-Auflösung erfolgt beim Speichern. Mehrfachangabe möglich (Multiplizität 0..n). Hinweis: `dct:subject` gehört nicht zum DCAT-AP.de-Profil — die offiziellen SHACL-Shapes kennen die Eigenschaft für Datensätze nicht. Als Dublin-Core-Angabe ist sie zulässig (RDF erlaubt zusätzliche Aussagen) und wird hier bewusst ausgegeben; streng profilkonforme Portale können sie ignorieren.',
-		'desc_human'  => 'Optional für Organisationen der Zivilgesellschaft: Ordnen Sie den Datensatz einem Engagementfeld zu — also dem gesellschaftlichen Bereich, in dem Sie aktiv sind. Wählen Sie einen Eintrag aus der Liste; die passende Kennung wird automatisch gesetzt. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.',
+		'desc_human'  => 'Optional für Organisationen der Zivilgesellschaft: Ordnen Sie den Datensatz einem oder mehreren Engagementfeldern zu — also den gesellschaftlichen Bereichen, in denen Sie aktiv sind. Wählen Sie die Einträge in der Liste aus; die passenden Kennungen werden automatisch gesetzt. Beispiel: Kultur, Sport, Umwelt- und Naturschutz.',
 	),
 	array(
 		'key'         => 'description',

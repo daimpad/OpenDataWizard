@@ -25,7 +25,7 @@ class ODW_Setup {
 	private const DEMO_OPTION     = 'odw_demo_post_id';
 	private const WELCOME_OPTION  = 'odw_show_welcome';
 	private const REDIRECT_OPTION = 'odw_activation_redirect';
-	private const THEME_MIGRATED  = 'odw_theme_multi_migrated';
+	private const MULTI_MIGRATED  = 'odw_multi_value_migrated';
 
 	/**
 	 * Custom capability, die Batch-Import & Co. schützt.
@@ -50,25 +50,26 @@ class ODW_Setup {
 		add_action( 'admin_init', array( self::class, 'maybe_grant_capability' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_redirect_to_intro' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_create_demo' ) );
-		add_action( 'admin_init', array( self::class, 'maybe_migrate_themes' ) );
+		add_action( 'admin_init', array( self::class, 'maybe_migrate_multi_values' ) );
 		add_action( 'admin_init', array( self::class, 'handle_dismiss' ) );
 		add_action( 'admin_notices', array( self::class, 'render_welcome_notice' ) );
 	}
 
 	/**
-	 * Überführt Einzel-Themen in die Mehrfachauswahl (einmalig, ab v2.41.0).
+	 * Überführt Einzelwerte in die Mehrfachauswahlen (einmalig, ab v2.41.0).
 	 *
-	 * Bis v2.40.x war `odw_theme` ein Auswahlfeld und lag flach unter
-	 * `_odw_theme`; ein zweites Thema konnte unter `_odw_theme_uri` stehen.
-	 * Carbon Fields legt Mehrfachwerte unter eigenen Meta-Keys ab, die alten
-	 * Zeilen wären also unsichtbar geworden — deshalb diese Umschreibung.
+	 * Betroffen sind `odw_theme` und `odw_engagementfeld`. Bis v2.40.x waren
+	 * beide Auswahl- bzw. Textfelder und lagen flach unter `_odw_theme` bzw.
+	 * `_odw_engagementfeld`; ein zweites Thema konnte unter `_odw_theme_uri`
+	 * stehen. Carbon Fields legt Mehrfachwerte unter eigenen Meta-Keys ab, die
+	 * alten Zeilen wären also unsichtbar geworden — deshalb diese Umschreibung.
 	 *
 	 * Geschrieben wird über carbon_set_post_meta(), nicht über selbstgebaute
 	 * Meta-Keys: Das Schlüsselformat ist ein Interna von Carbon Fields und
 	 * darf sich ändern.
 	 */
-	public static function maybe_migrate_themes(): void {
-		if ( get_option( self::THEME_MIGRATED ) ) {
+	public static function maybe_migrate_multi_values(): void {
+		if ( get_option( self::MULTI_MIGRATED ) ) {
 			return;
 		}
 		if ( ! function_exists( 'carbon_set_post_meta' ) || ! class_exists( 'ODW_Fields' ) ) {
@@ -102,9 +103,21 @@ class ODW_Setup {
 			// eingelesen — mit dann womöglich überholten Werten.
 			delete_post_meta( $post_id, '_odw_theme' );
 			delete_post_meta( $post_id, '_odw_theme_uri' );
+
+			// Engagementfeld: bis v2.40.x ein Textfeld mit Autosuggest, das
+			// entweder die URI oder — bei von Hand eingetragenen Werten — das
+			// Label enthielt. normalize_vocabulary() löst beides auf.
+			$alt_engagement = get_post_meta( $post_id, '_odw_engagementfeld', true );
+			$engagement     = ODW_Fields::normalize_vocabulary( $alt_engagement, 'engagementfeld' );
+
+			if ( array() !== $engagement ) {
+				carbon_set_post_meta( $post_id, 'odw_engagementfeld', $engagement );
+			}
+
+			delete_post_meta( $post_id, '_odw_engagementfeld' );
 		}
 
-		update_option( self::THEME_MIGRATED, '1', false );
+		update_option( self::MULTI_MIGRATED, '1', false );
 	}
 
 	/**

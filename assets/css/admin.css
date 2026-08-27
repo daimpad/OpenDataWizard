@@ -689,6 +689,48 @@ input.odw-cessda-input,
 }
 
 /* =========================================================================
+   Vorschlagsliste (odw-suggest) — klappt beim Anklicken auf
+   ========================================================================= */
+
+/* Der Container umschliesst nur das Eingabefeld, damit die absolut
+   positionierte Liste genau darunter sitzt und nicht unter der Hinweiszeile. */
+.odw-suggest {
+    position: relative;
+}
+
+.odw-suggest__list {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 2px 0 0;
+    padding: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--odw-color-primary-bg);
+    border: 1px solid var(--odw-color-border);
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.odw-suggest__option {
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--odw-color-text);
+    cursor: pointer;
+}
+
+.odw-suggest__option:hover,
+.odw-suggest__option.is-active {
+    background: var(--odw-color-primary);
+    color: #fff;
+}
+
+/* =========================================================================
    License description (shown under the license select on selection)
    ========================================================================= */
 
