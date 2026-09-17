@@ -489,9 +489,18 @@ class ODW_Batch_Import {
 				if ( 'byte_size' === $field ) {
 					$value = (string) absint( $value );
 				} elseif ( 'keywords' === $field ) {
-					// Schlagworte werden intern zeilengetrennt gespeichert. Import
-					// erlaubt Komma- ODER Zeilentrennung — beides zu Zeilen normalisieren.
-					$split = preg_split( '/[\r\n,]+/', self::neutralize_formula( $value ) );
+					// Schlagworte werden intern zeilengetrennt gespeichert — genau wie
+					// im Formular, das ausdrücklich vor Kommas warnt (ein Komma im
+					// Schlagwort ist zulässig, z. B. „Berlin, Stadt"). Bis v2.42.1
+					// spaltete der Import zusätzlich an Kommas: Dieselbe Eingabe ergab
+					// im Formular ein Schlagwort, im Import zwei — und ein via Komma
+					// geschriebenes Schlagwort landete im veröffentlichten JSON-LD als
+					// mehrere `dcat:keyword`-Werte, ohne dass jemand das so eingegeben
+					// hätte. Nur noch Zeilenumbrüche trennen; ein Komma bleibt Teil des
+					// Schlagworts. Mehrere Zeilen in einer CSV-Zelle: Feld in
+					// Anführungszeichen setzen, Zeilenumbrüche darin bleiben erhalten
+					// (Excel/LibreOffice tun das beim Export automatisch).
+					$split = preg_split( '/[\r\n]+/', self::neutralize_formula( $value ) );
 					$parts = array_values(
 						array_filter(
 							array_map( 'trim', is_array( $split ) ? $split : array() ),

@@ -509,19 +509,38 @@ class Test_ODW_Batch_Import extends TestCase {
 	}
 
 	/**
-	 * Keywords may arrive comma- or newline-separated; internally they are
-	 * stored one per line.
+	 * Keywords are stored one per line — only newlines separate them, exactly
+	 * like the form field. Blank lines in between are dropped.
 	 */
 	public function test_import_normalises_keywords_to_one_per_line(): void {
 		$meta = array();
 		$this->mock_import_environment( $meta );
 
 		$record             = $this->valid_record( 'Mit Schlagworten' );
-		$record['keywords'] = 'Bäume, Umwelt ,, Klima';
+		$record['keywords'] = "Bäume\n\nUmwelt\n \nKlima";
 
 		ODW_Batch_Import::import_records( array( $record ) );
 
 		$this->assertSame( "Bäume\nUmwelt\nKlima", $meta['_odw_keywords'] );
+	}
+
+	/**
+	 * A comma inside a keyword must survive the import — it is not a
+	 * separator here. Until v2.42.1 the import split on commas too, so the
+	 * same value produced one keyword via the form but several via import,
+	 * and a genuinely comma-containing keyword (e.g. „Berlin, Stadt") was
+	 * silently split into two `dcat:keyword` values on publish.
+	 */
+	public function test_import_keeps_comma_within_a_single_keyword(): void {
+		$meta = array();
+		$this->mock_import_environment( $meta );
+
+		$record             = $this->valid_record( 'Komma im Schlagwort' );
+		$record['keywords'] = 'Demografie, Statistik';
+
+		ODW_Batch_Import::import_records( array( $record ) );
+
+		$this->assertSame( 'Demografie, Statistik', $meta['_odw_keywords'] );
 	}
 
 	/**
