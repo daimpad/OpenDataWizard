@@ -1,0 +1,59 @@
+# Open Data Lizenzen — eine Lizenz pro Zeile
+# Format: URI | Anzeigename
+# Kommentarzeilen beginnen mit #
+
+https://creativecommons.org/publicdomain/zero/1.0/ | CC0 1.0 (Public Domain)
+https://creativecommons.org/licenses/by/4.0/ | CC-BY 4.0 (Namensnennung)
+https://creativecommons.org/licenses/by-sa/4.0/ | CC-BY-SA 4.0 (Namensnennung, Weitergabe unter gleichen Bedingungen)
+https://creativecommons.org/licenses/by-nc/4.0/ | CC-BY-NC 4.0 (Namensnennung, nicht kommerziell)
+https://creativecommons.org/licenses/by-nd/4.0/ | CC-BY-ND 4.0 (Namensnennung, keine Bearbeitung)
+https://creativecommons.org/licenses/by-nc-sa/4.0/ | CC-BY-NC-SA 4.0 (Namensnennung, nicht kommerziell, Weitergabe)
+https://creativecommons.org/licenses/by-nc-nd/4.0/ | CC-BY-NC-ND 4.0 (Namensnennung, nicht kommerziell, keine Bearbeitung)
+https://www.govdata.de/dl-de/by-2-0 | Datenlizenz Deutschland – Namensnennung 2.0
+https://www.govdata.de/dl-de/zero-2-0 | Datenlizenz Deutschland – Zero 2.0
+https://opendatacommons.org/licenses/odbl/1-0/ | ODbL 1.0 (Open Database License)
+https://opendatacommons.org/licenses/pddl/1-0/ | PDDL 1.0 (Public Domain Dedication and License)
+https://opendatacommons.org/licenses/by/1-0/ | ODC-BY 1.0 (Open Data Commons Attribution)
+https://opensource.org/licenses/MIT | MIT License
+https://www.apache.org/licenses/LICENSE-2.0 | Apache License 2.0
+
+# ---------------------------------------------------------------------------
+# DCAT-AP.de-Lizenzregister (http://dcat-ap.de/def/licenses/)
+# Offizielle Lizenz-URIs für DCAT-AP.de-konforme Kataloge.
+# Freie Nutzung
+# ---------------------------------------------------------------------------
+http://dcat-ap.de/def/licenses/dl-zero-de/2.0 | Datenlizenz Deutschland – Zero – Version 2.0
+http://dcat-ap.de/def/licenses/dl-by-de/2.0 | Datenlizenz Deutschland – Namensnennung – Version 2.0
+http://dcat-ap.de/def/licenses/dl-by-de/1.0 | Datenlizenz Deutschland – Namensnennung – Version 1.0
+http://dcat-ap.de/def/licenses/cc-by/4.0 | Creative Commons Namensnennung – 4.0 International (CC BY 4.0)
+http://dcat-ap.de/def/licenses/cc-by-de/3.0 | Creative Commons Namensnennung 3.0 Deutschland (CC BY 3.0 DE)
+http://dcat-ap.de/def/licenses/cc-by | Creative Commons Namensnennung (CC-BY)
+http://dcat-ap.de/def/licenses/cc-by-sa/4.0 | Creative Commons Namensnennung – Weitergabe unter gleichen Bedingungen 4.0 International (CC BY-SA 4.0)
+http://dcat-ap.de/def/licenses/cc-by-sa-de/3.0 | Creative Commons Namensnennung – Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-SA 3.0 DE)
+http://dcat-ap.de/def/licenses/cc-by-sa | Creative Commons Namensnennung – Weitergabe unter gleichen Bedingungen (CC-BY-SA)
+http://dcat-ap.de/def/licenses/cc-zero | Creative Commons CC Zero License (CC0)
+http://dcat-ap.de/def/licenses/ccpdm/1.0 | Public Domain Mark 1.0 (PDM)
+http://dcat-ap.de/def/licenses/odbl | Open Data Commons Open Database License (ODbL)
+http://dcat-ap.de/def/licenses/odby | Open Data Commons Attribution License (ODC-BY 1.0)
+http://dcat-ap.de/def/licenses/odcpddl | Open Data Commons Public Domain Dedication and Licence (ODC PDDL)
+http://dcat-ap.de/def/licenses/officialWork | Amtliches Werk, lizenzfrei nach §5 Abs. 1 UrhG
+http://dcat-ap.de/def/licenses/geonutz/20130319 | Nutzungsbestimmungen für Geodaten des Bundes (GeoNutzV)
+http://dcat-ap.de/def/licenses/geoNutz/20131001 | Nutzungsbestimmungen für Geodaten des Landes Berlin
+http://dcat-ap.de/def/licenses/apache | Apache Software License
+http://dcat-ap.de/def/licenses/bsd | BSD Lizenz
+http://dcat-ap.de/def/licenses/gfdl | GNU Free Documentation License (GFDL)
+http://dcat-ap.de/def/licenses/gpl/3.0 | GNU General Public License version 3.0 (GPLv3)
+http://dcat-ap.de/def/licenses/mozilla | Mozilla Public License 2.0 (MPL)
+http://dcat-ap.de/def/licenses/other-open | Andere offene Lizenz
+http://dcat-ap.de/def/licenses/other-opensource | Andere Open-Source-Lizenz
+# Eingeschränkte Nutzung
+http://dcat-ap.de/def/licenses/cc-by-nc/4.0 | Creative Commons Namensnennung – Nicht kommerziell 4.0 International (CC BY-NC 4.0)
+http://dcat-ap.de/def/licenses/cc-by-nc-de/3.0 | Creative Commons Namensnennung – Nicht kommerziell 3.0 Deutschland (CC BY-NC 3.0 DE)
+http://dcat-ap.de/def/licenses/cc-by-nc | Creative Commons Namensnennung – Nicht kommerziell (CC BY-NC)
+http://dcat-ap.de/def/licenses/cc-by-nd/4.0 | Creative Commons Namensnennung – Keine Bearbeitung 4.0 International (CC BY-ND 4.0)
+http://dcat-ap.de/def/licenses/cc-by-nd/3.0 | Creative Commons Namensnennung – Keine Bearbeitung 3.0 (CC BY-ND 3.0)
+http://dcat-ap.de/def/licenses/cc-by-nd | Creative Commons Namensnennung – Keine Bearbeitung (CC BY-ND)
+http://dcat-ap.de/def/licenses/dl-by-nc-de/1.0 | Datenlizenz Deutschland – Namensnennung – nicht-kommerziell 1.0
+http://dcat-ap.de/def/licenses/other-closed | Andere geschlossene Lizenz
+http://dcat-ap.de/def/licenses/other-commercial | Andere kommerzielle Lizenz
+http://dcat-ap.de/def/licenses/other-freeware | Andere Freeware-Lizenz
