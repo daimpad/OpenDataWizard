@@ -1189,9 +1189,6 @@ msgstr ""
 msgid "URL zur Beschreibung des Qualitätssicherungs-Prozesses (optional)."
 msgstr ""
 
-msgid "Zugriff & weitere Auffindbarkeit"
-msgstr ""
-
 msgid "Wer darf auf diese Daten zugreifen?"
 msgstr ""
 
@@ -1559,4 +1556,49 @@ msgid "Wählen Sie rechts in der Seitenleiste einen Datensatz aus."
 msgstr ""
 
 msgid "wird als Download-Karte ausgegeben"
+msgstr ""
+
+msgid "Endpunkt prüfen"
+msgstr ""
+
+msgid "Ruft den Katalog von hier aus ab und sagt im Klartext, was zurückkommt — bevor Sie die URL einem Portal geben."
+msgstr ""
+
+msgid "Geprüft wurde: %s"
+msgstr ""
+
+msgid "Der Server konnte sich selbst nicht erreichen."
+msgstr ""
+
+msgid "Das ist ein Loopback-Problem des Hosting-Systems und sagt nichts darüber aus, ob der Endpunkt von außen erreichbar ist. Rufen Sie die obige URL zum Gegentest von einem anderen Rechner aus auf."
+msgstr ""
+
+msgid "Der Harvest-Endpunkt antwortet."
+msgstr ""
+
+msgid "Antwort: %1$s mit %2$d veröffentlichten Datensätzen."
+msgstr ""
+
+msgid "Der Katalog ist noch leer: Ein Portal fände hier nichts zu ernten. Veröffentlichen Sie mindestens einen Datensatz — Entwürfe zählen bewusst nicht."
+msgstr ""
+
+msgid "Die REST-API antwortet, kennt diese Route aber nicht."
+msgstr ""
+
+msgid "HTTP 404 · rest_no_route"
+msgstr ""
+
+msgid "Das Plugin hat seine Endpunkte nicht registriert. Häufigste Ursache: Es wurde aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert, dann fehlen die Programmbibliotheken. Prüfen Sie die Plugin-Liste auf eine rote Hinweismeldung und spielen Sie gegebenenfalls das Release-ZIP erneut ein."
+msgstr ""
+
+msgid "Der Abruf wurde abgewiesen."
+msgstr ""
+
+msgid "HTTP %d"
+msgstr ""
+
+msgid "Etwas blockiert die REST-API für nicht angemeldete Abrufe — typischerweise ein Sicherheits-Plugin, ein Passwortschutz der Seite oder der Wartungsmodus. Ein Portal käme genauso wenig durch."
+msgstr ""
+
+msgid "Unerwartete Antwort vom Endpunkt."
 msgstr ""

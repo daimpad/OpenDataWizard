@@ -1672,9 +1672,6 @@ msgstr "Time period"
 msgid "Zu diesem Datensatz hochgeladen"
 msgstr "Uploaded to this dataset"
 
-msgid "Zugriff & weitere Auffindbarkeit"
-msgstr "Access & further discoverability"
-
 msgid "Zugriff verweigert."
 msgstr "Access denied."
 
@@ -1933,3 +1930,48 @@ msgstr "Choose a dataset in the sidebar on the right."
 
 msgid "wird als Download-Karte ausgegeben"
 msgstr "will be output as a download card"
+
+msgid "Endpunkt prüfen"
+msgstr "Check endpoint"
+
+msgid "Ruft den Katalog von hier aus ab und sagt im Klartext, was zurückkommt — bevor Sie die URL einem Portal geben."
+msgstr "Fetches the catalogue from here and says in plain language what comes back — before you hand the URL to a portal."
+
+msgid "Geprüft wurde: %s"
+msgstr "Checked: %s"
+
+msgid "Der Server konnte sich selbst nicht erreichen."
+msgstr "The server could not reach itself."
+
+msgid "Das ist ein Loopback-Problem des Hosting-Systems und sagt nichts darüber aus, ob der Endpunkt von außen erreichbar ist. Rufen Sie die obige URL zum Gegentest von einem anderen Rechner aus auf."
+msgstr "That is a loopback problem of the hosting system and says nothing about whether the endpoint can be reached from outside. Open the URL above from another machine to cross-check."
+
+msgid "Der Harvest-Endpunkt antwortet."
+msgstr "The harvesting endpoint responds."
+
+msgid "Antwort: %1$s mit %2$d veröffentlichten Datensätzen."
+msgstr "Response: %1$s with %2$d published datasets."
+
+msgid "Der Katalog ist noch leer: Ein Portal fände hier nichts zu ernten. Veröffentlichen Sie mindestens einen Datensatz — Entwürfe zählen bewusst nicht."
+msgstr "The catalogue is still empty: a portal would find nothing to harvest here. Publish at least one dataset — drafts deliberately do not count."
+
+msgid "Die REST-API antwortet, kennt diese Route aber nicht."
+msgstr "The REST API responds but does not know this route."
+
+msgid "HTTP 404 · rest_no_route"
+msgstr "HTTP 404 · rest_no_route"
+
+msgid "Das Plugin hat seine Endpunkte nicht registriert. Häufigste Ursache: Es wurde aus dem Quellcode-Archiv statt aus dem fertigen Plugin-Paket installiert, dann fehlen die Programmbibliotheken. Prüfen Sie die Plugin-Liste auf eine rote Hinweismeldung und spielen Sie gegebenenfalls das Release-ZIP erneut ein."
+msgstr "The plugin has not registered its endpoints. Most common cause: it was installed from the source archive instead of the finished plugin package, which leaves the libraries missing. Check the plugin list for a red notice and, if needed, install the release ZIP again."
+
+msgid "Der Abruf wurde abgewiesen."
+msgstr "The request was refused."
+
+msgid "HTTP %d"
+msgstr "HTTP %d"
+
+msgid "Etwas blockiert die REST-API für nicht angemeldete Abrufe — typischerweise ein Sicherheits-Plugin, ein Passwortschutz der Seite oder der Wartungsmodus. Ein Portal käme genauso wenig durch."
+msgstr "Something is blocking the REST API for unauthenticated requests — typically a security plugin, a password protection on the site, or maintenance mode. A portal would get no further."
+
+msgid "Unerwartete Antwort vom Endpunkt."
+msgstr "Unexpected response from the endpoint."

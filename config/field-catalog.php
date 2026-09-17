@@ -539,7 +539,7 @@ return array(
 		'dcat_prop'   => 'dct:accessRights',
 		'cardinality' => '0..1',
 		'entity'      => 'dataset',
-		'tab'         => '4 — Erweiterte Angaben',
+		'tab'         => '3 — Datenbereitstellung',
 		'tier'        => 'optional',
 		'vocab'       => 'access-right',
 		'q_dcat'      => 'Welche `dct:accessRights` (Zugriffsklassifikation) gelten für den Datensatz?',

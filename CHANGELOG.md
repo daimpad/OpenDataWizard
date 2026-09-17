@@ -7,6 +7,42 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.42.0] — 2026-09-17
+
+Beim Testen des Harvestings kam ein nacktes `rest_no_route` zurück — ohne jeden Hinweis, woran
+es liegt. Und die Zugriffsrechte standen mit ihrer Vorauswahl an einer Stelle, an der sie
+niemand sah.
+
+### ✨ Added
+- **„Endpunkt prüfen" auf der Einstellungsseite.** Ein Knopf neben den Harvest-URLs ruft den
+  eigenen Katalog ab und sagt im Klartext, was zurückkommt: „antwortet · N veröffentlichte
+  Datensätze" — oder die benannte Ursache. `rest_no_route` heißt dort nicht mehr „404", sondern
+  „Das Plugin hat seine Endpunkte nicht registriert", mit der häufigsten Ursache dazu
+  (Installation aus dem Quellcode-Archiv statt aus dem Release-Paket). 401/403 werden als
+  Blockade durch Sicherheits-Plugin, Passwortschutz oder Wartungsmodus benannt, ein
+  fehlgeschlagener Loopback ausdrücklich als Problem des Hosters — und nicht als Aussage über
+  die Erreichbarkeit von außen. Jede Meldung nennt die tatsächlich abgerufene URL; die
+  Verwechslung der URL war der Anlass.
+
+### 🎨 Changed
+- **Die Zugriffsrechte stehen jetzt in Tab 3 „Datenbereitstellung".** Bis v2.41.1 lagen sie in
+  einer standardmäßig zugeklappten Gruppe in Tab 4. Die Vorauswahl „öffentlich" wanderte damit
+  bei jedem Speichern als `dct:accessRights` in die veröffentlichten Metadaten, ohne dass sie
+  je jemand zu sehen bekam — bei einem Datensatz mit eingeschränktem Zugang eine still
+  veröffentlichte Falschaussage. Tab 3 muss ohnehin jede:r öffnen (Zugriffs-URL und Lizenz sind
+  Pflicht), und inhaltlich gehört die Frage, wer zugreifen darf, neben Lizenz und
+  Verfügbarkeit. Ein neuer Test hält die Regel dahinter fest: **kein vorbelegtes Feld darf in
+  einer zugeklappten Gruppe stehen.**
+
+### ℹ️ Zur Qualitätsbewertung
+Die 15 Punkte, die die vorbelegten Zugriffsrechte beitragen, zählen weiterhin. Der Wert steht
+nach dem Speichern tatsächlich in den Metadaten, und die EU-MQA vergibt dafür genau diese
+Punkte — rechneten wir sie heraus, wiche unsere Zahl von der des Portals ab. Geändert wurde
+deshalb nicht die Bewertung, sondern die Sichtbarkeit: Wer die Punkte bekommt, hat den Wert
+jetzt auch gesehen.
+
+---
+
 ## [2.41.1] — 2026-08-27
 
 Ein Nachtrag zum Usability-Test: der Startwert der Qualitätsprüfung.

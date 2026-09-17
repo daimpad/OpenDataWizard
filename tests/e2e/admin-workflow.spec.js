@@ -218,6 +218,23 @@ test.describe('Formular', () => {
     await expect(box.locator('.odw-quality-percent')).toHaveText('0 %');
   });
 
+  test('Zugriffsrechte stehen sichtbar in Tab 3, nicht in einer zugeklappten Gruppe', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Datenbereitstellung' }).click();
+
+    // Seit v2.42.0 hier statt in einer standardmäßig zugeklappten Gruppe in Tab 4.
+    // Bewusst ohne vorheriges Aufklappen: Genau das ist der Punkt — die Vorauswahl
+    // „öffentlich" landet beim Speichern in den Metadaten und muss vorher zu sehen
+    // sein. Der Test darf also nichts aufklappen, sonst prüft er das Gegenteil.
+    const feld = page.locator('.cf-field', { has: page.locator(cfField('odw_access_rights')) });
+    await expect(feld).toBeVisible();
+    await expect(feld).not.toHaveClass(/odw-pro-collapsed/);
+    await expect(page.locator(cfField('odw_access_rights'))).toHaveValue(
+      'http://publications.europa.eu/resource/authority/access-right/PUBLIC'
+    );
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
@@ -262,6 +279,22 @@ test.describe('Plugin-Seiten', () => {
     await expect(
       page.locator('.odw-introduction-page a.button-primary')
     ).toContainText('Neuen Datensatz erstellen');
+  });
+
+  test('„Endpunkt prüfen" meldet ein Ergebnis und nennt die geprüfte URL', async ({ page }) => {
+    await page.goto(`${LIST_URL}&page=odw-settings`);
+
+    await page.locator('a.button', { hasText: 'Endpunkt prüfen' }).click();
+
+    // Der Ausgang hängt daran, ob der Container sich selbst erreichen kann — in
+    // wp-env liegt der Webserver hinter einer Port-Weiterleitung, der Loopback
+    // schlägt dort fehl. Geprüft wird deshalb die Kette, die das Plugin
+    // verantwortet: Nonce, Handler, Rücksprung, Transient, Anzeige. Und dass die
+    // Meldung sagt, welche URL überhaupt abgerufen wurde — ohne das ist sie
+    // wertlos, denn genau die Verwechslung der URL war der Anlass.
+    const notice = page.locator('.wrap .notice').filter({ hasText: 'Geprüft wurde' });
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText('datenatlas/v1/catalog');
   });
 
   test('Einstellungsseite zeigt die Harvest-URLs', async ({ page }) => {
