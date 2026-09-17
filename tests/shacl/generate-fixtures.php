@@ -192,6 +192,7 @@ if ( ! defined( 'DAY_IN_SECONDS' ) ) {
 require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
 require_once ODW_PLUGIN_DIR . 'includes/class-rdf.php';
 require_once ODW_PLUGIN_DIR . 'includes/class-rest-api.php';
+require_once ODW_PLUGIN_DIR . 'includes/class-quality.php';
 
 // ----------------------------------------------------------
 // Fixture data definitions
@@ -284,6 +285,45 @@ function fixture_maximal(): array {
 		'odw_conforms_to'         => 'https://schema.org/Dataset',
 		'odw_provenance'          => 'Daten aus amtlichen Erhebungen gemäß Bundesstatistikgesetz',
 		'odw_access_rights'       => 'http://publications.europa.eu/resource/authority/access-right/PUBLIC',
+
+		// Gespeicherter MQA-Stand: ODW_Quality::append_to_jsonld() hängt daraus den
+		// odw:qualityScore-Block an. Der gehört in die Fixture, weil er in echten
+		// Antworten steht — und weil genau dieser Block in v2.42.0 ungültiges
+		// Turtle erzeugte, ohne dass eine Prüfung es bemerkt hätte.
+		'_odw_mqa'                => array(
+			'achieved'      => 165,
+			'assessable'    => 295,
+			'max'           => 405,
+			'rating'        => 'good',
+			'calculated_at' => '2026-09-17 12:00:00',
+			'dimensions'    => array(
+				'findability'      => array(
+					'achieved'   => 30,
+					'assessable' => 100,
+					'max'        => 100,
+				),
+				'accessibility'    => array(
+					'achieved'   => 0,
+					'assessable' => 20,
+					'max'        => 100,
+				),
+				'interoperability' => array(
+					'achieved'   => 70,
+					'assessable' => 80,
+					'max'        => 110,
+				),
+				'reusability'      => array(
+					'achieved'   => 55,
+					'assessable' => 75,
+					'max'        => 75,
+				),
+				'contextuality'    => array(
+					'achieved'   => 10,
+					'assessable' => 20,
+					'max'        => 20,
+				),
+			),
+		),
 		'odw_availability'        => 'http://publications.europa.eu/resource/authority/planned-availability/STABLE',
 
 		// Distribution fields.
@@ -387,6 +427,13 @@ function generate_fixture( string $name, array $meta, bool $is_catalog = false )
 		$doc = build_catalog_fixture( $datasets );
 	} else {
 		$doc = odw_build_dataset_jsonld( 1 );
+		if ( null !== $doc ) {
+			// Denselben Weg gehen wie der Endpunkt: erst der Qualitätsblock (den
+			// das Plugin über den Filter odw_dataset_jsonld anhängt), dann der
+			// @context. Ohne den Kontext hätte die Turtle-Datei keine Präfixe.
+			$doc = ODW_Quality::append_to_jsonld( $doc, 1 );
+			$doc = ODW_Rest_API::build_dataset_document( $doc );
+		}
 	}
 
 	if ( null === $doc ) {

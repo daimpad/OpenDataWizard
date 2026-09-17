@@ -7,6 +7,44 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.42.1] — 2026-09-17
+
+Der empfohlene Harvest-Endpunkt lieferte Turtle, das **kein RDF-Parser lesen konnte** — und
+zwar seit es den Qualitätsblock gibt. Aufgefallen beim Testen der Live-Ausgabe.
+
+### 🐛 Fixed
+- **Ungültiges Turtle im gesamten Katalog.** Die Dimensionsnamen im `odw:qualityScore`-Block
+  standen als nackte Bezeichner (`findability [ … ]`) da. Ein Prädikat muss in Turtle ein IRI
+  oder ein Präfixname sein; der Parser bricht an dieser Stelle ab und verwirft **das ganze
+  Dokument**, nicht nur die eine Zeile. Belegt mit dem echten Abruf einer Installation:
+  `Unexpected "findability" on line 34` — dasselbe Dokument ohne den Block parst mit 25 Tripeln
+  sauber. Die Namen tragen jetzt den `odw:`-Präfix.
+  In JSON-LD fiel derselbe Schlüssel stillschweigend weg (kein Eintrag im `@context`), die
+  Dimensionen fehlten dort also schon immer in der Ausgabe.
+- **Der Serializer kann kein ungültiges Prädikat mehr erzeugen.** `ODW_Rdf` schreibt einen
+  Schlüssel nur noch aus, wenn er ein IRI oder ein Präfixname ist, und lässt ihn sonst weg. Eine
+  einzelne verlorene Zusatzangabe ist ungleich harmloser als ein Katalog, den niemand einlesen
+  kann. Ein vollständiges IRI als Schlüssel wird dabei korrekt in spitze Klammern gesetzt.
+- **Die Datensatz-Fixtures hatten keine `@prefix`-Zeilen.** Sie wurden ohne `@context`
+  serialisiert und waren damit ebenfalls unparsbar — was nie auffiel, siehe unten. Der neue
+  `ODW_Rest_API::build_dataset_document()` setzt den Kontext an einer Stelle, die Fixture und
+  Endpunkt gemeinsam nutzen.
+
+### 🧪 Warum das grün durch die CI kam
+Der SHACL-Job erzeugte zwar Turtle-Dateien, **validierte aber nur die JSON-LD-Fixtures** — die
+`.ttl`-Dateien wurden nie geparst. Dazu kam, dass der Qualitätsblock in den Fixtures überhaupt
+nicht vorkam, weil der Generator den Filter `odw_dataset_jsonld` nicht durchlief. Die einzige
+kaputte Stelle lag damit exakt im blinden Fleck. Beides ist behoben:
+- `tests/shacl/validate.mjs` prüft jetzt **beide Serialisierungen**; ein Syntaxfehler in der
+  Turtle-Datei lässt den Lauf scheitern.
+- Die maximale Fixture trägt einen gespeicherten MQA-Stand und durchläuft
+  `ODW_Quality::append_to_jsonld()` — der Qualitätsblock steht also in der geprüften Ausgabe.
+- Zwei Unit-Tests halten die Stellen fest: die Dimensionsnamen als Präfixnamen und das
+  Verwerfen ungültiger Prädikate im Serializer. Der Serializer-Schutz allein hätte den Fehler
+  in ein stilles `odw:dimensions []` verwandelt — deshalb beides.
+
+---
+
 ## [2.42.0] — 2026-09-17
 
 Beim Testen des Harvestings kam ein nacktes `rest_no_route` zurück — ohne jeden Hinweis, woran

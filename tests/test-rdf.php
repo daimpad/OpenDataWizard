@@ -174,4 +174,43 @@ class Test_ODW_Rdf extends TestCase {
 
 		$this->assertStringContainsString( '<https://example.org/agent> a foaf:Agent, foaf:Organization .', $ttl );
 	}
+
+	/**
+	 * Ein Schlüssel, der kein Prädikat sein kann, fliegt raus — statt das ganze
+	 * Dokument zu zerstören.
+	 *
+	 * In Turtle muss ein Prädikat ein IRI oder ein Präfixname sein. Ein nackter
+	 * Bezeichner beschädigt nicht nur seine Zeile: Der Parser bricht ab und liest
+	 * das komplette Dokument nicht mehr. Genau das passierte in v2.42.0 mit den
+	 * Dimensionsnamen des Qualitätsblocks, wodurch der empfohlene Turtle-Katalog
+	 * für jeden Harvester unbrauchbar war.
+	 */
+	public function test_invalid_predicate_is_dropped_not_emitted(): void {
+		$doc = array(
+			'@context'  => array( 'dct' => 'http://purl.org/dc/terms/' ),
+			'@id'       => 'https://example.org/x',
+			'dct:title' => 'Titel',
+			'kaputt'    => 'Wert',
+		);
+
+		$turtle = ODW_Rdf::to_turtle( $doc );
+
+		$this->assertStringContainsString( 'dct:title "Titel"', $turtle );
+		$this->assertStringNotContainsString( 'kaputt', $turtle );
+	}
+
+	/**
+	 * Ein Schlüssel als vollständiges IRI kommt in spitze Klammern.
+	 */
+	public function test_full_iri_predicate_is_bracketed(): void {
+		$doc = array(
+			'@context'                      => array( 'dct' => 'http://purl.org/dc/terms/' ),
+			'@id'                           => 'https://example.org/x',
+			'http://example.org/ns#gewicht' => '5',
+		);
+
+		$turtle = ODW_Rdf::to_turtle( $doc );
+
+		$this->assertStringContainsString( '<http://example.org/ns#gewicht> "5"', $turtle );
+	}
 }

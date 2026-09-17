@@ -677,9 +677,14 @@ class ODW_Quality {
 			return $dataset;
 		}
 
+		// Der Dimensionsname muss ein Präfixname sein, kein nackter Bezeichner:
+		// In JSON-LD fällt ein Schlüssel ohne Zuordnung im @context stillschweigend
+		// weg, in Turtle ergäbe er ein ungültiges Prädikat — und damit ein Dokument,
+		// das kein Harvester mehr liest. Bis v2.42.0 stand hier „findability" statt
+		// „odw:findability", wodurch der gesamte Turtle-Katalog unparsbar war.
 		$dimensions = array();
 		foreach ( (array) ( $quality['dimensions'] ?? array() ) as $dim => $data ) {
-			$dimensions[ $dim ] = array(
+			$dimensions[ 'odw:' . $dim ] = array(
 				'odw:score'      => (int) ( $data['achieved'] ?? 0 ),
 				'odw:assessable' => (int) ( $data['assessable'] ?? 0 ),
 				'odw:maxScore'   => (int) ( $data['max'] ?? 0 ),

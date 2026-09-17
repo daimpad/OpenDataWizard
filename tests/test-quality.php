@@ -658,4 +658,58 @@ class Test_ODW_Quality extends TestCase {
 		$this->assertSame( 0, $result['score'] );
 		$this->assertGreaterThan( 0, $result['assessable'], 'Die Metriken bleiben bewertbar, sie sind nur nicht erfüllt.' );
 	}
+
+	/**
+	 * Die Dimensionsnamen im Qualitätsblock müssen Präfixnamen sein.
+	 *
+	 * Bis v2.42.0 standen dort nackte Bezeichner („findability"). In JSON-LD fällt
+	 * ein Schlüssel ohne Zuordnung im @context stillschweigend weg, in Turtle
+	 * ergibt er ein ungültiges Prädikat — das gesamte Dokument war damit für
+	 * Harvester unlesbar. Der Serializer wirft solche Schlüssel inzwischen weg,
+	 * das rettet aber nur die Syntax: Ohne diesen Test verschwänden die
+	 * Dimensionen wieder unbemerkt aus der Ausgabe.
+	 */
+	public function test_quality_dimensions_use_prefixed_predicates(): void {
+		$this->load_class();
+
+		\WP_Mock::userFunction( 'get_post_meta' )->andReturn(
+			array(
+				'achieved'      => 165,
+				'assessable'    => 295,
+				'max'           => 405,
+				'rating'        => 'good',
+				'calculated_at' => '2026-09-17 12:00:00',
+				'dimensions'    => array(
+					'findability'   => array(
+						'achieved'   => 30,
+						'assessable' => 100,
+						'max'        => 100,
+					),
+					'accessibility' => array(
+						'achieved'   => 0,
+						'assessable' => 20,
+						'max'        => 100,
+					),
+				),
+			)
+		);
+
+		$dataset = ODW_Quality::append_to_jsonld( array( '@type' => 'dcat:Dataset' ), 42 );
+
+		$this->assertArrayHasKey( 'odw:qualityScore', $dataset );
+
+		$dimensionen = $dataset['odw:qualityScore']['odw:dimensions'];
+		$this->assertNotEmpty( $dimensionen );
+
+		foreach ( array_keys( $dimensionen ) as $schluessel ) {
+			$this->assertMatchesRegularExpression(
+				'/^odw:[A-Za-z]+$/',
+				(string) $schluessel,
+				'Dimensionsname ist kein Präfixname und damit kein gültiges Prädikat: ' . $schluessel
+			);
+		}
+
+		$this->assertArrayHasKey( 'odw:findability', $dimensionen );
+		$this->assertSame( 30, $dimensionen['odw:findability']['odw:score'] );
+	}
 }
