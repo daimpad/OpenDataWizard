@@ -9,7 +9,7 @@
     "language": "de",
     "format": "CSV",
     "issued": "2024-01-15",
-    "keywords": "Demografie, Statistik"
+    "keywords": "Demografie\nStatistik"
   },
   {
     "title": "Arbeitslosenquoten 2024",
@@ -21,7 +21,7 @@
     "language": "de",
     "format": "XLSX",
     "issued": "2024-02-01",
-    "keywords": "Beschäftigung, Wirtschaft"
+    "keywords": "Beschäftigung\nWirtschaft"
   },
   {
     "title": "Schulstandorte",
@@ -33,7 +33,7 @@
     "language": "de",
     "format": "GeoJSON",
     "issued": "2024-01-01",
-    "keywords": "Schulen, Bildung, Geolocation"
+    "keywords": "Schulen\nBildung\nGeolocation"
   },
   {
     "title": "Breitbandverfügbarkeit",
@@ -45,7 +45,7 @@
     "language": "de",
     "format": "CSV",
     "issued": "2024-03-01",
-    "keywords": "Internet, Infrastruktur"
+    "keywords": "Internet\nInfrastruktur"
   },
   {
     "title": "Energieverbrauch nach Sektor 2023",
@@ -57,6 +57,6 @@
     "language": "de",
     "format": "JSON",
     "issued": "2023-12-31",
-    "keywords": "Energie, Umwelt, Statistik"
+    "keywords": "Energie\nUmwelt\nStatistik"
   }
 ]

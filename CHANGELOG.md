@@ -7,6 +7,30 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.42.2] — 2026-09-17
+
+Der Batch-Import trennte Schlagworte an Kommas — das Formular tut das ausdrücklich nicht.
+
+### 🐛 Fixed
+- **Import und Formular widersprachen sich bei Schlagworten mit Komma.** Das Formular warnt
+  seit jeher: „Trennen Sie die Schlagwörter nicht mit Komma" — ein Komma darf Teil eines
+  Schlagworts sein (z. B. „Berlin, Stadt"). Der Batch-Import spaltete dieselbe Eingabe aber an
+  Komma **und** Zeilenumbruch. Dieselben Rohdaten ergaben je nach Weg ein anderes Ergebnis, und
+  ein per Komma geschriebenes Schlagwort landete beim Veröffentlichen unbemerkt als mehrere
+  `dcat:keyword`-Werte statt einem. Aufgefallen an den eigenen Beispieldateien: `"Demografie,
+  Statistik"` wurde beim Import zu zwei Schlagworten, im Formular wäre es eines geblieben. Der
+  Import trennt jetzt wie das Formular ausschließlich an Zeilenumbrüchen; mehrere Zeilen passen
+  in eine CSV-Zelle, wenn sie in Anführungszeichen steht (Excel/LibreOffice schreiben das beim
+  Export automatisch so).
+- **`samples/import-example.csv` und `.json` gingen mit schlechtem Beispiel voran** — beide
+  nutzten kommagetrennte Schlagworte. Auf Zeilentrennung umgestellt.
+
+Tests: ein bestehender Test verlangte die alte, falsche Form (Komma spaltet) und ist jetzt auf
+das richtige Verhalten umgestellt; ein neuer Test hält fest, dass ein Komma innerhalb eines
+Schlagworts erhalten bleibt.
+
+---
+
 ## [2.42.1] — 2026-09-17
 
 Der empfohlene Harvest-Endpunkt lieferte Turtle, das **kein RDF-Parser lesen konnte** — und

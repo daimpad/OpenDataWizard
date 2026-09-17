@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.42.1-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.42.2-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -149,7 +149,7 @@ Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-
 - `language` — Sprache (z.B. de, en)
 - `format` — Dateiformat (z.B. CSV, JSON, PDF)
 - `issued` — Veröffentlichungsdatum
-- `keywords` — Schlagworte (komma-getrennt)
+- `keywords` — Schlagworte (eine pro Zeile, wie im Formular — kein Komma als Trenner: In eine CSV-Zelle passen mehrere Zeilen, wenn sie in Anführungszeichen steht)
 - `byte_size` — Dateigröße in Bytes (nur ganze Zahl; abweichende Werte werden als Fehler markiert)
 - `attribution` — Namensnennungstext
 
