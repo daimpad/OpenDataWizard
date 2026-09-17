@@ -57,10 +57,20 @@ const TIERS = {
 };
 
 // Fixtures to validate.
+//
+// Beide Serialisierungen, nicht nur JSON-LD: Die Turtle-Ausgabe ist das, was der
+// Harvest-Endpunkt als empfohlenes Format liefert, und sie hatte bis v2.42.0
+// überhaupt keine Prüfung. Ein ungültiges Prädikat macht in Turtle das *ganze*
+// Dokument unparsbar, während JSON-LD denselben Schlüssel stillschweigend
+// verwirft — grüne JSON-LD-Prüfung bei kaputtem Turtle ist also kein Widerspruch,
+// sondern genau der Fall, der eintrat.
 const FIXTURES = [
 	'build/shacl/dataset-minimal.jsonld',
 	'build/shacl/dataset-maximal.jsonld',
 	'build/shacl/catalog.jsonld',
+	'build/shacl/dataset-minimal.ttl',
+	'build/shacl/dataset-maximal.ttl',
+	'build/shacl/catalog.ttl',
 ];
 
 /**
@@ -280,7 +290,12 @@ async function main() {
 		}
 
 		console.log(`Validating ${fixturePath}...`);
-		const dataGraph = await loadJsonLd(fixturePath);
+		// Ein Syntaxfehler in der Turtle-Datei wirft hier — und soll das auch:
+		// Ein Dokument, das kein Parser liest, ist schlimmer als eines mit
+		// SHACL-Verstößen.
+		const dataGraph = fixturePath.endsWith('.ttl')
+			? await loadRdf(fixturePath)
+			: await loadJsonLd(fixturePath);
 		const violationCount = await validateFixture(dataGraph, shapesGraph, fixturePath, allowlist);
 		totalViolations += violationCount;
 	}

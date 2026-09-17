@@ -141,6 +141,15 @@ class ODW_Rdf {
 				continue;
 			}
 
+			// Ein Prädikat muss in Turtle ein IRI oder ein Präfixname sein. Ein
+			// nackter Bezeichner ist beides nicht — und er beschädigt nicht bloß
+			// seine eigene Zeile, sondern macht das ganze Dokument unparsbar.
+			// Lieber die eine Aussage auslassen als den Katalog unbrauchbar machen.
+			$predicate = self::predicate( (string) $key );
+			if ( '' === $predicate ) {
+				continue;
+			}
+
 			$object = self::render_object( $value, $subjects, $seen );
 
 			// Eine leere Liste (z. B. ein Katalog ohne veröffentlichte Datensätze)
@@ -150,7 +159,7 @@ class ODW_Rdf {
 				continue;
 			}
 
-			$parts[] = $key . ' ' . $object;
+			$parts[] = $predicate . ' ' . $object;
 		}
 
 		return $parts;
@@ -257,6 +266,36 @@ class ODW_Rdf {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Einen Schlüssel als Turtle-Prädikat ausgeben — oder '' , wenn er keines sein kann.
+	 *
+	 * Zulässig sind ein absolutes IRI (kommt in spitze Klammern) und ein
+	 * Präfixname wie `dcat:theme`. Bewusst enger gefasst als die Turtle-Grammatik
+	 * (keine Escape-Sequenzen, kein Punkt am Ende des lokalen Teils): Was hier
+	 * durchfällt, stammt aus einem Fehler im Aufbau des Dokuments und gehört
+	 * nicht in die Ausgabe.
+	 *
+	 * @param string $key Schlüssel aus dem JSON-LD-Knoten.
+	 * @return string Prädikat oder '' , wenn der Schlüssel keines ergibt.
+	 */
+	private static function predicate( string $key ): string {
+		$key = trim( $key );
+
+		if ( '' === $key ) {
+			return '';
+		}
+
+		if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.-]*://#', $key ) ) {
+			return '<' . self::escape_iri( $key ) . '>';
+		}
+
+		if ( preg_match( '/^[A-Za-z][A-Za-z0-9._-]*:[A-Za-z0-9_](?:[A-Za-z0-9._-]*[A-Za-z0-9_-])?$/', $key ) ) {
+			return $key;
+		}
+
+		return '';
 	}
 
 	/**

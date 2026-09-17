@@ -275,6 +275,21 @@ class ODW_Rest_API {
 	}
 
 	/**
+	 * Setzt den @context vor einen Datensatz-Knoten.
+	 *
+	 * Ausgelagert, damit die SHACL-Fixtures denselben Weg gehen wie die Antwort
+	 * des Endpunkts. Vorher baute die Fixture den Knoten ohne Kontext — die
+	 * erzeugte Turtle-Datei hatte dadurch keine @prefix-Zeilen und war gar nicht
+	 * parsbar, was niemandem auffiel, weil die Prüfung nur das JSON-LD ansah.
+	 *
+	 * @param array<string, mixed> $dataset Dataset JSON-LD node.
+	 * @return array<string, mixed>
+	 */
+	public static function build_dataset_document( array $dataset ): array {
+		return array_merge( array( '@context' => self::JSONLD_CONTEXT ), $dataset );
+	}
+
+	/**
 	 * Assemble the dcat:Catalog JSON-LD document from the given dataset nodes.
 	 *
 	 * The catalog carries a stable `@id` (its own endpoint URL) and a homepage so
@@ -617,10 +632,7 @@ class ODW_Rest_API {
 			);
 		}
 
-		$body = array_merge(
-			array( '@context' => self::JSONLD_CONTEXT ),
-			$dataset
-		);
+		$body = self::build_dataset_document( $dataset );
 
 		set_transient( $cache_key, $body, self::get_cache_ttl() );
 
