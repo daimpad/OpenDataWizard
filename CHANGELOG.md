@@ -42,6 +42,10 @@ kaputte Stelle lag damit exakt im blinden Fleck. Beides ist behoben:
 - Zwei Unit-Tests halten die Stellen fest: die Dimensionsnamen als Präfixnamen und das
   Verwerfen ungültiger Prädikate im Serializer. Der Serializer-Schutz allein hätte den Fehler
   in ein stilles `odw:dimensions []` verwandelt — deshalb beides.
+- Ein bestehender Test *hatte* den Qualitätsblock geprüft — und die falsche Form festgeschrieben:
+  Er verlangte den Schlüssel `findability`. Eine Zusicherung, die den Ist-Zustand abbildet statt
+  einer Anforderung, meldet den Fehler nicht, sondern hält ihn fest. Die Zusicherung steht jetzt
+  auf `odw:findability`.
 
 ---
 

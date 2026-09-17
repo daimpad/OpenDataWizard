@@ -420,7 +420,11 @@ class Test_ODW_Quality extends TestCase {
 		$this->assertSame( 200, $result['odw:qualityScore']['odw:score'] );
 		$this->assertSame( 'good', $result['odw:qualityScore']['odw:rating'] );
 		$this->assertSame( 405, $result['odw:qualityScore']['odw:maxScore'] );
-		$this->assertArrayHasKey( 'findability', $result['odw:qualityScore']['odw:dimensions'] );
+		// Mit Präfix: Ohne ihn ist der Dimensionsname in Turtle kein gültiges
+		// Prädikat und in JSON-LD kein bekannter Begriff. Diese Zusicherung stand
+		// bis v2.42.0 auf dem nackten Namen und hat den Fehler dadurch festgehalten,
+		// statt ihn zu melden.
+		$this->assertArrayHasKey( 'odw:findability', $result['odw:qualityScore']['odw:dimensions'] );
 	}
 
 	/**
