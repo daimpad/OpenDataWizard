@@ -312,4 +312,65 @@ class Test_ODW_Field_Catalog extends TestCase {
 
 		$this->assertSame( $erwartet, $tatsaechlich );
 	}
+
+	/**
+	 * Ein vorbelegtes Feld darf nicht in einer zugeklappten Gruppe stehen.
+	 *
+	 * Vorgabewerte landen beim ersten Speichern in den veröffentlichten Metadaten,
+	 * ob jemand sie gesehen hat oder nicht. Bis v2.41.1 stand genau so ein Feld —
+	 * die Zugriffsrechte mit der Vorauswahl „öffentlich" — in einer standardmäßig
+	 * zugeklappten Gruppe in Tab 4. Bei einem Datensatz mit eingeschränktem Zugang
+	 * wäre damit still eine falsche Aussage veröffentlicht worden.
+	 *
+	 * Die Abschnitte laufen jeweils vom Umschalter bis zum nächsten Umschalter oder
+	 * bis zum Tab-Ende. Ein Feld steckt also dann in einem Abschnitt, wenn zwischen
+	 * seinem Tab-Anfang und ihm ein Umschalter liegt.
+	 */
+	public function test_prefilled_fields_are_not_hidden_behind_a_toggle(): void {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reads local source, not a remote request.
+		$source = (string) file_get_contents( ODW_PLUGIN_DIR . 'includes/class-fields.php' );
+		$this->assertNotSame( '', $source, 'class-fields.php could not be read' );
+
+		preg_match_all( '/^\s*\/\/ Tab \d+ — /m', $source, $tabs, PREG_OFFSET_CAPTURE );
+		preg_match_all( '/data-odw-section-toggle="[a-z0-9]+"/', $source, $toggles, PREG_OFFSET_CAPTURE );
+		preg_match_all( '/->set_default_value\(/', $source, $defaults, PREG_OFFSET_CAPTURE );
+
+		$this->assertNotEmpty( $tabs[0], 'Keine Tab-Marker gefunden — der Test misst sonst nichts.' );
+		$this->assertNotEmpty( $defaults[0], 'Kein vorbelegtes Feld gefunden — der Test misst sonst nichts.' );
+
+		$letzte_vor = static function ( array $treffer, int $pos ): ?int {
+			$gefunden = null;
+			foreach ( $treffer as $t ) {
+				if ( $t[1] < $pos ) {
+					$gefunden = (int) $t[1];
+				}
+			}
+			return $gefunden;
+		};
+
+		$verstoesse = array();
+		foreach ( $defaults[0] as $treffer ) {
+			$pos = (int) $treffer[1];
+
+			$tab_start = $letzte_vor( $tabs[0], $pos );
+			$toggle    = $letzte_vor( $toggles[0], $pos );
+
+			if ( null === $toggle || null === $tab_start || $toggle < $tab_start ) {
+				continue;
+			}
+
+			// Feldname für eine brauchbare Fehlermeldung: das letzte 'odw_…' davor.
+			$name = '(unbekannt)';
+			if ( preg_match_all( "/'(odw_[a-z_]+)'/", substr( $source, 0, $pos ), $namen ) ) {
+				$name = (string) end( $namen[1] );
+			}
+			$verstoesse[] = $name;
+		}
+
+		$this->assertSame(
+			array(),
+			$verstoesse,
+			'Vorbelegte Felder in einer zugeklappten Gruppe: ' . implode( ', ', $verstoesse )
+		);
+	}
 }

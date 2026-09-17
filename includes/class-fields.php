@@ -302,6 +302,20 @@ class ODW_Fields {
 						->add_options( self::get_availability_options() )
 						->set_help_text( __( 'PLANBARE VERFÜGBARKEIT (dcatap:availability)', 'open-data-wizard' ) ),
 
+					// „Öffentlich“ ist bei einem Open-Data-Plugin der Normalfall und
+					// steht deshalb vorausgewählt. Genau deshalb gehört das Feld hierher
+					// und nicht, wie bis v2.41.1, in eine zugeklappte Gruppe in Tab 4:
+					// Dort hat die Vorauswahl nie jemand gesehen, sie landete aber bei
+					// jedem Speichern als dct:accessRights in den veröffentlichten
+					// Metadaten — bei einem Datensatz mit eingeschränktem Zugang also
+					// als falsche Aussage. Tab 3 muss ohnehin jede:r öffnen (Zugriffs-URL
+					// und Lizenz sind Pflicht), und inhaltlich steht die Frage, wer
+					// zugreifen darf, neben Lizenz und Verfügbarkeit am richtigen Ort.
+					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
+						->add_options( self::get_access_rights_options() )
+						->set_default_value( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' )
+						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) ),
+
 					Field::make( 'complex', 'odw_extra_distributions', __( 'Weitere Distributionen', 'open-data-wizard' ) )
 						->set_help_text( __( 'MEHRERE DISTRIBUTIONEN (dcat:distribution)', 'open-data-wizard' ) . "\n\n" . __( 'Optional: zusätzliche Zugänge zu diesem Datensatz — z. B. dieselben Daten in einem weiteren Format oder unter einer anderen URL. Die oben angegebene Datei bleibt die primäre Distribution.', 'open-data-wizard' ) )
 						->set_collapsed( true )
@@ -513,24 +527,6 @@ class ODW_Fields {
 						->set_attribute( 'type', 'url' )
 						->set_attribute( 'placeholder', 'https://beispiel.de/qualitaetssicherung' )
 						->set_help_text( __( 'QUALITÄTSPROZESS (dcatde:qualityProcessURI)', 'open-data-wizard' ) ),
-
-					Field::make( 'html', 'odw_ext_hint_access' )
-					->set_html(
-						'<button type="button" class="odw-section-toggle" data-odw-section-toggle="access" aria-expanded="false">'
-						. '<span class="odw-section-caret" aria-hidden="true">▸</span> '
-						. esc_html__( 'Zugriff & weitere Auffindbarkeit', 'open-data-wizard' )
-						. '</button>'
-					),
-
-					// „Öffentlich“ ist bei einem Open-Data-Plugin der Normalfall und
-					// steht deshalb vorausgewählt — sichtbar im Formular und jederzeit
-					// änderbar. Bewusst kein Hintergrund-Automatismus aus dem
-					// Beitragsstatus: Metadaten, die niemand gesehen hat, sollen nicht
-					// still entstehen.
-					Field::make( 'select', 'odw_access_rights', __( 'Wer darf auf diese Daten zugreifen?', 'open-data-wizard' ) )
-						->add_options( self::get_access_rights_options() )
-						->set_default_value( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' )
-						->set_help_text( __( 'ZUGRIFFSRECHTE (dct:accessRights)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_hvd' )
 					->set_html(

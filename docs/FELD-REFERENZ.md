@@ -54,7 +54,9 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
   - [Wie lautet die E-Mail-Adresse der pflegenden Stelle?](#wie-lautet-die-e-mail-adresse-der-pflegenden-stelle)
   - [Auf welcher rechtlichen Grundlage werden die Daten bereitgestellt?](#auf-welcher-rechtlichen-grundlage-werden-die-daten-bereitgestellt)
   - [Wo ist das Qualitätssicherungs-Verfahren dokumentiert?](#wo-ist-das-qualitätssicherungs-verfahren-dokumentiert)
+- **3 — Datenbereitstellung**
   - [Wer darf auf diese Daten zugreifen?](#wer-darf-auf-diese-daten-zugreifen)
+- **4 — Erweiterte Angaben**
   - [Ist dies ein hochwertiger Datensatz (HVD)?](#ist-dies-ein-hochwertiger-datensatz-hvd)
   - [Welcher HVD-Kategorie gehört dieser Datensatz an?](#welcher-hvd-kategorie-gehört-dieser-datensatz-an)
   - [Welche eindeutige Kennung hat dieser Datensatz?](#welche-eindeutige-kennung-hat-dieser-datensatz)
@@ -735,6 +737,10 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 
 **4 · Verständliche Langbeschreibung:** Verlinken Sie optional eine Seite, die beschreibt, wie Sie die Qualität der Daten sichern (z. B. Prüfschritte). Das stärkt das Vertrauen in Ihre Daten. Beispiel: https://beispiel.de/qualitaetssicherung.
 
+---
+
+## 3 — Datenbereitstellung
+
 ### Wer darf auf diese Daten zugreifen?
 
 | Eigenschaft | Wert |
@@ -753,6 +759,10 @@ Legende der Stufen-Spalte: **Pflicht** (Veröffentlichung wird ohne dieses Feld 
 **3 · DCAT-AP-Langbeschreibung:** `dct:accessRights` klassifiziert den Zugriffsstatus über das EU-Vokabular „Access Right" (`PUBLIC`, `RESTRICTED`, `NON_PUBLIC`). Multiplizität 0..1. Relevant für die MQA-Dimension Wiederverwendbarkeit.
 
 **4 · Verständliche Langbeschreibung:** Geben Sie an, ob die Daten für alle offen (öffentlich), nur eingeschränkt oder gar nicht öffentlich zugänglich sind. Für offene Daten ist das in der Regel „öffentlich". Beispiel: Öffentlich. „Öffentlich" ist bereits vorausgewählt — ändern Sie die Angabe nur, wenn der Zugriff eingeschränkt oder gar nicht öffentlich ist.
+
+---
+
+## 4 — Erweiterte Angaben
 
 ### Ist dies ein hochwertiger Datensatz (HVD)?
 
