@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@wordpress/env": "^11.15.0",
+    "@wordpress/env": "^11.16.0",
     "@zazuko/env-node": "^3.1.0",
     "rdf-validate-shacl": "^0.6.5"
   }
