@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "odw/catalog",
+	"title": "Datenkatalog",
+	"category": "widgets",
+	"icon": "list-view",
+	"description": "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog].",
+	"keywords": [ "Datenkatalog", "Open Data", "Datensätze", "DCAT" ],
+	"textdomain": "open-data-wizard",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true
+		}
+	},
+	"attributes": {
+		"perPage": {
+			"type": "number",
+			"default": 20
+		},
+		"orderby": {
+			"type": "string",
+			"default": "title"
+		},
+		"theme": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"excerpt": {
+			"type": "number",
+			"default": 30
+		},
+		"showDemo": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"editorScript": "odw-catalog-editor"
+}

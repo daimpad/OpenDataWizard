@@ -7,6 +7,53 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.43.0] — 2026-10-27
+
+Ein Datenkatalog fürs Frontend: alle veröffentlichten Datensätze auf einer Seite.
+
+### ✨ Added
+- **Shortcode `[odw_catalog]` und Block „Datenkatalog".** Listet die veröffentlichten
+  Datensätze mit Titel, Aktualisierungsdatum, Auszug der Beschreibung, Badges (Thema, Format,
+  Größe, Lizenz, eingeschränkter Zugang) und einem direkten Link zur Datei bzw. zum
+  Datenangebot. Attribute: `per_page` (1–50), `orderby` (`title`/`modified`), `theme`
+  (EU-Codes, kommagetrennt), `title`, `excerpt` (Wörter, `0` = aus), `show_demo`. Im Block
+  stehen dieselben Einstellungen in der Seitenleiste.
+- **Detailansicht auf derselben Seite.** Der Titel führt auf `?odw_ds=<ID>` und zeigt dort die
+  bekannte Download-Card. Der Datensatztyp hat bewusst keine öffentlichen Einzelseiten — so
+  bleibt das auch so. „Zurück zum Katalog" führt auf die Listenseite zurück, von der man kam.
+- **Eigene Seitennavigation** über `?odw_page=<n>` — nicht über `page`/`paged`, die mit
+  statischen Startseiten und `<!--nextpage-->` kollidieren.
+- Filter **`odw_catalog_query_args`** zum Anpassen der Listenabfrage.
+
+### ⚡ Performance
+- Die Liste liest ihre Felder aus dem Meta-Cache, den `WP_Query` für alle Treffer in einer
+  Abfrage vorlädt, statt die Karte je Eintrag zu rendern: Carbon Fields setzt für jeden
+  gelesenen Wert eine eigene SQL-Abfrage ab, eine Karte kostet so 29–32 Abfragen. Eine
+  Katalogseite bleibt dadurch bei rund einem halben Dutzend Abfragen, unabhängig von ihrer Länge.
+
+### 🔒 Security
+- Entwürfe, private, geplante und passwortgeschützte Datensätze erscheinen weder in der Liste
+  noch über `?odw_ds=` — eine unbekannte und eine nicht öffentliche ID antworten gleich.
+- Die Kontakt-E-Mail der Download-Card wird per `antispambot()` verschleiert.
+
+### 🔧 Changed
+- Die Logik für Lizenz-Label, Datei-Angaben und Download-Ziel steckt jetzt in öffentlichen
+  Helfern von `ODW_Shortcode` (`license_label()`, `file_info()`, `download_target()`,
+  `format_bytes()`), die Karte und Katalog gemeinsam nutzen. Die Karte selbst gibt Byte für Byte
+  dasselbe aus wie zuvor (abgesehen von der verschleierten E-Mail).
+- README: „Kein Datenportal" präzisiert — der Katalog ist eine schlichte Liste der eigenen
+  Datensätze; Suche, Facetten und das Zusammenführen fremder Kataloge bleiben Sache der Portale.
+
+### 🧪 Tests
+- `tests/test-catalog.php`: Attribute, Anfrage-Parameter, Query-Argumente, Trefferzeile,
+  Seitenfenster und Listen-Daten — samt Wächter, der verhindert, dass die Liste ein Feld liest,
+  das nicht als flacher Meta-Wert gespeichert ist.
+- `tests/e2e/catalog.spec.js`: Liste, Ausschluss von Entwurf und Passwortschutz, Badges,
+  Detailansicht mit Rückweg, Paginierung und eine Seite jenseits des Endes — gegen ein echtes
+  WordPress in der CI.
+
+---
+
 ## [2.42.2] — 2026-09-17
 
 Der Batch-Import trennte Schlagworte an Kommas — das Formular tut das ausdrücklich nicht.

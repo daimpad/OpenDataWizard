@@ -95,6 +95,7 @@ open-data-wizard/
 │   ├── class-field-reference.php    # Feld-Referenz-Generator (docs/FELD-REFERENZ.md)
 │   ├── class-settings.php           # Einstellungsseite
 │   ├── class-shortcode.php          # [odw_dataset id="123"] Frontend-Card
+│   ├── class-catalog.php            # [odw_catalog] + Block „Datenkatalog" (Liste + Detailansicht)
 │   ├── class-batch-import.php       # CSV/JSON Batch-Import (Parser + Importer)
 │   └── class-cli.php                # WP-CLI Befehle
 ├── assets/
@@ -130,6 +131,7 @@ open-data-wizard/
 │   ├── test-quality.php            # Qualitäts-Scoring Tests
 │   ├── test-settings.php           # Settings-Filter Tests
 │   ├── test-shortcode.php          # Shortcode Rendering Tests
+│   ├── test-catalog.php            # Datenkatalog: Attribute, Query-Argumente, Listen-Daten
 │   ├── test-rest-delta.php         # Delta Endpoint Tests
 │   ├── test-cli.php                # CLI Commands Tests
 │   └── class-stubs.php             # WP_Mock Stubs
@@ -182,7 +184,8 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Field_Reference** | Erzeugt `docs/FELD-REFERENZ.md` aus `config/field-catalog.php` | `build()`, `write()`, `js_map()` |
 | **ODW_Settings** | Plugin-Einstellungsseite | `get()`, `filter_catalog_title()` |
 | **ODW_Block** | Gutenberg-Block „Datensatz-Karte“ (dynamisch, rendert über ODW_Shortcode) | `register()`, `localize()`, `render()` |
-| **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()` |
+| **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()`, `license_label()`, `file_info()`, `download_target()`, `format_bytes()` |
+| **ODW_Catalog** | Frontend-Datenkatalog: `[odw_catalog]` + Block `odw/catalog`; Liste liest Roh-Meta aus dem WP_Query-Cache (keine Carbon-Fields-Reads), Detailansicht über `?odw_ds=<ID>` | `render_shortcode()`, `render_block()`, `item_data()`, `build_query_args()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
 | **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
 
@@ -229,16 +232,18 @@ Validation greift nicht bei Save ein — nur bei **Publish-Attempt**:
 → Erlaubt Drafts, erzwingt Vollständigkeit für Public
 
 #### 6. **Companion Functions außerhalb Klassen**
-Zwei Funktionen stehen **außerhalb** class-Definitionen (absichtlich):
+Die JSON-LD-Bausteine stehen **außerhalb** der class-Definition am Ende von `class-fields.php`
+(absichtlich) — allen voran:
 
 ```php
-// In class-fields.php, nach class-Definition:
 function odw_build_dataset_jsonld( int $post_id ): ?array { ... }
-
-// In class-shortcode.php:
-function odw_format_bytes( int $bytes, int $precision = 2 ): string { ... }
 ```
+Daneben u. a. `odw_build_distribution_node()`, `odw_resolve_vocab_uri()`, `odw_resolve_language_tag()`.
 Grund: Hohe Sichtbarkeit, mehrere Klassen verwenden sie, kein `self::`-Overhead.
+
+Die Frontend-Helfer der Download-Card (`format_bytes()`, `license_label()`, `file_info()`,
+`download_target()`) sind dagegen **öffentliche statische Methoden von `ODW_Shortcode`** — Karte
+und Datenkatalog (`ODW_Catalog`) teilen sich darüber dieselbe Logik.
 
 ---
 
@@ -765,7 +770,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.42.2**
+Current: **v2.43.0**
 
 ---
 

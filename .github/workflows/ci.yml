@@ -183,6 +183,9 @@ jobs:
           npx wp-env run tests-cli wp post list --post_type=odw_dataset --post_status=publish --fields=ID,post_title || true
           npx wp-env run tests-cli wp option get odw_e2e_seeded || true
           echo "::endgroup::"
+          echo "::group::Katalogseite (Shortcode)"
+          curl -sS 'http://localhost:8889/odw-e2e-katalog/' | grep -o 'class="odw-catalog[^"]*"' | head -3 || true
+          echo "::endgroup::"
           echo "--- Katalog über die Testumgebung ---"
           STATUS="$(curl -sS -o "$RUNNER_TEMP/catalog.json" -w '%{http_code}' 'http://localhost:8889/wp-json/datenatlas/v1/catalog' || echo 000)"
           echo "HTTP $STATUS"
@@ -199,6 +202,13 @@ jobs:
       - name: End-to-end tests — Backend
         if: always()
         run: npx playwright test --project=chromium tests/e2e/admin-workflow.spec.js
+
+      # Eine neue Spec-Datei läuft hier NICHT automatisch mit — die Schritte
+      # nennen ihre Datei ausdrücklich. Ohne diesen Schritt bliebe der
+      # Frontend-Katalog in der CI ungeprüft.
+      - name: End-to-end tests — Frontend-Katalog
+        if: always()
+        run: npx playwright test --project=chromium tests/e2e/catalog.spec.js
 
       # WP_DEBUG_LOG schreibt PHP-Notices und -Fatals nach wp-content/debug.log.
       # Am Ende ausgegeben, weil eine leer gerenderte Admin-Seite sonst nur als

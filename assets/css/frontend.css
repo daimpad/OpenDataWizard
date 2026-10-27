@@ -209,3 +209,203 @@
         align-items: flex-start;
     }
 }
+
+/* =========================================================================
+   KATALOG — Shortcode [odw_catalog] und Block odw/catalog (ab v2.43.0)
+
+   Abgegrenzter Abschnitt: Die Regeln der Download-Karte oben bleiben
+   unberührt. Wie die Karte erbt der Katalog Schrift- und Textfarben vom
+   Theme; nur Badges und Hauptlink tragen eigene Akzentfarben.
+   ========================================================================= */
+
+.odw-catalog {
+    margin: 1.5rem 0;
+}
+
+.odw-catalog__title {
+    margin: 0 0 0.75rem;
+}
+
+.odw-catalog__count,
+.odw-catalog__empty,
+.odw-catalog__back {
+    margin: 0 0 1rem;
+}
+
+.odw-catalog__count {
+    font-size: 0.9em;
+}
+
+.odw-catalog__back a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.odw-catalog__back a:hover {
+    text-decoration: underline;
+}
+
+/* Nur für eingeloggte Redakteur:innen sichtbar (z. B. unbekannte Themen). */
+.odw-catalog__notice {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.9rem;
+    border-left: 4px solid #b45309;
+    background: #fff7ed;
+    color: #7c2d12;
+    font-size: 0.9em;
+}
+
+/* Liste ohne Aufzählungszeichen — auch gegen Themes, die li::before setzen. */
+.odw-catalog .odw-catalog__list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.odw-catalog .odw-catalog__item {
+    margin: 0;
+    padding: 0;
+}
+
+.odw-catalog .odw-catalog__item::before,
+.odw-catalog .odw-catalog__item::marker {
+    content: none;
+}
+
+/* --- Listeneintrag --- */
+.odw-entry {
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+}
+
+.odw-catalog .odw-entry__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.2em;
+    line-height: 1.3;
+}
+
+.odw-entry__meta {
+    margin: 0 0 0.5rem;
+    font-size: 0.85em;
+}
+
+.odw-entry__excerpt {
+    margin: 0 0 0.6rem;
+}
+
+.odw-entry__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 0.75rem;
+}
+
+/* Lange Lizenznamen dürfen umbrechen, statt die Mobilansicht zu sprengen. */
+.odw-entry__badges .odw-badge {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.odw-badge--theme  { background: #f1ecfb; color: #4c2a85; }
+.odw-badge--access { background: #fde8e8; color: #8a1c1c; }
+
+.odw-entry__actions {
+    margin: 0;
+}
+
+.odw-entry__action {
+    display: inline-block;
+    padding: 0.45em 1.1em;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95em;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.odw-entry__action:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+/*
+ * Sichtbarer Tastaturfokus. Höhere Spezifität mit Absicht: Manche Themes
+ * (etwa Twenty Twenty-One) geben fokussierten Links einen hellen Hintergrund
+ * ohne Textfarbe — der weiße Text des Buttons wäre dann unsichtbar.
+ */
+.odw-catalog.odw-catalog a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus,
+.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus-visible {
+    background: #1d4ed8;
+    color: #fff;
+    text-decoration: none;
+    outline: 3px solid #1d4ed8;
+    outline-offset: 2px;
+}
+
+/* --- Seitennavigation --- */
+.odw-catalog .odw-catalog__pagination ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.odw-catalog .odw-catalog__pagination li {
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__pagination li::before {
+    content: none;
+}
+
+.odw-catalog__pagination a,
+.odw-catalog__pagination [aria-current="page"] {
+    display: inline-block;
+    min-width: 2.2em;
+    padding: 0.3em 0.6em;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.odw-catalog__pagination [aria-current="page"] {
+    border-color: currentColor;
+    font-weight: 700;
+}
+
+.odw-catalog__pagination-gap {
+    padding: 0.3em 0.2em;
+}
+
+/* --- Detailansicht: die Karte direkt unter dem Rückweg --- */
+.odw-catalog--detail .odw-download-card {
+    margin-top: 0;
+}
+
+/* Für Screenreader, unsichtbar am Bildschirm. */
+.odw-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}

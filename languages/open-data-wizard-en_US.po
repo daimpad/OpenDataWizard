@@ -1975,3 +1975,78 @@ msgstr "Something is blocking the REST API for unauthenticated requests — typi
 
 msgid "Unerwartete Antwort vom Endpunkt."
 msgstr "Unexpected response from the endpoint."
+
+msgid "%d Datensätze"
+msgstr "%d datasets"
+
+msgid "Aktualisiert: %s"
+msgstr "Updated: %s"
+
+msgid "Beispieldatensatz anzeigen"
+msgstr "Show sample dataset"
+
+msgid "Datenkatalog"
+msgstr "Data catalogue"
+
+msgid "Datensatz %1$d von %2$d"
+msgstr "Dataset %1$d of %2$d"
+
+msgid "Datensätze %1$d–%2$d von %3$d"
+msgstr "Datasets %1$d–%2$d of %3$d"
+
+msgid "Datensätze pro Seite"
+msgstr "Datasets per page"
+
+msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten."
+msgstr "Also list the sample dataset created on activation."
+
+msgid "Diese Seite gibt es nicht."
+msgstr "This page does not exist."
+
+msgid "Ein Datensatz"
+msgstr "One dataset"
+
+msgid "Hinweis für die Redaktion, nur für Sie sichtbar: Diese Themen-Angaben wurden nicht erkannt und ignoriert: %s. Verwenden Sie EU-Codes wie EDUC oder SOCI."
+msgstr "Note for editors, visible only to you: these theme values were not recognised and have been ignored: %s. Use EU codes such as EDUC or SOCI."
+
+msgid "Keine Auswahl zeigt alle Themen."
+msgstr "No selection shows all themes."
+
+msgid "Länge des Beschreibungsauszugs (Wörter, 0 = aus)"
+msgstr "Length of the description excerpt (words, 0 = off)"
+
+msgid "Nach Titel (A–Z)"
+msgstr "By title (A–Z)"
+
+msgid "Nur diese Themen zeigen"
+msgstr "Only show these themes"
+
+msgid "Nächste Seite"
+msgstr "Next page"
+
+msgid "Seiten des Datenkatalogs"
+msgstr "Data catalogue pages"
+
+msgid "Sortierung"
+msgstr "Sort order"
+
+msgid "Vorherige Seite"
+msgstr "Previous page"
+
+msgid "Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben."
+msgstr "Displayed on the front end as a list of all published datasets."
+
+msgid "Zuletzt aktualisierte zuerst"
+msgstr "Most recently updated first"
+
+msgid "Zum Datenangebot"
+msgstr "Go to the data"
+
+msgid "Zur ersten Seite"
+msgstr "Go to the first page"
+
+msgid "Zurück zum Katalog"
+msgstr "Back to the catalogue"
+
+msgid "Überschrift (optional)"
+msgstr "Heading (optional)"
