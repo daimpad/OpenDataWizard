@@ -255,9 +255,15 @@
     font-size: 0.9em;
 }
 
-/* Liste ohne Aufzählungszeichen — auch gegen Themes, die li::before setzen. */
+/*
+ * Liste ohne Aufzählungszeichen — auch gegen Themes, die li::before setzen.
+ * minmax(0, 1fr) statt der impliziten auto-Spur: Sonst wäre die Spur
+ * mindestens so breit wie das längste unbrechbare Wort (eine URL im Auszug)
+ * und schöbe auf schmalen Bildschirmen die ganze Liste über den Rand.
+ */
 .odw-catalog .odw-catalog__list {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
     margin: 0;
     padding: 0;
@@ -279,6 +285,7 @@
     border: 1px solid rgba(128, 128, 128, 0.35);
     border-radius: 8px;
     padding: 1rem 1.2rem;
+    overflow-wrap: break-word;
 }
 
 .odw-catalog .odw-entry__title {
@@ -336,16 +343,20 @@
 
 /*
  * Sichtbarer Tastaturfokus. Höhere Spezifität mit Absicht: Manche Themes
- * (etwa Twenty Twenty-One) geben fokussierten Links einen hellen Hintergrund
- * ohne Textfarbe — der weiße Text des Buttons wäre dann unsichtbar.
+ * (etwa Twenty Twenty-One mit (0,4,1)) geben fokussierten Links einen hellen
+ * Hintergrund ohne Textfarbe — der weiße Text der Buttons wäre dann
+ * unsichtbar. Die Buttons sind von der currentColor-Regel ausgenommen: Ihr
+ * Text ist weiß, ein weißer Ring auf weißer Seite wäre kein Fokus.
  */
-.odw-catalog.odw-catalog a:focus-visible {
+.odw-catalog.odw-catalog a:not(.odw-entry__action):not(.odw-download-card__download):focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
 }
 
 .odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus,
-.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus-visible {
+.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus-visible,
+.odw-catalog.odw-catalog .odw-download-card .odw-download-card__download:focus,
+.odw-catalog.odw-catalog .odw-download-card .odw-download-card__download:focus-visible {
     background: #1d4ed8;
     color: #fff;
     text-decoration: none;

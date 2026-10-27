@@ -5,11 +5,12 @@
 	"title": "Datenkatalog",
 	"category": "widgets",
 	"icon": "list-view",
-	"description": "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog].",
+	"description": "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog]. Ein Katalog pro Seite.",
 	"keywords": [ "Datenkatalog", "Open Data", "Datensätze", "DCAT" ],
 	"textdomain": "open-data-wizard",
 	"supports": {
 		"html": false,
+		"multiple": false,
 		"align": [ "wide", "full" ],
 		"spacing": {
 			"margin": true

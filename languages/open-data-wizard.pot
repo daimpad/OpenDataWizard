@@ -1624,7 +1624,7 @@ msgstr ""
 msgid "Datensätze pro Seite"
 msgstr ""
 
-msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten."
+msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin."
 msgstr ""
 
 msgid "Diese Seite gibt es nicht."
@@ -1676,4 +1676,10 @@ msgid "Zurück zum Katalog"
 msgstr ""
 
 msgid "Überschrift (optional)"
+msgstr ""
+
+msgid "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog]. Ein Katalog pro Seite."
+msgstr ""
+
+msgid "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset]."
 msgstr ""

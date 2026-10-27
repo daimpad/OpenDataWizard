@@ -1997,8 +1997,8 @@ msgstr "Datasets %1$d–%2$d of %3$d"
 msgid "Datensätze pro Seite"
 msgstr "Datasets per page"
 
-msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten."
-msgstr "Also list the sample dataset created on activation."
+msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin."
+msgstr "Also list the sample dataset created on activation. Once it has been edited, it is listed anyway."
 
 msgid "Diese Seite gibt es nicht."
 msgstr "This page does not exist."
@@ -2050,3 +2050,9 @@ msgstr "Back to the catalogue"
 
 msgid "Überschrift (optional)"
 msgstr "Heading (optional)"
+
+msgid "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog]. Ein Katalog pro Seite."
+msgstr "Lists all published datasets; a click opens the full download card — the alternative to the [odw_catalog] shortcode. One catalogue per page."
+
+msgid "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset]."
+msgstr "Shows a published dataset as a download card — the alternative to the [odw_dataset] shortcode."

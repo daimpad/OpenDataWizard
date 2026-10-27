@@ -17,7 +17,10 @@ Ein Datenkatalog fürs Frontend: alle veröffentlichten Datensätze auf einer Se
   Größe, Lizenz, eingeschränkter Zugang) und einem direkten Link zur Datei bzw. zum
   Datenangebot. Attribute: `per_page` (1–50), `orderby` (`title`/`modified`), `theme`
   (EU-Codes, kommagetrennt), `title`, `excerpt` (Wörter, `0` = aus), `show_demo`. Im Block
-  stehen dieselben Einstellungen in der Seitenleiste.
+  stehen dieselben Einstellungen in der Seitenleiste. Ein Katalog pro Seite — Blättern und
+  Detailansicht gelten seitenweit, der Block lässt sich nur einmal einfügen.
+- Der Beispieldatensatz bleibt im Katalog ausgeblendet, **solange er unverändert ist**. Wer ihn
+  als Vorlage für den ersten echten Datensatz nutzt, findet ihn danach ganz normal in der Liste.
 - **Detailansicht auf derselben Seite.** Der Titel führt auf `?odw_ds=<ID>` und zeigt dort die
   bekannte Download-Card. Der Datensatztyp hat bewusst keine öffentlichen Einzelseiten — so
   bleibt das auch so. „Zurück zum Katalog" führt auf die Listenseite zurück, von der man kam.
@@ -30,24 +33,40 @@ Ein Datenkatalog fürs Frontend: alle veröffentlichten Datensätze auf einer Se
   Abfrage vorlädt, statt die Karte je Eintrag zu rendern: Carbon Fields setzt für jeden
   gelesenen Wert eine eigene SQL-Abfrage ab, eine Karte kostet so 29–32 Abfragen. Eine
   Katalogseite bleibt dadurch bei rund einem halben Dutzend Abfragen, unabhängig von ihrer Länge.
+  Auch ein Verweis auf eine in der Mediathek gelöschte Datei kostet keine Einzelabfrage mehr.
 
 ### 🔒 Security
 - Entwürfe, private, geplante und passwortgeschützte Datensätze erscheinen weder in der Liste
   noch über `?odw_ds=` — eine unbekannte und eine nicht öffentliche ID antworten gleich.
-- Die Kontakt-E-Mail der Download-Card wird per `antispambot()` verschleiert.
+- Die Kontakt-E-Mail der Download-Card wird per `antispambot()` verschleiert (nur reine
+  ASCII-Adressen: Bei einer Umlaut-Domain zerlegte `antispambot()` die Zeichen byteweise, und
+  die Kontaktzeile wäre leer geblieben).
+- Alle Katalog-Links bleiben auf der eigenen Website — auch wenn die aufgerufene Adresse mit
+  `//fremde-domain/` beginnt und der Katalog etwa als Widget auf einer Suchseite steht.
 
 ### 🔧 Changed
 - Die Logik für Lizenz-Label, Datei-Angaben und Download-Ziel steckt jetzt in öffentlichen
   Helfern von `ODW_Shortcode` (`license_label()`, `file_info()`, `download_target()`,
   `format_bytes()`), die Karte und Katalog gemeinsam nutzen. Die Karte selbst gibt Byte für Byte
   dasselbe aus wie zuvor (abgesehen von der verschleierten E-Mail).
+- **`dct:modified` folgt der letzten Bearbeitung.** `_odw_modified` wird beim Speichern aus
+  `post_modified` gebildet statt aus dem heutigen Datum. Beim normalen Speichern ist das
+  dasselbe; ein *geplanter* Datensatz behält aber beim Veröffentlichen durch den Cron sein
+  Bearbeitungsdatum — eine Veröffentlichung ist keine inhaltliche Änderung. Damit stimmen die
+  Sortierung „Zuletzt aktualisierte zuerst" und das angezeigte Datum im Katalog überein.
+- Titel, Beschreibung und Schlagworte der Blöcke „Datenkatalog" und „Datensatz-Karte" werden
+  jetzt übersetzt — WordPress übersetzt `block.json` nur über gettext-Kontexte, die die
+  gebündelte `.mo` nicht kennt; auf englischen Installationen standen sie bisher auf Deutsch.
 - README: „Kein Datenportal" präzisiert — der Katalog ist eine schlichte Liste der eigenen
   Datensätze; Suche, Facetten und das Zusammenführen fremder Kataloge bleiben Sache der Portale.
+- CI: Jeder E2E-Schritt schreibt seinen Playwright-Bericht in einen eigenen Ordner — vorher
+  überschrieb der letzte Lauf den Bericht eines früher fehlgeschlagenen.
 
 ### 🧪 Tests
 - `tests/test-catalog.php`: Attribute, Anfrage-Parameter, Query-Argumente, Trefferzeile,
-  Seitenfenster und Listen-Daten — samt Wächter, der verhindert, dass die Liste ein Feld liest,
-  das nicht als flacher Meta-Wert gespeichert ist.
+  Seitenfenster, Listen-Daten, Basis-Adresse, frühes Einbinden des Stylesheets und
+  Beispieldatensatz — samt Wächter, der verhindert, dass die Liste ein Feld liest, das nicht als
+  flacher Meta-Wert gespeichert ist, oder ein Auswahlfeld anders als Carbon Fields auswertet.
 - `tests/e2e/catalog.spec.js`: Liste, Ausschluss von Entwurf und Passwortschutz, Badges,
   Detailansicht mit Rückweg, Paginierung und eine Seite jenseits des Endes — gegen ein echtes
   WordPress in der CI.

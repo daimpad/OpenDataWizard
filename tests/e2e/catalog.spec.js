@@ -60,10 +60,13 @@ test.describe('Datenkatalog im Frontend', () => {
     await expect(action).toContainText('Zum Datenangebot');
   });
 
-  test('bindet das Stylesheet im Head ein', async ({ page }) => {
+  test('das Stylesheet steht im Head', async ({ page }) => {
     await page.goto(CATALOG);
 
-    // Früh eingebunden, damit die Liste nicht kurz ungestylt erscheint.
+    // Prüft nur das Ergebnis. Im Block-Theme der Testumgebung rendert
+    // WordPress den Inhalt vor wp_head(), das Stylesheet landet dort also
+    // auch ohne ODW_Catalog::maybe_enqueue_assets() im Head. Das frühe
+    // Einbinden selbst sichern die Unit-Tests in tests/test-catalog.php.
     await expect(page.locator('head link#odw-frontend-css')).toHaveCount(1);
   });
 

@@ -15,7 +15,8 @@ if ( ! class_exists( 'WP_Post' ) ) {
 	 *
 	 * ODW_Quality::calculate() und evaluate_metric() sind auf \WP_Post typisiert,
 	 * WP_Mock bringt die Klasse aber nicht mit. Mehr als diese drei Felder liest
-	 * der Qualitätsbericht nicht.
+	 * der Qualitätsbericht nicht; die übrigen Felder brauchen die Katalog-Tests
+	 * (gleiche Felder wie in test-catalog.php, egal welche Datei zuerst lädt).
 	 *
 	 * @package OpenDataWizard
 	 */
@@ -41,6 +42,34 @@ if ( ! class_exists( 'WP_Post' ) ) {
 		 * @var string
 		 */
 		public $post_status = 'draft';
+
+		/**
+		 * Creation date (GMT).
+		 *
+		 * @var string
+		 */
+		public $post_date_gmt = '';
+
+		/**
+		 * Last modification date (GMT).
+		 *
+		 * @var string
+		 */
+		public $post_modified_gmt = '';
+
+		/**
+		 * Last modification date (local time).
+		 *
+		 * @var string
+		 */
+		public $post_modified = '';
+
+		/**
+		 * Post content.
+		 *
+		 * @var string
+		 */
+		public $post_content = '';
 	}
 }
 

@@ -347,4 +347,24 @@ class Test_ODW_Shortcode extends TestCase {
 			ODW_Shortcode::file_info( 7 )
 		);
 	}
+
+	/**
+	 * Kontaktzeile: ASCII-Adressen verschleiert, Adressen mit Umlaut roh —
+	 * antispambot() kodiert byteweise und erzeugte sonst ungültiges UTF-8, das
+	 * esc_html() samt Namen verwürfe.
+	 */
+	public function test_contact_line(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( 'antispambot' )->andReturnUsing(
+			static function ( $email ) {
+				return 'ENC(' . $email . ')';
+			}
+		);
+
+		$this->assertSame( 'Max Muster · ENC(max@example.org)', ODW_Shortcode::contact_line( 'Max Muster', 'max@example.org' ) );
+		$this->assertSame( 'Stadtwerke · kontakt@stadtwerke-münchen.de', ODW_Shortcode::contact_line( 'Stadtwerke', 'kontakt@stadtwerke-münchen.de' ) );
+		$this->assertSame( 'ENC(info@example.org)', ODW_Shortcode::contact_line( '', 'info@example.org' ) );
+		$this->assertSame( 'Nur Name', ODW_Shortcode::contact_line( 'Nur Name', '' ) );
+		$this->assertSame( '', ODW_Shortcode::contact_line( '', '' ) );
+	}
 }

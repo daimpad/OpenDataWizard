@@ -44,6 +44,34 @@ if ( ! class_exists( 'WP_Post' ) ) {
 		 * @var string
 		 */
 		public $post_status = 'draft';
+
+		/**
+		 * Creation date (GMT).
+		 *
+		 * @var string
+		 */
+		public $post_date_gmt = '';
+
+		/**
+		 * Last modification date (GMT).
+		 *
+		 * @var string
+		 */
+		public $post_modified_gmt = '';
+
+		/**
+		 * Last modification date (local time).
+		 *
+		 * @var string
+		 */
+		public $post_modified = '';
+
+		/**
+		 * Post content.
+		 *
+		 * @var string
+		 */
+		public $post_content = '';
 	}
 }
 
@@ -68,6 +96,16 @@ class Test_ODW_Catalog extends TestCase {
 	 */
 	protected function tearDown(): void {
 		\WP_Mock::tearDown();
+	}
+
+	/**
+	 * Prüft die once()/never()-Erwartungen sofort statt erst in tearDown()
+	 * und zählt sie als Zusicherungen.
+	 */
+	private function verify_expectations(): void {
+		$container = \Mockery::getContainer();
+		$container->mockery_verify();
+		$this->addToAssertionCount( $container->mockery_getExpectationCount() );
 	}
 
 	/**
@@ -475,11 +513,17 @@ class Test_ODW_Catalog extends TestCase {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Stellt get_post_meta() mit einer festen Meta-Tabelle bereit.
+	 * Stellt get_post_meta() und metadata_exists() mit einer festen
+	 * Meta-Tabelle bereit.
 	 *
 	 * @param array<string, mixed> $meta Meta-Schlüssel => Wert.
 	 */
 	private function mock_meta( array $meta ): void {
+		\WP_Mock::userFunction( 'metadata_exists' )->andReturnUsing(
+			static function ( $type, $post_id, $key ) use ( $meta ): bool { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+				return array_key_exists( $key, $meta );
+			}
+		);
 		\WP_Mock::userFunction( 'get_post_meta' )->andReturnUsing(
 			static function ( $post_id, $key, $single = false ) use ( $meta ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 				$value = $meta[ $key ] ?? null;
@@ -579,6 +623,288 @@ class Test_ODW_Catalog extends TestCase {
 		);
 	}
 
+	/**
+	 * Auswahlfelder wie Carbon Fields: Ein Wert außerhalb der Optionen wird
+	 * zu '' — die Karte zeigt ihn nicht, also auch die Liste nicht.
+	 */
+	public function test_item_data_ignores_select_values_outside_the_options(): void {
+		$this->load();
+		$this->mock_meta(
+			array(
+				'_odw_format'        => 'csv',
+				'_odw_license'       => 'https://creativecommons.org/licenses/by-nc/4.0/',
+				'_odw_access_rights' => 'RESTRICTED',
+				'_odw_access_url'    => 'https://example.org/portal',
+				'_odw_modified'      => '2026-10-01',
+			)
+		);
+		\WP_Mock::userFunction( 'get_the_title' )->andReturn( 'Import' );
+		\WP_Mock::userFunction( 'get_option' )->andReturn( 'd.m.Y' );
+		\WP_Mock::userFunction( 'mysql2date' )->andReturn( '01.10.2026' );
+
+		$item = ODW_Catalog::item_data( $this->post( 23 ), 0 );
+
+		$this->assertSame( '', $item['format'], 'Kleingeschrieben ist keine Option — Carbon Fields liefert der Karte "".' );
+		$this->assertSame( '', $item['license'] );
+		$this->assertSame( '', $item['access'] );
+	}
+
+	/**
+	 * Fehlt die Meta-Zeile ganz, gilt wie in Carbon Fields der Standardwert:
+	 * die Standard-Lizenz der Einstellungen, beim Zugriffsrecht „öffentlich".
+	 */
+	public function test_item_data_uses_field_defaults_for_missing_select_meta(): void {
+		$this->load();
+		require_once ODW_PLUGIN_DIR . 'includes/class-settings.php';
+		$this->mock_meta(
+			array(
+				'_odw_access_url' => 'https://example.org/portal',
+				'_odw_modified'   => '2026-10-01',
+			)
+		);
+		\WP_Mock::userFunction( 'get_the_title' )->andReturn( 'Ohne Lizenzangabe' );
+		\WP_Mock::userFunction( 'get_option' )->andReturnUsing(
+			static function ( $name, $fallback = false ) {
+				if ( 'date_format' === $name ) {
+					return 'd.m.Y';
+				}
+				if ( 'odw_settings' === $name ) {
+					return array( 'default_license' => 'https://creativecommons.org/licenses/by/4.0/' );
+				}
+				return $fallback;
+			}
+		);
+		\WP_Mock::userFunction( 'mysql2date' )->andReturn( '01.10.2026' );
+
+		$item = ODW_Catalog::item_data( $this->post( 24 ), 0 );
+
+		$this->assertSame( 'CC BY 4.0 — Namensnennung', $item['license'] );
+		$this->assertSame( '', $item['access'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// Position, Adresse, Beispieldatensatz, Stylesheet
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Erster Eintrag einer Seite nach den Regeln von WP_Query.
+	 *
+	 * @dataProvider provide_positions
+	 *
+	 * @param array<string, mixed> $vars     Abfrage-Variablen.
+	 * @param int                  $expected Erwartete Position.
+	 */
+	public function test_first_position( array $vars, int $expected ): void {
+		$this->load();
+
+		$this->assertSame( $expected, ODW_Catalog::first_position( $vars ) );
+	}
+
+	/**
+	 * Abfrage-Variablen und die erwartete erste Position.
+	 *
+	 * @return array<string, array{0: array<string, mixed>, 1: int}>
+	 */
+	public function provide_positions(): array {
+		return array(
+			'Seite 1'               => array(
+				array(
+					'posts_per_page' => 20,
+					'paged'          => 1,
+					'offset'         => '',
+				),
+				1,
+			),
+			'Seite 3 zu je 20'      => array(
+				array(
+					'posts_per_page' => 20,
+					'paged'          => 3,
+					'offset'         => '',
+				),
+				41,
+			),
+			'Filter: 10 pro Seite'  => array(
+				array(
+					'posts_per_page' => 10,
+					'paged'          => 2,
+				),
+				11,
+			),
+			'paged 0 gilt als 1'    => array(
+				array(
+					'posts_per_page' => 20,
+					'paged'          => 0,
+				),
+				1,
+			),
+			'offset vor paged'      => array(
+				array(
+					'posts_per_page' => 20,
+					'paged'          => 3,
+					'offset'         => 5,
+				),
+				6,
+			),
+			'alles auf einer Seite' => array(
+				array(
+					'posts_per_page' => -1,
+					'paged'          => 2,
+					'nopaging'       => true,
+				),
+				1,
+			),
+		);
+	}
+
+	/**
+	 * Die Basis-Adresse bleibt auf der eigenen Website — auch bei einem
+	 * REQUEST_URI, der wie eine schemarelative fremde Adresse aussieht.
+	 *
+	 * @dataProvider provide_request_uris
+	 *
+	 * @param string $uri      REQUEST_URI.
+	 * @param string $home     home_url().
+	 * @param string $expected Erwartete Basis.
+	 */
+	public function test_same_site_url( string $uri, string $home, string $expected ): void {
+		$this->load();
+		\WP_Mock::userFunction( 'wp_parse_url' )->andReturnUsing(
+			static function ( $url ) {
+				return parse_url( $url ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url -- Testersatz für wp_parse_url(), kein WordPress geladen.
+			}
+		);
+
+		$this->assertSame( $expected, ODW_Catalog::same_site_url( $uri, $home ) );
+	}
+
+	/**
+	 * REQUEST_URI, home_url() und die erwartete Basis.
+	 *
+	 * @return array<string, array{0: string, 1: string, 2: string}>
+	 */
+	public function provide_request_uris(): array {
+		return array(
+			'normaler Pfad'          => array( '/daten/?s=x', 'https://example.org', 'https://example.org/daten/?s=x' ),
+			'doppelter Schrägstrich' => array( '//evil.example/?s=x', 'https://example.org', 'https://example.org/evil.example/?s=x' ),
+			'Backslash'              => array( '/\\evil.example/', 'https://example.org', 'https://example.org/evil.example/' ),
+			'Unterverzeichnis'       => array( '/blog/daten/', 'https://example.org/blog', 'https://example.org/blog/daten/' ),
+			'Port'                   => array( '/x/', 'http://localhost:8889', 'http://localhost:8889/x/' ),
+			'leer'                   => array( '', 'https://example.org', 'https://example.org/' ),
+		);
+	}
+
+	/**
+	 * Der Beispieldatensatz gilt nur als solcher, solange er nie gespeichert
+	 * wurde — ein zur Vorlage umgearbeitetes Beispiel erscheint im Katalog.
+	 */
+	public function test_demo_is_untouched_only_until_first_save(): void {
+		$this->load();
+
+		$post                    = $this->post( 7 );
+		$post->post_date_gmt     = '2026-09-01 10:00:00';
+		$post->post_modified_gmt = '2026-09-01 10:00:00';
+		$this->assertTrue( ODW_Catalog::is_untouched( $post ) );
+
+		$post->post_modified_gmt = '2026-10-02 08:15:00';
+		$this->assertFalse( ODW_Catalog::is_untouched( $post ) );
+	}
+
+	/**
+	 * Ein Beitrag mit dem Shortcode bindet das Stylesheet früh ein.
+	 */
+	public function test_enqueues_style_for_shortcode_in_content(): void {
+		$this->load();
+		$post               = $this->post( 5 );
+		$post->post_content = 'Vorher [odw_catalog per_page="5"] nachher';
+
+		\WP_Mock::userFunction( 'is_singular' )->andReturn( true );
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $post );
+		\WP_Mock::userFunction( 'has_block' )->andReturn( false );
+		\WP_Mock::userFunction( 'has_shortcode' )->with( $post->post_content, 'odw_catalog' )->andReturn( true );
+		\WP_Mock::userFunction( 'wp_enqueue_style' )->once()->with( 'odw-frontend' );
+
+		ODW_Catalog::maybe_enqueue_assets();
+		$this->verify_expectations();
+	}
+
+	/**
+	 * Ein Beitrag mit dem Block bindet das Stylesheet früh ein.
+	 */
+	public function test_enqueues_style_for_block_in_content(): void {
+		$this->load();
+		$post               = $this->post( 6 );
+		$post->post_content = '<!-- wp:odw/catalog /-->';
+
+		\WP_Mock::userFunction( 'is_singular' )->andReturn( true );
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $post );
+		\WP_Mock::userFunction( 'has_block' )->with( 'odw/catalog', $post )->andReturn( true );
+		\WP_Mock::userFunction( 'has_shortcode' )->andReturn( false );
+		\WP_Mock::userFunction( 'wp_enqueue_style' )->once()->with( 'odw-frontend' );
+
+		ODW_Catalog::maybe_enqueue_assets();
+		$this->verify_expectations();
+	}
+
+	/**
+	 * Ohne Katalog im Inhalt — und außerhalb von Einzelseiten — kein Stylesheet.
+	 */
+	public function test_does_not_enqueue_style_without_catalog(): void {
+		$this->load();
+		$post               = $this->post( 8 );
+		$post->post_content = '[odw_dataset id="3"]';
+
+		\WP_Mock::userFunction( 'is_singular' )->andReturn( true, false );
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $post );
+		\WP_Mock::userFunction( 'has_block' )->andReturn( false );
+		\WP_Mock::userFunction( 'has_shortcode' )->andReturn( false );
+		\WP_Mock::userFunction( 'wp_enqueue_style' )->never();
+
+		ODW_Catalog::maybe_enqueue_assets();
+		ODW_Catalog::maybe_enqueue_assets();
+		$this->verify_expectations();
+	}
+
+	// -------------------------------------------------------------------------
+	// Änderungsdatum: Sortierung und Anzeige
+	// -------------------------------------------------------------------------
+
+	/**
+	 * _odw_modified folgt post_modified, nicht dem Tag des Speicherns: Ein
+	 * geplanter Datensatz, den der Cron veröffentlicht, behält sein Datum —
+	 * sonst widersprächen sich im Katalog Sortierung (post_modified) und
+	 * angezeigtes Datum.
+	 */
+	public function test_modified_date_follows_post_modified(): void {
+		$this->load();
+		$post                = $this->post( 9 );
+		$post->post_status   = 'publish';
+		$post->post_modified = '2026-10-01 18:30:00';
+
+		\WP_Mock::userFunction( 'remove_action' )->andReturn( true );
+		\WP_Mock::userFunction( 'current_time' )->andReturn( '2026-10-20' );
+		\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 9, '_odw_modified', '2026-10-01' );
+
+		ODW_Fields::set_modified_date( 9, $post );
+		$this->verify_expectations();
+	}
+
+	/**
+	 * Ohne brauchbares post_modified bleibt es beim heutigen Datum.
+	 */
+	public function test_modified_date_falls_back_to_today(): void {
+		$this->load();
+		$post                = $this->post( 10 );
+		$post->post_status   = 'draft';
+		$post->post_modified = '0000-00-00 00:00:00';
+
+		\WP_Mock::userFunction( 'remove_action' )->andReturn( true );
+		\WP_Mock::userFunction( 'current_time' )->with( 'Y-m-d' )->andReturn( '2026-10-20' );
+		\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 10, '_odw_modified', '2026-10-20' );
+
+		ODW_Fields::set_modified_date( 10, $post );
+		$this->verify_expectations();
+	}
+
 	// -------------------------------------------------------------------------
 	// Wächter: Die Liste liest nur flache Meta-Schlüssel
 	// -------------------------------------------------------------------------
@@ -610,16 +936,25 @@ class Test_ODW_Catalog extends TestCase {
 		$internal = array( '_odw_modified', '_odw_file_id', '_odw_file_format', '_odw_file_size', '_odw_theme_index' );
 
 		$problems = array();
+		$raw      = array();
 		foreach ( $keys as $key ) {
 			if ( in_array( $key, $internal, true ) ) {
 				continue;
 			}
 			$field = substr( $key, 1 );
-			if ( ! preg_match( "/Field::make\\(\\s*'(?:text|textarea|select)',\\s*'" . preg_quote( $field, '/' ) . "'/", $fields ) ) {
+			if ( ! preg_match( "/Field::make\\(\\s*'(text|textarea|select)',\\s*'" . preg_quote( $field, '/' ) . "'/", $fields, $type ) ) {
 				$problems[] = $key;
+				continue;
+			}
+			// Auswahlfelder nie roh lesen: Carbon Fields ersetzt fehlende und
+			// ungültige Werte (Standardwert, erste Option) — die Liste muss das
+			// über select_meta() nachbilden, sonst weicht sie von der Karte ab.
+			if ( 'select' === $type[1] && ! preg_match( "/select_meta\\(\\s*\\$\\w+,\\s*'" . preg_quote( $key, '/' ) . "'/", $catalog ) ) {
+				$raw[] = $key;
 			}
 		}
 
 		$this->assertSame( array(), $problems, 'Kein flaches Formularfeld: ' . implode( ', ', $problems ) );
+		$this->assertSame( array(), $raw, 'Auswahlfeld ohne select_meta(): ' . implode( ', ', $raw ) );
 	}
 }

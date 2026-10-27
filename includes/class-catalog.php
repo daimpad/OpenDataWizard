@@ -64,6 +64,14 @@ class ODW_Catalog {
 	private const ACCESS_PUBLIC = 'http://publications.europa.eu/resource/authority/access-right/PUBLIC';
 
 	/**
+	 * Anhang-IDs, die prime_attachments() nicht gefunden hat (in der Mediathek
+	 * gelöscht, der Verweis _odw_file_id steht noch am Datensatz).
+	 *
+	 * @var array<int, true>
+	 */
+	private static $missing_files = array();
+
+	/**
 	 * Registers the shortcode, the block and the asset hooks.
 	 */
 	public static function init(): void {
@@ -119,9 +127,18 @@ class ODW_Catalog {
 			true
 		);
 
+		// Titel, Beschreibung und Schlagworte als Argumente: Sie überschreiben
+		// block.json (register_block_type_from_metadata() führt beides per
+		// array_merge zusammen). WordPress übersetzt block.json nur über
+		// gettext-Kontexte („block title" …), die die gebündelte .mo nicht kennt.
 		register_block_type(
 			ODW_PLUGIN_DIR . 'blocks/catalog',
-			array( 'render_callback' => array( self::class, 'render_block' ) )
+			array(
+				'title'           => __( 'Datenkatalog', 'open-data-wizard' ),
+				'description'     => __( 'Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog]. Ein Katalog pro Seite.', 'open-data-wizard' ),
+				'keywords'        => array( __( 'Datenkatalog', 'open-data-wizard' ), 'Open Data', __( 'Datensätze', 'open-data-wizard' ), 'DCAT' ),
+				'render_callback' => array( self::class, 'render_block' ),
+			)
 		);
 	}
 
@@ -168,7 +185,7 @@ class ODW_Catalog {
 					'themes'       => __( 'Nur diese Themen zeigen', 'open-data-wizard' ),
 					'themesHelp'   => __( 'Keine Auswahl zeigt alle Themen.', 'open-data-wizard' ),
 					'showDemo'     => __( 'Beispieldatensatz anzeigen', 'open-data-wizard' ),
-					'showDemoHelp' => __( 'Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten.', 'open-data-wizard' ),
+					'showDemoHelp' => __( 'Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin.', 'open-data-wizard' ),
 					'rendered'     => __( 'Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben.', 'open-data-wizard' ),
 				),
 			)
@@ -419,10 +436,18 @@ class ODW_Catalog {
 		}
 
 		// Datei aus der Mediathek, ohne filesize(): N Dateisystemzugriffe je
-		// Listenseite lohnen nicht, die Detailansicht ermittelt die Größe.
-		$file = ODW_Shortcode::file_info( $id, false );
+		// Listenseite lohnen nicht, die Detailansicht ermittelt die Größe. Für
+		// einen gelöschten Anhang liefert file_info() ohnehin leere Werte —
+		// nur fragte wp_get_attachment_url() dafür jedes Mal einzeln nach.
+		$file = isset( self::$missing_files[ (int) get_post_meta( $id, '_odw_file_id', true ) ] )
+			? array(
+				'url'    => '',
+				'format' => '',
+				'size'   => '',
+			)
+			: ODW_Shortcode::file_info( $id, false );
 
-		$format = self::meta( $id, '_odw_format' );
+		$format = self::select_meta( $id, '_odw_format', 'format' );
 		if ( '' === $format ) {
 			$format = $file['format'];
 		}
@@ -435,7 +460,7 @@ class ODW_Catalog {
 			}
 		}
 
-		$license = self::meta( $id, '_odw_license' );
+		$license = self::select_meta( $id, '_odw_license', 'license' );
 		$custom  = 'sonstige' === $license ? self::meta( $id, '_odw_license_custom' ) : '';
 
 		$excerpt = '';
@@ -452,7 +477,7 @@ class ODW_Catalog {
 			'format'   => $format,
 			'size'     => $size,
 			'license'  => self::license_label( $license, $custom ),
-			'access'   => self::access_label( self::meta( $id, '_odw_access_rights' ) ),
+			'access'   => self::access_label( self::select_meta( $id, '_odw_access_rights', 'access_rights' ) ),
 			'target'   => ODW_Shortcode::download_target(
 				self::meta( $id, '_odw_download_url' ),
 				$file['url'],
@@ -470,6 +495,58 @@ class ODW_Catalog {
 	 */
 	private static function meta( int $post_id, string $key ): string {
 		return trim( (string) get_post_meta( $post_id, $key, true ) );
+	}
+
+	/**
+	 * Wert eines Auswahlfelds — so, wie Carbon Fields ihn der Karte liefert.
+	 *
+	 * Zwei Regeln von Carbon Fields gelten auch hier:
+	 * - Fehlt die Meta-Zeile ganz, nimmt es den Standardwert des Felds
+	 *   (Field::get_value_from_datastore()): bei der Lizenz die Standard-Lizenz
+	 *   aus den Einstellungen, beim Zugriffsrecht „öffentlich".
+	 * - Ist der Wert keine der Optionen (etwa „csv" klein aus einem Import),
+	 *   nimmt es die erste Option, bei allen drei Feldern also ''
+	 *   (Select_Field::get_formatted_value(), strikter Vergleich ohne Trimmen).
+	 * Sonst zeigte die Liste ein Badge, das Karte und JSON-LD nicht haben —
+	 * oder umgekehrt.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Meta-Schlüssel mit führendem Unterstrich.
+	 * @param string $field   format | license | access_rights.
+	 * @return string
+	 */
+	private static function select_meta( int $post_id, string $key, string $field ): string {
+		if ( ! class_exists( 'ODW_Fields' ) ) {
+			return self::meta( $post_id, $key );
+		}
+
+		static $valid = array();
+		if ( ! isset( $valid[ $field ] ) ) {
+			switch ( $field ) {
+				case 'format':
+					$options = ODW_Fields::get_format_options();
+					break;
+				case 'license':
+					$options = ODW_Fields::get_license_options();
+					break;
+				default:
+					$options = ODW_Fields::get_access_rights_options();
+			}
+			$valid[ $field ] = array_map( 'strval', array_keys( $options ) );
+		}
+
+		// metadata_exists() liest denselben vorgeladenen Meta-Cache — keine Abfrage.
+		if ( metadata_exists( 'post', $post_id, $key ) ) {
+			$raw = (string) get_post_meta( $post_id, $key, true );
+		} elseif ( 'license' === $field ) {
+			$raw = class_exists( 'ODW_Settings' ) ? (string) ODW_Settings::get( 'default_license' ) : '';
+		} elseif ( 'access_rights' === $field ) {
+			$raw = self::ACCESS_PUBLIC;
+		} else {
+			$raw = '';
+		}
+
+		return in_array( $raw, $valid[ $field ], true ) ? trim( $raw ) : '';
 	}
 
 	/**
@@ -653,11 +730,16 @@ class ODW_Catalog {
 		$total = (int) $query->found_posts;
 		$pages = (int) $query->max_num_pages;
 
+		// Seite und Position aus der Abfrage, wie sie tatsächlich lief — nicht
+		// aus Attribut und Adresse: odw_catalog_query_args oder pre_get_posts
+		// dürfen posts_per_page und paged ändern.
+		$page = max( 1, absint( $query->get( 'paged' ) ) );
+
 		// Eine leere Seite hinter Seite 1 liegt jenseits des Endes. found_posts
 		// taugt hier nicht zur Unterscheidung: WP_Query zählt die Treffer nur,
 		// wenn die angefragte Seite welche enthält (set_found_posts() bricht bei
 		// leerem Ergebnis ab) — es bleibt dann immer 0.
-		if ( empty( $posts ) && $request['page'] > 1 ) {
+		if ( empty( $posts ) && $page > 1 ) {
 			$html .= '<p class="odw-catalog__empty">' . esc_html__( 'Diese Seite gibt es nicht.', 'open-data-wizard' ) . ' '
 				. '<a href="' . esc_url( self::page_url( $base, 1, 0, self::ANCHOR ) ) . '">' . esc_html__( 'Zur ersten Seite', 'open-data-wizard' ) . '</a></p>';
 		} elseif ( empty( $posts ) ) {
@@ -665,16 +747,16 @@ class ODW_Catalog {
 		} else {
 			self::prime_attachments( $posts );
 
-			$from = ( $request['page'] - 1 ) * (int) $config['per_page'] + 1;
+			$from = self::first_position( (array) $query->query_vars );
 			$to   = $from + count( $posts ) - 1;
 
 			$html .= '<p class="odw-catalog__count">' . esc_html( self::count_label( $from, $to, $total ) ) . '</p>';
 			$html .= '<ul class="odw-catalog__list">';
 			foreach ( $posts as $post ) {
-				$html .= self::render_entry( self::item_data( $post, (int) $config['excerpt'] ), $entry_tag, $base, $request['page'] );
+				$html .= self::render_entry( self::item_data( $post, (int) $config['excerpt'] ), $entry_tag, $base, $page );
 			}
 			$html .= '</ul>';
-			$html .= self::pagination( $base, $request['page'], $pages );
+			$html .= self::pagination( $base, $page, $pages );
 		}
 
 		return array(
@@ -827,6 +909,28 @@ class ODW_Catalog {
 	}
 
 	/**
+	 * Position des ersten Eintrags einer Seite (1-basiert), aus den
+	 * Abfrage-Variablen — nach denselben Regeln wie WP_Query::get_posts():
+	 * nopaging bzw. posts_per_page -1 zeigt alles ab 1, ein offset hat
+	 * Vorrang vor paged.
+	 *
+	 * @param array<string, mixed> $vars WP_Query::$query_vars nach der Abfrage.
+	 * @return int
+	 */
+	public static function first_position( array $vars ): int {
+		$per_page = (int) ( $vars['posts_per_page'] ?? 0 );
+		if ( ! empty( $vars['nopaging'] ) || $per_page < 1 ) {
+			return 1;
+		}
+
+		if ( isset( $vars['offset'] ) && is_numeric( $vars['offset'] ) ) {
+			return absint( $vars['offset'] ) + 1;
+		}
+
+		return ( max( 1, absint( $vars['paged'] ?? 1 ) ) - 1 ) * $per_page + 1;
+	}
+
+	/**
 	 * Eigene Seitennavigation.
 	 *
 	 * Nicht paginate_links(): Das übernimmt alle Parameter der aktuellen Anfrage
@@ -927,21 +1031,68 @@ class ODW_Catalog {
 	/**
 	 * Adresse der Seite, auf der der Katalog steht.
 	 *
-	 * Auf einer Einzelseite deren Permalink — sauber, ohne fremde Parameter.
-	 * Überall sonst (Widgets in Archiven, Blog-Startseite) die aktuelle Adresse
-	 * ohne die eigenen Parameter, damit Links nie auf eine fremde Seite führen.
+	 * - Einzelseite: deren Permalink — sauber, ohne fremde Parameter. Nicht auf
+	 *   einer Unterseite (<!--nextpage-->) und nicht in der Vorschau: Der
+	 *   Permalink führte dort auf Seite 1 bzw. auf die veröffentlichte Fassung.
+	 * - Feed und REST-Antwort: der Permalink des Beitrags, in dessen Inhalt der
+	 *   Katalog steht — die aufgerufene Adresse ist dort der Feed bzw. der
+	 *   Endpunkt. Feed-Schleife und REST-Controller setzen den globalen Beitrag.
+	 * - Sonst (Widgets in Archiven, Blog-Startseite, Unterseite, Vorschau): die
+	 *   aufgerufene Adresse ohne die eigenen Parameter, an die eigene Website
+	 *   gebunden (same_site_url()).
 	 *
 	 * @return string
 	 */
 	private static function base_url(): string {
-		if ( is_singular() ) {
+		$subpage = max( (int) get_query_var( 'page' ), (int) get_query_var( 'paged' ) ) > 1;
+
+		if ( is_singular() && ! $subpage && ! is_preview() ) {
 			$permalink = get_permalink( get_queried_object_id() );
 			if ( is_string( $permalink ) && '' !== $permalink ) {
 				return $permalink;
 			}
 		}
 
-		return (string) remove_query_arg( array( self::PARAM_PAGE, self::PARAM_DATASET ) );
+		if ( is_feed() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+			$permalink = get_permalink();
+			if ( is_string( $permalink ) && '' !== $permalink ) {
+				return $permalink;
+			}
+		}
+
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+		return (string) remove_query_arg(
+			array( self::PARAM_PAGE, self::PARAM_DATASET ),
+			self::same_site_url( $request_uri, home_url() )
+		);
+	}
+
+	/**
+	 * Bindet die aufgerufene Adresse (REQUEST_URI) an die eigene Website.
+	 *
+	 * REQUEST_URI kommt vom Browser. Ein Pfad wie //evil.example/ ergäbe
+	 * unverändert schemarelative Links auf eine fremde Domain — und
+	 * redirect_canonical() räumt ihn etwa auf Suchseiten nicht auf. Deshalb:
+	 * führende Schrägstriche und Backslashes weg, Schema und Host der eigenen
+	 * Website davor. REQUEST_URI enthält bereits ein etwaiges Unterverzeichnis
+	 * der Installation, nur der Ursprung kommt aus home_url().
+	 *
+	 * @param string $request_uri Pfad samt Query, wie im REQUEST_URI.
+	 * @param string $home        home_url().
+	 * @return string
+	 */
+	public static function same_site_url( string $request_uri, string $home ): string {
+		$path  = '/' . ltrim( $request_uri, '/\\' );
+		$parts = wp_parse_url( $home );
+
+		if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
+			return $path;
+		}
+
+		return ( $parts['scheme'] ?? 'https' ) . '://' . $parts['host']
+			. ( isset( $parts['port'] ) ? ':' . $parts['port'] : '' )
+			. $path;
 	}
 
 	/**
@@ -961,18 +1112,59 @@ class ODW_Catalog {
 			}
 		}
 
-		if ( ! empty( $ids ) && function_exists( '_prime_post_caches' ) ) {
-			_prime_post_caches( array_values( array_unique( $ids ) ), false, true );
+		if ( empty( $ids ) || ! function_exists( '_prime_post_caches' ) ) {
+			return;
+		}
+
+		$ids = array_values( array_unique( $ids ) );
+		_prime_post_caches( $ids, false, true );
+
+		// Was die Vorab-Abfrage nicht findet, merkt sich WordPress nicht:
+		// wp_get_attachment_url() fragte für jeden verwaisten Verweis erneut
+		// einzeln — bis zu per_page Abfragen pro Seitenaufruf.
+		if ( function_exists( 'wp_cache_get_multiple' ) ) {
+			foreach ( wp_cache_get_multiple( $ids, 'posts' ) as $file_id => $cached ) {
+				if ( false === $cached ) {
+					self::$missing_files[ (int) $file_id ] = true;
+				}
+			}
 		}
 	}
 
 	/**
-	 * ID des Beispieldatensatzes oder 0.
+	 * ID des Beispieldatensatzes, solange er unverändert ist — sonst 0.
+	 *
+	 * Die Willkommensseite lädt ausdrücklich ein, das Beispiel als Vorlage zu
+	 * nutzen. Wer daraus den ersten echten Datensatz macht, darf ihn nicht
+	 * kommentarlos im Katalog vermissen. Die Option odw_demo_post_id bleibt
+	 * dabei stehen: Sonst legte maybe_create_demo() beim nächsten Aktivieren
+	 * ein neues Beispiel an.
 	 *
 	 * @return int
 	 */
 	private static function demo_id(): int {
-		return class_exists( 'ODW_Setup' ) ? ODW_Setup::get_demo_post_id() : 0;
+		$id = class_exists( 'ODW_Setup' ) ? ODW_Setup::get_demo_post_id() : 0;
+		if ( $id <= 0 ) {
+			return 0;
+		}
+
+		$post = get_post( $id );
+
+		return $post instanceof WP_Post && self::is_untouched( $post ) ? $id : 0;
+	}
+
+	/**
+	 * Wurde der Beitrag seit dem Anlegen nie gespeichert?
+	 *
+	 * Beim Anlegen setzt wp_insert_post() post_modified gleich post_date;
+	 * jedes spätere Speichern (wp_update_post, Schnellbearbeitung) hebt die
+	 * Gleichheit auf. create_demo_dataset() schreibt danach nur noch Meta.
+	 *
+	 * @param WP_Post $post Beitrag.
+	 * @return bool
+	 */
+	public static function is_untouched( WP_Post $post ): bool {
+		return (string) $post->post_modified_gmt === (string) $post->post_date_gmt;
 	}
 
 	/**

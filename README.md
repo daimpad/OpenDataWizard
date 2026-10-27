@@ -231,13 +231,16 @@ Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_
 | `theme` | — | Nur bestimmte Themen, kommagetrennt als EU-Code (`EDUC,HEAL`) |
 | `title` | — | Überschrift über der Liste |
 | `excerpt` | `30` | Wörter im Auszug; `0` blendet ihn aus (max. 100) |
-| `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt |
+| `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt — solange er unverändert ist; einmal bearbeitet, erscheint er wie jeder andere Datensatz |
 
 ```
 [odw_catalog per_page="10" orderby="modified" theme="EDUC" title="Unsere Daten"]
 ```
 
 Im Block stehen dieselben Einstellungen in der Seitenleiste; Themen werden dort angehakt.
+**Ein Katalog pro Seite:** Blättern (`?odw_page`) und Detailansicht (`?odw_ds`) gelten für die ganze
+Seite, der Block lässt sich deshalb nur einmal einfügen. Für nach Thema getrennte Kataloge je eine
+eigene Seite anlegen.
 Entwürfe, private und passwortgeschützte Datensätze erscheinen weder in der Liste noch in der
 Detailansicht. Die Liste kommt unabhängig von der Katalogsgröße mit rund einem halben Dutzend
 Datenbankabfragen pro Seite aus. Eine Volltextsuche oder Filter zum Anklicken gibt es bewusst

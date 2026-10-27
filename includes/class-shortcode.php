@@ -309,21 +309,37 @@ class ODW_Shortcode {
 		$add( __( 'Urheber', 'open-data-wizard' ), self::meta( $post_id, 'odw_originator_name' ) );
 		$add( __( 'Pflegende Stelle', 'open-data-wizard' ), self::meta( $post_id, 'odw_maintainer_name' ) );
 
-		// Die E-Mail-Adresse als HTML-Entitäten: Im Browser sieht sie gleich aus,
-		// einfache Adress-Sammler lesen sie aber nicht mehr mit. Seit es den
-		// Katalog gibt, hat jeder Datensatz eine verlinkte, auffindbare Ansicht.
-		// esc_html() kodiert die Entitäten später nicht doppelt.
-		$email   = self::meta( $post_id, 'odw_contact_email' );
-		$contact = array_filter(
-			array(
-				self::meta( $post_id, 'odw_contact_name' ),
-				'' !== $email && function_exists( 'antispambot' ) ? antispambot( $email ) : $email,
-			)
+		$add(
+			__( 'Kontakt', 'open-data-wizard' ),
+			self::contact_line( self::meta( $post_id, 'odw_contact_name' ), self::meta( $post_id, 'odw_contact_email' ) )
 		);
-		$add( __( 'Kontakt', 'open-data-wizard' ), implode( ' · ', $contact ) );
 		$add( __( 'Kontakt-Website', 'open-data-wizard' ), self::meta( $post_id, 'odw_contact_url' ), true );
 
 		return $rows;
+	}
+
+	/**
+	 * Kontaktzeile der Karte: „Name · E-Mail".
+	 *
+	 * Die E-Mail-Adresse als HTML-Entitäten: Im Browser sieht sie gleich aus,
+	 * einfache Adress-Sammler lesen sie aber nicht mehr mit. Seit es den
+	 * Katalog gibt, hat jeder Datensatz eine verlinkte, auffindbare Ansicht.
+	 * esc_html() kodiert die Entitäten später nicht doppelt.
+	 *
+	 * Nur reine ASCII-Adressen: antispambot() kodiert Byte für Byte und
+	 * zerschnitte ein Umlaut-Zeichen (etwa einer IDN-Domain „münchen.de") in
+	 * ungültiges UTF-8 — esc_html() verwürfe dann die ganze Zeile samt Namen.
+	 *
+	 * @param string $name  Kontaktname.
+	 * @param string $email E-Mail-Adresse.
+	 * @return string
+	 */
+	public static function contact_line( string $name, string $email ): string {
+		if ( '' !== $email && function_exists( 'antispambot' ) && ! preg_match( '/[\x80-\xFF]/', $email ) ) {
+			$email = antispambot( $email );
+		}
+
+		return implode( ' · ', array_filter( array( $name, $email ) ) );
 	}
 
 	/**

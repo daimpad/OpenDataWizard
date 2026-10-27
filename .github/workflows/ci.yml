@@ -193,14 +193,22 @@ jobs:
           echo
           test "$STATUS" = "200"
 
-      # Zwei Schritte statt einem, und der zweite läuft auch nach einem
-      # Fehlschlag des ersten: Sonst steht die Ausgabe des einen Laufs so weit
+      # Getrennte Schritte statt einem, und die späteren laufen auch nach einem
+      # Fehlschlag der früheren: Sonst steht die Ausgabe des einen Laufs so weit
       # oben im Log, dass sie beim Nachlesen nicht mehr auffindbar ist.
+      # Jeder Schritt schreibt seinen HTML-Bericht in einen eigenen Ordner: Der
+      # Reporter leert seinen Ordner zu Beginn, ein gemeinsamer Ordner enthielte
+      # am Ende nur den letzten Lauf — der Fehlschlag eines früheren fehlte im
+      # hochgeladenen Bericht.
       - name: End-to-end tests — Harvest-Endpunkte
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/api
         run: npx playwright test --project=chromium tests/e2e/api-endpoints.spec.js
 
       - name: End-to-end tests — Backend
         if: always()
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/admin
         run: npx playwright test --project=chromium tests/e2e/admin-workflow.spec.js
 
       # Eine neue Spec-Datei läuft hier NICHT automatisch mit — die Schritte
@@ -208,6 +216,8 @@ jobs:
       # Frontend-Katalog in der CI ungeprüft.
       - name: End-to-end tests — Frontend-Katalog
         if: always()
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/catalog
         run: npx playwright test --project=chromium tests/e2e/catalog.spec.js
 
       # WP_DEBUG_LOG schreibt PHP-Notices und -Fatals nach wp-content/debug.log.
