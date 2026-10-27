@@ -239,8 +239,9 @@ Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_
 
 Im Block stehen dieselben Einstellungen in der Seitenleiste; Themen werden dort angehakt.
 **Ein Katalog pro Seite:** Blättern (`?odw_page`) und Detailansicht (`?odw_ds`) gelten für die ganze
-Seite, der Block lässt sich deshalb nur einmal einfügen. Für nach Thema getrennte Kataloge je eine
-eigene Seite anlegen.
+Seite. Im Inhalt lässt sich der Block deshalb nur einmal einfügen; auch zusätzlich als Widget, in
+einer Seitenleiste oder im Template gehört kein zweiter Katalog auf dieselbe Seite — dort würde ein
+Klick beide umschalten. Für nach Thema getrennte Kataloge je eine eigene Seite anlegen.
 Entwürfe, private und passwortgeschützte Datensätze erscheinen weder in der Liste noch in der
 Detailansicht. Die Liste kommt unabhängig von der Katalogsgröße mit rund einem halben Dutzend
 Datenbankabfragen pro Seite aus. Eine Volltextsuche oder Filter zum Anklicken gibt es bewusst

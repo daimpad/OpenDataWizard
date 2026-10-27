@@ -1038,8 +1038,7 @@ class ODW_Catalog {
 	 *   Katalog steht — die aufgerufene Adresse ist dort der Feed bzw. der
 	 *   Endpunkt. Feed-Schleife und REST-Controller setzen den globalen Beitrag.
 	 * - Sonst (Widgets in Archiven, Blog-Startseite, Unterseite, Vorschau): die
-	 *   aufgerufene Adresse ohne die eigenen Parameter, an die eigene Website
-	 *   gebunden (same_site_url()).
+	 *   aufgerufene Adresse ohne die eigenen Parameter (request_base()).
 	 *
 	 * @return string
 	 */
@@ -1060,39 +1059,37 @@ class ODW_Catalog {
 			}
 		}
 
-		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		// Gesäubert in request_base(): erst nach remove_query_arg(), sonst
+		// strichen esc_url_raw() Zeichen wie ^ { } aus fremden Parametern.
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		return (string) remove_query_arg(
-			array( self::PARAM_PAGE, self::PARAM_DATASET ),
-			self::same_site_url( $request_uri, home_url() )
-		);
+		return self::request_base( (string) $request_uri );
 	}
 
 	/**
-	 * Bindet die aufgerufene Adresse (REQUEST_URI) an die eigene Website.
+	 * Basis aus der aufgerufenen Adresse (REQUEST_URI): ohne die eigenen
+	 * Parameter, wurzelrelativ, garantiert auf derselben Website.
 	 *
-	 * REQUEST_URI kommt vom Browser. Ein Pfad wie //evil.example/ ergäbe
-	 * unverändert schemarelative Links auf eine fremde Domain — und
-	 * redirect_canonical() räumt ihn etwa auf Suchseiten nicht auf. Deshalb:
-	 * führende Schrägstriche und Backslashes weg, Schema und Host der eigenen
-	 * Website davor. REQUEST_URI enthält bereits ein etwaiges Unterverzeichnis
-	 * der Installation, nur der Ursprung kommt aus home_url().
+	 * Die Reihenfolge zählt:
+	 * 1. remove_query_arg() entfernt odw_page/odw_ds und kodiert die übrige
+	 *    Query neu — ^ { } ` bleiben dabei als %5E … erhalten.
+	 * 2. esc_url_raw() streicht nur noch, was nicht in eine URL gehört.
+	 * 3. Zuletzt genau EIN führender Schrägstrich: REQUEST_URI kommt vom
+	 *    Browser, ein Pfad wie //evil.example/ ergäbe sonst schemarelative
+	 *    Links auf eine fremde Domain (redirect_canonical() räumt ihn etwa auf
+	 *    Suchseiten nicht auf). Nach diesem Schritt entfernt esc_url() bei der
+	 *    Ausgabe nichts mehr, was erneut // erzeugen könnte.
+	 * Wurzelrelativ statt mit Schema und Host aus home_url(): Bei Sprachen auf
+	 * eigenen (Sub-)Domains (etwa Polylang) bliebe der Besucher sonst nicht auf
+	 * der Domain, die er aufgerufen hat.
 	 *
 	 * @param string $request_uri Pfad samt Query, wie im REQUEST_URI.
-	 * @param string $home        home_url().
 	 * @return string
 	 */
-	public static function same_site_url( string $request_uri, string $home ): string {
-		$path  = '/' . ltrim( $request_uri, '/\\' );
-		$parts = wp_parse_url( $home );
+	public static function request_base( string $request_uri ): string {
+		$uri = esc_url_raw( (string) remove_query_arg( array( self::PARAM_PAGE, self::PARAM_DATASET ), $request_uri ) );
 
-		if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
-			return $path;
-		}
-
-		return ( $parts['scheme'] ?? 'https' ) . '://' . $parts['host']
-			. ( isset( $parts['port'] ) ? ':' . $parts['port'] : '' )
-			. $path;
+		return '/' . ltrim( $uri, '/\\' );
 	}
 
 	/**
@@ -1121,8 +1118,10 @@ class ODW_Catalog {
 
 		// Was die Vorab-Abfrage nicht findet, merkt sich WordPress nicht:
 		// wp_get_attachment_url() fragte für jeden verwaisten Verweis erneut
-		// einzeln — bis zu per_page Abfragen pro Seitenaufruf.
-		if ( function_exists( 'wp_cache_get_multiple' ) ) {
+		// einzeln — bis zu per_page Abfragen pro Seitenaufruf. Nicht bei
+		// ausgesetzter Cache-Aufnahme (etwa Widgets in der Customizer-Vorschau):
+		// Dort fehlen auch vorhandene Anhänge im Cache.
+		if ( function_exists( 'wp_cache_get_multiple' ) && ! wp_suspend_cache_addition() ) {
 			foreach ( wp_cache_get_multiple( $ids, 'posts' ) as $file_id => $cached ) {
 				if ( false === $cached ) {
 					self::$missing_files[ (int) $file_id ] = true;

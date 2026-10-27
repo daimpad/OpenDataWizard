@@ -757,39 +757,46 @@ class Test_ODW_Catalog extends TestCase {
 	}
 
 	/**
-	 * Die Basis-Adresse bleibt auf der eigenen Website — auch bei einem
-	 * REQUEST_URI, der wie eine schemarelative fremde Adresse aussieht.
+	 * Die Basis aus REQUEST_URI ist wurzelrelativ mit genau einem führenden
+	 * Schrägstrich — auch wenn die Adresse wie eine schemarelative fremde
+	 * Adresse aussieht. Erst remove_query_arg() (kodiert die Query neu), dann
+	 * esc_url_raw(): umgekehrt verlöre ein Suchbegriff wie a^b sein ^.
 	 *
 	 * @dataProvider provide_request_uris
 	 *
-	 * @param string $uri      REQUEST_URI.
-	 * @param string $home     home_url().
+	 * @param string $raw      REQUEST_URI.
+	 * @param string $removed  Ergebnis von remove_query_arg().
 	 * @param string $expected Erwartete Basis.
 	 */
-	public function test_same_site_url( string $uri, string $home, string $expected ): void {
+	public function test_request_base( string $raw, string $removed, string $expected ): void {
 		$this->load();
-		\WP_Mock::userFunction( 'wp_parse_url' )->andReturnUsing(
+		\WP_Mock::userFunction( 'remove_query_arg' )
+			->once()
+			->with( array( 'odw_page', 'odw_ds' ), $raw )
+			->andReturn( $removed );
+		// Wie esc_url_raw(): streicht Zeichen, die nicht in eine URL gehören.
+		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnUsing(
 			static function ( $url ) {
-				return parse_url( $url ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url -- Testersatz für wp_parse_url(), kein WordPress geladen.
+				return preg_replace( '/[\^{}`\\\\]/', '', (string) $url );
 			}
 		);
 
-		$this->assertSame( $expected, ODW_Catalog::same_site_url( $uri, $home ) );
+		$this->assertSame( $expected, ODW_Catalog::request_base( $raw ) );
+		$this->verify_expectations();
 	}
 
 	/**
-	 * REQUEST_URI, home_url() und die erwartete Basis.
+	 * REQUEST_URI, Ergebnis von remove_query_arg() und die erwartete Basis.
 	 *
 	 * @return array<string, array{0: string, 1: string, 2: string}>
 	 */
 	public function provide_request_uris(): array {
 		return array(
-			'normaler Pfad'          => array( '/daten/?s=x', 'https://example.org', 'https://example.org/daten/?s=x' ),
-			'doppelter Schrägstrich' => array( '//evil.example/?s=x', 'https://example.org', 'https://example.org/evil.example/?s=x' ),
-			'Backslash'              => array( '/\\evil.example/', 'https://example.org', 'https://example.org/evil.example/' ),
-			'Unterverzeichnis'       => array( '/blog/daten/', 'https://example.org/blog', 'https://example.org/blog/daten/' ),
-			'Port'                   => array( '/x/', 'http://localhost:8889', 'http://localhost:8889/x/' ),
-			'leer'                   => array( '', 'https://example.org', 'https://example.org/' ),
+			'eigene Parameter weg'   => array( '/daten/?s=x&odw_page=2', '/daten/?s=x', '/daten/?s=x' ),
+			'doppelter Schrägstrich' => array( '//evil.example/?s=x', '//evil.example/?s=x', '/evil.example/?s=x' ),
+			'Backslash'              => array( '/\\evil.example/', '/\\evil.example/', '/evil.example/' ),
+			'Zeichen in der Query'   => array( '/?s=a^b', '/?s=a%5Eb', '/?s=a%5Eb' ),
+			'leer'                   => array( '', '', '/' ),
 		);
 	}
 
@@ -949,8 +956,12 @@ class Test_ODW_Catalog extends TestCase {
 			// Auswahlfelder nie roh lesen: Carbon Fields ersetzt fehlende und
 			// ungültige Werte (Standardwert, erste Option) — die Liste muss das
 			// über select_meta() nachbilden, sonst weicht sie von der Karte ab.
-			if ( 'select' === $type[1] && ! preg_match( "/select_meta\\(\\s*\\$\\w+,\\s*'" . preg_quote( $key, '/' ) . "'/", $catalog ) ) {
-				$raw[] = $key;
+			if ( 'select' === $type[1] ) {
+				$all     = substr_count( $catalog, "'" . $key . "'" );
+				$guarded = preg_match_all( "/select_meta\\(\\s*\\$\\w+,\\s*'" . preg_quote( $key, '/' ) . "'/", $catalog );
+				if ( 0 === $guarded || $guarded < $all ) {
+					$raw[] = $key;
+				}
 			}
 		}
 
