@@ -653,11 +653,15 @@ class ODW_Catalog {
 		$total = (int) $query->found_posts;
 		$pages = (int) $query->max_num_pages;
 
-		if ( 0 === $total ) {
-			$html .= self::empty_state();
-		} elseif ( empty( $posts ) ) {
+		// Eine leere Seite hinter Seite 1 liegt jenseits des Endes. found_posts
+		// taugt hier nicht zur Unterscheidung: WP_Query zählt die Treffer nur,
+		// wenn die angefragte Seite welche enthält (set_found_posts() bricht bei
+		// leerem Ergebnis ab) — es bleibt dann immer 0.
+		if ( empty( $posts ) && $request['page'] > 1 ) {
 			$html .= '<p class="odw-catalog__empty">' . esc_html__( 'Diese Seite gibt es nicht.', 'open-data-wizard' ) . ' '
 				. '<a href="' . esc_url( self::page_url( $base, 1, 0, self::ANCHOR ) ) . '">' . esc_html__( 'Zur ersten Seite', 'open-data-wizard' ) . '</a></p>';
+		} elseif ( empty( $posts ) ) {
+			$html .= self::empty_state();
 		} else {
 			self::prime_attachments( $posts );
 
