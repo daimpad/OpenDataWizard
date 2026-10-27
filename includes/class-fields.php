@@ -677,7 +677,7 @@ class ODW_Fields {
 	}
 
 	/**
-	 * Auto-update odw_modified on every save.
+	 * Setzt odw_modified bei jedem Speichern auf den Tag der letzten Bearbeitung.
 	 *
 	 * @param int      $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
@@ -700,8 +700,19 @@ class ODW_Fields {
 			return;
 		}
 
+		// Der Tag der letzten Bearbeitung, nicht „heute": Beim Speichern ist das
+		// dasselbe, weil wp_update_post() post_modified auf jetzt setzt. Geplante
+		// Datensätze veröffentlicht der Cron aber über wp_publish_post(), das
+		// save_post feuert, ohne post_modified zu ändern — eine Veröffentlichung
+		// ist keine inhaltliche Änderung. So stimmen dct:modified und die
+		// Sortierung „Zuletzt aktualisiert" des Katalogs (post_modified) überein.
+		$date = substr( (string) $post->post_modified, 0, 10 );
+		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) || '0000-00-00' === $date ) {
+			$date = current_time( 'Y-m-d' );
+		}
+
 		remove_action( 'save_post', array( self::class, 'set_modified_date' ), 20 );
-		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
+		update_post_meta( $post_id, '_odw_modified', $date );
 		add_action( 'save_post', array( self::class, 'set_modified_date' ), 20, 2 );
 	}
 

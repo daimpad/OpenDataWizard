@@ -126,3 +126,97 @@ function odw_e2e_seed(): void {
 	}
 }
 add_action( 'init', 'odw_e2e_seed', 20 );
+
+/** Option, die den einmaligen Lauf der Katalog-Saat markiert. */
+const ODW_E2E_CATALOG_OPTION = 'odw_e2e_catalog_seeded';
+
+/**
+ * Seiten mit dem Frontend-Katalog und zwei Datensätze, die dort NICHT stehen dürfen.
+ *
+ * Eigene Funktion mit eigener Option: Eine lokale Testumgebung, in der die
+ * erste Saat schon gelaufen ist, bekommt die Katalogseiten so trotzdem.
+ *
+ * - odw-e2e-katalog: [odw_catalog] mit Standardwerten.
+ * - odw-e2e-katalog-seiten: ein Eintrag pro Seite, um die Navigation zu prüfen.
+ * - ein Entwurf und ein passwortgeschützter, aber veröffentlichter Datensatz.
+ *   Der Katalog muss beide auslassen, auch in der Detailansicht.
+ */
+function odw_e2e_seed_catalog(): void {
+	if ( get_option( ODW_E2E_CATALOG_OPTION ) ) {
+		return;
+	}
+
+	if ( ! post_type_exists( 'odw_dataset' ) ) {
+		return;
+	}
+
+	$hidden = array();
+	foreach (
+		array(
+			'draft'     => array(
+				'post_title'  => 'E2E: Entwurf (nicht im Katalog)',
+				'post_status' => 'draft',
+			),
+			'protected' => array(
+				'post_title'    => 'E2E: Passwortgeschützt (nicht im Katalog)',
+				'post_status'   => 'publish',
+				'post_password' => 'geheim',
+			),
+		) as $key => $postarr
+	) {
+		$post_id = wp_insert_post( array_merge( array( 'post_type' => 'odw_dataset' ), $postarr ) );
+		if ( is_wp_error( $post_id ) || ! $post_id ) {
+			return;
+		}
+		// Mit Zugriffs-URL, damit der Datensatz sonst vollständig darstellbar wäre.
+		update_post_meta( $post_id, '_odw_access_url', 'https://example.org/geheim.csv' );
+		$hidden[ $key ] = (int) $post_id;
+	}
+
+	foreach (
+		array(
+			'odw-e2e-katalog'        => '[odw_catalog]',
+			'odw-e2e-katalog-seiten' => '[odw_catalog per_page="1"]',
+		) as $slug => $content
+	) {
+		if ( get_page_by_path( $slug ) ) {
+			continue;
+		}
+		wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_name'    => $slug,
+				'post_title'   => 'E2E: ' . $slug,
+				'post_content' => $content,
+				'post_status'  => 'publish',
+			)
+		);
+	}
+
+	update_option( ODW_E2E_CATALOG_OPTION, $hidden, false );
+}
+add_action( 'init', 'odw_e2e_seed_catalog', 21 );
+
+/**
+ * Gibt den Tests die IDs der versteckten Datensätze.
+ *
+ * Nur in der Testumgebung: Das mu-plugin ist nicht Teil des Release-Pakets.
+ * Ohne die IDs ließe sich nicht prüfen, dass die Detailansicht Entwurf und
+ * Passwortschutz genauso abweist wie eine unbekannte ID.
+ */
+add_action(
+	'rest_api_init',
+	static function (): void {
+		register_rest_route(
+			'odw-e2e/v1',
+			'/fixtures',
+			array(
+				'methods'             => 'GET',
+				'callback'            => static function () {
+					return rest_ensure_response( (array) get_option( ODW_E2E_CATALOG_OPTION, array() ) );
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+);

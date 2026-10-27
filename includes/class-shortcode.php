@@ -104,41 +104,19 @@ class ODW_Shortcode {
 		$title = get_the_title( $post );
 
 		// --- License label ---
-		$license_label = '';
+		// Die eigene Lizenz-URI nur lesen, wenn sie gebraucht wird: Jeder
+		// Carbon-Fields-Zugriff ist eine eigene Datenbankabfrage.
 		$license_uri   = self::meta( $post_id, 'odw_license' );
-		if ( 'sonstige' === $license_uri ) {
-			$license_label = self::meta( $post_id, 'odw_license_custom' );
-			if ( class_exists( 'ODW_Fields' ) && '' !== $license_label ) {
-				$license_label = ODW_Fields::get_license_label( $license_label );
-			}
-		} elseif ( '' !== $license_uri && class_exists( 'ODW_Fields' ) ) {
-			$license_label = ODW_Fields::get_license_label( $license_uri );
-		}
+		$license_label = self::license_label(
+			$license_uri,
+			'sonstige' === $license_uri ? self::meta( $post_id, 'odw_license_custom' ) : ''
+		);
 
 		// --- File (media library) ---
-		$file_id     = (int) get_post_meta( $post_id, '_odw_file_id', true );
-		$file_url    = '';
-		$file_size   = '';
-		$file_format = '';
-
-		if ( $file_id > 0 ) {
-			$url = wp_get_attachment_url( $file_id );
-			if ( $url ) {
-				$file_url      = $url;
-				$stored_format = (string) get_post_meta( $post_id, '_odw_file_format', true );
-				$file_format   = $stored_format ? $stored_format : strtoupper( (string) pathinfo( $url, PATHINFO_EXTENSION ) );
-
-				$stored_size = get_post_meta( $post_id, '_odw_file_size', true );
-				if ( '' !== $stored_size && is_numeric( $stored_size ) ) {
-					$file_size = self::format_bytes( (int) $stored_size );
-				} else {
-					$file_path = get_attached_file( $file_id );
-					if ( $file_path && is_readable( $file_path ) ) {
-						$file_size = self::format_bytes( (int) filesize( $file_path ) );
-					}
-				}
-			}
-		}
+		$file        = self::file_info( $post_id );
+		$file_url    = $file['url'];
+		$file_size   = $file['size'];
+		$file_format = $file['format'];
 
 		// Format from the form takes precedence over the derived file extension.
 		$form_format = self::meta( $post_id, 'odw_format' );
@@ -155,10 +133,14 @@ class ODW_Shortcode {
 		}
 
 		// --- Download target: downloadURL → media file → accessURL ---
-		$download_url = self::meta( $post_id, 'odw_download_url' );
-		if ( '' === $download_url ) {
-			$download_url = '' !== $file_url ? $file_url : self::meta( $post_id, 'odw_access_url' );
-		}
+		// Die accessURL nur lesen, wenn die beiden vorrangigen Ziele fehlen.
+		$direct_url   = self::meta( $post_id, 'odw_download_url' );
+		$target       = self::download_target(
+			$direct_url,
+			$file_url,
+			'' === $direct_url && '' === $file_url ? self::meta( $post_id, 'odw_access_url' ) : ''
+		);
+		$download_url = $target['url'];
 
 		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
 		$meta_rows    = self::collect_metadata_rows( $post_id, $license_label, $file_size );
@@ -327,16 +309,37 @@ class ODW_Shortcode {
 		$add( __( 'Urheber', 'open-data-wizard' ), self::meta( $post_id, 'odw_originator_name' ) );
 		$add( __( 'Pflegende Stelle', 'open-data-wizard' ), self::meta( $post_id, 'odw_maintainer_name' ) );
 
-		$contact = array_filter(
-			array(
-				self::meta( $post_id, 'odw_contact_name' ),
-				self::meta( $post_id, 'odw_contact_email' ),
-			)
+		$add(
+			__( 'Kontakt', 'open-data-wizard' ),
+			self::contact_line( self::meta( $post_id, 'odw_contact_name' ), self::meta( $post_id, 'odw_contact_email' ) )
 		);
-		$add( __( 'Kontakt', 'open-data-wizard' ), implode( ' · ', $contact ) );
 		$add( __( 'Kontakt-Website', 'open-data-wizard' ), self::meta( $post_id, 'odw_contact_url' ), true );
 
 		return $rows;
+	}
+
+	/**
+	 * Kontaktzeile der Karte: „Name · E-Mail".
+	 *
+	 * Die E-Mail-Adresse als HTML-Entitäten: Im Browser sieht sie gleich aus,
+	 * einfache Adress-Sammler lesen sie aber nicht mehr mit. Seit es den
+	 * Katalog gibt, hat jeder Datensatz eine verlinkte, auffindbare Ansicht.
+	 * esc_html() kodiert die Entitäten später nicht doppelt.
+	 *
+	 * Nur reine ASCII-Adressen: antispambot() kodiert Byte für Byte und
+	 * zerschnitte ein Umlaut-Zeichen (etwa einer IDN-Domain „münchen.de") in
+	 * ungültiges UTF-8 — esc_html() verwürfe dann die ganze Zeile samt Namen.
+	 *
+	 * @param string $name  Kontaktname.
+	 * @param string $email E-Mail-Adresse.
+	 * @return string
+	 */
+	public static function contact_line( string $name, string $email ): string {
+		if ( '' !== $email && function_exists( 'antispambot' ) && ! preg_match( '/[\x80-\xFF]/', $email ) ) {
+			$email = antispambot( $email );
+		}
+
+		return implode( ' · ', array_filter( array( $name, $email ) ) );
 	}
 
 	/**
@@ -403,13 +406,131 @@ class ODW_Shortcode {
 		return $out;
 	}
 
+	// -------------------------------------------------------------------------
+	// Gemeinsame Helfer für Karte und Katalog
+	//
+	// Öffentlich, damit der Katalog-Shortcode (ODW_Catalog) dieselbe Logik
+	// verwendet wie die Karte. Liefe sie doppelt, zeigten Liste und Detailansicht
+	// für denselben Datensatz irgendwann unterschiedliche Lizenzen oder Ziele.
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Lesbares Lizenz-Label aus der gespeicherten Lizenz.
+	 *
+	 * @param string $license Gespeicherter Wert von odw_license (URI oder 'sonstige').
+	 * @param string $custom  Eigene Lizenz-URI (odw_license_custom); nur bei 'sonstige' relevant.
+	 * @return string Label, die eigene URI selbst oder '' ohne Lizenz.
+	 */
+	public static function license_label( string $license, string $custom ): string {
+		if ( 'sonstige' === $license ) {
+			if ( class_exists( 'ODW_Fields' ) && '' !== $custom ) {
+				return ODW_Fields::get_license_label( $custom );
+			}
+			return $custom;
+		}
+
+		if ( '' !== $license && class_exists( 'ODW_Fields' ) ) {
+			return ODW_Fields::get_license_label( $license );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Angaben zur hochgeladenen Datei aus der Mediathek.
+	 *
+	 * Liest nur Post-Meta und den Anhang selbst — kein Carbon Fields. Das Format
+	 * kommt aus _odw_file_format, sonst aus der Dateiendung; die Größe aus
+	 * _odw_file_size, sonst (nur mit $allow_filesystem) aus der Datei.
+	 *
+	 * @param int  $post_id          Dataset post ID.
+	 * @param bool $allow_filesystem Größe notfalls per filesize() ermitteln. Der
+	 *                               Katalog verzichtet darauf: N Zugriffe aufs
+	 *                               Dateisystem je Listenseite lohnen nicht.
+	 * @return array{url: string, format: string, size: string}
+	 */
+	public static function file_info( int $post_id, bool $allow_filesystem = true ): array {
+		$info    = array(
+			'url'    => '',
+			'format' => '',
+			'size'   => '',
+		);
+		$file_id = (int) get_post_meta( $post_id, '_odw_file_id', true );
+
+		if ( $file_id <= 0 ) {
+			return $info;
+		}
+
+		$url = wp_get_attachment_url( $file_id );
+		if ( ! $url ) {
+			return $info;
+		}
+
+		$info['url']    = $url;
+		$stored_format  = (string) get_post_meta( $post_id, '_odw_file_format', true );
+		$info['format'] = $stored_format ? $stored_format : strtoupper( (string) pathinfo( $url, PATHINFO_EXTENSION ) );
+
+		$stored_size = get_post_meta( $post_id, '_odw_file_size', true );
+		if ( '' !== $stored_size && is_numeric( $stored_size ) ) {
+			$info['size'] = self::format_bytes( (int) $stored_size );
+		} elseif ( $allow_filesystem ) {
+			$file_path = get_attached_file( $file_id );
+			if ( $file_path && is_readable( $file_path ) ) {
+				$info['size'] = self::format_bytes( (int) filesize( $file_path ) );
+			}
+		}
+
+		return $info;
+	}
+
+	/**
+	 * Wohin der Hauptlink eines Datensatzes führt.
+	 *
+	 * Reihenfolge wie in der Karte: downloadURL → Datei aus der Mediathek →
+	 * accessURL. `kind` unterscheidet eine echte Datei ('file') vom Rückfall auf
+	 * die accessURL ('access'), die in DCAT auch eine Webseite sein darf — der
+	 * Katalog beschriftet den Link danach unterschiedlich.
+	 *
+	 * @param string $download_url Direkter Download (odw_download_url).
+	 * @param string $file_url     URL der Datei aus der Mediathek.
+	 * @param string $access_url   Zugriffs-URL (odw_access_url).
+	 * @return array{url: string, kind: string} kind ist 'file', 'access' oder ''.
+	 */
+	public static function download_target( string $download_url, string $file_url, string $access_url ): array {
+		if ( '' !== $download_url ) {
+			return array(
+				'url'  => $download_url,
+				'kind' => 'file',
+			);
+		}
+
+		if ( '' !== $file_url ) {
+			return array(
+				'url'  => $file_url,
+				'kind' => 'file',
+			);
+		}
+
+		if ( '' !== $access_url ) {
+			return array(
+				'url'  => $access_url,
+				'kind' => 'access',
+			);
+		}
+
+		return array(
+			'url'  => '',
+			'kind' => '',
+		);
+	}
+
 	/**
 	 * Formatiert eine Byte-Anzahl als lesbare Größenangabe (B / KB / MB / GB).
 	 *
 	 * @param int $bytes Rohe Byte-Anzahl (aus _odw_file_size oder filesize()).
 	 * @return string    Formatierter String, z.B. "2.5 MB".
 	 */
-	private static function format_bytes( int $bytes ): string {
+	public static function format_bytes( int $bytes ): string {
 		if ( $bytes < 0 ) {
 			$bytes = 0;
 		}

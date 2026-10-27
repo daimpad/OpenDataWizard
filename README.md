@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.42.2-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.43.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -209,6 +209,44 @@ Der Block speichert ausschließlich die Datensatz-ID und rendert beim Ausliefern
 umbenannter Datensatz erscheint also mit seinem aktuellen Titel, statt eine eingefrorene Kopie im
 Beitrag zu hinterlassen.
 
+### 📚 Datenkatalog — alle Datensätze auf einer Seite
+
+Für eine Übersichtsseite aller veröffentlichten Datensätze gibt es den Block **„Datenkatalog"**
+bzw. den Shortcode:
+
+```
+[odw_catalog]
+```
+
+Die Liste zeigt je Datensatz Titel, Aktualisierungsdatum, einen kurzen Auszug der Beschreibung,
+Badges für Thema, Format, Größe und Lizenz sowie einen direkten Link zur Datei bzw. zum
+Datenangebot. Ein Klick auf den Titel öffnet die vollständige Download-Card **auf derselben
+Seite** (`?odw_ds=<ID>`); „Zurück zum Katalog" führt auf die zuvor besuchte Listenseite zurück.
+Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_page=<n>`).
+
+| Attribut | Standard | Bedeutung |
+|---|---|---|
+| `per_page` | `20` | Einträge pro Seite (1–50) |
+| `orderby` | `title` | `title` (A–Z) oder `modified` (zuletzt aktualisiert zuerst) |
+| `theme` | — | Nur bestimmte Themen, kommagetrennt als EU-Code (`EDUC,HEAL`) |
+| `title` | — | Überschrift über der Liste |
+| `excerpt` | `30` | Wörter im Auszug; `0` blendet ihn aus (max. 100) |
+| `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt — solange er unverändert ist; einmal bearbeitet, erscheint er wie jeder andere Datensatz |
+
+```
+[odw_catalog per_page="10" orderby="modified" theme="EDUC" title="Unsere Daten"]
+```
+
+Im Block stehen dieselben Einstellungen in der Seitenleiste; Themen werden dort angehakt.
+**Ein Katalog pro Seite:** Blättern (`?odw_page`) und Detailansicht (`?odw_ds`) gelten für die ganze
+Seite. Im Inhalt lässt sich der Block deshalb nur einmal einfügen; auch zusätzlich als Widget, in
+einer Seitenleiste oder im Template gehört kein zweiter Katalog auf dieselbe Seite — dort würde ein
+Klick beide umschalten. Für nach Thema getrennte Kataloge je eine eigene Seite anlegen.
+Entwürfe, private und passwortgeschützte Datensätze erscheinen weder in der Liste noch in der
+Detailansicht. Die Liste kommt unabhängig von der Katalogsgröße mit rund einem halben Dutzend
+Datenbankabfragen pro Seite aus. Eine Volltextsuche oder Filter zum Anklicken gibt es bewusst
+(noch) nicht — siehe „Was der Open Data Wizard *nicht* ist".
+
 ### 🔗 REST API Endpoints
 
 ```
@@ -312,8 +350,11 @@ die hier beschriebene externe Validierung geprüft (Ansatz „achievable max"). 
 
 Eine ehrliche Abgrenzung hilft bei der Einordnung:
 
-- **Kein Datenportal.** Das Plugin hostet keine Suchoberfläche und keinen Katalog für Dritte — es
-  macht eine einzelne Organisation harvestbar.
+- **Kein Datenportal.** Das Plugin macht eine einzelne Organisation harvestbar. Der
+  [Datenkatalog-Block](#-datenkatalog--alle-datensätze-auf-einer-seite) zeigt die eigenen
+  Datensätze als schlichte Liste auf der eigenen Website — Volltextsuche, Facetten, Nutzerkonten
+  oder das Zusammenführen fremder Kataloge bleiben Aufgabe der Portale, die die Daten abholen
+  (GovData, data.europa.eu).
 - **Kein Datenmanagement-System.** Die eigentlichen Dateien liegen, wo sie liegen: in der Mediathek,
   auf einem Server, in einem Repositorium. Das Plugin *beschreibt* sie, es verwaltet sie nicht.
 - **Kein Ersatz für fachliche Sorgfalt.** Es prüft, *ob* eine Lizenz angegeben ist — nicht, ob es die
@@ -420,6 +461,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] REST API Endpoints: `/catalog`, `/datasets/<id>`, `/delta?since=<timestamp>`
 - [x] Qualitätsindikatoren / 4-Stufen-Ampellogik (Perfekt / Gut / Ausreichend / Verbesserungsbedarf)
 - [x] Download-Card Shortcode `[odw_dataset]` mit Keywords und Metadaten-Download
+- [x] Datenkatalog `[odw_catalog]` / Block „Datenkatalog" mit Detailansicht auf derselben Seite (v2.43.0)
 - [x] Demo-Datensatz bei Aktivierung
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)

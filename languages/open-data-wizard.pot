@@ -1602,3 +1602,84 @@ msgstr ""
 
 msgid "Unerwartete Antwort vom Endpunkt."
 msgstr ""
+
+msgid "%d Datensätze"
+msgstr ""
+
+msgid "Aktualisiert: %s"
+msgstr ""
+
+msgid "Beispieldatensatz anzeigen"
+msgstr ""
+
+msgid "Datenkatalog"
+msgstr ""
+
+msgid "Datensatz %1$d von %2$d"
+msgstr ""
+
+msgid "Datensätze %1$d–%2$d von %3$d"
+msgstr ""
+
+msgid "Datensätze pro Seite"
+msgstr ""
+
+msgid "Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin."
+msgstr ""
+
+msgid "Diese Seite gibt es nicht."
+msgstr ""
+
+msgid "Ein Datensatz"
+msgstr ""
+
+msgid "Hinweis für die Redaktion, nur für Sie sichtbar: Diese Themen-Angaben wurden nicht erkannt und ignoriert: %s. Verwenden Sie EU-Codes wie EDUC oder SOCI."
+msgstr ""
+
+msgid "Keine Auswahl zeigt alle Themen."
+msgstr ""
+
+msgid "Länge des Beschreibungsauszugs (Wörter, 0 = aus)"
+msgstr ""
+
+msgid "Nach Titel (A–Z)"
+msgstr ""
+
+msgid "Nur diese Themen zeigen"
+msgstr ""
+
+msgid "Nächste Seite"
+msgstr ""
+
+msgid "Seiten des Datenkatalogs"
+msgstr ""
+
+msgid "Sortierung"
+msgstr ""
+
+msgid "Vorherige Seite"
+msgstr ""
+
+msgid "Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben."
+msgstr ""
+
+msgid "Zuletzt aktualisierte zuerst"
+msgstr ""
+
+msgid "Zum Datenangebot"
+msgstr ""
+
+msgid "Zur ersten Seite"
+msgstr ""
+
+msgid "Zurück zum Katalog"
+msgstr ""
+
+msgid "Überschrift (optional)"
+msgstr ""
+
+msgid "Listet alle veröffentlichten Datensätze; ein Klick öffnet die vollständige Download-Karte — die Alternative zum Shortcode [odw_catalog]. Ein Katalog pro Seite."
+msgstr ""
+
+msgid "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset]."
+msgstr ""

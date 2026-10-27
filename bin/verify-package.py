@@ -41,6 +41,7 @@ import zipfile
 BOOTSTRAP_FILES = {
     'vendor/autoload.php': 'Ohne Autoloader bricht odw_bootstrap() mit einer Admin-Notice ab.',
     'blocks/dataset-card/block.json': 'register_block_type() liest die Blockdefinition aus diesem Verzeichnis.',
+    'blocks/catalog/block.json': 'register_block_type() liest die Blockdefinition des Katalogs aus diesem Verzeichnis.',
     'languages/open-data-wizard-en_US.mo': 'Die .po allein wird von WordPress nicht gelesen.',
 }
 

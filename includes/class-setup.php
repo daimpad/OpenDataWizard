@@ -33,6 +33,18 @@ class ODW_Setup {
 	public const CAPABILITY = 'manage_open_data';
 
 	/**
+	 * ID des bei der Aktivierung angelegten Beispieldatensatzes, sonst 0.
+	 *
+	 * Der Frontend-Katalog blendet ihn standardmäßig aus, damit auf einer echten
+	 * Website kein Musterdatensatz zwischen den eigenen Daten steht.
+	 *
+	 * @return int
+	 */
+	public static function get_demo_post_id(): int {
+		return (int) get_option( self::DEMO_OPTION );
+	}
+
+	/**
 	 * Wird direkt aus register_activation_hook aufgerufen — Carbon Fields
 	 * ist zu diesem Zeitpunkt noch nicht geladen.
 	 */

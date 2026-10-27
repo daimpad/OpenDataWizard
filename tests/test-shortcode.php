@@ -219,4 +219,152 @@ class Test_ODW_Shortcode extends TestCase {
 		$result = ODW_Shortcode::render( array( 'id' => '6' ) );
 		$this->assertSame( '', $result );
 	}
+
+	// -------------------------------------------------------------------------
+	// Gemeinsame Helfer für Karte und Katalog
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Lizenz-Label: Standard-URI, eigene URI bei „sonstige", sonst leer.
+	 */
+	public function test_license_label(): void {
+		$this->load_class();
+
+		$this->assertSame( 'CC BY 4.0 — Namensnennung', ODW_Shortcode::license_label( 'https://creativecommons.org/licenses/by/4.0/', '' ) );
+		$this->assertSame( '', ODW_Shortcode::license_label( '', '' ) );
+		$this->assertSame( '', ODW_Shortcode::license_label( 'sonstige', '' ), '„Sonstige" ohne eigene URI hat kein Label.' );
+		$this->assertSame(
+			'https://example.org/eigene-lizenz',
+			ODW_Shortcode::license_label( 'sonstige', 'https://example.org/eigene-lizenz' ),
+			'Eine unbekannte eigene URI erscheint unverändert.'
+		);
+	}
+
+	/**
+	 * Ziel des Hauptlinks: downloadURL vor Datei vor accessURL — und nur die
+	 * ersten beiden zählen als Datei.
+	 *
+	 * @dataProvider provide_download_targets
+	 *
+	 * @param array<int, string>    $in       downloadURL, Datei-URL, accessURL.
+	 * @param array<string, string> $expected Erwartetes Ziel.
+	 */
+	public function test_download_target( array $in, array $expected ): void {
+		$this->load_class();
+
+		$this->assertSame( $expected, ODW_Shortcode::download_target( $in[0], $in[1], $in[2] ) );
+	}
+
+	/**
+	 * Eingaben und erwartetes Ziel.
+	 *
+	 * @return array<string, array{0: array<int, string>, 1: array<string, string>}>
+	 */
+	public function provide_download_targets(): array {
+		return array(
+			'downloadURL gewinnt' => array(
+				array( 'https://a/dl', 'https://a/datei', 'https://a/zugang' ),
+				array(
+					'url'  => 'https://a/dl',
+					'kind' => 'file',
+				),
+			),
+			'dann die Datei'      => array(
+				array( '', 'https://a/datei', 'https://a/zugang' ),
+				array(
+					'url'  => 'https://a/datei',
+					'kind' => 'file',
+				),
+			),
+			'zuletzt accessURL'   => array(
+				array( '', '', 'https://a/zugang' ),
+				array(
+					'url'  => 'https://a/zugang',
+					'kind' => 'access',
+				),
+			),
+			'gar nichts'          => array(
+				array( '', '', '' ),
+				array(
+					'url'  => '',
+					'kind' => '',
+				),
+			),
+		);
+	}
+
+	/**
+	 * Datei-Angaben: gespeichertes Format und gespeicherte Größe; ohne
+	 * Dateisystem-Zugriff bleibt eine fehlende Größe leer, ein fehlendes Format
+	 * kommt aus der Dateiendung.
+	 */
+	public function test_file_info(): void {
+		$this->load_class();
+
+		$meta = array(
+			5 => array(
+				'_odw_file_id'     => '50',
+				'_odw_file_format' => 'CSV',
+				'_odw_file_size'   => '2048',
+			),
+			6 => array( '_odw_file_id' => '60' ),
+			7 => array(),
+		);
+		\WP_Mock::userFunction( 'get_post_meta' )->andReturnUsing(
+			static function ( $post_id, $key ) use ( $meta ) {
+				return $meta[ $post_id ][ $key ] ?? '';
+			}
+		);
+		\WP_Mock::userFunction( 'wp_get_attachment_url' )->andReturnUsing(
+			static function ( $id ) {
+				return 50 === $id ? 'https://a/up/daten.csv' : 'https://a/up/bericht.pdf';
+			}
+		);
+
+		$this->assertSame(
+			array(
+				'url'    => 'https://a/up/daten.csv',
+				'format' => 'CSV',
+				'size'   => '2 KB',
+			),
+			ODW_Shortcode::file_info( 5 )
+		);
+		$this->assertSame(
+			array(
+				'url'    => 'https://a/up/bericht.pdf',
+				'format' => 'PDF',
+				'size'   => '',
+			),
+			ODW_Shortcode::file_info( 6, false ),
+			'Ohne Dateisystem-Zugriff bleibt eine nicht gespeicherte Größe leer.'
+		);
+		$this->assertSame(
+			array(
+				'url'    => '',
+				'format' => '',
+				'size'   => '',
+			),
+			ODW_Shortcode::file_info( 7 )
+		);
+	}
+
+	/**
+	 * Kontaktzeile: ASCII-Adressen verschleiert, Adressen mit Umlaut roh —
+	 * antispambot() kodiert byteweise und erzeugte sonst ungültiges UTF-8, das
+	 * esc_html() samt Namen verwürfe.
+	 */
+	public function test_contact_line(): void {
+		$this->load_class();
+		\WP_Mock::userFunction( 'antispambot' )->andReturnUsing(
+			static function ( $email ) {
+				return 'ENC(' . $email . ')';
+			}
+		);
+
+		$this->assertSame( 'Max Muster · ENC(max@example.org)', ODW_Shortcode::contact_line( 'Max Muster', 'max@example.org' ) );
+		$this->assertSame( 'Stadtwerke · kontakt@stadtwerke-münchen.de', ODW_Shortcode::contact_line( 'Stadtwerke', 'kontakt@stadtwerke-münchen.de' ) );
+		$this->assertSame( 'ENC(info@example.org)', ODW_Shortcode::contact_line( '', 'info@example.org' ) );
+		$this->assertSame( 'Nur Name', ODW_Shortcode::contact_line( 'Nur Name', '' ) );
+		$this->assertSame( '', ODW_Shortcode::contact_line( '', '' ) );
+	}
 }

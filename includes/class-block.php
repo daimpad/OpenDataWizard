@@ -58,9 +58,18 @@ class ODW_Block {
 			true
 		);
 
+		// Titel, Beschreibung und Schlagworte als Argumente: Sie überschreiben
+		// block.json (register_block_type_from_metadata() führt beides per
+		// array_merge zusammen). WordPress übersetzt block.json nur über
+		// gettext-Kontexte („block title" …), die die gebündelte .mo nicht kennt.
 		register_block_type(
 			ODW_PLUGIN_DIR . 'blocks/dataset-card',
-			array( 'render_callback' => array( self::class, 'render' ) )
+			array(
+				'title'           => __( 'Datensatz-Karte', 'open-data-wizard' ),
+				'description'     => __( 'Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset].', 'open-data-wizard' ),
+				'keywords'        => array( __( 'Datensatz', 'open-data-wizard' ), 'Open Data', 'Download', 'DCAT' ),
+				'render_callback' => array( self::class, 'render' ),
+			)
 		);
 	}
 
