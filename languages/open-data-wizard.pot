@@ -1699,6 +1699,9 @@ msgstr ""
 msgid "Anzeigen"
 msgstr ""
 
+msgid "Bitte mindestens zwei Zeichen eingeben."
+msgstr ""
+
 msgid "Datensätze durchsuchen"
 msgstr ""
 

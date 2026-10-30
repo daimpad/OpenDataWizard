@@ -192,6 +192,58 @@ class Test_ODW_Catalog extends TestCase {
 
 		$this->assertNull( ODW_Catalog::config_from_content( '<p>[[odw_catalog]]</p>' ) );
 		$this->assertNull( ODW_Catalog::config_from_content( '<p>Kein Katalog</p>' ) );
+		$this->assertNull( ODW_Catalog::config_from_content( "<!-- [odw_catalog per_page=\"10\"]\n --><p>Bald.</p>" ), 'Auskommentiert.' );
+		$this->assertSame( 7, ODW_Catalog::config_from_content( '<!-- alt --> [odw_catalog per_page="7"]' )['per_page'] );
+	}
+
+	/**
+	 * Bei unbekannter Lizenz oder nur unbekannten Themen zeigt die Liste
+	 * nichts — page_has_entries() sagt das, ohne die Datenbank zu fragen.
+	 */
+	public function test_page_has_entries_invalid_config(): void {
+		$this->load();
+		$request = array(
+			'page'    => 2,
+			'dataset' => 0,
+		);
+		$state   = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( '' ), array() );
+
+		$this->assertFalse( ODW_Catalog::page_has_entries( ODW_Catalog::parse_atts( array( 'license' => 'gibt-es-nicht' ) ), $request, $state ) );
+		$this->assertFalse( ODW_Catalog::page_has_entries( ODW_Catalog::parse_atts( array( 'theme' => 'XYZ' ) ), $request, $state ) );
+	}
+
+	/**
+	 * GET-Werte: Lizenz und Thema behalten %XX (eigene Lizenz-URIs), alles
+	 * andere läuft durch sanitize_text_field(); Arrays gelten als nicht gesetzt.
+	 */
+	public function test_request_values(): void {
+		// Vor load(): Die erste passende Erwartung gilt, und load() stellt ein
+		// sanitize_text_field() ohne das Entfernen von %XX bereit.
+		\WP_Mock::userFunction( 'wp_unslash' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'wp_check_invalid_utf8' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'sanitize_text_field' )->andReturnUsing(
+			static function ( $value ): string {
+				// Wie Core: Prozent-Kodierungen und Tags fallen weg.
+				return trim( (string) preg_replace( '/%[a-f0-9]{2}/i', '', strip_tags( (string) $value ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Testersatz für sanitize_text_field(), kein WordPress geladen.
+			}
+		);
+		$this->load();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Test setzt $_GET, um request_values() wie im Request zu prüfen.
+		$backup = $_GET;
+		$_GET   = array(
+			'odw_license' => 'https://stadt.example/nutzung-f%C3%BCr-daten',
+			'odw_q'       => '<b>Schule</b> 100%ab',
+			'odw_format'  => array( 'CSV' ),
+		);
+		$values = ODW_Catalog::request_values();
+		$_GET   = $backup;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$this->assertSame( 'https://stadt.example/nutzung-f%C3%BCr-daten', $values['odw_license'] );
+		$this->assertSame( 'Schule 100', $values['odw_q'] );
+		$this->assertSame( '', $values['odw_format'] );
+		$this->assertSame( '', $values['odw_page'] );
 	}
 
 	/**

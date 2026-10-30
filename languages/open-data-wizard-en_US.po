@@ -2072,6 +2072,9 @@ msgstr "All themes"
 msgid "Anzeigen"
 msgstr "Show"
 
+msgid "Bitte mindestens zwei Zeichen eingeben."
+msgstr "Please enter at least two characters."
+
 msgid "Datensätze durchsuchen"
 msgstr "Search datasets"
 

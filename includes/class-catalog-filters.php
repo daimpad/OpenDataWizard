@@ -66,6 +66,16 @@ class ODW_Catalog_Filters {
 	private const INDEX_VERSION = 1;
 	private const INDEX_BATCH   = 200;
 
+	/**
+	 * Je Datensatz: Index-Version und post_modified_gmt beim letzten Abgleich.
+	 * Daran erkennt die Migration Datensätze, die ohne Abgleich geändert
+	 * wurden (etwa unter einer älteren Plugin-Version).
+	 */
+	private const INDEX_STATE = '_odw_index_state';
+
+	/** Abstand der Nachprüfung auf solche Datensätze, in Sekunden (12 Stunden). */
+	private const INDEX_RECHECK = 43200;
+
 	/** Basis der EU-Themen-URIs. */
 	private const THEME_BASE = 'http://publications.europa.eu/resource/authority/data-theme/';
 
@@ -76,9 +86,10 @@ class ODW_Catalog_Filters {
 	private const SOURCE_KEYS = array( '_odw_license', '_odw_license_custom', '_odw_format', '_odw_file_id', '_odw_file_format' );
 
 	/**
-	 * Datensätze, deren Index am Ende des Requests abzugleichen ist.
+	 * Datensätze, deren Index am Ende des Requests abzugleichen ist — je
+	 * Website (Multisite: switch_to_blog()).
 	 *
-	 * @var array<int, true>
+	 * @var array<int, array<int, true>>
 	 */
 	private static $pending = array();
 
@@ -164,6 +175,14 @@ class ODW_Catalog_Filters {
 		}
 
 		if ( strlen( $raw ) <= 500 && preg_match( '#^https?://[^\s<>"]+$#i', $raw ) ) {
+			// Eine Lizenz der Auswahlliste in ihrer Schreibweise: Die Liste
+			// fände „https://CreativeCommons.org/…" (die Kollation von
+			// wp_postmeta unterscheidet nicht), das Auswahlfeld nicht.
+			foreach ( array_unique( $aliases ) as $uri ) {
+				if ( 0 === strcasecmp( $uri, $raw ) ) {
+					return $uri;
+				}
+			}
 			return $raw;
 		}
 
@@ -545,7 +564,17 @@ class ODW_Catalog_Filters {
 	 */
 	public static function facet_options( string $facet, array $counts, string $selected ): array {
 		if ( '' !== $selected && ! isset( $counts[ $selected ] ) ) {
-			$counts[ $selected ] = 0;
+			// GROUP BY liefert bei Schreibvarianten (…/Lizenz, …/lizenz) nur
+			// einen Vertreter; die Liste trifft beide. Dann diesen markieren.
+			foreach ( array_keys( $counts ) as $value ) {
+				if ( 0 === strcasecmp( (string) $value, $selected ) ) {
+					$selected = (string) $value;
+					break;
+				}
+			}
+			if ( ! isset( $counts[ $selected ] ) ) {
+				$counts[ $selected ] = 0;
+			}
 		}
 
 		$themes = 'theme' === $facet && class_exists( 'ODW_Fields' ) ? ODW_Fields::get_theme_options_multi() : array();
@@ -597,7 +626,8 @@ class ODW_Catalog_Filters {
 	/**
 	 * Ergibt der GET-Wert einer Option nach dem Absenden wieder genau ihren
 	 * Wert? Nicht bei einer eigenen Lizenz als Freitext oder bei einem Thema,
-	 * das es nicht mehr in der Auswahl gibt.
+	 * das es nicht mehr in der Auswahl gibt. Den Weg durch das HTML-Attribut
+	 * macht attr_exact() verlustfrei, auch für „&amp;" im Wert.
 	 *
 	 * @param string $facet theme | license | format.
 	 * @param string $param GET-Wert der Option.
@@ -629,9 +659,10 @@ class ODW_Catalog_Filters {
 	 * @param array<string, mixed>  $conditions Ergebnis von conditions().
 	 * @param string                $base       Basis-URL der Katalogseite.
 	 * @param string                $reset      Adresse ohne Filter.
+	 * @param string                $short_q    Zu kurzer Suchbegriff (short_query()), sonst ''.
 	 * @return string
 	 */
-	public static function render_form( array $config, array $state, array $conditions, string $base, string $reset ): string {
+	public static function render_form( array $config, array $state, array $conditions, string $base, string $reset, string $short_q = '' ): string {
 		$filters = (array) ( $config['filters'] ?? array() );
 		$search  = ! empty( $config['search'] );
 		if ( empty( $filters ) && ! $search ) {
@@ -646,13 +677,21 @@ class ODW_Catalog_Filters {
 		// Seite selbst braucht (page_id bei einfachen Permalinks, lang bei
 		// Sprach-Plugins), muss deshalb als verstecktes Feld mit.
 		foreach ( self::hidden_inputs( $base ) as $name => $value ) {
-			$html .= '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '">';
+			$html .= '<input type="hidden" name="' . self::attr_exact( $name ) . '" value="' . self::attr_exact( $value ) . '">';
 		}
 
 		if ( $search ) {
-			$html .= '<p class="odw-catalog__field odw-catalog__field--search">'
+			// Zu kurz: Der Begriff bleibt stehen, und ein Hinweis sagt, warum die
+			// Liste ungefiltert ist (WCAG 3.3.1). minlength zählt UTF-16-Einheiten
+			// und Leerraum mit, das pattern wie der Server zwei Zeichen ohne ihn.
+			$hint    = __( 'Bitte mindestens zwei Zeichen eingeben.', 'open-data-wizard' );
+			$invalid = '' !== $short_q;
+			$html   .= '<p class="odw-catalog__field odw-catalog__field--search">'
 				. '<label for="odw-filter-q">' . esc_html__( 'Datensätze durchsuchen', 'open-data-wizard' ) . '</label>'
-				. '<input type="search" id="odw-filter-q" name="' . esc_attr( self::PARAM_QUERY ) . '" value="' . esc_attr( $state['q'] ) . '" minlength="' . (int) self::QUERY_MIN . '" maxlength="' . (int) self::QUERY_MAX . '">'
+				. '<input type="search" id="odw-filter-q" name="' . esc_attr( self::PARAM_QUERY ) . '" value="' . self::attr_exact( $invalid ? $short_q : $state['q'] ) . '"'
+				. ' minlength="' . (int) self::QUERY_MIN . '" maxlength="' . (int) self::QUERY_MAX . '" pattern="' . esc_attr( '\s*\S.*\S\s*' ) . '" title="' . esc_attr( $hint ) . '"'
+				. ( $invalid ? ' aria-invalid="true" aria-describedby="odw-filter-q-hint"' : '' ) . '>'
+				. ( $invalid ? '<span class="odw-catalog__hint" id="odw-filter-q-hint">' . esc_html( $hint ) . '</span>' : '' )
 				. '</p>';
 		}
 
@@ -682,7 +721,7 @@ class ODW_Catalog_Filters {
 				. '<select id="odw-filter-' . esc_attr( $facet ) . '" name="' . esc_attr( $name ) . '">'
 				. '<option value="">' . esc_html( $all ) . '</option>';
 			foreach ( $options as $option ) {
-				$html .= '<option value="' . esc_attr( $option['param'] ) . '"' . ( $option['selected'] ? ' selected' : '' ) . '>'
+				$html .= '<option value="' . self::attr_exact( $option['param'] ) . '"' . ( $option['selected'] ? ' selected' : '' ) . '>'
 					. esc_html(
 						sprintf(
 							/* translators: 1: filter value, e.g. a theme or licence name, 2: number of matching datasets */
@@ -704,6 +743,36 @@ class ODW_Catalog_Filters {
 		$html .= '</p></form>';
 
 		return $html;
+	}
+
+	/**
+	 * Attributwert, den der Browser genau so zurückschickt.
+	 *
+	 * Denn esc_attr() kodiert vorhandene Zeichenreferenzen nicht noch einmal: Aus
+	 * einer Lizenz-URI mit „&amp;" (aus HTML-Quelltext kopiert) würde im
+	 * Browser „&" — und die Auswahl träfe nichts. Ein vorab kodiertes & hält
+	 * jede Referenz wörtlich.
+	 *
+	 * @param string $value Wert.
+	 * @return string Für ein Attribut in doppelten Anführungszeichen.
+	 */
+	public static function attr_exact( string $value ): string {
+		return esc_attr( str_replace( '&', '&amp;', $value ) );
+	}
+
+	/**
+	 * Ein eingegebener, aber zu kurzer Suchbegriff — für den Hinweis am
+	 * Suchfeld. parse_get() verwirft ihn; ohne Hinweis sähe der Besucher nur
+	 * die ungefilterte Liste und ein leeres Feld.
+	 *
+	 * @param array<string, mixed> $get Bereits entschärfte GET-Werte.
+	 * @return string Der Begriff (1 Zeichen), sonst ''.
+	 */
+	public static function short_query( array $get ): string {
+		$raw = isset( $get[ self::PARAM_QUERY ] ) && is_scalar( $get[ self::PARAM_QUERY ] ) ? (string) $get[ self::PARAM_QUERY ] : '';
+		$q   = trim( (string) preg_replace( '/\s+/u', ' ', $raw ) );
+		$len = function_exists( 'mb_strlen' ) ? mb_strlen( $q ) : strlen( $q );
+		return $len > 0 && $len < self::QUERY_MIN ? $q : '';
 	}
 
 	/**
@@ -777,7 +846,7 @@ class ODW_Catalog_Filters {
 			return;
 		}
 
-		unset( self::$pending[ $post_id ] );
+		unset( self::$pending[ get_current_blog_id() ][ $post_id ] );
 
 		$values = self::index_values( $post_id );
 		foreach ( array(
@@ -790,6 +859,18 @@ class ODW_Catalog_Filters {
 				update_post_meta( $post_id, $key, $value );
 			}
 		}
+
+		update_post_meta( $post_id, self::INDEX_STATE, self::index_state( (string) get_post_field( 'post_modified_gmt', $post_id ) ) );
+	}
+
+	/**
+	 * Stand des Abgleichs, wie ihn die Migration vergleicht. Reine Funktion.
+	 *
+	 * @param string $modified_gmt post_modified_gmt des Datensatzes.
+	 * @return string
+	 */
+	public static function index_state( string $modified_gmt ): string {
+		return self::INDEX_VERSION . '|' . $modified_gmt;
 	}
 
 	/**
@@ -847,14 +928,17 @@ class ODW_Catalog_Filters {
 	 * Priorität 10 alle Meta-Zeilen der Revision zurück, deren Schlüssel mit
 	 * einem Feldnamen beginnen — also auch die (zum Zeitpunkt der Revision
 	 * veralteten) Index-Felder _odw_license_index, _odw_format_index und
-	 * _odw_theme_index.
+	 * _odw_theme_index. Es schreibt per SQL an der Meta-API vorbei, ohne den
+	 * Meta-Cache zu leeren; der Abgleich verwirft ihn deshalb zuerst.
 	 *
 	 * @param int $post_id     Post ID.
 	 * @param int $revision_id Revision, ungenutzt.
 	 */
 	public static function after_restore( $post_id, $revision_id = 0 ): void {
 		unset( $revision_id );
+		wp_cache_delete( (int) $post_id, 'post_meta' );
 		self::resync( (int) $post_id );
+		self::announce( (int) $post_id );
 	}
 
 	/**
@@ -863,10 +947,23 @@ class ODW_Catalog_Filters {
 	 * Cache des Anhangs erst nach deleted_post).
 	 */
 	public static function flush_pending(): void {
-		foreach ( array_keys( self::$pending ) as $post_id ) {
-			self::resync( (int) $post_id );
-		}
+		$pending       = self::$pending;
 		self::$pending = array();
+		$current       = get_current_blog_id();
+
+		foreach ( $pending as $blog_id => $ids ) {
+			$switched = (int) $blog_id !== $current && is_multisite();
+			if ( $switched ) {
+				switch_to_blog( (int) $blog_id );
+			}
+			foreach ( array_keys( $ids ) as $post_id ) {
+				self::resync( (int) $post_id );
+				self::announce( (int) $post_id );
+			}
+			if ( $switched ) {
+				restore_current_blog();
+			}
+		}
 	}
 
 	/**
@@ -881,7 +978,7 @@ class ODW_Catalog_Filters {
 		if ( empty( self::$pending ) ) {
 			add_action( 'shutdown', array( self::class, 'flush_pending' ) );
 		}
-		self::$pending[ $post_id ] = true;
+		self::$pending[ get_current_blog_id() ][ $post_id ] = true;
 	}
 
 	/**
@@ -897,33 +994,50 @@ class ODW_Catalog_Filters {
 	}
 
 	/**
-	 * Füllt die Index-Felder für Bestandsdaten — 200 Datensätze pro Request,
-	 * bis alle durch sind.
+	 * Meldet einen veröffentlichten Datensatz an odw_catalog_changed — auch
+	 * dann, wenn das Speichern ihn in diesem Request schon gemeldet hat: Der
+	 * Abgleich kam danach.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	private static function announce( int $post_id ): void {
+		if ( class_exists( 'ODW_Catalog_Seo' ) && 'publish' === get_post_status( $post_id ) ) {
+			ODW_Catalog_Seo::announce( $post_id, true );
+		}
+	}
+
+	/**
+	 * Gleicht Datensätze ab, deren Index nicht zum aktuellen Stand passt —
+	 * 200 pro Request, bis alle durch sind.
+	 *
+	 * Welche das sind, sagt _odw_index_state (index_state()): Er fehlt bei
+	 * Bestandsdaten aus der Zeit vor 2.44 und bei Datensätzen, die eine ältere
+	 * Plugin-Version angelegt hat; er weicht ab, wenn ein Datensatz ohne
+	 * Abgleich gespeichert wurde (etwa nach einem Rollback auf 2.43) oder sich
+	 * die Index-Version ändert.
 	 *
 	 * Läuft auf init, also auch im Frontend: Sonst fehlten auf einer frisch
 	 * aktualisierten Website, deren Backend noch niemand geöffnet hat, alle
-	 * Bestandsdaten in Filtern und Facetten. Die Option ist autoload — nach
-	 * Abschluss kostet die Prüfung keine Abfrage.
-	 *
-	 * Nach jedem Wechsel der Plugin-Version läuft sie erneut: Eine ältere
-	 * Version (etwa nach einem automatischen Rollback) pflegt die Index-Felder
-	 * nicht, und was dort geändert wurde, stünde sonst dauerhaft falsch im
-	 * Filter.
+	 * Bestandsdaten in Filtern und Facetten. Abgeschlossen kostet die Prüfung
+	 * keine Abfrage (die Option ist autoload); nachgesehen wird nach einem
+	 * Versionswechsel und sonst alle 12 Stunden, mit einer Abfrage.
 	 */
 	public static function maybe_migrate_index(): void {
 		$plugin   = defined( 'ODW_VERSION' ) ? (string) ODW_VERSION : '';
+		$now      = time();
 		$progress = get_option( self::INDEX_OPTION );
 		$progress = is_array( $progress ) ? $progress : array();
 		$current  = (int) ( $progress['version'] ?? 0 ) === self::INDEX_VERSION && (string) ( $progress['plugin'] ?? '' ) === $plugin;
-		if ( $current && ! empty( $progress['done'] ) ) {
+		$done     = ! empty( $progress['done'] );
+		if ( $current && $done && $now - (int) ( $progress['checked'] ?? 0 ) < self::INDEX_RECHECK ) {
 			return;
 		}
 
-		$after = $current ? (int) ( $progress['after'] ?? 0 ) : 0;
+		$after = $current && ! $done ? (int) ( $progress['after'] ?? 0 ) : 0;
 
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Migration in Stapeln nach ID; get_posts() kennt kein „ID größer als".
-		$ids = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'odw_dataset' AND post_status NOT IN ( 'auto-draft', 'trash', 'inherit' ) AND ID > %d ORDER BY ID ASC LIMIT %d", $after, self::INDEX_BATCH ) ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Migration in Stapeln nach ID über einen LEFT JOIN; get_posts() kennt weder „ID größer als" noch den Vergleich mit post_modified_gmt.
+		$ids = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT p.ID FROM {$wpdb->posts} p LEFT JOIN {$wpdb->postmeta} s ON s.post_id = p.ID AND s.meta_key = %s WHERE p.post_type = 'odw_dataset' AND p.post_status NOT IN ( 'auto-draft', 'trash', 'inherit' ) AND p.ID > %d AND ( s.meta_value IS NULL OR s.meta_value <> CONCAT( %d, '|', p.post_modified_gmt ) ) ORDER BY p.ID ASC LIMIT %d", self::INDEX_STATE, $after, self::INDEX_VERSION, self::INDEX_BATCH ) ) );
 
 		if ( ! empty( $ids ) ) {
 			update_meta_cache( 'post', $ids );
@@ -939,6 +1053,7 @@ class ODW_Catalog_Filters {
 				'plugin'  => $plugin,
 				'after'   => empty( $ids ) ? $after : (int) end( $ids ),
 				'done'    => count( $ids ) < self::INDEX_BATCH,
+				'checked' => $now,
 			),
 			true
 		);

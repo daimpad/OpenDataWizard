@@ -21,7 +21,8 @@ Alles ist Opt-in: Ein `[odw_catalog]` ohne die neuen Attribute sieht aus wie bis
   Lizenz-URIs sind wählbar; eine eigene Lizenz als Freitext („Nutzung nach Absprache") erscheint
   nicht als Auswahl, weil sie sich nicht eindeutig adressieren lässt.
 - **Textsuche:** `search="1"` durchsucht Titel, Beschreibung und Schlagworte (einfache LIKE-Suche
-  ohne Relevanz).
+  ohne Relevanz). Ein zu kurzer Begriff bleibt im Feld stehen, mit dem Hinweis „Bitte mindestens
+  zwei Zeichen eingeben.".
 - **Feste Lizenz:** `license="cc-by"` (Kurzform oder Lizenz-URI, auch eine eigene).
 - Im Block „Datenkatalog" stehen dieselben Einstellungen in der Seitenleiste.
 - **Suchmaschinen:** Die Detailansicht `?odw_ds=<ID>` ist eine eigene Seite — Titel „Datensatz –
@@ -46,8 +47,9 @@ Alles ist Opt-in: Ein `[odw_catalog]` ohne die neuen Attribute sieht aus wie bis
   wie schon beim Thema. Lizenz und Format als ODER-Abfrage über die Rohfelder hätten in
   WordPress ein Kreuzprodukt über `wp_postmeta` erzeugt. Die Felder entstehen beim Speichern
   und folgen auch Änderungen auf anderem Weg (WordPress-Importer, WP-CLI, gelöschter Anhang,
-  wiederhergestellte Revision). Bestandsdaten füllt eine Migration in Stapeln zu 200
-  Datensätzen nach; sie läuft nach jedem Versionswechsel erneut.
+  wiederhergestellte Revision, Multisite-Kopien). Bestandsdaten füllt eine Migration in Stapeln
+  zu 200 Datensätzen nach; nach einem Versionswechsel und alle 12 Stunden sieht sie mit einer
+  Abfrage nach Datensätzen, die ohne Abgleich geändert wurden (etwa nach einem Rollback).
 - Die Facetten kosten je Auswahlfeld eine GROUP-BY-Abfrage; eine Katalogseite mit allen Filtern
   bleibt bei rund einem Dutzend Abfragen.
 

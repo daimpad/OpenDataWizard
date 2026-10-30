@@ -360,10 +360,11 @@
     background: #1d4ed8;
     color: #fff;
     text-decoration: none;
-    outline: 3px solid #1d4ed8;
+    /* Dunkelblauer Ring mit weißem Saum in der Lücke: Auf jedem Hintergrund
+       erreicht eine der beiden Farben 3:1 (WCAG 1.4.11) — #1e3a8a gegen Weiß
+       10,4:1, die Bereiche überlappen also. */
+    outline: 3px solid #1e3a8a;
     outline-offset: 2px;
-    /* Weißer Saum in der Lücke: Auf dunklen oder farbigen Theme-Hintergründen
-       erreicht dann eine der beiden Farben 3:1 (WCAG 1.4.11). */
     box-shadow: 0 0 0 2px #fff;
 }
 
@@ -437,9 +438,13 @@
 .odw-catalog.odw-catalog .odw-catalog__submit:focus-visible,
 .odw-catalog.odw-catalog .odw-catalog__field select:focus-visible,
 .odw-catalog.odw-catalog .odw-catalog__field input:focus-visible {
-    outline: 3px solid #1d4ed8;
+    outline: 3px solid #1e3a8a;
     outline-offset: 2px;
     box-shadow: 0 0 0 2px #fff;
+}
+
+.odw-catalog .odw-catalog__hint {
+    font-size: 0.85em;
 }
 
 /* --- Seitennavigation --- */

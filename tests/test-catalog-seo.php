@@ -285,6 +285,9 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		ODW_Catalog_Seo::after_insert( 501, $this->post( 501 ), true, $this->post( 501 ) );
 
 		$this->assertSame( array( 501 => 1 ), $count->calls );
+
+		ODW_Catalog_Seo::announce( 501, true );
+		$this->assertSame( array( 501 => 2 ), $count->calls, 'Mit $again ein zweites Mal (Abgleich nach dem Speichern).' );
 	}
 
 	/**
@@ -593,6 +596,7 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'CO2-Emissionen – Daten', 'CO<sub>2</sub>-Emissionen' ), 'Tags entfernt.' );
 		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Schüler &amp; Lehrer – Daten', 'Schüler &#038; Lehrer' ), 'Entitäten.' );
 		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Zwei Leer – Daten', 'Zwei  Leer' ), 'Leerraum zusammengefasst.' );
+		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Pfad C:Daten – Daten – Stadt', 'Pfad C:\\Daten' ), 'stripslashes wie bei Rank Math.' );
 		$this->assertFalse( ODW_Catalog_Seo::starts_with_title( 'Daten – Stadt', 'Schulstandorte' ) );
 
 		$this->set_head(
@@ -632,7 +636,124 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		$piece = ODW_Catalog_Seo::yoast_schema_webpage( array( 'name' => 'Daten - Stadt' ), $context );
 		$this->assertSame( 'Schüler & Lehrer – Daten - Stadt', $piece['name'] );
 
+		$this->set_head(
+			$this->head(
+				array(
+					'title'   => 'Messwerte &lt;!--&lt;script&gt; Rohdaten',
+					'dataset' => 21,
+				)
+			)
+		);
+		$piece = ODW_Catalog_Seo::yoast_schema_webpage( array( 'name' => 'Daten' ), $context );
+		$this->assertStringNotContainsString( '<', $piece['name'], 'Kodiertes Markup wird nach dem Dekodieren nicht zu echtem.' );
+
 		$this->set_head( null );
+	}
+
+	/**
+	 * Social-Titel bei Yoast und Rank Math: Datensatztitel als Text, ohne
+	 * Tags (Yoasts Twitter-Ausgabe entfernt keine); ein leerer bleibt leer.
+	 */
+	public function test_social_titles_plain(): void {
+		$this->load();
+		$this->mock_strip_tags();
+		$this->set_head(
+			$this->head(
+				array(
+					'title'   => 'CO<sub>2</sub>-Emissionen',
+					'dataset' => 21,
+				)
+			)
+		);
+
+		$this->assertSame( 'CO2-Emissionen – Eigener X-Titel', ODW_Catalog_Seo::yoast_social_title( 'Eigener X-Titel', $this->presentation( 7 ) ) );
+		$this->assertSame( '', ODW_Catalog_Seo::yoast_social_title( '', $this->presentation( 7 ) ), 'Leer: og:title gilt.' );
+		$this->assertSame( 'Eigener X-Titel', ODW_Catalog_Seo::yoast_social_title( 'Eigener X-Titel', $this->presentation( 8 ) ) );
+		$this->assertSame( 'CO2-Emissionen – Teilen', ODW_Catalog_Seo::rank_math_social_title( 'Teilen' ) );
+
+		$this->set_head( null );
+	}
+
+	/**
+	 * Header: nie „follow" (ein nofollow der Redaktion kennt er nicht), bei
+	 * blog_public = 0 nofollow.
+	 */
+	public function test_robots_header(): void {
+		$this->load();
+
+		$this->assertSame( 'noindex', ODW_Catalog_Seo::robots_header( true ) );
+		$this->assertSame( 'noindex, nofollow', ODW_Catalog_Seo::robots_header( false ) );
+	}
+
+	/**
+	 * Die Methode init() hängt die Adapter an — auch twitter:title (Yoast) und das
+	 * Schema von All in One SEO.
+	 */
+	public function test_init_registers_adapters(): void {
+		$this->load();
+		\WP_Mock::expectFilterAdded( 'wpseo_opengraph_title', array( 'ODW_Catalog_Seo', 'yoast_social_title' ), 20, 2 );
+		\WP_Mock::expectFilterAdded( 'wpseo_twitter_title', array( 'ODW_Catalog_Seo', 'yoast_social_title' ), 20, 2 );
+		\WP_Mock::expectFilterAdded( 'aioseo_schema_output', array( 'ODW_Catalog_Seo', 'aioseo_schema' ), 20 );
+
+		ODW_Catalog_Seo::init();
+
+		$this->verify_expectations();
+	}
+
+	/**
+	 * Eine Seite, die den Katalog nur maskiert ([[odw_catalog]]) oder
+	 * auskommentiert enthält, ist keine Katalogseite: Parameter ändern
+	 * nichts am Kopfbereich.
+	 *
+	 * @dataProvider provide_not_a_catalog
+	 *
+	 * @param string $content Seiteninhalt.
+	 */
+	public function test_masked_catalog_is_no_catalog_page( string $content ): void {
+		$this->load();
+		$post               = $this->post( 7 );
+		$post->post_type    = 'page';
+		$post->post_content = $content;
+
+		\WP_Mock::userFunction( 'did_action' )->andReturn( 1 );
+		\WP_Mock::userFunction( 'is_singular' )->andReturn( true );
+		\WP_Mock::userFunction( 'is_preview' )->andReturn( false );
+		\WP_Mock::userFunction( 'get_queried_object' )->andReturn( $post );
+		\WP_Mock::userFunction( 'has_block' )->andReturn( false );
+		\WP_Mock::userFunction( 'has_shortcode' )->andReturn( true );
+		\WP_Mock::userFunction( 'wp_unslash' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'wp_check_invalid_utf8' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'sanitize_text_field' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'absint' )->andReturnUsing(
+			static function ( $value ): int {
+				return abs( (int) $value );
+			}
+		);
+		\WP_Mock::userFunction( 'get_shortcode_regex' )->andReturnUsing(
+			static function ( array $tags ): string {
+				$tagregexp = implode( '|', array_map( 'preg_quote', $tags ) );
+				return '\\[(\\[?)(' . $tagregexp . ')(?![\\w-])([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)(?:(\\/)\\]|\\](?:([^\\[]*+(?:\\[(?!\\/\\2\\])[^\\[]*+)*+)\\[\\/\\2\\])?)(\\]?)';
+			}
+		);
+		$this->set_head( null );
+		$_GET['odw_q'] = 'Schule';
+
+		$this->assertSame( array( 'index' => true ), ODW_Catalog_Seo::filter_robots( array( 'index' => true ) ) );
+
+		unset( $_GET['odw_q'] );
+		$this->set_head( null );
+	}
+
+	/**
+	 * Inhalte ohne ausführbaren Katalog.
+	 *
+	 * @return array<string, array{0: string}>
+	 */
+	public function provide_not_a_catalog(): array {
+		return array(
+			'maskiert'       => array( '<p>So binden Sie ihn ein: [[odw_catalog]]</p>' ),
+			'auskommentiert' => array( '<!-- [odw_catalog filters="theme"] --><p>Bald.</p>' ),
+		);
 	}
 
 	/**
@@ -745,6 +866,17 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		);
 		$out = ODW_Catalog_Seo::aioseo_schema( $graph );
 		$this->assertSame( 'https://example.org/daten/?odw_ds=21', $out[0]['url'] );
+
+		$listing = ODW_Catalog_Seo::aioseo_schema(
+			array(
+				array(
+					'@type' => 'RealEstateListing',
+					'@id'   => 'https://example.org/daten/#realestatelisting',
+					'url'   => 'https://example.org/daten/',
+				),
+			)
+		);
+		$this->assertSame( 'https://example.org/daten/?odw_ds=21', $listing[0]['url'], 'Auch AIOSEOs Seitentyp ohne „Page" im Namen.' );
 		$this->assertSame( 'https://example.org/daten/#webpage', $out[0]['@id'] );
 		$this->assertSame( $graph[1], $out[1] );
 

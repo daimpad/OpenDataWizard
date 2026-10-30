@@ -237,6 +237,16 @@ test.describe('Datenkatalog: Filter, Suche und Kopfbereich (Stufe 2)', () => {
     await expect(catalog.locator('.odw-catalog__empty a')).toHaveText('Filter zurücksetzen');
   });
 
+  test('ein zu kurzer Suchbegriff bleibt stehen und wird erklärt', async ({ page }) => {
+    await page.goto(`${FILTERED}?odw_q=a`);
+
+    const field = page.getByLabel('Datensätze durchsuchen');
+    await expect(field).toHaveValue('a');
+    await expect(field).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.locator('#odw-filter-q-hint')).toHaveText('Bitte mindestens zwei Zeichen eingeben.');
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+  });
+
   test('Detailansicht: eigener Titel, Canonical ohne Listenzustand, Rückweg mit Filter', async ({ page }) => {
     await page.goto(`${FILTERED}?odw_theme=EDUC`);
     await page.locator('.odw-entry__title a', { hasText: 'E2E: Schulstandorte' }).click();

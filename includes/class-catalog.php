@@ -834,7 +834,7 @@ class ODW_Catalog {
 		// Die Facetten zählen genau die Datensätze, die auch die Liste zeigen
 		// kann — mit show_demo also einschließlich des Beispiels.
 		$exclude = empty( $config['show_demo'] ) ? $demo_id : 0;
-		$html   .= ODW_Catalog_Filters::render_form( $config, $state, ODW_Catalog_Filters::conditions( $config, $state, $exclude ), $base, $reset );
+		$html   .= ODW_Catalog_Filters::render_form( $config, $state, ODW_Catalog_Filters::conditions( $config, $state, $exclude ), $base, $reset, ODW_Catalog_Filters::short_query( self::request_values() ) );
 
 		$query = new WP_Query( self::build_query_args( $config, $request, $demo_id, $state ) );
 		$posts = array_values(
@@ -1246,7 +1246,9 @@ class ODW_Catalog {
 	 * damit der Kopfbereich weiß, was die Seite zeigen wird, bevor sie es tut.
 	 *
 	 * Block vor Shortcode (der Block ist nur einmal je Beitrag erlaubt). Ein
-	 * Katalog in einem synchronisierten Muster steht nicht im Inhalt: null.
+	 * maskierter [[odw_catalog]], ein auskommentierter und ein Katalog in
+	 * einem synchronisierten Muster ergeben null — die Seite zeigt dann keinen
+	 * (bzw. keinen erkennbaren) Katalog.
 	 *
 	 * @param string $content Beitragsinhalt.
 	 * @return array<string, mixed>|null Ergebnis von parse_atts(), null ohne Katalog.
@@ -1259,8 +1261,11 @@ class ODW_Catalog {
 			}
 		}
 
-		if ( false === strpos( $content, '[' . self::SHORTCODE )
-			|| ! preg_match_all( '/' . get_shortcode_regex( array( self::SHORTCODE ) ) . '/', $content, $matches, PREG_SET_ORDER )
+		// Ein auskommentierter Shortcode (<!-- [odw_catalog] -->, etwa zum
+		// vorübergehenden Abschalten) gibt im Browser nichts aus.
+		$scan = (string) preg_replace( '/<!--.*?-->/s', '', $content );
+		if ( false === strpos( $scan, '[' . self::SHORTCODE )
+			|| ! preg_match_all( '/' . get_shortcode_regex( array( self::SHORTCODE ) ) . '/', $scan, $matches, PREG_SET_ORDER )
 		) {
 			return null;
 		}
