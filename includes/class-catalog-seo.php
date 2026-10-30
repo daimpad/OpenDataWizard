@@ -85,6 +85,15 @@ class ODW_Catalog_Seo {
 		add_filter( 'wpseo_opengraph_title', array( self::class, 'yoast_title' ), 20, 2 );
 		add_filter( 'wpseo_schema_webpage', array( self::class, 'yoast_schema_webpage' ), 20, 2 );
 
+		// Rank Math ersetzt Titel, Canonical und robots (es leert am Hook wp
+		// sogar alle wp_robots-Filter). Priorität 20, nach den eigenen
+		// Integrationen von Rank Math (WooCommerce, Polylang …) auf 10.
+		add_filter( 'rank_math/frontend/robots', array( self::class, 'rank_math_robots' ), 20 );
+		add_filter( 'rank_math/frontend/canonical', array( self::class, 'rank_math_canonical' ), 20 );
+		add_filter( 'rank_math/frontend/title', array( self::class, 'rank_math_title' ), 20 );
+		add_filter( 'rank_math/opengraph/facebook/og_title', array( self::class, 'rank_math_social_title' ), 20 );
+		add_filter( 'rank_math/opengraph/twitter/twitter_title', array( self::class, 'rank_math_social_title' ), 20 );
+
 		add_action( 'wp_after_insert_post', array( self::class, 'after_insert' ), 10, 4 );
 		add_action( 'deleted_post', array( self::class, 'after_delete' ), 10, 2 );
 	}
@@ -440,6 +449,75 @@ class ODW_Catalog_Seo {
 			$piece['name'] = self::title_for( $piece['name'], (string) $head['title'] );
 		}
 		return $piece;
+	}
+
+	// -------------------------------------------------------------------------
+	// Rank Math
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Robots in Rank Maths Form ('index' => 'noindex'). Rank Math entfernt am
+	 * Hook wp alle wp_robots-Filter und schreibt sein eigenes Tag; bei noindex
+	 * lässt es den Canonical selbst weg.
+	 *
+	 * Ein vorhandenes 'nofollow' (etwa bei blog_public = 0) bleibt stehen.
+	 *
+	 * @param array<string, string> $robots Robots-Werte.
+	 * @return array<string, string>
+	 */
+	public static function rank_math_robots( $robots ): array {
+		$robots = (array) $robots;
+		$head   = self::head();
+		if ( false === $head || ! $head['noindex'] ) {
+			return $robots;
+		}
+
+		$robots['index'] = 'noindex';
+		if ( ! isset( $robots['follow'] ) ) {
+			$robots['follow'] = 'follow';
+		}
+		return $robots;
+	}
+
+	/**
+	 * Canonical (og:url und Schema folgen ihm bei Rank Math von selbst).
+	 * Rank Math berechnet ihn nur für die aufgerufene Seite.
+	 *
+	 * @param string|false $url Canonical.
+	 * @return string|false
+	 */
+	public static function rank_math_canonical( $url ) {
+		$head = self::head();
+		return false === $head || ! is_string( $url ) ? $url : self::canonical_for( $url, $head );
+	}
+
+	/**
+	 * Titel der Detailansicht. Ruft bewusst nichts von Rank Math auf — eine
+	 * Titel-Abfrage aus dem Titel-Filter heraus liefe in eine Endlosschleife.
+	 *
+	 * @param string $title Titel.
+	 * @return string
+	 */
+	public static function rank_math_title( $title ): string {
+		$head = self::head();
+		return false === $head ? (string) $title : self::title_for( (string) $title, (string) $head['title'] );
+	}
+
+	/**
+	 * Die Social-Titel og:title und twitter:title. Ohne eigenen Social-Titel der Seite fällt
+	 * Rank Math auf den schon ergänzten Seitentitel zurück — dann nicht ein
+	 * zweites Mal voranstellen.
+	 *
+	 * @param string $title Titel.
+	 * @return string
+	 */
+	public static function rank_math_social_title( $title ): string {
+		$title = (string) $title;
+		$head  = self::head();
+		if ( false === $head || '' === $head['title'] || 0 === strpos( $title, $head['title'] . ' – ' ) ) {
+			return $title;
+		}
+		return self::title_for( $title, (string) $head['title'] );
 	}
 
 	/**

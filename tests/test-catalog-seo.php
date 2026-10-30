@@ -372,4 +372,148 @@ class Test_ODW_Catalog_Seo extends TestCase {
 			ODW_Catalog_Seo::allow_params( array( 'utm_source', 'odw_page' ) )
 		);
 	}
+
+	/**
+	 * Setzt den Zustand der aufgerufenen Seite, wie head() ihn ermitteln würde.
+	 *
+	 * @param array<string, mixed>|null $head Zustand, null zum Zurücksetzen.
+	 */
+	private function set_head( ?array $head ): void {
+		$property = new ReflectionProperty( 'ODW_Catalog_Seo', 'head' );
+		$property->setAccessible( true );
+		$property->setValue( null, $head );
+	}
+
+	/**
+	 * Zustand einer Seite mit Abweichungen.
+	 *
+	 * @param array<string, mixed> $set Abweichungen.
+	 * @return array<string, mixed>
+	 */
+	private function head( array $set ): array {
+		return array_merge(
+			array(
+				'status'         => 200,
+				'noindex'        => false,
+				'canonical_args' => array(),
+				'title'          => '',
+				'dataset'        => 0,
+				'post_id'        => 7,
+			),
+			$set
+		);
+	}
+
+	/**
+	 * Ein Yoast-Presentation-Objekt.
+	 *
+	 * @param int $id Objekt-ID.
+	 * @return object
+	 */
+	private function presentation( int $id ): object {
+		return (object) array(
+			'model' => (object) array(
+				'object_type' => 'post',
+				'object_id'   => $id,
+			),
+		);
+	}
+
+	/**
+	 * Robots in den drei Formen: Core-Array, Yoast-Form, Rank-Math-Form — nur
+	 * für die Katalogseite und nur bei noindex.
+	 */
+	public function test_robots_adapters(): void {
+		$this->load();
+		$this->set_head( $this->head( array( 'noindex' => true ) ) );
+
+		$this->assertSame(
+			array(
+				'max-image-preview' => 'large',
+				'noindex'           => true,
+				'follow'            => true,
+			),
+			ODW_Catalog_Seo::filter_robots(
+				array(
+					'index'             => true,
+					'max-image-preview' => 'large',
+				)
+			)
+		);
+
+		$yoast = ODW_Catalog_Seo::yoast_robots(
+			array(
+				'index'             => 'index',
+				'follow'            => 'follow',
+				'max-snippet'       => 'max-snippet:-1',
+				'max-image-preview' => 'max-image-preview:large',
+			),
+			$this->presentation( 7 )
+		);
+		$this->assertSame(
+			array(
+				'index'  => 'noindex',
+				'follow' => 'follow',
+			),
+			$yoast
+		);
+		$this->assertSame( array( 'index' => 'index' ), ODW_Catalog_Seo::yoast_robots( array( 'index' => 'index' ), $this->presentation( 8 ) ), 'Fremde Seite bleibt unberührt.' );
+
+		$this->assertSame(
+			array(
+				'index'  => 'noindex',
+				'follow' => 'nofollow',
+			),
+			ODW_Catalog_Seo::rank_math_robots(
+				array(
+					'index'  => 'index',
+					'follow' => 'nofollow',
+				)
+			),
+			'Ein vorhandenes nofollow (blog_public = 0) bleibt.'
+		);
+
+		$this->set_head( $this->head( array() ) );
+		$this->assertSame( array( 'index' => 'index' ), ODW_Catalog_Seo::rank_math_robots( array( 'index' => 'index' ) ) );
+		$this->set_head( null );
+	}
+
+	/**
+	 * Titel: Core-Teile, Yoast und Rank Math bekommen den Datensatztitel
+	 * vorangestellt; Social-Titel nicht doppelt.
+	 */
+	public function test_title_adapters(): void {
+		$this->load();
+		$this->set_head(
+			$this->head(
+				array(
+					'title'   => 'Schulstandorte',
+					'dataset' => 21,
+				)
+			)
+		);
+
+		$this->assertSame( 'Schulstandorte', ODW_Catalog_Seo::filter_title_parts( array( 'title' => 'Daten' ) )['title'] );
+		$this->assertSame( 'Schulstandorte – Daten – Stadt', ODW_Catalog_Seo::yoast_title( 'Daten – Stadt', $this->presentation( 7 ) ) );
+		$this->assertSame( 'Daten – Stadt', ODW_Catalog_Seo::yoast_title( 'Daten – Stadt', $this->presentation( 9 ) ) );
+		$this->assertSame( 'Schulstandorte – Daten | Stadt', ODW_Catalog_Seo::rank_math_title( 'Daten | Stadt' ) );
+		$this->assertSame( 'Schulstandorte – Daten | Stadt', ODW_Catalog_Seo::rank_math_social_title( 'Schulstandorte – Daten | Stadt' ), 'Schon ergänzt: nicht doppelt.' );
+		$this->assertSame( 'Schulstandorte – Teilen', ODW_Catalog_Seo::rank_math_social_title( 'Teilen' ) );
+
+		$this->set_head( null );
+	}
+
+	/**
+	 * Canonical bei Yoast und Rank Math: ungültige ID ohne Canonical.
+	 */
+	public function test_canonical_adapters(): void {
+		$this->load();
+		$this->set_head( $this->head( array( 'status' => 404 ) ) );
+
+		$this->assertSame( '', ODW_Catalog_Seo::yoast_url( 'https://example.org/daten/', $this->presentation( 7 ) ) );
+		$this->assertSame( '', ODW_Catalog_Seo::rank_math_canonical( 'https://example.org/daten/' ) );
+		$this->assertSame( 'https://example.org/andere/', ODW_Catalog_Seo::yoast_url( 'https://example.org/andere/', $this->presentation( 8 ) ) );
+
+		$this->set_head( null );
+	}
 }
