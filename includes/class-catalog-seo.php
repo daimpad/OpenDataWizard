@@ -94,6 +94,12 @@ class ODW_Catalog_Seo {
 		add_filter( 'rank_math/opengraph/facebook/og_title', array( self::class, 'rank_math_social_title' ), 20 );
 		add_filter( 'rank_math/opengraph/twitter/twitter_title', array( self::class, 'rank_math_social_title' ), 20 );
 
+		// All in One SEO: dieselben drei Ausgaben über eigene Filter; es leert
+		// vor wp_head ebenfalls alle wp_robots-Filter.
+		add_filter( 'aioseo_canonical_url', array( self::class, 'aioseo_canonical' ), 20 );
+		add_filter( 'aioseo_title', array( self::class, 'aioseo_title' ), 20 );
+		add_filter( 'aioseo_robots_meta', array( self::class, 'aioseo_robots' ), 20 );
+
 		add_action( 'wp_after_insert_post', array( self::class, 'after_insert' ), 10, 4 );
 		add_action( 'deleted_post', array( self::class, 'after_delete' ), 10, 2 );
 	}
@@ -518,6 +524,62 @@ class ODW_Catalog_Seo {
 			return $title;
 		}
 		return self::title_for( $title, (string) $head['title'] );
+	}
+
+	// -------------------------------------------------------------------------
+	// All in One SEO
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Canonical und og:url. AIOSEO wendet vorher auch get_canonical_url an —
+	 * canonical_for() ersetzt die eigenen Parameter, statt sie zu verdoppeln.
+	 * Ein '' unterdrückt Canonical und og:url.
+	 *
+	 * @param string $url Canonical.
+	 * @return string
+	 */
+	public static function aioseo_canonical( $url ): string {
+		$head = self::head();
+		return false === $head ? (string) $url : self::canonical_for( (string) $url, $head );
+	}
+
+	/**
+	 * Titel, og:title, twitter:title und Schema-Name — AIOSEO ruft den Filter
+	 * für jeden davon einzeln auf, ohne Kontext. Deshalb nur einmal voranstellen.
+	 *
+	 * AIOSEO ersetzt danach Smart-Tags (#…) und führt Shortcodes aus; ein # oder
+	 * [ im Datensatztitel wird deshalb als Entität übergeben.
+	 *
+	 * @param string $title Titel.
+	 * @return string
+	 */
+	public static function aioseo_title( $title ): string {
+		$title = (string) $title;
+		$head  = self::head();
+		if ( false === $head || '' === $head['title'] || '' === trim( $title ) ) {
+			return $title;
+		}
+
+		$dataset = str_replace( array( '#', '[' ), array( '&#35;', '&#91;' ), (string) $head['title'] );
+		return 0 === strpos( $title, $dataset . ' – ' ) ? $title : self::title_for( $title, $dataset );
+	}
+
+	/**
+	 * Robots in AIOSEOs Form ('noindex' => 'noindex'). AIOSEO leert vor
+	 * wp_head alle wp_robots-Filter. Ein gesetztes nofollow bleibt.
+	 *
+	 * @param array<string, string> $attributes Robots-Werte.
+	 * @return array<string, string>
+	 */
+	public static function aioseo_robots( $attributes ): array {
+		$attributes = (array) $attributes;
+		$head       = self::head();
+		if ( false === $head || ! $head['noindex'] ) {
+			return $attributes;
+		}
+
+		$attributes['noindex'] = 'noindex';
+		return $attributes;
 	}
 
 	/**

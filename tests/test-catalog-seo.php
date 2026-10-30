@@ -516,4 +516,63 @@ class Test_ODW_Catalog_Seo extends TestCase {
 
 		$this->set_head( null );
 	}
+
+	/**
+	 * All in One SEO: robots in seiner Form, Titel nur einmal und mit
+	 * maskierten Smart-Tag-/Shortcode-Zeichen, Canonical ohne Verdopplung.
+	 */
+	public function test_aioseo_adapters(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'remove_query_arg' )->andReturnUsing(
+			static function ( $keys, $url ) {
+				$parts = explode( '?', (string) $url, 2 );
+				$query = array();
+				if ( isset( $parts[1] ) ) {
+					parse_str( $parts[1], $query );
+				}
+				foreach ( (array) $keys as $key ) {
+					unset( $query[ $key ] );
+				}
+				return $parts[0] . ( $query ? '?' . http_build_query( $query ) : '' );
+			}
+		);
+		\WP_Mock::userFunction( 'add_query_arg' )->andReturnUsing(
+			static function ( $args, $url ) {
+				return $url . ( false === strpos( (string) $url, '?' ) ? '?' : '&' ) . http_build_query( $args );
+			}
+		);
+
+		$this->set_head(
+			$this->head(
+				array(
+					'title'          => 'Messwerte #1 [Rohdaten]',
+					'dataset'        => 21,
+					'canonical_args' => array( 'odw_ds' => 21 ),
+				)
+			)
+		);
+
+		$once = ODW_Catalog_Seo::aioseo_title( 'Daten - Stadt' );
+		$this->assertSame( 'Messwerte &#35;1 &#91;Rohdaten] – Daten - Stadt', $once );
+		$this->assertSame( $once, ODW_Catalog_Seo::aioseo_title( $once ), 'Zweiter Aufruf (og:title) stellt nicht erneut voran.' );
+
+		// get_canonical_url hat odw_ds schon angehängt — nicht verdoppeln.
+		$this->assertSame( 'https://example.org/daten/?odw_ds=21', ODW_Catalog_Seo::aioseo_canonical( 'https://example.org/daten/?odw_ds=21' ) );
+
+		$this->set_head( $this->head( array( 'noindex' => true ) ) );
+		$this->assertSame(
+			array(
+				'noindex'  => 'noindex',
+				'nofollow' => 'nofollow',
+			),
+			ODW_Catalog_Seo::aioseo_robots(
+				array(
+					'noindex'  => '',
+					'nofollow' => 'nofollow',
+				)
+			)
+		);
+
+		$this->set_head( null );
+	}
 }

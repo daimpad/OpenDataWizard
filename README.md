@@ -277,7 +277,8 @@ Herausgeber sind nicht filterbar.
   sind `noindex, follow` — sie zeigen dieselben Datensätze in anderer Auswahl.
 - Mit **Yoast SEO**, **Rank Math** oder **All in One SEO** gelten dieselben Regeln; das Plugin
   gibt ihnen Titel, Canonical und robots über deren eigene Filter vor. Yoasts „Crawl-Bereinigung"
-  lässt die `odw_`-Parameter stehen. Für alle anderen SEO-Plugins gilt `noindex` zusätzlich als
+  lässt die `odw_`-Parameter stehen; in der Crawl-Bereinigung von All in One SEO dürfen sie nicht
+  auf der Sperrliste stehen. Für alle anderen SEO-Plugins gilt `noindex` zusätzlich als
   HTTP-Header (`X-Robots-Tag`).
 - **Seiten-Caches:** Ein Datensatz hat keine eigene Adresse, ein Cache-Plugin leert die Katalogseite
   beim Speichern deshalb nicht von selbst. Die Katalogseite am besten vom Ganzseiten-Cache ausnehmen
