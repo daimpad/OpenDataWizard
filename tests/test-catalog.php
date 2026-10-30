@@ -142,7 +142,7 @@ class Test_ODW_Catalog extends TestCase {
 			}
 		);
 
-		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php' ) as $file ) {
+		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
 			require_once ODW_PLUGIN_DIR . 'includes/' . $file;
 		}
 	}
@@ -502,10 +502,24 @@ class Test_ODW_Catalog extends TestCase {
 				'title'     => 'Daten',
 				'excerpt'   => '0',
 				'show_demo' => '1',
+				'license'   => '',
+				'filters'   => '',
+				'search'    => '0',
 			),
 			$atts
 		);
 		$this->assertSame( '0', ODW_Catalog::block_to_atts( array() )['show_demo'] );
+
+		$stage2 = ODW_Catalog::block_to_atts(
+			array(
+				'license' => 'cc-by',
+				'filters' => array( 'theme', 'format' ),
+				'search'  => true,
+			)
+		);
+		$this->assertSame( 'cc-by', $stage2['license'] );
+		$this->assertSame( 'theme,format', $stage2['filters'] );
+		$this->assertSame( '1', $stage2['search'] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -772,7 +786,7 @@ class Test_ODW_Catalog extends TestCase {
 		$this->load();
 		\WP_Mock::userFunction( 'remove_query_arg' )
 			->once()
-			->with( array( 'odw_page', 'odw_ds' ), $raw )
+			->with( array( 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q' ), $raw )
 			->andReturn( $removed );
 		// Wie esc_url_raw(): streicht Zeichen, die nicht in eine URL gehören.
 		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnUsing(

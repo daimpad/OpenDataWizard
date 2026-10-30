@@ -16,7 +16,14 @@
 	var el       = element.createElement;
 	var cfg      = window.odwCatalogBlock || {};
 	var themes   = cfg.themes || [];
+	var licenses = cfg.licenses || [];
 	var labels   = cfg.labels || {};
+	var facets   = [
+		{ key: 'theme', label: labels.filterTheme },
+		{ key: 'license', label: labels.filterLic },
+		{ key: 'format', label: labels.filterFormat },
+		{ key: 'sort', label: labels.filterSort },
+	];
 	var defaults = cfg.defaults || { perPage: 20, excerpt: 30 };
 	var limits   = cfg.limits || { perPage: 50, excerpt: 100 };
 
@@ -78,7 +85,93 @@
 			);
 		}
 
+		if ( attributes.license ) {
+			lines.push( el( 'p', { key: 'license' }, ( labels.license || '' ) + ': ' + licenseLabel( attributes.license ) ) );
+		}
+
+		var active = activeFacets( attributes ).map( function ( key ) {
+			for ( var i = 0; i < facets.length; i++ ) {
+				if ( facets[ i ].key === key ) {
+					return facets[ i ].label;
+				}
+			}
+			return key;
+		} );
+		if ( active.length || attributes.search ) {
+			lines.push(
+				el(
+					'p',
+					{ key: 'visitor' },
+					( active.length ? ( labels.filtersOn || '' ) + ': ' + active.join( ', ' ) : '' ) +
+					( active.length && attributes.search ? ' · ' : '' ) +
+					( attributes.search ? labels.searchOn : '' )
+				)
+			);
+		}
+
 		return el( components.Placeholder, { icon: 'list-view', label: labels.title }, lines );
+	}
+
+	function licenseLabel( value ) {
+		for ( var i = 0; i < licenses.length; i++ ) {
+			if ( licenses[ i ].value === value ) {
+				return licenses[ i ].label;
+			}
+		}
+		return value;
+	}
+
+	/**
+	 * Freigeschaltete Filter, ohne die fest eingestellten — wie im Frontend.
+	 *
+	 * @param {Object} attributes Block-Attribute.
+	 * @return {Array} Schlüssel.
+	 */
+	function activeFacets( attributes ) {
+		var wanted = Array.isArray( attributes.filters ) ? attributes.filters : [];
+		return wanted.filter( function ( key ) {
+			if ( 'theme' === key && selectedThemes( attributes.theme ).length ) {
+				return false;
+			}
+			if ( 'license' === key && attributes.license ) {
+				return false;
+			}
+			return true;
+		} );
+	}
+
+	function facetControls( attributes, setAttributes ) {
+		var wanted = Array.isArray( attributes.filters ) ? attributes.filters : [];
+
+		return facets.map( function ( facet ) {
+			var fixed = ( 'theme' === facet.key && selectedThemes( attributes.theme ).length ) ||
+				( 'license' === facet.key && attributes.license );
+
+			return el( components.CheckboxControl, {
+				key: facet.key,
+				label: facet.label,
+				checked: ! fixed && wanted.indexOf( facet.key ) !== -1,
+				disabled: !! fixed,
+				onChange: function ( isChecked ) {
+					var next = wanted.filter( function ( key ) {
+						return key !== facet.key;
+					} );
+					if ( isChecked ) {
+						next.push( facet.key );
+					}
+					// Feste Reihenfolge wie im Formular.
+					next = facets
+						.map( function ( f ) {
+							return f.key;
+						} )
+						.filter( function ( key ) {
+							return next.indexOf( key ) !== -1;
+						} );
+					setAttributes( { filters: next } );
+				},
+				__nextHasNoMarginBottom: true,
+			} );
+		} );
 	}
 
 	function themeControls( attributes, setAttributes ) {
@@ -175,7 +268,36 @@
 							el( 'p', null, labels.themesHelp ),
 							themeControls( attributes, setAttributes )
 						)
-						: null
+						: null,
+					licenses.length
+						? el(
+							components.PanelBody,
+							{ title: labels.license, initialOpen: false },
+							el( components.SelectControl, {
+								label: labels.license,
+								value: attributes.license || '',
+								options: [ { label: labels.allLicenses, value: '' } ].concat( licenses ),
+								onChange: function ( value ) {
+									setAttributes( { license: value } );
+								},
+								__nextHasNoMarginBottom: true,
+							} )
+						)
+						: null,
+					el(
+						components.PanelBody,
+						{ title: labels.visitor, initialOpen: false },
+						el( 'p', null, labels.visitorHelp ),
+						facetControls( attributes, setAttributes ),
+						el( components.ToggleControl, {
+							label: labels.search,
+							checked: !! attributes.search,
+							onChange: function ( value ) {
+								setAttributes( { search: !! value } );
+							},
+							__nextHasNoMarginBottom: true,
+						} )
+					)
 				),
 				preview( attributes )
 			);

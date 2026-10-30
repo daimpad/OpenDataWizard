@@ -42,6 +42,8 @@ open-data-wizard/
 │   ├── class-admin.php               # Listenansicht, wp.media Meta-Box, Help Tabs
 │   ├── class-shortcode.php           # [odw_dataset]-Shortcode, Download-Card
 │   ├── class-catalog.php             # [odw_catalog]-Shortcode + Block, Datenkatalog
+│   ├── class-catalog-filters.php     # Katalog: Filter, Facetten, Suche, Index-Felder
+│   ├── class-catalog-seo.php         # Katalog: 404, Canonical, Titel, robots, Cache-Action
 │   ├── class-setup.php               # Demo-Datensatz bei Aktivierung
 │   ├── class-settings.php            # Einstellungsseite
 │   └── class-cli.php                 # WP-CLI Befehle
@@ -63,6 +65,8 @@ open-data-wizard/
 │   ├── test-settings.php
 │   ├── test-shortcode.php
 │   ├── test-catalog.php
+│   ├── test-catalog-filters.php
+│   ├── test-catalog-seo.php
 │   ├── test-rest-delta.php
 │   └── test-cli.php
 └── .github/workflows/ci.yml          # CI: PHPCS + PHPStan + PHPUnit (PHP 8.1–8.3)
@@ -211,13 +215,22 @@ Response enthält `dcat:dataset` (geänderte Datasets) und `odw:removed` (Tombst
 | `odw_theme_options`   | Weitere Thema-Optionen hinzufügen |
 | `odw_dataset_jsonld`  | JSON-LD Array vor Ausgabe anpassen |
 | `odw_catalog_title`   | Catalog-Titel anpassen |
-| `odw_catalog_query_args` | WP_Query-Argumente der Frontend-Katalogliste anpassen (`$args`, `$config`, `$request`) |
+| `odw_catalog_query_args` | WP_Query-Argumente der Frontend-Katalogliste anpassen (`$args`, `$config`, `$request`, seit 2.44.0 `$state` mit Filtern/Suche) |
+| `odw_catalog_changed` (Action) | Ein Datensatz, der im öffentlichen Katalog steht oder stand, wurde gespeichert, veröffentlicht, zurückgezogen oder gelöscht (`$post_id`) — zum Leeren von Seiten-Caches |
 
 ```php
 // Eigene Lizenz hinzufügen
 add_filter( 'odw_license_options', function( array $options ): array {
     $options['https://example.com/custom-license'] = 'Custom License 1.0';
     return $options;
+} );
+
+// Katalogseite aus dem Seiten-Cache werfen, sobald sich ein Datensatz ändert
+// (Beispiel WP Rocket; die ID der Katalogseite ist hier 42)
+add_action( 'odw_catalog_changed', function( int $post_id ): void {
+    if ( function_exists( 'rocket_clean_post' ) ) {
+        rocket_clean_post( 42 );
+    }
 } );
 
 // JSON-LD Dataset anpassen

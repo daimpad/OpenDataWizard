@@ -102,6 +102,12 @@ function odw_e2e_seed(): void {
 			ODW_Fields::sync_theme_index( $post_id );
 		}
 
+		// Lizenz- und Format-Index der Katalog-Filter: save_post lief, bevor
+		// es die Meta-Werte gab — genau wie beim Batch-Import.
+		if ( class_exists( 'ODW_Catalog_Filters' ) ) {
+			ODW_Catalog_Filters::sync_index( $post_id );
+		}
+
 		if ( class_exists( 'ODW_Quality' ) ) {
 			ODW_Quality::store( $post_id, ODW_Quality::calculate( $post_id ) );
 		}
@@ -196,6 +202,28 @@ function odw_e2e_seed_catalog(): void {
 	update_option( ODW_E2E_CATALOG_OPTION, $hidden, false );
 }
 add_action( 'init', 'odw_e2e_seed_catalog', 21 );
+
+/**
+ * Katalogseite mit Filtern, Suche und Sortierauswahl (Stufe 2).
+ *
+ * Ohne eigene Option, nur über den Slug abgesichert: So bekommt auch eine
+ * lokale Testumgebung die Seite, in der die Katalog-Saat schon gelaufen ist.
+ */
+function odw_e2e_seed_filter_page(): void {
+	if ( get_page_by_path( 'odw-e2e-katalog-filter' ) ) {
+		return;
+	}
+	wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_name'    => 'odw-e2e-katalog-filter',
+			'post_title'   => 'E2E: odw-e2e-katalog-filter',
+			'post_content' => '[odw_catalog filters="theme,license,format,sort" search="1"]',
+			'post_status'  => 'publish',
+		)
+	);
+}
+add_action( 'init', 'odw_e2e_seed_filter_page', 22 );
 
 /**
  * Gibt den Tests die IDs der versteckten Datensätze.

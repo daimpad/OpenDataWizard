@@ -364,6 +364,78 @@
     outline-offset: 2px;
 }
 
+/*
+ * --- Filterformular (Stufe 2, nur mit filters/search) ---
+ * Felder nebeneinander, so viele die Breite erlaubt; Beschriftung über dem
+ * Feld. Selects und Suchfeld erben Schrift und Farbe vom Theme.
+ */
+.odw-catalog .odw-catalog__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+    margin: 0 0 1.25rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+}
+
+.odw-catalog .odw-catalog__field {
+    display: flex;
+    flex: 1 1 12rem;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__field--search {
+    flex-basis: 100%;
+}
+
+.odw-catalog .odw-catalog__field label {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.odw-catalog .odw-catalog__field select,
+.odw-catalog .odw-catalog__field input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    font: inherit;
+}
+
+.odw-catalog .odw-catalog__filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__submit {
+    padding: 0.45em 1.1em;
+    background: #2563eb;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-catalog__submit:hover {
+    background: #1d4ed8;
+}
+
+.odw-catalog.odw-catalog .odw-catalog__submit:focus-visible,
+.odw-catalog.odw-catalog .odw-catalog__field select:focus-visible,
+.odw-catalog.odw-catalog .odw-catalog__field input:focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 2px;
+}
+
 /* --- Seitennavigation --- */
 .odw-catalog .odw-catalog__pagination ul {
     display: flex;

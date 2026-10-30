@@ -2056,3 +2056,48 @@ msgstr "Lists all published datasets; a click opens the full download card — t
 
 msgid "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset]."
 msgstr "Shows a published dataset as a download card — the alternative to the [odw_dataset] shortcode."
+
+msgid "%1$s (%2$d)"
+msgstr "%1$s (%2$d)"
+
+msgid "Alle Formate"
+msgstr "All formats"
+
+msgid "Alle Lizenzen"
+msgstr "All licences"
+
+msgid "Alle Themen"
+msgstr "All themes"
+
+msgid "Anzeigen"
+msgstr "Show"
+
+msgid "Datensätze durchsuchen"
+msgstr "Search datasets"
+
+msgid "Datensätze filtern"
+msgstr "Filter datasets"
+
+msgid "Filter"
+msgstr "Filters"
+
+msgid "Filter und Suche für Besucher"
+msgstr "Filters and search for visitors"
+
+msgid "Filter zurücksetzen"
+msgstr "Reset filters"
+
+msgid "Hinweis für die Redaktion, nur für Sie sichtbar: Die Lizenz-Angabe „%s\" wurde nicht erkannt. Verwenden Sie eine Kurzform wie cc-by oder die Lizenz-URI."
+msgstr "Note for editors, visible only to you: the licence value \"%s\" was not recognised. Use a short code such as cc-by or the licence URI."
+
+msgid "Nur diese Lizenz zeigen"
+msgstr "Show only this licence"
+
+msgid "Suchfeld anzeigen"
+msgstr "Show search field"
+
+msgid "Zeigt über der Liste ein Formular. Fest eingestellte Themen oder Lizenzen werden dort nicht noch einmal angeboten."
+msgstr "Shows a form above the list. Themes or licences fixed in the settings are not offered there again."
+
+msgid "mit Suche"
+msgstr "with search"

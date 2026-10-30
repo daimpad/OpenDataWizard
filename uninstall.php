@@ -46,6 +46,7 @@ foreach ( $odw_roles->role_objects as $odw_role ) {
 delete_option( 'odw_settings' );
 delete_option( 'odw_demo_post_id' );
 delete_option( 'odw_show_welcome' );
+delete_option( 'odw_catalog_index' );
 
 // Transients bereinigen.
 global $wpdb;

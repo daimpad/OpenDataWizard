@@ -252,6 +252,12 @@ class ODW_Setup {
 			}
 		}
 
+		// Lizenz- und Format-Index für die Katalog-Filter nachziehen: save_post
+		// lief bei wp_insert_post(), bevor es die Meta-Werte gab.
+		if ( class_exists( 'ODW_Catalog_Filters' ) ) {
+			ODW_Catalog_Filters::sync_index( $post_id );
+		}
+
 		// Qualitätsscore sofort berechnen und persistieren.
 		ODW_Quality::store( $post_id, ODW_Quality::calculate( $post_id ) );
 
