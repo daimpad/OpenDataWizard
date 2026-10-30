@@ -174,7 +174,7 @@ class ODW_Catalog_Filters {
 			return $aliases[ $key ];
 		}
 
-		if ( strlen( $raw ) <= 500 && preg_match( '#^https?://[^\s<>"]+$#i', $raw ) ) {
+		if ( strlen( $raw ) <= 500 && preg_match( '#^https?://[^\s<>"\x00-\x1F\x7F]+$#i', $raw ) ) {
 			// Eine Lizenz der Auswahlliste in ihrer Schreibweise: Die Liste
 			// fände „https://CreativeCommons.org/…" (die Kollation von
 			// wp_postmeta unterscheidet nicht), das Auswahlfeld nicht.

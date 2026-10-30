@@ -653,6 +653,60 @@ class Test_ODW_Catalog extends TestCase {
 		$this->assertSame( 'cc-by', $stage2['license'] );
 		$this->assertSame( 'theme,format', $stage2['filters'] );
 		$this->assertSame( '1', $stage2['search'] );
+
+		// Falsch typisiert (per Skript oder Code-Editor angelegt): kein
+		// „Array to string conversion", sondern der Standardwert.
+		$odd = ODW_Catalog::block_to_atts(
+			array(
+				'theme'   => array( 'EDUC' ),
+				'perPage' => array( 5 ),
+				'filters' => array( 'theme', array( 'x' ) ),
+			)
+		);
+		$this->assertSame( '', $odd['theme'] );
+		$this->assertSame( '20', $odd['per_page'] );
+		$this->assertSame( 'theme', $odd['filters'] );
+	}
+
+	/**
+	 * Der Kopfbereich liest die Block-Attribute so geprüft, wie WordPress sie
+	 * dem render_callback gibt (prepare_attributes_for_render()).
+	 */
+	public function test_config_from_content_validates_block_attributes(): void {
+		$this->load();
+		if ( ! class_exists( 'WP_Block_Type_Registry' ) ) {
+			require_once __DIR__ . '/fixtures/block-type-registry.php';
+		}
+		\WP_Mock::userFunction( 'parse_blocks' )->andReturn(
+			array(
+				array(
+					'blockName'   => 'odw/catalog',
+					'attrs'       => array(
+						'perPage'  => true,
+						'showDemo' => 'yes',
+					),
+					'innerBlocks' => array(),
+				),
+			)
+		);
+
+		WP_Block_Type_Registry::$type = new WP_Block_Type(
+			static function ( array $attributes ): array {
+				// Wie WordPress: ungültige Typen fallen auf den Standardwert.
+				if ( ! is_int( $attributes['perPage'] ?? 20 ) ) {
+					$attributes['perPage'] = 20;
+				}
+				if ( ! is_bool( $attributes['showDemo'] ?? false ) ) {
+					$attributes['showDemo'] = false;
+				}
+				return $attributes;
+			}
+		);
+		$config                       = ODW_Catalog::config_from_content( '<!-- wp:odw/catalog {"perPage":true,"showDemo":"yes"} /-->' );
+		WP_Block_Type_Registry::$type = null;
+
+		$this->assertSame( 20, $config['per_page'] );
+		$this->assertFalse( $config['show_demo'] );
 	}
 
 	// -------------------------------------------------------------------------

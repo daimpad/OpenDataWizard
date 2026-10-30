@@ -255,15 +255,20 @@ class ODW_Catalog {
 	 * @return array<string, string>
 	 */
 	public static function block_to_atts( array $attributes ): array {
+		$text = static function ( string $key, string $fallback ) use ( $attributes ): string {
+			$value = $attributes[ $key ] ?? $fallback;
+			return is_scalar( $value ) ? (string) $value : $fallback;
+		};
+
 		return array(
-			'per_page'  => (string) ( $attributes['perPage'] ?? self::PER_PAGE_DEFAULT ),
-			'orderby'   => (string) ( $attributes['orderby'] ?? 'title' ),
-			'theme'     => (string) ( $attributes['theme'] ?? '' ),
-			'title'     => (string) ( $attributes['title'] ?? '' ),
-			'excerpt'   => (string) ( $attributes['excerpt'] ?? self::EXCERPT_DEFAULT ),
+			'per_page'  => $text( 'perPage', (string) self::PER_PAGE_DEFAULT ),
+			'orderby'   => $text( 'orderby', 'title' ),
+			'theme'     => $text( 'theme', '' ),
+			'title'     => $text( 'title', '' ),
+			'excerpt'   => $text( 'excerpt', (string) self::EXCERPT_DEFAULT ),
 			'show_demo' => empty( $attributes['showDemo'] ) ? '0' : '1',
-			'license'   => (string) ( $attributes['license'] ?? '' ),
-			'filters'   => implode( ',', array_map( 'strval', (array) ( $attributes['filters'] ?? array() ) ) ),
+			'license'   => $text( 'license', '' ),
+			'filters'   => implode( ',', array_filter( (array) ( $attributes['filters'] ?? array() ), 'is_string' ) ),
 			'search'    => empty( $attributes['search'] ) ? '0' : '1',
 		);
 	}
@@ -1257,6 +1262,14 @@ class ODW_Catalog {
 		if ( false !== strpos( $content, '<!-- wp:' . self::BLOCK ) && function_exists( 'parse_blocks' ) ) {
 			$attributes = self::find_block_attributes( parse_blocks( $content ) );
 			if ( null !== $attributes ) {
+				// Wie vor dem render_callback: WordPress prüft die Attribute gegen
+				// die Typen aus block.json und setzt Ungültiges auf den
+				// Standardwert. Ohne diesen Schritt rechneten Kopfbereich und Liste
+				// etwa bei "theme":["EDUC"] mit verschiedenen Einstellungen.
+				$type = class_exists( 'WP_Block_Type_Registry' ) ? WP_Block_Type_Registry::get_instance()->get_registered( self::BLOCK ) : null;
+				if ( $type instanceof WP_Block_Type ) {
+					$attributes = $type->prepare_attributes_for_render( $attributes );
+				}
 				return self::parse_atts( self::block_to_atts( $attributes ) );
 			}
 		}
