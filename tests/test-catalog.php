@@ -142,9 +142,142 @@ class Test_ODW_Catalog extends TestCase {
 			}
 		);
 
-		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php' ) as $file ) {
+		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
 			require_once ODW_PLUGIN_DIR . 'includes/' . $file;
 		}
+	}
+
+	// -------------------------------------------------------------------------
+	// config_from_content()
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Stellt get_shortcode_regex() (wie in Core) und shortcode_parse_atts()
+	 * (vereinfacht: name="wert") bereit.
+	 */
+	private function mock_shortcodes(): void {
+		\WP_Mock::userFunction( 'get_shortcode_regex' )->andReturnUsing(
+			static function ( array $tags ): string {
+				$tagregexp = implode( '|', array_map( 'preg_quote', $tags ) );
+				return '\\[(\\[?)(' . $tagregexp . ')(?![\\w-])([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)(?:(\\/)\\]|\\](?:([^\\[]*+(?:\\[(?!\\/\\2\\])[^\\[]*+)*+)\\[\\/\\2\\])?)(\\]?)';
+			}
+		);
+		\WP_Mock::userFunction( 'shortcode_parse_atts' )->andReturnUsing(
+			static function ( string $text ) {
+				preg_match_all( '/(\w+)="([^"]*)"/', $text, $pairs, PREG_SET_ORDER );
+				$atts = array();
+				foreach ( $pairs as $pair ) {
+					$atts[ $pair[1] ] = $pair[2];
+				}
+				return '' === trim( $text ) ? '' : $atts;
+			}
+		);
+	}
+
+	/**
+	 * Shortcode: die Attribute des ersten ausgeführten Katalogs, geprüft wie
+	 * beim Rendern; ein maskierter [[odw_catalog]] zählt nicht.
+	 */
+	public function test_config_from_content_shortcode(): void {
+		$this->load();
+		$this->mock_shortcodes();
+
+		$config = ODW_Catalog::config_from_content( '<p>Text</p>[[odw_catalog per_page="3"]] [odw_catalog per_page="5" filters="theme,sort"]' );
+		$this->assertNotNull( $config );
+		$this->assertSame( 5, $config['per_page'] );
+		$this->assertSame( array( 'theme', 'sort' ), $config['filters'] );
+
+		$plain = ODW_Catalog::config_from_content( '[odw_catalog]' );
+		$this->assertSame( 20, $plain['per_page'], 'Ohne Attribute: Standardwerte.' );
+
+		$this->assertNull( ODW_Catalog::config_from_content( '<p>[[odw_catalog]]</p>' ) );
+		$this->assertNull( ODW_Catalog::config_from_content( '<p>Kein Katalog</p>' ) );
+		$this->assertNull( ODW_Catalog::config_from_content( "<!-- [odw_catalog per_page=\"10\"]\n --><p>Bald.</p>" ), 'Auskommentiert.' );
+		$this->assertSame( 7, ODW_Catalog::config_from_content( '<!-- alt --> [odw_catalog per_page="7"]' )['per_page'] );
+	}
+
+	/**
+	 * Bei unbekannter Lizenz oder nur unbekannten Themen zeigt die Liste
+	 * nichts — page_has_entries() sagt das, ohne die Datenbank zu fragen.
+	 */
+	public function test_page_has_entries_invalid_config(): void {
+		$this->load();
+		$request = array(
+			'page'    => 2,
+			'dataset' => 0,
+		);
+		$state   = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( '' ), array() );
+
+		$this->assertFalse( ODW_Catalog::page_has_entries( ODW_Catalog::parse_atts( array( 'license' => 'gibt-es-nicht' ) ), $request, $state ) );
+		$this->assertFalse( ODW_Catalog::page_has_entries( ODW_Catalog::parse_atts( array( 'theme' => 'XYZ' ) ), $request, $state ) );
+	}
+
+	/**
+	 * GET-Werte: Lizenz und Thema behalten %XX (eigene Lizenz-URIs), alles
+	 * andere läuft durch sanitize_text_field(); Arrays gelten als nicht gesetzt.
+	 */
+	public function test_request_values(): void {
+		// Vor load(): Die erste passende Erwartung gilt, und load() stellt ein
+		// sanitize_text_field() ohne das Entfernen von %XX bereit.
+		\WP_Mock::userFunction( 'wp_unslash' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'wp_check_invalid_utf8' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'sanitize_text_field' )->andReturnUsing(
+			static function ( $value ): string {
+				// Wie Core: Prozent-Kodierungen und Tags fallen weg.
+				return trim( (string) preg_replace( '/%[a-f0-9]{2}/i', '', strip_tags( (string) $value ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Testersatz für sanitize_text_field(), kein WordPress geladen.
+			}
+		);
+		$this->load();
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Test setzt $_GET, um request_values() wie im Request zu prüfen.
+		$backup = $_GET;
+		$_GET   = array(
+			'odw_license' => 'https://stadt.example/nutzung-f%C3%BCr-daten',
+			'odw_q'       => '<b>Schule</b> 100%ab',
+			'odw_format'  => array( 'CSV' ),
+		);
+		$values = ODW_Catalog::request_values();
+		$_GET   = $backup;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		$this->assertSame( 'https://stadt.example/nutzung-f%C3%BCr-daten', $values['odw_license'] );
+		$this->assertSame( 'Schule 100', $values['odw_q'] );
+		$this->assertSame( '', $values['odw_format'] );
+		$this->assertSame( '', $values['odw_page'] );
+	}
+
+	/**
+	 * Block: auch verschachtelt; fehlende Attribute sind die Standardwerte
+	 * aus block.json.
+	 */
+	public function test_config_from_content_block(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'parse_blocks' )->andReturn(
+			array(
+				array(
+					'blockName'   => 'core/group',
+					'attrs'       => array(),
+					'innerBlocks' => array(
+						array(
+							'blockName'   => 'odw/catalog',
+							'attrs'       => array(
+								'perPage' => 4,
+								'filters' => array( 'license' ),
+								'search'  => true,
+							),
+							'innerBlocks' => array(),
+						),
+					),
+				),
+			)
+		);
+
+		$config = ODW_Catalog::config_from_content( '<!-- wp:group --><!-- wp:odw/catalog {"perPage":4} /--><!-- /wp:group -->' );
+		$this->assertNotNull( $config );
+		$this->assertSame( 4, $config['per_page'] );
+		$this->assertSame( array( 'license' ), $config['filters'] );
+		$this->assertTrue( $config['search'] );
+		$this->assertSame( 'title', $config['orderby'] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -502,10 +635,78 @@ class Test_ODW_Catalog extends TestCase {
 				'title'     => 'Daten',
 				'excerpt'   => '0',
 				'show_demo' => '1',
+				'license'   => '',
+				'filters'   => '',
+				'search'    => '0',
 			),
 			$atts
 		);
 		$this->assertSame( '0', ODW_Catalog::block_to_atts( array() )['show_demo'] );
+
+		$stage2 = ODW_Catalog::block_to_atts(
+			array(
+				'license' => 'cc-by',
+				'filters' => array( 'theme', 'format' ),
+				'search'  => true,
+			)
+		);
+		$this->assertSame( 'cc-by', $stage2['license'] );
+		$this->assertSame( 'theme,format', $stage2['filters'] );
+		$this->assertSame( '1', $stage2['search'] );
+
+		// Falsch typisiert (per Skript oder Code-Editor angelegt): kein
+		// „Array to string conversion", sondern der Standardwert.
+		$odd = ODW_Catalog::block_to_atts(
+			array(
+				'theme'   => array( 'EDUC' ),
+				'perPage' => array( 5 ),
+				'filters' => array( 'theme', array( 'x' ) ),
+			)
+		);
+		$this->assertSame( '', $odd['theme'] );
+		$this->assertSame( '20', $odd['per_page'] );
+		$this->assertSame( 'theme', $odd['filters'] );
+	}
+
+	/**
+	 * Der Kopfbereich liest die Block-Attribute so geprüft, wie WordPress sie
+	 * dem render_callback gibt (prepare_attributes_for_render()).
+	 */
+	public function test_config_from_content_validates_block_attributes(): void {
+		$this->load();
+		if ( ! class_exists( 'WP_Block_Type_Registry' ) ) {
+			require_once __DIR__ . '/fixtures/block-type-registry.php';
+		}
+		\WP_Mock::userFunction( 'parse_blocks' )->andReturn(
+			array(
+				array(
+					'blockName'   => 'odw/catalog',
+					'attrs'       => array(
+						'perPage'  => true,
+						'showDemo' => 'yes',
+					),
+					'innerBlocks' => array(),
+				),
+			)
+		);
+
+		WP_Block_Type_Registry::$type = new WP_Block_Type(
+			static function ( array $attributes ): array {
+				// Wie WordPress: ungültige Typen fallen auf den Standardwert.
+				if ( ! is_int( $attributes['perPage'] ?? 20 ) ) {
+					$attributes['perPage'] = 20;
+				}
+				if ( ! is_bool( $attributes['showDemo'] ?? false ) ) {
+					$attributes['showDemo'] = false;
+				}
+				return $attributes;
+			}
+		);
+		$config                       = ODW_Catalog::config_from_content( '<!-- wp:odw/catalog {"perPage":true,"showDemo":"yes"} /-->' );
+		WP_Block_Type_Registry::$type = null;
+
+		$this->assertSame( 20, $config['per_page'] );
+		$this->assertFalse( $config['show_demo'] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -772,7 +973,7 @@ class Test_ODW_Catalog extends TestCase {
 		$this->load();
 		\WP_Mock::userFunction( 'remove_query_arg' )
 			->once()
-			->with( array( 'odw_page', 'odw_ds' ), $raw )
+			->with( array( 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q' ), $raw )
 			->andReturn( $removed );
 		// Wie esc_url_raw(): streicht Zeichen, die nicht in eine URL gehören.
 		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnUsing(

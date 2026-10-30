@@ -925,17 +925,12 @@ class ODW_Rest_API {
 	}
 
 	/**
-	 * Shorthand alias map for ?license= filter.
+	 * Shorthand alias map for ?license= filter — dieselbe Liste wie Import und
+	 * Frontend-Katalog (ODW_Fields::license_aliases()).
+	 *
+	 * @return array<string, string>
 	 */
 	private static function get_license_alias_map(): array {
-		return array(
-			'cc0'          => 'https://creativecommons.org/publicdomain/zero/1.0/',
-			'cc0-1.0'      => 'https://creativecommons.org/publicdomain/zero/1.0/',
-			'cc-by'        => 'https://creativecommons.org/licenses/by/4.0/',
-			'cc-by-4.0'    => 'https://creativecommons.org/licenses/by/4.0/',
-			'cc-by-sa'     => 'https://creativecommons.org/licenses/by-sa/4.0/',
-			'cc-by-sa-4.0' => 'https://creativecommons.org/licenses/by-sa/4.0/',
-			'dl-de-by-2.0' => 'https://www.govdata.de/dl-de/by-2-0',
-		);
+		return ODW_Fields::license_aliases();
 	}
 }

@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.43.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.44.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -232,6 +232,9 @@ Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_
 | `title` | — | Überschrift über der Liste |
 | `excerpt` | `30` | Wörter im Auszug; `0` blendet ihn aus (max. 100) |
 | `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt — solange er unverändert ist; einmal bearbeitet, erscheint er wie jeder andere Datensatz |
+| `license` | — | Nur eine Lizenz, als Kurzform (`cc-by`, `cc0`, `cc-by-sa`, `dl-de-by`, `dl-de-zero`, `odc-odbl`) oder als Lizenz-URI — auch eine eigene |
+| `filters` | — | Auswahlfelder für Besucher, kommagetrennt: `theme`, `license`, `format`, `sort` |
+| `search` | `0` | `1` zeigt ein Suchfeld (Titel, Beschreibung und Schlagworte) |
 
 ```
 [odw_catalog per_page="10" orderby="modified" theme="EDUC" title="Unsere Daten"]
@@ -244,8 +247,48 @@ einer Seitenleiste oder im Template gehört kein zweiter Katalog auf dieselbe Se
 Klick beide umschalten. Für nach Thema getrennte Kataloge je eine eigene Seite anlegen.
 Entwürfe, private und passwortgeschützte Datensätze erscheinen weder in der Liste noch in der
 Detailansicht. Die Liste kommt unabhängig von der Katalogsgröße mit rund einem halben Dutzend
-Datenbankabfragen pro Seite aus. Eine Volltextsuche oder Filter zum Anklicken gibt es bewusst
-(noch) nicht — siehe „Was der Open Data Wizard *nicht* ist".
+Datenbankabfragen pro Seite aus.
+
+#### Filter und Suche für Besucher
+
+```
+[odw_catalog filters="theme,license,format,sort" search="1"]
+[odw_catalog license="cc-by" filters="theme"]
+```
+
+Mit `filters` und `search` steht über der Liste ein schlichtes Formular — ohne JavaScript, abgeschickt
+über „Anzeigen". Die Auswahlfelder zeigen nur Werte, die tatsächlich vorkommen, mit der Zahl der
+Treffer, die die Wahl **zusammen mit den übrigen Filtern und der Suche** ergäbe; „Filter
+zurücksetzen" führt zur ungefilterten Liste. Fest eingestellte Themen (`theme`) oder Lizenzen
+(`license`) bietet das Formular nicht noch einmal an. Der Filterzustand bleibt beim Blättern und auf
+dem Weg in die Detailansicht und zurück erhalten. Ohne die beiden Attribute sieht ein Katalog genau
+so aus wie bisher.
+
+Grenzen, bewusst einfach gehalten: Format und Lizenz beziehen sich auf die erste Distribution, nicht
+auf weitere. Eine eigene Lizenz („Sonstige") ist nur dann wählbar, wenn sie als Adresse
+(`https://…`) eingetragen ist — ein Freitext wie „Nutzung nach Absprache" erscheint nicht im
+Lizenzfilter. Die Suche ist eine einfache Textsuche ohne Relevanz-Sortierung und braucht mindestens
+zwei Zeichen. Engagementfeld und Herausgeber sind nicht filterbar.
+
+#### Suchmaschinen und Seiten-Caches
+
+- Die Detailansicht ist eine eigene Seite für Suchmaschinen: Titel „Datensatz – Katalogseite",
+  Canonical `<Katalogseite>?odw_ds=<ID>` und `<link rel="alternate">` auf JSON-LD und Turtle des
+  Datensatzes. Eine unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex`,
+  ebenso eine Listenseite hinter dem Ende.
+- Listenseiten ab 2 haben einen eigenen Canonical; gefilterte, durchsuchte oder umsortierte Varianten
+  sind `noindex, follow` — sie zeigen dieselben Datensätze in anderer Auswahl. Ist die Website auf
+  „Suchmaschinen davon abhalten" gestellt oder die Katalogseite auf `nofollow`, bleibt es dabei.
+- Mit **Yoast SEO**, **Rank Math** oder **All in One SEO** gelten dieselben Regeln; das Plugin
+  gibt ihnen Titel, Canonical und robots über deren eigene Filter vor. Yoasts „Crawl-Bereinigung"
+  lässt die `odw_`-Parameter stehen; in der Crawl-Bereinigung von All in One SEO dürfen sie nicht
+  auf der Sperrliste stehen. Für alle anderen SEO-Plugins gilt `noindex` zusätzlich als
+  HTTP-Header (`X-Robots-Tag`).
+- **Seiten-Caches:** Ein Datensatz hat keine eigene Adresse, ein Cache-Plugin leert die Katalogseite
+  beim Speichern deshalb nicht von selbst. Die Katalogseite am besten vom Ganzseiten-Cache ausnehmen
+  oder eine kurze Cache-Dauer setzen — die Liste ist billig genug. Für ein gezieltes Leeren meldet
+  die Action `odw_catalog_changed` jede Änderung, die den Katalog betrifft (siehe
+  [DOCUMENTATION.md](DOCUMENTATION.md#erweiterbarkeit)).
 
 ### 🔗 REST API Endpoints
 
@@ -352,9 +395,9 @@ Eine ehrliche Abgrenzung hilft bei der Einordnung:
 
 - **Kein Datenportal.** Das Plugin macht eine einzelne Organisation harvestbar. Der
   [Datenkatalog-Block](#-datenkatalog--alle-datensätze-auf-einer-seite) zeigt die eigenen
-  Datensätze als schlichte Liste auf der eigenen Website — Volltextsuche, Facetten, Nutzerkonten
-  oder das Zusammenführen fremder Kataloge bleiben Aufgabe der Portale, die die Daten abholen
-  (GovData, data.europa.eu).
+  Datensätze auf der eigenen Website, auf Wunsch mit einfachen Filtern und einer Textsuche.
+  Relevanz-Suche, Nutzerkonten, Kommentare oder das Zusammenführen fremder Kataloge bleiben Aufgabe
+  der Portale, die die Daten abholen (GovData, data.europa.eu).
 - **Kein Datenmanagement-System.** Die eigentlichen Dateien liegen, wo sie liegen: in der Mediathek,
   auf einem Server, in einem Repositorium. Das Plugin *beschreibt* sie, es verwaltet sie nicht.
 - **Kein Ersatz für fachliche Sorgfalt.** Es prüft, *ob* eine Lizenz angegeben ist — nicht, ob es die
@@ -462,6 +505,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Qualitätsindikatoren / 4-Stufen-Ampellogik (Perfekt / Gut / Ausreichend / Verbesserungsbedarf)
 - [x] Download-Card Shortcode `[odw_dataset]` mit Keywords und Metadaten-Download
 - [x] Datenkatalog `[odw_catalog]` / Block „Datenkatalog" mit Detailansicht auf derselben Seite (v2.43.0)
+- [x] Datenkatalog: Filter mit Trefferzahlen, Textsuche, eigene Suchmaschinen-Seiten je Datensatz (v2.44.0)
 - [x] Demo-Datensatz bei Aktivierung
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)

@@ -1683,3 +1683,51 @@ msgstr ""
 
 msgid "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset]."
 msgstr ""
+
+msgid "%1$s (%2$d)"
+msgstr ""
+
+msgid "Alle Formate"
+msgstr ""
+
+msgid "Alle Lizenzen"
+msgstr ""
+
+msgid "Alle Themen"
+msgstr ""
+
+msgid "Anzeigen"
+msgstr ""
+
+msgid "Bitte mindestens zwei Zeichen eingeben."
+msgstr ""
+
+msgid "Datensätze durchsuchen"
+msgstr ""
+
+msgid "Datensätze filtern"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Filter und Suche für Besucher"
+msgstr ""
+
+msgid "Filter zurücksetzen"
+msgstr ""
+
+msgid "Hinweis für die Redaktion, nur für Sie sichtbar: Die Lizenz-Angabe „%s\" wurde nicht erkannt. Verwenden Sie eine Kurzform wie cc-by oder die Lizenz-URI."
+msgstr ""
+
+msgid "Nur diese Lizenz zeigen"
+msgstr ""
+
+msgid "Suchfeld anzeigen"
+msgstr ""
+
+msgid "Zeigt über der Liste ein Formular. Fest eingestellte Themen oder Lizenzen werden dort nicht noch einmal angeboten."
+msgstr ""
+
+msgid "mit Suche"
+msgstr ""

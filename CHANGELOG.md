@@ -7,6 +7,60 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.44.0] — 2026-10-30
+
+Der Datenkatalog bekommt Filter, Suche und eigene Suchmaschinen-Seiten je Datensatz (Stufe 2).
+Alles ist Opt-in: Ein `[odw_catalog]` ohne die neuen Attribute sieht aus wie bisher.
+
+### ✨ Added
+- **Filter mit Trefferzahlen:** `filters="theme,license,format,sort"` zeigt über der Liste ein
+  GET-Formular (ohne JavaScript). Die Auswahlfelder bieten nur vorkommende Werte an, mit der Zahl
+  der Treffer, die die Wahl zusammen mit den übrigen Filtern und der Suche ergäbe. „Filter
+  zurücksetzen" führt zur ungefilterten Liste; der Zustand bleibt beim Blättern und auf dem Weg in
+  die Detailansicht und zurück erhalten. Eigene Themen (Filter `odw_theme_options`) und eigene
+  Lizenz-URIs sind wählbar; eine eigene Lizenz als Freitext („Nutzung nach Absprache") erscheint
+  nicht als Auswahl, weil sie sich nicht eindeutig adressieren lässt.
+- **Textsuche:** `search="1"` durchsucht Titel, Beschreibung und Schlagworte (einfache LIKE-Suche
+  ohne Relevanz). Ein zu kurzer Begriff bleibt im Feld stehen, mit dem Hinweis „Bitte mindestens
+  zwei Zeichen eingeben.".
+- **Feste Lizenz:** `license="cc-by"` (Kurzform oder Lizenz-URI, auch eine eigene).
+- Im Block „Datenkatalog" stehen dieselben Einstellungen in der Seitenleiste.
+- **Suchmaschinen:** Die Detailansicht `?odw_ds=<ID>` ist eine eigene Seite — Titel „Datensatz –
+  Katalogseite", eigener Canonical, `<link rel="alternate">` auf JSON-LD und Turtle. Eine
+  unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex` (bisher 200),
+  ebenso eine Listenseite hinter dem Ende (`?odw_page=99`). Listenseiten ab 2 haben einen eigenen
+  Canonical; gefilterte, durchsuchte oder umsortierte Varianten sind `noindex, follow` — ein
+  `nofollow` der Website („Suchmaschinen davon abhalten") oder der Redaktion bleibt dabei
+  stehen. Parameter für Filter, die der Katalog nicht freischaltet, ändern nichts, auch nicht
+  den Kopfbereich.
+- **SEO-Plugins:** Mit Yoast SEO, Rank Math und All in One SEO gelten dieselben Regeln über deren
+  eigene Filter (diese Plugins ersetzen Canonical und Titel von WordPress) — einschließlich
+  og:/twitter:title und des WebPage-Knotens im Schema. Yoasts
+  „Crawl-Bereinigung", die unbekannte Parameter für Besucher per 301 entfernt, lässt die
+  `odw_`-Parameter stehen. Für alle übrigen gilt `noindex` zusätzlich als `X-Robots-Tag`-Header.
+- **Action `odw_catalog_changed`** (`$post_id`) bei jeder Änderung, die den öffentlichen Katalog
+  betrifft — zum Leeren von Seiten-Caches, die die Katalogseite sonst nicht von selbst erneuern.
+
+### ⚡ Performance
+- Gefiltert wird über flache Index-Felder `_odw_license_index` (wirksame Lizenz-URI, bei
+  „sonstige" die eigene) und `_odw_format_index` (Format aus dem Formular, sonst aus der Datei),
+  wie schon beim Thema. Lizenz und Format als ODER-Abfrage über die Rohfelder hätten in
+  WordPress ein Kreuzprodukt über `wp_postmeta` erzeugt. Die Felder entstehen beim Speichern
+  und folgen auch Änderungen auf anderem Weg (WordPress-Importer, WP-CLI, gelöschter Anhang,
+  wiederhergestellte Revision, Multisite-Kopien). Bestandsdaten füllt eine Migration in Stapeln
+  zu 200 Datensätzen nach; nach einem Versionswechsel und alle 12 Stunden sieht sie mit einer
+  Abfrage nach Datensätzen, die ohne Abgleich geändert wurden (etwa nach einem Rollback).
+- Die Facetten kosten je Auswahlfeld eine GROUP-BY-Abfrage; eine Katalogseite mit allen Filtern
+  bleibt bei rund einem Dutzend Abfragen.
+
+### 🔧 Changed
+- **Eine Liste der Lizenz-Kurzformen** (`ODW_Fields::license_aliases()`) für REST-Filter
+  `?license=`, Batch-Import und Katalog. Bisher kannten REST und Import je eine eigene,
+  abweichende Liste; jede kennt jetzt alle Kurzformen beider.
+- Der Filter `odw_catalog_query_args` bekommt als viertes Argument den Filterzustand.
+
+---
+
 ## [2.43.0] — 2026-10-27
 
 Ein Datenkatalog fürs Frontend: alle veröffentlichten Datensätze auf einer Seite.

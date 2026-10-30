@@ -96,6 +96,8 @@ open-data-wizard/
 │   ├── class-settings.php           # Einstellungsseite
 │   ├── class-shortcode.php          # [odw_dataset id="123"] Frontend-Card
 │   ├── class-catalog.php            # [odw_catalog] + Block „Datenkatalog" (Liste + Detailansicht)
+│   ├── class-catalog-filters.php    # Katalog Stufe 2: Filter, Facetten, Suche, Index-Felder
+│   ├── class-catalog-seo.php        # Katalog Stufe 2: 404, Canonical, Titel, robots, SEO-Plugins
 │   ├── class-batch-import.php       # CSV/JSON Batch-Import (Parser + Importer)
 │   └── class-cli.php                # WP-CLI Befehle
 ├── assets/
@@ -132,6 +134,8 @@ open-data-wizard/
 │   ├── test-settings.php           # Settings-Filter Tests
 │   ├── test-shortcode.php          # Shortcode Rendering Tests
 │   ├── test-catalog.php            # Datenkatalog: Attribute, Query-Argumente, Listen-Daten
+│   ├── test-catalog-filters.php    # Datenkatalog: Filter, Facetten-/Such-SQL, Index-Felder
+│   ├── test-catalog-seo.php        # Datenkatalog: Kopfbereich, Canonical, Cache-Action
 │   ├── test-rest-delta.php         # Delta Endpoint Tests
 │   ├── test-cli.php                # CLI Commands Tests
 │   └── class-stubs.php             # WP_Mock Stubs
@@ -186,6 +190,8 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Block** | Gutenberg-Block „Datensatz-Karte“ (dynamisch, rendert über ODW_Shortcode) | `register()`, `localize()`, `render()` |
 | **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()`, `license_label()`, `file_info()`, `download_target()`, `format_bytes()` |
 | **ODW_Catalog** | Frontend-Datenkatalog: `[odw_catalog]` + Block `odw/catalog`; Liste liest Roh-Meta aus dem WP_Query-Cache (keine Carbon-Fields-Reads), Detailansicht über `?odw_ds=<ID>` | `render_shortcode()`, `render_block()`, `item_data()`, `build_query_args()` |
+| **ODW_Catalog_Filters** | Katalog Stufe 2 (Opt-in über `filters`/`search`/`license`): GET-Zustand, Facetten mit Trefferzahlen (GROUP BY über flache Index-Felder `_odw_license_index`/`_odw_format_index`/`_odw_theme_index`), LIKE-Suche über `posts_where`, Index-Sync auf `save_post`@30, bei Meta-Änderungen außerhalb (Import, gelöschter Anhang, Revision) am Request-Ende, + Migration in Stapeln über `_odw_index_state` (Versionswechsel, alle 12 h) | `state()`, `apply_to_query()`, `facet_sql()`, `render_form()`, `sync_index()` |
+| **ODW_Catalog_Seo** | Katalog Stufe 2: HTTP 404 für ungültige `odw_ds` und Seiten hinter dem Ende, Canonical/Titel/robots je Zustand für Core, Yoast, Rank Math und AIOSEO; Action `odw_catalog_changed` für Seiten-Caches | `head_state()`, `canonical_for()`, `send_headers()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
 | **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
 
@@ -770,7 +776,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.43.0**
+Current: **v2.44.0**
 
 ---
 

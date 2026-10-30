@@ -916,6 +916,34 @@ class ODW_Fields {
 	}
 
 	/**
+	 * Kurzformen für Lizenz-URIs (Kurzform → URI).
+	 *
+	 * Eine Liste für alle Stellen, die Kurzformen annehmen: REST-Filter
+	 * ?license=, Batch-Import und Frontend-Katalog. Bis v2.43 hatten REST und
+	 * Import je eine eigene, voneinander abweichende Liste — eine Kurzform, die
+	 * nur die eine kannte, landete in der anderen als wörtlicher Wert.
+	 * Die erste Kurzform je URI ist die bevorzugte (der Katalog schreibt sie in
+	 * seine Filter-Links).
+	 *
+	 * @return array<string, string>
+	 */
+	public static function license_aliases(): array {
+		return array(
+			'cc0'            => 'https://creativecommons.org/publicdomain/zero/1.0/',
+			'cc0-1.0'        => 'https://creativecommons.org/publicdomain/zero/1.0/',
+			'cc-by'          => 'https://creativecommons.org/licenses/by/4.0/',
+			'cc-by-4.0'      => 'https://creativecommons.org/licenses/by/4.0/',
+			'cc-by-sa'       => 'https://creativecommons.org/licenses/by-sa/4.0/',
+			'cc-by-sa-4.0'   => 'https://creativecommons.org/licenses/by-sa/4.0/',
+			'odc-odbl'       => 'https://opendatacommons.org/licenses/odbl/1-0/',
+			'dl-de-by'       => 'https://www.govdata.de/dl-de/by-2-0',
+			'dl-de-by-2.0'   => 'https://www.govdata.de/dl-de/by-2-0',
+			'dl-de-zero'     => 'https://www.govdata.de/dl-de/zero-2-0',
+			'dl-de-zero-2.0' => 'https://www.govdata.de/dl-de/zero-2-0',
+		);
+	}
+
+	/**
 	 * Kurze, allgemeinverständliche Erklärung je Lizenz (URI → Beschreibungstext).
 	 * Wird unter dem Lizenz-Auswahlfeld angezeigt, sobald eine Lizenz gewählt ist.
 	 *

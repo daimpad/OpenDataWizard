@@ -40,6 +40,21 @@
 		"showDemo": {
 			"type": "boolean",
 			"default": false
+		},
+		"license": {
+			"type": "string",
+			"default": ""
+		},
+		"filters": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "string"
+			}
+		},
+		"search": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"editorScript": "odw-catalog-editor"

@@ -18,6 +18,20 @@ const { test, expect } = require('@playwright/test');
 
 const CATALOG = '/odw-e2e-katalog/';
 const PAGED = '/odw-e2e-katalog-seiten/';
+const FILTERED = '/odw-e2e-katalog-filter/';
+
+/** Trefferzeile für n Datensätze auf einer Seite. */
+function countLine(n) {
+  return n === 1 ? 'Ein Datensatz' : `${n} Datensätze`;
+}
+
+/** Zahl in Klammern am Ende einer Facetten-Option, z. B. „Umwelt (3)". */
+async function optionCount(select, value) {
+  const text = await select.locator(`option[value="${value}"]`).innerText();
+  const match = text.match(/\((\d+)\)$/);
+  expect(match, `Option ${value}: ${text}`).not.toBeNull();
+  return Number(match[1]);
+}
 
 test.describe('Datenkatalog im Frontend', () => {
   test('listet die veröffentlichten Datensätze', async ({ page }) => {
@@ -93,7 +107,10 @@ test.describe('Datenkatalog im Frontend', () => {
     expect(fixtures.protected).toBeGreaterThan(0);
 
     for (const id of [fixtures.draft, fixtures.protected, 999999]) {
-      await page.goto(`${CATALOG}?odw_ds=${id}`);
+      const detail = await page.goto(`${CATALOG}?odw_ds=${id}`);
+      // Seit Stufe 2 ein echter 404 — das Seitentemplate bleibt erhalten.
+      expect(detail?.status()).toBe(404);
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
       await expect(page.locator('#odw-catalog .odw-catalog__empty')).toHaveText('Datensatz nicht gefunden.');
       await expect(page.locator('#odw-catalog .odw-download-card')).toHaveCount(0);
       await expect(page.locator('#odw-catalog .odw-catalog__back a')).toBeVisible();
@@ -125,12 +142,136 @@ test.describe('Datenkatalog im Frontend', () => {
     await expect(page).not.toHaveURL(/odw_ds=/);
   });
 
-  test('eine Seite jenseits des Endes führt zur ersten zurück', async ({ page }) => {
-    await page.goto(`${PAGED}?odw_page=999`);
+  test('eine Seite jenseits des Endes ist ein 404 und führt zur ersten zurück', async ({ page }) => {
+    const response = await page.goto(`${PAGED}?odw_page=999`);
 
+    expect(response?.status()).toBe(404);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
     await expect(page.locator('#odw-catalog .odw-catalog__empty')).toContainText('Diese Seite gibt es nicht.');
     await page.locator('#odw-catalog .odw-catalog__empty a').click();
     await expect(page).not.toHaveURL(/odw_page=/);
     await expect(page.locator('.odw-catalog__item')).toHaveCount(1);
+  });
+});
+
+test.describe('Datenkatalog: Filter, Suche und Kopfbereich (Stufe 2)', () => {
+  test('ein Katalog ohne filters/search bleibt wie in Stufe 1', async ({ page }) => {
+    await page.goto(CATALOG);
+
+    await expect(page.locator('#odw-catalog form.odw-catalog__filters')).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+
+    // Ein Filter-Parameter, den der Katalog nicht freischaltet, ändert nichts —
+    // auch nicht den Kopfbereich.
+    await page.goto(`${CATALOG}?odw_theme=EDUC`);
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+  });
+
+  test('das Formular bietet Facetten mit Trefferzahlen', async ({ page }) => {
+    await page.goto(FILTERED);
+
+    const form = page.locator('#odw-catalog form.odw-catalog__filters');
+    await expect(form).toBeVisible();
+    await expect(form.getByLabel('Datensätze durchsuchen')).toBeVisible();
+
+    const theme = form.getByLabel('Thema');
+    await expect(theme.locator('option').first()).toHaveText('Alle Themen');
+    await expect(theme.locator('option[value="EDUC"]')).toHaveText(/^Bildung, Kultur & Sport \(\d+\)$/);
+    await expect(form.getByLabel('Lizenz').locator('option[value="cc-by"]')).toHaveText(/^CC BY 4\.0.*\(\d+\)$/);
+    await expect(form.getByLabel('Format').locator('option[value="CSV"]')).toHaveText(/^CSV \(\d+\)$/);
+    await expect(form.getByLabel('Sortierung')).toBeVisible();
+  });
+
+  test('ein Themenfilter grenzt ein, ist noindex und lässt sich zurücksetzen', async ({ page }) => {
+    await page.goto(FILTERED);
+    const form = page.locator('#odw-catalog form.odw-catalog__filters');
+    const expected = await optionCount(form.getByLabel('Thema'), 'EDUC');
+
+    await form.getByLabel('Thema').selectOption('EDUC');
+    await form.getByRole('button', { name: 'Anzeigen' }).click();
+
+    await expect(page).toHaveURL(/[?&]odw_theme=EDUC/);
+    const catalog = page.locator('section#odw-catalog');
+    await expect(catalog.locator('.odw-catalog__count')).toHaveText(countLine(expected));
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).not.toContainText('E2E: Vereinsregister');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expect(form.getByLabel('Thema')).toHaveValue('EDUC');
+
+    await catalog.getByRole('link', { name: 'Filter zurücksetzen' }).first().click();
+    await expect(page).not.toHaveURL(/odw_theme=/);
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+  });
+
+  test('Lizenz- und Formatfilter laufen über die Index-Felder', async ({ page }) => {
+    await page.goto(`${FILTERED}?odw_license=cc0`);
+    const catalog = page.locator('section#odw-catalog');
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+    await expect(catalog).not.toContainText('E2E: Schulstandorte');
+
+    await page.goto(`${FILTERED}?odw_format=CSV`);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).not.toContainText('E2E: Vereinsregister');
+  });
+
+  test('die Suche findet Titel, Beschreibung und Schlagworte', async ({ page }) => {
+    const catalog = page.locator('section#odw-catalog');
+
+    // Schlagwort „Vereine" des Vereinsregisters.
+    await page.goto(FILTERED);
+    await page.getByLabel('Datensätze durchsuchen').fill('Vereine');
+    await page.getByRole('button', { name: 'Anzeigen' }).click();
+    await expect(page).toHaveURL(/[?&]odw_q=Vereine/);
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+    await expect(catalog).not.toContainText('E2E: Schulstandorte');
+
+    // „allgemeinbildenden" steht nur in der Beschreibung der Schulstandorte.
+    await page.goto(`${FILTERED}?odw_q=allgemeinbildenden`);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).not.toContainText('E2E: Vereinsregister');
+
+    // Nichts gefunden: Leerzustand mit Rückweg.
+    await page.goto(`${FILTERED}?odw_q=xyzkeintreffer`);
+    await expect(catalog.locator('.odw-catalog__empty')).toContainText('Keine Datensätze gefunden.');
+    await expect(catalog.locator('.odw-catalog__empty a')).toHaveText('Filter zurücksetzen');
+  });
+
+  test('ein zu kurzer Suchbegriff bleibt stehen und wird erklärt', async ({ page }) => {
+    await page.goto(`${FILTERED}?odw_q=a`);
+
+    const field = page.getByLabel('Datensätze durchsuchen');
+    await expect(field).toHaveValue('a');
+    await expect(field).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.locator('#odw-filter-q-hint')).toHaveText('Bitte mindestens zwei Zeichen eingeben.');
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+  });
+
+  test('Detailansicht: eigener Titel, Canonical ohne Listenzustand, Rückweg mit Filter', async ({ page }) => {
+    await page.goto(`${FILTERED}?odw_theme=EDUC`);
+    await page.locator('.odw-entry__title a', { hasText: 'E2E: Schulstandorte' }).click();
+
+    await expect(page).toHaveURL(/odw_ds=\d+/);
+    await expect(page).toHaveURL(/odw_theme=EDUC/);
+    const id = new URL(page.url()).searchParams.get('odw_ds');
+
+    await expect(page).toHaveTitle(/^E2E: Schulstandorte/);
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    expect(canonical).toMatch(new RegExp(`odw-e2e-katalog-filter/\\?odw_ds=${id}$`));
+    await expect(page.locator(`link[rel="alternate"][type="application/ld+json"]`)).toHaveAttribute('href', new RegExp(`datasets/${id}`));
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+
+    await page.locator('.odw-catalog__back a').click();
+    await expect(page).toHaveURL(/odw_theme=EDUC/);
+    await expect(page).not.toHaveURL(/odw_ds=/);
+  });
+
+  test('Listenseiten ab 2 haben einen eigenen Canonical', async ({ page }) => {
+    const response = await page.goto(`${PAGED}?odw_page=2`);
+
+    expect(response?.status()).toBe(200);
+
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    expect(canonical).toMatch(/odw-e2e-katalog-seiten\/\?odw_page=2$/);
   });
 });

@@ -379,17 +379,11 @@ class ODW_Batch_Import {
 	 * @return array<string, string>
 	 */
 	private static function get_license_alias_map(): array {
-		// WICHTIG: https-URIs, identisch zu ODW_Fields::get_license_options() und
-		// zur REST-Aliasmap — http-Varianten würden Katalog-Filter, Lizenz-Labels
-		// und die MQA-Vokabular-Metrik für importierte Datensätze brechen.
-		return array(
-			'cc0'        => 'https://creativecommons.org/publicdomain/zero/1.0/',
-			'cc-by'      => 'https://creativecommons.org/licenses/by/4.0/',
-			'cc-by-sa'   => 'https://creativecommons.org/licenses/by-sa/4.0/',
-			'odc-odbl'   => 'https://opendatacommons.org/licenses/odbl/1-0/',
-			'dl-de-by'   => 'https://www.govdata.de/dl-de/by-2-0',
-			'dl-de-zero' => 'https://www.govdata.de/dl-de/zero-2-0',
-		);
+		// Dieselbe Liste wie REST-Filter und Frontend-Katalog. WICHTIG: https-URIs,
+		// identisch zu ODW_Fields::get_license_options() — http-Varianten würden
+		// Katalog-Filter, Lizenz-Labels und die MQA-Vokabular-Metrik für
+		// importierte Datensätze brechen.
+		return ODW_Fields::license_aliases();
 	}
 
 	/**
@@ -536,6 +530,12 @@ class ODW_Batch_Import {
 
 		// Set import tracking.
 		update_post_meta( $post_id, '_odw_imported', current_time( 'mysql' ) );
+
+		// Lizenz- und Format-Index für die Katalog-Filter: Wie beim Qualitätswert
+		// lief save_post, bevor es diese Meta-Werte gab.
+		if ( class_exists( 'ODW_Catalog_Filters' ) ) {
+			ODW_Catalog_Filters::sync_index( $post_id );
+		}
 
 		// Recalculate quality now that all meta is written. wp_insert_post() above
 		// fired save_post before these meta values existed, so the score stored then
