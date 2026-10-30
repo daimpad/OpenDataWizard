@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" width="1200" height="460" role="img" aria-labelledby="odw-ablauf-titel odw-ablauf-desc">
+  <title id="odw-ablauf-titel">Vom Formular ins Datenportal</title>
+  <desc id="odw-ablauf-desc">Drei Schritte: Redakteurinnen und Redakteure fuellen ein einfaches Formular aus, der Open Data Wizard erzeugt daraus DCAT-AP.de-konformes JSON-LD mit den Eigenschaften dcat:Catalog, dct:title, dct:publisher, foaf:name, dcat:dataset, dct:description und dcat:distribution, und Datenportale ernten den Katalog automatisch ab.</desc>
+
+  <style>
+    .odw-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .odw-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .odw-h1   { font-size: 27px; font-weight: 700; fill: #ffffff; letter-spacing: -0.2px; }
+    .odw-step { font-size: 17px; font-weight: 600; fill: #ffffff; }
+    .odw-num  { font-size: 15px; font-weight: 700; fill: #101010; }
+    .odw-cap  { font-size: 13px; fill: #9aa0a6; }
+    .odw-ui   { font-size: 13px; font-weight: 700; fill: #0a0a0a; }
+    .odw-code { font-size: 15px; }
+    .odw-file { font-size: 12px; fill: #03ff9a; letter-spacing: 0.4px; }
+    .odw-key  { fill: #03ff9a; }
+    .odw-val  { fill: #e8e8e8; }
+  </style>
+
+  <!-- Bühne -->
+  <rect x="0" y="0" width="1200" height="460" rx="20" fill="#101010"/>
+
+  <!-- Titel -->
+  <text x="70" y="54" class="odw-sans odw-h1">Vom Formular ins Datenportal<tspan fill="#03ff9a">.</tspan></text>
+
+  <!-- ================= Schritt 1: Formular ================= -->
+  <g>
+    <circle cx="83" cy="94" r="13" fill="#03ff9a"/>
+    <text x="83" y="99" text-anchor="middle" class="odw-sans odw-num">1</text>
+    <text x="106" y="100" class="odw-sans odw-step">Formular ausfüllen</text>
+
+    <!-- Karte -->
+    <rect x="70" y="124" width="260" height="240" rx="12" fill="#ffffff"/>
+    <path d="M70,136 a12,12 0 0 1 12,-12 h236 a12,12 0 0 1 12,12 v22 h-260 z" fill="#03ff9a"/>
+    <text x="88" y="147" class="odw-sans odw-ui">Neuer Datensatz</text>
+
+    <!-- Feld 1 (ausgefüllt) -->
+    <rect x="88" y="176" width="76" height="6" rx="3" fill="#c9ccd1"/>
+    <rect x="88" y="190" width="224" height="24" rx="6" fill="#f4f5f6" stroke="#dcdfe3"/>
+    <rect x="98" y="198" width="122" height="8" rx="4" fill="#c9ccd1"/>
+
+    <!-- Feld 2 (aktiv) -->
+    <rect x="88" y="222" width="94" height="6" rx="3" fill="#c9ccd1"/>
+    <rect x="88" y="236" width="224" height="24" rx="6" fill="#03ff9a" fill-opacity="0.16" stroke="#03ff9a"/>
+    <rect x="98" y="244" width="86" height="8" rx="4" fill="#8f9296"/>
+    <rect x="190" y="242" width="2" height="12" fill="#101010"/>
+
+    <!-- Feld 3 -->
+    <rect x="88" y="268" width="64" height="6" rx="3" fill="#c9ccd1"/>
+    <rect x="88" y="282" width="224" height="24" rx="6" fill="#f4f5f6" stroke="#dcdfe3"/>
+    <rect x="98" y="290" width="150" height="8" rx="4" fill="#c9ccd1"/>
+
+    <!-- Feld 4 (Auswahl) -->
+    <rect x="88" y="314" width="82" height="6" rx="3" fill="#c9ccd1"/>
+    <rect x="88" y="328" width="224" height="24" rx="6" fill="#f4f5f6" stroke="#dcdfe3"/>
+    <rect x="98" y="336" width="104" height="8" rx="4" fill="#c9ccd1"/>
+    <path d="M292,337 l7,7 7,-7 z" fill="#8f9296"/>
+
+    <text x="70" y="400" class="odw-sans odw-cap">Einfache Fragen statt Fachbegriffe —</text>
+    <text x="70" y="420" class="odw-sans odw-cap">fünf Reiter, verständlich beschriftet.</text>
+  </g>
+
+  <!-- Pfeil 1 -->
+  <g transform="translate(348,244)">
+    <path d="M0,-6 L38,-6 L38,-18 L64,0 L38,18 L38,6 L0,6 Z" fill="#03ff9a"/>
+  </g>
+
+  <!-- ================= Schritt 2: JSON-LD ================= -->
+  <g>
+    <circle cx="443" cy="94" r="13" fill="#03ff9a"/>
+    <text x="443" y="99" text-anchor="middle" class="odw-sans odw-num">2</text>
+    <text x="466" y="100" class="odw-sans odw-step">DCAT-AP.de erzeugen</text>
+
+    <rect x="430" y="124" width="340" height="240" rx="12" fill="#171717" stroke="#03ff9a" stroke-opacity="0.35"/>
+    <circle cx="450" cy="148" r="4" fill="#03ff9a"/>
+    <circle cx="464" cy="148" r="4" fill="#3a3a3a"/>
+    <circle cx="478" cy="148" r="4" fill="#3a3a3a"/>
+    <text x="754" y="152" text-anchor="end" class="odw-mono odw-file">catalog.jsonld</text>
+    <line x1="446" y1="166" x2="754" y2="166" stroke="#2c2c2c"/>
+
+    <text x="450" y="190" class="odw-mono odw-code odw-key" font-weight="700">dcat:Catalog</text>
+
+    <text x="468" y="215" class="odw-mono odw-code"><tspan class="odw-key">dct:</tspan><tspan class="odw-val">title</tspan></text>
+    <rect x="650" y="205" width="90" height="9" rx="4.5" fill="#3a3a3a"/>
+
+    <text x="468" y="240" class="odw-mono odw-code"><tspan class="odw-key">dct:</tspan><tspan class="odw-val">publisher</tspan></text>
+
+    <text x="486" y="265" class="odw-mono odw-code"><tspan class="odw-key">foaf:</tspan><tspan class="odw-val">name</tspan></text>
+    <rect x="650" y="255" width="72" height="9" rx="4.5" fill="#3a3a3a"/>
+
+    <text x="468" y="290" class="odw-mono odw-code"><tspan class="odw-key">dcat:</tspan><tspan class="odw-val">dataset</tspan></text>
+
+    <text x="486" y="315" class="odw-mono odw-code"><tspan class="odw-key">dct:</tspan><tspan class="odw-val">description</tspan></text>
+    <rect x="650" y="305" width="90" height="9" rx="4.5" fill="#3a3a3a"/>
+
+    <text x="486" y="340" class="odw-mono odw-code"><tspan class="odw-key">dcat:</tspan><tspan class="odw-val">distribution</tspan></text>
+
+    <text x="430" y="400" class="odw-sans odw-cap">Das Plugin schreibt daraus gültiges JSON-LD</text>
+    <text x="430" y="420" class="odw-sans odw-cap">oder Turtle — ohne Zutun der Redaktion.</text>
+  </g>
+
+  <!-- Pfeil 2 -->
+  <g transform="translate(788,244)">
+    <path d="M0,-6 L38,-6 L38,-18 L64,0 L38,18 L38,6 L0,6 Z" fill="#03ff9a"/>
+  </g>
+
+  <!-- ================= Schritt 3: Harvesting ================= -->
+  <g>
+    <circle cx="883" cy="94" r="13" fill="#03ff9a"/>
+    <text x="883" y="99" text-anchor="middle" class="odw-sans odw-num">3</text>
+    <text x="906" y="100" class="odw-sans odw-step">Portale ernten ab</text>
+
+    <!-- Signalbögen -->
+    <g fill="none" stroke="#03ff9a" stroke-linecap="round">
+      <path d="M1038.8,172.2 A34,34 0 0 1 1062.8,196.2" stroke-width="4"/>
+      <path d="M1043.5,154.8 A52,52 0 0 1 1080.2,191.5" stroke-width="3.5" stroke-opacity="0.7"/>
+      <path d="M1048.1,137.4 A70,70 0 0 1 1097.6,186.9" stroke-width="3" stroke-opacity="0.45"/>
+    </g>
+
+    <!-- Mast und Sockel -->
+    <rect x="980" y="250" width="10" height="72" fill="#ffffff"/>
+    <path d="M952,340 L968,318 L1002,318 L1018,340 Z" fill="#ffffff"/>
+
+    <!-- Schüssel -->
+    <g transform="rotate(-40 985 255)">
+      <ellipse cx="985" cy="255" rx="60" ry="39" fill="#03ff9a"/>
+      <ellipse cx="985" cy="255" rx="47" ry="28" fill="#101010" fill-opacity="0.18"/>
+    </g>
+    <!-- Erreger -->
+    <line x1="985" y1="255" x2="1028" y2="207" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="1030" cy="205" r="8" fill="#ffffff"/>
+
+    <text x="870" y="400" class="odw-sans odw-cap">GovData, europäische Portale und andere</text>
+    <text x="870" y="420" class="odw-sans odw-cap">Harvester lesen den Katalog automatisch.</text>
+  </g>
+</svg>

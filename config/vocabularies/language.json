@@ -1,0 +1,98 @@
+[
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/DEU",
+    "label": "Deutsch (DE)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/ENG",
+    "label": "Englisch (EN)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/BUL",
+    "label": "Bulgarisch (BG)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/DAN",
+    "label": "Dänisch (DA)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/EST",
+    "label": "Estnisch (ET)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/FIN",
+    "label": "Finnisch (FI)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/FRA",
+    "label": "Französisch (FR)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/ELL",
+    "label": "Griechisch (EL)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/GLE",
+    "label": "Irisch (GA)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/ITA",
+    "label": "Italienisch (IT)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/HRV",
+    "label": "Kroatisch (HR)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/LAV",
+    "label": "Lettisch (LV)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/LIT",
+    "label": "Litauisch (LT)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/MLT",
+    "label": "Maltesisch (MT)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/NLD",
+    "label": "Niederländisch (NL)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/POL",
+    "label": "Polnisch (PL)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/POR",
+    "label": "Portugiesisch (PT)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/RON",
+    "label": "Rumänisch (RO)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/SWE",
+    "label": "Schwedisch (SV)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/SLK",
+    "label": "Slowakisch (SK)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/SLV",
+    "label": "Slowenisch (SL)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/SPA",
+    "label": "Spanisch (ES)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/CES",
+    "label": "Tschechisch (CS)"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/language/HUN",
+    "label": "Ungarisch (HU)"
+  }
+]

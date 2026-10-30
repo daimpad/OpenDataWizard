@@ -1,0 +1,14 @@
+[
+  {
+    "value": "http://publications.europa.eu/resource/authority/access-right/PUBLIC",
+    "label": "Öffentlich"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/access-right/RESTRICTED",
+    "label": "Eingeschränkt"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC",
+    "label": "Nicht öffentlich"
+  }
+]

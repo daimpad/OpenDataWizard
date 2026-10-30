@@ -1,0 +1,505 @@
+/**
+ * Open Data Wizard — Frontend Styles (Download-Card)
+ *
+ * Aufbau: Name groß + „Metadaten JSON" rechts · Download-Button · bunte Badges
+ * (Format/Größe/Lizenz) · Accordion mit allen Metadatenfeldern.
+ *
+ * Struktur erbt Theme-Farben (currentColor); die Badges und der Download-Button
+ * verwenden bewusst eigene Akzentfarben, damit sie „bunt" hervorstechen.
+ */
+
+.odw-download-card {
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    margin: 1.5rem 0;
+}
+
+/* --- Kopf: Titel groß + Metadaten-JSON-Link rechts --- */
+.odw-download-card__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.4rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.odw-download-card__title {
+    margin: 0;
+    font-size: 1.6em;
+    font-weight: 700;
+    line-height: 1.25;
+    flex: 1 1 auto;
+}
+
+.odw-download-card__metajson {
+    flex-shrink: 0;
+    font-size: 0.82em;
+    text-decoration: none;
+    opacity: 0.75;
+    white-space: nowrap;
+}
+
+.odw-download-card__metajson:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* --- Download-Button (Akzent) --- */
+.odw-download-card__download {
+    display: inline-block;
+    padding: 0.6em 1.4em;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1em;
+    text-decoration: none;
+    line-height: 1.3;
+    transition: background 0.15s ease;
+}
+
+.odw-download-card__download:hover,
+.odw-download-card__download:focus {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+/* --- Bunte Badges: Format · Größe · Lizenz --- */
+.odw-download-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.9rem 0 0;
+}
+
+.odw-badge {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    border-radius: 99px;
+    font-size: 0.78em;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.odw-badge--format  { background: #e7f0fd; color: #17416b; }
+.odw-badge--size    { background: #e6f4ea; color: #0f5323; }
+.odw-badge--license { background: #fdf3e2; color: #7a4f00; }
+
+/* --- Accordion mit allen Metadatenfeldern --- */
+.odw-download-card__details {
+    margin-top: 1.1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    padding-top: 0.75rem;
+}
+
+.odw-download-card__details summary {
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    opacity: 0.85;
+    list-style-position: inside;
+}
+
+.odw-download-card__details summary:hover {
+    opacity: 1;
+}
+
+.odw-download-card__details[open] summary {
+    margin-bottom: 0.75rem;
+}
+
+.odw-download-card__metalist {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.45rem 1.1rem;
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.odw-metarow {
+    display: contents;
+}
+
+.odw-download-card__metalist dt {
+    font-weight: 600;
+    opacity: 0.6;
+}
+
+.odw-download-card__metalist dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.odw-download-card__metalist a {
+    word-break: break-all;
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+
+@media screen and (max-width: 480px) {
+    .odw-download-card__title {
+        font-size: 1.35em;
+    }
+
+    .odw-download-card__download {
+        display: block;
+        text-align: center;
+    }
+
+    .odw-download-card__metalist {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .odw-metarow {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .odw-download-card__metalist dt {
+        display: block;
+    }
+}
+
+/* --- Weitere Distributionen --- */
+.odw-download-card__dists {
+    margin-top: 1.1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    padding-top: 0.85rem;
+}
+
+.odw-download-card__dists-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.9em;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+.odw-dist {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    padding: 0.35rem 0;
+}
+
+.odw-dist__link {
+    font-weight: 600;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+.odw-dist__link:hover {
+    text-decoration: underline;
+}
+
+.odw-dist__badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+@media screen and (max-width: 480px) {
+    .odw-dist {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* =========================================================================
+   KATALOG — Shortcode [odw_catalog] und Block odw/catalog (ab v2.43.0)
+
+   Abgegrenzter Abschnitt: Die Regeln der Download-Karte oben bleiben
+   unberührt. Wie die Karte erbt der Katalog Schrift- und Textfarben vom
+   Theme; nur Badges und Hauptlink tragen eigene Akzentfarben.
+   ========================================================================= */
+
+.odw-catalog {
+    margin: 1.5rem 0;
+}
+
+.odw-catalog__title {
+    margin: 0 0 0.75rem;
+}
+
+.odw-catalog__count,
+.odw-catalog__empty,
+.odw-catalog__back {
+    margin: 0 0 1rem;
+}
+
+.odw-catalog__count {
+    font-size: 0.9em;
+}
+
+.odw-catalog__back a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.odw-catalog__back a:hover {
+    text-decoration: underline;
+}
+
+/* Nur für eingeloggte Redakteur:innen sichtbar (z. B. unbekannte Themen). */
+.odw-catalog__notice {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.9rem;
+    border-left: 4px solid #b45309;
+    background: #fff7ed;
+    color: #7c2d12;
+    font-size: 0.9em;
+}
+
+/*
+ * Liste ohne Aufzählungszeichen — auch gegen Themes, die li::before setzen.
+ * minmax(0, 1fr) statt der impliziten auto-Spur: Sonst wäre die Spur
+ * mindestens so breit wie das längste unbrechbare Wort (eine URL im Auszug)
+ * und schöbe auf schmalen Bildschirmen die ganze Liste über den Rand.
+ */
+.odw-catalog .odw-catalog__list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.odw-catalog .odw-catalog__item {
+    margin: 0;
+    padding: 0;
+}
+
+.odw-catalog .odw-catalog__item::before,
+.odw-catalog .odw-catalog__item::marker {
+    content: none;
+}
+
+/* --- Listeneintrag --- */
+.odw-entry {
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    overflow-wrap: break-word;
+}
+
+.odw-catalog .odw-entry__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.2em;
+    line-height: 1.3;
+}
+
+.odw-entry__meta {
+    margin: 0 0 0.5rem;
+    font-size: 0.85em;
+}
+
+.odw-entry__excerpt {
+    margin: 0 0 0.6rem;
+}
+
+.odw-entry__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 0.75rem;
+}
+
+/* Lange Lizenznamen dürfen umbrechen, statt die Mobilansicht zu sprengen. */
+.odw-entry__badges .odw-badge {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.odw-badge--theme  { background: #f1ecfb; color: #4c2a85; }
+.odw-badge--access { background: #fde8e8; color: #8a1c1c; }
+
+.odw-entry__actions {
+    margin: 0;
+}
+
+.odw-entry__action {
+    display: inline-block;
+    padding: 0.45em 1.1em;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95em;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.odw-entry__action:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+/*
+ * Sichtbarer Tastaturfokus. Höhere Spezifität mit Absicht: Manche Themes
+ * (etwa Twenty Twenty-One mit (0,4,1)) geben fokussierten Links einen hellen
+ * Hintergrund ohne Textfarbe — der weiße Text der Buttons wäre dann
+ * unsichtbar. Die Buttons sind von der currentColor-Regel ausgenommen: Ihr
+ * Text ist weiß, ein weißer Ring auf weißer Seite wäre kein Fokus.
+ */
+.odw-catalog.odw-catalog a:not(.odw-entry__action):not(.odw-download-card__download):focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus,
+.odw-catalog.odw-catalog .odw-entry .odw-entry__action:focus-visible,
+.odw-catalog.odw-catalog .odw-download-card .odw-download-card__download:focus,
+.odw-catalog.odw-catalog .odw-download-card .odw-download-card__download:focus-visible {
+    background: #1d4ed8;
+    color: #fff;
+    text-decoration: none;
+    /* Dunkelblauer Ring mit weißem Saum in der Lücke: Auf jedem Hintergrund
+       erreicht eine der beiden Farben 3:1 (WCAG 1.4.11) — #1e3a8a gegen Weiß
+       10,4:1, die Bereiche überlappen also. */
+    outline: 3px solid #1e3a8a;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+/*
+ * --- Filterformular (Stufe 2, nur mit filters/search) ---
+ * Felder nebeneinander, so viele die Breite erlaubt; Beschriftung über dem
+ * Feld. Selects und Suchfeld erben Schrift und Farbe vom Theme.
+ */
+.odw-catalog .odw-catalog__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1rem;
+    margin: 0 0 1.25rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+}
+
+.odw-catalog .odw-catalog__field {
+    display: flex;
+    flex: 1 1 12rem;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__field--search {
+    flex-basis: 100%;
+}
+
+.odw-catalog .odw-catalog__field label {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.odw-catalog .odw-catalog__field select,
+.odw-catalog .odw-catalog__field input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    font: inherit;
+}
+
+.odw-catalog .odw-catalog__filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+}
+
+/* Transparenter statt keiner Rahmen: Im Kontrastmodus (forced-colors) färbt
+   der Browser ihn ein — sonst wäre der Button dort bloßer Text. */
+.odw-catalog .odw-catalog__submit {
+    padding: calc(0.45em - 2px) calc(1.1em - 2px);
+    background: #2563eb;
+    color: #fff;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-catalog__submit:hover {
+    background: #1d4ed8;
+}
+
+.odw-catalog.odw-catalog .odw-catalog__submit:focus-visible,
+.odw-catalog.odw-catalog .odw-catalog__field select:focus-visible,
+.odw-catalog.odw-catalog .odw-catalog__field input:focus-visible {
+    outline: 3px solid #1e3a8a;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+.odw-catalog .odw-catalog__hint {
+    font-size: 0.85em;
+}
+
+/* --- Seitennavigation --- */
+.odw-catalog .odw-catalog__pagination ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.odw-catalog .odw-catalog__pagination li {
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__pagination li::before {
+    content: none;
+}
+
+.odw-catalog__pagination a,
+.odw-catalog__pagination [aria-current="page"] {
+    display: inline-block;
+    min-width: 2.2em;
+    padding: 0.3em 0.6em;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.odw-catalog__pagination [aria-current="page"] {
+    border-color: currentColor;
+    font-weight: 700;
+}
+
+.odw-catalog__pagination-gap {
+    padding: 0.3em 0.2em;
+}
+
+/* --- Detailansicht: die Karte direkt unter dem Rückweg --- */
+.odw-catalog--detail .odw-download-card {
+    margin-top: 0;
+}
+
+/* Für Screenreader, unsichtbar am Bildschirm. */
+.odw-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}

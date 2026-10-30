@@ -1,0 +1,58 @@
+[
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/SOCI",
+    "label": "Bevölkerung und Gesellschaft"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/EDUC",
+    "label": "Bildung, Kultur und Sport"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/ENER",
+    "label": "Energie"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/HEAL",
+    "label": "Gesundheit"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/INTR",
+    "label": "Internationale Themen"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/JUST",
+    "label": "Justiz, Rechtssystem und öffentliche Sicherheit"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/AGRI",
+    "label": "Landwirtschaft, Fischerei, Forstwirtschaft und Nahrungsmittel"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/GOVE",
+    "label": "Regierung und öffentlicher Sektor"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/REGI",
+    "label": "Regionen und Städte"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/ENVI",
+    "label": "Umwelt"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/TRAN",
+    "label": "Verkehr"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/OP_DATPRO",
+    "label": "Vorläufige Daten"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/ECON",
+    "label": "Wirtschaft und Finanzen"
+  },
+  {
+    "value": "http://publications.europa.eu/resource/authority/data-theme/TECH",
+    "label": "Wissenschaft und Technologie"
+  }
+]
