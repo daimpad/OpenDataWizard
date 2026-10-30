@@ -362,6 +362,9 @@
     text-decoration: none;
     outline: 3px solid #1d4ed8;
     outline-offset: 2px;
+    /* Weißer Saum in der Lücke: Auf dunklen oder farbigen Theme-Hintergründen
+       erreicht dann eine der beiden Farben 3:1 (WCAG 1.4.11). */
+    box-shadow: 0 0 0 2px #fff;
 }
 
 /*
@@ -414,11 +417,13 @@
     margin: 0;
 }
 
+/* Transparenter statt keiner Rahmen: Im Kontrastmodus (forced-colors) färbt
+   der Browser ihn ein — sonst wäre der Button dort bloßer Text. */
 .odw-catalog .odw-catalog__submit {
-    padding: 0.45em 1.1em;
+    padding: calc(0.45em - 2px) calc(1.1em - 2px);
     background: #2563eb;
     color: #fff;
-    border: 0;
+    border: 2px solid transparent;
     border-radius: 6px;
     font: inherit;
     font-weight: 600;
@@ -434,6 +439,7 @@
 .odw-catalog.odw-catalog .odw-catalog__field input:focus-visible {
     outline: 3px solid #1d4ed8;
     outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
 }
 
 /* --- Seitennavigation --- */

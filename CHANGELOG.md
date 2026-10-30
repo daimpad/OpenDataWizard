@@ -17,18 +17,24 @@ Alles ist Opt-in: Ein `[odw_catalog]` ohne die neuen Attribute sieht aus wie bis
   GET-Formular (ohne JavaScript). Die Auswahlfelder bieten nur vorkommende Werte an, mit der Zahl
   der Treffer, die die Wahl zusammen mit den übrigen Filtern und der Suche ergäbe. „Filter
   zurücksetzen" führt zur ungefilterten Liste; der Zustand bleibt beim Blättern und auf dem Weg in
-  die Detailansicht und zurück erhalten.
+  die Detailansicht und zurück erhalten. Eigene Themen (Filter `odw_theme_options`) und eigene
+  Lizenz-URIs sind wählbar; eine eigene Lizenz als Freitext („Nutzung nach Absprache") erscheint
+  nicht als Auswahl, weil sie sich nicht eindeutig adressieren lässt.
 - **Textsuche:** `search="1"` durchsucht Titel, Beschreibung und Schlagworte (einfache LIKE-Suche
   ohne Relevanz).
 - **Feste Lizenz:** `license="cc-by"` (Kurzform oder Lizenz-URI, auch eine eigene).
 - Im Block „Datenkatalog" stehen dieselben Einstellungen in der Seitenleiste.
 - **Suchmaschinen:** Die Detailansicht `?odw_ds=<ID>` ist eine eigene Seite — Titel „Datensatz –
   Katalogseite", eigener Canonical, `<link rel="alternate">` auf JSON-LD und Turtle. Eine
-  unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex` (bisher 200).
-  Listenseiten ab 2 haben einen eigenen Canonical; gefilterte, durchsuchte oder umsortierte
-  Varianten sind `noindex, follow`.
+  unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex` (bisher 200),
+  ebenso eine Listenseite hinter dem Ende (`?odw_page=99`). Listenseiten ab 2 haben einen eigenen
+  Canonical; gefilterte, durchsuchte oder umsortierte Varianten sind `noindex, follow` — ein
+  `nofollow` der Website („Suchmaschinen davon abhalten") oder der Redaktion bleibt dabei
+  stehen. Parameter für Filter, die der Katalog nicht freischaltet, ändern nichts, auch nicht
+  den Kopfbereich.
 - **SEO-Plugins:** Mit Yoast SEO, Rank Math und All in One SEO gelten dieselben Regeln über deren
-  eigene Filter (diese Plugins ersetzen Canonical und Titel von WordPress). Yoasts
+  eigene Filter (diese Plugins ersetzen Canonical und Titel von WordPress) — einschließlich
+  og:/twitter:title und des WebPage-Knotens im Schema. Yoasts
   „Crawl-Bereinigung", die unbekannte Parameter für Besucher per 301 entfernt, lässt die
   `odw_`-Parameter stehen. Für alle übrigen gilt `noindex` zusätzlich als `X-Robots-Tag`-Header.
 - **Action `odw_catalog_changed`** (`$post_id`) bei jeder Änderung, die den öffentlichen Katalog
@@ -38,8 +44,10 @@ Alles ist Opt-in: Ein `[odw_catalog]` ohne die neuen Attribute sieht aus wie bis
 - Gefiltert wird über flache Index-Felder `_odw_license_index` (wirksame Lizenz-URI, bei
   „sonstige" die eigene) und `_odw_format_index` (Format aus dem Formular, sonst aus der Datei),
   wie schon beim Thema. Lizenz und Format als ODER-Abfrage über die Rohfelder hätten in
-  WordPress ein Kreuzprodukt über `wp_postmeta` erzeugt. Die Felder entstehen beim Speichern;
-  Bestandsdaten füllt eine einmalige Migration in Stapeln zu 200 Datensätzen nach.
+  WordPress ein Kreuzprodukt über `wp_postmeta` erzeugt. Die Felder entstehen beim Speichern
+  und folgen auch Änderungen auf anderem Weg (WordPress-Importer, WP-CLI, gelöschter Anhang,
+  wiederhergestellte Revision). Bestandsdaten füllt eine Migration in Stapeln zu 200
+  Datensätzen nach; sie läuft nach jedem Versionswechsel erneut.
 - Die Facetten kosten je Auswahlfeld eine GROUP-BY-Abfrage; eine Katalogseite mit allen Filtern
   bleibt bei rund einem Dutzend Abfragen.
 

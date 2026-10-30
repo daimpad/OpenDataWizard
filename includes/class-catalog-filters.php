@@ -14,7 +14,9 @@
  * WP_Meta_Query ein Kreuzprodukt über wp_postmeta mit acht Aliassen. Die
  * Indexfelder schreibt sync_index() auf save_post@30, also nach Carbon Fields
  * (@10) und dem Datei-Widget (@20); Bestandsdaten holt maybe_migrate_index()
- * in Stapeln nach.
+ * in Stapeln nach. Ändern sich die Quellwerte auf anderem Weg (Import,
+ * WP-CLI, gelöschter Anhang, wiederhergestellte Revision), gleicht
+ * flush_pending() am Ende des Requests ab.
  *
  * Die Facetten zählen je Wert, wie viele Datensätze die AKTUELLE Auswahl der
  * übrigen Filter und der Suche ergäbe — so führt kein angebotener Wert ins
@@ -68,6 +70,19 @@ class ODW_Catalog_Filters {
 	private const THEME_BASE = 'http://publications.europa.eu/resource/authority/data-theme/';
 
 	/**
+	 * Meta-Schlüssel, aus denen die Index-Felder entstehen (dazu die
+	 * Carbon-Fields-Zeilen der Themen, _odw_theme|||N|value).
+	 */
+	private const SOURCE_KEYS = array( '_odw_license', '_odw_license_custom', '_odw_format', '_odw_file_id', '_odw_file_format' );
+
+	/**
+	 * Datensätze, deren Index am Ende des Requests abzugleichen ist.
+	 *
+	 * @var array<int, true>
+	 */
+	private static $pending = array();
+
+	/**
 	 * Registers the index sync, the migration and the search clause.
 	 */
 	public static function init(): void {
@@ -76,6 +91,14 @@ class ODW_Catalog_Filters {
 		add_action( 'save_post', array( self::class, 'sync_index' ), 30 );
 		add_action( 'init', array( self::class, 'maybe_migrate_index' ), 30 );
 		add_filter( 'posts_where', array( self::class, 'search_where' ), 10, 2 );
+
+		// Was die Index-Felder sonst noch verändert — Import, WP-CLI, eigener
+		// Code, gelöschte Anhänge, wiederhergestellte Revisionen.
+		foreach ( array( 'added_post_meta', 'updated_post_meta', 'deleted_post_meta' ) as $hook ) {
+			add_action( $hook, array( self::class, 'note_meta_change' ), 10, 3 );
+		}
+		add_action( 'deleted_post', array( self::class, 'note_attachment_deleted' ), 10, 2 );
+		add_action( 'wp_restore_post_revision', array( self::class, 'after_restore' ), 20, 2 );
 	}
 
 	/**
@@ -160,6 +183,24 @@ class ODW_Catalog_Filters {
 		return false === $alias ? $uri : (string) $alias;
 	}
 
+	/**
+	 * Einheitliche Schreibweise eines Formats: der Schlüssel der Formatliste
+	 * (csv → CSV, GEOJSON → GeoJSON), sonst in Großbuchstaben — so, wie das
+	 * Datei-Widget Endungen speichert.
+	 *
+	 * Ohne sie fände die Liste „csv" (die Kollation von wp_postmeta
+	 * unterscheidet nicht nach Groß-/Kleinschreibung), das Auswahlfeld aber
+	 * nicht, und GROUP BY legte GeoJSON und GEOJSON zusammen.
+	 *
+	 * @param string $format Format oder Dateiendung.
+	 * @return string
+	 */
+	public static function canonical_format( string $format ): string {
+		$format = trim( $format );
+		$key    = '' !== $format && class_exists( 'ODW_Fields' ) ? ODW_Fields::resolve_format_key( $format ) : '';
+		return '' !== $key ? $key : strtoupper( $format );
+	}
+
 	// -------------------------------------------------------------------------
 	// Anfrage
 	// -------------------------------------------------------------------------
@@ -176,19 +217,21 @@ class ODW_Catalog_Filters {
 			return isset( $get[ $key ] ) && is_scalar( $get[ $key ] ) ? trim( (string) $get[ $key ] ) : '';
 		};
 
+		// EU-Code (EDUC) oder — für Themen, die eine Website über den Filter
+		// odw_theme_options ergänzt — der Wert der Option selbst.
 		$theme = '';
-		$code  = strtoupper( $value( self::PARAM_THEME ) );
-		if ( '' !== $code && preg_match( '/^[A-Z_]{2,20}$/', $code ) && class_exists( 'ODW_Fields' ) ) {
-			$uri = self::THEME_BASE . $code;
-			if ( isset( ODW_Fields::get_theme_options_multi()[ $uri ] ) ) {
-				$theme = $uri;
+		$raw   = $value( self::PARAM_THEME );
+		if ( '' !== $raw && class_exists( 'ODW_Fields' ) ) {
+			$known = ODW_Fields::get_theme_options_multi();
+			if ( isset( $known[ $raw ] ) && 0 !== strpos( $raw, self::THEME_BASE ) ) {
+				$theme = $raw;
+			} elseif ( preg_match( '/^[A-Za-z_]{2,20}$/', $raw ) && isset( $known[ self::THEME_BASE . strtoupper( $raw ) ] ) ) {
+				$theme = self::THEME_BASE . strtoupper( $raw );
 			}
 		}
 
 		$format = $value( self::PARAM_FORMAT );
-		if ( ! preg_match( '/^[A-Za-z0-9][A-Za-z0-9.+_-]{0,39}$/', $format ) ) {
-			$format = '';
-		}
+		$format = preg_match( '/^[A-Za-z0-9][A-Za-z0-9.+_-]{0,39}$/', $format ) ? self::canonical_format( $format ) : '';
 
 		$sort = strtolower( $value( self::PARAM_SORT ) );
 		if ( ! in_array( $sort, array( 'title', 'modified' ), true ) ) {
@@ -524,6 +567,14 @@ class ODW_Catalog_Filters {
 					$param = $value;
 			}
 
+			// Was über das Formular nicht unverändert zurückkommt, führte ins
+			// Leere oder zu anderen Datensätzen — es wird gar nicht erst
+			// angeboten. Der gewählte Wert stammt aus parse_get(), er kommt
+			// immer zurück.
+			if ( $value !== $selected && ! self::round_trips( $facet, $param, $value ) ) {
+				continue;
+			}
+
 			$options[] = array(
 				'value'    => $value,
 				'param'    => $param,
@@ -541,6 +592,26 @@ class ODW_Catalog_Filters {
 		);
 
 		return $options;
+	}
+
+	/**
+	 * Ergibt der GET-Wert einer Option nach dem Absenden wieder genau ihren
+	 * Wert? Nicht bei einer eigenen Lizenz als Freitext oder bei einem Thema,
+	 * das es nicht mehr in der Auswahl gibt.
+	 *
+	 * @param string $facet theme | license | format.
+	 * @param string $param GET-Wert der Option.
+	 * @param string $value Index-Wert.
+	 * @return bool
+	 */
+	private static function round_trips( string $facet, string $param, string $value ): bool {
+		$names = array(
+			'theme'   => self::PARAM_THEME,
+			'license' => self::PARAM_LICENSE,
+			'format'  => self::PARAM_FORMAT,
+		);
+		$back  = self::parse_get( array( $names[ $facet ] => $param ) );
+		return $back[ $facet ] === $value;
 	}
 
 	// -------------------------------------------------------------------------
@@ -581,7 +652,7 @@ class ODW_Catalog_Filters {
 		if ( $search ) {
 			$html .= '<p class="odw-catalog__field odw-catalog__field--search">'
 				. '<label for="odw-filter-q">' . esc_html__( 'Datensätze durchsuchen', 'open-data-wizard' ) . '</label>'
-				. '<input type="search" id="odw-filter-q" name="' . esc_attr( self::PARAM_QUERY ) . '" value="' . esc_attr( $state['q'] ) . '" maxlength="' . (int) self::QUERY_MAX . '">'
+				. '<input type="search" id="odw-filter-q" name="' . esc_attr( self::PARAM_QUERY ) . '" value="' . esc_attr( $state['q'] ) . '" minlength="' . (int) self::QUERY_MIN . '" maxlength="' . (int) self::QUERY_MAX . '">'
 				. '</p>';
 		}
 
@@ -670,17 +741,26 @@ class ODW_Catalog_Filters {
 
 	/**
 	 * Wirksame Lizenz und wirksames Format eines Datensatzes — genau das, was
-	 * Liste und Karte anzeigen.
+	 * Liste und Karte anzeigen, in einer Form, die der Filter auch wieder
+	 * annimmt.
+	 *
+	 * Eine eigene Lizenz, die weder Kurzform noch http(s)-Adresse ist
+	 * („Nutzung nach Absprache", aber auch „CC-BY" als Freitext), kommt nicht
+	 * in den Index: parse_license() verwürfe sie bzw. läse sie als die
+	 * Standard-Lizenz CC BY — die Auswahl wirkte nicht oder zeigte andere
+	 * Datensätze.
 	 *
 	 * @param int $post_id Post ID.
 	 * @return array{license: string, format: string}
 	 */
 	public static function index_values( int $post_id ): array {
-		$file = class_exists( 'ODW_Shortcode' ) ? ODW_Shortcode::file_info( $post_id, false ) : array( 'format' => '' );
+		$file    = class_exists( 'ODW_Shortcode' ) ? ODW_Shortcode::file_info( $post_id, false ) : array( 'format' => '' );
+		$license = ODW_Catalog::effective_license( $post_id );
+		$format  = ODW_Catalog::effective_format( $post_id, (string) $file['format'] );
 
 		return array(
-			'license' => ODW_Catalog::effective_license( $post_id ),
-			'format'  => ODW_Catalog::effective_format( $post_id, (string) $file['format'] ),
+			'license' => self::parse_license( $license ) === $license ? $license : '',
+			'format'  => '' !== $format ? self::canonical_format( $format ) : '',
 		);
 	}
 
@@ -697,6 +777,8 @@ class ODW_Catalog_Filters {
 			return;
 		}
 
+		unset( self::$pending[ $post_id ] );
+
 		$values = self::index_values( $post_id );
 		foreach ( array(
 			self::LICENSE_INDEX => $values['license'],
@@ -711,6 +793,110 @@ class ODW_Catalog_Filters {
 	}
 
 	/**
+	 * Merkt einen Datensatz vor, wenn sich ein Quellwert der Index-Felder
+	 * außerhalb des Speicherns ändert.
+	 *
+	 * Der WordPress-Importer etwa legt den Beitrag an (save_post läuft, noch
+	 * ohne Meta) und schreibt die Meta erst danach mit add_post_meta(); ebenso
+	 * „wp post meta update" oder eigener Code. Die Index-Schlüssel selbst
+	 * stehen nicht in der Liste — kein Kreislauf.
+	 *
+	 * @param mixed  $meta_ids  Meta-ID(s), ungenutzt.
+	 * @param int    $object_id Post ID.
+	 * @param string $meta_key  Meta-Schlüssel.
+	 */
+	public static function note_meta_change( $meta_ids, $object_id, $meta_key ): void {
+		unset( $meta_ids );
+		$meta_key = (string) $meta_key;
+		if ( ! in_array( $meta_key, self::SOURCE_KEYS, true ) && 0 !== strpos( $meta_key, '_odw_theme|' ) ) {
+			return;
+		}
+		self::queue( (int) $object_id );
+	}
+
+	/**
+	 * Ein gelöschter Anhang nimmt Datensätzen, die ihn als Datei führen, das
+	 * Format aus der Dateiendung — Liste und Karte zeigen dann keines mehr.
+	 *
+	 * @param int          $post_id Post ID.
+	 * @param WP_Post|null $post    Gelöschter Beitrag.
+	 */
+	public static function note_attachment_deleted( $post_id, $post = null ): void {
+		if ( ! $post instanceof WP_Post || 'attachment' !== $post->post_type ) {
+			return;
+		}
+
+		$ids = get_posts(
+			array(
+				'post_type'      => 'odw_dataset',
+				'post_status'    => 'any',
+				'fields'         => 'ids',
+				'posts_per_page' => -1,
+				'no_found_rows'  => true,
+				'meta_key'       => '_odw_file_id',
+				'meta_value'     => (string) (int) $post_id,
+			)
+		);
+		foreach ( (array) $ids as $id ) {
+			self::queue( (int) $id );
+		}
+	}
+
+	/**
+	 * Nach dem Wiederherstellen einer Revision: Carbon Fields kopiert auf
+	 * Priorität 10 alle Meta-Zeilen der Revision zurück, deren Schlüssel mit
+	 * einem Feldnamen beginnen — also auch die (zum Zeitpunkt der Revision
+	 * veralteten) Index-Felder _odw_license_index, _odw_format_index und
+	 * _odw_theme_index.
+	 *
+	 * @param int $post_id     Post ID.
+	 * @param int $revision_id Revision, ungenutzt.
+	 */
+	public static function after_restore( $post_id, $revision_id = 0 ): void {
+		unset( $revision_id );
+		self::resync( (int) $post_id );
+	}
+
+	/**
+	 * Vorgemerkte Datensätze am Ende des Requests abgleichen — dann stehen
+	 * alle Meta-Werte und Caches fest (wp_delete_attachment() leert den
+	 * Cache des Anhangs erst nach deleted_post).
+	 */
+	public static function flush_pending(): void {
+		foreach ( array_keys( self::$pending ) as $post_id ) {
+			self::resync( (int) $post_id );
+		}
+		self::$pending = array();
+	}
+
+	/**
+	 * Merkt einen Datensatz für flush_pending() vor.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	private static function queue( int $post_id ): void {
+		if ( $post_id <= 0 || 'odw_dataset' !== get_post_type( $post_id ) ) {
+			return;
+		}
+		if ( empty( self::$pending ) ) {
+			add_action( 'shutdown', array( self::class, 'flush_pending' ) );
+		}
+		self::$pending[ $post_id ] = true;
+	}
+
+	/**
+	 * Alle Index-Felder eines Datensatzes neu schreiben.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	private static function resync( int $post_id ): void {
+		if ( class_exists( 'ODW_Fields' ) ) {
+			ODW_Fields::sync_theme_index( $post_id );
+		}
+		self::sync_index( $post_id );
+	}
+
+	/**
 	 * Füllt die Index-Felder für Bestandsdaten — 200 Datensätze pro Request,
 	 * bis alle durch sind.
 	 *
@@ -718,18 +904,25 @@ class ODW_Catalog_Filters {
 	 * aktualisierten Website, deren Backend noch niemand geöffnet hat, alle
 	 * Bestandsdaten in Filtern und Facetten. Die Option ist autoload — nach
 	 * Abschluss kostet die Prüfung keine Abfrage.
+	 *
+	 * Nach jedem Wechsel der Plugin-Version läuft sie erneut: Eine ältere
+	 * Version (etwa nach einem automatischen Rollback) pflegt die Index-Felder
+	 * nicht, und was dort geändert wurde, stünde sonst dauerhaft falsch im
+	 * Filter.
 	 */
 	public static function maybe_migrate_index(): void {
+		$plugin   = defined( 'ODW_VERSION' ) ? (string) ODW_VERSION : '';
 		$progress = get_option( self::INDEX_OPTION );
 		$progress = is_array( $progress ) ? $progress : array();
-		if ( (int) ( $progress['version'] ?? 0 ) >= self::INDEX_VERSION && ! empty( $progress['done'] ) ) {
+		$current  = (int) ( $progress['version'] ?? 0 ) === self::INDEX_VERSION && (string) ( $progress['plugin'] ?? '' ) === $plugin;
+		if ( $current && ! empty( $progress['done'] ) ) {
 			return;
 		}
 
-		$after = (int) ( $progress['version'] ?? 0 ) === self::INDEX_VERSION ? (int) ( $progress['after'] ?? 0 ) : 0;
+		$after = $current ? (int) ( $progress['after'] ?? 0 ) : 0;
 
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Einmalige Migration in Stapeln nach ID; get_posts() kennt kein „ID größer als".
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Migration in Stapeln nach ID; get_posts() kennt kein „ID größer als".
 		$ids = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'odw_dataset' AND post_status NOT IN ( 'auto-draft', 'trash', 'inherit' ) AND ID > %d ORDER BY ID ASC LIMIT %d", $after, self::INDEX_BATCH ) ) );
 
 		if ( ! empty( $ids ) ) {
@@ -743,6 +936,7 @@ class ODW_Catalog_Filters {
 			self::INDEX_OPTION,
 			array(
 				'version' => self::INDEX_VERSION,
+				'plugin'  => $plugin,
 				'after'   => empty( $ids ) ? $after : (int) end( $ids ),
 				'done'    => count( $ids ) < self::INDEX_BATCH,
 			),

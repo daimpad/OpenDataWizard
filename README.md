@@ -265,16 +265,20 @@ dem Weg in die Detailansicht und zurück erhalten. Ohne die beiden Attribute sie
 so aus wie bisher.
 
 Grenzen, bewusst einfach gehalten: Format und Lizenz beziehen sich auf die erste Distribution, nicht
-auf weitere. Die Suche ist eine einfache Textsuche ohne Relevanz-Sortierung. Engagementfeld und
-Herausgeber sind nicht filterbar.
+auf weitere. Eine eigene Lizenz („Sonstige") ist nur dann wählbar, wenn sie als Adresse
+(`https://…`) eingetragen ist — ein Freitext wie „Nutzung nach Absprache" erscheint nicht im
+Lizenzfilter. Die Suche ist eine einfache Textsuche ohne Relevanz-Sortierung und braucht mindestens
+zwei Zeichen. Engagementfeld und Herausgeber sind nicht filterbar.
 
 #### Suchmaschinen und Seiten-Caches
 
 - Die Detailansicht ist eine eigene Seite für Suchmaschinen: Titel „Datensatz – Katalogseite",
   Canonical `<Katalogseite>?odw_ds=<ID>` und `<link rel="alternate">` auf JSON-LD und Turtle des
-  Datensatzes. Eine unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex`.
+  Datensatzes. Eine unbekannte oder nicht öffentliche ID antwortet mit **HTTP 404** und `noindex`,
+  ebenso eine Listenseite hinter dem Ende.
 - Listenseiten ab 2 haben einen eigenen Canonical; gefilterte, durchsuchte oder umsortierte Varianten
-  sind `noindex, follow` — sie zeigen dieselben Datensätze in anderer Auswahl.
+  sind `noindex, follow` — sie zeigen dieselben Datensätze in anderer Auswahl. Ist die Website auf
+  „Suchmaschinen davon abhalten" gestellt oder die Katalogseite auf `nofollow`, bleibt es dabei.
 - Mit **Yoast SEO**, **Rank Math** oder **All in One SEO** gelten dieselben Regeln; das Plugin
   gibt ihnen Titel, Canonical und robots über deren eigene Filter vor. Yoasts „Crawl-Bereinigung"
   lässt die `odw_`-Parameter stehen; in der Crawl-Bereinigung von All in One SEO dürfen sie nicht

@@ -148,6 +148,87 @@ class Test_ODW_Catalog extends TestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// config_from_content()
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Stellt get_shortcode_regex() (wie in Core) und shortcode_parse_atts()
+	 * (vereinfacht: name="wert") bereit.
+	 */
+	private function mock_shortcodes(): void {
+		\WP_Mock::userFunction( 'get_shortcode_regex' )->andReturnUsing(
+			static function ( array $tags ): string {
+				$tagregexp = implode( '|', array_map( 'preg_quote', $tags ) );
+				return '\\[(\\[?)(' . $tagregexp . ')(?![\\w-])([^\\]\\/]*(?:\\/(?!\\])[^\\]\\/]*)*?)(?:(\\/)\\]|\\](?:([^\\[]*+(?:\\[(?!\\/\\2\\])[^\\[]*+)*+)\\[\\/\\2\\])?)(\\]?)';
+			}
+		);
+		\WP_Mock::userFunction( 'shortcode_parse_atts' )->andReturnUsing(
+			static function ( string $text ) {
+				preg_match_all( '/(\w+)="([^"]*)"/', $text, $pairs, PREG_SET_ORDER );
+				$atts = array();
+				foreach ( $pairs as $pair ) {
+					$atts[ $pair[1] ] = $pair[2];
+				}
+				return '' === trim( $text ) ? '' : $atts;
+			}
+		);
+	}
+
+	/**
+	 * Shortcode: die Attribute des ersten ausgeführten Katalogs, geprüft wie
+	 * beim Rendern; ein maskierter [[odw_catalog]] zählt nicht.
+	 */
+	public function test_config_from_content_shortcode(): void {
+		$this->load();
+		$this->mock_shortcodes();
+
+		$config = ODW_Catalog::config_from_content( '<p>Text</p>[[odw_catalog per_page="3"]] [odw_catalog per_page="5" filters="theme,sort"]' );
+		$this->assertNotNull( $config );
+		$this->assertSame( 5, $config['per_page'] );
+		$this->assertSame( array( 'theme', 'sort' ), $config['filters'] );
+
+		$plain = ODW_Catalog::config_from_content( '[odw_catalog]' );
+		$this->assertSame( 20, $plain['per_page'], 'Ohne Attribute: Standardwerte.' );
+
+		$this->assertNull( ODW_Catalog::config_from_content( '<p>[[odw_catalog]]</p>' ) );
+		$this->assertNull( ODW_Catalog::config_from_content( '<p>Kein Katalog</p>' ) );
+	}
+
+	/**
+	 * Block: auch verschachtelt; fehlende Attribute sind die Standardwerte
+	 * aus block.json.
+	 */
+	public function test_config_from_content_block(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'parse_blocks' )->andReturn(
+			array(
+				array(
+					'blockName'   => 'core/group',
+					'attrs'       => array(),
+					'innerBlocks' => array(
+						array(
+							'blockName'   => 'odw/catalog',
+							'attrs'       => array(
+								'perPage' => 4,
+								'filters' => array( 'license' ),
+								'search'  => true,
+							),
+							'innerBlocks' => array(),
+						),
+					),
+				),
+			)
+		);
+
+		$config = ODW_Catalog::config_from_content( '<!-- wp:group --><!-- wp:odw/catalog {"perPage":4} /--><!-- /wp:group -->' );
+		$this->assertNotNull( $config );
+		$this->assertSame( 4, $config['per_page'] );
+		$this->assertSame( array( 'license' ), $config['filters'] );
+		$this->assertTrue( $config['search'] );
+		$this->assertSame( 'title', $config['orderby'] );
+	}
+
+	// -------------------------------------------------------------------------
 	// parse_atts()
 	// -------------------------------------------------------------------------
 

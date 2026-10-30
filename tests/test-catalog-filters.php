@@ -230,6 +230,11 @@ class Test_ODW_Catalog_Filters extends TestCase {
 			'Thema als URI'          => array( array( 'odw_theme' => self::THEME_BASE . 'EDUC' ), 'theme', '' ),
 			'Lizenz als Kurzform'    => array( array( 'odw_license' => 'cc-by' ), 'license', self::CC_BY ),
 			'Format'                 => array( array( 'odw_format' => 'GeoJSON' ), 'format', 'GeoJSON' ),
+			'Format klein'           => array( array( 'odw_format' => 'csv' ), 'format', 'CSV' ),
+			'Format als Endung'      => array( array( 'odw_format' => 'geojson' ), 'format', 'GeoJSON' ),
+			'Format ohne Schlüssel'  => array( array( 'odw_format' => 'docx' ), 'format', 'DOCX' ),
+			'Lizenz-URI kodiert'     => array( array( 'odw_license' => 'https://stadt.example/nutzung-f%C3%BCr-daten' ), 'license', 'https://stadt.example/nutzung-f%C3%BCr-daten' ),
+			'Lizenz als Freitext'    => array( array( 'odw_license' => 'Nutzung nach Absprache' ), 'license', '' ),
 			'Format mit Leerzeichen' => array( array( 'odw_format' => 'C S V' ), 'format', '' ),
 			'Sortierung'             => array( array( 'odw_sort' => 'Modified' ), 'sort', 'modified' ),
 			'Sortierung unbekannt'   => array( array( 'odw_sort' => 'rand' ), 'sort', '' ),
@@ -257,7 +262,9 @@ class Test_ODW_Catalog_Filters extends TestCase {
 			)
 		);
 
-		$off = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( '' ), $get );
+		// modified weicht von der Standardsortierung ab — wirkt also nur, wenn
+		// 'sort' freigeschaltet ist.
+		$off = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( '' ), array_merge( $get, array( 'sort' => 'modified' ) ) );
 		$this->assertSame( $this->state(), $off, 'Ohne filters/search ändert sich nichts.' );
 		$this->assertFalse( ODW_Catalog_Filters::is_active( $off ) );
 
@@ -286,6 +293,23 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$sorted = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( array( 'filters' => 'sort' ) ), ODW_Catalog_Filters::parse_get( array( 'odw_sort' => 'modified' ) ) );
 		$this->assertSame( 'modified', $sorted['sort'] );
 		$this->assertTrue( ODW_Catalog_Filters::is_active( $sorted ) );
+
+		// Umgekehrt: Katalog nach Änderung sortiert, Besucher wählt Titel.
+		$config   = ODW_Catalog::parse_atts(
+			array(
+				'orderby' => 'modified',
+				'filters' => 'sort',
+			)
+		);
+		$by_title = ODW_Catalog_Filters::state( $config, ODW_Catalog_Filters::parse_get( array( 'odw_sort' => 'title' ) ) );
+		$this->assertSame( 'title', $by_title['sort'] );
+		$this->assertSame(
+			array(
+				'title' => 'ASC',
+				'ID'    => 'ASC',
+			),
+			ODW_Catalog_Filters::apply_to_query( array(), $config, $by_title )['orderby']
+		);
 	}
 
 	/**
@@ -445,6 +469,8 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$this->assertContains( 'CSV', $values );
 		$this->assertContains( '_odw_format_index', $values );
 		$this->assertContains( '%Schule%', $values );
+		$this->assertContains( self::THEME_BASE . 'ENVI', $values, 'Die Themen des Attributs gelten.' );
+		$this->assertSame( 2, count( array_keys( $values, '_odw_theme_index', true ) ), 'Themen des Attributs und Wahl des Besuchers: zwei Bedingungen.' );
 		$this->assertSame(
 			substr_count( $sql, '%s' ) + substr_count( $sql, '%d' ),
 			count( $values ),
@@ -467,6 +493,27 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		);
 		$this->assertSame( array( '_odw_format_index' ), $plain_values );
 		$this->assertStringNotContainsString( 'EXISTS', $plain );
+	}
+
+	/**
+	 * Bedingungen der Facetten: Die Lizenz des Attributs geht der Wahl des
+	 * Besuchers vor, die Themen des Attributs gelten immer.
+	 */
+	public function test_conditions(): void {
+		$this->load();
+
+		$config     = ODW_Catalog::parse_atts(
+			array(
+				'license' => 'cc-by',
+				'theme'   => 'EDUC',
+				'filters' => 'format',
+			)
+		);
+		$conditions = ODW_Catalog_Filters::conditions( $config, $this->state( array( 'license' => self::CC0 ) ), 7 );
+
+		$this->assertSame( self::CC_BY, $conditions['license'] );
+		$this->assertSame( array( self::THEME_BASE . 'EDUC' ), $conditions['themes'] );
+		$this->assertSame( 7, $conditions['exclude'] );
 	}
 
 	/**
@@ -499,6 +546,68 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		);
 		$this->assertSame( array( 'cc-by', 'https://example.org/eigen' ), array_column( $licenses, 'param' ) );
 		$this->assertSame( 'CC BY 4.0 — Namensnennung', $licenses[0]['label'] );
+	}
+
+	/**
+	 * Angeboten wird nur, was über das Formular unverändert zurückkommt:
+	 * keine Lizenz als Freitext, kein Thema, das es nicht mehr gibt.
+	 */
+	public function test_facet_options_round_trip(): void {
+		$this->load();
+
+		$licenses = ODW_Catalog_Filters::facet_options(
+			'license',
+			array(
+				self::CC_BY              => 3,
+				'Nutzung nach Absprache' => 2,
+				'CC-BY'                  => 1,
+				'https://stadt.example/nutzung-f%C3%BCr-daten' => 1,
+			),
+			''
+		);
+		$this->assertSame( array( 'cc-by', 'https://stadt.example/nutzung-f%C3%BCr-daten' ), array_column( $licenses, 'param' ) );
+
+		$themes = ODW_Catalog_Filters::facet_options(
+			'theme',
+			array(
+				self::THEME_BASE . 'EDUC' => 1,
+				self::THEME_BASE . 'XYZ'  => 4,
+			),
+			''
+		);
+		$this->assertSame( array( 'EDUC' ), array_column( $themes, 'param' ) );
+	}
+
+	/**
+	 * Themen, die eine Website über odw_theme_options ergänzt, lassen sich
+	 * wählen — als URI oder als eigener Schlüssel.
+	 */
+	public function test_custom_theme(): void {
+		$this->load();
+		$defaults = ODW_Fields::get_theme_options();
+		\WP_Mock::onFilter( 'odw_theme_options' )->with( $defaults )->reply(
+			array_merge(
+				$defaults,
+				array(
+					'https://example.org/thema/sport' => 'Sport',
+					'ehrenamt'                        => 'Ehrenamt',
+				)
+			)
+		);
+
+		$this->assertSame( 'https://example.org/thema/sport', ODW_Catalog_Filters::parse_get( array( 'odw_theme' => 'https://example.org/thema/sport' ) )['theme'] );
+		$this->assertSame( 'ehrenamt', ODW_Catalog_Filters::parse_get( array( 'odw_theme' => 'ehrenamt' ) )['theme'] );
+
+		$options = ODW_Catalog_Filters::facet_options(
+			'theme',
+			array(
+				'https://example.org/thema/sport' => 2,
+				'ehrenamt'                        => 1,
+			),
+			''
+		);
+		$this->assertSame( array( 'ehrenamt', 'https://example.org/thema/sport' ), array_column( $options, 'param' ) );
+		$this->assertSame( array( 'Ehrenamt', 'Sport' ), array_column( $options, 'label' ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -603,7 +712,31 @@ class Test_ODW_Catalog_Filters extends TestCase {
 					'_odw_file_id' => '9',
 				),
 				'',
-				'GEOJSON',
+				'GeoJSON',
+			),
+			'Endung ohne Format-Schlüssel'       => array(
+				array(
+					'_odw_file_id'     => '9',
+					'_odw_file_format' => 'DOCX',
+				),
+				'',
+				'DOCX',
+			),
+			'eigene Lizenz als Freitext'         => array(
+				array(
+					'_odw_license'        => 'sonstige',
+					'_odw_license_custom' => 'Nutzung nach Absprache',
+				),
+				'',
+				'',
+			),
+			'eigene Lizenz wie eine Kurzform'    => array(
+				array(
+					'_odw_license'        => 'sonstige',
+					'_odw_license_custom' => 'CC-BY',
+				),
+				'',
+				'',
 			),
 		);
 	}
@@ -621,8 +754,10 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		\WP_Mock::userFunction( 'get_post_type' )->andReturn( 'odw_dataset' );
 		\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 41, '_odw_license_index', self::CC0 );
 		\WP_Mock::userFunction( 'delete_post_meta' )->once()->with( 41, '_odw_format_index' );
+		$this->set_pending( array( 41 => true ) );
 
 		ODW_Catalog_Filters::sync_index( 41 );
+		$this->assertSame( array(), $this->pending(), 'Abgeglichen: nicht mehr vorgemerkt.' );
 
 		$container = \Mockery::getContainer();
 		$container->mockery_verify();
@@ -639,6 +774,185 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		\WP_Mock::userFunction( 'delete_post_meta' )->never();
 
 		ODW_Catalog_Filters::sync_index( 42 );
+
+		$container = \Mockery::getContainer();
+		$container->mockery_verify();
+		$this->addToAssertionCount( $container->mockery_getExpectationCount() );
+	}
+	// -------------------------------------------------------------------------
+	// Abgleich außerhalb des Speicherns
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Vorgemerkte Datensätze.
+	 *
+	 * @return array<int, true>
+	 */
+	private function pending(): array {
+		$property = new ReflectionProperty( 'ODW_Catalog_Filters', 'pending' );
+		$property->setAccessible( true );
+		return (array) $property->getValue();
+	}
+
+	/**
+	 * Setzt die vorgemerkten Datensätze.
+	 *
+	 * @param array<int, true> $pending Vormerkungen.
+	 */
+	private function set_pending( array $pending ): void {
+		$property = new ReflectionProperty( 'ODW_Catalog_Filters', 'pending' );
+		$property->setAccessible( true );
+		$property->setValue( null, $pending );
+	}
+
+	/**
+	 * Meta-Änderungen an Quellwerten (auch an den Carbon-Fields-Zeilen der
+	 * Themen) merken den Datensatz vor — einmal, mit einem shutdown-Abgleich.
+	 * Andere Schlüssel und die Index-Felder selbst nicht.
+	 */
+	public function test_meta_change_queues_dataset(): void {
+		$this->load();
+		$this->set_pending( array() );
+		\WP_Mock::userFunction( 'get_post_type' )->andReturnUsing(
+			static function ( $id ): string {
+				return 50 === (int) $id ? 'odw_dataset' : 'revision';
+			}
+		);
+		\WP_Mock::expectActionAdded( 'shutdown', array( 'ODW_Catalog_Filters', 'flush_pending' ) );
+
+		ODW_Catalog_Filters::note_meta_change( 1, 50, '_odw_license' );
+		ODW_Catalog_Filters::note_meta_change( array( 2, 3 ), 50, '_odw_theme|||0|value' );
+		ODW_Catalog_Filters::note_meta_change( 4, 50, '_odw_license_index' );
+		ODW_Catalog_Filters::note_meta_change( 5, 50, '_odw_description' );
+		ODW_Catalog_Filters::note_meta_change( 6, 51, '_odw_format' );
+
+		$this->assertSame( array( 50 => true ), $this->pending() );
+
+		$this->set_pending( array() );
+	}
+
+	/**
+	 * Ein gelöschter Anhang merkt die Datensätze vor, die ihn als Datei
+	 * führen; andere gelöschte Beiträge lösen keine Suche aus.
+	 */
+	public function test_attachment_deleted_queues_datasets(): void {
+		$this->load();
+		$this->set_pending( array() );
+		\WP_Mock::userFunction( 'get_post_type' )->andReturn( 'odw_dataset' );
+		\WP_Mock::userFunction( 'add_action' )->andReturn( true );
+		\WP_Mock::userFunction( 'get_posts' )->once()->andReturnUsing(
+			static function ( array $args ): array {
+				return '_odw_file_id' === $args['meta_key'] && '90' === $args['meta_value'] && 'ids' === $args['fields'] ? array( 60, 61 ) : array();
+			}
+		);
+
+		$page            = new WP_Post();
+		$page->post_type = 'page';
+		ODW_Catalog_Filters::note_attachment_deleted( 91, $page );
+
+		$attachment            = new WP_Post();
+		$attachment->post_type = 'attachment';
+		ODW_Catalog_Filters::note_attachment_deleted( 90, $attachment );
+
+		$this->assertSame(
+			array(
+				60 => true,
+				61 => true,
+			),
+			$this->pending()
+		);
+
+		$this->set_pending( array() );
+	}
+
+	/**
+	 * Die Migration läuft nach jedem Versionswechsel erneut von vorn — auch
+	 * wenn sie für eine frühere Version schon fertig war.
+	 */
+	public function test_migration_restarts_after_version_change(): void {
+		$this->load();
+
+		$GLOBALS['wpdb'] = new class() {
+			/**
+			 * Tabelle.
+			 *
+			 * @var string
+			 */
+			public $posts = 'wp_posts';
+
+			/**
+			 * Letzte Werte von prepare().
+			 *
+			 * @var array<int, mixed>
+			 */
+			public $args = array();
+
+			/**
+			 * Ersatz für wpdb::prepare().
+			 *
+			 * @param string $sql     Vorlage.
+			 * @param mixed  ...$args Werte.
+			 * @return string
+			 */
+			public function prepare( $sql, ...$args ) {
+				$this->args = $args;
+				return (string) $sql;
+			}
+
+			/**
+			 * Ersatz für wpdb::get_col().
+			 *
+			 * @return array<int, string>
+			 */
+			public function get_col() {
+				return array();
+			}
+		};
+
+		$stored = array(
+			'version' => 1,
+			'plugin'  => '0.9.0',
+			'after'   => 500,
+			'done'    => true,
+		);
+		\WP_Mock::userFunction( 'get_option' )->with( 'odw_catalog_index' )->andReturn( $stored );
+		\WP_Mock::userFunction( 'update_option' )->once()->with(
+			'odw_catalog_index',
+			array(
+				'version' => 1,
+				'plugin'  => ODW_VERSION,
+				'after'   => 0,
+				'done'    => true,
+			),
+			true
+		);
+
+		ODW_Catalog_Filters::maybe_migrate_index();
+		$this->assertSame( array( 0, 200 ), $GLOBALS['wpdb']->args, 'Von vorn: ID > 0.' );
+
+		$container = \Mockery::getContainer();
+		$container->mockery_verify();
+		$this->addToAssertionCount( $container->mockery_getExpectationCount() );
+
+		unset( $GLOBALS['wpdb'] );
+	}
+
+	/**
+	 * Für die aktuelle Version abgeschlossen: keine Abfrage, kein Schreiben.
+	 */
+	public function test_migration_done_for_current_version(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'get_option' )->andReturn(
+			array(
+				'version' => 1,
+				'plugin'  => ODW_VERSION,
+				'after'   => 500,
+				'done'    => true,
+			)
+		);
+		\WP_Mock::userFunction( 'update_option' )->never();
+
+		ODW_Catalog_Filters::maybe_migrate_index();
 
 		$container = \Mockery::getContainer();
 		$container->mockery_verify();

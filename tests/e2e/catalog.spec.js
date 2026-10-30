@@ -142,9 +142,12 @@ test.describe('Datenkatalog im Frontend', () => {
     await expect(page).not.toHaveURL(/odw_ds=/);
   });
 
-  test('eine Seite jenseits des Endes führt zur ersten zurück', async ({ page }) => {
-    await page.goto(`${PAGED}?odw_page=999`);
+  test('eine Seite jenseits des Endes ist ein 404 und führt zur ersten zurück', async ({ page }) => {
+    const response = await page.goto(`${PAGED}?odw_page=999`);
 
+    expect(response?.status()).toBe(404);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
     await expect(page.locator('#odw-catalog .odw-catalog__empty')).toContainText('Diese Seite gibt es nicht.');
     await page.locator('#odw-catalog .odw-catalog__empty a').click();
     await expect(page).not.toHaveURL(/odw_page=/);
@@ -157,6 +160,11 @@ test.describe('Datenkatalog: Filter, Suche und Kopfbereich (Stufe 2)', () => {
     await page.goto(CATALOG);
 
     await expect(page.locator('#odw-catalog form.odw-catalog__filters')).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
+
+    // Ein Filter-Parameter, den der Katalog nicht freischaltet, ändert nichts —
+    // auch nicht den Kopfbereich.
+    await page.goto(`${CATALOG}?odw_theme=EDUC`);
     await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute('content', /noindex/);
   });
 
@@ -249,7 +257,9 @@ test.describe('Datenkatalog: Filter, Suche und Kopfbereich (Stufe 2)', () => {
   });
 
   test('Listenseiten ab 2 haben einen eigenen Canonical', async ({ page }) => {
-    await page.goto(`${PAGED}?odw_page=2`);
+    const response = await page.goto(`${PAGED}?odw_page=2`);
+
+    expect(response?.status()).toBe(200);
 
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
     expect(canonical).toMatch(/odw-e2e-katalog-seiten\/\?odw_page=2$/);

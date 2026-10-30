@@ -756,14 +756,21 @@ class ODW_Catalog {
 	 * Die GET-Werte des Katalogs, entschärft. Nicht-skalare Werte (?odw_q[]=)
 	 * kommen als '' an und gelten damit als nicht gesetzt.
 	 *
+	 * Lizenz und Thema laufen nicht durch sanitize_text_field(): Das entfernt
+	 * %XX-Sequenzen, aus einer eigenen Lizenz-URI wie …-f%C3%BCr-daten würde
+	 * eine andere. Beide prüft ODW_Catalog_Filters::parse_get() danach streng
+	 * (http(s)-Adresse ohne Leerraum und <>" bzw. Liste der Themen).
+	 *
 	 * @return array<string, string>
 	 */
 	public static function request_values(): array {
+		$raw = array( ODW_Catalog_Filters::PARAM_LICENSE, ODW_Catalog_Filters::PARAM_THEME );
 		$out = array();
 		foreach ( array_merge( array( self::PARAM_PAGE, self::PARAM_DATASET ), ODW_Catalog_Filters::params() ) as $key ) {
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Rein lesender Seitenaufruf. Eine Nonce vertrüge sich weder mit Seiten-Caches noch mit Lesezeichen; jeder Wert wird danach gegen eine Whitelist bzw. per absint() geprüft.
-			$out[ $key ] = isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? sanitize_text_field( wp_unslash( (string) $_GET[ $key ] ) ) : '';
-			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Rein lesender Seitenaufruf. Eine Nonce vertrüge sich weder mit Seiten-Caches noch mit Lesezeichen; jeder Wert wird danach gegen eine Whitelist, ein Muster bzw. per absint() geprüft.
+			$value       = isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? wp_unslash( (string) $_GET[ $key ] ) : '';
+			$out[ $key ] = in_array( $key, $raw, true ) ? trim( wp_check_invalid_utf8( $value ) ) : sanitize_text_field( $value );
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 		return $out;
 	}
@@ -1232,6 +1239,90 @@ class ODW_Catalog {
 	 */
 	public static function own_params(): array {
 		return array_merge( array( self::PARAM_PAGE, self::PARAM_DATASET ), ODW_Catalog_Filters::params() );
+	}
+
+	/**
+	 * Attribute des ersten Katalogs im Inhalt, geprüft wie beim Rendern —
+	 * damit der Kopfbereich weiß, was die Seite zeigen wird, bevor sie es tut.
+	 *
+	 * Block vor Shortcode (der Block ist nur einmal je Beitrag erlaubt). Ein
+	 * Katalog in einem synchronisierten Muster steht nicht im Inhalt: null.
+	 *
+	 * @param string $content Beitragsinhalt.
+	 * @return array<string, mixed>|null Ergebnis von parse_atts(), null ohne Katalog.
+	 */
+	public static function config_from_content( string $content ): ?array {
+		if ( false !== strpos( $content, '<!-- wp:' . self::BLOCK ) && function_exists( 'parse_blocks' ) ) {
+			$attributes = self::find_block_attributes( parse_blocks( $content ) );
+			if ( null !== $attributes ) {
+				return self::parse_atts( self::block_to_atts( $attributes ) );
+			}
+		}
+
+		if ( false === strpos( $content, '[' . self::SHORTCODE )
+			|| ! preg_match_all( '/' . get_shortcode_regex( array( self::SHORTCODE ) ) . '/', $content, $matches, PREG_SET_ORDER )
+		) {
+			return null;
+		}
+
+		foreach ( $matches as $match ) {
+			// [[odw_catalog]] ist maskiert und wird nicht ausgeführt (wie do_shortcode_tag()).
+			if ( '[' === $match[1] && ']' === $match[6] ) {
+				continue;
+			}
+			// Ohne Attribute liefert shortcode_parse_atts() '' — parse_atts() nimmt beides.
+			return self::parse_atts( shortcode_parse_atts( $match[3] ) );
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attribute des Katalog-Blocks, auch verschachtelt (Gruppe, Spalten).
+	 *
+	 * @param array<int, array<string, mixed>> $blocks Ergebnis von parse_blocks().
+	 * @return array<string, mixed>|null
+	 */
+	private static function find_block_attributes( array $blocks ): ?array {
+		foreach ( $blocks as $block ) {
+			if ( self::BLOCK === ( $block['blockName'] ?? null ) ) {
+				return (array) ( $block['attrs'] ?? array() );
+			}
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$found = self::find_block_attributes( (array) $block['innerBlocks'] );
+				if ( null !== $found ) {
+					return $found;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Zeigt die Listenseite Einträge? Dieselbe Abfrage wie die Liste, nur nach
+	 * IDs und ohne Zählung. Für Seiten hinter dem Ende (odw_page=99), die der
+	 * Kopfbereich als 404 ausliefert.
+	 *
+	 * @param array<string, mixed>  $config  Ergebnis von parse_atts().
+	 * @param array<string, int>    $request Ergebnis von parse_request().
+	 * @param array<string, string> $state   Filter-Zustand.
+	 * @return bool
+	 */
+	public static function page_has_entries( array $config, array $request, array $state ): bool {
+		// Bei unbekannter Lizenz bzw. nur unbekannten Themen zeigt die Liste
+		// nichts (render_list()).
+		if ( '' !== $config['license_invalid'] || ( ! empty( $config['themes_invalid'] ) && empty( $config['themes'] ) ) ) {
+			return false;
+		}
+
+		$args = self::build_query_args( $config, $request, self::demo_id(), $state );
+
+		$args['fields']                 = 'ids';
+		$args['no_found_rows']          = true;
+		$args['update_post_meta_cache'] = false;
+
+		$query = new WP_Query( $args );
+		return ! empty( $query->posts );
 	}
 
 	/**

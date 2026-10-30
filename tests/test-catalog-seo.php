@@ -222,6 +222,19 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		);
 		$this->assertSame( array(), $first['canonical_args'] );
 		$this->assertFalse( $first['noindex'] );
+
+		$beyond = ODW_Catalog_Seo::head_state(
+			array(
+				'page'    => 9,
+				'dataset' => 0,
+			),
+			false,
+			null,
+			true
+		);
+		$this->assertSame( 404, $beyond['status'], 'Seite hinter dem Ende: 404 statt Soft-404.' );
+		$this->assertTrue( $beyond['noindex'] );
+		$this->assertSame( array(), $beyond['canonical_args'] );
 	}
 
 	/**
@@ -266,12 +279,31 @@ class Test_ODW_Catalog_Seo extends TestCase {
 	 */
 	public function test_after_insert_announces_once(): void {
 		$this->load();
-		\WP_Mock::expectAction( 'odw_catalog_changed', 501 );
+		$count = $this->count_announcements( array( 501 ) );
 
 		ODW_Catalog_Seo::after_insert( 501, $this->post( 501 ), true, $this->post( 501, 'draft' ) );
 		ODW_Catalog_Seo::after_insert( 501, $this->post( 501 ), true, $this->post( 501 ) );
 
-		$this->verify_expectations();
+		$this->assertSame( array( 501 => 1 ), $count->calls );
+	}
+
+	/**
+	 * Zählt odw_catalog_changed je Post ID.
+	 *
+	 * @param array<int, int> $ids IDs, die gemeldet werden könnten.
+	 * @return object Zähler mit calls: array<int, int>.
+	 */
+	private function count_announcements( array $ids ): object {
+		$counter        = new stdClass();
+		$counter->calls = array_fill_keys( $ids, 0 );
+		foreach ( $ids as $id ) {
+			\WP_Mock::onAction( 'odw_catalog_changed' )->with( $id )->perform(
+				static function () use ( $counter, $id ): void {
+					++$counter->calls[ $id ];
+				}
+			);
+		}
+		return $counter;
 	}
 
 	/**
@@ -296,12 +328,19 @@ class Test_ODW_Catalog_Seo extends TestCase {
 	 */
 	public function test_after_delete_announces_published(): void {
 		$this->load();
-		\WP_Mock::expectAction( 'odw_catalog_changed', 504 );
+		$count = $this->count_announcements( array( 504, 505 ) );
 
 		ODW_Catalog_Seo::after_delete( 504, $this->post( 504 ) );
 		ODW_Catalog_Seo::after_delete( 505, $this->post( 505, 'draft' ) );
 
-		$this->verify_expectations();
+		$this->assertSame(
+			array(
+				504 => 1,
+				505 => 0,
+			),
+			$count->calls,
+			'Ein gelöschter Entwurf stand nie im Katalog.'
+		);
 	}
 
 	/**
@@ -440,6 +479,19 @@ class Test_ODW_Catalog_Seo extends TestCase {
 				)
 			)
 		);
+		$this->assertSame(
+			array(
+				'noindex'  => true,
+				'nofollow' => true,
+			),
+			ODW_Catalog_Seo::filter_robots(
+				array(
+					'noindex'  => true,
+					'nofollow' => true,
+				)
+			),
+			'blog_public = 0: kein „noindex, nofollow, follow".'
+		);
 
 		$yoast = ODW_Catalog_Seo::yoast_robots(
 			array(
@@ -458,6 +510,20 @@ class Test_ODW_Catalog_Seo extends TestCase {
 			$yoast
 		);
 		$this->assertSame( array( 'index' => 'index' ), ODW_Catalog_Seo::yoast_robots( array( 'index' => 'index' ), $this->presentation( 8 ) ), 'Fremde Seite bleibt unberührt.' );
+		$this->assertSame(
+			array(
+				'index'  => 'noindex',
+				'follow' => 'nofollow',
+			),
+			ODW_Catalog_Seo::yoast_robots(
+				array(
+					'index'  => 'index',
+					'follow' => 'nofollow',
+				),
+				$this->presentation( 7 )
+			),
+			'Ein nofollow der Redaktion bleibt.'
+		);
 
 		$this->assertSame(
 			array(
@@ -484,6 +550,7 @@ class Test_ODW_Catalog_Seo extends TestCase {
 	 */
 	public function test_title_adapters(): void {
 		$this->load();
+		$this->mock_strip_tags();
 		$this->set_head(
 			$this->head(
 				array(
@@ -499,6 +566,71 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		$this->assertSame( 'Schulstandorte – Daten | Stadt', ODW_Catalog_Seo::rank_math_title( 'Daten | Stadt' ) );
 		$this->assertSame( 'Schulstandorte – Daten | Stadt', ODW_Catalog_Seo::rank_math_social_title( 'Schulstandorte – Daten | Stadt' ), 'Schon ergänzt: nicht doppelt.' );
 		$this->assertSame( 'Schulstandorte – Teilen', ODW_Catalog_Seo::rank_math_social_title( 'Teilen' ) );
+
+		$this->set_head( null );
+	}
+
+	/**
+	 * Stellt wp_strip_all_tags() bereit.
+	 */
+	private function mock_strip_tags(): void {
+		\WP_Mock::userFunction( 'wp_strip_all_tags' )->andReturnUsing(
+			static function ( $text ): string {
+				return trim( strip_tags( (string) $text ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Testersatz für wp_strip_all_tags(), kein WordPress geladen.
+			}
+		);
+	}
+
+	/**
+	 * Rank Math bearbeitet den Seitentitel nach dem Filter weiter — der
+	 * schon ergänzte Datensatztitel wird trotzdem erkannt.
+	 */
+	public function test_starts_with_title(): void {
+		$this->load();
+		$this->mock_strip_tags();
+
+		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Schulstandorte Der Stadt – Daten – Stadt', 'Schulstandorte der stadt' ), 'Großschreibung jedes Worts.' );
+		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'CO2-Emissionen – Daten', 'CO<sub>2</sub>-Emissionen' ), 'Tags entfernt.' );
+		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Schüler &amp; Lehrer – Daten', 'Schüler &#038; Lehrer' ), 'Entitäten.' );
+		$this->assertTrue( ODW_Catalog_Seo::starts_with_title( 'Zwei Leer – Daten', 'Zwei  Leer' ), 'Leerraum zusammengefasst.' );
+		$this->assertFalse( ODW_Catalog_Seo::starts_with_title( 'Daten – Stadt', 'Schulstandorte' ) );
+
+		$this->set_head(
+			$this->head(
+				array(
+					'title'   => 'Schulstandorte der stadt',
+					'dataset' => 21,
+				)
+			)
+		);
+		$this->assertSame( 'Schulstandorte Der Stadt – Daten', ODW_Catalog_Seo::rank_math_social_title( 'Schulstandorte Der Stadt – Daten' ) );
+		$this->set_head( null );
+	}
+
+	/**
+	 * Yoast-Schema: Fremde Werte laufen unverändert durch (ein false entfernt
+	 * den Knoten), der Name ist Text ohne Entitäten.
+	 */
+	public function test_yoast_schema_webpage(): void {
+		$this->load();
+		$this->mock_strip_tags();
+		$this->set_head(
+			$this->head(
+				array(
+					'title'   => 'Schüler &#038; Lehrer',
+					'dataset' => 21,
+				)
+			)
+		);
+		$context = (object) array(
+			'indexable' => (object) array( 'object_id' => 7 ),
+		);
+
+		$this->assertFalse( ODW_Catalog_Seo::yoast_schema_webpage( false, $context ) );
+		$this->assertNull( ODW_Catalog_Seo::yoast_schema_webpage( null, $context ) );
+
+		$piece = ODW_Catalog_Seo::yoast_schema_webpage( array( 'name' => 'Daten - Stadt' ), $context );
+		$this->assertSame( 'Schüler & Lehrer – Daten - Stadt', $piece['name'] );
 
 		$this->set_head( null );
 	}
@@ -572,6 +704,52 @@ class Test_ODW_Catalog_Seo extends TestCase {
 				)
 			)
 		);
+
+		$this->set_head( null );
+	}
+
+	/**
+	 * AIOSEO-Schema: Der WebPage-Knoten bekommt die Adresse der Detailansicht,
+	 * andere Knoten und die @id bleiben.
+	 */
+	public function test_aioseo_schema(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'remove_query_arg' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( 'add_query_arg' )->andReturnUsing(
+			static function ( $args, $url ) {
+				return $url . '?' . http_build_query( $args );
+			}
+		);
+
+		$graph = array(
+			array(
+				'@type' => 'WebPage',
+				'@id'   => 'https://example.org/daten/#webpage',
+				'url'   => 'https://example.org/daten/',
+			),
+			array(
+				'@type' => 'WebSite',
+				'@id'   => 'https://example.org/#website',
+				'url'   => 'https://example.org/',
+			),
+		);
+
+		$this->set_head(
+			$this->head(
+				array(
+					'title'          => 'Schulstandorte',
+					'dataset'        => 21,
+					'canonical_args' => array( 'odw_ds' => 21 ),
+				)
+			)
+		);
+		$out = ODW_Catalog_Seo::aioseo_schema( $graph );
+		$this->assertSame( 'https://example.org/daten/?odw_ds=21', $out[0]['url'] );
+		$this->assertSame( 'https://example.org/daten/#webpage', $out[0]['@id'] );
+		$this->assertSame( $graph[1], $out[1] );
+
+		$this->set_head( $this->head( array( 'noindex' => true ) ) );
+		$this->assertSame( $graph, ODW_Catalog_Seo::aioseo_schema( $graph ), 'Varianten und 404: unverändert.' );
 
 		$this->set_head( null );
 	}

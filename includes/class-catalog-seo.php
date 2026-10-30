@@ -11,10 +11,12 @@
  * - gültige ID: Canonical <Seite>?odw_ds=<ID>, Titel „Datensatz – Seite",
  *   <link rel="alternate"> auf JSON-LD und Turtle des Datensatzes;
  * - Listenseite ab 2: Canonical mit odw_page, damit Crawler jede Seite der
- *   Liste (und damit jeden Titel-Link) erreichen;
+ *   Liste (und damit jeden Titel-Link) erreichen; eine Seite hinter dem Ende
+ *   (odw_page=99) bekommt wie eine ungültige ID HTTP 404 und noindex;
  * - Filter, Suche oder Sortierung: noindex,follow — dieselben Datensätze in
  *   beliebig vielen Kombinationen sind Duplikate. Der Canonical bleibt der
- *   der Seite.
+ *   der Seite. Ein nofollow der Website (blog_public = 0) oder der Redaktion
+ *   bleibt dabei stehen.
  *
  * Erkannt wird der Katalog nur im Inhalt der aufgerufenen Seite (Shortcode
  * oder Block). In Widgets und Templates greift nichts davon; die Ausgabe der
@@ -83,6 +85,7 @@ class ODW_Catalog_Seo {
 		add_filter( 'wpseo_opengraph_url', array( self::class, 'yoast_url' ), 20, 2 );
 		add_filter( 'wpseo_title', array( self::class, 'yoast_title' ), 20, 2 );
 		add_filter( 'wpseo_opengraph_title', array( self::class, 'yoast_title' ), 20, 2 );
+		add_filter( 'wpseo_twitter_title', array( self::class, 'yoast_title' ), 20, 2 );
 		add_filter( 'wpseo_schema_webpage', array( self::class, 'yoast_schema_webpage' ), 20, 2 );
 
 		// Rank Math ersetzt Titel, Canonical und robots (es leert am Hook wp
@@ -99,6 +102,7 @@ class ODW_Catalog_Seo {
 		add_filter( 'aioseo_canonical_url', array( self::class, 'aioseo_canonical' ), 20 );
 		add_filter( 'aioseo_title', array( self::class, 'aioseo_title' ), 20 );
 		add_filter( 'aioseo_robots_meta', array( self::class, 'aioseo_robots' ), 20 );
+		add_filter( 'aioseo_schema_output', array( self::class, 'aioseo_schema' ), 20 );
 
 		add_action( 'wp_after_insert_post', array( self::class, 'after_insert' ), 10, 4 );
 		add_action( 'deleted_post', array( self::class, 'after_delete' ), 10, 2 );
@@ -111,12 +115,13 @@ class ODW_Catalog_Seo {
 	/**
 	 * Was gilt für die Katalogseite in diesem Zustand? Reine Funktion.
 	 *
-	 * @param array<string, int> $request Ergebnis von ODW_Catalog::parse_request().
-	 * @param bool               $variant Filter, Suche oder Sortierung gesetzt.
-	 * @param WP_Post|null       $dataset Öffentlicher Datensatz der Detailansicht, sonst null.
+	 * @param array<string, int> $request    Ergebnis von ODW_Catalog::parse_request().
+	 * @param bool               $variant    Filter, Suche oder Sortierung gesetzt.
+	 * @param WP_Post|null       $dataset    Öffentlicher Datensatz der Detailansicht, sonst null.
+	 * @param bool               $beyond_end Listenseite ab 2 ohne Einträge.
 	 * @return array{status: int, noindex: bool, canonical_args: array<string, int>, title: string, dataset: int}
 	 */
-	public static function head_state( array $request, bool $variant, ?WP_Post $dataset ): array {
+	public static function head_state( array $request, bool $variant, ?WP_Post $dataset, bool $beyond_end = false ): array {
 		$state = array(
 			'status'         => 200,
 			'noindex'        => false,
@@ -137,6 +142,15 @@ class ODW_Catalog_Seo {
 			$state['canonical_args'] = array( ODW_Catalog::PARAM_DATASET => (int) $dataset->ID );
 			$state['title']          = (string) get_the_title( $dataset );
 			$state['dataset']        = (int) $dataset->ID;
+			return $state;
+		}
+
+		// Die Liste sagt „Diese Seite gibt es nicht." — eine 200 mit eigenem
+		// Canonical wäre ein Soft-404. Core antwortet bei paged über das Ende
+		// ebenfalls mit 404.
+		if ( $beyond_end ) {
+			$state['status']  = 404;
+			$state['noindex'] = true;
 			return $state;
 		}
 
@@ -184,10 +198,22 @@ class ODW_Catalog_Seo {
 		$id      = (int) $request['dataset'];
 		$dataset = $id > 0 && ODW_Catalog::is_public_dataset( $id ) ? get_post( $id ) : null;
 
+		// Mit den Attributen des Katalogs zählt nur, was er freischaltet: Ein
+		// ?odw_theme= an einem Katalog ohne Themenfilter ändert die Liste
+		// nicht und ist deshalb auch keine Variante.
+		$config = ODW_Catalog::config_from_content( (string) $post->post_content );
+		$state  = null !== $config
+			? ODW_Catalog_Filters::state( $config, ODW_Catalog_Filters::parse_get( $get ) )
+			: ODW_Catalog_Filters::parse_get( $get );
+
+		$beyond_end = 0 === $id && (int) $request['page'] > 1 && null !== $config
+			&& ! ODW_Catalog::page_has_entries( $config, $request, $state );
+
 		self::$head = self::head_state(
 			$request,
-			ODW_Catalog_Filters::is_active( ODW_Catalog_Filters::parse_get( $get ) ),
-			$dataset instanceof WP_Post ? $dataset : null
+			ODW_Catalog_Filters::is_active( $state ),
+			$dataset instanceof WP_Post ? $dataset : null,
+			$beyond_end
 		) + array( 'post_id' => (int) $post->ID );
 
 		return self::$head;
@@ -212,12 +238,14 @@ class ODW_Catalog_Seo {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Sendet 404 für eine ungültige Detail-ID — vor jeder Ausgabe, ohne
-	 * set_404(): Das Seitentemplate mit der Meldung bleibt erhalten.
+	 * Sendet 404 für eine ungültige Detail-ID oder eine Seite hinter dem
+	 * Ende — vor jeder Ausgabe, ohne set_404(): Das Seitentemplate mit der
+	 * Meldung bleibt erhalten.
 	 *
 	 * Das noindex zusätzlich als HTTP-Header: Der wirkt auch dann, wenn ein
 	 * SEO-Plugin das robots-Meta-Tag selbst schreibt und keinen der Filter
-	 * unten kennt.
+	 * unten kennt. Als weiterer Header, nicht als Ersatz eines vorhandenen;
+	 * bei „Suchmaschinen davon abhalten" mit nofollow wie das Meta-Tag.
 	 */
 	public static function send_headers(): void {
 		$head = self::head();
@@ -230,7 +258,7 @@ class ODW_Catalog_Seo {
 			nocache_headers();
 		}
 		if ( $head['noindex'] ) {
-			header( 'X-Robots-Tag: noindex, follow' );
+			header( 'X-Robots-Tag: noindex, ' . ( get_option( 'blog_public' ) ? 'follow' : 'nofollow' ), false );
 		}
 	}
 
@@ -319,7 +347,9 @@ class ODW_Catalog_Seo {
 	}
 
 	/**
-	 * Robots „noindex,follow" für Fehler und gefilterte Varianten.
+	 * Robots „noindex,follow" für Fehler und gefilterte Varianten. Ein
+	 * nofollow, das Core bei blog_public = 0 schon gesetzt hat, bleibt —
+	 * sonst stünde „noindex, nofollow, follow" im Tag.
 	 *
 	 * @param array<string, bool|string> $robots Robots-Direktiven.
 	 * @return array<string, bool|string>
@@ -333,7 +363,9 @@ class ODW_Catalog_Seo {
 
 		unset( $robots['index'] );
 		$robots['noindex'] = true;
-		$robots['follow']  = true;
+		if ( empty( $robots['nofollow'] ) ) {
+			$robots['follow'] = true;
+		}
 		return $robots;
 	}
 
@@ -387,7 +419,8 @@ class ODW_Catalog_Seo {
 	}
 
 	/**
-	 * Robots in Yoasts eigener Form ('index' => 'noindex').
+	 * Robots in Yoasts eigener Form ('index' => 'noindex'). Ein nofollow,
+	 * das die Redaktion für die Katalogseite gesetzt hat, bleibt stehen.
 	 *
 	 * @param array<string, string> $robots       Robots-Werte.
 	 * @param mixed                 $presentation Indexable_Presentation.
@@ -400,8 +433,10 @@ class ODW_Catalog_Seo {
 			return $robots;
 		}
 
-		$robots['index']  = 'noindex';
-		$robots['follow'] = 'follow';
+		$robots['index'] = 'noindex';
+		if ( 'nofollow' !== ( $robots['follow'] ?? '' ) ) {
+			$robots['follow'] = 'follow';
+		}
 		unset( $robots['max-snippet'], $robots['max-image-preview'], $robots['max-video-preview'], $robots['imageindex'], $robots['archive'], $robots['snippet'] );
 		return $robots;
 	}
@@ -420,8 +455,9 @@ class ODW_Catalog_Seo {
 	}
 
 	/**
-	 * Titel und og:title der Detailansicht. Läuft je Request mehrfach — und
-	 * bekommt jedes Mal den frischen Yoast-Titel.
+	 * Titel, og:title und twitter:title der Detailansicht. Läuft je Request
+	 * mehrfach — und bekommt jedes Mal den frischen Yoast-Titel. Ein leerer
+	 * twitter:title (dann gilt og:title) bleibt leer.
 	 *
 	 * @param string $title        Titel.
 	 * @param mixed  $presentation Indexable_Presentation.
@@ -436,12 +472,19 @@ class ODW_Catalog_Seo {
 	 * Der WebPage-Knoten im Schema-Graphen: url und name wie Canonical und
 	 * Titel. Die @id bleibt der Permalink, andere Knoten verweisen darauf.
 	 *
-	 * @param array<string, mixed> $piece   Schema-Knoten.
-	 * @param mixed                $context Meta_Tags_Context.
-	 * @return array<string, mixed>
+	 * Was kein Array ist, läuft unverändert durch: Ein false entfernt den
+	 * Knoten (etwa per __return_false), ein Cast machte daraus [false] im
+	 * Graphen jeder Seite.
+	 *
+	 * @param mixed $piece   Schema-Knoten.
+	 * @param mixed $context Meta_Tags_Context.
+	 * @return mixed
 	 */
-	public static function yoast_schema_webpage( $piece, $context ): array {
-		$piece     = (array) $piece;
+	public static function yoast_schema_webpage( $piece, $context ) {
+		if ( ! is_array( $piece ) ) {
+			return $piece;
+		}
+
 		$indexable = is_object( $context ) && isset( $context->indexable ) ? $context->indexable : null;
 		$head      = is_object( $indexable ) ? self::head_for( (int) ( $indexable->object_id ?? 0 ) ) : false;
 		if ( false === $head || $head['noindex'] ) {
@@ -452,7 +495,8 @@ class ODW_Catalog_Seo {
 			$piece['url'] = self::canonical_for( $piece['url'], $head );
 		}
 		if ( ! empty( $piece['name'] ) && is_string( $piece['name'] ) ) {
-			$piece['name'] = self::title_for( $piece['name'], (string) $head['title'] );
+			// JSON-LD ist kein HTML: get_the_title() liefert &#038; und &#8211;.
+			$piece['name'] = self::title_for( $piece['name'], self::plain_title( (string) $head['title'] ) );
 		}
 		return $piece;
 	}
@@ -520,10 +564,39 @@ class ODW_Catalog_Seo {
 	public static function rank_math_social_title( $title ): string {
 		$title = (string) $title;
 		$head  = self::head();
-		if ( false === $head || '' === $head['title'] || 0 === strpos( $title, $head['title'] . ' – ' ) ) {
+		if ( false === $head || '' === $head['title'] || self::starts_with_title( $title, (string) $head['title'] ) ) {
 			return $title;
 		}
 		return self::title_for( $title, (string) $head['title'] );
+	}
+
+	/**
+	 * Beginnt ein fertiger Titel schon mit dem Datensatztitel? Reine Funktion.
+	 *
+	 * Rank Math bearbeitet den Seitentitel nach dem Filter weiter (Leerraum,
+	 * Tags, Entitäten, auf Wunsch Großschreibung jedes Worts) — verglichen
+	 * wird deshalb ohne all das.
+	 *
+	 * @param string $title   Fertiger Titel.
+	 * @param string $dataset Datensatztitel.
+	 * @return bool
+	 */
+	public static function starts_with_title( string $title, string $dataset ): bool {
+		$normalize = static function ( string $text ): string {
+			$text = (string) preg_replace( '/\s+/u', ' ', self::plain_title( $text ) );
+			return function_exists( 'mb_strtolower' ) ? mb_strtolower( $text, 'UTF-8' ) : strtolower( $text );
+		};
+		return 0 === strpos( $normalize( $title ), $normalize( $dataset . ' – ' ) );
+	}
+
+	/**
+	 * Titel ohne Tags und Entitäten. Reine Funktion.
+	 *
+	 * @param string $title Titel, etwa aus get_the_title().
+	 * @return string
+	 */
+	public static function plain_title( string $title ): string {
+		return trim( html_entity_decode( wp_strip_all_tags( $title ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -580,6 +653,35 @@ class ODW_Catalog_Seo {
 
 		$attributes['noindex'] = 'noindex';
 		return $attributes;
+	}
+
+	/**
+	 * Der WebPage-Knoten im Schema-Graphen: url wie der Canonical — der Name
+	 * enthält über aioseo_title schon den Datensatz. Die @id bleibt der
+	 * Permalink, andere Knoten verweisen darauf.
+	 *
+	 * Erkannt wird der Knoten an der Form, die AIOSEO ihm gibt: ein
+	 * Seitentyp (WebPage, CollectionPage, ItemPage …) mit @id = url#typ.
+	 * WebSite und Organization haben dieselbe Form, sind aber keine Seite.
+	 *
+	 * @param mixed $graph Knoten des @graph.
+	 * @return mixed
+	 */
+	public static function aioseo_schema( $graph ) {
+		$head = self::head();
+		if ( ! is_array( $graph ) || false === $head || $head['noindex'] || empty( $head['canonical_args'] ) ) {
+			return $graph;
+		}
+
+		foreach ( $graph as $index => $node ) {
+			if ( ! is_array( $node ) || empty( $node['url'] ) || ! is_string( $node['url'] ) || ! is_string( $node['@type'] ?? null ) ) {
+				continue;
+			}
+			if ( 'Page' === substr( $node['@type'], -4 ) && ( $node['@id'] ?? '' ) === $node['url'] . '#' . strtolower( $node['@type'] ) ) {
+				$graph[ $index ]['url'] = self::canonical_for( $node['url'], $head );
+			}
+		}
+		return $graph;
 	}
 
 	/**
