@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.44.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.45.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -233,7 +233,7 @@ Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_
 | `excerpt` | `30` | Wörter im Auszug; `0` blendet ihn aus (max. 100) |
 | `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt — solange er unverändert ist; einmal bearbeitet, erscheint er wie jeder andere Datensatz |
 | `license` | — | Nur eine Lizenz, als Kurzform (`cc-by`, `cc0`, `cc-by-sa`, `dl-de-by`, `dl-de-zero`, `odc-odbl`) oder als Lizenz-URI — auch eine eigene |
-| `filters` | — | Auswahlfelder für Besucher, kommagetrennt: `theme`, `license`, `format`, `sort` |
+| `filters` | — | Auswahlfelder für Besucher, kommagetrennt: `theme`, `license`, `format`, `publisher`, `keyword`, `sort`, `period`, `open`, `hvd` |
 | `search` | `0` | `1` zeigt ein Suchfeld (Titel, Beschreibung und Schlagworte) |
 
 ```
@@ -254,6 +254,7 @@ Datenbankabfragen pro Seite aus.
 ```
 [odw_catalog filters="theme,license,format,sort" search="1"]
 [odw_catalog license="cc-by" filters="theme"]
+[odw_catalog filters="theme,publisher,keyword,period,open,hvd,sort" search="1"]
 ```
 
 Mit `filters` und `search` steht über der Liste ein schlichtes Formular — ohne JavaScript, abgeschickt
@@ -264,11 +265,36 @@ zurücksetzen" führt zur ungefilterten Liste. Fest eingestellte Themen (`theme`
 dem Weg in die Detailansicht und zurück erhalten. Ohne die beiden Attribute sieht ein Katalog genau
 so aus wie bisher.
 
+| Eintrag in `filters` | Feld im Formular |
+|---|---|
+| `theme`, `license`, `format` | Auswahlfeld Thema, Lizenz bzw. Format |
+| `publisher` | Auswahlfeld Herausgeber |
+| `keyword` | Schlagworte mit Mehrfachauswahl; mehrere ergeben Datensätze mit **mindestens einem** davon |
+| `sort` | Sortierung nach Titel oder Aktualisierung |
+| `period` | Zeitraum der Daten, Jahr ab/bis (aus „Zeitlicher Bezug") |
+| `open` | Kästchen „Nur Open Data" |
+| `hvd` | Kästchen „Nur hochwertige Datensätze (HVD)", nur wenn es solche gibt |
+
+Über der Liste stehen die **aktiven Filter als Chips**; jeder lässt sich mit × einzeln entfernen.
+Auf schmalen Bildschirmen ist das Formular unter „Filter und Suche" eingeklappt, damit die Liste
+gleich zu sehen ist; die Chips bleiben sichtbar. Dafür und für das Aufklappfeld der Schlagworte
+lädt der Katalog ein kleines Skript. Ohne JavaScript funktioniert alles, nur schlichter: Die
+Schlagworte sind dann ein normales Mehrfach-Auswahlfeld (Strg- bzw. Cmd-Taste), das Formular ist
+immer offen.
+
+- **Zeitraum:** Ein Datensatz erscheint, wenn sich sein zeitlicher Bezug mit den gewählten Jahren
+  überschneidet. Nur ein Startdatum heißt „seit …" und reicht bis heute. Datensätze ohne
+  zeitlichen Bezug fallen heraus, sobald ein Zeitraum gewählt ist.
+- **Nur Open Data:** zählt jede Lizenz, die in `config/licenses.txt` im Abschnitt „Freie Nutzung"
+  steht (CC0, CC BY, CC BY-SA, Datenlizenz Deutschland, ODbL …). CC BY-NC und CC BY-ND zählen
+  nicht, eine eigene Lizenz nur, wenn ihre Adresse in diesem Abschnitt steht. Anpassen lässt sich
+  das mit dem Filter `odw_license_is_open`.
+
 Grenzen, bewusst einfach gehalten: Format und Lizenz beziehen sich auf die erste Distribution, nicht
 auf weitere. Eine eigene Lizenz („Sonstige") ist nur dann wählbar, wenn sie als Adresse
 (`https://…`) eingetragen ist — ein Freitext wie „Nutzung nach Absprache" erscheint nicht im
 Lizenzfilter. Die Suche ist eine einfache Textsuche ohne Relevanz-Sortierung und braucht mindestens
-zwei Zeichen. Engagementfeld und Herausgeber sind nicht filterbar.
+zwei Zeichen. Das Engagementfeld ist nicht filterbar.
 
 #### Suchmaschinen und Seiten-Caches
 
@@ -506,6 +532,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Download-Card Shortcode `[odw_dataset]` mit Keywords und Metadaten-Download
 - [x] Datenkatalog `[odw_catalog]` / Block „Datenkatalog" mit Detailansicht auf derselben Seite (v2.43.0)
 - [x] Datenkatalog: Filter mit Trefferzahlen, Textsuche, eigene Suchmaschinen-Seiten je Datensatz (v2.44.0)
+- [x] Datenkatalog: Herausgeber, Schlagworte, Zeitraum, „Nur Open Data", „Nur HVD", aktive Filter als Chips (v2.45.0)
 - [x] Demo-Datensatz bei Aktivierung
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)

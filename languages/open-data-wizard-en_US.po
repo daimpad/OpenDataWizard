@@ -2104,3 +2104,112 @@ msgstr "Shows a form above the list. Themes or licences fixed in the settings ar
 
 msgid "mit Suche"
 msgstr "with search"
+
+#, php-format
+msgid "%1$s (%2$d aktiv)"
+msgstr "%1$s (%2$d active)"
+
+#, php-format
+msgid "%1$s–%2$s"
+msgstr "%1$s–%2$s"
+
+#, php-format
+msgid "%d ausgewählt"
+msgstr "%d selected"
+
+msgid "Aktive Filter:"
+msgstr "Active filters:"
+
+msgid "Alle Herausgeber"
+msgstr "All publishers"
+
+msgid "Alle Schlagworte"
+msgstr "All keywords"
+
+msgid "Alle entfernen"
+msgstr "Remove all"
+
+msgid "Auswahl aufheben"
+msgstr "Clear selection"
+
+msgid "Eingrenzen"
+msgstr "Narrow down"
+
+msgid "Fertig"
+msgstr "Done"
+
+msgid "Filter entfernen"
+msgstr "remove filter"
+
+msgid "Filter und Suche"
+msgstr "Filters and search"
+
+#, php-format
+msgid "Format: %s"
+msgstr "Format: %s"
+
+#, php-format
+msgid "Herausgeber: %s"
+msgstr "Publisher: %s"
+
+#, php-format
+msgid "Lizenz: %s"
+msgstr "Licence: %s"
+
+msgid "Mehrere Schlagworte: Datensätze mit mindestens einem davon."
+msgstr "Several keywords: datasets with at least one of them."
+
+msgid "Mehrfachauswahl mit gedrückter Strg- bzw. Cmd-Taste."
+msgstr "Hold Ctrl or Cmd to select several."
+
+msgid "Nur Open Data"
+msgstr "Open data only"
+
+msgid "Nur hochwertige Datensätze (HVD)"
+msgstr "High-value datasets (HVD) only"
+
+msgid "Schlagwort suchen"
+msgstr "Search keywords"
+
+#, php-format
+msgid "Schlagwort: %s"
+msgstr "Keyword: %s"
+
+#, php-format
+msgid "Sortierung: %s"
+msgstr "Sort order: %s"
+
+msgid "Suche"
+msgstr "Search"
+
+#, php-format
+msgid "Suche: „%s“"
+msgstr "Search: “%s”"
+
+#, php-format
+msgid "Thema: %s"
+msgstr "Theme: %s"
+
+msgid "Zeitraum der Daten"
+msgstr "Time period of the data"
+
+#, php-format
+msgid "Zeitraum: %s"
+msgstr "Time period: %s"
+
+msgid "ab"
+msgstr "from"
+
+#, php-format
+msgid "ab %s"
+msgstr "from %s"
+
+msgid "beliebig"
+msgstr "any"
+
+msgid "bis"
+msgstr "to"
+
+#, php-format
+msgid "bis %s"
+msgstr "until %s"

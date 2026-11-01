@@ -447,6 +447,313 @@
     font-size: 0.85em;
 }
 
+/*
+ * --- Filterformular Stufe 3a: Gruppen, Zeitraum, Schlagworte, aktive Filter ---
+ */
+
+/* Zeitraum (zwei Jahresfelder) und Kästchen (Nur Open Data / HVD) */
+.odw-catalog .odw-catalog__group {
+    display: flex;
+    flex: 1 1 15rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 1rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.odw-catalog .odw-catalog__group legend {
+    float: left;
+    width: 100%;
+    margin: 0 0 0.2rem;
+    padding: 0;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.odw-catalog .odw-catalog__option {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+
+/* Kästchen in ihrer eigenen Größe — die Regel für Felder (width: 100%)
+   gälte sonst auch für sie und drückte den Text hinaus. */
+.odw-catalog .odw-catalog__field input[type="checkbox"],
+.odw-catalog .odw-catalog__option input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__count-hint {
+    opacity: 0.75;
+    font-variant-numeric: tabular-nums;
+}
+
+.odw-catalog .odw-catalog__years {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+}
+
+.odw-catalog .odw-catalog__year {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.odw-catalog .odw-catalog__years label {
+    font-size: 0.9em;
+}
+
+.odw-catalog .odw-catalog__years select {
+    width: auto;
+    min-width: 6.5em;
+    font: inherit;
+}
+
+/* Schlagworte: ohne JavaScript ein Mehrfach-Auswahlfeld, mit JavaScript ein
+   Aufklappfeld (assets/js/odw-catalog.js). */
+.odw-catalog .odw-catalog__field--keywords select[multiple] {
+    box-sizing: border-box;
+    width: 100%;
+    font: inherit;
+}
+
+.odw-catalog .odw-ms {
+    position: relative;
+}
+
+.odw-catalog .odw-ms__button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.2em 0.5em;
+    line-height: 1.4;
+    border: 1px solid rgba(128, 128, 128, 0.6);
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-ms__button span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.odw-catalog .odw-ms__button::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.45em;
+    height: 0.45em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-25%) rotate(45deg);
+}
+
+/* Das Aufklappfeld braucht einen eigenen, deckenden Hintergrund — das Theme
+   gibt keinen vor. Canvas/CanvasText folgen dem Farbschema der Seite. */
+.odw-catalog .odw-ms__panel {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 4px);
+    left: 0;
+    display: grid;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    width: max(100%, 17rem);
+    max-width: 90vw;
+    padding: 0.6rem;
+    border: 1px solid rgba(128, 128, 128, 0.6);
+    border-radius: 6px;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.odw-catalog .odw-ms__panel[hidden] {
+    display: none;
+}
+
+.odw-catalog .odw-ms__search {
+    box-sizing: border-box;
+    width: 100%;
+    font: inherit;
+}
+
+.odw-catalog .odw-ms__list {
+    display: grid;
+    gap: 0.15rem;
+    max-height: 13rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow-y: auto;
+}
+
+.odw-catalog .odw-ms__list label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.15rem 0.2rem;
+    border-radius: 4px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-ms__list label[hidden] {
+    display: none;
+}
+
+.odw-catalog .odw-ms__list input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0;
+}
+
+.odw-catalog .odw-ms__hint {
+    margin: 0;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+.odw-catalog .odw-ms__foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.odw-catalog .odw-ms__foot button {
+    padding: 0.2em 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.9em;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-ms__foot .odw-ms__done {
+    padding: 0.2em 0.8em;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Aktive Filter als Chips; jeder ist ein Link ohne diesen Filter. */
+.odw-catalog .odw-catalog__active {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 1rem;
+}
+
+.odw-catalog .odw-catalog__active-label {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.odw-catalog .odw-catalog__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.odw-catalog .odw-catalog__chips li {
+    margin: 0;
+}
+
+.odw-catalog .odw-catalog__chips li::before {
+    content: none;
+}
+
+.odw-catalog .odw-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15em 0.75em;
+    border: 1px solid #9cbbe8;
+    border-radius: 99px;
+    background: #e7f0fd;
+    color: #17416b;
+    font-size: 0.85em;
+    line-height: 1.6;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.odw-catalog .odw-chip:hover {
+    border-color: #17416b;
+    color: #17416b;
+}
+
+.odw-catalog .odw-chip__x {
+    font-weight: 700;
+    line-height: 1;
+}
+
+.odw-catalog .odw-catalog__clear {
+    font-size: 0.85em;
+}
+
+.odw-catalog.odw-catalog .odw-ms__button:focus-visible,
+.odw-catalog.odw-catalog .odw-ms__foot button:focus-visible,
+.odw-catalog.odw-catalog .odw-catalog__option input:focus-visible {
+    outline: 3px solid #1e3a8a;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
+}
+
+/* Bereich „Filter und Suche": auf breiten Bildschirmen ohne Kopfzeile (immer
+   offen), auf schmalen einklappbar. */
+.odw-catalog .odw-catalog__toggle {
+    margin: 0 0 1.25rem;
+}
+
+.odw-catalog .odw-catalog__toggle .odw-catalog__filters {
+    margin-bottom: 0;
+}
+
+.odw-catalog .odw-catalog__summary {
+    padding: 0.6rem 1rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.odw-catalog .odw-catalog__toggle[open] > .odw-catalog__summary {
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 40.0625em) {
+    .odw-catalog .odw-catalog__summary {
+        display: none;
+    }
+}
+
 /* --- Seitennavigation --- */
 .odw-catalog .odw-catalog__pagination ul {
     display: flex;

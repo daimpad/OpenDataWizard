@@ -235,6 +235,7 @@ class Test_ODW_Catalog extends TestCase {
 			'odw_license' => 'https://stadt.example/nutzung-f%C3%BCr-daten',
 			'odw_q'       => '<b>Schule</b> 100%ab',
 			'odw_format'  => array( 'CSV' ),
+			'odw_keyword' => array( '<i>Sport</i>', array( 'x' ), 'Vereine' ),
 		);
 		$values = ODW_Catalog::request_values();
 		$_GET   = $backup;
@@ -244,6 +245,43 @@ class Test_ODW_Catalog extends TestCase {
 		$this->assertSame( 'Schule 100', $values['odw_q'] );
 		$this->assertSame( '', $values['odw_format'] );
 		$this->assertSame( '', $values['odw_page'] );
+		$this->assertSame( array( 'Sport', 'Vereine' ), $values['odw_keyword'], 'Schlagworte als Liste, entschärft; Verschachteltes fällt weg.' );
+	}
+
+	/**
+	 * Links tragen auch Listen: Schlagworte werden zu odw_keyword[0]=…, jeder
+	 * Wert kodiert.
+	 */
+	public function test_page_url_with_keywords(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'remove_query_arg' )->andReturnArg( 1 );
+		$seen = null;
+		\WP_Mock::userFunction( 'add_query_arg' )->andReturnUsing(
+			static function ( $args, $url ) use ( &$seen ) {
+				$seen = $args;
+				return $url . '?' . http_build_query( $args );
+			}
+		);
+
+		ODW_Catalog::page_url(
+			'https://example.org/daten/',
+			2,
+			0,
+			'',
+			array(
+				'odw_keyword' => array( 'Sport & Spiel', 'Vereine' ),
+				'odw_from'    => '2020',
+			)
+		);
+
+		$this->assertSame(
+			array(
+				'odw_page'    => 2,
+				'odw_keyword' => array( 'Sport%20%26%20Spiel', 'Vereine' ),
+				'odw_from'    => '2020',
+			),
+			$seen
+		);
 	}
 
 	/**
@@ -973,7 +1011,7 @@ class Test_ODW_Catalog extends TestCase {
 		$this->load();
 		\WP_Mock::userFunction( 'remove_query_arg' )
 			->once()
-			->with( array( 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q' ), $raw )
+			->with( array( 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q', 'odw_publisher', 'odw_keyword', 'odw_from', 'odw_to', 'odw_open', 'odw_hvd' ), $raw )
 			->andReturn( $removed );
 		// Wie esc_url_raw(): streicht Zeichen, die nicht in eine URL gehören.
 		\WP_Mock::userFunction( 'esc_url_raw' )->andReturnUsing(

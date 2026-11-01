@@ -105,6 +105,7 @@ open-data-wizard/
 │   │   ├── admin.css               # Admin-UI Styling (Tabs, Badges, etc.)
 │   │   └── frontend.css            # Frontend Download-Card Styling
 │   ├── js/
+│   │   ├── odw-catalog.js          # Katalog: Schlagwort-Aufklappfeld, Einklappen auf dem Handy
 │   │   ├── wizard-tabs.js          # Tab-Navigation mit SessionStorage
 │   │   ├── odw-admin-fields.js     # Field-Initialization, Autosuggest
 │   │   └── odw-file-upload.js      # File-Upload Handler (wp.media)
@@ -190,7 +191,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Block** | Gutenberg-Block „Datensatz-Karte“ (dynamisch, rendert über ODW_Shortcode) | `register()`, `localize()`, `render()` |
 | **ODW_Shortcode** | Frontend Download-Card: `[odw_dataset id="123"]` | `render()`, `license_label()`, `file_info()`, `download_target()`, `format_bytes()` |
 | **ODW_Catalog** | Frontend-Datenkatalog: `[odw_catalog]` + Block `odw/catalog`; Liste liest Roh-Meta aus dem WP_Query-Cache (keine Carbon-Fields-Reads), Detailansicht über `?odw_ds=<ID>` | `render_shortcode()`, `render_block()`, `item_data()`, `build_query_args()` |
-| **ODW_Catalog_Filters** | Katalog Stufe 2 (Opt-in über `filters`/`search`/`license`): GET-Zustand, Facetten mit Trefferzahlen (GROUP BY über flache Index-Felder `_odw_license_index`/`_odw_format_index`/`_odw_theme_index`), LIKE-Suche über `posts_where`, Index-Sync auf `save_post`@30, bei Meta-Änderungen außerhalb (Import, gelöschter Anhang, Revision) am Request-Ende, + Migration in Stapeln über `_odw_index_state` (Versionswechsel, alle 12 h) | `state()`, `apply_to_query()`, `facet_sql()`, `render_form()`, `sync_index()` |
+| **ODW_Catalog_Filters** | Katalog Stufe 2/3a (Opt-in über `filters`/`search`/`license`): GET-Zustand, Facetten mit Trefferzahlen (GROUP BY über flache Index-Felder `_odw_license_index`/`_odw_format_index`/`_odw_theme_index`/`_odw_publisher_index`/`_odw_keyword_index`, dazu `_odw_period_from`/`_odw_period_to`, `_odw_open_index`, `_odw_hvd_index`), aktive Filter als Chips, LIKE-Suche über `posts_where`, Index-Sync auf `save_post`@30, bei Meta-Änderungen außerhalb (Import, gelöschter Anhang, Revision) am Request-Ende, + Migration in Stapeln über `_odw_index_state` (Versionswechsel, alle 12 h) | `state()`, `apply_to_query()`, `facet_sql()`, `render_form()`, `sync_index()` |
 | **ODW_Catalog_Seo** | Katalog Stufe 2: HTTP 404 für ungültige `odw_ds` und Seiten hinter dem Ende, Canonical/Titel/robots je Zustand für Core, Yoast, Rank Math und AIOSEO; Action `odw_catalog_changed` für Seiten-Caches | `head_state()`, `canonical_for()`, `send_headers()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
 | **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
@@ -776,7 +777,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.44.0**
+Current: **v2.45.0**
 
 ---
 
