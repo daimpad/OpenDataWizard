@@ -22,7 +22,12 @@
 		{ key: 'theme', label: labels.filterTheme },
 		{ key: 'license', label: labels.filterLic },
 		{ key: 'format', label: labels.filterFormat },
+		{ key: 'publisher', label: labels.filterPublisher },
+		{ key: 'keyword', label: labels.filterKeyword },
 		{ key: 'sort', label: labels.filterSort },
+		{ key: 'period', label: labels.filterPeriod },
+		{ key: 'open', label: labels.filterOpen },
+		{ key: 'hvd', label: labels.filterHvd },
 	];
 	var defaults = cfg.defaults || { perPage: 20, excerpt: 30 };
 	var limits   = cfg.limits || { perPage: 50, excerpt: 100 };

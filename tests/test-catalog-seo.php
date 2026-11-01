@@ -410,7 +410,7 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		$this->load();
 
 		$this->assertSame(
-			array( 'utm_source', 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q' ),
+			array( 'utm_source', 'odw_page', 'odw_ds', 'odw_theme', 'odw_license', 'odw_format', 'odw_sort', 'odw_q', 'odw_publisher', 'odw_keyword', 'odw_from', 'odw_to', 'odw_open', 'odw_hvd' ),
 			ODW_Catalog_Seo::allow_params( array( 'utm_source', 'odw_page' ) )
 		);
 	}

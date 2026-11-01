@@ -112,6 +112,27 @@ class ODW_Catalog {
 	}
 
 	/**
+	 * Bindet das kleine Skript des Filterformulars ein (Schlagwort-Auswahl,
+	 * Einklappen auf schmalen Bildschirmen) — nur, wo ein Formular steht.
+	 * Ohne das Skript funktioniert das Formular vollständig.
+	 */
+	public static function enqueue_script(): void {
+		if ( ! wp_script_is( 'odw-catalog', 'registered' ) ) {
+			wp_register_script(
+				'odw-catalog',
+				ODW_PLUGIN_URL . 'assets/js/odw-catalog.js',
+				array(),
+				ODW_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
+		wp_enqueue_script( 'odw-catalog' );
+	}
+
+	/**
 	 * Registriert Editor-Skript und Block.
 	 */
 	public static function register_block(): void {
@@ -192,30 +213,35 @@ class ODW_Catalog {
 					'excerpt' => self::EXCERPT_MAX,
 				),
 				'labels'   => array(
-					'title'        => __( 'Datenkatalog', 'open-data-wizard' ),
-					'panel'        => __( 'Katalog', 'open-data-wizard' ),
-					'heading'      => __( 'Überschrift (optional)', 'open-data-wizard' ),
-					'perPage'      => __( 'Datensätze pro Seite', 'open-data-wizard' ),
-					'orderby'      => __( 'Sortierung', 'open-data-wizard' ),
-					'byTitle'      => __( 'Nach Titel (A–Z)', 'open-data-wizard' ),
-					'byModified'   => __( 'Zuletzt aktualisierte zuerst', 'open-data-wizard' ),
-					'excerpt'      => __( 'Länge des Beschreibungsauszugs (Wörter, 0 = aus)', 'open-data-wizard' ),
-					'themes'       => __( 'Nur diese Themen zeigen', 'open-data-wizard' ),
-					'themesHelp'   => __( 'Keine Auswahl zeigt alle Themen.', 'open-data-wizard' ),
-					'showDemo'     => __( 'Beispieldatensatz anzeigen', 'open-data-wizard' ),
-					'showDemoHelp' => __( 'Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin.', 'open-data-wizard' ),
-					'rendered'     => __( 'Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben.', 'open-data-wizard' ),
-					'license'      => __( 'Nur diese Lizenz zeigen', 'open-data-wizard' ),
-					'allLicenses'  => __( 'Alle Lizenzen', 'open-data-wizard' ),
-					'visitor'      => __( 'Filter und Suche für Besucher', 'open-data-wizard' ),
-					'visitorHelp'  => __( 'Zeigt über der Liste ein Formular. Fest eingestellte Themen oder Lizenzen werden dort nicht noch einmal angeboten.', 'open-data-wizard' ),
-					'filterTheme'  => __( 'Thema', 'open-data-wizard' ),
-					'filterLic'    => __( 'Lizenz', 'open-data-wizard' ),
-					'filterFormat' => __( 'Format', 'open-data-wizard' ),
-					'filterSort'   => __( 'Sortierung', 'open-data-wizard' ),
-					'search'       => __( 'Suchfeld anzeigen', 'open-data-wizard' ),
-					'filtersOn'    => __( 'Filter', 'open-data-wizard' ),
-					'searchOn'     => __( 'mit Suche', 'open-data-wizard' ),
+					'title'           => __( 'Datenkatalog', 'open-data-wizard' ),
+					'panel'           => __( 'Katalog', 'open-data-wizard' ),
+					'heading'         => __( 'Überschrift (optional)', 'open-data-wizard' ),
+					'perPage'         => __( 'Datensätze pro Seite', 'open-data-wizard' ),
+					'orderby'         => __( 'Sortierung', 'open-data-wizard' ),
+					'byTitle'         => __( 'Nach Titel (A–Z)', 'open-data-wizard' ),
+					'byModified'      => __( 'Zuletzt aktualisierte zuerst', 'open-data-wizard' ),
+					'excerpt'         => __( 'Länge des Beschreibungsauszugs (Wörter, 0 = aus)', 'open-data-wizard' ),
+					'themes'          => __( 'Nur diese Themen zeigen', 'open-data-wizard' ),
+					'themesHelp'      => __( 'Keine Auswahl zeigt alle Themen.', 'open-data-wizard' ),
+					'showDemo'        => __( 'Beispieldatensatz anzeigen', 'open-data-wizard' ),
+					'showDemoHelp'    => __( 'Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin.', 'open-data-wizard' ),
+					'rendered'        => __( 'Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben.', 'open-data-wizard' ),
+					'license'         => __( 'Nur diese Lizenz zeigen', 'open-data-wizard' ),
+					'allLicenses'     => __( 'Alle Lizenzen', 'open-data-wizard' ),
+					'visitor'         => __( 'Filter und Suche für Besucher', 'open-data-wizard' ),
+					'visitorHelp'     => __( 'Zeigt über der Liste ein Formular. Fest eingestellte Themen oder Lizenzen werden dort nicht noch einmal angeboten.', 'open-data-wizard' ),
+					'filterTheme'     => __( 'Thema', 'open-data-wizard' ),
+					'filterLic'       => __( 'Lizenz', 'open-data-wizard' ),
+					'filterFormat'    => __( 'Format', 'open-data-wizard' ),
+					'filterPublisher' => __( 'Herausgeber', 'open-data-wizard' ),
+					'filterKeyword'   => __( 'Schlagworte', 'open-data-wizard' ),
+					'filterSort'      => __( 'Sortierung', 'open-data-wizard' ),
+					'filterPeriod'    => __( 'Zeitraum der Daten', 'open-data-wizard' ),
+					'filterOpen'      => __( 'Nur Open Data', 'open-data-wizard' ),
+					'filterHvd'       => __( 'Nur hochwertige Datensätze (HVD)', 'open-data-wizard' ),
+					'search'          => __( 'Suchfeld anzeigen', 'open-data-wizard' ),
+					'filtersOn'       => __( 'Filter', 'open-data-wizard' ),
+					'searchOn'        => __( 'mit Suche', 'open-data-wizard' ),
 				),
 			)
 		);
@@ -410,10 +436,10 @@ class ODW_Catalog {
 	 * der Aktivierung angelegte Beispieldatensatz. update_post_meta_cache bleibt
 	 * an: Genau dieser Vorab-Abruf aller Meta-Zeilen ist der Kern des Ansatzes.
 	 *
-	 * @param array<string, mixed>       $config  Ergebnis von parse_atts().
-	 * @param array<string, int>         $request Ergebnis von parse_request().
-	 * @param int                        $demo_id ID des Beispieldatensatzes oder 0.
-	 * @param array<string, string>|null $state   Filter-Zustand (ODW_Catalog_Filters::state()), null = keiner.
+	 * @param array<string, mixed>      $config  Ergebnis von parse_atts().
+	 * @param array<string, int>        $request Ergebnis von parse_request().
+	 * @param int                       $demo_id ID des Beispieldatensatzes oder 0.
+	 * @param array<string, mixed>|null $state   Filter-Zustand (ODW_Catalog_Filters::state()), null = keiner.
 	 * @return array<string, mixed>
 	 */
 	public static function build_query_args( array $config, array $request, int $demo_id, ?array $state = null ): array {
@@ -759,34 +785,43 @@ class ODW_Catalog {
 
 	/**
 	 * Die GET-Werte des Katalogs, entschärft. Nicht-skalare Werte (?odw_q[]=)
-	 * kommen als '' an und gelten damit als nicht gesetzt.
+	 * kommen als '' an und gelten damit als nicht gesetzt — außer bei den
+	 * Schlagworten, die als Liste kommen (odw_keyword[]=…); dort werden die
+	 * ersten 20 skalaren Einträge gelesen.
 	 *
 	 * Lizenz und Thema laufen nicht durch sanitize_text_field(): Das entfernt
 	 * %XX-Sequenzen, aus einer eigenen Lizenz-URI wie …-f%C3%BCr-daten würde
 	 * eine andere. Beide prüft ODW_Catalog_Filters::parse_get() danach streng
 	 * (http(s)-Adresse ohne Leerraum und <>" bzw. Liste der Themen).
 	 *
-	 * @return array<string, string>
+	 * @return array<string, string|array<int, string>>
 	 */
 	public static function request_values(): array {
-		$raw = array( ODW_Catalog_Filters::PARAM_LICENSE, ODW_Catalog_Filters::PARAM_THEME );
-		$out = array();
+		$raw  = array( ODW_Catalog_Filters::PARAM_LICENSE, ODW_Catalog_Filters::PARAM_THEME );
+		$list = ODW_Catalog_Filters::PARAM_KEYWORD;
+		$out  = array();
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Rein lesender Seitenaufruf. Eine Nonce vertrüge sich weder mit Seiten-Caches noch mit Lesezeichen; jeder Wert wird danach gegen eine Whitelist, ein Muster bzw. per absint() geprüft.
 		foreach ( array_merge( array( self::PARAM_PAGE, self::PARAM_DATASET ), ODW_Catalog_Filters::params() ) as $key ) {
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Rein lesender Seitenaufruf. Eine Nonce vertrüge sich weder mit Seiten-Caches noch mit Lesezeichen; jeder Wert wird danach gegen eine Whitelist, ein Muster bzw. per absint() geprüft.
+			if ( $list === $key ) {
+				$items       = isset( $_GET[ $key ] ) ? wp_unslash( $_GET[ $key ] ) : array();
+				$items       = is_array( $items ) ? array_slice( array_values( array_filter( $items, 'is_scalar' ) ), 0, 20 ) : array( $items );
+				$out[ $key ] = array_values( array_map( 'sanitize_text_field', array_map( 'strval', array_filter( $items, 'is_scalar' ) ) ) );
+				continue;
+			}
 			$value       = isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? wp_unslash( (string) $_GET[ $key ] ) : '';
 			$out[ $key ] = in_array( $key, $raw, true ) ? trim( wp_check_invalid_utf8( $value ) ) : sanitize_text_field( $value );
-			// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		return $out;
 	}
 
 	/**
 	 * Die Liste: Formular, Trefferzeile, Einträge, Seitennavigation.
 	 *
-	 * @param array<string, mixed>  $config  Geprüfte Attribute.
-	 * @param array<string, int>    $request Seite und Detail-ID.
-	 * @param array<string, string> $state   Filter-Zustand.
-	 * @param string                $base    Basis-URL der Katalogseite.
+	 * @param array<string, mixed> $config  Geprüfte Attribute.
+	 * @param array<string, int>   $request Seite und Detail-ID.
+	 * @param array<string, mixed> $state   Filter-Zustand.
+	 * @param string               $base    Basis-URL der Katalogseite.
 	 * @return array{mode: string, labelledby: string, html: string}
 	 */
 	private static function render_list( array $config, array $request, array $state, string $base ): array {
@@ -840,6 +875,7 @@ class ODW_Catalog {
 		// kann — mit show_demo also einschließlich des Beispiels.
 		$exclude = empty( $config['show_demo'] ) ? $demo_id : 0;
 		$html   .= ODW_Catalog_Filters::render_form( $config, $state, ODW_Catalog_Filters::conditions( $config, $state, $exclude ), $base, $reset, ODW_Catalog_Filters::short_query( self::request_values() ) );
+		$html   .= ODW_Catalog_Filters::render_active( $state, $base, $reset );
 
 		$query = new WP_Query( self::build_query_args( $config, $request, $demo_id, $state ) );
 		$posts = array_values(
@@ -892,11 +928,11 @@ class ODW_Catalog {
 	/**
 	 * Ein Listeneintrag.
 	 *
-	 * @param array<string, mixed>  $item       Ergebnis von item_data().
-	 * @param string                $title_tag  h2 oder h3.
-	 * @param string                $base       Basis-URL.
-	 * @param int                   $page       Aktuelle Listenseite (für den Rückweg).
-	 * @param array<string, string> $state_args Filter-Zustand für den Rückweg.
+	 * @param array<string, mixed> $item       Ergebnis von item_data().
+	 * @param string               $title_tag  h2 oder h3.
+	 * @param string               $base       Basis-URL.
+	 * @param int                  $page       Aktuelle Listenseite (für den Rückweg).
+	 * @param array<string, mixed> $state_args Filter-Zustand für den Rückweg.
 	 * @return string
 	 */
 	private static function render_entry( array $item, string $title_tag, string $base, int $page, array $state_args = array() ): string {
@@ -964,9 +1000,9 @@ class ODW_Catalog {
 	 * Entwurf, Passwortschutz, Papierkorb, fremder Typ und unbekannte ID
 	 * antworten gleich — Entwurfs-IDs lassen sich so nicht aufzählen.
 	 *
-	 * @param array<string, int>    $request Seite und Detail-ID.
-	 * @param array<string, string> $state   Filter-Zustand (nur für den Rückweg).
-	 * @param string                $base    Basis-URL.
+	 * @param array<string, int>   $request Seite und Detail-ID.
+	 * @param array<string, mixed> $state   Filter-Zustand (nur für den Rückweg).
+	 * @param string               $base    Basis-URL.
 	 * @return array{mode: string, labelledby: string, html: string}
 	 */
 	private static function render_detail( array $request, array $state, string $base ): array {
@@ -1076,10 +1112,10 @@ class ODW_Catalog {
 	 * Nicht paginate_links(): Das übernimmt alle Parameter der aktuellen Anfrage
 	 * in jeden Link und liest ohne ausdrückliche Angaben die globale Abfrage.
 	 *
-	 * @param string                $base       Basis-URL.
-	 * @param int                   $current    Aktuelle Seite.
-	 * @param int                   $pages      Seiten insgesamt.
-	 * @param array<string, string> $state_args Filter-Zustand.
+	 * @param string               $base       Basis-URL.
+	 * @param int                  $current    Aktuelle Seite.
+	 * @param int                  $pages      Seiten insgesamt.
+	 * @param array<string, mixed> $state_args Filter-Zustand.
 	 * @return string
 	 */
 	private static function pagination( string $base, int $current, int $pages, array $state_args = array() ): string {
@@ -1146,11 +1182,11 @@ class ODW_Catalog {
 	 * Einstieg gibt. Vorhandene odw_-Parameter der Basis werden ersetzt, nicht
 	 * verdoppelt.
 	 *
-	 * @param string                $base       Basis-URL der Katalogseite.
-	 * @param int                   $page       Listenseite.
-	 * @param int                   $dataset    Datensatz-ID für die Detailansicht, 0 für die Liste.
-	 * @param string                $fragment   Sprungmarke ohne #.
-	 * @param array<string, string> $state_args Filter-Zustand (ODW_Catalog_Filters::state_args()).
+	 * @param string               $base       Basis-URL der Katalogseite.
+	 * @param int                  $page       Listenseite.
+	 * @param int                  $dataset    Datensatz-ID für die Detailansicht, 0 für die Liste.
+	 * @param string               $fragment   Sprungmarke ohne #.
+	 * @param array<string, mixed> $state_args Filter-Zustand (ODW_Catalog_Filters::state_args()).
 	 * @return string
 	 */
 	public static function page_url( string $base, int $page, int $dataset, string $fragment, array $state_args = array() ): string {
@@ -1164,7 +1200,9 @@ class ODW_Catalog {
 			$args[ self::PARAM_PAGE ] = $page;
 		}
 		foreach ( $state_args as $key => $value ) {
-			$args[ $key ] = rawurlencode( $value );
+			// add_query_arg() kodiert nichts selbst; Listen (Schlagworte) werden
+			// zu odw_keyword[0]=…&odw_keyword[1]=….
+			$args[ $key ] = is_array( $value ) ? array_map( 'rawurlencode', array_map( 'strval', $value ) ) : rawurlencode( (string) $value );
 		}
 		if ( ! empty( $args ) ) {
 			$url = add_query_arg( $args, $url );
@@ -1321,9 +1359,9 @@ class ODW_Catalog {
 	 * IDs und ohne Zählung. Für Seiten hinter dem Ende (odw_page=99), die der
 	 * Kopfbereich als 404 ausliefert.
 	 *
-	 * @param array<string, mixed>  $config  Ergebnis von parse_atts().
-	 * @param array<string, int>    $request Ergebnis von parse_request().
-	 * @param array<string, string> $state   Filter-Zustand.
+	 * @param array<string, mixed> $config  Ergebnis von parse_atts().
+	 * @param array<string, int>   $request Ergebnis von parse_request().
+	 * @param array<string, mixed> $state   Filter-Zustand.
 	 * @return bool
 	 */
 	public static function page_has_entries( array $config, array $request, array $state ): bool {

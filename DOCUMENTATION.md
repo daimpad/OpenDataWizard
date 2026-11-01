@@ -216,6 +216,7 @@ Response enthält `dcat:dataset` (geänderte Datasets) und `odw:removed` (Tombst
 | `odw_dataset_jsonld`  | JSON-LD Array vor Ausgabe anpassen |
 | `odw_catalog_title`   | Catalog-Titel anpassen |
 | `odw_catalog_query_args` | WP_Query-Argumente der Frontend-Katalogliste anpassen (`$args`, `$config`, `$request`, seit 2.44.0 `$state` mit Filtern/Suche) |
+| `odw_license_is_open` | Zählt eine Lizenz als Open Data (Katalogfilter „Nur Open Data")? (`$open`, `$uri`) — Standard: Abschnitt „Freie Nutzung" in `config/licenses.txt`; wirkt beim nächsten Speichern bzw. Index-Abgleich |
 | `odw_catalog_changed` (Action) | Ein Datensatz, der im öffentlichen Katalog steht oder stand, wurde gespeichert, veröffentlicht, zurückgezogen oder gelöscht (`$post_id`) — zum Leeren von Seiten-Caches |
 
 ```php

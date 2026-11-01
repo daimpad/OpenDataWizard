@@ -35,6 +35,38 @@ class Test_ODW_Fields extends TestCase {
 	}
 
 	/**
+	 * Open Data laut den Abschnitten in config/licenses.txt: freie Lizenzen ja,
+	 * NC/ND und geschlossene nein, unbekannte nein; ohne Rücksicht auf
+	 * Groß-/Kleinschreibung und den Schrägstrich am Ende.
+	 */
+	public function test_is_open_license(): void {
+		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		foreach ( array(
+			'https://creativecommons.org/licenses/by/4.0/',
+			'https://creativecommons.org/publicdomain/zero/1.0/',
+			'https://www.govdata.de/dl-de/by-2-0',
+			'http://dcat-ap.de/def/licenses/cc-by/4.0',
+			'http://dcat-ap.de/def/licenses/dl-zero-de/2.0',
+			'HTTPS://CreativeCommons.org/licenses/by-sa/4.0',
+		) as $uri ) {
+			$this->assertTrue( ODW_Fields::is_open_license( $uri ), $uri );
+		}
+
+		foreach ( array(
+			'https://creativecommons.org/licenses/by-nc/4.0/',
+			'https://creativecommons.org/licenses/by-nd/4.0/',
+			'http://dcat-ap.de/def/licenses/cc-by-nc/4.0',
+			'http://dcat-ap.de/def/licenses/other-closed',
+			'https://stadt.example/nutzungsbedingungen',
+			'',
+		) as $uri ) {
+			$this->assertFalse( ODW_Fields::is_open_license( $uri ), $uri );
+		}
+	}
+
+	/**
 	 * The license options array includes an empty-string key as the placeholder option.
 	 */
 	public function test_get_license_options_has_empty_default(): void {

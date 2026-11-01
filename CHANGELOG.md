@@ -7,6 +7,34 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.45.0] — 2026-11-01
+
+Weitere Filter für den Datenkatalog (Stufe 3a), wie sie große Open-Data-Portale anbieten.
+Alles bleibt Opt-in über das Attribut `filters`.
+
+### ✨ Added
+- **Herausgeber** (`publisher`): Auswahlfeld mit Trefferzahlen.
+- **Schlagworte** (`keyword`): Mehrfachauswahl. Mehrere Schlagworte ergeben Datensätze mit
+  mindestens einem davon; die Trefferzahlen zählen entsprechend. Mit JavaScript ein Aufklappfeld
+  mit Suche und Kästchen, ohne ein normales Mehrfach-Auswahlfeld.
+- **Zeitraum der Daten** (`period`): Jahr ab/bis aus dem zeitlichen Bezug. Treffer ist jeder
+  Datensatz, dessen Zeitraum die gewählten Jahre berührt; nur ein Startdatum reicht bis heute.
+  Datensätze ohne zeitlichen Bezug fallen bei aktivem Zeitfilter heraus.
+- **Nur Open Data** (`open`): Kästchen für Datensätze unter einer freien Lizenz. Welche Lizenzen
+  frei sind, steht in `config/licenses.txt` (Abschnitte „Freie Nutzung" / „Eingeschränkte
+  Nutzung", jetzt auch für die eigene Liste); anpassbar mit dem Filter `odw_license_is_open`.
+- **Nur hochwertige Datensätze (HVD)** (`hvd`): Kästchen, erscheint nur, wenn es HVD gibt.
+- **Aktive Filter als Chips** über der Liste, jeder einzeln mit × entfernbar, dazu „Alle entfernen".
+- **Auf schmalen Bildschirmen** ist das Formular unter „Filter und Suche (n aktiv)" eingeklappt;
+  die Chips bleiben sichtbar. Ohne JavaScript bleibt es offen.
+- Im Block „Datenkatalog" lassen sich die neuen Filter in der Seitenleiste ankreuzen.
+
+### ⚡ Performance
+- Neue flache Index-Felder: `_odw_publisher_index`, `_odw_keyword_index` (eine Zeile je
+  Schlagwort), `_odw_period_from`/`_odw_period_to` (Jahre), `_odw_open_index`, `_odw_hvd_index`.
+  Bestandsdaten gleicht die vorhandene Migration nach dem Update in Stapeln ab (Index-Version 2).
+- Das Skript `assets/js/odw-catalog.js` (ohne Abhängigkeiten) lädt nur auf Seiten mit Formular.
+
 ## [2.44.0] — 2026-10-30
 
 Der Datenkatalog bekommt Filter, Suche und eigene Suchmaschinen-Seiten je Datensatz (Stufe 2).

@@ -19,6 +19,7 @@ const { test, expect } = require('@playwright/test');
 const CATALOG = '/odw-e2e-katalog/';
 const PAGED = '/odw-e2e-katalog-seiten/';
 const FILTERED = '/odw-e2e-katalog-filter/';
+const STAGE3A = '/odw-e2e-katalog-3a/';
 
 /** Trefferzeile für n Datensätze auf einer Seite. */
 function countLine(n) {
@@ -273,5 +274,109 @@ test.describe('Datenkatalog: Filter, Suche und Kopfbereich (Stufe 2)', () => {
 
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
     expect(canonical).toMatch(/odw-e2e-katalog-seiten\/\?odw_page=2$/);
+  });
+});
+
+test.describe('Datenkatalog: Herausgeber, Schlagworte, Zeitraum, Open Data, HVD (Stufe 3a)', () => {
+  test('Herausgeber grenzt ein; der Chip entfernt genau diesen Filter', async ({ page }) => {
+    await page.goto(STAGE3A);
+    const form = page.locator('#odw-catalog form.odw-catalog__filters');
+    const catalog = page.locator('section#odw-catalog');
+
+    const publisher = form.getByLabel('Herausgeber');
+    await expect(publisher.locator('option').first()).toHaveText('Alle Herausgeber');
+    await expect(publisher.locator('option[value="Musterorganisation e.V."]')).toHaveText('Musterorganisation e.V. (1)');
+
+    await publisher.selectOption('Musterorganisation e.V.');
+    await form.getByRole('button', { name: 'Anzeigen' }).click();
+
+    await expect(page).toHaveURL(/[?&]odw_publisher=Musterorganisation/);
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+    await expect(catalog).not.toContainText('E2E: Schulstandorte');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+
+    const chip = catalog.locator('.odw-chip', { hasText: 'Herausgeber: Musterorganisation e.V.' });
+    await expect(chip).toBeVisible();
+    await chip.click();
+    await expect(page).not.toHaveURL(/odw_publisher=/);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+  });
+
+  test('Schlagworte: Aufklappfeld mit Suche, mehrere ergeben mindestens eines', async ({ page }) => {
+    await page.goto(STAGE3A);
+    const form = page.locator('#odw-catalog form.odw-catalog__filters');
+    const catalog = page.locator('section#odw-catalog');
+
+    const button = form.getByRole('button', { name: /^Schlagworte/ });
+    await expect(button).toHaveText('Alle Schlagworte');
+    await button.click();
+    const panel = form.locator('.odw-ms__panel');
+    await expect(panel).toBeVisible();
+
+    await panel.getByRole('searchbox').fill('ver');
+    await expect(panel.getByRole('checkbox', { name: /^Schule/ })).toBeHidden();
+    await panel.getByRole('checkbox', { name: /^Vereine/ }).check();
+    await panel.getByRole('searchbox').fill('');
+    await panel.getByRole('checkbox', { name: /^Schule/ }).check();
+    await panel.getByRole('button', { name: 'Fertig' }).click();
+    await expect(panel).toBeHidden();
+    await expect(button).toHaveText('Schule, Vereine');
+
+    await form.getByRole('button', { name: 'Anzeigen' }).click();
+    await expect(page).toHaveURL(/odw_keyword/);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+
+    await catalog.locator('.odw-chip', { hasText: 'Schlagwort: Schule' }).click();
+    await expect(catalog).toContainText('E2E: Vereinsregister');
+    await expect(catalog).not.toContainText('E2E: Schulstandorte');
+    await expect(catalog.locator('.odw-chip', { hasText: 'Schlagwort: Vereine' })).toBeVisible();
+  });
+
+  test('Zeitraum: Überschneidung, Datensätze ohne Zeitangabe fallen heraus', async ({ page }) => {
+    const catalog = page.locator('section#odw-catalog');
+
+    await page.goto(STAGE3A);
+    const from = page.locator('#odw-catalog form.odw-catalog__filters').getByLabel('ab', { exact: true });
+    await expect(from.locator('option[value="2020"]')).toHaveCount(1);
+    await expect(from.locator('option[value="2025"]')).toHaveCount(1);
+
+    await page.goto(`${STAGE3A}?odw_from=2021&odw_to=2022`);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).not.toContainText('E2E: Vereinsregister');
+    await expect(catalog.locator('.odw-chip', { hasText: 'Zeitraum: 2021–2022' })).toBeVisible();
+
+    await page.goto(`${STAGE3A}?odw_from=2026`);
+    await expect(catalog.locator('.odw-catalog__empty')).toContainText('Keine Datensätze gefunden.');
+  });
+
+  test('Nur HVD und Nur Open Data', async ({ page }) => {
+    await page.goto(STAGE3A);
+    const form = page.locator('#odw-catalog form.odw-catalog__filters');
+    const catalog = page.locator('section#odw-catalog');
+
+    await expect(form.locator('label[for="odw-filter-open"]')).toHaveText('Nur Open Data (2)');
+    await expect(form.locator('label[for="odw-filter-hvd"]')).toHaveText('Nur hochwertige Datensätze (HVD) (1)');
+
+    await form.getByRole('checkbox', { name: /^Nur hochwertige Datensätze/ }).check();
+    await form.getByRole('button', { name: 'Anzeigen' }).click();
+    await expect(page).toHaveURL(/[?&]odw_hvd=1/);
+    await expect(catalog).toContainText('E2E: Schulstandorte');
+    await expect(catalog).not.toContainText('E2E: Vereinsregister');
+  });
+
+  test('auf schmalen Bildschirmen ist das Formular eingeklappt, die Chips bleiben', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto(`${STAGE3A}?odw_hvd=1`);
+    const catalog = page.locator('section#odw-catalog');
+
+    const summary = catalog.locator('.odw-catalog__summary');
+    await expect(summary).toHaveText('Filter und Suche (1 aktiv)');
+    await expect(catalog.locator('form.odw-catalog__filters')).toBeHidden();
+    await expect(catalog.locator('.odw-chip', { hasText: 'Nur hochwertige Datensätze (HVD)' })).toBeVisible();
+
+    await summary.click();
+    await expect(catalog.locator('form.odw-catalog__filters')).toBeVisible();
   });
 });

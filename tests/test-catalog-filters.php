@@ -92,11 +92,39 @@ class Test_ODW_Catalog_Filters extends TestCase {
 	private function state( array $set = array() ): array {
 		return array_merge(
 			array(
-				'theme'   => '',
-				'license' => '',
-				'format'  => '',
-				'sort'    => '',
-				'q'       => '',
+				'theme'     => '',
+				'license'   => '',
+				'format'    => '',
+				'sort'      => '',
+				'q'         => '',
+				'publisher' => '',
+				'keywords'  => array(),
+				'from'      => '',
+				'to'        => '',
+				'open'      => '',
+				'hvd'       => '',
+			),
+			$set
+		);
+	}
+
+	/**
+	 * Index-Werte eines Datensatzes mit Abweichungen.
+	 *
+	 * @param array<string, mixed> $set Abweichungen.
+	 * @return array<string, mixed>
+	 */
+	private function index( array $set = array() ): array {
+		return array_merge(
+			array(
+				'license'   => '',
+				'format'    => '',
+				'publisher' => '',
+				'keywords'  => array(),
+				'from'      => '',
+				'to'        => '',
+				'open'      => '',
+				'hvd'       => '',
 			),
 			$set
 		);
@@ -674,9 +702,12 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		\WP_Mock::userFunction( 'wp_get_attachment_url' )->andReturn( 'https://example.org/up/karte.geojson' );
 
 		$this->assertSame(
-			array(
-				'license' => $license,
-				'format'  => $format,
+			$this->index(
+				array(
+					'license' => $license,
+					'format'  => $format,
+					'open'    => in_array( $license, array( self::CC_BY, self::CC0 ), true ) ? '1' : '',
+				)
 			),
 			ODW_Catalog_Filters::index_values( 40 )
 		);
@@ -748,15 +779,31 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$this->load();
 		$this->mock_meta(
 			array(
-				'_odw_license' => self::CC0,
+				'_odw_license'        => self::CC0,
+				'_odw_publisher'      => 'Stadt  Musterstadt ',
+				'_odw_keywords'       => "Schule\nSchule\n Bildung ",
+				'_odw_temporal_start' => '2019-01-01',
+				'_odw_is_hvd'         => 'yes',
 			)
 		);
 		\WP_Mock::userFunction( 'get_post_type' )->andReturn( 'odw_dataset' );
 		\WP_Mock::userFunction( 'get_current_blog_id' )->andReturn( 1 );
 		\WP_Mock::userFunction( 'get_post_field' )->with( 'post_modified_gmt', 41 )->andReturn( '2026-10-30 08:00:00' );
-		\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 41, '_odw_license_index', self::CC0 );
-		\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 41, '_odw_index_state', '1|2026-10-30 08:00:00' );
+		foreach ( array(
+			'_odw_license_index'   => self::CC0,
+			'_odw_publisher_index' => 'Stadt Musterstadt',
+			'_odw_period_from'     => '2019',
+			'_odw_period_to'       => '9999',
+			'_odw_open_index'      => '1',
+			'_odw_hvd_index'       => '1',
+			'_odw_index_state'     => '2|2026-10-30 08:00:00',
+		) as $key => $value ) {
+			\WP_Mock::userFunction( 'update_post_meta' )->once()->with( 41, $key, $value );
+		}
 		\WP_Mock::userFunction( 'delete_post_meta' )->once()->with( 41, '_odw_format_index' );
+		\WP_Mock::userFunction( 'delete_post_meta' )->once()->with( 41, '_odw_keyword_index' );
+		\WP_Mock::userFunction( 'add_post_meta' )->once()->with( 41, '_odw_keyword_index', 'Schule' );
+		\WP_Mock::userFunction( 'add_post_meta' )->once()->with( 41, '_odw_keyword_index', 'Bildung' );
 		$this->set_pending( array( 1 => array( 41 => true ) ) );
 
 		ODW_Catalog_Filters::sync_index( 41 );
@@ -1084,7 +1131,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 
 		\WP_Mock::userFunction( 'get_option' )->with( 'odw_catalog_index' )->andReturn(
 			array(
-				'version' => 1,
+				'version' => 2,
 				'plugin'  => '0.9.0',
 				'after'   => 500,
 				'done'    => true,
@@ -1095,14 +1142,14 @@ class Test_ODW_Catalog_Filters extends TestCase {
 			'odw_catalog_index',
 			\Mockery::on(
 				static function ( $value ): bool {
-					return 1 === $value['version'] && ODW_VERSION === $value['plugin'] && 0 === $value['after'] && true === $value['done'] && $value['checked'] > 0;
+					return 2 === $value['version'] && ODW_VERSION === $value['plugin'] && 0 === $value['after'] && true === $value['done'] && $value['checked'] > 0;
 				}
 			),
 			true
 		);
 
 		ODW_Catalog_Filters::maybe_migrate_index();
-		$this->assertSame( array( '_odw_index_state', 0, 1, 200 ), $GLOBALS['wpdb']->args, 'Von vorn: ID > 0, Index-Version 1.' );
+		$this->assertSame( array( '_odw_index_state', 0, 2, 200 ), $GLOBALS['wpdb']->args, 'Von vorn: ID > 0, Index-Version 2.' );
 		$this->assertStringContainsString( "CONCAT( %d, '|', p.post_modified_gmt )", $GLOBALS['wpdb']->sql );
 
 		$container = \Mockery::getContainer();
@@ -1121,7 +1168,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$GLOBALS['wpdb'] = $this->wpdb_stub();
 		\WP_Mock::userFunction( 'get_option' )->andReturn(
 			array(
-				'version' => 1,
+				'version' => 2,
 				'plugin'  => ODW_VERSION,
 				'after'   => 500,
 				'done'    => true,
@@ -1148,7 +1195,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$this->load();
 		\WP_Mock::userFunction( 'get_option' )->andReturn(
 			array(
-				'version' => 1,
+				'version' => 2,
 				'plugin'  => ODW_VERSION,
 				'after'   => 500,
 				'done'    => true,
@@ -1239,14 +1286,469 @@ class Test_ODW_Catalog_Filters extends TestCase {
 
 		$this->assertSame(
 			array(
-				'exclude' => 0,
-				'themes'  => array(),
-				'theme'   => self::THEME_BASE . 'EDUC',
-				'license' => self::CC0,
-				'format'  => 'CSV',
-				'q'       => 'Schule',
+				'exclude'   => 0,
+				'themes'    => array(),
+				'theme'     => self::THEME_BASE . 'EDUC',
+				'license'   => self::CC0,
+				'format'    => 'CSV',
+				'q'         => 'Schule',
+				'publisher' => '',
+				'keywords'  => array(),
+				'from'      => '',
+				'to'        => '',
+				'open'      => '',
+				'hvd'       => '',
 			),
 			ODW_Catalog_Filters::conditions( $config, $state, 0 )
 		);
+	}
+	// -------------------------------------------------------------------------
+	// Stufe 3a: Herausgeber, Schlagworte, Zeitraum, Open Data, HVD
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Die neuen Einträge im Attribut filters, in Formularreihenfolge.
+	 */
+	public function test_parse_filters_stage3a(): void {
+		$this->load();
+
+		$this->assertSame(
+			array( 'theme', 'publisher', 'keyword', 'sort', 'period', 'open', 'hvd' ),
+			ODW_Catalog_Filters::parse_filters( 'hvd,open,period,sort,keyword,publisher,theme', false, false )
+		);
+	}
+
+	/**
+	 * GET-Werte der neuen Filter.
+	 *
+	 * @dataProvider provide_get_stage3a
+	 *
+	 * @param array<string, mixed> $get      GET.
+	 * @param string               $key      Geprüfter Schlüssel.
+	 * @param mixed                $expected Erwarteter Wert.
+	 */
+	public function test_parse_get_stage3a( array $get, string $key, $expected ): void {
+		$this->load();
+
+		$this->assertSame( $expected, ODW_Catalog_Filters::parse_get( $get )[ $key ] );
+	}
+
+	/**
+	 * GET-Werte und das Ergebnis.
+	 *
+	 * @return array<string, array{0: array<string, mixed>, 1: string, 2: mixed}>
+	 */
+	public function provide_get_stage3a(): array {
+		return array(
+			'Herausgeber'                   => array( array( 'odw_publisher' => "  Stadt \t Musterstadt " ), 'publisher', 'Stadt Musterstadt' ),
+			'Herausgeber zu lang'           => array( array( 'odw_publisher' => str_repeat( 'a', 201 ) ), 'publisher', '' ),
+			'Herausgeber mit Steuerzeichen' => array( array( 'odw_publisher' => "A\x01B" ), 'publisher', '' ),
+			'Herausgeber als Liste'         => array( array( 'odw_publisher' => array( 'x' ) ), 'publisher', '' ),
+			'Schlagworte'                   => array( array( 'odw_keyword' => array( 'Sport', ' Vereine ', 'Sport', '', array( 'x' ) ) ), 'keywords', array( 'Sport', 'Vereine' ) ),
+			'ein Schlagwort ohne Liste'     => array( array( 'odw_keyword' => 'Sport' ), 'keywords', array( 'Sport' ) ),
+			'höchstens 20 Schlagworte'      => array( array( 'odw_keyword' => range( 1, 30 ) ), 'keywords', array_map( 'strval', range( 1, 20 ) ) ),
+			'ohne Schlagworte'              => array( array(), 'keywords', array() ),
+			'Jahr von'                      => array( array( 'odw_from' => '2020' ), 'from', '2020' ),
+			'Jahr ungültig'                 => array( array( 'odw_from' => '20x0' ), 'from', '' ),
+			'Jahr fünfstellig'              => array( array( 'odw_to' => '20201' ), 'to', '' ),
+			'Zeitraum gedreht (von)'        => array(
+				array(
+					'odw_from' => '2025',
+					'odw_to'   => '2020',
+				),
+				'from',
+				'2020',
+			),
+			'Zeitraum gedreht (bis)'        => array(
+				array(
+					'odw_from' => '2025',
+					'odw_to'   => '2020',
+				),
+				'to',
+				'2025',
+			),
+			'Open Data'                     => array( array( 'odw_open' => '1' ), 'open', '1' ),
+			'Open Data ungültig'            => array( array( 'odw_open' => 'ja' ), 'open', '' ),
+			'HVD'                           => array( array( 'odw_hvd' => '1' ), 'hvd', '1' ),
+		);
+	}
+
+	/**
+	 * Die neuen Filter wirken nur, wenn der Katalog sie freischaltet.
+	 */
+	public function test_state_stage3a(): void {
+		$this->load();
+
+		$get = ODW_Catalog_Filters::parse_get(
+			array(
+				'odw_publisher' => 'Stadt Musterstadt',
+				'odw_keyword'   => array( 'Sport' ),
+				'odw_from'      => '2020',
+				'odw_to'        => '2024',
+				'odw_open'      => '1',
+				'odw_hvd'       => '1',
+			)
+		);
+
+		$off = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( array( 'filters' => 'theme' ) ), $get );
+		$this->assertSame( $this->state(), $off );
+		$this->assertFalse( ODW_Catalog_Filters::is_active( $off ) );
+
+		$on = ODW_Catalog_Filters::state( ODW_Catalog::parse_atts( array( 'filters' => 'publisher,keyword,period,open,hvd' ) ), $get );
+		$this->assertSame(
+			$this->state(
+				array(
+					'publisher' => 'Stadt Musterstadt',
+					'keywords'  => array( 'Sport' ),
+					'from'      => '2020',
+					'to'        => '2024',
+					'open'      => '1',
+					'hvd'       => '1',
+				)
+			),
+			$on
+		);
+		$this->assertTrue( ODW_Catalog_Filters::is_active( $this->state( array( 'keywords' => array( 'Sport' ) ) ) ) );
+
+		$this->assertSame(
+			array(
+				'odw_publisher' => 'Stadt Musterstadt',
+				'odw_keyword'   => array( 'Sport' ),
+				'odw_from'      => '2020',
+				'odw_to'        => '2024',
+				'odw_open'      => '1',
+				'odw_hvd'       => '1',
+			),
+			ODW_Catalog_Filters::state_args( $on )
+		);
+	}
+
+	/**
+	 * Abfrage: Herausgeber gleich, Schlagworte IN (mindestens eines),
+	 * Zeitraum als Überschneidung über numerische Vergleiche, Kästchen = '1'.
+	 */
+	public function test_apply_to_query_stage3a(): void {
+		$this->load();
+
+		$args = ODW_Catalog_Filters::apply_to_query(
+			array(),
+			ODW_Catalog::parse_atts( '' ),
+			$this->state(
+				array(
+					'publisher' => 'Stadt Musterstadt',
+					'keywords'  => array( 'Sport', 'Vereine' ),
+					'from'      => '2020',
+					'to'        => '2024',
+					'open'      => '1',
+					'hvd'       => '1',
+				)
+			)
+		);
+
+		$this->assertSame(
+			array(
+				array(
+					'key'   => '_odw_publisher_index',
+					'value' => 'Stadt Musterstadt',
+				),
+				array(
+					'key'     => '_odw_keyword_index',
+					'value'   => array( 'Sport', 'Vereine' ),
+					'compare' => 'IN',
+				),
+				array(
+					'key'     => '_odw_period_to',
+					'value'   => 2020,
+					'compare' => '>=',
+					'type'    => 'NUMERIC',
+				),
+				array(
+					'key'     => '_odw_period_from',
+					'value'   => 2024,
+					'compare' => '<=',
+					'type'    => 'NUMERIC',
+				),
+				array(
+					'key'   => '_odw_open_index',
+					'value' => '1',
+				),
+				array(
+					'key'   => '_odw_hvd_index',
+					'value' => '1',
+				),
+			),
+			$args['meta_query']
+		);
+	}
+
+	/**
+	 * Bedingungen eines Katalogs mit allen neuen Filtern.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function conditions_stage3a(): array {
+		return array(
+			'exclude'   => 0,
+			'themes'    => array(),
+			'theme'     => '',
+			'license'   => '',
+			'format'    => '',
+			'q'         => '',
+			'publisher' => 'Stadt Musterstadt',
+			'keywords'  => array( 'Sport', 'Vereine' ),
+			'from'      => '2020',
+			'to'        => '2024',
+			'open'      => '1',
+			'hvd'       => '1',
+		);
+	}
+
+	/**
+	 * Facetten-SQL: Die Schlagwort-Facette zählt ohne die eigene Auswahl,
+	 * aber mit Herausgeber, Zeitraum und Kästchen. Platzhalter und Werte
+	 * passen zusammen.
+	 */
+	public function test_facet_sql_stage3a(): void {
+		$this->load();
+
+		list( $sql, $values ) = ODW_Catalog_Filters::facet_sql( 'keyword', $this->conditions_stage3a(), 'wp_posts', 'wp_postmeta' );
+
+		$this->assertSame( '_odw_keyword_index', $values[0] );
+		$this->assertNotContains( 'Sport', $values, 'Die eigene Auswahl zählt nicht mit.' );
+		$this->assertContains( 'Stadt Musterstadt', $values );
+		$this->assertContains( '_odw_open_index', $values );
+		$this->assertContains( '_odw_hvd_index', $values );
+		$this->assertStringContainsString( 'CAST( y.meta_value AS SIGNED ) >= %d', $sql );
+		$this->assertStringContainsString( 'CAST( y.meta_value AS SIGNED ) <= %d', $sql );
+		$this->assertSame( array( '_odw_period_to', 2020 ), array_slice( $values, array_search( '_odw_period_to', $values, true ), 2 ) );
+		$this->assertSame(
+			substr_count( $sql, '%s' ) + substr_count( $sql, '%d' ),
+			count( $values ),
+			'Jeder Platzhalter hat genau einen Wert.'
+		);
+
+		// Das HVD-Kästchen zählt ohne die eigene Auswahl, mit den Schlagworten.
+		list( $hvd_sql, $hvd_values ) = ODW_Catalog_Filters::facet_sql( 'hvd', $this->conditions_stage3a(), 'wp_posts', 'wp_postmeta' );
+		$this->assertSame( '_odw_hvd_index', $hvd_values[0] );
+		$this->assertSame( 1, count( array_keys( $hvd_values, '_odw_hvd_index', true ) ), 'Nur als gezählte Facette, nicht als Bedingung.' );
+		$this->assertContains( 'Vereine', $hvd_values );
+		$this->assertSame( substr_count( $hvd_sql, '%s' ) + substr_count( $hvd_sql, '%d' ), count( $hvd_values ) );
+	}
+
+	/**
+	 * Schlagworte: mehrere gewählt, ein gewähltes ohne Treffer bleibt stehen.
+	 */
+	public function test_facet_options_keywords(): void {
+		$this->load();
+
+		$options = ODW_Catalog_Filters::facet_options(
+			'keyword',
+			array(
+				'Vereine' => 3,
+				'Sport'   => 2,
+				'2024'    => 1,
+			),
+			array( 'Sport', 'Quartier' )
+		);
+
+		$this->assertSame( array( '2024', 'Quartier', 'Sport', 'Vereine' ), array_column( $options, 'value' ) );
+		$this->assertSame( array( false, true, true, false ), array_column( $options, 'selected' ) );
+		$this->assertSame( array( 1, 0, 2, 3 ), array_column( $options, 'count' ) );
+	}
+
+	/**
+	 * Zeitlicher Bezug als Jahre: offenes Ende, offener Anfang, vertauscht,
+	 * ohne Angabe.
+	 */
+	public function test_period(): void {
+		$this->load();
+
+		$this->assertSame( array( '2020', '2025' ), ODW_Catalog_Filters::period( '2020-01-01', '2025-12-31' ) );
+		$this->assertSame( array( '2019', '9999' ), ODW_Catalog_Filters::period( '2019-05-01', '' ), 'Nur Start: seit 2019.' );
+		$this->assertSame( array( '0', '2024' ), ODW_Catalog_Filters::period( '', '2024-12-31' ), 'Nur Ende.' );
+		$this->assertSame( array( '2020', '2025' ), ODW_Catalog_Filters::period( '2025-01-01', '2020-01-01' ), 'Vertauscht.' );
+		$this->assertSame( array( '', '' ), ODW_Catalog_Filters::period( '', 'unbekannt' ) );
+	}
+
+	/**
+	 * Jahresliste für den Zeitraum.
+	 */
+	public function test_year_range(): void {
+		$this->load();
+
+		$this->assertSame(
+			array( 2025, 2024, 2023, 2022, 2021, 2020 ),
+			ODW_Catalog_Filters::year_range(
+				array(
+					'lo_from' => '2020',
+					'hi_from' => '2024',
+					'lo_to'   => '2021',
+					'hi_to'   => '2025',
+					'hi_raw'  => '2025',
+				),
+				2026
+			)
+		);
+		$this->assertSame(
+			array( 2026, 2025, 2024 ),
+			ODW_Catalog_Filters::year_range(
+				array(
+					'lo_from' => '2024',
+					'hi_from' => '2024',
+					'lo_to'   => '9999',
+					'hi_to'   => null,
+					'hi_raw'  => '9999',
+				),
+				2026
+			),
+			'Ein offener Zeitraum reicht bis zum laufenden Jahr.'
+		);
+		$this->assertCount(
+			200,
+			ODW_Catalog_Filters::year_range(
+				array(
+					'lo_from' => '201',
+					'hi_to'   => '2025',
+					'hi_raw'  => '2025',
+				),
+				2026
+			),
+			'Höchstens 200 Jahre.'
+		);
+		$this->assertSame( array(), ODW_Catalog_Filters::year_range( array(), 2026 ), 'Ohne Zeitangaben keine Jahre.' );
+	}
+
+	/**
+	 * Aktive Filter: Beschriftung und der Zustand ohne den jeweiligen Filter;
+	 * mehrere Schlagworte einzeln.
+	 */
+	public function test_active_filters(): void {
+		$this->load();
+
+		$state  = $this->state(
+			array(
+				'theme'     => self::THEME_BASE . 'EDUC',
+				'q'         => 'Schule',
+				'publisher' => 'Stadt Musterstadt',
+				'keywords'  => array( 'Sport', 'Vereine' ),
+				'from'      => '2020',
+				'open'      => '1',
+				'sort'      => 'modified',
+			)
+		);
+		$active = ODW_Catalog_Filters::active_filters( $state );
+
+		$this->assertSame(
+			array(
+				'Suche: „Schule“',
+				'Thema: Bildung, Kultur & Sport',
+				'Herausgeber: Stadt Musterstadt',
+				'Schlagwort: Sport',
+				'Schlagwort: Vereine',
+				'Zeitraum: ab 2020',
+				'Nur Open Data',
+				'Sortierung: Zuletzt aktualisierte zuerst',
+			),
+			array_column( $active, 'label' )
+		);
+		$this->assertSame( array( 'Vereine' ), $active[3]['state']['keywords'], 'Ein Schlagwort entfernen, das andere bleibt.' );
+		$this->assertSame( '', $active[2]['state']['publisher'] );
+		$this->assertSame( 'Stadt Musterstadt', $active[3]['state']['publisher'], 'Die übrigen Filter bleiben.' );
+		$this->assertSame( array(), ODW_Catalog_Filters::active_filters( $this->state() ) );
+	}
+
+	/**
+	 * Beschriftung des Zeitraums.
+	 */
+	public function test_period_label(): void {
+		$this->load();
+
+		$this->assertSame( 'Zeitraum: 2020–2024', ODW_Catalog_Filters::period_label( '2020', '2024' ) );
+		$this->assertSame( 'Zeitraum: 2020', ODW_Catalog_Filters::period_label( '2020', '2020' ) );
+		$this->assertSame( 'Zeitraum: ab 2020', ODW_Catalog_Filters::period_label( '2020', '' ) );
+		$this->assertSame( 'Zeitraum: bis 2024', ODW_Catalog_Filters::period_label( '', '2024' ) );
+	}
+
+	/**
+	 * Index-Werte der neuen Felder: Herausgeber und Schlagworte wie aus der
+	 * Adresse gelesen, Zeitraum in Jahren, Open Data aus der Lizenzliste, HVD.
+	 */
+	public function test_index_values_stage3a(): void {
+		$this->load();
+		$this->mock_meta(
+			array(
+				'_odw_license'        => 'sonstige',
+				'_odw_license_custom' => 'https://creativecommons.org/licenses/by-nc/4.0/',
+				'_odw_publisher'      => " Kreissportbund\nMusterkreis ",
+				'_odw_keywords'       => "Sport\r\nVereine\n\nSport\n" . str_repeat( 'x', 201 ),
+				'_odw_temporal_start' => '2015-01-01',
+				'_odw_temporal_end'   => '2025-12-31',
+				'_odw_is_hvd'         => '',
+			)
+		);
+
+		$this->assertSame(
+			$this->index(
+				array(
+					'license'   => 'https://creativecommons.org/licenses/by-nc/4.0/',
+					'publisher' => 'Kreissportbund Musterkreis',
+					'keywords'  => array( 'Sport', 'Vereine' ),
+					'from'      => '2015',
+					'to'        => '2025',
+				)
+			),
+			ODW_Catalog_Filters::index_values( 40 ),
+			'CC BY-NC ist keine freie Lizenz; zu lange Schlagworte fehlen im Index.'
+		);
+	}
+
+	/**
+	 * Herausgeber und Schlagworte, die die Facette anbietet, kommen über das
+	 * Formular zurück.
+	 */
+	public function test_facet_options_publisher_round_trip(): void {
+		$this->load();
+
+		$options = ODW_Catalog_Filters::facet_options(
+			'publisher',
+			array(
+				'Stadt Musterstadt'         => 2,
+				'Bürgernetz e.V. & Partner' => 1,
+			),
+			''
+		);
+		$this->assertSame( array( 'Bürgernetz e.V. & Partner', 'Stadt Musterstadt' ), array_column( $options, 'param' ) );
+	}
+	/**
+	 * Chips der aktiven Filter: je ein Link ohne diesen Filter, dazu „Alle
+	 * entfernen"; ohne aktive Filter nichts.
+	 */
+	public function test_render_active(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'remove_query_arg' )->andReturnArg( 1 );
+		\WP_Mock::userFunction( 'add_query_arg' )->andReturnUsing(
+			static function ( $args, $url ) {
+				return $url . '?' . http_build_query( $args );
+			}
+		);
+
+		$html = ODW_Catalog_Filters::render_active(
+			$this->state(
+				array(
+					'keywords' => array( 'Sport', 'Vereine' ),
+					'hvd'      => '1',
+				)
+			),
+			'https://example.org/daten/',
+			'https://example.org/daten/#odw-catalog'
+		);
+
+		$this->assertSame( 4, substr_count( $html, '<li>' ), 'Zwei Schlagworte, HVD, „Alle entfernen".' );
+		$this->assertStringContainsString( 'Schlagwort: Sport', $html );
+		$this->assertStringContainsString( 'Nur hochwertige Datensätze (HVD)', $html );
+		// Der Chip „Sport" führt zur Liste mit Vereine und HVD.
+		$this->assertMatchesRegularExpression( '#href="[^"]*odw_keyword%5B0%5D=Vereine[^"]*odw_hvd=1[^"]*">Schlagwort: Sport#', $html );
+		$this->assertStringContainsString( 'href="https://example.org/daten/#odw-catalog">Alle entfernen', $html );
+		$this->assertSame( '', ODW_Catalog_Filters::render_active( $this->state(), 'https://example.org/daten/', '' ) );
 	}
 }

@@ -821,6 +821,56 @@ class ODW_Fields {
 	}
 
 	/**
+	 * Darf die Lizenz frei genutzt werden (Open Data)?
+	 *
+	 * Entscheidet über die Abschnitte „# Freie Nutzung" und „# Eingeschränkte
+	 * Nutzung" in config/licenses.txt (dort auch das DCAT-AP.de-Lizenzregister).
+	 * Eine Lizenz außerhalb der Liste — etwa eine eigene — gilt nicht als
+	 * Open Data. Verglichen wird ohne Groß-/Kleinschreibung und ohne
+	 * Schrägstrich am Ende.
+	 *
+	 * @param string $uri Lizenz-URI.
+	 * @return bool Erweiterbar via `add_filter( 'odw_license_is_open', fn( $open, $uri ) => … , 10, 2 )`.
+	 */
+	public static function is_open_license( string $uri ): bool {
+		static $open = null;
+		if ( null === $open ) {
+			$open = array();
+			$file = ODW_PLUGIN_DIR . 'config/licenses.txt';
+			$free = null;
+			foreach ( file_exists( $file ) ? (array) file( $file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES ) : array() as $line ) {
+				$line = trim( (string) $line );
+				if ( str_starts_with( $line, '#' ) ) {
+					$section = trim( substr( $line, 1 ) );
+					if ( 'Freie Nutzung' === $section ) {
+						$free = true;
+					} elseif ( 'Eingeschränkte Nutzung' === $section ) {
+						$free = false;
+					}
+					continue;
+				}
+				$license = trim( explode( '|', $line, 2 )[0] );
+				if ( '' !== $license && null !== $free ) {
+					$open[ self::license_key( $license ) ] = $free;
+				}
+			}
+		}
+
+		$is_open = $open[ self::license_key( $uri ) ] ?? false;
+		return (bool) apply_filters( 'odw_license_is_open', $is_open, $uri );
+	}
+
+	/**
+	 * Vergleichsschlüssel einer Lizenz-URI.
+	 *
+	 * @param string $uri Lizenz-URI.
+	 * @return string
+	 */
+	private static function license_key( string $uri ): string {
+		return strtolower( rtrim( trim( $uri ), '/' ) );
+	}
+
+	/**
 	 * Parse CESSDA SKOS/RDF file and return concept URI => German label map.
 	 * Result is cached in a transient (24h TTL).
 	 *

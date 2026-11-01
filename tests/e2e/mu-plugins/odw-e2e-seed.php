@@ -51,13 +51,18 @@ function odw_e2e_seed(): void {
 			'title'  => 'E2E: Schulstandorte',
 			'themes' => array( 'Bildung' ),
 			'meta'   => array(
-				'_odw_publisher'   => 'Stadt Musterstadt',
-				'_odw_description' => 'Standorte aller allgemeinbildenden Schulen im Stadtgebiet.',
-				'_odw_access_url'  => 'https://example.org/schulstandorte.csv',
-				'_odw_license'     => 'https://creativecommons.org/licenses/by/4.0/',
-				'_odw_format'      => 'CSV',
-				'_odw_language'    => 'http://publications.europa.eu/resource/authority/language/DEU',
-				'_odw_keywords'    => "Schule\nBildung\nStandorte",
+				'_odw_publisher'      => 'Stadt Musterstadt',
+				'_odw_description'    => 'Standorte aller allgemeinbildenden Schulen im Stadtgebiet.',
+				'_odw_access_url'     => 'https://example.org/schulstandorte.csv',
+				'_odw_license'        => 'https://creativecommons.org/licenses/by/4.0/',
+				'_odw_format'         => 'CSV',
+				'_odw_language'       => 'http://publications.europa.eu/resource/authority/language/DEU',
+				'_odw_keywords'       => "Schule\nBildung\nStandorte",
+				// Zeitraum und HVD für die Filter aus Stufe 3a; das Vereinsregister
+				// hat beides nicht.
+				'_odw_temporal_start' => '2020-01-01',
+				'_odw_temporal_end'   => '2025-12-31',
+				'_odw_is_hvd'         => 'yes',
 			),
 		),
 		array(
@@ -224,6 +229,26 @@ function odw_e2e_seed_filter_page(): void {
 	);
 }
 add_action( 'init', 'odw_e2e_seed_filter_page', 22 );
+
+/**
+ * Katalogseite mit den Filtern aus Stufe 3a: Herausgeber, Schlagworte,
+ * Zeitraum, Nur Open Data, Nur HVD.
+ */
+function odw_e2e_seed_filter_page_3a(): void {
+	if ( get_page_by_path( 'odw-e2e-katalog-3a' ) ) {
+		return;
+	}
+	wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_name'    => 'odw-e2e-katalog-3a',
+			'post_title'   => 'E2E: odw-e2e-katalog-3a',
+			'post_content' => '[odw_catalog filters="publisher,keyword,period,open,hvd" search="1"]',
+			'post_status'  => 'publish',
+		)
+	);
+}
+add_action( 'init', 'odw_e2e_seed_filter_page_3a', 22 );
 
 /**
  * Gibt den Tests die IDs der versteckten Datensätze.

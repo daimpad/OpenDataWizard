@@ -1731,3 +1731,112 @@ msgstr ""
 
 msgid "mit Suche"
 msgstr ""
+
+#, php-format
+msgid "%1$s (%2$d aktiv)"
+msgstr ""
+
+#, php-format
+msgid "%1$s–%2$s"
+msgstr ""
+
+#, php-format
+msgid "%d ausgewählt"
+msgstr ""
+
+msgid "Aktive Filter:"
+msgstr ""
+
+msgid "Alle Herausgeber"
+msgstr ""
+
+msgid "Alle Schlagworte"
+msgstr ""
+
+msgid "Alle entfernen"
+msgstr ""
+
+msgid "Auswahl aufheben"
+msgstr ""
+
+msgid "Eingrenzen"
+msgstr ""
+
+msgid "Fertig"
+msgstr ""
+
+msgid "Filter entfernen"
+msgstr ""
+
+msgid "Filter und Suche"
+msgstr ""
+
+#, php-format
+msgid "Format: %s"
+msgstr ""
+
+#, php-format
+msgid "Herausgeber: %s"
+msgstr ""
+
+#, php-format
+msgid "Lizenz: %s"
+msgstr ""
+
+msgid "Mehrere Schlagworte: Datensätze mit mindestens einem davon."
+msgstr ""
+
+msgid "Mehrfachauswahl mit gedrückter Strg- bzw. Cmd-Taste."
+msgstr ""
+
+msgid "Nur Open Data"
+msgstr ""
+
+msgid "Nur hochwertige Datensätze (HVD)"
+msgstr ""
+
+msgid "Schlagwort suchen"
+msgstr ""
+
+#, php-format
+msgid "Schlagwort: %s"
+msgstr ""
+
+#, php-format
+msgid "Sortierung: %s"
+msgstr ""
+
+msgid "Suche"
+msgstr ""
+
+#, php-format
+msgid "Suche: „%s“"
+msgstr ""
+
+#, php-format
+msgid "Thema: %s"
+msgstr ""
+
+msgid "Zeitraum der Daten"
+msgstr ""
+
+#, php-format
+msgid "Zeitraum: %s"
+msgstr ""
+
+msgid "ab"
+msgstr ""
+
+#, php-format
+msgid "ab %s"
+msgstr ""
+
+msgid "beliebig"
+msgstr ""
+
+msgid "bis"
+msgstr ""
+
+#, php-format
+msgid "bis %s"
+msgstr ""
