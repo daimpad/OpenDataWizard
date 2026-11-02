@@ -68,7 +68,12 @@ open-data-wizard/
 │   ├── test-catalog-filters.php
 │   ├── test-catalog-seo.php
 │   ├── test-rest-delta.php
-│   └── test-cli.php
+│   ├── test-batch-import.php
+│   ├── test-samples.php
+│   ├── test-validation.php, test-rdf.php, test-vocabulary.php, …
+│   ├── test-cli.php
+│   ├── shacl/                        # SHACL-Fixtures + validate.mjs
+│   └── e2e/                          # Playwright-Specs + mu-plugins/odw-e2e-seed.php
 └── .github/workflows/ci.yml          # CI: PHPCS + PHPStan + PHPUnit (PHP 8.1–8.3)
 ```
 
@@ -171,6 +176,12 @@ GET /wp-json/datenatlas/v1/delta?since=2024-01-01T00:00:00Z
 | `format`   | `jsonld` | Content-Type |
 
 Response enthält `dcat:dataset` (geänderte Datasets) und `odw:removed` (Tombstones).
+
+#### Passwortgeschützte Datensätze
+
+Wie im Datenkatalog der Website: `/catalog` und `/delta` lassen sie weg, `/datasets/<id>`
+antwortet mit 404. Wird ein Datensatz nachträglich geschützt, erscheint er in `/delta` unter
+`odw:removed`.
 
 #### Beispieldaten
 
@@ -280,6 +291,18 @@ wp open-data-wizard samples remove --yes
 | [WP_Mock](https://github.com/10up/wp_mock) | ^1.0 | WordPress-Stubs für Tests (dev) |
 | [PHPStan](https://phpstan.org/) + WordPress-Stubs | ^2.0 | Statische Analyse Level 6 (dev) |
 | [WPCS](https://github.com/WordPress/WordPress-Coding-Standards) | ^3.1 | Coding Standards (dev) |
+
+Dazu npm-Pakete für die Testumgebung (wp-env, Playwright, SHACL-Prüfung). Sie landen nicht im
+Plugin-ZIP. Sicherheitslücken in ihren transitiven Abhängigkeiten werden über `overrides` in
+`package.json` behoben (derzeit `qs`, `body-parser`, `glob`/`minimatch`); `npm audit
+--package-lock-only` soll 0 Funde melden.
+
+### CI
+
+`.github/workflows/ci.yml` läuft mit `permissions: contents: read` und prüft PHPCS, PHPStan,
+PHPUnit (PHP 8.1–8.3), SHACL, das Release-Paket, die Übersetzungen und End-to-End (Playwright gegen
+wp-env auf Deutsch). Die E2E-Specs stehen einzeln im Workflow — eine neue Spec-Datei braucht einen
+eigenen Schritt.
 
 ### Release bauen
 

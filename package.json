@@ -1,6 +1,6 @@
 {
   "name": "open-data-wizard",
-  "version": "2.47.0",
+  "version": "2.47.1",
   "description": "WordPress plugin for publishing open data as DCAT-AP 3.0 compliant metadata",
   "author": "Open Data Wizard Team",
   "license": "GPL-2.0-or-later",
@@ -33,5 +33,10 @@
     "@wordpress/env": "^12.0.0",
     "@zazuko/env-node": "^3.1.0",
     "rdf-validate-shacl": "^0.6.5"
+  },
+  "overrides": {
+    "body-parser": "^1.20.9",
+    "glob": "^14.0.2",
+    "qs": "^6.16.2"
   }
 }

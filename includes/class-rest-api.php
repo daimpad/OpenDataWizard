@@ -200,6 +200,9 @@ class ODW_Rest_API {
 		$query_args = array(
 			'post_type'      => 'odw_dataset',
 			'post_status'    => 'publish',
+			// Passwortgeschützt heißt: nicht für alle. Der Datenkatalog auf der
+			// Website zeigt solche Datensätze nicht, ein Harvest also auch nicht.
+			'has_password'   => false,
 			'posts_per_page' => $per_page,
 			'paged'          => $page,
 			'orderby'        => 'modified',
@@ -604,10 +607,11 @@ class ODW_Rest_API {
 			);
 		}
 
-		if ( 'publish' !== $post->post_status || self::is_sample( $post_id ) ) {
+		if ( 'publish' !== $post->post_status || '' !== (string) $post->post_password || self::is_sample( $post_id ) ) {
 			// Bewusst identisch zum Nicht-Existieren (404 + gleiche Meldung),
 			// damit Entwurfs-IDs nicht von außen enumerierbar sind. Ebenso für
-			// Beispieldaten: Sie gehören in keinen Harvest.
+			// passwortgeschützte Datensätze und Beispieldaten: Sie gehören in
+			// keinen Harvest.
 			return new WP_Error(
 				'odw_not_found',
 				__( 'Datensatz nicht gefunden.', 'open-data-wizard' ),
@@ -644,7 +648,7 @@ class ODW_Rest_API {
 	 *
 	 * Response body keys:
 	 *  - dcat:dataset  — array of full JSON-LD dataset objects modified after `since`
-	 *  - odw:removed   — array of tombstone objects for datasets trashed after `since`
+	 *  - odw:removed   — array of tombstone objects for datasets trashed or password-protected after `since`
 	 *
 	 * Pagination (page/per_page) applies only to the modified set; all tombstones for the
 	 * requested window are always included in full so harvesters don't miss deletions.
@@ -698,6 +702,7 @@ class ODW_Rest_API {
 			array(
 				'post_type'      => 'odw_dataset',
 				'post_status'    => 'publish',
+				'has_password'   => false,
 				'posts_per_page' => $per_page,
 				'paged'          => $page,
 				'orderby'        => 'modified',
@@ -734,6 +739,29 @@ class ODW_Rest_API {
 			)
 		);
 
+		// Ein nachträglich mit Passwort geschützter Datensatz verschwindet aus
+		// /catalog. Wer inkrementell erntet, erfährt das nur über eine
+		// Löschmeldung — das Setzen des Passworts ändert post_modified, er
+		// liegt also im Fenster.
+		$protected_query = new WP_Query(
+			array(
+				'post_type'      => 'odw_dataset',
+				'post_status'    => 'publish',
+				'has_password'   => true,
+				'posts_per_page' => -1,
+				'orderby'        => 'modified',
+				'order'          => 'DESC',
+				'no_found_rows'  => true,
+				'meta_query'     => array( self::sample_exclusion() ),
+				'date_query'     => array(
+					array(
+						'column' => 'post_modified_gmt',
+						'after'  => $after_gmt,
+					),
+				),
+			)
+		);
+
 		$datasets = array();
 		foreach ( $modified_query->posts as $post ) {
 			$jsonld = odw_build_dataset_jsonld( (int) $post->ID );
@@ -742,8 +770,16 @@ class ODW_Rest_API {
 			}
 		}
 
+		$gone = array_merge( (array) $removed_query->posts, (array) $protected_query->posts );
+		usort(
+			$gone,
+			static function ( $a, $b ): int {
+				return strcmp( (string) $b->post_modified_gmt, (string) $a->post_modified_gmt );
+			}
+		);
+
 		$removed = array();
-		foreach ( $removed_query->posts as $post ) {
+		foreach ( $gone as $post ) {
 			$removed[] = array(
 				'@id'           => rest_url( self::NAMESPACE . '/datasets/' . $post->ID ),
 				'@type'         => 'dcat:Dataset',

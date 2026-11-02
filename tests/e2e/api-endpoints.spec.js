@@ -128,6 +128,21 @@ test.describe('Harvest-Endpunkte', () => {
     expect(data).toHaveProperty('dcat:distribution');
   });
 
+  test('passwortgeschützte Datensätze erscheinen in keinem Endpunkt', async ({ request }) => {
+    const fixtures = await (await request.get('/wp-json/odw-e2e/v1/fixtures')).json();
+    expect(fixtures.protected).toBeGreaterThan(0);
+
+    const catalog = await request.get(`${API_BASE}/catalog?full=1`);
+    expect(catalog.status()).toBe(200);
+    expect(await catalog.text()).not.toContain('E2E: Passwortgeschützt');
+
+    const delta = await request.get(`${API_BASE}/delta?since=2000-01-01`);
+    expect(delta.status()).toBe(200);
+    expect(await delta.text()).not.toContain('E2E: Passwortgeschützt');
+
+    expect((await request.get(`${API_BASE}/datasets/${fixtures.protected}`)).status()).toBe(404);
+  });
+
   test('/datasets/{unbekannt} antwortet mit 404', async ({ request }) => {
     const response = await request.get(`${API_BASE}/datasets/99999999`);
 
