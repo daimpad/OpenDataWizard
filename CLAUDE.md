@@ -28,7 +28,7 @@ wp plugin activate open-data-wizard
 # Entwicklung & Testing
 ./vendor/bin/phpcs --standard=config/phpcs.xml                 # Code-Style prüfen
 ./vendor/bin/phpcbf --standard=config/phpcs.xml includes/      # Auto-fix Style-Fehler
-./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (243 Tests)
+./vendor/bin/phpunit --configuration=config/phpunit.xml        # Unit-Tests (500+ Tests)
 ./vendor/bin/phpstan analyse --configuration=config/phpstan.neon  # Static analysis
 
 # Spezifische Tests
@@ -50,6 +50,10 @@ npm run env:stop
 - Runs auf **PHP 8.1, 8.2, 8.3** via GitHub Actions (`.github/workflows/ci.yml`)
 - Sieben Jobs: PHPCS, PHPStan, PHPUnit (drei PHP-Versionen), SHACL, **Release-Paket**,
   **Übersetzungen**, **End-to-End**
+- Der E2E-Job ruft die Spec-Dateien **einzeln** auf (`api-endpoints`, `admin-workflow`, `catalog`,
+  `samples`). **Eine neue Spec-Datei läuft nicht automatisch mit** — Schritt in `ci.yml` ergänzen.
+- `ci.yml` läuft mit `permissions: contents: read` (kein Job schreibt). Releases baut
+  `.github/workflows/release.yml` mit eigenen Rechten (siehe Version Management).
 - **Pull Requests** werden geblocked, wenn CI fehlschlägt
 
 > **Warum ein eigener Paket-Job?** Alle übrigen Prüfungen laufen gegen das
@@ -138,9 +142,16 @@ open-data-wizard/
 │   ├── test-catalog.php            # Datenkatalog: Attribute, Query-Argumente, Listen-Daten
 │   ├── test-catalog-filters.php    # Datenkatalog: Filter, Facetten-/Such-SQL, Index-Felder
 │   ├── test-catalog-seo.php        # Datenkatalog: Kopfbereich, Canonical, Cache-Action
-│   ├── test-rest-delta.php         # Delta Endpoint Tests
+│   ├── test-rest-delta.php         # REST: Delta, Content Negotiation, Ausschlüsse (Beispiele, Passwort)
+│   ├── test-batch-import.php       # Batch-Import: Parsing, Spalten, Vokabulare, Beispieldateien
+│   ├── test-samples.php            # Beispieldaten: Laden/Entfernen/Übernehmen, Demo-Migration
 │   ├── test-cli.php                # CLI Commands Tests
-│   └── class-stubs.php             # WP_Mock Stubs
+│   ├── test-validation.php, test-rdf.php, test-vocabulary.php, test-registry-schema.php,
+│   │   test-field-catalog.php, test-shacl-shapes.php
+│   ├── bootstrap.php               # WP_Mock-Bootstrap, Konstanten
+│   ├── shacl/                      # SHACL-Fixtures + validate.mjs (CI-Job SHACL)
+│   └── e2e/                        # Playwright: api-endpoints, admin-workflow, catalog, samples
+│       └── mu-plugins/odw-e2e-seed.php  # Saat + Test-Routen (fixtures, samples-Reset)
 ├── languages/
 │   ├── open-data-wizard.pot        # i18n Translation Template
 │   ├── open-data-wizard-en_US.po   # Englische Übersetzung (Quelle)
@@ -196,7 +207,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Catalog_Filters** | Katalog Stufe 2/3a (Opt-in über `filters`/`search`/`license`): GET-Zustand, Facetten mit Trefferzahlen (GROUP BY über flache Index-Felder `_odw_license_index`/`_odw_format_index`/`_odw_theme_index`/`_odw_publisher_index`/`_odw_keyword_index`, dazu `_odw_period_from`/`_odw_period_to`, `_odw_open_index`, `_odw_hvd_index`), aktive Filter als Chips, LIKE-Suche über `posts_where`, Index-Sync auf `save_post`@30, bei Meta-Änderungen außerhalb (Import, gelöschter Anhang, Revision) am Request-Ende, + Migration in Stapeln über `_odw_index_state` (Versionswechsel, alle 12 h) | `state()`, `apply_to_query()`, `facet_sql()`, `render_form()`, `sync_index()` |
 | **ODW_Catalog_Seo** | Katalog Stufe 2: HTTP 404 für ungültige `odw_ds` und Seiten hinter dem Ende, Canonical/Titel/robots je Zustand für Core, Yoast, Rank Math und AIOSEO; Action `odw_catalog_changed` für Seiten-Caches | `head_state()`, `canonical_for()`, `send_headers()` |
 | **ODW_Batch_Import** | CSV/JSON Batch-Import: Parsing, Validierung, Bulk-Insert | `parse_file()`, `validate_row()`, `import_records()` |
-| **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear) | `quality_recalculate()`, `cache_clear()` |
+| **ODW_CLI** | WP-CLI Befehle (Qualitäts-Recalc, Cache-Clear, Feld-Referenz, Beispieldaten) | `quality_recalculate()`, `cache_clear()`, `generate_docs()`, `samples_load()`, `samples_remove()`, `samples_status()` |
 
 ### Design Patterns
 
@@ -350,13 +361,15 @@ und Datenkatalog (`ODW_Catalog`) teilen sich darüber dieselbe Logik.
 ### Menü-Struktur
 ```
 WordPress Admin → Datensätze
-├── Alle Datensätze (List View mit Spalten)
-├── Einstieg (neu in v2.1.4!)
+├── Alle Datensätze (List View mit Spalten; Beispiele mit „— Beispieldaten")
+├── Neuen Datensatz erstellen (Create Form)
+├── Einstieg
 │   └── Welcome/Intro Page mit:
 │       - What is Open Data Wizard?
 │       - How it works (5-step overview)
 │       - Link: "Neuen Datensatz erstellen"
-├── Neue Datensatz (Create Form)
+│       - Kasten „Beispieldaten zum Ausprobieren" (laden/entfernen, ODW_Samples)
+├── Batch-Import (CSV/JSON, Vorschau, Import als Entwürfe; ebenfalls Beispieldaten-Kasten)
 ├── Einstellungen (Settings Page)
 │   ├── Katalog (Title, Publisher)
 │   ├── Standardwerte (Default Language, License)
@@ -409,6 +422,21 @@ In `class-admin.php` Methode `register_introduction_page()`:
 - URLs: `esc_url_raw()` vor Output (blockt `javascript:`, `data:`)
 - Meta Values: `esc_attr()`, `esc_html()` bei Output
 
+### Was nicht in die Harvest-Endpunkte gehört
+`/catalog`, `/datasets/<id>` und `/delta` liefern nur **öffentliche** Datensätze aus — wie der
+Datenkatalog der Website:
+- keine Entwürfe, privaten oder **passwortgeschützten** Datensätze (`has_password => false`;
+  `/datasets/<id>` antwortet mit derselben 404 wie für eine unbekannte ID),
+- keine **Beispieldaten** (`_odw_sample`, `meta_query` `NOT EXISTS`) — auch nicht als Löschmeldung.
+- Ein nachträglich geschützter Datensatz erscheint in `/delta` unter `odw:removed`.
+
+Wer eine neue Abfrage auf Datensätze für einen Endpunkt baut, muss diese Ausschlüsse übernehmen.
+
+### Abhängigkeiten der Testumgebung
+npm-Pakete (wp-env, Playwright, SHACL) sind reine Entwicklungswerkzeuge und nicht im Plugin-ZIP.
+Sicherheitslücken in transitiven Paketen werden über `overrides` in `package.json` behoben,
+danach `npm install --package-lock-only` und `npm audit --package-lock-only` (Ziel: 0 Funde).
+
 ---
 
 ## 🌍 Internationalisierung (i18n)
@@ -424,7 +452,7 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 - **Source language**: German (the `__()` default strings are German)
 - **POT Template**: `languages/open-data-wizard.pot`
 - **English**: `languages/open-data-wizard-en_US.po` / `.mo` — overrides the German
-  source strings on `en_US` installs (336 strings)
+  source strings on `en_US` installs (rund 750 Einträge)
 - Loaded via `load_plugin_textdomain()` on `init` hook
 - The `.mo` is generated without gettext tooling; if strings change, regenerate
   the `.po`/`.mo` (see the generator approach in the v2.3.0 PR)
@@ -447,12 +475,19 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 - **test-quality.php** — Quality Scoring: 0-100 Score calculation, 4-level mapping
 - **test-settings.php** — Settings get/filter methods
 - **test-shortcode.php** — Shortcode rendering, byte formatting
-- **test-rest-delta.php** — Delta endpoint validation, cache logic
+- **test-rest-delta.php** — REST: Delta, Cache, Content Negotiation, Ausschlüsse (Beispiele, Passwort)
+- **test-catalog.php / test-catalog-filters.php / test-catalog-seo.php** — Frontend-Datenkatalog
+- **test-batch-import.php** — Batch-Import inkl. „die Beispieldateien laufen fehlerfrei durch"
+- **test-samples.php** — Beispieldaten und Demo-Migration
 - **test-cli.php** — WP-CLI commands
+- Weitere: Validierung, RDF/Turtle, Vokabulare, Feld-Registry, Feld-Katalog, SHACL-Shapes
+
+**E2E (Playwright, `tests/e2e/`):** läuft in der CI gegen ein deutsches wp-env-WordPress; siehe
+Quick Start und CI/CD Pipeline.
 
 #### Running Tests
 ```bash
-# Alle 243 Tests
+# Alle Tests (500+)
 ./vendor/bin/phpunit --configuration=config/phpunit.xml
 
 # Spezifische Test-Datei
@@ -505,14 +540,18 @@ class Test_ODW_Fields extends \WP_Mock\Tools\TestCase {
 ### Base Namespace
 All endpoints unter `/wp-json/datenatlas/v1/`
 
+Ausgeliefert werden nur öffentliche Datensätze — keine Entwürfe, passwortgeschützten Datensätze
+oder Beispieldaten (siehe „Was nicht in die Harvest-Endpunkte gehört").
+
 ### GET /catalog
-**Alle veröffentlichten Datasets als dcat:Catalog (JSON-LD)**
+**Alle öffentlichen Datasets als dcat:Catalog**
 
 Query-Parameter:
 - `page=1`, `per_page=20` — Pagination
+- `full=1` — der ganze Katalog in einem Dokument (Harvest-Endpunkt)
 - `theme=Bildung` — Filter by theme
 - `license=cc-by` — Filter by license short code
-- `format=json|jsonld` — Response format
+- `format=jsonld|json|turtle` — Response format; ohne `format` entscheidet der `Accept`-Header
 
 Response (JSON-LD):
 ```json
@@ -552,9 +591,10 @@ Query-Parameter:
 Response:
 ```json
 {
-  "datasets": [ { ... } ],          // Geänderte Datasets
-  "tombstones": [                    // Gelöschte Datasets
-    { "id": "post-id", "deleted": true }
+  "@type": "odw:DeltaCatalog",
+  "dcat:dataset": [ { ... } ],       // Geänderte öffentliche Datasets (paginiert)
+  "odw:removed": [                   // Papierkorb oder nachträglich passwortgeschützt
+    { "@id": ".../datasets/123", "@type": "dcat:Dataset", "odw:removedAt": "2026-…" }
   ]
 }
 ```
@@ -617,12 +657,16 @@ Abstände kommen vom Raster des Tab-Panels, nicht mehr von Margins je Feld —
 ## 📝 Git Workflow & Commits
 
 ### Branch Strategy
-**WICHTIG (ab v2.1.4):** Alle Commits gehen **direkt zu `main`**
+Änderungen laufen über einen Branch und einen Pull Request gegen `main`; gemergt wird erst, wenn
+die CI grün ist. Jeder Push auf `main` startet `release.yml`: Ist die Version im Plugin-Header neu,
+entstehen Tag `v<version>`, Release mit ZIP (Notizen aus dem obersten CHANGELOG-Eintrag) und der
+Branch `release` mit dem Inhalt des ZIPs (Quelle für Git Updater).
 
 ```bash
 # Lokal entwickeln
 git checkout main
 git pull origin main
+git checkout -b <branch>
 
 # Änderungen machen
 # ... edit files ...
@@ -638,8 +682,8 @@ Detaillierte Erklärung was sich ändert und warum.
 
 https://claude.ai/code/session_01JB1xUQM892bVZ4Yv3MZjvq"
 
-# Pushen zu main
-git push origin main
+# Pushen und Pull Request öffnen
+git push -u origin <branch>
 ```
 
 ### Commit Message Conventions
@@ -754,6 +798,11 @@ Known false positives from incomplete Carbon Fields stubs:
 ## 🚀 Version Management
 
 ### Version Bumping
+Die Version steht an mehreren Stellen; `bin/verify-package.py` (CI-Job „Release-Paket") prüft,
+dass Plugin-Header, `ODW_VERSION` und oberster CHANGELOG-Eintrag übereinstimmen. Außerdem:
+`package.json`, `package-lock.json` (zwei Stellen), Versions-Badge in `README.md` und „Current"
+unten in dieser Datei.
+
 Update **both** locations:
 1. Plugin header in `open-data-wizard.php`
    ```php
@@ -825,6 +874,14 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Content Negotiation (v2.35.0):** Alle drei Endpunkte liefern `jsonld`/`json`/`turtle`; ohne
   `?format=` entscheidet der `Accept`-Header (q-Werte, `Vary: Accept`). Explizites `?format=`
   hat Vorrang.
+- **Datenkatalog im Frontend (v2.43.0–v2.45.0):** `[odw_catalog]` / Block „Datenkatalog" mit
+  Detailansicht, Filtern mit Trefferzahlen, Suche, eigenem SEO-Kopf, Herausgeber, Schlagworten,
+  Zeitraum, „Nur Open Data", „Nur HVD" und Filter-Chips.
+- **Batch-Import mit allen wichtigen Feldern (v2.46.0):** 18 weitere Spalten, Vokabular-Auflösung,
+  42 vollständige Beispieldatensätze in `samples/`.
+- **Beispieldaten statt Demo-Datensatz (v2.47.0):** leerer Start, Laden/Entfernen per Klick oder
+  WP-CLI, nie in einem Harvest-Endpunkt, im Frontend nur für die Redaktion.
+- **Nur öffentliche Datensätze in den Endpunkten, CI mit Leserechten (v2.47.1).**
 
 ### ☐ Noch offen / geplant
 
@@ -924,6 +981,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.39.1 (August 2026)
+**Zuletzt aktualisiert**: Version 2.47.1 (November 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

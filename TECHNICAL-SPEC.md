@@ -4,7 +4,7 @@
 
 ## 📌 Umsetzungsstand
 
-Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface (siehe Abschnitt 1).
+Stand der Tabelle: **v2.5.1** (DCAT-AP-Phasen). Plugin aktuell: **v2.47.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface (siehe Abschnitt 1).
 
 | Phase | Inhalt | Status |
 |---|---|---|
@@ -14,6 +14,7 @@ Stand: **v2.5.1**. Abgeleitet aus der Analyse des piveau Data Provider Interface
 | **D** | Mehrsprachige Literale (`@language`/`@value`) für title/description/keyword (Output-Tagging, ohne Migration) | ✅ v2.9.0 |
 | **E** | Multi-Distribution (opt-in, wiederholbare Distributionen) | ✅ v2.22.0 (additiv) |
 | — | Profi-UX (ausklappbarer „Erweiterte Angaben"-Bereich) ✅ v2.8.0; Hilfe-Tooltips + Live-Vorschau ✅ v2.11.0; Registry-getriebenes Formular/JSON-LD ☐ | teils |
+| — | Harvest-Umfang: Endpunkte liefern nur öffentliche Datensätze (keine Entwürfe, privaten, passwortgeschützten oder Beispieldatensätze); nachträglich geschützte als Löschmeldung in `/delta` | ✅ v2.47.0 / 2.47.1 |
 
 Details zur phasierten Umsetzungsplanung in Abschnitt 7.
 

@@ -368,7 +368,9 @@ Diese URLs können bei einer Open-Data-Plattform als Harvest-Quelle eingetragen 
 
 **Content Negotiation:** Alle drei Endpunkte liefern `jsonld`, `json` und `turtle`. Ohne `?format=` entscheidet der **`Accept`-Header** (mit q-Werten); ein explizites `?format=` hat immer Vorrang. Antworten tragen `Vary: Accept`.
 
-**Delta-Parameter:** `since` (erforderlich, ISO 8601), `page`, `per_page`, `format` — liefert nur Datensätze, die nach dem angegebenen Zeitstempel geändert wurden, plus Tombstones für gelöschte Datensätze
+**Delta-Parameter:** `since` (erforderlich, ISO 8601), `page`, `per_page`, `format` — liefert nur Datensätze, die nach dem angegebenen Zeitstempel geändert wurden, plus Löschmeldungen (`odw:removed`) für Datensätze, die seitdem im Papierkorb gelandet sind oder ein Passwort bekommen haben
+
+**Nur Öffentliches:** Die Endpunkte liefern genau die Datensätze, die auch der Datenkatalog der Website Besuchern zeigt. Entwürfe, private und **passwortgeschützte** Datensätze sowie [Beispieldaten](#-beispieldaten-zum-ausprobieren) erscheinen nicht; `/datasets/<id>` antwortet für sie mit derselben 404 wie für eine unbekannte ID.
 
 ### 🌾 Harvesting durch externe Open-Data-Portale
 
@@ -382,7 +384,7 @@ GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1&format=turtle 
 GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1                 →  application/ld+json
 ```
 
-- **`full=1`** liefert **alle veröffentlichten Datensätze in einem Abruf** (ohne Paginierung) als `dcat:Catalog` → `dcat:Dataset` → `dcat:Distribution` — das Muster, das RDF-Harvester erwarten.
+- **`full=1`** liefert **alle öffentlichen Datensätze in einem Abruf** (ohne Paginierung) als `dcat:Catalog` → `dcat:Dataset` → `dcat:Distribution` — das Muster, das RDF-Harvester erwarten.
 - **`format=turtle`** serialisiert denselben Graphen als **Turtle** (`text/turtle`) — ohne externe RDF-Bibliothek. JSON-LD (`application/ld+json`) und `json` bleiben verfügbar. Harvester, die rein über Header aushandeln, senden stattdessen `Accept: text/turtle`.
 - Die Datensatz-URIs (`@id`) sind **über Releases stabil** (an die Post-ID gebunden), sodass Harvester Aktualisierungen/Löschungen korrekt zuordnen und keine Duplikate anlegen.
 
@@ -574,6 +576,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Datenkatalog: Herausgeber, Schlagworte, Zeitraum, „Nur Open Data", „Nur HVD", aktive Filter als Chips (v2.45.0)
 - [x] Batch-Import mit allen wichtigen Feldern (Zeitraum, Kontakt, Aktualisierung, HVD …) und 42 vollständigen Beispieldatensätzen (v2.46.0)
 - [x] Beispieldaten mit einem Klick laden und entfernen — nie in einem Harvest-Endpunkt (v2.47.0)
+- [x] Harvest-Endpunkte nur mit öffentlichen Datensätzen (auch ohne passwortgeschützte), CI mit Leserechten (v2.47.1)
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)
 - [x] Nativer wp.media Upload-Widget
