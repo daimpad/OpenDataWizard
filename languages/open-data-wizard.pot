@@ -1840,3 +1840,31 @@ msgstr ""
 #, php-format
 msgid "bis %s"
 msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Ungültiges Datum in „%2$s\": %3$s (erwartet JJJJ-MM-TT oder TT.MM.JJJJ)"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Ungültige Adresse in „%2$s\": %3$s"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Ungültige E-Mail-Adresse in „%2$s\": %3$s"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Unbekannter Wert in „%2$s\": %3$s"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Ungültiger Medientyp in „%2$s\": %3$s (erwartet z. B. text/csv)"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: „%2$s\" erwartet ja oder nein: %3$s"
+msgstr ""
+
+#, php-format
+msgid "Zeile %1$d: Der Zeitraum beginnt nach seinem Ende: %2$s bis %3$s"
+msgstr ""

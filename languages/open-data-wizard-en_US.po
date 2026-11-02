@@ -2213,3 +2213,31 @@ msgstr "to"
 #, php-format
 msgid "bis %s"
 msgstr "until %s"
+
+#, php-format
+msgid "Zeile %1$d: Ungültiges Datum in „%2$s\": %3$s (erwartet JJJJ-MM-TT oder TT.MM.JJJJ)"
+msgstr "Row %1$d: invalid date in \"%2$s\": %3$s (expected YYYY-MM-DD or DD.MM.YYYY)"
+
+#, php-format
+msgid "Zeile %1$d: Ungültige Adresse in „%2$s\": %3$s"
+msgstr "Row %1$d: invalid URL in \"%2$s\": %3$s"
+
+#, php-format
+msgid "Zeile %1$d: Ungültige E-Mail-Adresse in „%2$s\": %3$s"
+msgstr "Row %1$d: invalid email address in \"%2$s\": %3$s"
+
+#, php-format
+msgid "Zeile %1$d: Unbekannter Wert in „%2$s\": %3$s"
+msgstr "Row %1$d: unknown value in \"%2$s\": %3$s"
+
+#, php-format
+msgid "Zeile %1$d: Ungültiger Medientyp in „%2$s\": %3$s (erwartet z. B. text/csv)"
+msgstr "Row %1$d: invalid media type in \"%2$s\": %3$s (expected e.g. text/csv)"
+
+#, php-format
+msgid "Zeile %1$d: „%2$s\" erwartet ja oder nein: %3$s"
+msgstr "Row %1$d: \"%2$s\" expects yes or no: %3$s"
+
+#, php-format
+msgid "Zeile %1$d: Der Zeitraum beginnt nach seinem Ende: %2$s bis %3$s"
+msgstr "Row %1$d: the period starts after it ends: %2$s to %3$s"
