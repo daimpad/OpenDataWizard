@@ -7,6 +7,50 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.0] — 2026-11-02
+
+Der Katalog startet leer. Beispieldaten lädt man bei Bedarf mit einem Klick — und sie landen
+nie versehentlich in einem Harvest-Endpunkt.
+
+### ✨ Added
+- **„Beispieldaten laden"** auf der Einstiegsseite und im Batch-Import: legt die 42 Datensätze aus
+  `samples/import-example.json` an, kennzeichnet sie (`_odw_sample`) und veröffentlicht sie. Erst
+  die Kennzeichnung, dann die Veröffentlichung — ein Beispiel ist in keinem Moment ein gewöhnlicher
+  Datensatz. Ein zweiter Klick legt nichts doppelt an.
+- **Nie in einem Harvest-Endpunkt:** `/catalog` (auch `?full=1`, Turtle), `/datasets/<id>` (404 wie
+  für eine unbekannte ID) und `/delta` lassen Beispiele weg — auch als Löschmeldung, wenn eines im
+  Papierkorb landet.
+- **Im Datenkatalog nur für die Redaktion:** Wer `manage_open_data` hat, sieht sie mit dem
+  Abzeichen „Beispieldaten" und kann alle Filter ausprobieren. Besucher sehen sie weder in der
+  Liste noch in Trefferzahlen und Jahresliste der Filter; ihre Detailseite antwortet mit 404 und
+  hat für die Redaktion `noindex` ohne `<link rel="alternate">`. `show_demo="1"` (Block:
+  „Beispieldaten auch Besuchern zeigen") zeigt sie allen, etwa auf einer Demo-Seite.
+- **Gekennzeichnet:** „— Beispieldaten" in der Datensatzliste, ein Hinweis im Formular, auf der
+  Karte „Beispieldaten" statt des Metadaten-Links (den der Endpunkt nicht bedienen würde).
+- **„Als eigenen Datensatz übernehmen"** im Formular eines Beispiels hebt die Kennzeichnung auf.
+  Bearbeiten und Speichern allein tut das nicht — wer sich nur das Formular ansieht, soll nichts
+  veröffentlichen.
+- **„Beispieldaten entfernen"** (Einstieg, Batch-Import, Hinweis über der Datensatzliste) löscht
+  alle Beispiele endgültig, nach Rückfrage.
+- **WP-CLI:** `wp open-data-wizard samples load | remove [--yes] | status`.
+
+### 🔄 Changed
+- **Kein Demo-Datensatz mehr bei der Aktivierung.** Der Willkommenshinweis bietet stattdessen
+  „Neuen Datensatz erstellen" und „Zu den Beispieldaten". Die mitgelieferte Demo-CSV
+  (`assets/sample/`) entfällt.
+- **Der Demo-Datensatz früherer Versionen** wird beim Update einmalig zum Beispiel, solange er nie
+  bearbeitet wurde — damit verschwindet er aus den Endpunkten, an die er bisher ausgeliefert
+  wurde, und lässt sich mit „Beispieldaten entfernen" samt seiner CSV löschen. Ein bearbeiteter
+  Demo-Datensatz gilt als echter Datensatz und bleibt, wie er ist.
+- Der Katalog blendet statt einer einzelnen Demo-ID alle Beispiele aus (`build_query_args()` nimmt
+  nun `bool $editor`, `ODW_Catalog_Filters::conditions()` `bool $hide_samples`).
+
+### 🐛 Fixed
+- **Sprache des Demo-Datensatzes ging verloren.** Sie stand roh als `de` im Feld; das Auswahlfeld
+  kennt nur EU-URIs, Formular und JSON-LD zeigten keine Sprache. Die Migration setzt die URI.
+
+---
+
 ## [2.46.0] — 2026-11-02
 
 Viel mehr und vollständige Beispieldaten für den Batch-Import. Damit die Beispiele wirklich

@@ -78,7 +78,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 			}
 		);
 
-		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
+		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-samples.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
 			require_once ODW_PLUGIN_DIR . 'includes/' . $file;
 		}
 	}
@@ -394,7 +394,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 				'page'    => 1,
 				'dataset' => 0,
 			),
-			0,
+			true,
 			$this->state(
 				array(
 					'format' => 'CSV',
@@ -445,7 +445,7 @@ class Test_ODW_Catalog_Filters extends TestCase {
 				'page'    => 1,
 				'dataset' => 0,
 			),
-			0
+			true
 		);
 		$this->assertArrayNotHasKey( 'meta_query', $args );
 		$this->assertArrayNotHasKey( 'odw_search', $args );
@@ -478,12 +478,12 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$this->load();
 
 		$conditions = array(
-			'exclude' => 7,
-			'themes'  => array( self::THEME_BASE . 'EDUC', self::THEME_BASE . 'ENVI' ),
-			'theme'   => self::THEME_BASE . 'EDUC',
-			'license' => self::CC_BY,
-			'format'  => 'CSV',
-			'q'       => 'Schule',
+			'hide_samples' => true,
+			'themes'       => array( self::THEME_BASE . 'EDUC', self::THEME_BASE . 'ENVI' ),
+			'theme'        => self::THEME_BASE . 'EDUC',
+			'license'      => self::CC_BY,
+			'format'       => 'CSV',
+			'q'            => 'Schule',
 		);
 
 		list( $sql, $values ) = ODW_Catalog_Filters::facet_sql( 'license', $conditions, 'wp_posts', 'wp_postmeta' );
@@ -492,7 +492,8 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		$this->assertStringContainsString( "p.post_type = 'odw_dataset' AND p.post_status = 'publish' AND p.post_password = ''", $sql );
 		$this->assertStringEndsWith( 'GROUP BY f.meta_value', $sql );
 		$this->assertSame( '_odw_license_index', $values[0] );
-		$this->assertSame( 7, $values[1] );
+		$this->assertSame( '_odw_sample', $values[1] );
+		$this->assertStringContainsString( 'AND NOT EXISTS ( SELECT 1 FROM wp_postmeta x WHERE x.post_id = p.ID AND x.meta_key = %s )', $sql, 'Beispieldaten zählen für Besucher nicht mit.' );
 		$this->assertNotContains( self::CC_BY, $values, 'Die eigene Auswahl zählt nicht mit.' );
 		$this->assertContains( 'CSV', $values );
 		$this->assertContains( '_odw_format_index', $values );
@@ -509,12 +510,12 @@ class Test_ODW_Catalog_Filters extends TestCase {
 		list( $plain, $plain_values ) = ODW_Catalog_Filters::facet_sql(
 			'format',
 			array(
-				'exclude' => 0,
-				'themes'  => array(),
-				'theme'   => '',
-				'license' => '',
-				'format'  => '',
-				'q'       => '',
+				'hide_samples' => false,
+				'themes'       => array(),
+				'theme'        => '',
+				'license'      => '',
+				'format'       => '',
+				'q'            => '',
 			),
 			'wp_posts',
 			'wp_postmeta'
@@ -537,11 +538,11 @@ class Test_ODW_Catalog_Filters extends TestCase {
 				'filters' => 'format',
 			)
 		);
-		$conditions = ODW_Catalog_Filters::conditions( $config, $this->state( array( 'license' => self::CC0 ) ), 7 );
+		$conditions = ODW_Catalog_Filters::conditions( $config, $this->state( array( 'license' => self::CC0 ) ), true );
 
 		$this->assertSame( self::CC_BY, $conditions['license'] );
 		$this->assertSame( array( self::THEME_BASE . 'EDUC' ), $conditions['themes'] );
-		$this->assertSame( 7, $conditions['exclude'] );
+		$this->assertTrue( $conditions['hide_samples'] );
 	}
 
 	/**
@@ -1286,20 +1287,20 @@ class Test_ODW_Catalog_Filters extends TestCase {
 
 		$this->assertSame(
 			array(
-				'exclude'   => 0,
-				'themes'    => array(),
-				'theme'     => self::THEME_BASE . 'EDUC',
-				'license'   => self::CC0,
-				'format'    => 'CSV',
-				'q'         => 'Schule',
-				'publisher' => '',
-				'keywords'  => array(),
-				'from'      => '',
-				'to'        => '',
-				'open'      => '',
-				'hvd'       => '',
+				'hide_samples' => false,
+				'themes'       => array(),
+				'theme'        => self::THEME_BASE . 'EDUC',
+				'license'      => self::CC0,
+				'format'       => 'CSV',
+				'q'            => 'Schule',
+				'publisher'    => '',
+				'keywords'     => array(),
+				'from'         => '',
+				'to'           => '',
+				'open'         => '',
+				'hvd'          => '',
 			),
-			ODW_Catalog_Filters::conditions( $config, $state, 0 )
+			ODW_Catalog_Filters::conditions( $config, $state, false )
 		);
 	}
 	// -------------------------------------------------------------------------
@@ -1488,18 +1489,18 @@ class Test_ODW_Catalog_Filters extends TestCase {
 	 */
 	private function conditions_stage3a(): array {
 		return array(
-			'exclude'   => 0,
-			'themes'    => array(),
-			'theme'     => '',
-			'license'   => '',
-			'format'    => '',
-			'q'         => '',
-			'publisher' => 'Stadt Musterstadt',
-			'keywords'  => array( 'Sport', 'Vereine' ),
-			'from'      => '2020',
-			'to'        => '2024',
-			'open'      => '1',
-			'hvd'       => '1',
+			'hide_samples' => false,
+			'themes'       => array(),
+			'theme'        => '',
+			'license'      => '',
+			'format'       => '',
+			'q'            => '',
+			'publisher'    => 'Stadt Musterstadt',
+			'keywords'     => array( 'Sport', 'Vereine' ),
+			'from'         => '2020',
+			'to'           => '2024',
+			'open'         => '1',
+			'hvd'          => '1',
 		);
 	}
 

@@ -142,7 +142,10 @@ class ODW_Shortcode {
 		);
 		$download_url = $target['url'];
 
-		$metadata_url = rest_url( 'datenatlas/v1/datasets/' . $post_id );
+		// Ein Beispiel liefert der Endpunkt nicht aus (ODW_Samples) — statt
+		// eines Links ins Leere ein sichtbarer Hinweis.
+		$is_sample    = '' !== (string) get_post_meta( $post_id, '_odw_sample', true );
+		$metadata_url = $is_sample ? '' : rest_url( 'datenatlas/v1/datasets/' . $post_id );
 		$meta_rows    = self::collect_metadata_rows( $post_id, $license_label, $file_size );
 		$extra_dists  = self::collect_extra_distributions( $post_id );
 
@@ -153,6 +156,9 @@ class ODW_Shortcode {
 
 			<div class="odw-download-card__top">
 				<h2 class="odw-download-card__title"><?php echo esc_html( $title ); ?></h2>
+				<?php if ( $is_sample ) : ?>
+				<span class="odw-download-card__sample"><?php esc_html_e( 'Beispieldaten', 'open-data-wizard' ); ?></span>
+				<?php else : ?>
 				<a
 					class="odw-download-card__metajson"
 					href="<?php echo esc_url( $metadata_url ); ?>"
@@ -160,6 +166,7 @@ class ODW_Shortcode {
 				>
 					<span aria-hidden="true">⤓</span> <?php esc_html_e( 'Metadaten JSON', 'open-data-wizard' ); ?>
 				</a>
+				<?php endif; ?>
 			</div>
 
 			<?php if ( '' !== $download_url ) : ?>

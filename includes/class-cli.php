@@ -5,6 +5,7 @@
  * Provides command-line utilities for bulk operations:
  * - wp open-data-wizard quality recalculate
  * - wp open-data-wizard cache clear
+ * - wp open-data-wizard samples load|remove|status
  *
  * @package OpenDataWizard
  */
@@ -32,6 +33,80 @@ class ODW_CLI {
 		\WP_CLI::add_command( 'open-data-wizard quality recalculate', array( self::class, 'quality_recalculate' ) );
 		\WP_CLI::add_command( 'open-data-wizard cache clear', array( self::class, 'cache_clear' ) );
 		\WP_CLI::add_command( 'open-data-wizard docs', array( self::class, 'generate_docs' ) );
+		\WP_CLI::add_command( 'open-data-wizard samples load', array( self::class, 'samples_load' ) );
+		\WP_CLI::add_command( 'open-data-wizard samples remove', array( self::class, 'samples_remove' ) );
+		\WP_CLI::add_command( 'open-data-wizard samples status', array( self::class, 'samples_status' ) );
+	}
+
+	/**
+	 * Lädt die Beispieldatensätze und veröffentlicht sie. Sie erscheinen in
+	 * keinem Harvest-Endpunkt und im Datenkatalog nur für die Redaktion.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard samples load
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments.
+	 */
+	public static function samples_load( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		$result = ODW_Samples::load();
+
+		if ( 'exists' === $result['error'] ) {
+			\WP_CLI::warning( sprintf( 'Beispieldaten sind bereits geladen (%d Datensätze).', count( ODW_Samples::loaded_ids() ) ) );
+			return;
+		}
+		if ( '' !== $result['error'] ) {
+			\WP_CLI::error( 'Die Beispieldatei konnte nicht gelesen werden.' );
+		}
+
+		\WP_CLI::success( sprintf( '%d Beispieldatensätze angelegt, %d veröffentlicht.', $result['created'], $result['published'] ) );
+	}
+
+	/**
+	 * Löscht alle Beispieldatensätze endgültig.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--yes]
+	 * : Ohne Rückfrage löschen.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard samples remove --yes
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments (--yes).
+	 */
+	public static function samples_remove( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		$count = count( ODW_Samples::ids() );
+		if ( 0 === $count ) {
+			\WP_CLI::success( 'Keine Beispieldaten vorhanden.' );
+			return;
+		}
+
+		\WP_CLI::confirm( sprintf( '%d Beispieldatensätze endgültig löschen?', $count ), $assoc_args );
+
+		\WP_CLI::success( sprintf( '%d Beispieldatensätze gelöscht.', ODW_Samples::remove() ) );
+	}
+
+	/**
+	 * Zeigt, ob Beispieldaten geladen sind.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp open-data-wizard samples status
+	 *
+	 * @param array<string, mixed> $args Positional arguments.
+	 * @param array<string, mixed> $assoc_args Named arguments.
+	 */
+	public static function samples_status( array $args, array $assoc_args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+		$count = count( ODW_Samples::ids() );
+		\WP_CLI::log(
+			0 === $count
+				? sprintf( 'Keine Beispieldaten geladen (%d verfügbar).', ODW_Samples::available() )
+				: sprintf( '%d Beispieldatensätze geladen.', $count )
+		);
 	}
 
 	/**

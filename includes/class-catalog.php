@@ -223,8 +223,8 @@ class ODW_Catalog {
 					'excerpt'         => __( 'Länge des Beschreibungsauszugs (Wörter, 0 = aus)', 'open-data-wizard' ),
 					'themes'          => __( 'Nur diese Themen zeigen', 'open-data-wizard' ),
 					'themesHelp'      => __( 'Keine Auswahl zeigt alle Themen.', 'open-data-wizard' ),
-					'showDemo'        => __( 'Beispieldatensatz anzeigen', 'open-data-wizard' ),
-					'showDemoHelp'    => __( 'Den bei der Aktivierung angelegten Beispieldatensatz mit auflisten. Sobald er bearbeitet wurde, erscheint er ohnehin.', 'open-data-wizard' ),
+					'showDemo'        => __( 'Beispieldaten auch Besuchern zeigen', 'open-data-wizard' ),
+					'showDemoHelp'    => __( 'Sonst sieht geladene Beispieldaten nur, wer angemeldet ist und Datensätze bearbeiten darf. In den Harvest-Endpunkten erscheinen sie nie.', 'open-data-wizard' ),
 					'rendered'        => __( 'Wird im Frontend als Liste aller veröffentlichten Datensätze ausgegeben.', 'open-data-wizard' ),
 					'license'         => __( 'Nur diese Lizenz zeigen', 'open-data-wizard' ),
 					'allLicenses'     => __( 'Alle Lizenzen', 'open-data-wizard' ),
@@ -438,11 +438,11 @@ class ODW_Catalog {
 	 *
 	 * @param array<string, mixed>      $config  Ergebnis von parse_atts().
 	 * @param array<string, int>        $request Ergebnis von parse_request().
-	 * @param int                       $demo_id ID des Beispieldatensatzes oder 0.
+	 * @param bool                      $editor  Ob die Person Datensätze bearbeiten darf (und Beispieldaten sieht).
 	 * @param array<string, mixed>|null $state   Filter-Zustand (ODW_Catalog_Filters::state()), null = keiner.
 	 * @return array<string, mixed>
 	 */
-	public static function build_query_args( array $config, array $request, int $demo_id, ?array $state = null ): array {
+	public static function build_query_args( array $config, array $request, bool $editor, ?array $state = null ): array {
 		$args = array(
 			'post_type'              => 'odw_dataset',
 			'post_status'            => 'publish',
@@ -466,10 +466,6 @@ class ODW_Catalog {
 			'ignore_sticky_posts'    => true,
 		);
 
-		if ( empty( $config['show_demo'] ) && $demo_id > 0 ) {
-			$args['post__not_in'] = array( $demo_id );
-		}
-
 		if ( ! empty( $config['themes'] ) ) {
 			// Über den flachen Spiegel _odw_theme_index (sync_theme_index), nicht
 			// über die Carbon-Fields-Schlüssel der Mehrfachauswahl.
@@ -480,6 +476,11 @@ class ODW_Catalog {
 					'compare' => 'IN',
 				),
 			);
+		}
+
+		if ( self::hide_samples( $config, $editor ) ) {
+			$args['meta_query']   = $args['meta_query'] ?? array();
+			$args['meta_query'][] = ODW_Samples::exclude_clause();
 		}
 
 		$state = $state ?? ODW_Catalog_Filters::state( $config, array() );
@@ -509,7 +510,7 @@ class ODW_Catalog {
 	 *
 	 * @param WP_Post $post          Datensatz.
 	 * @param int     $excerpt_words Länge des Auszugs in Wörtern, 0 = keiner.
-	 * @return array{id: int, title: string, modified: string, excerpt: string, themes: array<int, string>, format: string, size: string, license: string, access: string, target: array{url: string, kind: string}}
+	 * @return array{id: int, title: string, modified: string, excerpt: string, themes: array<int, string>, format: string, size: string, license: string, access: string, target: array{url: string, kind: string}, sample: bool}
 	 */
 	public static function item_data( WP_Post $post, int $excerpt_words ): array {
 		$id = (int) $post->ID;
@@ -568,6 +569,7 @@ class ODW_Catalog {
 				$file['url'],
 				self::meta( $id, '_odw_access_url' )
 			),
+			'sample'   => '' !== self::meta( $id, ODW_Samples::META_KEY ),
 		);
 	}
 
@@ -763,7 +765,7 @@ class ODW_Catalog {
 
 		$base = self::base_url();
 		$view = $request['dataset'] > 0
-			? self::render_detail( $request, $state, $base )
+			? self::render_detail( $config, $request, $state, $base )
 			: self::render_list( $config, $request, $state, $base );
 
 		$attributes = array(
@@ -867,17 +869,16 @@ class ODW_Catalog {
 			);
 		}
 
-		$demo_id    = self::demo_id();
+		$editor     = self::editor_view();
 		$state_args = ODW_Catalog_Filters::state_args( $state );
 		$reset      = self::page_url( $base, 1, 0, self::ANCHOR );
 
 		// Die Facetten zählen genau die Datensätze, die auch die Liste zeigen
-		// kann — mit show_demo also einschließlich des Beispiels.
-		$exclude = empty( $config['show_demo'] ) ? $demo_id : 0;
-		$html   .= ODW_Catalog_Filters::render_form( $config, $state, ODW_Catalog_Filters::conditions( $config, $state, $exclude ), $base, $reset, ODW_Catalog_Filters::short_query( self::request_values() ) );
-		$html   .= ODW_Catalog_Filters::render_active( $state, $base, $reset );
+		// kann — für die Redaktion und mit show_demo also samt Beispieldaten.
+		$html .= ODW_Catalog_Filters::render_form( $config, $state, ODW_Catalog_Filters::conditions( $config, $state, self::hide_samples( $config, $editor ) ), $base, $reset, ODW_Catalog_Filters::short_query( self::request_values() ) );
+		$html .= ODW_Catalog_Filters::render_active( $state, $base, $reset );
 
-		$query = new WP_Query( self::build_query_args( $config, $request, $demo_id, $state ) );
+		$query = new WP_Query( self::build_query_args( $config, $request, $editor, $state ) );
 		$posts = array_values(
 			array_filter(
 				(array) $query->posts,
@@ -961,6 +962,9 @@ class ODW_Catalog {
 		}
 
 		$badges = array();
+		if ( ! empty( $item['sample'] ) ) {
+			$badges[] = array( 'sample', __( 'Beispieldaten', 'open-data-wizard' ) );
+		}
 		foreach ( $item['themes'] as $theme ) {
 			$badges[] = array( 'theme', $theme );
 		}
@@ -1000,14 +1004,15 @@ class ODW_Catalog {
 	 * Entwurf, Passwortschutz, Papierkorb, fremder Typ und unbekannte ID
 	 * antworten gleich — Entwurfs-IDs lassen sich so nicht aufzählen.
 	 *
+	 * @param array<string, mixed> $config  Ergebnis von parse_atts().
 	 * @param array<string, int>   $request Seite und Detail-ID.
 	 * @param array<string, mixed> $state   Filter-Zustand (nur für den Rückweg).
 	 * @param string               $base    Basis-URL.
 	 * @return array{mode: string, labelledby: string, html: string}
 	 */
-	private static function render_detail( array $request, array $state, string $base ): array {
+	private static function render_detail( array $config, array $request, array $state, string $base ): array {
 		$id    = (int) $request['dataset'];
-		$valid = self::is_public_dataset( $id );
+		$valid = self::is_visible_dataset( $id, $config, self::editor_view() );
 
 		$back = self::page_url( $base, $request['page'], 0, $valid ? 'odw-ds-' . $id : self::ANCHOR, ODW_Catalog_Filters::state_args( $state ) );
 		$html = '<p class="odw-catalog__back"><a href="' . esc_url( $back ) . '"><span aria-hidden="true">←</span> '
@@ -1039,6 +1044,45 @@ class ODW_Catalog {
 			&& 'odw_dataset' === $post->post_type
 			&& 'publish' === $post->post_status
 			&& '' === (string) $post->post_password;
+	}
+
+	/**
+	 * Darf dieser Katalog den Datensatz in der Detailansicht zeigen? Wie
+	 * is_public_dataset(), dazu: ein Beispiel nur, wo die Liste es auch zeigt.
+	 *
+	 * @param int                  $id     Post ID.
+	 * @param array<string, mixed> $config Ergebnis von parse_atts().
+	 * @param bool                 $editor Ob die Person Datensätze bearbeiten darf.
+	 * @return bool
+	 */
+	public static function is_visible_dataset( int $id, array $config, bool $editor ): bool {
+		if ( ! self::is_public_dataset( $id ) ) {
+			return false;
+		}
+		return ! self::hide_samples( $config, $editor ) || ! ODW_Samples::is_sample( $id );
+	}
+
+	/**
+	 * Bleiben Beispieldaten in diesem Katalog verborgen? Sie zeigen sich der
+	 * Redaktion und, mit show_demo="1", allen.
+	 *
+	 * @param array<string, mixed> $config Ergebnis von parse_atts().
+	 * @param bool                 $editor Ob die Person Datensätze bearbeiten darf.
+	 * @return bool
+	 */
+	public static function hide_samples( array $config, bool $editor ): bool {
+		return empty( $config['show_demo'] ) && ! $editor;
+	}
+
+	/**
+	 * Sieht die angemeldete Person die Beispieldaten (weil sie Datensätze
+	 * bearbeiten darf)? Seiten-Caches liefern angemeldeten Personen in aller
+	 * Regel nichts aus dem Cache — die Ansicht für Besucher bleibt unberührt.
+	 *
+	 * @return bool
+	 */
+	public static function editor_view(): bool {
+		return is_user_logged_in() && current_user_can( 'manage_open_data' );
 	}
 
 	/**
@@ -1371,7 +1415,7 @@ class ODW_Catalog {
 			return false;
 		}
 
-		$args = self::build_query_args( $config, $request, self::demo_id(), $state );
+		$args = self::build_query_args( $config, $request, self::editor_view(), $state );
 
 		$args['fields']                 = 'ids';
 		$args['no_found_rows']          = true;
@@ -1417,42 +1461,6 @@ class ODW_Catalog {
 				}
 			}
 		}
-	}
-
-	/**
-	 * ID des Beispieldatensatzes, solange er unverändert ist — sonst 0.
-	 *
-	 * Die Willkommensseite lädt ausdrücklich ein, das Beispiel als Vorlage zu
-	 * nutzen. Wer daraus den ersten echten Datensatz macht, darf ihn nicht
-	 * kommentarlos im Katalog vermissen. Die Option odw_demo_post_id bleibt
-	 * dabei stehen: Sonst legte maybe_create_demo() beim nächsten Aktivieren
-	 * ein neues Beispiel an.
-	 *
-	 * @return int
-	 */
-	private static function demo_id(): int {
-		$id = class_exists( 'ODW_Setup' ) ? ODW_Setup::get_demo_post_id() : 0;
-		if ( $id <= 0 ) {
-			return 0;
-		}
-
-		$post = get_post( $id );
-
-		return $post instanceof WP_Post && self::is_untouched( $post ) ? $id : 0;
-	}
-
-	/**
-	 * Wurde der Beitrag seit dem Anlegen nie gespeichert?
-	 *
-	 * Beim Anlegen setzt wp_insert_post() post_modified gleich post_date;
-	 * jedes spätere Speichern (wp_update_post, Schnellbearbeitung) hebt die
-	 * Gleichheit auf. create_demo_dataset() schreibt danach nur noch Meta.
-	 *
-	 * @param WP_Post $post Beitrag.
-	 * @return bool
-	 */
-	public static function is_untouched( WP_Post $post ): bool {
-		return (string) $post->post_modified_gmt === (string) $post->post_date_gmt;
 	}
 
 	/**

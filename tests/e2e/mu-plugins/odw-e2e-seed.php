@@ -271,5 +271,20 @@ add_action(
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		// Setzt die Beispieldaten zurück, damit tests/e2e/samples.spec.js
+		// unbedingt starten und aufräumen kann — auch nach einem Abbruch
+		// mitten im Test. Ohne Anmeldung: Das gibt es nur in der Testumgebung.
+		register_rest_route(
+			'odw-e2e/v1',
+			'/samples',
+			array(
+				'methods'             => 'DELETE',
+				'callback'            => static function () {
+					return rest_ensure_response( array( 'removed' => class_exists( 'ODW_Samples' ) ? ODW_Samples::remove() : 0 ) );
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 );

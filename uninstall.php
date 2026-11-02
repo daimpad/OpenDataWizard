@@ -45,6 +45,7 @@ foreach ( $odw_roles->role_objects as $odw_role ) {
 // Plugin-Optionen löschen.
 delete_option( 'odw_settings' );
 delete_option( 'odw_demo_post_id' );
+delete_option( 'odw_demo_migrated' );
 delete_option( 'odw_show_welcome' );
 delete_option( 'odw_catalog_index' );
 

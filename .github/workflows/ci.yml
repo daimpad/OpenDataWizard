@@ -220,6 +220,16 @@ jobs:
           PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/catalog
         run: npx playwright test --project=chromium tests/e2e/catalog.spec.js
 
+      # Zuletzt: Der Test legt 42 Beispieldatensätze an und entfernt sie wieder.
+      # Liefe er vor den übrigen und bräche ab, stünden die Beispiele in deren
+      # Datensatzliste — die Rücksetz-Route der Saat räumt zwar auf, aber so
+      # gibt es diese Abhängigkeit gar nicht erst.
+      - name: End-to-end tests — Beispieldaten
+        if: always()
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report/samples
+        run: npx playwright test --project=chromium tests/e2e/samples.spec.js
+
       # WP_DEBUG_LOG schreibt PHP-Notices und -Fatals nach wp-content/debug.log.
       # Am Ende ausgegeben, weil eine leer gerenderte Admin-Seite sonst nur als
       # „Element nicht gefunden" erscheint und die Ursache unsichtbar bleibt.

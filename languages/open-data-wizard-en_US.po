@@ -2241,3 +2241,61 @@ msgstr "Row %1$d: \"%2$s\" expects yes or no: %3$s"
 #, php-format
 msgid "Zeile %1$d: Der Zeitraum beginnt nach seinem Ende: %2$s bis %3$s"
 msgstr "Row %1$d: the period starts after it ends: %2$s to %3$s"
+
+#, php-format
+msgid "%d Beispieldatensätze wurden angelegt und veröffentlicht. Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf."
+msgstr "%d sample datasets were created and published. They never appear in a harvest endpoint, and in the data catalogue on the website only signed-in users who may edit datasets can see them."
+
+msgid "Alle Beispieldatensätze endgültig löschen? Änderungen daran gehen verloren."
+msgstr "Permanently delete all sample datasets? Any changes made to them will be lost."
+
+msgid "Als eigenen Datensatz übernehmen"
+msgstr "Turn into a regular dataset"
+
+msgid "Beispieldaten"
+msgstr "Sample data"
+
+msgid "Beispieldaten auch Besuchern zeigen"
+msgstr "Show sample data to visitors too"
+
+msgid "Beispieldaten entfernen"
+msgstr "Remove sample data"
+
+msgid "Beispieldaten laden"
+msgstr "Load sample data"
+
+msgid "Beispieldaten zum Ausprobieren"
+msgstr "Sample data to try things out"
+
+#, php-format
+msgid "Beispieldatensätze endgültig gelöscht: %d."
+msgstr "Sample datasets permanently deleted: %d."
+
+#, php-format
+msgid "Beispieldatensätze vorhanden: %d. Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf."
+msgstr "Sample datasets present: %d. They never appear in a harvest endpoint, and in the data catalogue on the website only signed-in users who may edit datasets can see them."
+
+msgid "Der Datensatz ist jetzt ein eigener Datensatz. Veröffentlicht erscheint er in den Harvest-Endpunkten und im Datenkatalog."
+msgstr "This is now a regular dataset. Once published, it appears in the harvest endpoints and in the data catalogue."
+
+msgid "Der Katalog ist leer. Legen Sie Ihren ersten Datensatz an — oder laden Sie zum Ausprobieren Beispieldaten. Sie erscheinen in keinem Harvest-Endpunkt und lassen sich mit einem Klick wieder entfernen."
+msgstr "The catalogue is empty. Create your first dataset — or load sample data to try things out. Sample data never appears in a harvest endpoint and can be removed with one click."
+
+msgid "Die Beispieldatei konnte nicht gelesen werden."
+msgstr "The sample file could not be read."
+
+msgid "Die Beispieldaten sind bereits geladen."
+msgstr "The sample data is already loaded."
+
+msgid "Dies ist ein Beispieldatensatz. Er erscheint in keinem Harvest-Endpunkt, und im Datenkatalog sieht ihn nur, wer angemeldet ist und Datensätze bearbeiten darf. Das gilt auch, wenn Sie ihn bearbeiten und speichern."
+msgstr "This is a sample dataset. It never appears in a harvest endpoint, and in the data catalogue only signed-in users who may edit datasets can see it. This also applies if you edit and save it."
+
+msgid "Sonst sieht geladene Beispieldaten nur, wer angemeldet ist und Datensätze bearbeiten darf. In den Harvest-Endpunkten erscheinen sie nie."
+msgstr "Otherwise, loaded sample data is only visible to signed-in users who may edit datasets. It never appears in the harvest endpoints."
+
+msgid "Zu den Beispieldaten"
+msgstr "Go to sample data"
+
+#, php-format
+msgid "Zum Ausprobieren können Sie %d vollständig ausgefüllte, frei erfundene Datensätze laden (Musterstadt, Musterkreis, Musterland). Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. Mit einem Klick sind sie wieder entfernt."
+msgstr "To try things out, you can load %d complete, entirely fictional datasets (Musterstadt, Musterkreis, Musterland). They never appear in a harvest endpoint, and in the data catalogue on the website only signed-in users who may edit datasets can see them. One click removes them again."

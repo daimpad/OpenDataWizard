@@ -125,9 +125,10 @@ class ODW_Catalog_Seo {
 	 * @param bool               $variant    Filter, Suche oder Sortierung gesetzt.
 	 * @param WP_Post|null       $dataset    Öffentlicher Datensatz der Detailansicht, sonst null.
 	 * @param bool               $beyond_end Listenseite ab 2 ohne Einträge.
+	 * @param bool               $sample     Der Datensatz der Detailansicht ist ein Beispiel.
 	 * @return array{status: int, noindex: bool, canonical_args: array<string, int>, title: string, dataset: int}
 	 */
-	public static function head_state( array $request, bool $variant, ?WP_Post $dataset, bool $beyond_end = false ): array {
+	public static function head_state( array $request, bool $variant, ?WP_Post $dataset, bool $beyond_end = false, bool $sample = false ): array {
 		$state = array(
 			'status'         => 200,
 			'noindex'        => false,
@@ -148,6 +149,8 @@ class ODW_Catalog_Seo {
 			$state['canonical_args'] = array( ODW_Catalog::PARAM_DATASET => (int) $dataset->ID );
 			$state['title']          = (string) get_the_title( $dataset );
 			$state['dataset']        = (int) $dataset->ID;
+			// Erfundene Beispieldaten gehören in keinen Suchindex.
+			$state['noindex'] = $sample;
 			return $state;
 		}
 
@@ -202,7 +205,6 @@ class ODW_Catalog_Seo {
 		$get     = ODW_Catalog::request_values();
 		$request = ODW_Catalog::parse_request( $get );
 		$id      = (int) $request['dataset'];
-		$dataset = $id > 0 && ODW_Catalog::is_public_dataset( $id ) ? get_post( $id ) : null;
 
 		// Ohne ausführbaren Katalog keine Katalogseite: has_shortcode() zählt
 		// auch ein maskiertes [[odw_catalog]] oder einen auskommentierten mit.
@@ -210,6 +212,9 @@ class ODW_Catalog_Seo {
 		if ( null === $config ) {
 			return false;
 		}
+
+		$dataset = $id > 0 && ODW_Catalog::is_visible_dataset( $id, $config, ODW_Catalog::editor_view() ) ? get_post( $id ) : null;
+		$sample  = $dataset instanceof WP_Post && ODW_Samples::is_sample( (int) $dataset->ID );
 
 		// Mit den Attributen des Katalogs zählt nur, was er freischaltet: Ein
 		// ?odw_theme= an einem Katalog ohne Themenfilter ändert die Liste
@@ -221,7 +226,8 @@ class ODW_Catalog_Seo {
 			$request,
 			ODW_Catalog_Filters::is_active( $state ),
 			$dataset instanceof WP_Post ? $dataset : null,
-			$beyond_end
+			$beyond_end,
+			$sample
 		) + array( 'post_id' => (int) $post->ID );
 
 		return self::$head;
@@ -394,10 +400,11 @@ class ODW_Catalog_Seo {
 	/**
 	 * <link rel="alternate"> auf die maschinenlesbaren Fassungen des
 	 * Datensatzes — dieselben Adressen wie der Link „Metadaten JSON" der Karte.
+	 * Nicht für ein Beispiel (noindex): Die Endpunkte liefern es nicht aus.
 	 */
 	public static function print_alternates(): void {
 		$head = self::head();
-		if ( false === $head || $head['dataset'] <= 0 ) {
+		if ( false === $head || $head['dataset'] <= 0 || $head['noindex'] ) {
 			return;
 		}
 

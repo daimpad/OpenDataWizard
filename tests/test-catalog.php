@@ -142,7 +142,7 @@ class Test_ODW_Catalog extends TestCase {
 			}
 		);
 
-		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
+		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-samples.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php' ) as $file ) {
 			require_once ODW_PLUGIN_DIR . 'includes/' . $file;
 		}
 	}
@@ -505,7 +505,7 @@ class Test_ODW_Catalog extends TestCase {
 				'page'    => 2,
 				'dataset' => 0,
 			),
-			0
+			true
 		);
 
 		$this->assertSame( 'odw_dataset', $args['post_type'] );
@@ -526,21 +526,54 @@ class Test_ODW_Catalog extends TestCase {
 	}
 
 	/**
-	 * Der Beispieldatensatz fehlt standardmäßig und erscheint mit show_demo.
+	 * Beispieldaten fehlen für Besucher. Wer Datensätze bearbeiten darf, sieht
+	 * sie; mit show_demo="1" alle.
 	 */
-	public function test_query_args_hide_demo_unless_requested(): void {
+	public function test_query_args_hide_samples_from_visitors(): void {
 		$this->load();
 
 		$request = array(
 			'page'    => 1,
 			'dataset' => 0,
 		);
+		$sample  = array(
+			'key'     => '_odw_sample',
+			'compare' => 'NOT EXISTS',
+		);
 
-		$hidden = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( '' ), $request, 7 );
-		$shown  = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( array( 'show_demo' => '1' ) ), $request, 7 );
+		$visitor = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( '' ), $request, false );
+		$editor  = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( '' ), $request, true );
+		$shown   = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( array( 'show_demo' => '1' ) ), $request, false );
 
-		$this->assertSame( array( 7 ), $hidden['post__not_in'] );
-		$this->assertArrayNotHasKey( 'post__not_in', $shown );
+		$this->assertSame( array( $sample ), $visitor['meta_query'] );
+		$this->assertArrayNotHasKey( 'meta_query', $editor );
+		$this->assertArrayNotHasKey( 'meta_query', $shown );
+		$this->assertArrayNotHasKey( 'post__not_in', $visitor, 'Kein Ausschluss einzelner IDs mehr.' );
+
+		// Mit Themenfilter stehen beide Bedingungen nebeneinander (UND).
+		$themed = ODW_Catalog::build_query_args( ODW_Catalog::parse_atts( array( 'theme' => 'EDUC' ) ), $request, false );
+		$this->assertCount( 2, $themed['meta_query'] );
+		$this->assertSame( $sample, $themed['meta_query'][1] );
+	}
+
+	/**
+	 * Die Detailansicht zeigt ein Beispiel nur dort, wo die Liste es zeigt.
+	 */
+	public function test_detail_shows_sample_only_where_the_list_does(): void {
+		$this->load();
+
+		$post                = new WP_Post();
+		$post->ID            = 31;
+		$post->post_type     = 'odw_dataset';
+		$post->post_status   = 'publish';
+		$post->post_password = '';
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $post );
+		\WP_Mock::userFunction( 'get_post_meta' )->andReturn( '1' );
+
+		$plain = ODW_Catalog::parse_atts( '' );
+		$this->assertFalse( ODW_Catalog::is_visible_dataset( 31, $plain, false ) );
+		$this->assertTrue( ODW_Catalog::is_visible_dataset( 31, $plain, true ) );
+		$this->assertTrue( ODW_Catalog::is_visible_dataset( 31, ODW_Catalog::parse_atts( array( 'show_demo' => '1' ) ), false ) );
 	}
 
 	/**
@@ -562,7 +595,7 @@ class Test_ODW_Catalog extends TestCase {
 				'page'    => 1,
 				'dataset' => 0,
 			),
-			0
+			true
 		);
 
 		$this->assertSame(
@@ -1037,22 +1070,6 @@ class Test_ODW_Catalog extends TestCase {
 			'Zeichen in der Query'   => array( '/?s=a^b', '/?s=a%5Eb', '/?s=a%5Eb' ),
 			'leer'                   => array( '', '', '/' ),
 		);
-	}
-
-	/**
-	 * Der Beispieldatensatz gilt nur als solcher, solange er nie gespeichert
-	 * wurde — ein zur Vorlage umgearbeitetes Beispiel erscheint im Katalog.
-	 */
-	public function test_demo_is_untouched_only_until_first_save(): void {
-		$this->load();
-
-		$post                    = $this->post( 7 );
-		$post->post_date_gmt     = '2026-09-01 10:00:00';
-		$post->post_modified_gmt = '2026-09-01 10:00:00';
-		$this->assertTrue( ODW_Catalog::is_untouched( $post ) );
-
-		$post->post_modified_gmt = '2026-10-02 08:15:00';
-		$this->assertFalse( ODW_Catalog::is_untouched( $post ) );
 	}
 
 	/**
