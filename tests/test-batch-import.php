@@ -564,8 +564,339 @@ class Test_ODW_Batch_Import extends TestCase {
 	}
 
 	// -----------------------------------------------------------------------
+	// Weitere Spalten (Zeitraum, Kontakt, Aktualisierung, HVD …)
+	// -----------------------------------------------------------------------
+
+	/**
+	 * Die mitgelieferten Beispieldateien sind die Vorlage, nach der Leute ihre
+	 * eigenen Dateien bauen. Jede Zeile muss deshalb ohne einen einzigen Fehler
+	 * durchgehen — eine Beispieldatei, die beim Import Zeilen verwirft, lehrt
+	 * genau das Falsche.
+	 *
+	 * @dataProvider provide_sample_files
+	 *
+	 * @param string $extension Dateiendung.
+	 */
+	public function test_sample_file_validates_without_errors( string $extension ): void {
+		$this->mock_vocabulary_environment();
+
+		$result = ODW_Batch_Import::parse_file( ODW_PLUGIN_DIR . 'samples/import-example.' . $extension );
+
+		$this->assertTrue( $result['success'], (string) $result['error'] );
+		$this->assertSame( array(), $result['errors'] ?? array() );
+		$this->assertGreaterThanOrEqual( 40, $result['count'] );
+	}
+
+	/**
+	 * Sample file extensions.
+	 *
+	 * @return array<string, array{0: string}>
+	 */
+	public function provide_sample_files(): array {
+		return array(
+			'CSV'  => array( 'csv' ),
+			'JSON' => array( 'json' ),
+		);
+	}
+
+	/**
+	 * CSV und JSON enthalten dieselben Datensätze mit denselben Spalten — wer
+	 * das eine Beispiel nimmt, soll nichts verpassen, was nur im anderen steht.
+	 * Jeder Datensatz füllt außerdem alle Spalten aus, die der Import kennt.
+	 */
+	public function test_sample_files_match_and_cover_every_column(): void {
+		$this->mock_vocabulary_environment();
+
+		$csv  = ODW_Batch_Import::parse_file( ODW_PLUGIN_DIR . 'samples/import-example.csv' );
+		$json = ODW_Batch_Import::parse_file( ODW_PLUGIN_DIR . 'samples/import-example.json' );
+
+		$this->assertSame( $csv['data'], $json['data'] );
+
+		$columns = array_merge(
+			array( 'title', 'publisher', 'description', 'access_url', 'license' ),
+			array_keys( $this->private_constant( 'OPTIONAL_FIELD_MAP' ) ),
+			array_keys( $this->private_constant( 'EXTENDED_FIELD_MAP' ) )
+		);
+		$this->assertEqualsCanonicalizing( $columns, array_keys( $csv['data'][0] ) );
+
+		// Nur diese Spalten dürfen leer bleiben: Nicht jeder Datensatz folgt
+		// einem Standard, nur HVD haben eine Kategorie, und eine Namensnennung
+		// verlangen nur die BY-Lizenzen.
+		$may_be_empty = array( 'conforms_to', 'hvd_category', 'attribution' );
+		foreach ( $csv['data'] as $index => $record ) {
+			foreach ( array_diff( $columns, $may_be_empty ) as $column ) {
+				$this->assertNotSame( '', $record[ $column ], sprintf( 'Datensatz %d: Spalte „%s" ist leer.', $index + 1, $column ) );
+			}
+			$this->assertSame( 'ja' === $record['hvd'], '' !== $record['hvd_category'], sprintf( 'Datensatz %d: HVD ohne Kategorie oder umgekehrt.', $index + 1 ) );
+			$this->assertLessThanOrEqual( $record['temporal_end'], $record['temporal_start'] );
+		}
+	}
+
+	/**
+	 * Datumsangaben in den beiden Formen, die Tabellen typischerweise liefern.
+	 *
+	 * @dataProvider provide_dates
+	 *
+	 * @param string $value    Wert aus der Datei.
+	 * @param string $expected Gespeicherter Wert ('' = ungültig).
+	 */
+	public function test_parse_date( string $value, string $expected ): void {
+		$this->mock_parse_environment();
+
+		$this->assertSame( $expected, ODW_Batch_Import::parse_date( $value ) );
+	}
+
+	/**
+	 * Dates and their stored form.
+	 *
+	 * @return array<string, array{0: string, 1: string}>
+	 */
+	public function provide_dates(): array {
+		return array(
+			'ISO'                 => array( '2024-03-01', '2024-03-01' ),
+			'deutsch'             => array( '01.03.2024', '2024-03-01' ),
+			'deutsch, einstellig' => array( '1.3.2024', '2024-03-01' ),
+			'Schalttag'           => array( '29.02.2024', '2024-02-29' ),
+			'kein Schalttag'      => array( '29.02.2023', '' ),
+			'Monat 13'            => array( '2024-13-01', '' ),
+			'nur Jahr'            => array( '2024', '' ),
+			'amerikanisch'        => array( '03/01/2024', '' ),
+			'Text'                => array( 'Frühjahr 2024', '' ),
+		);
+	}
+
+	/**
+	 * Ja/Nein in der Form des Auswahlfelds; anderer Text ist ein Fehler, kein
+	 * stilles „nein".
+	 */
+	public function test_parse_flag(): void {
+		$this->mock_parse_environment();
+
+		foreach ( array( 'ja', 'Ja', 'yes', 'x', '1', 'WAHR' ) as $value ) {
+			$this->assertSame( 'yes', ODW_Batch_Import::parse_flag( $value ), $value );
+		}
+		foreach ( array( '', 'nein', 'No', '0', 'falsch' ) as $value ) {
+			$this->assertSame( '', ODW_Batch_Import::parse_flag( $value ), $value );
+		}
+		$this->assertNull( ODW_Batch_Import::parse_flag( 'vielleicht' ) );
+	}
+
+	/**
+	 * Der Medientyp wird als IANA-URI gespeichert: dcat:mediaType ist eine
+	 * Ressource, ein nacktes „text/csv" wäre im JSON-LD eine relative Adresse.
+	 */
+	public function test_parse_media_type(): void {
+		$this->mock_parse_environment();
+
+		$iana = 'https://www.iana.org/assignments/media-types/';
+		$this->assertSame( $iana . 'text/csv', ODW_Batch_Import::parse_media_type( 'text/csv' ) );
+		$this->assertSame( $iana . 'application/geo+json', ODW_Batch_Import::parse_media_type( 'Application/Geo+JSON' ) );
+		$this->assertSame( $iana . 'application/vnd.oasis.opendocument.spreadsheet', ODW_Batch_Import::parse_media_type( 'application/vnd.oasis.opendocument.spreadsheet' ) );
+		$this->assertSame( $iana . 'text/csv', ODW_Batch_Import::parse_media_type( $iana . 'text/csv' ) );
+		$this->assertSame( '', ODW_Batch_Import::parse_media_type( 'CSV' ) );
+		$this->assertSame( '', ODW_Batch_Import::parse_media_type( 'text/csv; charset=utf-8' ) );
+	}
+
+	/**
+	 * Auswahlfelder nehmen die URI, ihr Kürzel und die Bezeichnung an und
+	 * speichern immer die URI — ein anderer Wert ginge im Formular verloren.
+	 *
+	 * @dataProvider provide_vocab_values
+	 *
+	 * @param string $column   Spalte.
+	 * @param string $value    Wert aus der Datei.
+	 * @param string $expected Gespeicherte URI ('' = unbekannt).
+	 */
+	public function test_resolve_vocab( string $column, string $value, string $expected ): void {
+		$this->mock_vocabulary_environment();
+
+		$this->assertSame( $expected, ODW_Batch_Import::resolve_vocab( $column, $value ) );
+	}
+
+	/**
+	 * Vocabulary values and the URI they resolve to.
+	 *
+	 * @return array<string, array{0: string, 1: string, 2: string}>
+	 */
+	public function provide_vocab_values(): array {
+		$frequency = 'http://publications.europa.eu/resource/authority/frequency/';
+		$language  = 'http://publications.europa.eu/resource/authority/language/';
+
+		return array(
+			'Frequenz als Kürzel'        => array( 'accrual_periodicity', 'ANNUAL', $frequency . 'ANNUAL' ),
+			'Frequenz klein geschrieben' => array( 'accrual_periodicity', 'quarterly', $frequency . 'QUARTERLY' ),
+			'Frequenz als Bezeichnung'   => array( 'accrual_periodicity', 'Jährlich', $frequency . 'ANNUAL' ),
+			'Frequenz als URI'           => array( 'accrual_periodicity', $frequency . 'DAILY', $frequency . 'DAILY' ),
+			'Frequenz unbekannt'         => array( 'accrual_periodicity', 'stündlich', '' ),
+			'Sprache zweibuchstabig'     => array( 'language', 'de', $language . 'DEU' ),
+			'Sprache dreibuchstabig'     => array( 'language', 'ENG', $language . 'ENG' ),
+			'Sprache als Name'           => array( 'language', 'Deutsch', $language . 'DEU' ),
+			'Verwaltungsebene'           => array( 'political_geocoding_level', 'municipality', 'http://dcat-ap.de/def/politicalGeocoding/Level/municipality' ),
+			'Zugriffsrechte'             => array( 'access_rights', 'PUBLIC', 'http://publications.europa.eu/resource/authority/access-right/PUBLIC' ),
+			'Verfügbarkeit'              => array( 'availability', 'stable', 'http://publications.europa.eu/resource/authority/planned-availability/STABLE' ),
+			'HVD-Kategorie als Code'     => array( 'hvd_category', 'c_e1da4e07', 'http://data.europa.eu/bna/c_e1da4e07' ),
+			'HVD-Kategorie als Name'     => array( 'hvd_category', 'Mobilität', 'http://data.europa.eu/bna/c_b79e35eb' ),
+			'unbekannte Spalte'          => array( 'title', 'ANNUAL', '' ),
+		);
+	}
+
+	/**
+	 * Jeder ungültige Wert in einer weiteren Spalte wird mit Zeile und Spalte
+	 * gemeldet; ein Zeitraum, der nach seinem Ende beginnt, ebenso.
+	 */
+	public function test_validate_reports_invalid_extended_values(): void {
+		$this->mock_vocabulary_environment();
+
+		$record = $this->valid_record( 'Fehlerhaft' ) + array(
+			'issued'              => '31.02.2024',
+			'temporal_start'      => '2024-12-31',
+			'temporal_end'        => '2024-01-01',
+			'landing_page'        => 'javascript:alert(1)',
+			'contact_email'       => 'kein-postfach',
+			'accrual_periodicity' => 'stündlich',
+			'hvd'                 => 'vielleicht',
+			'media_type'          => 'CSV',
+		);
+
+		$result = $this->call_private( 'validate_row', array( $record, 7 ) );
+
+		$this->assertFalse( $result['valid'] );
+		$this->assertCount( 7, $result['errors'] );
+		$joined = implode( "\n", $result['errors'] );
+		$this->assertStringContainsString( 'Zeile 7: Ungültiges Datum in „issued": 31.02.2024', $joined );
+		$this->assertStringContainsString( 'Zeile 7: Ungültige Adresse in „landing_page"', $joined );
+		$this->assertStringContainsString( 'Zeile 7: Ungültige E-Mail-Adresse in „contact_email"', $joined );
+		$this->assertStringContainsString( 'Zeile 7: Unbekannter Wert in „accrual_periodicity": stündlich', $joined );
+		$this->assertStringContainsString( 'Zeile 7: „hvd" erwartet ja oder nein: vielleicht', $joined );
+		$this->assertStringContainsString( 'Zeile 7: Ungültiger Medientyp in „media_type": CSV', $joined );
+		$this->assertStringContainsString( 'Zeile 7: Der Zeitraum beginnt nach seinem Ende: 2024-12-31 bis 2024-01-01', $joined );
+	}
+
+	/**
+	 * Leere Zellen in den weiteren Spalten sind kein Fehler.
+	 */
+	public function test_validate_accepts_empty_extended_values(): void {
+		$this->mock_vocabulary_environment();
+
+		$record = $this->valid_record( 'Lückenhaft' ) + array_fill_keys( array_keys( $this->private_constant( 'EXTENDED_FIELD_MAP' ) ), '' );
+
+		$this->assertTrue( $this->call_private( 'validate_row', array( $record, 1 ) )['valid'] );
+	}
+
+	/**
+	 * Die weiteren Spalten landen in der Form im Meta, die das Formular
+	 * speichert: Datum als JJJJ-MM-TT, Auswahlwerte als URI, ja als 'yes'.
+	 * „nein" schreibt nichts, so wie ein nie berührtes Auswahlfeld.
+	 */
+	public function test_import_writes_extended_meta_in_form_shape(): void {
+		$meta = array();
+		$this->mock_import_environment( $meta );
+		$this->mock_vocabulary_environment();
+		\WP_Mock::userFunction( 'sanitize_email' )->andReturnArg( 0 );
+
+		$record = $this->valid_record( 'Vollständig' ) + array(
+			'format'                    => 'geojson',
+			'media_type'                => 'application/geo+json',
+			'rights'                    => 'Nutzung für jeden Zweck erlaubt.',
+			'language'                  => 'de',
+			'issued'                    => '01.03.2024',
+			'temporal_start'            => '2020-01-01',
+			'temporal_end'              => '31.12.2023',
+			'accrual_periodicity'       => 'ANNUAL',
+			'spatial'                   => 'Musterstadt',
+			'political_geocoding_level' => 'municipality',
+			'landing_page'              => 'https://www.musterstadt.example/projekte/baeume',
+			'download_url'              => 'https://www.musterstadt.example/opendata/baeume.geojson',
+			'contact_name'              => 'Grünflächenamt',
+			'contact_email'             => 'gruen@musterstadt.example',
+			'contact_url'               => 'https://www.musterstadt.example/kontakt',
+			'access_rights'             => 'PUBLIC',
+			'availability'              => 'STABLE',
+			'hvd'                       => 'ja',
+			'hvd_category'              => 'c_ac64a52d',
+			'version'                   => '2024',
+			'conforms_to'               => 'https://www.rfc-editor.org/rfc/rfc7946',
+		);
+
+		ODW_Batch_Import::import_records( array( $record ) );
+
+		$this->assertSame( 'GeoJSON', $meta['_odw_format'] );
+		$this->assertSame( 'https://www.iana.org/assignments/media-types/application/geo+json', $meta['_odw_media_type'] );
+		$this->assertSame( 'Nutzung für jeden Zweck erlaubt.', $meta['_odw_dist_rights'] );
+		$this->assertSame( 'http://publications.europa.eu/resource/authority/language/DEU', $meta['_odw_language'] );
+		$this->assertSame( '2024-03-01', $meta['_odw_issued'] );
+		$this->assertSame( '2020-01-01', $meta['_odw_temporal_start'] );
+		$this->assertSame( '2023-12-31', $meta['_odw_temporal_end'] );
+		$this->assertSame( 'http://publications.europa.eu/resource/authority/frequency/ANNUAL', $meta['_odw_accrual_periodicity'] );
+		$this->assertSame( 'Musterstadt', $meta['_odw_spatial'] );
+		$this->assertSame( 'http://dcat-ap.de/def/politicalGeocoding/Level/municipality', $meta['_odw_political_geocoding_level'] );
+		$this->assertSame( 'https://www.musterstadt.example/opendata/baeume.geojson', $meta['_odw_download_url'] );
+		$this->assertSame( 'gruen@musterstadt.example', $meta['_odw_contact_email'] );
+		$this->assertSame( 'http://publications.europa.eu/resource/authority/access-right/PUBLIC', $meta['_odw_access_rights'] );
+		$this->assertSame( 'http://publications.europa.eu/resource/authority/planned-availability/STABLE', $meta['_odw_availability'] );
+		$this->assertSame( 'yes', $meta['_odw_is_hvd'] );
+		$this->assertSame( 'http://data.europa.eu/bna/c_ac64a52d', $meta['_odw_hvd_category'] );
+		$this->assertSame( '2024', $meta['_odw_version'] );
+		$this->assertSame( 'https://www.rfc-editor.org/rfc/rfc7946', $meta['_odw_conforms_to'] );
+
+		$meta   = array();
+		$record = $this->valid_record( 'Kein HVD' ) + array( 'hvd' => 'nein' );
+		ODW_Batch_Import::import_records( array( $record ) );
+		$this->assertArrayNotHasKey( '_odw_is_hvd', $meta );
+	}
+
+	/**
+	 * Eine Lizenz außerhalb der Auswahlliste wird — wie im Formular — als
+	 * eigene Lizenz gespeichert. Bis v2.45.0 landete die URI direkt im
+	 * Auswahlfeld, Carbon Fields verwarf sie beim Lesen, und Formular und
+	 * JSON-LD zeigten gar keine Lizenz.
+	 */
+	public function test_import_stores_unlisted_license_as_custom(): void {
+		$meta = array();
+		$this->mock_import_environment( $meta );
+
+		$record            = $this->valid_record( 'Nicht kommerziell' );
+		$record['license'] = 'https://creativecommons.org/licenses/by-nc/4.0/';
+
+		ODW_Batch_Import::import_records( array( $record ) );
+
+		$this->assertSame( 'sonstige', $meta['_odw_license'] );
+		$this->assertSame( 'https://creativecommons.org/licenses/by-nc/4.0/', $meta['_odw_license_custom'] );
+	}
+
+	// -----------------------------------------------------------------------
 	// Fixtures
 	// -----------------------------------------------------------------------
+
+	/**
+	 * Registers what the vocabulary lookups need on top of the parse
+	 * environment: the bundled vocabulary files are read without a cache, and
+	 * is_email() behaves like WordPress for ordinary addresses.
+	 */
+	private function mock_vocabulary_environment(): void {
+		$this->mock_parse_environment();
+
+		if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+			define( 'DAY_IN_SECONDS', 86400 );
+		}
+		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
+		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
+		\WP_Mock::userFunction( 'is_email' )->andReturnUsing(
+			function ( $email ) {
+				return false !== filter_var( (string) $email, FILTER_VALIDATE_EMAIL ) ? $email : false;
+			}
+		);
+	}
+
+	/**
+	 * Reads a private constant of ODW_Batch_Import.
+	 *
+	 * @param string $name Constant name.
+	 * @return array<string, mixed>
+	 */
+	private function private_constant( string $name ): array {
+		return (array) ( new \ReflectionClass( 'ODW_Batch_Import' ) )->getConstant( $name );
+	}
 
 	/**
 	 * Returns a record that passes validation.

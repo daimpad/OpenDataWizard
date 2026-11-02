@@ -48,12 +48,45 @@ class ODW_Batch_Import {
 	/** Optional field mapping (CSV column → meta key). */
 	private const OPTIONAL_FIELD_MAP = array(
 		'theme'       => '_odw_theme',
-		'language'    => '_odw_language',
 		'keywords'    => '_odw_keywords',
-		'issued'      => '_odw_issued',
 		'format'      => '_odw_format',
 		'byte_size'   => '_odw_byte_size',
 		'attribution' => '_odw_attribution_text',
+	);
+
+	/**
+	 * Weitere optionale Spalten für vollständige Datensätze: Spalte => array(
+	 * Meta-Schlüssel, Art ). Jede Art wird in validate_row() geprüft und in
+	 * clean_value() in die Form gebracht, die das Formular speichert:
+	 * - date:  JJJJ-MM-TT oder TT.MM.JJJJ, gespeichert als JJJJ-MM-TT;
+	 * - url / email / text;
+	 * - vocab: Wert eines Auswahlfelds — URI, Kürzel (ANNUAL, PUBLIC, DEU, de)
+	 *   oder Bezeichnung („Jährlich"), gespeichert als URI (resolve_vocab());
+	 * - flag:  ja/nein;
+	 * - media: Medientyp als IANA-URI oder kurz (text/csv), gespeichert als
+	 *   IANA-URI (parse_media_type()).
+	 */
+	private const EXTENDED_FIELD_MAP = array(
+		'language'                  => array( '_odw_language', 'vocab' ),
+		'issued'                    => array( '_odw_issued', 'date' ),
+		'temporal_start'            => array( '_odw_temporal_start', 'date' ),
+		'temporal_end'              => array( '_odw_temporal_end', 'date' ),
+		'accrual_periodicity'       => array( '_odw_accrual_periodicity', 'vocab' ),
+		'spatial'                   => array( '_odw_spatial', 'text' ),
+		'political_geocoding_level' => array( '_odw_political_geocoding_level', 'vocab' ),
+		'landing_page'              => array( '_odw_landing_page', 'url' ),
+		'download_url'              => array( '_odw_download_url', 'url' ),
+		'media_type'                => array( '_odw_media_type', 'media' ),
+		'rights'                    => array( '_odw_dist_rights', 'text' ),
+		'contact_name'              => array( '_odw_contact_name', 'text' ),
+		'contact_email'             => array( '_odw_contact_email', 'email' ),
+		'contact_url'               => array( '_odw_contact_url', 'url' ),
+		'access_rights'             => array( '_odw_access_rights', 'vocab' ),
+		'availability'              => array( '_odw_availability', 'vocab' ),
+		'hvd'                       => array( '_odw_is_hvd', 'flag' ),
+		'hvd_category'              => array( '_odw_hvd_category', 'vocab' ),
+		'version'                   => array( '_odw_version', 'text' ),
+		'conforms_to'               => array( '_odw_conforms_to', 'url' ),
 	);
 
 	/**
@@ -327,10 +360,233 @@ class ODW_Batch_Import {
 			}
 		}
 
+		$errors = array_merge( $errors, self::validate_extended( $record, $row_index ) );
+
 		return array(
 			'valid'  => empty( $errors ),
 			'errors' => $errors,
 		);
+	}
+
+	/**
+	 * Prüft die weiteren optionalen Spalten (EXTENDED_FIELD_MAP). Leere Zellen
+	 * sind immer erlaubt.
+	 *
+	 * @param array<string, mixed> $record    Data record.
+	 * @param int                  $row_index Row number (for error reporting).
+	 * @return string[]
+	 */
+	private static function validate_extended( array $record, int $row_index ): array {
+		$errors = array();
+
+		foreach ( self::EXTENDED_FIELD_MAP as $column => $spec ) {
+			$raw = isset( $record[ $column ] ) && is_scalar( $record[ $column ] ) ? trim( (string) $record[ $column ] ) : '';
+			if ( '' === $raw ) {
+				continue;
+			}
+
+			switch ( $spec[1] ) {
+				case 'date':
+					$ok = '' !== self::parse_date( $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: Ungültiges Datum in „%2$s": %3$s (erwartet JJJJ-MM-TT oder TT.MM.JJJJ)', 'open-data-wizard' );
+					break;
+				case 'url':
+					$ok = self::is_valid_url( $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: Ungültige Adresse in „%2$s": %3$s', 'open-data-wizard' );
+					break;
+				case 'email':
+					$ok = (bool) is_email( $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: Ungültige E-Mail-Adresse in „%2$s": %3$s', 'open-data-wizard' );
+					break;
+				case 'vocab':
+					$ok = '' !== self::resolve_vocab( $column, $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: Unbekannter Wert in „%2$s": %3$s', 'open-data-wizard' );
+					break;
+				case 'media':
+					$ok = '' !== self::parse_media_type( $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: Ungültiger Medientyp in „%2$s": %3$s (erwartet z. B. text/csv)', 'open-data-wizard' );
+					break;
+				case 'flag':
+					$ok = null !== self::parse_flag( $raw );
+					/* translators: 1: row number, 2: column name, 3: invalid value. */
+					$message = __( 'Zeile %1$d: „%2$s" erwartet ja oder nein: %3$s', 'open-data-wizard' );
+					break;
+				default:
+					$ok      = true;
+					$message = '';
+			}
+
+			if ( ! $ok ) {
+				$errors[] = sprintf( $message, $row_index, $column, $raw );
+			}
+		}
+
+		$start = self::parse_date( isset( $record['temporal_start'] ) && is_scalar( $record['temporal_start'] ) ? (string) $record['temporal_start'] : '' );
+		$end   = self::parse_date( isset( $record['temporal_end'] ) && is_scalar( $record['temporal_end'] ) ? (string) $record['temporal_end'] : '' );
+		if ( '' !== $start && '' !== $end && $start > $end ) {
+			$errors[] = sprintf(
+				/* translators: 1: row number, 2: start date, 3: end date. */
+				__( 'Zeile %1$d: Der Zeitraum beginnt nach seinem Ende: %2$s bis %3$s', 'open-data-wizard' ),
+				$row_index,
+				$start,
+				$end
+			);
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Datum als JJJJ-MM-TT. Nimmt JJJJ-MM-TT und TT.MM.JJJJ an; sonst ''.
+	 *
+	 * @param string $value Datum aus der Datei.
+	 * @return string
+	 */
+	public static function parse_date( string $value ): string {
+		$value = trim( $value );
+		if ( preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $value, $m ) ) {
+			list( , $year, $month, $day ) = $m;
+		} elseif ( preg_match( '/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $value, $m ) ) {
+			list( , $day, $month, $year ) = $m;
+		} else {
+			return '';
+		}
+
+		if ( ! checkdate( (int) $month, (int) $day, (int) $year ) ) {
+			return '';
+		}
+		return sprintf( '%04d-%02d-%02d', (int) $year, (int) $month, (int) $day );
+	}
+
+	/**
+	 * Ja/Nein: 'yes' bzw. '' wie das Auswahlfeld, null bei anderem Text.
+	 *
+	 * @param string $value Wert aus der Datei.
+	 * @return string|null
+	 */
+	public static function parse_flag( string $value ): ?string {
+		$value = strtolower( trim( $value ) );
+		if ( in_array( $value, array( 'ja', 'yes', 'y', 'j', '1', 'true', 'wahr', 'x' ), true ) ) {
+			return 'yes';
+		}
+		if ( in_array( $value, array( '', 'nein', 'no', 'n', '0', 'false', 'falsch' ), true ) ) {
+			return '';
+		}
+		return null;
+	}
+
+	/**
+	 * Medientyp als IANA-URI, wie ihn dcat:mediaType erwartet. „text/csv" wird
+	 * zu https://www.iana.org/assignments/media-types/text/csv; eine Adresse
+	 * bleibt, wie sie ist. Sonst ''.
+	 *
+	 * @param string $value Wert aus der Datei.
+	 * @return string
+	 */
+	public static function parse_media_type( string $value ): string {
+		$value = trim( $value );
+		if ( preg_match( '#^[a-z]+/[a-z0-9][a-z0-9.+_-]*$#i', $value ) ) {
+			return 'https://www.iana.org/assignments/media-types/' . strtolower( $value );
+		}
+		return self::is_valid_url( $value ) ? $value : '';
+	}
+
+	/**
+	 * Wert eines Auswahlfelds als gespeicherte URI. Erkennt die URI selbst,
+	 * ihr letztes Pfadstück (ANNUAL, PUBLIC, DEU, federal, c_ac64a52d) und die
+	 * Bezeichnung mit oder ohne Klammerzusatz („Jährlich", „Deutsch"), bei der
+	 * Sprache auch den zweibuchstabigen Code (de). Sonst ''.
+	 *
+	 * @param string $column Spalte (language, accrual_periodicity, …).
+	 * @param string $value  Wert aus der Datei.
+	 * @return string
+	 */
+	public static function resolve_vocab( string $column, string $value ): string {
+		$value = trim( $value );
+		if ( '' === $value ) {
+			return '';
+		}
+
+		switch ( $column ) {
+			case 'language':
+				$options = ODW_Fields::get_language_options();
+				break;
+			case 'accrual_periodicity':
+				$options = ODW_Fields::get_periodicity_options();
+				break;
+			case 'political_geocoding_level':
+				$options = ODW_Fields::get_political_geocoding_level_options();
+				break;
+			case 'access_rights':
+				$options = ODW_Fields::get_access_rights_options();
+				break;
+			case 'availability':
+				$options = ODW_Fields::get_availability_options();
+				break;
+			case 'hvd_category':
+				$options = ODW_Fields::get_hvd_category_options();
+				break;
+			default:
+				$options = array();
+		}
+		unset( $options[''] );
+
+		if ( isset( $options[ $value ] ) ) {
+			return $value;
+		}
+
+		$needle = function_exists( 'mb_strtolower' ) ? mb_strtolower( $value ) : strtolower( $value );
+		foreach ( $options as $key => $label ) {
+			$key   = (string) $key;
+			$parts = explode( '/', rtrim( $key, '/' ) );
+			$label = trim( function_exists( 'mb_strtolower' ) ? mb_strtolower( (string) $label ) : strtolower( (string) $label ) );
+			$names = array(
+				strtolower( (string) end( $parts ) ),
+				$label,
+				trim( (string) preg_replace( '/\s*\(.*\)$/', '', $label ) ),
+			);
+			if ( 'language' === $column && function_exists( 'odw_resolve_language_tag' ) ) {
+				$names[] = odw_resolve_language_tag( $key );
+			}
+			if ( in_array( $needle, $names, true ) ) {
+				return $key;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Wert einer weiteren Spalte in der Form, die das Formular speichert.
+	 *
+	 * @param string $column Spalte.
+	 * @param string $type   Art aus EXTENDED_FIELD_MAP.
+	 * @param string $raw    Wert aus der Datei.
+	 * @return string '' bei ungültigem Wert.
+	 */
+	private static function clean_value( string $column, string $type, string $raw ): string {
+		switch ( $type ) {
+			case 'date':
+				return self::parse_date( $raw );
+			case 'url':
+				return self::is_valid_url( $raw ) ? esc_url_raw( $raw ) : '';
+			case 'media':
+				$media = self::parse_media_type( $raw );
+				return '' !== $media ? esc_url_raw( $media ) : '';
+			case 'email':
+				return sanitize_email( $raw );
+			case 'vocab':
+				return self::resolve_vocab( $column, $raw );
+			case 'flag':
+				return (string) self::parse_flag( $raw );
+			default:
+				return sanitize_text_field( self::neutralize_formula( $raw ) );
+		}
 	}
 
 	/**
@@ -462,11 +718,19 @@ class ODW_Batch_Import {
 		update_post_meta( $post_id, '_odw_description', sanitize_textarea_field( self::neutralize_formula( (string) ( $record['description'] ?? '' ) ) ) );
 		update_post_meta( $post_id, '_odw_access_url', esc_url_raw( (string) ( $record['access_url'] ?? '' ) ) );
 
-		// License: map short code to URI if needed.
+		// License: map short code to URI if needed. Eine Lizenz außerhalb der
+		// Auswahlliste ist — wie im Formular — eine eigene („sonstige"); sonst
+		// verwürfe Carbon Fields den Wert beim Lesen, und Formular und JSON-LD
+		// zeigten gar keine Lizenz.
 		$license     = (string) ( $record['license'] ?? '' );
 		$license_map = self::get_license_alias_map();
 		$license_uri = $license_map[ strtolower( $license ) ] ?? $license;
-		update_post_meta( $post_id, '_odw_license', sanitize_text_field( $license_uri ) );
+		if ( isset( ODW_Fields::get_license_options()[ $license_uri ] ) ) {
+			update_post_meta( $post_id, '_odw_license', sanitize_text_field( $license_uri ) );
+		} else {
+			update_post_meta( $post_id, '_odw_license', 'sonstige' );
+			update_post_meta( $post_id, '_odw_license_custom', sanitize_text_field( self::neutralize_formula( $license_uri ) ) );
+		}
 
 		// Optional fields.
 		foreach ( self::OPTIONAL_FIELD_MAP as $field => $meta_key ) {
@@ -506,11 +770,28 @@ class ODW_Batch_Import {
 					$value = implode( "\n", array_map( 'sanitize_text_field', $parts ) );
 				} elseif ( '_odw_attribution_text' === $meta_key ) {
 					$value = sanitize_textarea_field( self::neutralize_formula( $value ) );
+				} elseif ( 'format' === $field ) {
+					// „geojson" → „GeoJSON": Das Formular ist ein Auswahlfeld, ein
+					// Wert in anderer Schreibweise ginge dort verloren.
+					$key   = ODW_Fields::resolve_format_key( $value );
+					$value = '' !== $key ? $key : sanitize_text_field( self::neutralize_formula( $value ) );
 				} else {
 					$value = sanitize_text_field( self::neutralize_formula( $value ) );
 				}
 
 				update_post_meta( $post_id, $meta_key, $value );
+			}
+		}
+
+		// Weitere Spalten (Zeitraum, Kontakt, Aktualisierung, HVD …).
+		foreach ( self::EXTENDED_FIELD_MAP as $column => $spec ) {
+			$raw = isset( $record[ $column ] ) && is_scalar( $record[ $column ] ) ? trim( (string) $record[ $column ] ) : '';
+			if ( '' === $raw ) {
+				continue;
+			}
+			$value = self::clean_value( $column, $spec[1], $raw );
+			if ( '' !== $value ) {
+				update_post_meta( $post_id, $spec[0], $value );
 			}
 		}
 

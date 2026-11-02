@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.45.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.46.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -134,24 +134,44 @@ Datensätze → Batch-Import
 Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-Wizard zeigt eine Vorschau aller gültigen Zeilen, markiert Fehler, und lässt dich auswählen, welche Datensätze importiert werden. Alle importierten Datensätze werden als **Entwürfe** erstellt — zur Bearbeitung vor Publishing bereit.
 
 **Unterstützte Formate:**
-- **CSV**: Spaltenköpfe = Feldnamen (title, publisher, description, access_url, license, theme, language, format, issued, keywords, byte_size, attribution)
+- **CSV**: Spaltenköpfe = Feldnamen (siehe unten); Reihenfolge beliebig, nicht benötigte Spalten dürfen fehlen
 - **JSON**: Array von Objekten oder einzelnes Objekt mit gleichen Feldnamen
 
 **Pflichtfelder beim Import:**
 - `title` — Datensatztitel
 - `publisher` — Herausgebende Organisation
-- `description` — Beschreibung (Mindestens 10 Zeichen)
-- `access_url` — Download-URL (muss mit http/https beginnen)
-- `license` — Lizenz (short code wie `cc-by` oder volle URI)
+- `description` — Beschreibung
+- `access_url` — Zugriffs-URL (muss mit http/https beginnen)
+- `license` — Lizenz (Kürzel wie `cc-by`, `cc0`, `dl-de-by` oder volle URI). Eine Lizenz außerhalb der Auswahlliste, etwa CC BY-NC, wird wie im Formular als eigene Lizenz („Sonstige") gespeichert.
 
 **Optionale Felder:**
-- `theme` — Thema (z.B. SOCI, ECON, EDUC)
-- `language` — Sprache (z.B. de, en)
-- `format` — Dateiformat (z.B. CSV, JSON, PDF)
-- `issued` — Veröffentlichungsdatum
-- `keywords` — Schlagworte (eine pro Zeile, wie im Formular — kein Komma als Trenner: In eine CSV-Zelle passen mehrere Zeilen, wenn sie in Anführungszeichen steht)
-- `byte_size` — Dateigröße in Bytes (nur ganze Zahl; abweichende Werte werden als Fehler markiert)
-- `attribution` — Namensnennungstext
+
+| Spalte | Inhalt | Beispiel |
+|---|---|---|
+| `theme` | Themen, mehrere durch Komma oder Zeilenumbruch getrennt | `SOCI,ECON` |
+| `keywords` | Schlagworte, eines pro Zeile (kein Komma als Trenner — in eine CSV-Zelle passen mehrere Zeilen, wenn sie in Anführungszeichen steht) | `Bevölkerung⏎Statistik` |
+| `language` | Sprache: zwei- oder dreibuchstabiger Code oder Name | `de`, `DEU`, `Deutsch` |
+| `format` | Dateiformat, Schreibweise egal | `CSV`, `geojson` |
+| `media_type` | Medientyp, wird zur IANA-URI | `text/csv` |
+| `byte_size` | Dateigröße in Bytes (nur ganze Zahl) | `184320` |
+| `download_url` | Direkter Download-Link | `https://…/daten.csv` |
+| `attribution` | Namensnennungstext | `Datenquelle: Stadt Musterstadt, 2025` |
+| `rights` | Nutzungsrechte der Datei in Worten oder als URI | `Nutzung erlaubt, Quelle nennen.` |
+| `issued` | Veröffentlichungsdatum | `2025-02-14` oder `14.02.2025` |
+| `temporal_start`, `temporal_end` | Zeitlicher Bezug von–bis (Datum wie oben; Beginn nicht nach dem Ende) | `2015-01-01`, `2024-12-31` |
+| `accrual_periodicity` | Aktualisierung: `DAILY`, `WEEKLY`, `MONTHLY`, `QUARTERLY`, `ANNUAL`, `BIENNIAL`, `IRREG`, `UNKNOWN` | `ANNUAL` |
+| `spatial` | Geografische Region | `Musterstadt` |
+| `political_geocoding_level` | Verwaltungsebene: `federal`, `state`, `administrativeDistrict`, `municipality` | `municipality` |
+| `landing_page` | Projektseite | `https://…/projekt` |
+| `contact_name`, `contact_email`, `contact_url` | Kontaktpunkt | `opendata@musterstadt.example` |
+| `access_rights` | Zugriffsrechte: `PUBLIC`, `RESTRICTED`, `NON_PUBLIC` | `PUBLIC` |
+| `availability` | Geplante Verfügbarkeit: `AVAILABLE`, `STABLE`, `EXPERIMENTAL`, `TEMPORARY` | `STABLE` |
+| `hvd` | Hochwertiger Datensatz: `ja`/`nein` (auch `yes`/`no`, `1`/`0`) | `ja` |
+| `hvd_category` | HVD-Kategorie als Code aus dem EU-Vokabular: `c_ac64a52d` Georaum, `c_dd313021` Erdbeobachtung und Umwelt, `c_164e0bf5` Meteorologie, `c_e1da4e07` Statistik, `c_a9135398` Unternehmen, `c_b79e35eb` Mobilität | `c_e1da4e07` |
+| `version` | Version | `2.0` |
+| `conforms_to` | Standard oder Schema (URI) | `https://www.rfc-editor.org/rfc/rfc7946` |
+
+Bei den Auswahlwerten (Sprache, Aktualisierung, Verwaltungsebene, Zugriffsrechte, Verfügbarkeit, HVD-Kategorie) gehen statt des Kürzels auch die volle URI und die Bezeichnung aus dem Formular in der Sprache der Website („Jährlich"). Ein unbekannter Wert, ein ungültiges Datum, eine ungültige Adresse oder E-Mail-Adresse wird mit Zeile und Spalte gemeldet; die Zeile wird dann nicht importiert. Leere Zellen sind immer erlaubt.
 
 **Gut zu wissen:**
 - **Excel-kompatibel:** UTF-8-CSVs mit BOM (Excel-Standardexport) werden korrekt eingelesen.
@@ -161,6 +181,8 @@ Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-
 Die Batch-Import-Seite ist vollständig ins WordPress-Admin-Design integriert (Standard-Buttons, dezente Icons).
 
 [📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
+
+Die Beispieldateien enthalten 42 vollständig ausgefüllte, frei erfundene Datensätze (Musterstadt, Musterkreis, Musterland; alle Adressen unter `.example`) mit abgeschlossenen Zeiträumen, verschiedenen Lizenzen, Themen und Formaten sowie 15 HVD — genug, um alle Filter des Datenkatalogs auszuprobieren. CSV und JSON enthalten dieselben Datensätze. Nach dem Import liegen sie als Entwürfe vor und lassen sich ohne Nacharbeit veröffentlichen.
 
 ### 📎 Datei-Upload (Mediathek)
 Steht in Tab 3 direkt unter der Zugriffs-URL, zu der er die Alternative ist:
@@ -533,6 +555,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Datenkatalog `[odw_catalog]` / Block „Datenkatalog" mit Detailansicht auf derselben Seite (v2.43.0)
 - [x] Datenkatalog: Filter mit Trefferzahlen, Textsuche, eigene Suchmaschinen-Seiten je Datensatz (v2.44.0)
 - [x] Datenkatalog: Herausgeber, Schlagworte, Zeitraum, „Nur Open Data", „Nur HVD", aktive Filter als Chips (v2.45.0)
+- [x] Batch-Import mit allen wichtigen Feldern (Zeitraum, Kontakt, Aktualisierung, HVD …) und 42 vollständigen Beispieldatensätzen (v2.46.0)
 - [x] Demo-Datensatz bei Aktivierung
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)

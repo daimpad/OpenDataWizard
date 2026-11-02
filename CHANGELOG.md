@@ -7,6 +7,42 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.46.0] — 2026-11-02
+
+Viel mehr und vollständige Beispieldaten für den Batch-Import. Damit die Beispiele wirklich
+vollständig sein können, nimmt der Import jetzt fast alle Felder des Formulars an.
+
+### ✨ Added
+- **Beispieldateien mit 42 Datensätzen** statt fünf (`samples/import-example.csv` und `.json`,
+  gleicher Inhalt): alle Felder ausgefüllt, abgeschlossene Zeiträume zwischen 2000 und 2025,
+  verschiedene Herausgeber, Lizenzen (auch drei eingeschränkte), Themen, Formate und 15 HVD. Alle
+  Organisationen und Orte sind erfunden (Musterstadt, Musterkreis, Musterland), alle Adressen
+  liegen unter der reservierten Endung `.example`. Nach dem Import lassen sich alle ohne Nacharbeit
+  veröffentlichen; 30 erreichen 100 % Qualität, die übrigen 93 % (proprietäre oder nicht
+  maschinenlesbare Formate wie XLSX, PDF, ZIP). Alle bestehen die SHACL-Prüfung für DCAT-AP.de.
+- **Neue Import-Spalten:** `download_url`, `media_type`, `rights`, `temporal_start`,
+  `temporal_end`, `accrual_periodicity`, `spatial`, `political_geocoding_level`, `landing_page`,
+  `contact_name`, `contact_email`, `contact_url`, `access_rights`, `availability`, `hvd`,
+  `hvd_category`, `version`, `conforms_to`. Auswahlwerte gehen als Kürzel (`ANNUAL`, `PUBLIC`,
+  `municipality`), als URI oder als Bezeichnung aus dem Formular; Daten als `JJJJ-MM-TT` oder
+  `TT.MM.JJJJ`; der Medientyp kurz (`text/csv`), gespeichert als IANA-URI. Ungültige Werte werden
+  mit Zeile und Spalte gemeldet, ebenso ein Zeitraum, der nach seinem Ende beginnt; die Zeile wird
+  dann — wie schon bei einer ungültigen Dateigröße — nicht importiert. Leere Zellen sind erlaubt.
+  Geprüft werden jetzt auch `language` und `issued`, die bisher ungeprüft gespeichert wurden.
+
+### 🐛 Fixed
+- **Sprache aus dem Import ging verloren.** `language` wurde roh gespeichert (`de`), das
+  Auswahlfeld kennt aber nur EU-URIs — Formular und JSON-LD zeigten keine Sprache. Der
+  Wert wird jetzt aufgelöst (`de`, `DEU`, `Deutsch` → `…/language/DEU`). Dasselbe gilt für
+  `issued` im Format `TT.MM.JJJJ`, das bisher unverändert im Datumsfeld landete.
+- **Lizenz außerhalb der Auswahlliste ging verloren.** Eine URI wie CC BY-NC landete direkt im
+  Auswahlfeld, Carbon Fields verwarf sie beim Lesen — Formular und JSON-LD zeigten keine Lizenz.
+  Sie wird jetzt wie im Formular als eigene Lizenz („Sonstige") gespeichert.
+- **Format in anderer Schreibweise ging verloren.** `geojson` wird zu `GeoJSON`, wie es das
+  Auswahlfeld erwartet.
+
+---
+
 ## [2.45.0] — 2026-11-01
 
 Weitere Filter für den Datenkatalog (Stufe 3a), wie sie große Open-Data-Portale anbieten.
