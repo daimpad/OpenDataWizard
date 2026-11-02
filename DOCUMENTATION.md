@@ -172,6 +172,12 @@ GET /wp-json/datenatlas/v1/delta?since=2024-01-01T00:00:00Z
 
 Response enthält `dcat:dataset` (geänderte Datasets) und `odw:removed` (Tombstones).
 
+#### Passwortgeschützte Datensätze
+
+Wie im Datenkatalog der Website: `/catalog` und `/delta` lassen sie weg, `/datasets/<id>`
+antwortet mit 404. Wird ein Datensatz nachträglich geschützt, erscheint er in `/delta` unter
+`odw:removed`.
+
 #### Beispieldaten
 
 Datensätze mit dem Meta-Schlüssel `_odw_sample` (geladen über „Beispieldaten laden" bzw.

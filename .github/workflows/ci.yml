@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: ["main", "master"]
 
+# Nur lesen: Kein Job schreibt ins Repository, legt Releases an oder
+# kommentiert. Ohne diese Zeile erbt jeder Job die Standardrechte des
+# Repositorys (CodeQL: „Workflow does not contain permissions").
+permissions:
+  contents: read
+
 jobs:
   phpcs:
     name: WordPress Coding Standards

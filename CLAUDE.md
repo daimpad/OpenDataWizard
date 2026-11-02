@@ -779,7 +779,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.47.0**
+Current: **v2.47.1**
 
 ---
 

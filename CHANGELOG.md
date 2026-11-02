@@ -7,6 +7,25 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.1] — 2026-11-02
+
+### 🔒 Security
+- **Passwortgeschützte Datensätze erscheinen in keinem Harvest-Endpunkt mehr.** Der Datenkatalog
+  auf der Website blendete sie schon aus, `/catalog` lieferte sie aber vollständig aus.
+  `/datasets/<id>` antwortet jetzt mit derselben 404 wie für eine unbekannte ID. `/delta` führt
+  einen nachträglich geschützten Datensatz als Löschmeldung, damit auch inkrementell erntende
+  Portale ihn entfernen.
+- **CI mit Leserechten:** `.github/workflows/ci.yml` setzt `permissions: contents: read`; vorher
+  erbte jeder Job die Standardrechte des Repositorys (7 CodeQL-Hinweise
+  „Workflow does not contain permissions").
+- **Abhängigkeiten der Testumgebung:** `overrides` in `package.json` heben `qs` (6.17.1),
+  `body-parser` (1.20.9), `glob` (14.0.3) und damit `minimatch` (11.0.4) auf Versionen ohne
+  bekannte Schwachstellen (u. a. die Dependabot-Hinweise zu `minimatch` und `qs`). `npm audit`:
+  0 Funde. Betrifft nur die Entwicklungswerkzeuge (wp-env, Playwright, SHACL), nicht das
+  ausgelieferte Plugin.
+
+---
+
 ## [2.47.0] — 2026-11-02
 
 Der Katalog startet leer. Beispieldaten lädt man bei Bedarf mit einem Klick — und sie landen
