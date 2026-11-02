@@ -16,7 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Handles first-run setup: creates demo dataset and shows welcome notice.
+ * Handles first-run setup: welcome notice, capability, one-time migrations.
+ *
+ * Seit v2.47.0 legt die Aktivierung keinen Demo-Datensatz mehr an — der
+ * Katalog startet leer. Beispieldaten lädt man bei Bedarf (ODW_Samples).
  *
  * @package OpenDataWizard
  */
@@ -26,23 +29,12 @@ class ODW_Setup {
 	private const WELCOME_OPTION  = 'odw_show_welcome';
 	private const REDIRECT_OPTION = 'odw_activation_redirect';
 	private const MULTI_MIGRATED  = 'odw_multi_value_migrated';
+	private const DEMO_MIGRATED   = 'odw_demo_migrated';
 
 	/**
 	 * Custom capability, die Batch-Import & Co. schützt.
 	 */
 	public const CAPABILITY = 'manage_open_data';
-
-	/**
-	 * ID des bei der Aktivierung angelegten Beispieldatensatzes, sonst 0.
-	 *
-	 * Der Frontend-Katalog blendet ihn standardmäßig aus, damit auf einer echten
-	 * Website kein Musterdatensatz zwischen den eigenen Daten steht.
-	 *
-	 * @return int
-	 */
-	public static function get_demo_post_id(): int {
-		return (int) get_option( self::DEMO_OPTION );
-	}
 
 	/**
 	 * Wird direkt aus register_activation_hook aufgerufen — Carbon Fields
@@ -61,7 +53,7 @@ class ODW_Setup {
 	public static function init(): void {
 		add_action( 'admin_init', array( self::class, 'maybe_grant_capability' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_redirect_to_intro' ) );
-		add_action( 'admin_init', array( self::class, 'maybe_create_demo' ) );
+		add_action( 'admin_init', array( self::class, 'maybe_migrate_demo' ) );
 		add_action( 'admin_init', array( self::class, 'maybe_migrate_multi_values' ) );
 		add_action( 'admin_init', array( self::class, 'handle_dismiss' ) );
 		add_action( 'admin_notices', array( self::class, 'render_welcome_notice' ) );
@@ -176,129 +168,55 @@ class ODW_Setup {
 	}
 
 	// -------------------------------------------------------------------------
-	// Demo-Datensatz
+	// Demo-Datensatz früherer Versionen
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Erstellt den Demo-Datensatz genau einmal nach der Aktivierung.
-	 * Läuft auf admin_init — Carbon Fields ist hier vollständig initialisiert.
-	 */
-	public static function maybe_create_demo(): void {
-		if ( ! get_option( self::WELCOME_OPTION ) ) {
-			return;
-		}
-
-		if ( get_option( self::DEMO_OPTION ) ) {
-			return;
-		}
-
-		$post_id = self::create_demo_dataset();
-
-		if ( $post_id ) {
-			update_option( self::DEMO_OPTION, $post_id, false );
-		}
-	}
-
-	/**
-	 * Inserts the demo dataset post and imports the sample CSV file.
+	 * Übernimmt den Demo-Datensatz, den Versionen vor 2.47.0 beim Aktivieren
+	 * anlegten (einmalig).
 	 *
-	 * @return int Post ID on success, 0 on failure.
+	 * - Nie bearbeitet, ist er noch das Beispiel und wird als solches
+	 *   gekennzeichnet: Dann erscheint er in keinem Harvest-Endpunkt mehr —
+	 *   bisher lieferte der Katalog ihn an jedes Portal aus — und lässt sich
+	 *   mit den übrigen Beispieldaten entfernen.
+	 * - Wer ihn bearbeitet hat, hat daraus vermutlich den ersten echten
+	 *   Datensatz gemacht; der bleibt, wie er ist.
+	 *
+	 * In beiden Fällen wird die Sprache repariert: Sie stand roh als „de" im
+	 * Feld, das Auswahlfeld kennt aber nur EU-URIs, und Formular wie JSON-LD
+	 * zeigten deshalb keine Sprache.
 	 */
-	private static function create_demo_dataset(): int {
-		$post_id = wp_insert_post(
-			array(
-				'post_title'  => __( 'Beispiel: Zivilgesellschaftliche Organisationen', 'open-data-wizard' ),
-				'post_status' => 'publish',
-				'post_type'   => 'odw_dataset',
-			)
-		);
-
-		if ( is_wp_error( $post_id ) || ! $post_id ) {
-			return 0;
+	public static function maybe_migrate_demo(): void {
+		if ( get_option( self::DEMO_MIGRATED ) ) {
+			return;
 		}
 
-		// Einfache Felder direkt per update_post_meta setzen —
-		// Carbon Fields liest dieselben _odw_* Keys über carbon_get_post_meta().
-		update_post_meta(
-			$post_id,
-			'_odw_description',
-			__(
-				'Dieser Demo-Datensatz enthält eine Beispielliste zivilgesellschaftlicher Organisationen. Er wurde automatisch bei der Plugin-Installation erstellt und kann als Vorlage oder zum Testen des [odw_dataset]-Shortcodes verwendet werden.',
-				'open-data-wizard'
-			)
-		);
-		update_post_meta( $post_id, '_odw_publisher', __( 'Musterorganisation e.V.', 'open-data-wizard' ) );
-		update_post_meta( $post_id, '_odw_license', 'https://creativecommons.org/publicdomain/zero/1.0/' );
-		update_post_meta( $post_id, '_odw_language', 'de' );
-		update_post_meta( $post_id, '_odw_keywords', "Zivilgesellschaft\nEngagement\nOrganisationen\nDemo" );
-		if ( function_exists( 'carbon_set_post_meta' ) && class_exists( 'ODW_Fields' ) ) {
-			carbon_set_post_meta( $post_id, 'odw_theme', ODW_Fields::normalize_themes( 'Soziales' ) );
-			ODW_Fields::sync_theme_index( $post_id );
-		}
-		update_post_meta( $post_id, '_odw_issued', current_time( 'Y-m-d' ) );
-		update_post_meta( $post_id, '_odw_modified', current_time( 'Y-m-d' ) );
+		$post_id = (int) get_option( self::DEMO_OPTION );
+		$post    = $post_id > 0 ? get_post( $post_id ) : null;
 
-		// Beispiel-CSV importieren und als Mediathek-Eintrag verknüpfen.
-		$file_id = self::import_sample_file();
+		if ( $post instanceof WP_Post && 'odw_dataset' === $post->post_type ) {
+			$language = (string) get_post_meta( $post_id, '_odw_language', true );
+			if ( '' !== $language && 0 !== strpos( $language, 'http' ) && class_exists( 'ODW_Batch_Import' ) ) {
+				$uri = ODW_Batch_Import::resolve_vocab( 'language', $language );
+				if ( '' !== $uri ) {
+					update_post_meta( $post_id, '_odw_language', $uri );
+				}
+			}
 
-		if ( $file_id ) {
-			update_post_meta( $post_id, '_odw_file_id', $file_id );
+			// wp_insert_post() setzt post_modified gleich post_date; jedes
+			// spätere Speichern hebt die Gleichheit auf. Der Demo-Datensatz
+			// bekam nach dem Anlegen nur noch Meta-Werte.
+			if ( (string) $post->post_modified_gmt === (string) $post->post_date_gmt && class_exists( 'ODW_Samples' ) ) {
+				update_post_meta( $post_id, ODW_Samples::META_KEY, ODW_Samples::DEMO );
+			}
 
-			$file_url = wp_get_attachment_url( $file_id );
-			if ( $file_url ) {
-				// Save singular distribution fields (v2.1.4: odw_distributions repeater removed).
-				update_post_meta( $post_id, '_odw_access_url', esc_url_raw( $file_url ) );
-				update_post_meta( $post_id, '_odw_format', 'CSV' );
+			if ( class_exists( 'ODW_Rest_API' ) ) {
+				ODW_Rest_API::invalidate_cache( $post_id );
 			}
 		}
 
-		// Lizenz- und Format-Index für die Katalog-Filter nachziehen: save_post
-		// lief bei wp_insert_post(), bevor es die Meta-Werte gab.
-		if ( class_exists( 'ODW_Catalog_Filters' ) ) {
-			ODW_Catalog_Filters::sync_index( $post_id );
-		}
-
-		// Qualitätsscore sofort berechnen und persistieren.
-		ODW_Quality::store( $post_id, ODW_Quality::calculate( $post_id ) );
-
-		return $post_id;
-	}
-
-	/**
-	 * Kopiert die gebündelte Beispiel-CSV in das Upload-Verzeichnis und
-	 * legt einen Mediathek-Eintrag an.
-	 */
-	private static function import_sample_file(): int {
-		$source = ODW_PLUGIN_DIR . 'assets/sample/beispiel-datensatz.csv';
-
-		if ( ! file_exists( $source ) ) {
-			return 0;
-		}
-
-		$upload = wp_upload_dir();
-		$dest   = trailingslashit( $upload['path'] ) . 'odw-beispiel-datensatz.csv';
-
-		if ( ! copy( $source, $dest ) ) {
-			return 0;
-		}
-
-		$attachment_id = wp_insert_attachment(
-			array(
-				'post_mime_type' => 'text/csv',
-				'post_title'     => __( 'Open Data Wizard — Demo-Datensatz (CSV)', 'open-data-wizard' ),
-				'post_status'    => 'inherit',
-			),
-			$dest
-		);
-
-		if ( is_wp_error( $attachment_id ) || ! $attachment_id ) {
-			if ( file_exists( $dest ) ) {
-				wp_delete_file( $dest );
-			}
-			return 0;
-		}
-
-		return (int) $attachment_id;
+		delete_option( self::DEMO_OPTION );
+		update_option( self::DEMO_MIGRATED, '1', false );
 	}
 
 	// -------------------------------------------------------------------------
@@ -337,42 +255,24 @@ class ODW_Setup {
 		// reappear on subsequent admin page loads, even without an explicit dismiss.
 		delete_option( self::WELCOME_OPTION );
 
-		$demo_id     = (int) get_option( self::DEMO_OPTION );
-		$edit_url    = $demo_id ? get_edit_post_link( $demo_id ) : null;
-		$list_url    = admin_url( 'edit.php?post_type=odw_dataset' );
+		$new_url     = admin_url( 'post-new.php?post_type=odw_dataset' );
+		$samples_url = admin_url( 'edit.php?post_type=odw_dataset&page=odw-einstieg' ) . '#odw-beispieldaten';
 		$dismiss_url = wp_nonce_url( add_query_arg( 'odw_dismiss_welcome', '1' ), 'odw_dismiss_welcome' );
-		$shortcode   = $demo_id ? '[odw_dataset id="' . $demo_id . '"]' : '';
 		?>
 		<div class="notice notice-success">
 			<p>
 				<strong><?php esc_html_e( 'Open Data Wizard erfolgreich installiert!', 'open-data-wizard' ); ?></strong>
 			</p>
-
-			<?php if ( $demo_id ) : ?>
 			<p>
-				<?php esc_html_e( 'Ein Demo-Datensatz mit Beispiel-CSV wurde automatisch erstellt. Fügen Sie diesen Shortcode in einen Beitrag oder eine Seite ein, um die Download-Card anzuzeigen:', 'open-data-wizard' ); ?>
+				<?php esc_html_e( 'Der Katalog ist leer. Legen Sie Ihren ersten Datensatz an — oder laden Sie zum Ausprobieren Beispieldaten. Sie erscheinen in keinem Harvest-Endpunkt und lassen sich mit einem Klick wieder entfernen.', 'open-data-wizard' ); ?>
 			</p>
 			<p>
-				<input
-					type="text"
-					readonly
-					value="<?php echo esc_attr( $shortcode ); ?>"
-					onclick="this.select();"
-					style="font-family:monospace;font-size:13px;padding:3px 8px;width:260px;cursor:text;vertical-align:middle;"
-					title="<?php esc_attr_e( 'Klicken zum Markieren', 'open-data-wizard' ); ?>"
-				>
-			</p>
-			<?php endif; ?>
-
-			<p>
-				<?php if ( $edit_url ) : ?>
-				<a href="<?php echo esc_url( $edit_url ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Demo-Datensatz bearbeiten', 'open-data-wizard' ); ?>
+				<a href="<?php echo esc_url( $new_url ); ?>" class="button button-primary">
+					<?php esc_html_e( 'Neuen Datensatz erstellen', 'open-data-wizard' ); ?>
 				</a>
 				&nbsp;
-				<?php endif; ?>
-				<a href="<?php echo esc_url( $list_url ); ?>" class="button">
-					<?php esc_html_e( 'Alle Datensätze', 'open-data-wizard' ); ?>
+				<a href="<?php echo esc_url( $samples_url ); ?>" class="button">
+					<?php esc_html_e( 'Zu den Beispieldaten', 'open-data-wizard' ); ?>
 				</a>
 				&nbsp;
 				<a href="<?php echo esc_url( $dismiss_url ); ?>">

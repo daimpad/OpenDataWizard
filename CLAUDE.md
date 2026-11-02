@@ -84,7 +84,8 @@ open-data-wizard/
 ├── open-data-wizard.php              # Plugin-Header & Bootstrap
 ├── uninstall.php                     # Deinstallations-Hook
 ├── includes/
-│   ├── class-setup.php              # Activation/Demo-Dataset
+│   ├── class-setup.php              # Activation, Welcome Notice, Migrationen
+│   ├── class-samples.php            # Beispieldaten laden/entfernen (_odw_sample), nie im Endpunkt
 │   ├── class-post-types.php         # CPT: odw_dataset
 │   ├── class-fields.php             # Carbon Fields Formular (5 Tabs)
 │   ├── class-validation.php         # Publishing-Validation
@@ -178,7 +179,8 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 
 | Klasse | Zweck | Haupt-Methoden |
 |--------|-------|----------------|
-| **ODW_Setup** | Activation: Demo-Dataset erstellen, Welcome Notice | `on_activation()`, `maybe_create_demo()` |
+| **ODW_Setup** | Activation, Welcome Notice, einmalige Migrationen (u. a. alter Demo-Datensatz → Beispiel) | `on_activation()`, `maybe_migrate_demo()` |
+| **ODW_Samples** | Beispieldaten aus `samples/import-example.json` laden/entfernen/übernehmen; Kennzeichen `_odw_sample` hält sie aus `/catalog`, `/datasets`, `/delta` heraus und im Frontend-Katalog nur für die Redaktion sichtbar (oder `show_demo="1"`) | `load()`, `remove()`, `adopt()`, `is_sample()`, `exclude_clause()` |
 | **ODW_Post_Types** | CPT Registrierung mit Capabilities | `register()` |
 | **ODW_Fields** | Carbon Fields Formular (5 Tabs) + JSON-LD Builder | `register_required_fields()`, `odw_build_dataset_jsonld()` |
 | **ODW_Validation** | Publish-Blocking bei fehlenden Pflichtfeldern | `intercept_publish()`, `validate()` |
@@ -777,7 +779,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.46.0**
+Current: **v2.47.0**
 
 ---
 

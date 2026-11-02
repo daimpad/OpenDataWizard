@@ -207,7 +207,8 @@ class ODW_Rest_API {
 			'no_found_rows'  => false,
 		);
 
-		$meta_query = array();
+		// Beispieldaten erscheinen in keinem Endpunkt (ODW_Samples).
+		$meta_query = array( self::sample_exclusion() );
 
 		if ( ! empty( $theme ) ) {
 			// Dieselbe Auflösung wie beim Schreiben des Index (normalize_themes),
@@ -237,9 +238,7 @@ class ODW_Rest_API {
 			);
 		}
 
-		if ( ! empty( $meta_query ) ) {
-			$query_args['meta_query'] = $meta_query;
-		}
+		$query_args['meta_query'] = $meta_query;
 
 		$query = new WP_Query( $query_args );
 		$posts = $query->posts;
@@ -605,9 +604,10 @@ class ODW_Rest_API {
 			);
 		}
 
-		if ( 'publish' !== $post->post_status ) {
+		if ( 'publish' !== $post->post_status || self::is_sample( $post_id ) ) {
 			// Bewusst identisch zum Nicht-Existieren (404 + gleiche Meldung),
-			// damit Entwurfs-IDs nicht von außen enumerierbar sind.
+			// damit Entwurfs-IDs nicht von außen enumerierbar sind. Ebenso für
+			// Beispieldaten: Sie gehören in keinen Harvest.
 			return new WP_Error(
 				'odw_not_found',
 				__( 'Datensatz nicht gefunden.', 'open-data-wizard' ),
@@ -703,6 +703,7 @@ class ODW_Rest_API {
 				'orderby'        => 'modified',
 				'order'          => 'DESC',
 				'no_found_rows'  => false,
+				'meta_query'     => array( self::sample_exclusion() ),
 				'date_query'     => array(
 					array(
 						'column' => 'post_modified_gmt',
@@ -721,6 +722,9 @@ class ODW_Rest_API {
 				'orderby'        => 'modified',
 				'order'          => 'DESC',
 				'no_found_rows'  => true,
+				// Ein Beispiel im Papierkorb wäre eine Löschmeldung für einen
+				// Datensatz, den kein Harvester je gesehen hat.
+				'meta_query'     => array( self::sample_exclusion() ),
 				'date_query'     => array(
 					array(
 						'column' => 'post_modified_gmt',
@@ -790,6 +794,30 @@ class ODW_Rest_API {
 				'X-ODW-Generated-At' => $generated_at,
 			)
 		);
+	}
+
+	/**
+	 * Klausel für meta_query, die Beispieldaten ausschließt. Dieselbe wie
+	 * ODW_Samples::exclude_clause(), aber ohne die Klasse: Die Endpunkte sollen
+	 * sich nicht darauf verlassen müssen, dass sie geladen ist.
+	 *
+	 * @return array{key: string, compare: string}
+	 */
+	private static function sample_exclusion(): array {
+		return array(
+			'key'     => '_odw_sample',
+			'compare' => 'NOT EXISTS',
+		);
+	}
+
+	/**
+	 * Ist der Datensatz ein Beispiel (ODW_Samples)?
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	private static function is_sample( int $post_id ): bool {
+		return '' !== (string) get_post_meta( $post_id, '_odw_sample', true );
 	}
 
 	/**

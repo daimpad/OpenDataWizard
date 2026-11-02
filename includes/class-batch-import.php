@@ -650,13 +650,15 @@ class ODW_Batch_Import {
 	 *   success: bool,
 	 *   created: int,
 	 *   failed: int,
-	 *   errors: array<int, array{row: int, message: string}>
+	 *   errors: array<int, array{row: int, message: string}>,
+	 *   ids: array<int, int>
 	 * }
 	 */
 	public static function import_records( array $records ): array {
 		$created = 0;
 		$failed  = 0;
 		$errors  = array();
+		$ids     = array();
 
 		// Cap the number of records as a defence-in-depth guard: the execute
 		// request comes from the client and could bypass the preview limit.
@@ -667,6 +669,7 @@ class ODW_Batch_Import {
 
 			if ( $result['success'] ) {
 				++$created;
+				$ids[] = (int) ( $result['post_id'] ?? 0 );
 			} else {
 				++$failed;
 				$errors[] = array(
@@ -681,6 +684,7 @@ class ODW_Batch_Import {
 			'created' => $created,
 			'failed'  => $failed,
 			'errors'  => $errors,
+			'ids'     => $ids,
 		);
 	}
 

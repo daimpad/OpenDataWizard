@@ -801,6 +801,12 @@ class ODW_Admin {
 						<?php esc_html_e( 'Neuen Datensatz erstellen', 'open-data-wizard' ); ?>
 					</a>
 				</p>
+
+				<?php
+				if ( class_exists( 'ODW_Samples' ) ) {
+					ODW_Samples::render_box( 'h3' );
+				}
+				?>
 			</div>
 		</div>
 
@@ -912,6 +918,12 @@ class ODW_Admin {
 							</p>
 						</form>
 					</div>
+
+					<?php if ( class_exists( 'ODW_Samples' ) ) : ?>
+					<div class="odw-batch-section">
+						<?php ODW_Samples::render_box( 'h2', 'odw-batch-section__title' ); ?>
+					</div>
+					<?php endif; ?>
 
 					<div id="odw-preview-section" class="odw-batch-section" style="display: none;">
 						<h2 class="odw-batch-section__title"><span class="odw-batch-ico" aria-hidden="true">👁️</span> <?php esc_html_e( 'Vorschau', 'open-data-wizard' ); ?></h2>

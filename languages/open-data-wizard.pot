@@ -1868,3 +1868,61 @@ msgstr ""
 #, php-format
 msgid "Zeile %1$d: Der Zeitraum beginnt nach seinem Ende: %2$s bis %3$s"
 msgstr ""
+
+#, php-format
+msgid "%d Beispieldatensätze wurden angelegt und veröffentlicht. Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf."
+msgstr ""
+
+msgid "Alle Beispieldatensätze endgültig löschen? Änderungen daran gehen verloren."
+msgstr ""
+
+msgid "Als eigenen Datensatz übernehmen"
+msgstr ""
+
+msgid "Beispieldaten"
+msgstr ""
+
+msgid "Beispieldaten auch Besuchern zeigen"
+msgstr ""
+
+msgid "Beispieldaten entfernen"
+msgstr ""
+
+msgid "Beispieldaten laden"
+msgstr ""
+
+msgid "Beispieldaten zum Ausprobieren"
+msgstr ""
+
+#, php-format
+msgid "Beispieldatensätze endgültig gelöscht: %d."
+msgstr ""
+
+#, php-format
+msgid "Beispieldatensätze vorhanden: %d. Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf."
+msgstr ""
+
+msgid "Der Datensatz ist jetzt ein eigener Datensatz. Veröffentlicht erscheint er in den Harvest-Endpunkten und im Datenkatalog."
+msgstr ""
+
+msgid "Der Katalog ist leer. Legen Sie Ihren ersten Datensatz an — oder laden Sie zum Ausprobieren Beispieldaten. Sie erscheinen in keinem Harvest-Endpunkt und lassen sich mit einem Klick wieder entfernen."
+msgstr ""
+
+msgid "Die Beispieldatei konnte nicht gelesen werden."
+msgstr ""
+
+msgid "Die Beispieldaten sind bereits geladen."
+msgstr ""
+
+msgid "Dies ist ein Beispieldatensatz. Er erscheint in keinem Harvest-Endpunkt, und im Datenkatalog sieht ihn nur, wer angemeldet ist und Datensätze bearbeiten darf. Das gilt auch, wenn Sie ihn bearbeiten und speichern."
+msgstr ""
+
+msgid "Sonst sieht geladene Beispieldaten nur, wer angemeldet ist und Datensätze bearbeiten darf. In den Harvest-Endpunkten erscheinen sie nie."
+msgstr ""
+
+msgid "Zu den Beispieldaten"
+msgstr ""
+
+#, php-format
+msgid "Zum Ausprobieren können Sie %d vollständig ausgefüllte, frei erfundene Datensätze laden (Musterstadt, Musterkreis, Musterland). Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. Mit einem Klick sind sie wieder entfernt."
+msgstr ""

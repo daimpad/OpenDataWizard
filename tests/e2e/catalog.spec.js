@@ -10,10 +10,10 @@ const { test, expect } = require('@playwright/test');
  * Dazu kommen ein Entwurf und ein passwortgeschützter Datensatz, die der
  * Katalog nirgends zeigen darf.
  *
- * Die Zählungen sind selbstbezüglich statt absolut: Ob der Beispieldatensatz
- * existiert, hängt davon ab, ob vorher eine Admin-Seite aufgerufen wurde. Der
- * Katalog blendet ihn zwar aus — fest steht trotzdem nur, dass die Trefferzeile
- * zur Zahl der Einträge passt und die gesäten Datensätze darunter sind.
+ * Die Zählungen sind selbstbezüglich statt absolut: Fest steht nur, dass die
+ * Trefferzeile zur Zahl der Einträge passt und die gesäten Datensätze darunter
+ * sind. Beispieldaten gibt es nur während tests/e2e/samples.spec.js — und
+ * Besucher sehen sie ohnehin nicht.
  */
 
 const CATALOG = '/odw-e2e-katalog/';

@@ -290,6 +290,34 @@ class Test_ODW_Rest_Delta extends TestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// Beispieldaten
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Ein Beispiel (ODW_Samples) liefert /datasets/<id> nicht aus — mit
+	 * derselben Antwort wie für eine unbekannte ID.
+	 */
+	public function test_get_dataset_hides_sample_datasets(): void {
+		$this->load_class();
+
+		$post              = new \stdClass();
+		$post->ID          = 31;
+		$post->post_type   = 'odw_dataset';
+		$post->post_status = 'publish';
+
+		\WP_Mock::userFunction( 'get_post' )->andReturn( $post );
+		\WP_Mock::userFunction( 'get_post_meta' )->with( 31, '_odw_sample', true )->andReturn( '1' );
+		\WP_Mock::userFunction( 'get_transient' )->never();
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+
+		$result = ODW_Rest_API::get_dataset( $this->make_request( array( 'id' => 31 ) ) );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'odw_not_found', $result->code );
+		$this->assertSame( 404, $result->data['status'] );
+	}
+
+	// -------------------------------------------------------------------------
 	// JSON-LD @context
 	// -------------------------------------------------------------------------
 

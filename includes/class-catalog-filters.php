@@ -618,23 +618,23 @@ class ODW_Catalog_Filters {
 	 *
 	 * @param array<string, mixed> $config  Ergebnis von ODW_Catalog::parse_atts().
 	 * @param array<string, mixed> $state   Ergebnis von state().
-	 * @param int                  $exclude Ausgeblendete ID (Beispieldatensatz) oder 0.
-	 * @return array{exclude: int, themes: array<int, string>, theme: string, license: string, format: string, q: string, publisher: string, keywords: array<int, string>, from: string, to: string, open: string, hvd: string}
+	 * @param bool                 $hide_samples Beispieldaten ausblenden (ODW_Catalog::hide_samples()).
+	 * @return array{hide_samples: bool, themes: array<int, string>, theme: string, license: string, format: string, q: string, publisher: string, keywords: array<int, string>, from: string, to: string, open: string, hvd: string}
 	 */
-	public static function conditions( array $config, array $state, int $exclude ): array {
+	public static function conditions( array $config, array $state, bool $hide_samples ): array {
 		return array(
-			'exclude'   => $exclude,
-			'themes'    => array_values( (array) ( $config['themes'] ?? array() ) ),
-			'theme'     => (string) $state['theme'],
-			'license'   => '' !== (string) ( $config['license'] ?? '' ) ? (string) $config['license'] : (string) $state['license'],
-			'format'    => (string) $state['format'],
-			'q'         => (string) $state['q'],
-			'publisher' => (string) ( $state['publisher'] ?? '' ),
-			'keywords'  => array_values( (array) ( $state['keywords'] ?? array() ) ),
-			'from'      => (string) ( $state['from'] ?? '' ),
-			'to'        => (string) ( $state['to'] ?? '' ),
-			'open'      => (string) ( $state['open'] ?? '' ),
-			'hvd'       => (string) ( $state['hvd'] ?? '' ),
+			'hide_samples' => $hide_samples,
+			'themes'       => array_values( (array) ( $config['themes'] ?? array() ) ),
+			'theme'        => (string) $state['theme'],
+			'license'      => '' !== (string) ( $config['license'] ?? '' ) ? (string) $config['license'] : (string) $state['license'],
+			'format'       => (string) $state['format'],
+			'q'            => (string) $state['q'],
+			'publisher'    => (string) ( $state['publisher'] ?? '' ),
+			'keywords'     => array_values( (array) ( $state['keywords'] ?? array() ) ),
+			'from'         => (string) ( $state['from'] ?? '' ),
+			'to'           => (string) ( $state['to'] ?? '' ),
+			'open'         => (string) ( $state['open'] ?? '' ),
+			'hvd'          => (string) ( $state['hvd'] ?? '' ),
 		);
 	}
 
@@ -659,9 +659,9 @@ class ODW_Catalog_Filters {
 			. " WHERE p.post_type = 'odw_dataset' AND p.post_status = 'publish' AND p.post_password = '' AND f.meta_value <> ''";
 		$values = array( $keys[ $facet ] );
 
-		if ( (int) $conditions['exclude'] > 0 ) {
-			$sql     .= ' AND p.ID <> %d';
-			$values[] = (int) $conditions['exclude'];
+		if ( ! empty( $conditions['hide_samples'] ) ) {
+			$sql     .= " AND NOT EXISTS ( SELECT 1 FROM {$meta} x WHERE x.post_id = p.ID AND x.meta_key = %s )";
+			$values[] = ODW_Samples::META_KEY;
 		}
 
 		$exists = static function ( string $key, array $wanted ) use ( $meta, &$sql, &$values ): void {
@@ -944,7 +944,7 @@ class ODW_Catalog_Filters {
 					$html .= self::keyword_field( $state, $conditions );
 					break;
 				case 'period':
-					$html .= self::period_field( $state );
+					$html .= self::period_field( $state, ! empty( $conditions['hide_samples'] ) );
 					break;
 				case 'open':
 				case 'hvd':
@@ -1080,13 +1080,14 @@ class ODW_Catalog_Filters {
 	/**
 	 * Zeitraum der Daten: Jahr von/bis.
 	 *
-	 * @param array<string, mixed> $state Ergebnis von state().
+	 * @param array<string, mixed> $state        Ergebnis von state().
+	 * @param bool                 $hide_samples Beispieldaten ausblenden.
 	 * @return string
 	 */
-	private static function period_field( array $state ): string {
+	private static function period_field( array $state, bool $hide_samples ): string {
 		$from  = (string) $state['from'];
 		$to    = (string) $state['to'];
-		$years = self::period_years();
+		$years = self::period_years( $hide_samples );
 		if ( empty( $years ) && '' === $from && '' === $to ) {
 			return '';
 		}
@@ -1153,12 +1154,14 @@ class ODW_Catalog_Filters {
 	 * Jahre für den Zeitraum: vom frühesten bis zum spätesten Jahr, das die
 	 * veröffentlichten Datensätze abdecken, absteigend. Eine Abfrage.
 	 *
+	 * @param bool $hide_samples Beispieldaten nicht mitrechnen.
 	 * @return array<int, int>
 	 */
-	public static function period_years(): array {
+	public static function period_years( bool $hide_samples = false ): array {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- MIN/MAX über die Index-Felder hat kein WP-API-Gegenstück; ohne Cache, damit das Jahr eines neuen Datensatzes sofort erscheint.
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT MIN( NULLIF( CAST( a.meta_value AS SIGNED ), 0 ) ) AS lo_from, MAX( CAST( a.meta_value AS SIGNED ) ) AS hi_from, MIN( CAST( b.meta_value AS SIGNED ) ) AS lo_to, MAX( NULLIF( CAST( b.meta_value AS SIGNED ), %d ) ) AS hi_to, MAX( CAST( b.meta_value AS SIGNED ) ) AS hi_raw FROM {$wpdb->posts} p INNER JOIN {$wpdb->postmeta} a ON a.post_id = p.ID AND a.meta_key = %s INNER JOIN {$wpdb->postmeta} b ON b.post_id = p.ID AND b.meta_key = %s WHERE p.post_type = 'odw_dataset' AND p.post_status = 'publish' AND p.post_password = ''", self::PERIOD_OPEN_END, self::PERIOD_FROM, self::PERIOD_TO ), ARRAY_A );
+		$samples = $hide_samples ? $wpdb->prepare( " AND NOT EXISTS ( SELECT 1 FROM {$wpdb->postmeta} x WHERE x.post_id = p.ID AND x.meta_key = %s )", ODW_Samples::META_KEY ) : '';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- MIN/MAX über die Index-Felder hat kein WP-API-Gegenstück; ohne Cache, damit das Jahr eines neuen Datensatzes sofort erscheint. $samples ist vorbereitet.
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT MIN( NULLIF( CAST( a.meta_value AS SIGNED ), 0 ) ) AS lo_from, MAX( CAST( a.meta_value AS SIGNED ) ) AS hi_from, MIN( CAST( b.meta_value AS SIGNED ) ) AS lo_to, MAX( NULLIF( CAST( b.meta_value AS SIGNED ), %d ) ) AS hi_to, MAX( CAST( b.meta_value AS SIGNED ) ) AS hi_raw FROM {$wpdb->posts} p INNER JOIN {$wpdb->postmeta} a ON a.post_id = p.ID AND a.meta_key = %s INNER JOIN {$wpdb->postmeta} b ON b.post_id = p.ID AND b.meta_key = %s WHERE p.post_type = 'odw_dataset' AND p.post_status = 'publish' AND p.post_password = ''{$samples}", self::PERIOD_OPEN_END, self::PERIOD_FROM, self::PERIOD_TO ), ARRAY_A );
 
 		return self::year_range( is_array( $row ) ? $row : array(), (int) current_time( 'Y' ) );
 	}

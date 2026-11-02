@@ -46,6 +46,23 @@
     text-decoration: underline;
 }
 
+/* Beispieldaten (ODW_Samples): statt des Metadaten-Links, den der Endpunkt
+   für ein Beispiel nicht bedient. Gleiche Form wie das Abzeichen der Liste. */
+.odw-download-card__sample,
+.odw-badge--sample {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 0.15em 0.7em;
+    border: 1px dashed #8a6d00;
+    border-radius: 99px;
+    background: #fff8db;
+    color: #5c4400;
+    font-size: 0.78em;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
 /* --- Download-Button (Akzent) --- */
 .odw-download-card__download {
     display: inline-block;

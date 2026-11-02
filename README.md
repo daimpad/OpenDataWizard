@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.46.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.47.0-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -182,7 +182,23 @@ Die Batch-Import-Seite ist vollständig ins WordPress-Admin-Design integriert (S
 
 [📥 CSV-Beispiel herunterladen](./samples/import-example.csv)  |  [📄 JSON-Beispiel](./samples/import-example.json)
 
-Die Beispieldateien enthalten 42 vollständig ausgefüllte, frei erfundene Datensätze (Musterstadt, Musterkreis, Musterland; alle Adressen unter `.example`) mit abgeschlossenen Zeiträumen, verschiedenen Lizenzen, Themen und Formaten sowie 15 HVD — genug, um alle Filter des Datenkatalogs auszuprobieren. CSV und JSON enthalten dieselben Datensätze. Nach dem Import liegen sie als Entwürfe vor und lassen sich ohne Nacharbeit veröffentlichen.
+Die Beispieldateien enthalten 42 vollständig ausgefüllte, frei erfundene Datensätze (Musterstadt, Musterkreis, Musterland; alle Adressen unter `.example`) mit abgeschlossenen Zeiträumen, verschiedenen Lizenzen, Themen und Formaten sowie 15 HVD — genug, um alle Filter des Datenkatalogs auszuprobieren. CSV und JSON enthalten dieselben Datensätze. Über den Batch-Import eingelesen, sind es gewöhnliche Datensätze (als Entwürfe). Zum bloßen Ausprobieren gibt es den Knopf „Beispieldaten laden" — siehe nächster Abschnitt.
+
+### 🧪 Beispieldaten zum Ausprobieren
+```
+Datensätze → Einstieg  (oder Batch-Import)  →  „Beispieldaten laden"
+```
+Der Katalog startet leer — das Plugin legt bei der Aktivierung keine Datensätze mehr an. Wer das Plugin erst kennenlernen will, lädt mit einem Klick die 42 Datensätze aus `samples/import-example.json`. Sie werden angelegt, als **Beispieldaten** gekennzeichnet und veröffentlicht. Für sie gilt:
+
+- **In keinem Harvest-Endpunkt.** `/catalog` (auch `?full=1` und Turtle), `/datasets/<id>` und `/delta` liefern sie nie aus — auch keine Löschmeldung, wenn eines im Papierkorb landet. Ein Portal wie GovData sammelt also keine erfundenen Daten ein.
+- **Im Datenkatalog nur für die Redaktion.** Wer angemeldet ist und Datensätze bearbeiten darf, sieht sie mit dem Abzeichen „Beispieldaten" und kann alle Filter ausprobieren. Besucher sehen sie nicht — weder in der Liste noch in den Trefferzahlen der Filter. Ihre Detailseiten antworten Besuchern mit 404 und tragen für die Redaktion `noindex`. Mit `show_demo="1"` (Block: „Beispieldaten auch Besuchern zeigen") zeigt ein Katalog sie allen, etwa auf einer Demo-Seite.
+- **Gekennzeichnet.** In der Datensatzliste steht „— Beispieldaten" hinter dem Titel, im Formular ein Hinweis. Die Karte zeigt „Beispieldaten" statt des Links auf die Metadaten.
+- **Bleiben Beispiele.** Bearbeiten und Speichern ändert daran nichts. Wer aus einem Beispiel einen eigenen Datensatz machen will, klickt im Formular auf „Als eigenen Datensatz übernehmen".
+- **Mit einem Klick wieder weg.** „Beispieldaten entfernen" (Einstieg, Batch-Import oder Hinweis über der Datensatzliste) löscht sie endgültig.
+
+Per WP-CLI: `wp open-data-wizard samples load`, `… samples remove --yes`, `… samples status`.
+
+Wer von einer Version vor 2.47.0 aktualisiert: Der damals bei der Aktivierung angelegte Demo-Datensatz („Beispiel: Zivilgesellschaftliche Organisationen") wird, solange er nie bearbeitet wurde, ebenfalls als Beispiel gekennzeichnet und verschwindet damit aus den Endpunkten. Ein bearbeiteter Demo-Datensatz bleibt, wie er ist.
 
 ### 📎 Datei-Upload (Mediathek)
 Steht in Tab 3 direkt unter der Zugriffs-URL, zu der er die Alternative ist:
@@ -253,7 +269,7 @@ Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_
 | `theme` | — | Nur bestimmte Themen, kommagetrennt als EU-Code (`EDUC,HEAL`) |
 | `title` | — | Überschrift über der Liste |
 | `excerpt` | `30` | Wörter im Auszug; `0` blendet ihn aus (max. 100) |
-| `show_demo` | `0` | `1` zeigt auch den Beispieldatensatz, den das Plugin bei der Aktivierung anlegt — solange er unverändert ist; einmal bearbeitet, erscheint er wie jeder andere Datensatz |
+| `show_demo` | `0` | `1` zeigt geladene [Beispieldaten](#-beispieldaten-zum-ausprobieren) auch Besuchern. Sonst sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. In den Harvest-Endpunkten erscheinen sie nie. |
 | `license` | — | Nur eine Lizenz, als Kurzform (`cc-by`, `cc0`, `cc-by-sa`, `dl-de-by`, `dl-de-zero`, `odc-odbl`) oder als Lizenz-URI — auch eine eigene |
 | `filters` | — | Auswahlfelder für Besucher, kommagetrennt: `theme`, `license`, `format`, `publisher`, `keyword`, `sort`, `period`, `open`, `hvd` |
 | `search` | `0` | `1` zeigt ein Suchfeld (Titel, Beschreibung und Schlagworte) |
@@ -462,7 +478,8 @@ Eine ehrliche Abgrenzung hilft bei der Einordnung:
 2. Im WordPress-Backend: **Plugins → Installieren → Plugin hochladen**
 3. Plugin aktivieren
 
-Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich.
+Keine weiteren Abhängigkeiten. Keine Programmierkenntnisse erforderlich. Der Katalog startet leer;
+zum Ausprobieren lassen sich [Beispieldaten](#-beispieldaten-zum-ausprobieren) mit einem Klick laden.
 
 > **Wichtig: das Release-ZIP verwenden, nicht das Quellcode-Archiv.** Der grüne „Code"-Button auf
 > GitHub liefert ein Archiv **ohne** die benötigten Programmbibliotheken — damit bleibt das Plugin
@@ -556,7 +573,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 - [x] Datenkatalog: Filter mit Trefferzahlen, Textsuche, eigene Suchmaschinen-Seiten je Datensatz (v2.44.0)
 - [x] Datenkatalog: Herausgeber, Schlagworte, Zeitraum, „Nur Open Data", „Nur HVD", aktive Filter als Chips (v2.45.0)
 - [x] Batch-Import mit allen wichtigen Feldern (Zeitraum, Kontakt, Aktualisierung, HVD …) und 42 vollständigen Beispieldatensätzen (v2.46.0)
-- [x] Demo-Datensatz bei Aktivierung
+- [x] Beispieldaten mit einem Klick laden und entfernen — nie in einem Harvest-Endpunkt (v2.47.0)
 - [x] Einstellungsseite (Catalog-Titel, Defaults, API, Cleanup)
 - [x] Erweiterte DCAT-AP Felder (Tab 4)
 - [x] Nativer wp.media Upload-Widget

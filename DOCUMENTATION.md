@@ -44,7 +44,9 @@ open-data-wizard/
 │   ├── class-catalog.php             # [odw_catalog]-Shortcode + Block, Datenkatalog
 │   ├── class-catalog-filters.php     # Katalog: Filter, Facetten, Suche, Index-Felder
 │   ├── class-catalog-seo.php         # Katalog: 404, Canonical, Titel, robots, Cache-Action
-│   ├── class-setup.php               # Demo-Datensatz bei Aktivierung
+│   ├── class-setup.php               # Aktivierung, Willkommenshinweis, Migrationen
+│   ├── class-samples.php             # Beispieldaten laden/entfernen, nie im Endpunkt
+│   ├── class-batch-import.php        # CSV/JSON-Import
 │   ├── class-settings.php            # Einstellungsseite
 │   └── class-cli.php                 # WP-CLI Befehle
 ├── assets/
@@ -52,11 +54,9 @@ open-data-wizard/
 │   │   ├── wizard-tabs.js            # Tab-Navigation (Vanilla JS)
 │   │   ├── odw-file-upload.js        # wp.media Upload-Widget (jQuery)
 │   │   └── odw-admin-fields.js       # License/CESSDA Auto-Suggest, Dateigröße-Widget
-│   ├── css/
-│   │   ├── admin.css                 # Admin-Styles
-│   │   └── frontend.css              # Download-Card + Datenkatalog
-│   └── sample/
-│       └── beispiel-datensatz.csv    # Demo-Datensatz CSV
+│   └── css/
+│       ├── admin.css                 # Admin-Styles
+│       └── frontend.css              # Download-Card + Datenkatalog
 ├── tests/
 │   ├── bootstrap.php
 │   ├── test-fields.php
@@ -172,6 +172,16 @@ GET /wp-json/datenatlas/v1/delta?since=2024-01-01T00:00:00Z
 
 Response enthält `dcat:dataset` (geänderte Datasets) und `odw:removed` (Tombstones).
 
+#### Beispieldaten
+
+Datensätze mit dem Meta-Schlüssel `_odw_sample` (geladen über „Beispieldaten laden" bzw.
+`wp open-data-wizard samples load`, siehe `ODW_Samples`) liefert keiner der drei Endpunkte aus:
+`/catalog` und `/delta` schließen sie per `meta_query` (`NOT EXISTS`) aus, auch bei den
+Löschmeldungen; `/datasets/<id>` antwortet mit derselben 404 wie für eine unbekannte ID. Im
+Frontend-Katalog sieht sie nur, wer `manage_open_data` hat (oder ein Katalog mit
+`show_demo="1"`), samt Trefferzahlen und Jahresliste der Filter. Die Kennzeichnung entfällt nur
+über „Als eigenen Datensatz übernehmen" (`ODW_Samples::adopt()`), nicht durch Bearbeiten.
+
 #### Beispiel-Response
 
 ```json
@@ -252,6 +262,11 @@ wp open-data-wizard quality recalculate --all
 
 # Alle REST API Transient-Caches löschen
 wp open-data-wizard cache clear
+
+# Beispieldaten laden, Stand anzeigen, endgültig löschen
+wp open-data-wizard samples load
+wp open-data-wizard samples status
+wp open-data-wizard samples remove --yes
 ```
 
 ---

@@ -100,7 +100,7 @@ class Test_ODW_Catalog_Seo extends TestCase {
 		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
 		\WP_Mock::userFunction( 'apply_filters' )->andReturnArg( 1 );
 
-		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php', 'class-catalog-seo.php' ) as $file ) {
+		foreach ( array( 'class-fields.php', 'class-setup.php', 'class-samples.php', 'class-shortcode.php', 'class-catalog.php', 'class-catalog-filters.php', 'class-catalog-seo.php' ) as $file ) {
 			require_once ODW_PLUGIN_DIR . 'includes/' . $file;
 		}
 	}
@@ -180,6 +180,32 @@ class Test_ODW_Catalog_Seo extends TestCase {
 				$this->post( 21 )
 			)
 		);
+	}
+
+	/**
+	 * Die Detailansicht eines Beispiels (nur für die Redaktion oder mit
+	 * show_demo sichtbar) gehört in keinen Suchindex. Ohne noindex fielen
+	 * auch die <link rel="alternate"> auf die Endpunkte weg — die liefern ein
+	 * Beispiel ohnehin nicht aus.
+	 */
+	public function test_head_state_sample_dataset_is_noindex(): void {
+		$this->load();
+		\WP_Mock::userFunction( 'get_the_title' )->andReturn( 'Pegelstände Musterbach' );
+
+		$state = ODW_Catalog_Seo::head_state(
+			array(
+				'page'    => 1,
+				'dataset' => 21,
+			),
+			false,
+			$this->post( 21 ),
+			false,
+			true
+		);
+
+		$this->assertSame( 200, $state['status'] );
+		$this->assertTrue( $state['noindex'] );
+		$this->assertSame( 21, $state['dataset'] );
 	}
 
 	/**

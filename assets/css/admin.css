@@ -130,6 +130,27 @@
    Tab Content
    ========================================================================= */
 
+/* --- Beispieldaten (ODW_Samples): Kasten auf Einstieg und Batch-Import --- */
+.odw-introduction-page .odw-samples-box {
+    margin-top: 24px;
+    padding: 16px 20px;
+    border: 1px dashed var(--odw-color-border);
+    border-radius: 4px;
+    background: var(--odw-color-bg-light);
+}
+
+.odw-introduction-page .odw-samples-box h3 {
+    margin-top: 0;
+}
+
+.odw-samples-form {
+    margin: 0 0 12px;
+}
+
+.odw-samples-notice .odw-samples-form {
+    margin-bottom: 10px;
+}
+
 /* Abstände und Raster des Tab-Inhalts stehen im Block „FORMULAR-DESIGN"
    am Dateiende. Die früheren Einzelabstände je Feld sind entfallen: Mit
    `gap` am Container entsteht ein gleichmäßiger Rhythmus, während Margins
