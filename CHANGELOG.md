@@ -7,6 +7,17 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.2] — 2026-11-03
+
+### 🐛 Fixed
+- **Lizenzdatei passt jetzt zur erklärten Lizenz.** `LICENSE` enthielt seit dem ersten Commit den
+  Text der GPL-3.0, während Plugin-Kopf, `composer.json`, `package.json` und README
+  GPL-2.0-or-later erklären. Das Release-ZIP bündelt außerdem Carbon Fields (GPL-2.0-only), das mit
+  GPLv3 nicht vereinbar ist. `LICENSE` enthält nun den unveränderten Text der GPL-2.0; die erklärte
+  Lizenz (GPL-2.0-or-later) bleibt dieselbe, es ist also keine Lizenzänderung.
+
+---
+
 ## [2.47.1] — 2026-11-02
 
 ### 🔒 Security
