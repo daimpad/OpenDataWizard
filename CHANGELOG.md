@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [Unreleased]
+
+### 🔄 Changed
+- **Namensraum der Harvest-Ausgabe geändert.** Das Präfix `odw:` (u. a. `odw:qualityScore`,
+  `odw:DeltaCatalog`, `odw:removed`) steht jetzt für
+  `https://github.com/bertelsmannstift/OpenDataWizard/ns#` statt
+  `https://github.com/daimpad/OpenDataWizard/ns#` — in JSON-LD (`@context`) und Turtle
+  (`@prefix`) aller drei Endpunkte. Harvester, die `odw:`-Angaben über die volle IRI auswerten,
+  müssen den neuen Wert übernehmen; die DCAT-AP-Angaben selbst sind nicht betroffen.
+
+---
+
 ## [2.47.2] — 2026-11-03
 
 ### 🐛 Fixed
