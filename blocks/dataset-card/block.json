@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "odw/dataset-card",
+	"title": "Datensatz-Karte",
+	"category": "widgets",
+	"icon": "database",
+	"description": "Zeigt einen veröffentlichten Datensatz als Download-Karte — die Alternative zum Shortcode [odw_dataset].",
+	"keywords": [ "Datensatz", "Open Data", "Download", "DCAT" ],
+	"textdomain": "open-data-wizard",
+	"supports": {
+		"html": false,
+		"align": [ "wide" ],
+		"spacing": {
+			"margin": true
+		}
+	},
+	"attributes": {
+		"datasetId": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"editorScript": "odw-dataset-card-editor"
+}

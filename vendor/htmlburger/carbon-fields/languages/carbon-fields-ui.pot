@@ -1,0 +1,12 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: packages/core/fields/color/index.js:141
+msgid "Select a color"
+msgstr ""
+
+#: packages/core/fields/color/index.js:155
+msgid "Clear"
+msgstr ""

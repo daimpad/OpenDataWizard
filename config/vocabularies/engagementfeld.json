@@ -1,0 +1,66 @@
+[
+  {
+    "value": "https://ziviz.de/def/engagementfeld/bevoelkerungsUNDkatastrophenschutz",
+    "label": "Bevölkerungs- und Katastrophenschutz"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/bildungUNDerziehung",
+    "label": "Bildung und Erziehung"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/buergerUNDverbraucherinteressen",
+    "label": "Bürger- und Verbraucherinteressen"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/freizeitUNDgeselligkeit",
+    "label": "Freizeit und Geselligkeit"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/gemeinschaftlicheversorgungsaufgaben",
+    "label": "Gemeinschaftliche Versorgungsaufgaben"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/gesundheitswesen",
+    "label": "Gesundheitswesen"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/internationalesolidaritaet",
+    "label": "Internationale Solidarität"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/kirchenUNDreligioesevereinigungen",
+    "label": "Kirchen und religiöse Vereinigungen"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/kultur",
+    "label": "Kultur"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/medien",
+    "label": "Medien"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/sozialedienste",
+    "label": "Soziale Dienste"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/sport",
+    "label": "Sport"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/umweltUNDnaturschutz",
+    "label": "Umwelt- und Naturschutz"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/wirtschaftsverbaendeUNDberufsorganisationen",
+    "label": "Wirtschaftsverbände und Berufsorganisationen"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/wissenschaftUNDforschung",
+    "label": "Wissenschaft und Forschung"
+  },
+  {
+    "value": "https://ziviz.de/def/engagementfeld/sonstiges",
+    "label": "Sonstiges"
+  }
+]
