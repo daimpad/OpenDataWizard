@@ -778,10 +778,40 @@
 		return document.querySelector( '[name$="[_' + key + ']"]' );
 	}
 
+	// Wie ODW_Shortcode::format_bytes() — dieselbe Anzeige wie auf der Karte.
+	function formatBytes( bytes ) {
+		var units = [ [ 1073741824, 'GB' ], [ 1048576, 'MB' ], [ 1024, 'KB' ] ];
+		for ( var i = 0; i < units.length; i++ ) {
+			if ( bytes >= units[ i ][ 0 ] ) {
+				return ( Math.round( bytes / units[ i ][ 0 ] * 10 ) / 10 ) + ' ' + units[ i ][ 1 ];
+			}
+		}
+		return bytes + ' B';
+	}
+
 	function fieldValue( key ) {
 		var el = fieldInput( key );
 		if ( ! el ) {
 			return '';
+		}
+		// Mehrfachauswahl (Thema, Engagementfeld …): Das versteckte Feld trägt
+		// die URIs, durch „|" getrennt. Angezeigt werden die Beschriftungen,
+		// die Carbon Fields als Chips rendert — sonst stünde in der Vorschau
+		// „http://publications.europa.eu/…/data-theme/ENVI" statt „Umwelt".
+		var multi = el.closest( '.cf-multiselect' );
+		if ( multi ) {
+			var labels = Array.prototype.map.call(
+				multi.querySelectorAll( '.cf-multiselect__multi-value__label' ),
+				function ( node ) {
+					return ( node.textContent || '' ).trim();
+				}
+			).filter( Boolean );
+			if ( labels.length ) {
+				return labels.join( ', ' );
+			}
+		}
+		if ( 'odw_byte_size' === key && /^\d+$/.test( ( el.value || '' ).trim() ) ) {
+			return formatBytes( parseInt( el.value, 10 ) );
 		}
 		if ( 'SELECT' === el.tagName && el.selectedIndex >= 0 ) {
 			var opt = el.options[ el.selectedIndex ];
@@ -862,6 +892,13 @@
 		// Update on any field change anywhere in the form (events bubble).
 		document.addEventListener( 'input',  refresh );
 		document.addEventListener( 'change', refresh );
+		// Die Mehrfachauswahl setzt ihren Wert ohne input-/change-Ereignis.
+		// Beim Wechsel auf einen Reiter (also auch auf „Vorschau") neu lesen.
+		document.addEventListener( 'click', function ( event ) {
+			if ( event.target.closest && event.target.closest( '.cf-container__tabs-item' ) ) {
+				refresh();
+			}
+		} );
 		refresh();
 	}
 

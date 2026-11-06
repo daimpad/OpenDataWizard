@@ -646,8 +646,13 @@ class ODW_Fields {
 			->add_tab(
 				__( '5 — Vorschau', 'open-data-wizard' ),
 				array(
+					// Als Callback, nicht als fertiger String: Die Felder werden
+					// registriert, bevor WordPress den bearbeiteten Datensatz
+					// kennt — get_the_ID() liefert dort false, und die
+					// JSON-LD-Ansicht samt REST-Link fehlte bei jedem Datensatz.
+					// Carbon Fields ruft den Callback erst beim Rendern auf.
 					Field::make( 'html', 'odw_preview_html' )
-					->set_html( self::get_preview_html() ),
+					->set_html( static fn (): string => self::get_preview_html() ),
 
 					Field::make( 'html', 'odw_datenatlas_publish' )
 					->set_html(
