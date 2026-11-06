@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.47.2-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.47.3-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -27,6 +27,19 @@
 </p>
 
 Open Data Wizard ermöglicht es Organisationen und Einzelpersonen, Datensätze direkt in WordPress zu beschreiben und als maschinenlesbare, standardkonforme Metadaten bereitzustellen — ohne technische Vorkenntnisse, ohne externe Plattformabhängigkeit.
+
+<table>
+  <tr>
+    <td width="58%"><img src="docs/screenshots/formular.png" alt="Datensatz bearbeiten: Formular mit fünf Reitern, Fragen in Alltagssprache und Pflichtfeld-Sternchen"></td>
+    <td width="42%"><img src="docs/screenshots/katalog.png" alt="Datenkatalog auf der Website mit Suche, Filtern und Datensätzen samt Thema, Format, Größe und Lizenz"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Erfassen im WordPress-Backend: Fragen statt Fachbegriffe</sub></td>
+    <td align="center"><sub>Veröffentlichen auf der eigenen Website: der Datenkatalog</sub></td>
+  </tr>
+</table>
+
+<sub>Alle Screenshots zeigen die mitgelieferten <a href="#-beispieldaten-zum-ausprobieren">Beispieldaten</a> (frei erfunden: Musterstadt, Musterkreis, Musterland).</sub>
 
 ---
 
@@ -82,6 +95,10 @@ Open Data Wizard implementiert **DCAT-AP 3.0** und erzeugt valide **JSON-LD**-Au
 ### 🗂 Datensätze verwalten
 Eigener Bereich im WordPress-Backend mit Übersicht, Filterung und Statusverwaltung (Entwurf / Veröffentlicht).
 
+<p align="center">
+  <img src="docs/screenshots/datensatzliste.png" alt="Datensatzliste im Backend mit Spalten für Lizenz, Thema, Qualität, Status, Änderungsdatum und Shortcode" width="900">
+</p>
+
 ### 😊 Benutzerfreundliche Formularsprache
 Das Wizard-Formular wurde vollständig überarbeitet, um es auch ohne DCAT-AP-Kenntnisse intuitiv zu machen:
 - **Klare Fragen statt technischer Begriffe:** Statt „Herausgebende Organisation (dct:publisher)" fragt das Plugin: „Wer gibt diese Daten heraus?"
@@ -97,6 +114,12 @@ Fünf-Tab-Assistent mit praktischen Beispielen. Pflichtfelder sind mit einem rot
 3. **Datenbereitstellung** — Zugriffs-URL **oder** Datei-Upload (Mediathek), Format, Dateigröße, **Lizenz (Pflicht je Distribution)**, Namensnennungstext; optional weitere Distributionen (wiederholbar)
 4. **Erweiterte Angaben** — Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz, geografische und zeitliche Abdeckung, Kontaktinformationen, Verantwortlichkeiten (Urheber/pflegende Stelle, GovData-Contributor-ID), High-Value-Datensatz (HVD) Kategorie
 5. **Vorschau** — generiertes JSON-LD live einsehen
+
+Der Reiter **Vorschau** prüft die Pflichtangaben noch während des Ausfüllens und zeigt darunter das zuletzt gespeicherte JSON-LD — genau das, was Harvester abrufen.
+
+<p align="center">
+  <img src="docs/screenshots/vorschau.png" alt="Reiter Vorschau: Live-Prüfung der Pflichtangaben, Zusammenfassung und das gespeicherte JSON-LD" width="720">
+</p>
 
 ### 🏷 Lizenz-Auswahl
 - Vordefinierte Auswahlliste mit ausgeschriebenen Lizenznamen (z. B. „CC BY 4.0 — Namensnennung")
@@ -132,6 +155,10 @@ Kuratierte Auswahlliste (Deutschland, alle 16 Bundesländer, größere Städte).
 Datensätze → Batch-Import
 ```
 Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-Wizard zeigt eine Vorschau aller gültigen Zeilen, markiert Fehler, und lässt dich auswählen, welche Datensätze importiert werden. Alle importierten Datensätze werden als **Entwürfe** erstellt — zur Bearbeitung vor Publishing bereit.
+
+<p align="center">
+  <img src="docs/screenshots/batch-import.png" alt="Batch-Import: Vorschau mit drei gültigen Datensätzen und einer Fehlermeldung für eine Zeile ohne Lizenz" width="820">
+</p>
 
 **Unterstützte Formate:**
 - **CSV**: Spaltenköpfe = Feldnamen (siehe unten); Reihenfolge beliebig, nicht benötigte Spalten dürfen fehlen
@@ -225,6 +252,10 @@ Automatische Metadaten-Qualitätsprüfung nach der [EU-MQA-Methodik](https://dat
 
 Berechnung nach jedem Speichern. Die **Listenspalte** zeigt Prozent + Stufe; die **Qualitäts-Meta-Box** ergänzt den MQA-Rohwert (z. B. „54 / 259 Punkte, von max. 405") als Detailzeile.
 
+<p align="center">
+  <img src="docs/screenshots/qualitaet.png" alt="Qualitätsprüfung (MQA): 100 Prozent, Stufe Ausgezeichnet, Punkte je Kriterium" width="720">
+</p>
+
 ### 📥 Download-Card — Block oder Shortcode
 
 Zwei Wege zur selben Karte. **Empfohlen ist der Block:**
@@ -261,6 +292,10 @@ Badges für Thema, Format, Größe und Lizenz sowie einen direkten Link zur Date
 Datenangebot. Ein Klick auf den Titel öffnet die vollständige Download-Card **auf derselben
 Seite** (`?odw_ds=<ID>`); „Zurück zum Katalog" führt auf die zuvor besuchte Listenseite zurück.
 Ab mehr Einträgen als `per_page` blättert eine eigene Seitennavigation (`?odw_page=<n>`).
+
+<p align="center">
+  <img src="docs/screenshots/katalog-detail.png" alt="Detailansicht im Datenkatalog: Download-Card mit Format, Größe, Lizenz und aufgeklappten Metadaten" width="560">
+</p>
 
 | Attribut | Standard | Bedeutung |
 |---|---|---|
@@ -302,6 +337,10 @@ zurücksetzen" führt zur ungefilterten Liste. Fest eingestellte Themen (`theme`
 (`license`) bietet das Formular nicht noch einmal an. Der Filterzustand bleibt beim Blättern und auf
 dem Weg in die Detailansicht und zurück erhalten. Ohne die beiden Attribute sieht ein Katalog genau
 so aus wie bisher.
+
+<p align="center">
+  <img src="docs/screenshots/katalog-filter.png" alt="Datenkatalog mit Suche nach „Daten", Thema Umwelt mit Trefferzahl und aktiven Filtern als Chips" width="560">
+</p>
 
 | Eintrag in `filters` | Feld im Formular |
 |---|---|

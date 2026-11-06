@@ -629,6 +629,13 @@ class Test_ODW_Batch_Import extends TestCase {
 			}
 			$this->assertSame( 'ja' === $record['hvd'], '' !== $record['hvd_category'], sprintf( 'Datensatz %d: HVD ohne Kategorie oder umgekehrt.', $index + 1 ) );
 			$this->assertLessThanOrEqual( $record['temporal_end'], $record['temporal_start'] );
+
+			// Schlagworte sind Wörter, keine Vokabular-Codes. Zwei Datensätze
+			// trugen den HVD-Code „c_b79e35eb" als Schlagwort — im Katalog stand
+			// er dann als Filterwert und als Badge.
+			foreach ( preg_split( '/\R/', (string) $record['keywords'] ) as $keyword ) {
+				$this->assertDoesNotMatchRegularExpression( '/^c_[0-9a-f]{8}$/', trim( $keyword ), sprintf( 'Datensatz %d: Vokabular-Code als Schlagwort.', $index + 1 ) );
+			}
 		}
 	}
 
