@@ -3,7 +3,9 @@
  *
  * Registers the German locale on the global flatpickr instance and re-localizes
  * any pickers that were already initialised, so month and weekday names appear
- * in German.
+ * in German. Enqueued for German locales only (ODW_Admin::enqueue_assets());
+ * the date fields pick their calendar locale to match
+ * (ODW_Fields::date_picker_options()).
  *
  * The "Select Date" button is not handled here: it is a regular Carbon Fields
  * UI string and comes from languages/carbon-fields-ui-de_DE.mo via

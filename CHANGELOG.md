@@ -35,13 +35,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
   Übersetzung. Der bisherige Tausch in `odw-datepicker-de.js` suchte „Select Date“ als
   Platzhalter des Eingabefelds — es ist aber die Beschriftung eines Buttons, der Tausch blieb
   deshalb wirkungslos und ist entfallen.
+- **Kalender auf englischen Installationen englisch.** Die Datumsfelder stellten flatpickr fest
+  auf `locale: 'de'`, und `odw-datepicker-de.js` lud die deutsche Sprachdatei für jede Locale —
+  auf en_US standen deutsche Monats- und Wochentagsnamen neben englischen Beschriftungen. Die
+  Kalendersprache folgt jetzt der Oberfläche (`ODW_Fields::date_picker_options()`: `de` bei
+  deutscher Locale, sonst `default`), und die Sprachdatei wird nur für deutsche Locales geladen.
 
 ### 🧪 Tests
 - `tests/test-carbon-fields-l10n.php`: Schlüsselbildung mit WP_Translations (nur `__get()`,
   Liste) und älteren Übersetzungsobjekten, Laden nur bei deutscher Locale, gebündelte `.mo`
-  passend zur `.po`.
+  passend zur `.po`, Kalendersprache je Locale.
 - E2E (`admin-workflow.spec.js`): Das deutsche Formular zeigt „Noch keine Einträge vorhanden.“,
-  „Distribution hinzufügen“ und „Datum wählen“ und keinen der englischen Texte.
+  „Distribution hinzufügen“, „Datum wählen“ und deutsche Wochentage im Kalender, aber keinen der
+  englischen Texte.
 
 ---
 

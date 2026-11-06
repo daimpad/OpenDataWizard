@@ -295,6 +295,11 @@ test.describe('Formular', () => {
     const zeitraum = page.locator('.cf-field', { has: page.locator(cfField('odw_temporal_start')) });
     await expect(zeitraum.locator('.cf-datetime__button')).toHaveText('Datum wählen');
 
+    // Kalender (flatpickr, `static: true` — liegt im Feld): deutsche Wochentage,
+    // Woche beginnt am Montag. Die Kalendersprache folgt seit v2.47.5 der
+    // Locale (ODW_Fields::date_picker_options()); auf en_US bleibt sie englisch.
+    await expect(zeitraum.locator('.flatpickr-weekday').first()).toHaveText(/^\s*Mo\s*$/);
+
     // Erst nach den positiven Zusicherungen: Vorher wäre ein noch nicht
     // gerendertes Formular ebenfalls „frei von englischen Texten".
     const formular = page.locator('#poststuff');

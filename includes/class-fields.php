@@ -390,12 +390,7 @@ class ODW_Fields {
 					// beisammen — unter „Inhaltliche Angaben" war das Datum fehl am Platz.
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) ),
 
 					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
@@ -439,22 +434,12 @@ class ODW_Fields {
 
 					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_contact' )
@@ -1014,6 +999,24 @@ class ODW_Fields {
 		);
 
 		return (array) apply_filters( 'odw_license_descriptions', $descriptions );
+	}
+
+	/**
+	 * Optionen für den Kalender (flatpickr) der Datumsfelder.
+	 *
+	 * Die Sprache folgt der Oberfläche: Deutsch nur bei deutscher Locale, sonst
+	 * das englische Original („default"). Fest auf „de" gestellt zeigte der
+	 * Kalender auch auf en_US deutsche Monate; ohne die Sprachdatei aus
+	 * assets/js/odw-datepicker-de.js, die nur für deutsche Locales geladen
+	 * wird, würde flatpickr bei „de" zudem „invalid locale" melden.
+	 *
+	 * @return array{dateFormat: string, locale: string}
+	 */
+	public static function date_picker_options(): array {
+		return array(
+			'dateFormat' => 'Y-m-d',
+			'locale'     => ODW_Carbon_Fields_L10n::is_german_locale() ? 'de' : 'default',
+		);
 	}
 
 	/**

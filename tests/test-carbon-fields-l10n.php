@@ -156,6 +156,31 @@ class Test_ODW_Carbon_Fields_L10n extends TestCase {
 		$this->assertTrue( ODW_Carbon_Fields_L10n::is_german_locale() );
 	}
 
+	/**
+	 * Kalendersprache der Datumsfelder folgt der Oberfläche: „de" nur bei
+	 * deutscher Locale, sonst flatpickrs englisches Original.
+	 */
+	public function test_date_picker_locale_follows_interface(): void {
+		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+
+		\WP_Mock::userFunction( 'determine_locale' )->andReturn( 'de_AT', 'en_US' );
+
+		$this->assertSame(
+			array(
+				'dateFormat' => 'Y-m-d',
+				'locale'     => 'de',
+			),
+			ODW_Fields::date_picker_options()
+		);
+		$this->assertSame(
+			array(
+				'dateFormat' => 'Y-m-d',
+				'locale'     => 'default',
+			),
+			ODW_Fields::date_picker_options()
+		);
+	}
+
 	// -----------------------------------------------------------------------
 	// locale_data()
 	// -----------------------------------------------------------------------
