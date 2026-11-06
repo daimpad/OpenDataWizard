@@ -2,8 +2,12 @@
  * Open Data Wizard — German localization for the Carbon Fields date picker (flatpickr).
  *
  * Registers the German locale on the global flatpickr instance and re-localizes
- * any pickers that were already initialised, so month names, weekday names and
- * the "Select Date" placeholder appear in German.
+ * any pickers that were already initialised, so month and weekday names appear
+ * in German.
+ *
+ * The "Select Date" button is not handled here: it is a regular Carbon Fields
+ * UI string and comes from languages/carbon-fields-ui-de_DE.mo via
+ * ODW_Carbon_Fields_L10n.
  */
 ( function () {
 	'use strict';
@@ -56,9 +60,6 @@
 		document.querySelectorAll( 'input' ).forEach( function ( input ) {
 			if ( input._flatpickr ) {
 				input._flatpickr.set( 'locale', German );
-			}
-			if ( input.placeholder === 'Select Date' || input.placeholder === 'Select date' ) {
-				input.placeholder = 'Datum wählen…';
 			}
 		} );
 	}

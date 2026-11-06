@@ -2299,3 +2299,9 @@ msgstr "Go to sample data"
 #, php-format
 msgid "Zum Ausprobieren können Sie %d vollständig ausgefüllte, frei erfundene Datensätze laden (Musterstadt, Musterkreis, Musterland). Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. Mit einem Klick sind sie wieder entfernt."
 msgstr "To try things out, you can load %d complete, entirely fictional datasets (Musterstadt, Musterkreis, Musterland). They never appear in a harvest endpoint, and in the data catalogue on the website only signed-in users who may edit datasets can see them. One click removes them again."
+
+msgid "Auswählen…"
+msgstr "Select..."
+
+msgid "Keine passenden Optionen"
+msgstr "No options"

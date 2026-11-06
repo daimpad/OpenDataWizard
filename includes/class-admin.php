@@ -461,6 +461,21 @@ class ODW_Admin {
 				true
 			);
 
+			// Platzhalter und Leermeldung der Mehrfachauswahl (react-select).
+			// Die übrigen Carbon-Fields-Texte kommen über ODW_Carbon_Fields_L10n.
+			wp_enqueue_script(
+				'odw-carbon-fields-l10n',
+				ODW_PLUGIN_URL . 'assets/js/odw-carbon-fields-l10n.js',
+				array(),
+				ODW_VERSION,
+				true
+			);
+			wp_localize_script(
+				'odw-carbon-fields-l10n',
+				'odwCarbonFieldsL10n',
+				array( 'reactSelect' => ODW_Carbon_Fields_L10n::react_select_strings() )
+			);
+
 			global $post;
 			$file_id   = $post ? (int) get_post_meta( $post->ID, '_odw_file_id', true ) : 0;
 			$file_name = '';

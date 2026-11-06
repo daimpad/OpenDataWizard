@@ -7,6 +7,44 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.3] — 2026-11-06
+
+### 🐛 Fixed
+- **Carbon-Fields-Bedienelemente auf Deutsch.** Im Formular standen auch in einem deutschen
+  WordPress englische Texte von Carbon Fields: „There are no entries yet.“ und
+  „Add Distribution“ im Wiederholungsfeld „Weitere Distributionen“ (ebenso bei den
+  Übersetzungs-Wiederholungsfeldern in Tab 2), „Select Date“ am Datumsfeld, „No options.“,
+  „Collapse All“ u. a. Zwei Ursachen:
+  - Carbon Fields 3.6.11 bringt für seine Oberflächen-Domain `carbon-fields-ui` keine deutsche
+    Datei mit. Das Plugin liefert sie jetzt selbst aus
+    (`languages/carbon-fields-ui-de_DE.po`/`.mo`, Anrede „Sie“), nicht in `vendor/`.
+  - Carbon Fields gibt seine UI-Übersetzungen nicht über `wp_set_script_translations()` weiter,
+    sondern über `wp_localize_script()` als `cf.config.locale`, das die Oberfläche an
+    `setLocaleData()` übergibt. Seit WordPress 6.5 liefert
+    `get_translations_for_domain()->entries` dafür eine Liste statt einer nach msgid
+    geschlüsselten Tabelle; Carbon Fields übernimmt die Listenindizes als msgids, und keine
+    Übersetzung erreicht die Oberfläche — auch die mitgelieferten (z. B. fr_FR) nicht. Die neue
+    Klasse `ODW_Carbon_Fields_L10n` baut die Daten im Filter `carbon_fields_config` korrekt
+    geschlüsselt neu auf und lädt für alle deutschen Locales (de_DE, de_DE_formal, de_AT, de_CH …)
+    die gebündelte Datei.
+- **Mehrfachauswahl (Themen, Engagementfelder):** Platzhalter „Select...“ und die Meldung
+  „No options“ im Aufklappmenü sind feste Vorgaben der Bibliothek react-select und laufen durch
+  keine Textdomain. `assets/js/odw-carbon-fields-l10n.js` ersetzt sie durch „Auswählen…“ und
+  „Keine passenden Optionen“ (über die Plugin-Domain; en_US erhält das englische Original).
+- **„Datum wählen“ statt „Select Date“:** Der Button am Datumsfeld kommt jetzt regulär aus der
+  Übersetzung. Der bisherige Tausch in `odw-datepicker-de.js` suchte „Select Date“ als
+  Platzhalter des Eingabefelds — es ist aber die Beschriftung eines Buttons, der Tausch blieb
+  deshalb wirkungslos und ist entfallen.
+
+### 🧪 Tests
+- `tests/test-carbon-fields-l10n.php`: Schlüsselbildung mit WP_Translations (nur `__get()`,
+  Liste) und älteren Übersetzungsobjekten, Laden nur bei deutscher Locale, gebündelte `.mo`
+  passend zur `.po`.
+- E2E (`admin-workflow.spec.js`): Das deutsche Formular zeigt „Noch keine Einträge vorhanden.“,
+  „Distribution hinzufügen“ und „Datum wählen“ und keinen der englischen Texte.
+
+---
+
 ## [2.47.2] — 2026-11-03
 
 ### 🐛 Fixed

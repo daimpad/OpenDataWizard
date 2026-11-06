@@ -244,6 +244,38 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_language'))).toBeVisible();
   });
 
+  test('Bedienelemente von Carbon Fields sprechen Deutsch', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Die Texte stammen aus der Oberfläche von Carbon Fields (Domain
+    // carbon-fields-ui), nicht aus dem Plugin. Sie kommen über
+    // ODW_Carbon_Fields_L10n und languages/carbon-fields-ui-de_DE.mo an; ohne
+    // beides stand hier „There are no entries yet." und „Add Distribution".
+
+    // Mehrfachauswahl in Tab 1 (aktiv): Platzhalter von react-select.
+    const themen = page.locator('.cf-field.cf-multiselect', { hasText: 'Welchen Themen' });
+    await expect(themen.locator('.cf-multiselect__placeholder')).toHaveText('Auswählen…');
+
+    // Wiederholungsfeld in Tab 3: Leerzustand und Hinzufügen-Button.
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Datenbereitstellung' }).click();
+    const weitere = page.locator('.cf-field.cf-complex', { hasText: 'Weitere Distributionen' });
+    await expect(weitere.locator('.cf-complex__placeholder-label')).toHaveText('Noch keine Einträge vorhanden.');
+    await expect(weitere.locator('.cf-complex__inserter-button')).toHaveText('Distribution hinzufügen');
+
+    // Datumsfeld: Beschriftung des Kalender-Buttons. Ohne Sichtbarkeitsprüfung,
+    // weil das Feld in einer aufklappbaren Gruppe stehen kann — es geht um den
+    // Text, und Carbon Fields rendert alle Reiter ins DOM.
+    const zeitraum = page.locator('.cf-field', { has: page.locator(cfField('odw_temporal_start')) });
+    await expect(zeitraum.locator('.cf-datetime__button')).toHaveText('Datum wählen');
+
+    // Erst nach den positiven Zusicherungen: Vorher wäre ein noch nicht
+    // gerendertes Formular ebenfalls „frei von englischen Texten".
+    const formular = page.locator('#poststuff');
+    for (const englisch of ['There are no entries yet', 'Add Distribution', 'Select Date', 'Select...', 'No options']) {
+      await expect(formular).not.toContainText(englisch);
+    }
+  });
+
   test('blockt die Veröffentlichung ohne Pflichtangaben und benennt die Felder', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
