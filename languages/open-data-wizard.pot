@@ -1923,3 +1923,9 @@ msgstr ""
 #, php-format
 msgid "Zum Ausprobieren können Sie %d vollständig ausgefüllte, frei erfundene Datensätze laden (Musterstadt, Musterkreis, Musterland). Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. Mit einem Klick sind sie wieder entfernt."
 msgstr ""
+
+msgid "Auswählen…"
+msgstr ""
+
+msgid "Keine passenden Optionen"
+msgstr ""

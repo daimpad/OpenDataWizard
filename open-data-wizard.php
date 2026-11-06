@@ -3,7 +3,7 @@
  * Plugin Name:       Open Data Wizard
  * Plugin URI:        https://github.com/daimpad/OpenDataWizard
  * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für WordPress. Bereitstellung als maschinenlesbarer JSON-LD-Endpoint für offene Daten.
- * Version:           2.47.4
+ * Version:           2.47.5
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            nozilla
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ODW_VERSION', '2.47.4' );
+define( 'ODW_VERSION', '2.47.5' );
 define( 'ODW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ODW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ODW_PLUGIN_FILE', __FILE__ );
@@ -140,6 +140,7 @@ function odw_bootstrap(): void {
 	require_once ODW_PLUGIN_DIR . 'includes/class-settings.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-post-types.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
+	require_once ODW_PLUGIN_DIR . 'includes/class-carbon-fields-l10n.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-rdf.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-rest-api.php';
 	require_once ODW_PLUGIN_DIR . 'includes/class-validation.php';
@@ -157,6 +158,7 @@ function odw_bootstrap(): void {
 	ODW_Settings::init();
 	ODW_Post_Types::init();
 	ODW_Fields::init();
+	ODW_Carbon_Fields_L10n::init();
 	ODW_Rest_API::init();
 	ODW_Validation::init();
 	ODW_Quality::init();

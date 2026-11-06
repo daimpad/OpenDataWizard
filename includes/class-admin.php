@@ -453,12 +453,32 @@ class ODW_Admin {
 				)
 			);
 
+			// Deutsche Monats- und Wochentagsnamen für den Kalender nur bei
+			// deutscher Oberfläche; die Datumsfelder wählen ihre Kalendersprache
+			// passend dazu (ODW_Fields::date_picker_options()).
+			if ( ODW_Carbon_Fields_L10n::is_german_locale() ) {
+				wp_enqueue_script(
+					'odw-datepicker-de',
+					ODW_PLUGIN_URL . 'assets/js/odw-datepicker-de.js',
+					array(),
+					ODW_VERSION,
+					true
+				);
+			}
+
+			// Platzhalter und Leermeldung der Mehrfachauswahl (react-select).
+			// Die übrigen Carbon-Fields-Texte kommen über ODW_Carbon_Fields_L10n.
 			wp_enqueue_script(
-				'odw-datepicker-de',
-				ODW_PLUGIN_URL . 'assets/js/odw-datepicker-de.js',
+				'odw-carbon-fields-l10n',
+				ODW_PLUGIN_URL . 'assets/js/odw-carbon-fields-l10n.js',
 				array(),
 				ODW_VERSION,
 				true
+			);
+			wp_localize_script(
+				'odw-carbon-fields-l10n',
+				'odwCarbonFieldsL10n',
+				array( 'reactSelect' => ODW_Carbon_Fields_L10n::react_select_strings() )
 			);
 
 			global $post;

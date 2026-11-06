@@ -92,6 +92,7 @@ open-data-wizard/
 │   ├── class-samples.php            # Beispieldaten laden/entfernen (_odw_sample), nie im Endpunkt
 │   ├── class-post-types.php         # CPT: odw_dataset
 │   ├── class-fields.php             # Carbon Fields Formular (5 Tabs)
+│   ├── class-carbon-fields-l10n.php # Deutsche UI-Texte für Carbon Fields (Filter carbon_fields_config)
 │   ├── class-validation.php         # Publishing-Validation
 │   ├── class-quality.php            # Qualitäts-Scoring (0-100)
 │   ├── class-admin.php              # Admin UI, Spalten, Intro-Seite
@@ -113,7 +114,8 @@ open-data-wizard/
 │   │   ├── odw-catalog.js          # Katalog: Schlagwort-Aufklappfeld, Einklappen auf dem Handy
 │   │   ├── wizard-tabs.js          # Tab-Navigation mit SessionStorage
 │   │   ├── odw-admin-fields.js     # Field-Initialization, Autosuggest
-│   │   └── odw-file-upload.js      # File-Upload Handler (wp.media)
+│   │   ├── odw-file-upload.js      # File-Upload Handler (wp.media)
+│   │   └── odw-carbon-fields-l10n.js # Feste react-select-Texte der Mehrfachauswahl („Select...")
 │   └── images/                      # Icons, Logos
 ├── config/
 │   ├── phpcs.xml                   # WordPress Coding Standards
@@ -145,6 +147,7 @@ open-data-wizard/
 │   ├── test-rest-delta.php         # REST: Delta, Content Negotiation, Ausschlüsse (Beispiele, Passwort)
 │   ├── test-batch-import.php       # Batch-Import: Parsing, Spalten, Vokabulare, Beispieldateien
 │   ├── test-samples.php            # Beispieldaten: Laden/Entfernen/Übernehmen, Demo-Migration
+│   ├── test-carbon-fields-l10n.php # Carbon-Fields-UI auf Deutsch: Locale-Daten, gebündelte .mo
 │   ├── test-cli.php                # CLI Commands Tests
 │   ├── test-validation.php, test-rdf.php, test-vocabulary.php, test-registry-schema.php,
 │   │   test-field-catalog.php, test-shacl-shapes.php
@@ -155,7 +158,8 @@ open-data-wizard/
 ├── languages/
 │   ├── open-data-wizard.pot        # i18n Translation Template
 │   ├── open-data-wizard-en_US.po   # Englische Übersetzung (Quelle)
-│   └── open-data-wizard-en_US.mo   # Englische Übersetzung (kompiliert)
+│   ├── open-data-wizard-en_US.mo   # Englische Übersetzung (kompiliert)
+│   └── carbon-fields-ui-de_DE.po/.mo # Deutsche Texte der Carbon-Fields-Oberfläche
 ├── README.md                        # User-facing Dokumentation (DE) + Doku-Navigation
 ├── DOCUMENTATION.md                 # Technische Dokumentation (Architektur, REST-API, CLI …)
 ├── TECHNICAL-SPEC.md                # Technische Spezifikationen + DCAT-AP-Roadmap/Umsetzungsstand
@@ -194,6 +198,7 @@ Externe Harvester rufen /catalog, /datasets/<id>, oder /delta ab
 | **ODW_Samples** | Beispieldaten aus `samples/import-example.json` laden/entfernen/übernehmen; Kennzeichen `_odw_sample` hält sie aus `/catalog`, `/datasets`, `/delta` heraus und im Frontend-Katalog nur für die Redaktion sichtbar (oder `show_demo="1"`) | `load()`, `remove()`, `adopt()`, `is_sample()`, `exclude_clause()` |
 | **ODW_Post_Types** | CPT Registrierung mit Capabilities | `register()` |
 | **ODW_Fields** | Carbon Fields Formular (5 Tabs) + JSON-LD Builder | `register_required_fields()`, `odw_build_dataset_jsonld()` |
+| **ODW_Carbon_Fields_L10n** | Deutsche Texte der Carbon-Fields-Oberfläche (Domain `carbon-fields-ui`): lädt `languages/carbon-fields-ui-de_DE.mo` für alle `de*`-Locales und baut `cf.config.locale` nach msgid geschlüsselt neu auf (Carbon Fields scheitert daran seit WP 6.5) | `filter_config()`, `locale_data()`, `is_german_locale()` |
 | **ODW_Validation** | Publish-Blocking bei fehlenden Pflichtfeldern | `intercept_publish()`, `validate()` |
 | **ODW_Quality** | Qualitäts-Scoring & Caching | `calculate()`, `get_level()` |
 | **ODW_Admin** | Admin UI (Spalten, Intro-Seite, Datei-Upload-Widget in Tab 3) | `register_introduction_page()`, `render_column()`, `file_upload_html()`, `save_file_attachment()` |
@@ -454,6 +459,17 @@ esc_attr__( 'Attribute Text', 'open-data-wizard' )
 - **English**: `languages/open-data-wizard-en_US.po` / `.mo` — overrides the German
   source strings on `en_US` installs (rund 750 Einträge)
 - Loaded via `load_plugin_textdomain()` on `init` hook
+
+**Carbon-Fields-Oberfläche (`carbon-fields-ui`).** Bedienelemente wie „Add %s", „There are no
+entries yet.", „Select Date" stammen aus Carbon Fields, nicht aus dem Plugin. Carbon Fields
+bringt dafür kein Deutsch mit und reicht seine Übersetzungen nicht über
+`wp_set_script_translations()`, sondern über den Filter `carbon_fields_config`
+(`cf.config.locale` → `setLocaleData()`) an die Oberfläche. `ODW_Carbon_Fields_L10n` setzt dort
+an; die Übersetzung liegt in `languages/carbon-fields-ui-de_DE.po` (nach Änderungen mit
+`bin/compile-mo.py` neu kompilieren), **nie in `vendor/`**. Platzhalter „Select..." und
+„No options" der Mehrfachauswahl sind feste react-select-Texte und werden von
+`assets/js/odw-carbon-fields-l10n.js` getauscht. Nach einem Carbon-Fields-Update prüfen, ob neue
+`__( '…', 'carbon-fields-ui' )`-Aufrufe dazugekommen sind.
 - The `.mo` is generated without gettext tooling; if strings change, regenerate
   the `.po`/`.mo` (see the generator approach in the v2.3.0 PR)
 
@@ -828,7 +844,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.47.4**
+Current: **v2.47.5**
 
 ---
 
@@ -882,6 +898,8 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Beispieldaten statt Demo-Datensatz (v2.47.0):** leerer Start, Laden/Entfernen per Klick oder
   WP-CLI, nie in einem Harvest-Endpunkt, im Frontend nur für die Redaktion.
 - **Nur öffentliche Datensätze in den Endpunkten, CI mit Leserechten (v2.47.1).**
+- **Carbon-Fields-Bedienelemente auf Deutsch (v2.47.5):** gebündelte `carbon-fields-ui`-Übersetzung
+  und korrekt geschlüsselte Locale-Daten (siehe Internationalisierung).
 
 ### ☐ Noch offen / geplant
 
@@ -981,6 +999,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.47.4 (November 2026)
+**Zuletzt aktualisiert**: Version 2.47.5 (November 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
