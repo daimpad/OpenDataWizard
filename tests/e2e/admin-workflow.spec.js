@@ -46,6 +46,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Datensatzliste', () => {
+  test('der Menüpunkt heißt „Datenkatalog"', async ({ page }) => {
+    await page.goto(LIST_URL);
+
+    await expect(page.locator('#menu-posts-odw_dataset .wp-menu-name')).toHaveText('Datenkatalog');
+  });
+
   test('zeigt die Datensätze mit allen Zusatzspalten', async ({ page }) => {
     await page.goto(LIST_URL);
 

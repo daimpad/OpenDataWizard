@@ -7,6 +7,17 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.4] — 2026-11-06
+
+### 🔧 Changed
+- **Der Menüpunkt im WordPress-Backend heißt jetzt „Datenkatalog"** statt „Open Data Wizard"
+  (englisch: „Data catalogue"). Die Untermenüs bleiben gleich. README und CLAUDE.md nennen den
+  Pfad entsprechend („Datenkatalog → Einstellungen" usw.); die Doku sprach bisher von
+  „Datensätze → …", einem Menünamen, den es nie gab. Screenshots von Datensatzliste und
+  Formular neu aufgenommen. E2E-Test sichert den Namen ab.
+
+---
+
 ## [2.47.3] — 2026-11-06
 
 ### 🐛 Fixed
