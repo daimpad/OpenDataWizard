@@ -7,7 +7,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
-## [2.47.3] — 2026-11-06
+## [2.47.5] — 2026-11-06
 
 ### 🐛 Fixed
 - **Carbon-Fields-Bedienelemente auf Deutsch.** Im Formular standen auch in einem deutschen
@@ -42,6 +42,46 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
   passend zur `.po`.
 - E2E (`admin-workflow.spec.js`): Das deutsche Formular zeigt „Noch keine Einträge vorhanden.“,
   „Distribution hinzufügen“ und „Datum wählen“ und keinen der englischen Texte.
+
+---
+
+## [2.47.4] — 2026-11-06
+
+### 🔧 Changed
+- **Der Menüpunkt im WordPress-Backend heißt jetzt „Datenkatalog"** statt „Open Data Wizard"
+  (englisch: „Data catalogue"). Die Untermenüs bleiben gleich. README und CLAUDE.md nennen den
+  Pfad entsprechend („Datenkatalog → Einstellungen" usw.); die Doku sprach bisher von
+  „Datensätze → …", einem Menünamen, den es nie gab. Screenshots von Datensatzliste und
+  Formular neu aufgenommen. E2E-Test sichert den Namen ab.
+
+---
+
+## [2.47.3] — 2026-11-06
+
+### 🐛 Fixed
+- **Die JSON-LD-Ansicht in Tab 5 „Vorschau" fehlte bei jedem Datensatz.** Das HTML des Reiters
+  entstand bei der Feldregistrierung, bevor WordPress den bearbeiteten Datensatz kennt:
+  `get_the_ID()` lieferte dort `false`, und unter dem Hinweis „Die JSON-LD-Ansicht unten zeigt
+  das zuletzt gespeicherte Ergebnis" standen weder das JSON-LD noch der Button
+  „REST-Endpoint öffnen". Carbon Fields bekommt jetzt einen Callback, der erst beim Rendern
+  läuft. Neuer E2E-Test in `admin-workflow.spec.js`.
+- **Lange Zeilen sprengen das Formular nicht mehr.** Das `<fieldset>` von Carbon Fields hat ab
+  Werk `min-width: min-content`; die nun sichtbare JSON-LD-Ansicht schob den ganzen Kasten über
+  den rechten Rand, statt im Code-Block zu scrollen (`assets/css/admin.css`, Block
+  `FORMULAR-DESIGN`).
+- **Live-Vorschau mit Klartext:** Die Zusammenfassung zeigte beim Thema die EU-URI
+  (`http://publications.europa.eu/…/data-theme/ENVI`) statt „Umwelt" und die Dateigröße in Bytes.
+  Sie nennt jetzt die Beschriftungen der Mehrfachauswahl und die Größe wie die Download-Card
+  („15 MB") und liest die Werte beim Wechsel des Reiters neu ein — die Mehrfachauswahl meldet
+  Änderungen nicht über `input`/`change`.
+- **Beispieldaten:** Zwei Datensätze („Radverkehrszählstellen", „Ladesäulen") trugen den
+  HVD-Code `c_b79e35eb` als Schlagwort; im Katalog erschien er als Filterwert und Badge. Jetzt
+  „Mobilität". `test-batch-import.php` lässt keine Vokabular-Codes als Schlagworte mehr durch.
+
+### 📝 Docs
+- **Screenshots im README** (`docs/screenshots/`, nicht im Plugin-ZIP): Formular, Datenkatalog mit
+  Filtern und Detailansicht, Datensatzliste, Vorschau, Qualitätsprüfung und Batch-Import —
+  aufgenommen in einem deutschen WordPress mit den mitgelieferten Beispieldaten.
 
 ---
 

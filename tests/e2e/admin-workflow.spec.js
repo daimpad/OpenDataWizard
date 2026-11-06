@@ -46,6 +46,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Datensatzliste', () => {
+  test('der Menüpunkt heißt „Datenkatalog"', async ({ page }) => {
+    await page.goto(LIST_URL);
+
+    await expect(page.locator('#menu-posts-odw_dataset .wp-menu-name')).toHaveText('Datenkatalog');
+  });
+
   test('zeigt die Datensätze mit allen Zusatzspalten', async ({ page }) => {
     await page.goto(LIST_URL);
 
@@ -233,6 +239,27 @@ test.describe('Formular', () => {
     await expect(page.locator(cfField('odw_access_rights'))).toHaveValue(
       'http://publications.europa.eu/resource/authority/access-right/PUBLIC'
     );
+  });
+
+  // Bis 2.47.2 entstand das HTML dieses Reiters schon bei der Feldregistrierung,
+  // bevor WordPress den Datensatz kannte: JSON-LD und REST-Link fehlten immer,
+  // nur der Hinweis „Die JSON-LD-Ansicht unten …" stand da.
+  test('die Vorschau zeigt das gespeicherte JSON-LD und den REST-Link', async ({ page }) => {
+    await page.goto(LIST_URL);
+    await page.locator('#the-list a.row-title', { hasText: 'E2E: Schulstandorte' }).click();
+
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Vorschau' }).click();
+
+    const code = page.locator('#odw-jsonld-preview pre.odw-jsonld-code');
+    await expect(code).toBeVisible();
+    await expect(code).toContainText('"@type": "dcat:Dataset"');
+    await expect(code).toContainText('E2E: Schulstandorte');
+    await expect(page.getByRole('link', { name: 'REST-Endpoint öffnen' })).toHaveAttribute('href', /datenatlas\/v1\/datasets\/\d+/);
+
+    // Die Zusammenfassung nennt das Thema beim Namen, nicht als EU-URI.
+    const card = page.locator('[data-odw-live-card]');
+    await expect(card).toContainText('Bildung');
+    await expect(card).not.toContainText('publications.europa.eu');
   });
 
   test('wechselt auf den zweiten Reiter', async ({ page }) => {

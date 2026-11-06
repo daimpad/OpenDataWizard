@@ -1083,9 +1083,6 @@ msgstr "Publishing open data is harder than it needs to be. Complex forms and un
 msgid "Offizielle Kennung der bereitstellenden Stelle aus dem DCAT-AP.de-Verzeichnis. Stelle aus der Liste wählen; die zugehörige offizielle URI wird automatisch verwendet."
 msgstr "Official identifier of the providing body from the DCAT-AP.de registry. Choose a body from the list; the corresponding official URI is used automatically."
 
-msgid "Open Data Wizard"
-msgstr "Open Data Wizard"
-
 msgid "Open Data Wizard erfolgreich installiert!"
 msgstr "Open Data Wizard installed successfully!"
 

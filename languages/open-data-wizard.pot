@@ -681,9 +681,6 @@ msgstr ""
 msgid "Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt."
 msgstr ""
 
-msgid "Open Data Wizard"
-msgstr ""
-
 msgid "Open Data Wizard erfolgreich installiert!"
 msgstr ""
 

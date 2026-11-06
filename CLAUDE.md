@@ -365,7 +365,7 @@ und Datenkatalog (`ODW_Catalog`) teilen sich darüber dieselbe Logik.
 
 ### Menü-Struktur
 ```
-WordPress Admin → Datensätze
+WordPress Admin → Datenkatalog (Menüpunkt; die Liste heißt „Datensätze")
 ├── Alle Datensätze (List View mit Spalten; Beispiele mit „— Beispieldaten")
 ├── Neuen Datensatz erstellen (Create Form)
 ├── Einstieg
@@ -844,7 +844,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.47.3**
+Current: **v2.47.5**
 
 ---
 
@@ -898,7 +898,7 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 - **Beispieldaten statt Demo-Datensatz (v2.47.0):** leerer Start, Laden/Entfernen per Klick oder
   WP-CLI, nie in einem Harvest-Endpunkt, im Frontend nur für die Redaktion.
 - **Nur öffentliche Datensätze in den Endpunkten, CI mit Leserechten (v2.47.1).**
-- **Carbon-Fields-Bedienelemente auf Deutsch (v2.47.3):** gebündelte `carbon-fields-ui`-Übersetzung
+- **Carbon-Fields-Bedienelemente auf Deutsch (v2.47.5):** gebündelte `carbon-fields-ui`-Übersetzung
   und korrekt geschlüsselte Locale-Daten (siehe Internationalisierung).
 
 ### ☐ Noch offen / geplant
@@ -999,6 +999,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.47.3 (November 2026)
+**Zuletzt aktualisiert**: Version 2.47.5 (November 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later
