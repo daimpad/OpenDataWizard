@@ -360,7 +360,7 @@ und Datenkatalog (`ODW_Catalog`) teilen sich darüber dieselbe Logik.
 
 ### Menü-Struktur
 ```
-WordPress Admin → Datensätze
+WordPress Admin → Datenkatalog (Menüpunkt; die Liste heißt „Datensätze")
 ├── Alle Datensätze (List View mit Spalten; Beispiele mit „— Beispieldaten")
 ├── Neuen Datensatz erstellen (Create Form)
 ├── Einstieg
@@ -828,7 +828,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.47.3**
+Current: **v2.47.4**
 
 ---
 
@@ -981,6 +981,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.47.3 (November 2026)
+**Zuletzt aktualisiert**: Version 2.47.4 (November 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

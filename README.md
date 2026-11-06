@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.47.3-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.47.4-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -152,7 +152,7 @@ Kuratierte Auswahlliste (Deutschland, alle 16 Bundesländer, größere Städte).
 
 ### 📥 Batch-Import (CSV & JSON)
 ```
-Datensätze → Batch-Import
+Datenkatalog → Batch-Import
 ```
 Importiere mehrere Datensätze auf einmal aus CSV oder JSON Dateien. Der Import-Wizard zeigt eine Vorschau aller gültigen Zeilen, markiert Fehler, und lässt dich auswählen, welche Datensätze importiert werden. Alle importierten Datensätze werden als **Entwürfe** erstellt — zur Bearbeitung vor Publishing bereit.
 
@@ -213,7 +213,7 @@ Die Beispieldateien enthalten 42 vollständig ausgefüllte, frei erfundene Daten
 
 ### 🧪 Beispieldaten zum Ausprobieren
 ```
-Datensätze → Einstieg  (oder Batch-Import)  →  „Beispieldaten laden"
+Datenkatalog → Einstieg  (oder Batch-Import)  →  „Beispieldaten laden"
 ```
 Der Katalog startet leer — das Plugin legt bei der Aktivierung keine Datensätze mehr an. Wer das Plugin erst kennenlernen will, lädt mit einem Klick die 42 Datensätze aus `samples/import-example.json`. Sie werden angelegt, als **Beispieldaten** gekennzeichnet und veröffentlicht. Für sie gilt:
 
@@ -234,7 +234,7 @@ Steht in Tab 3 direkt unter der Zugriffs-URL, zu der er die Alternative ist:
 - Sicherheit: `wp_verify_nonce` + `current_user_can('edit_post')`
 
 ### ⚙️ Einstellungsseite
-Untermenü unter *Datensätze → Einstellungen* mit vier Bereichen:
+Untermenü unter *Datenkatalog → Einstellungen* mit vier Bereichen:
 - **Katalog** — Titel und Herausgebende Organisation
 - **Standardwerte** — Standard-Sprache (wird bei neuen Datensätzen vorausgefüllt)
 - **REST API** — Cache-Laufzeit (60–86400 Sekunden)
@@ -427,7 +427,7 @@ GET https://deine-website.de/wp-json/datenatlas/v1/catalog?full=1               
 - **`format=turtle`** serialisiert denselben Graphen als **Turtle** (`text/turtle`) — ohne externe RDF-Bibliothek. JSON-LD (`application/ld+json`) und `json` bleiben verfügbar. Harvester, die rein über Header aushandeln, senden stattdessen `Accept: text/turtle`.
 - Die Datensatz-URIs (`@id`) sind **über Releases stabil** (an die Post-ID gebunden), sodass Harvester Aktualisierungen/Löschungen korrekt zuordnen und keine Duplikate anlegen.
 
-Die fertigen Harvest-URLs zeigt das Plugin **kopierfertig unter _Datensätze → Einstellungen → Harvesting_** an.
+Die fertigen Harvest-URLs zeigt das Plugin **kopierfertig unter _Datenkatalog → Einstellungen → Harvesting_** an.
 
 ### ✅ DCAT-AP 3.0 Konformität — nachgewiesen, nicht behauptet
 
@@ -653,7 +653,7 @@ Bitte öffne zunächst ein [Issue](https://github.com/daimpad/OpenDataWizard/iss
 
 Das Plugin löscht bei Deinstallation standardmäßig **keine** Daten (Opt-in).
 
-Um alle Plugin-Daten zu löschen, die Checkbox unter **Datensätze → Einstellungen → Deinstallation** aktivieren und dann das Plugin im WordPress-Backend deinstallieren. `uninstall.php` entfernt alle `odw_dataset`-Posts, alle `_odw_*`-Metafelder sowie die Plugin-Optionen.
+Um alle Plugin-Daten zu löschen, die Checkbox unter **Datenkatalog → Einstellungen → Deinstallation** aktivieren und dann das Plugin im WordPress-Backend deinstallieren. `uninstall.php` entfernt alle `odw_dataset`-Posts, alle `_odw_*`-Metafelder sowie die Plugin-Optionen.
 
 ---
 
