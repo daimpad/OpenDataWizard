@@ -30,7 +30,9 @@ Ein Drehbuch ist die einzige Quelle für Ton, Aufnahme, Schnitt, Untertitel und 
 | `einblendung` | Markierung, Zoom, Hinweistext oder Folienelement über dem Bild |
 
 **Schritte:** `oeffne` (Pfad im Backend), `klick` (sichtbare Beschriftung), `tippe` `{ feld, text }`,
-`waehle` `{ feld, option }`, `lade_hoch` `{ feld, datei }`, `warte_auf` (Text), `scrolle_zu` (Text).
+`waehle` `{ feld, option }`, `lade_hoch` `{ feld, datei }`, `warte_auf` (Text), `scrolle_zu` (Text),
+`bestaetige` (Rückfrage des Browsers mit „OK" bestätigen; `text` nennt die erwartete Frage).
+Ein Schritt mit nur einem Text kann auch als Objekt `{ text, bei }` geschrieben werden.
 
 **Einblendungen:** `markiere` (Beschriftung im Bild), `zoom: true`, `text` (Hinweis), `zeige`
 (Element einer Folie erscheinen lassen).

@@ -1,0 +1,199 @@
+# Drehbuch · Folge 2 · Installation, Updates, Einstellungen, Beispieldaten
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 2
+titel: "Installation, Updates, Einstellungen, Beispieldaten"
+plugin_version: "2.47.5"
+# Ausgangszustand: WordPress, in dem das Quellcode-Archiv (ohne vendor/) als Plugin installiert und
+# aktiviert ist. Es liegt in einem anderen Ordner als das Release-ZIP (wie beim Download über den
+# „Code"-Button) und muss deshalb vor der Installation des Release-ZIPs gelöscht werden.
+umgebung: wordpress-mit-quellcode-archiv
+
+szenen:
+
+  - id: "2.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 2: Installation, Einstellungen und Beispieldaten. Wir installieren das Plugin, sehen
+        uns an, was bei einem falschen Paket passiert, richten die Einstellungen ein und probieren
+        die Beispieldaten aus.
+
+  - id: "2.1"
+    kapitel: "Das richtige Paket"
+    bild: folie
+    dauer: "0:25"
+    folie: >-
+      Zwei Pakete nebeneinander, nachgebildet nach GitHub. Links „Release-ZIP — fertiges Plugin,
+      mit allen Bibliotheken" mit Häkchen. Rechts „Quellcode (grüner Button „Code") — für die
+      Entwicklung, ohne Bibliotheken" mit Kreuz.
+    einblendung:
+      - { zeige: "Release-ZIP", bei: "Releases" }
+      - { zeige: "Häkchen", bei: "Programmbibliotheken" }
+      - { zeige: "Quellcode", bei: "Code" }
+      - { zeige: "Kreuz", bei: "ohne" }
+    sprechtext:
+      de: >-
+        Den Open Data Wizard gibt es auf GitHub in zwei Formen, und nur eine ist zum Installieren
+        gedacht. Unter „Releases" liegt das fertige Plugin-Paket: eine ZIP-Datei mit allen
+        Programmbibliotheken, die das Plugin braucht. Der grüne Button „Code" liefert dagegen den
+        reinen Quellcode für die Entwicklung, ohne diese Bibliotheken.
+
+  - id: "2.2"
+    kapitel: "Wenn das falsche Paket installiert ist"
+    bild: screencast
+    dauer: "0:28"
+    sprechtext:
+      de: >-
+        Wer versehentlich den Quellcode installiert hat, sieht nach dem Aktivieren diesen Hinweis:
+        „Installation unvollständig". Das Plugin hat dann keine Funktion. Die Abhilfe: Deaktivieren
+        und löschen Sie das unvollständige Plugin und installieren Sie stattdessen das Release-ZIP.
+        Da das unvollständige Plugin nie gelaufen ist, geht dabei nichts verloren.
+    schritte:
+      - oeffne: /wp-admin/plugins.php
+      - warte_auf: "Open Data Wizard: Installation unvollständig"
+      - klick: { text: "Deaktivieren", quelle: core, bei: "Deaktivieren" }
+      - klick: { text: "Löschen", quelle: core, bei: "löschen" }
+      - bestaetige: { quelle: core, pruefen: true }
+    einblendung:
+      - { markiere: "Open Data Wizard: Installation unvollständig", zoom: true, bei: "Hinweis" }
+
+  - id: "2.3"
+    kapitel: "Installieren"
+    bild: screencast
+    dauer: "0:22"
+    sprechtext:
+      de: >-
+        Danach der übliche Weg: „Plugins", „Neues Plugin hinzufügen", „Plugin hochladen". Wählen Sie
+        das Release-ZIP, installieren und aktivieren Sie es. Der Hinweis ist verschwunden, und links
+        erscheint der Menüpunkt „Datenkatalog".
+    schritte:
+      - klick: { text: "Neues Plugin hinzufügen", quelle: core, pruefen: true, bei: "hinzufügen" }
+      - klick: { text: "Plugin hochladen", quelle: core, bei: "hochladen" }
+      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, pruefen: true, datei: "<release-zip>", bei: "Release-ZIP" }
+      - klick: { text: "Jetzt installieren", quelle: core, bei: "installieren" }
+      - klick: { text: "Plugin aktivieren", quelle: core, bei: "aktivieren" }
+    einblendung:
+      - { markiere: "Datenkatalog", bei: "Menüpunkt" }
+    hinweis: Das ZIP baut bin/build-release.sh vor der Aufnahme.
+
+  - id: "2.4"
+    kapitel: "Updates"
+    bild: folie
+    dauer: "0:32"
+    folie: >-
+      Zwei Wege zu einer neuen Version. Oben: „Mit Update-Plugin (z. B. Git Updater) — WordPress
+      meldet die neue Version". Unten: „Ohne — Release-ZIP hochladen, vorhandene Version ersetzen".
+      Darunter, über beide Wege: eine Datenbank mit der Beschriftung „Ihre Datensätze bleiben".
+    einblendung:
+      - { zeige: "Weg mit Update-Plugin", bei: "Git" }
+      - { zeige: "Weg ohne Update-Plugin", bei: "Ohne" }
+      - { zeige: "Datenbank", bei: "Datenbank" }
+    sprechtext:
+      de: >-
+        Und wie kommen spätere Versionen zu Ihnen? Haben Sie zusätzlich ein Update-Plugin wie Git
+        Updater installiert, meldet WordPress neue Versionen des Open Data Wizard wie bei jedem
+        anderen Plugin. Ohne ein solches Plugin laden Sie das neue Release-ZIP auf demselben Weg
+        hoch. WordPress bietet dann an, die vorhandene Version zu ersetzen. In beiden Fällen bleiben
+        Ihre Datensätze erhalten. Sie liegen in der Datenbank, nicht in den Plugin-Dateien.
+
+  - id: "2.5"
+    kapitel: "Einstellungen"
+    bild: screencast
+    dauer: "0:55"
+    sprechtext:
+      de: >-
+        Unter „Datenkatalog", „Einstellungen" legen Sie fest, wie sich Ihr Katalog nach außen zeigt.
+        Katalog-Titel und Katalog-Beschreibung beschreiben Ihren Katalog als Ganzes. Lassen Sie den
+        Titel leer, setzt das Plugin den Namen Ihrer Website ein. Die Beschreibung verlangt der
+        Standard DCAT-AP.de. Bei den Standardwerten tragen Sie Ihre Organisation, Ihre übliche
+        Lizenz und die Sprache ein. Jeder neue Datensatz beginnt dann mit diesen Angaben. Die
+        Cache-Laufzeit bestimmt, wie lange Abrufe zwischengespeichert werden; voreingestellt sind
+        fünf Minuten. Die Prüfung der URL-Erreichbarkeit ist zunächst aus. Eingeschaltet prüft das
+        Plugin beim Speichern, ob Ihre Links erreichbar sind, und berücksichtigt das in der
+        Qualitätsbewertung. Unter „Deinstallation" schließlich entscheiden Sie, ob beim Löschen des
+        Plugins auch alle Datensätze gelöscht werden. Ohne Häkchen bleiben sie erhalten.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-settings
+      - tippe: { feld: "Katalog-Beschreibung", text: "Offene Daten des Fördervereins Musterstadt e. V.", bei: "Beschreibung" }
+      - tippe: { feld: "Herausgebende Organisation", text: "Förderverein Musterstadt e. V.", bei: "Organisation" }
+      - waehle: { feld: "Standard-Lizenz", option: "CC BY 4.0 — Namensnennung", bei: "Lizenz" }
+      - waehle: { feld: "Standard-Sprache", option: "Deutsch (DE)", bei: "Sprache" }
+      - scrolle_zu: { text: "Cache-Laufzeit (Sekunden)", bei: "Cache-Laufzeit" }
+      - scrolle_zu: { text: "URL-Erreichbarkeit prüfen", bei: "URL-Erreichbarkeit" }
+      - scrolle_zu: { text: "Daten löschen", bei: "Deinstallation" }
+      - klick: { text: "Änderungen speichern", quelle: core }
+    einblendung:
+      - { markiere: "Katalog-Titel", bei: "Titel" }
+      - { markiere: "Daten löschen", zoom: true, bei: "Häkchen" }
+    hinweis: Den Abschnitt „Harvesting" zeigt Folge 9; hier wird über ihn hinweggescrollt.
+
+  - id: "2.6"
+    kapitel: "Beispieldaten laden"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Zum Ausprobieren gibt es Beispieldaten. Auf der Seite „Einstieg" finden Sie neben einer kurzen
+        Einführung den Kasten „Beispieldaten zum Ausprobieren". Ein Klick auf „Beispieldaten laden"
+        legt 42 erfundene Datensätze an und veröffentlicht sie. In der Liste steht hinter jedem Titel
+        „Beispieldaten". Diese Datensätze erscheinen in keinem Harvest-Endpunkt, und auf Ihrer
+        Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-einstieg
+      - scrolle_zu: { text: "Beispieldaten zum Ausprobieren", bei: "Kasten" }
+      - klick: { text: "Beispieldaten laden", bei: "Klick" }
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+    einblendung:
+      - { markiere: "— Beispieldaten", bei: "hinter" }
+
+  - id: "2.7"
+    kapitel: "Ein Beispiel übernehmen"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Ein Beispiel kann auch Vorlage für einen eigenen Datensatz sein. Öffnen Sie es und passen Sie
+        es zuerst an. Solange es ein Beispiel bleibt, sehen Portale es nicht, auch nicht nach dem
+        Speichern. Erst dann klicken Sie oben auf „Als eigenen Datensatz übernehmen". Ab jetzt ist es
+        ein regulärer, veröffentlichter Datensatz und erscheint in den Harvest-Endpunkten.
+    schritte:
+      - klick: { text: "Eingetragene Vereine in Musterstadt 2010–2024", bei: "Öffnen" }
+      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "Eingetragene Vereine in Musterstadt 2010–2025", bei: "passen" }
+      - klick: { text: "Aktualisieren", quelle: core, bei: "Speichern" }
+      - klick: { text: "Als eigenen Datensatz übernehmen", bei: "übernehmen" }
+      - warte_auf: "Der Datensatz ist jetzt ein eigener Datensatz."
+    einblendung:
+      - { markiere: "Dies ist ein Beispieldatensatz.", bei: "Beispiel" }
+
+  - id: "2.8"
+    kapitel: "Beispieldaten entfernen"
+    bild: screencast
+    dauer: "0:18"
+    sprechtext:
+      de: >-
+        Brauchen Sie die Beispiele nicht mehr, entfernt sie ein Klick auf „Beispieldaten entfernen"
+        endgültig. Übernommene Datensätze sind davon nicht betroffen.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "Beispieldaten entfernen", bei: "Klick" }
+      - bestaetige: { text: "Alle Beispieldatensätze endgültig löschen? Änderungen daran gehen verloren." }
+      - warte_auf: "Beispieldatensätze endgültig gelöscht"
+    einblendung:
+      - { markiere: "Eingetragene Vereine in Musterstadt 2010–2025", bei: "Übernommene" }
+
+  - id: "2.9"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 3; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        Damit ist alles vorbereitet. In der nächsten Folge füllen wir das Formular aus, Reiter für
+        Reiter.
