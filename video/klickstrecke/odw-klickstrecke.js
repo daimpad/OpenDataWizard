@@ -94,8 +94,9 @@ function titelFolie(f, g) {
 }
 function abspannFolie(f, g) {
   const n = f.folge + 1;
-  const weiter = f.folge === 0 ? 'Im Detail ab Folge 1: Warum Metadaten?' : `Als Nächstes · Folge ${n}: ${REIHE[n] || ''}`;
-  return `<div class="folie"><div class="f-titel">${marke(g)}<div class="f-eyebrow">Wie es weitergeht</div><h2>${esc(weiter)}</h2></div>
+  const letzte = !REIHE[n];
+  const weiter = f.folge === 0 ? 'Im Detail ab Folge 1: Warum Metadaten?' : letzte ? 'Ende der Reihe. Quellcode und Dokumentation im Repository des Open Data Wizard.' : `Als Nächstes · Folge ${n}: ${REIHE[n]}`;
+  return `<div class="folie"><div class="f-titel">${marke(g)}<div class="f-eyebrow">${letzte ? 'Zum Schluss' : 'Wie es weitergeht'}</div><h2>${esc(weiter)}</h2></div>
     <div class="f-fuss"><span>Plugin-Version ${esc(f.plugin_version)}</span><span>${esc(g.namensnennung)}</span></div></div>`;
 }
 const PFEIL = (id) => `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="c-akzent"/></marker></defs>`;
@@ -209,6 +210,76 @@ const FOLIEN = {
       <div class="f-paket" data-z="Pflichtspalten"><b>Pflicht</b><div class="f-spalten pflicht">${['title', 'publisher', 'description', 'access_url', 'license'].map((c) => `<code>${c}</code>`).join('')}</div></div>
       <div class="f-paket" data-z="Weitere Spalten"><b>Möglich</b><div class="f-spalten">${['theme', 'keywords', 'format', 'language', 'temporal_start', 'temporal_end', 'contact_email', '…'].map((c) => `<code>${c}</code>`).join('')}</div></div></div>
       <div class="f-band" data-z="Lizenz-Kürzel">Lizenz als Kürzel: <code class="t-mono">cc0</code> · <code class="t-mono">cc-by</code> · <code class="t-mono">cc-by-sa</code> · <code class="t-mono">dl-de-by</code> · <code class="t-mono">dl-de-zero</code></div></div>`,
+  '9/9.2': () => {
+    const wege = [
+      ['catalog', '/catalog', 'der Katalog, seitenweise', ''],
+      ['full', '/catalog?full=1', 'der ganze Katalog in einem Abruf', 'Adresse aus den Einstellungen'],
+      ['format', '…&amp;format=turtle', 'als Turtle statt JSON-LD', ''],
+      ['datasets', '/datasets/&lt;ID&gt;', 'ein einzelner Datensatz', ''],
+      ['delta', '/delta?since=&lt;Zeitpunkt&gt;', 'nur Änderungen seit diesem Zeitpunkt, mit Löschmeldungen', ''],
+    ];
+    return `<div class="folie"><div class="f-kopf">Schnittstelle · <span class="t-mono" style="text-transform:none;letter-spacing:0">/wp-json/datenatlas/v1</span></div><h3 class="f-h">Die Endpunkte</h3>
+      <div class="f-wege">${wege.map(([z, c, t, e]) => `<div data-z="${z}"><code>${c}</code><span>${t}${e ? ` <em>${e}</em>` : ''}</span></div>`).join('')}</div></div>`;
+  },
+  '9/9.3': () => `<div class="folie"><div class="f-kopf">Blick unter die Haube</div><h3 class="f-h">Zwei Schreibweisen</h3>
+      <div class="f-quelltext">
+        <figure data-z="JSON-LD"><figcaption>JSON-LD</figcaption><pre>"dct:title": {
+  "@value": "Mitgliederentwicklung …",
+  "@language": "de" },
+"dct:publisher": {
+  "foaf:name": "Förderverein Musterstadt e. V." },
+"dcat:keyword": [
+  { "@value": "Mitglieder", "@language": "de" },
+  { "@value": "Ehrenamt", "@language": "de" }, … ],
+"dcat:theme": {
+  "@id": "…/data-theme/SOCI" }</pre></figure>
+        <figure data-z="Turtle"><figcaption>Turtle</figcaption><pre>dct:title
+  "Mitgliederentwicklung …"@de ;
+dct:publisher [ foaf:name
+  "Förderverein Musterstadt e. V." ] ;
+dcat:keyword
+  "Mitglieder"@de, "Ehrenamt"@de, … ;
+dcat:theme
+  &lt;…/data-theme/SOCI&gt; ;</pre></figure></div>
+      <div class="f-band" data-z="Dieselben Aussagen">Dieselben Aussagen, zwei Schreibweisen.</div></div>`,
+  '9/9.4': () => `<div class="folie"><div class="f-kopf">Blick unter die Haube</div><h3 class="f-h">Format aushandeln</h3>
+      <div class="f-anfrage" data-z="Accept Turtle"><div class="f-paket"><code>GET /catalog?full=1</code><code>Accept: text/turtle</code></div><div class="f-pfeil">→</div><div class="f-paket"><b>Turtle</b></div></div>
+      <div class="f-anfrage" data-z="Accept JSON-LD"><div class="f-paket"><code>GET /catalog?full=1</code><code>Accept: application/ld+json</code></div><div class="f-pfeil">→</div><div class="f-paket"><b>JSON-LD</b></div></div>
+      <div class="f-band" data-z="Vorrang"><code class="t-mono">?format=</code> in der Adresse hat Vorrang vor dem Header.</div></div>`,
+  '9/9.5': () => `<div class="folie"><div class="f-kopf">Harvesting</div><h3 class="f-h">Was Portale sehen</h3><div class="f-zwei">
+      <div class="f-paket" data-z="Ausgeliefert" style="align-content:start"><b>Ausgeliefert</b><span>veröffentlichte Datensätze — genau das, was auch Besucher Ihrer Website sehen</span></div>
+      <div class="f-paket" data-z="Nicht ausgeliefert" style="align-content:start"><b>Nicht ausgeliefert</b><ul class="f-liste"><li>Entwürfe</li><li>private Datensätze</li><li>passwortgeschützte Datensätze</li><li>Beispieldaten</li></ul></div></div>
+      <div class="f-band" data-z="Löschmeldung">Papierkorb oder nachträglich geschützt: <code class="t-mono">/delta</code> meldet den Datensatz als entfernt.</div></div>`,
+  '9/9.6': () => `<div class="folie"><div class="f-kopf">Selbst prüfen</div><h3 class="f-h">Der SHACL-Validator der EU</h3>
+    <div class="f-drei">
+      <div class="f-schritt" data-z="Adresse eingeben"><span class="n">1</span><b>Adresse eingeben</b><span>die Turtle-Adresse aus den Einstellungen — oder die Datei hochladen</span></div><div class="f-pfeil" data-z="Prüfprofil wählen">→</div>
+      <div class="f-schritt" data-z="Prüfprofil wählen"><span class="n">2</span><b>Prüfprofil wählen</b><span>DCAT-AP</span></div><div class="f-pfeil" data-z="Ergebnis lesen">→</div>
+      <div class="f-schritt" data-z="Ergebnis lesen"><span class="n">3</span><b>Ergebnis lesen</b><span>kein Verstoß: formal in Ordnung; sonst je Verstoß die betroffene Angabe</span></div>
+    </div><div class="f-band" data-z="Validator-Adresse">EU-Validator: <span class="t-mono">www.itb.ec.europa.eu/shacl/dcat-ap/upload</span></div></div>`,
+  '9/9.7': () => `<div class="folie"><div class="f-kopf">Anmeldung</div><h3 class="f-h">Beim Portal melden</h3>
+    <div class="f-drei">
+      <div class="f-schritt" data-z="Portal wählen"><span class="n">1</span><b>Portal wählen</b><span>GovData oder das Open-Data-Portal Ihres Landes</span></div><div class="f-pfeil" data-z="Redaktion anschreiben">→</div>
+      <div class="f-schritt" data-z="Redaktion anschreiben"><span class="n">2</span><b>Redaktion anschreiben</b><span>die Harvest-Adresse aus den Einstellungen nennen</span></div><div class="f-pfeil" data-z="Abruf läuft">→</div>
+      <div class="f-schritt" data-z="Abruf läuft"><span class="n">3</span><b>Abruf läuft</b><span>einmal eingerichtet, dann regelmäßig und ohne Ihr Zutun</span></div>
+    </div><div class="f-band" data-z="Nächster Abruf">Änderungen erscheinen nach dem nächsten Abruf.</div></div>`,
+  '10/10.1': () => `<div class="folie"><div class="f-kopf">Für Administrator:innen</div><h3 class="f-h">Wer was darf</h3>
+      <div class="f-wege f-rechte">
+        <div data-z="Datensätze"><b>Datensätze anlegen, bearbeiten, importieren</b><span>Berechtigung <code>manage_open_data</code> — bei der Aktivierung an Administrator:innen und Redakteur:innen vergeben</span></div>
+        <div data-z="Einstellungen"><b>Einstellungen des Plugins</b><span>nur Administrator:innen</span></div>
+        <div data-z="Weitere Rollen"><b>Weitere Rollen</b><span>nur, wenn Sie ihnen die Berechtigung geben</span></div></div>
+      <div class="f-band" data-bei="Rollenverwaltung">Rollen anpassen: mit einem Plugin zur Rollenverwaltung.</div></div>`,
+  '10/10.2': () => {
+    // Echte Ausgabe (Plugin 2.47.9) im Ausgangszustand „uebungsdatensatz-veroeffentlicht“ (siehe Drehbuch).
+    const befehle = [
+      ['status', 'samples status', '42 Beispieldatensätze geladen.', false],
+      ['remove', 'samples remove --yes', '42 Beispieldatensätze gelöscht.', true],
+      ['load', 'samples load', '42 Beispieldatensätze angelegt, 42 veröffentlicht.', true],
+      ['quality', 'quality recalculate', 'Datensätze mit neu berechneter Qualität: 45', true],
+      ['cache', 'cache clear', 'Zwischengespeicherte Antworten gelöscht: 4', true],
+    ];
+    return `<div class="folie"><div class="f-kopf">Für Administrator:innen</div><h3 class="f-h">Befehle für WP-CLI</h3>
+      <div class="f-terminal">${befehle.map(([z, c, o, ok]) => `<div data-z="${z}"><div class="ein"><span class="p">$</span> wp open-data-wizard ${c}</div><div class="aus">${ok ? '<span class="ok">Success:</span> ' : ''}${o}</div></div>`).join('')}</div></div>`;
+  },
   '8/8.9': () => `<div class="folie"><div class="f-kopf">Datenkatalog</div><h3 class="f-h">Zwei Regeln</h3><div class="f-zwei">
       <div class="f-paket" data-z="Ein Katalog pro Seite" style="align-content:start"><b>Ein Katalog pro Seite</b><span>Blättern und Detailansicht gelten für die ganze Seite. Getrennte Kataloge, etwa nach Thema: je eine eigene Seite.</span></div>
       <div class="f-paket" data-z="Beispieldaten"><b>Beispieldaten</b><dl class="f-regeln"><dt>Redaktion, angemeldet</dt><dd>sichtbar</dd><dt>Besucher</dt><dd>nur mit Schalter im Block</dd><dt>Portale</dt><dd>nie</dd></dl></div></div>
@@ -315,6 +386,26 @@ svg .wandert.z-weg { transform: translateX(-330px); }
 .f-paket code { font: 500 1.6cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); }
 .f-paket code.gedimmt { color: var(--f-gedimmt); }
 .f-paket span { color: var(--f-gedimmt); font-size: 1.7cqw; }
+.f-wege { display: grid; gap: 1cqw; margin-top: 2.4cqw; }
+.f-wege > div { display: grid; grid-template-columns: 27cqw minmax(0, 1fr); gap: 2cqw; align-items: baseline; padding: 1.1cqw 1.6cqw; border: 1px solid var(--f-linie); border-radius: .8cqw; }
+.f-wege code { font: 500 1.65cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); }
+.f-wege span { font-size: 1.75cqw; line-height: 1.3; }
+.f-wege em { font-style: normal; font-size: 1.25cqw; color: var(--f-akzent_schrift); border: 1px solid var(--f-akzent); border-radius: 1cqw; padding: .2cqw .8cqw; margin-left: .6cqw; white-space: nowrap; }
+.f-quelltext { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2cqw; margin-top: 2cqw; }
+.f-quelltext figure { margin: 0; border: 1px solid var(--f-linie); border-radius: 1cqw; padding: 1.5cqw 1.7cqw; background: var(--f-flaeche); min-width: 0; }
+.f-quelltext figcaption { font: 700 1.3cqw/1 var(--s-anzeige); color: var(--f-akzent_schrift); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 1.1cqw; }
+.f-quelltext pre { margin: 0; font: 500 1.3cqw/1.5 var(--s-mono); white-space: pre; overflow: hidden; }
+.f-anfrage { display: grid; grid-template-columns: 1.7fr auto 1fr; gap: 1.6cqw; align-items: center; margin-top: 2.2cqw; }
+.f-anfrage .f-paket { padding: 1.8cqw 2.2cqw; gap: .6cqw; }
+.f-anfrage .f-paket code { font-size: 1.7cqw; }
+.f-liste { margin: 0; padding-left: 2.4cqw; font-size: 1.8cqw; line-height: 1.55; }
+.f-rechte > div { grid-template-columns: 30cqw minmax(0, 1fr); padding: 1.6cqw 1.8cqw; }
+.f-rechte b { font: 700 1.9cqw/1.25 var(--s-anzeige); }
+.f-rechte code { font-size: 1.6cqw; }
+.f-terminal { margin-top: 2.2cqw; background: #1d2327; color: #f0f0f1; border-radius: 1cqw; padding: 2cqw 2.4cqw; font: 500 1.45cqw/1.55 var(--s-mono); display: grid; gap: 1cqw; }
+.f-terminal .p { color: #8c8f94; }
+.f-terminal .aus { color: #c3c4c7; }
+.f-terminal .ok { color: #68de7c; }
 .f-regeln { display: grid; grid-template-columns: auto 1fr; gap: .9cqw 2cqw; margin: 0; font-size: 1.8cqw; }
 .f-regeln dt { color: var(--f-gedimmt); }
 .f-regeln dd { margin: 0; font-weight: 600; }

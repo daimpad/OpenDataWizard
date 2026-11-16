@@ -110,7 +110,7 @@ class ODW_CLI {
 	}
 
 	/**
-	 * Regenerates the field reference (docs/FELD-REFERENZ.md) from the field catalog.
+	 * Erzeugt die Feld-Referenz (docs/FELD-REFERENZ.md) neu aus dem Feld-Katalog.
 	 *
 	 * ## EXAMPLES
 	 *
@@ -137,12 +137,12 @@ class ODW_CLI {
 	}
 
 	/**
-	 * Recalculates quality scores for all published datasets.
+	 * Berechnet die Qualität aller veröffentlichten Datensätze neu.
 	 *
 	 * ## OPTIONS
 	 *
 	 * [--all]
-	 * : Include draft and trashed datasets (default: only published)
+	 * : Auch Entwürfe und Datensätze im Papierkorb einbeziehen (Standard: nur veröffentlichte).
 	 *
 	 * ## EXAMPLES
 	 *
@@ -168,12 +168,12 @@ class ODW_CLI {
 		$post_ids = $query->posts;
 
 		if ( empty( $post_ids ) ) {
-			\WP_CLI::success( 'No datasets found.' );
+			\WP_CLI::success( __( 'Keine Datensätze gefunden.', 'open-data-wizard' ) );
 			return;
 		}
 
 		$count    = 0;
-		$progress = \WP_CLI\Utils\make_progress_bar( 'Recalculating quality scores', count( $post_ids ) );
+		$progress = \WP_CLI\Utils\make_progress_bar( __( 'Qualität wird neu berechnet', 'open-data-wizard' ), count( $post_ids ) );
 
 		foreach ( $post_ids as $post_id ) {
 			if ( class_exists( 'ODW_Quality' ) ) {
@@ -190,19 +190,19 @@ class ODW_CLI {
 		\WP_CLI::success(
 			sprintf(
 				/* translators: %d = number of datasets processed */
-				__( 'Recalculated quality scores for %d dataset(s).', 'open-data-wizard' ),
+				__( 'Datensätze mit neu berechneter Qualität: %d', 'open-data-wizard' ),
 				$count
 			)
 		);
 	}
 
 	/**
-	 * Clears all REST API transient caches.
+	 * Leert den Zwischenspeicher der Schnittstelle (Transients).
 	 *
-	 * Removes cached responses for:
-	 * - Catalog endpoints (all pages and filters)
-	 * - Individual dataset endpoints
-	 * - Delta endpoint (all since values)
+	 * Entfernt die zwischengespeicherten Antworten von:
+	 * - /catalog (alle Seiten und Filter)
+	 * - /datasets/<ID>
+	 * - /delta (alle since-Werte)
 	 *
 	 * ## EXAMPLES
 	 *
@@ -244,7 +244,7 @@ class ODW_CLI {
 		\WP_CLI::success(
 			sprintf(
 				/* translators: %d = number of transients cleared */
-				__( 'Cleared %d transient cache(s).', 'open-data-wizard' ),
+				__( 'Zwischengespeicherte Antworten gelöscht: %d', 'open-data-wizard' ),
 				$count
 			)
 		);

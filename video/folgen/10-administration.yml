@@ -1,0 +1,119 @@
+# Drehbuch · Folge 10 · Für Administrator:innen
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+# Letzte Folge der Reihe.
+
+folge: 10
+titel: "Für Administrator:innen"
+plugin_version: "2.47.9"   # WP-CLI meldet sich erst ab 2.47.9 durchgehend auf Deutsch (Folie 10.2)
+# Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht, dazu Bestand
+# und Beispieldaten. So gibt es in 10.4 Datensätze, die beim Löschen des Plugins erhalten bleiben.
+umgebung: uebungsdatensatz-veroeffentlicht
+
+# Folie 10.2 zeigt die echte Ausgabe der WP-CLI-Befehle in diesem Ausgangszustand (42 Beispiel-
+# datensätze, 45 Datensätze insgesamt, vier Antworten im Zwischenspeicher). Ändert sich die Ausgabe
+# des Plugins, ist die Folie mitzuziehen.
+
+szenen:
+
+  - id: "10.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 10: Für Administratorinnen und Administratoren. Es geht um Berechtigungen, um Befehle für
+        die Kommandozeile und darum, was beim Deinstallieren mit Ihren Daten geschieht.
+
+  - id: "10.1"
+    kapitel: "Wer was darf"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Drei Zeilen. „Datensätze anlegen, bearbeiten, importieren": Berechtigung manage_open_data, bei
+      der Aktivierung an Administrator:innen und Redakteur:innen vergeben. „Einstellungen des
+      Plugins": nur Administrator:innen. „Weitere Rollen": nur, wenn Sie ihnen die Berechtigung
+      geben. Darunter ein Band: „Rollen anpassen: mit einem Plugin zur Rollenverwaltung".
+    einblendung:
+      - { zeige: "Datensätze", bei: "Berechtigung" }
+      - { zeige: "Einstellungen", bei: "Einstellungen" }
+      - { zeige: "Weitere Rollen", bei: "weitere" }
+    sprechtext:
+      de: >-
+        Wer Datensätze anlegen, bearbeiten und importieren darf, regelt eine eigene Berechtigung:
+        manage_open_data. Das Plugin vergibt sie bei der Aktivierung an Administratorinnen und
+        Administratoren sowie an Redakteurinnen und Redakteure. Die Einstellungen des Plugins bleiben
+        den Administratorinnen und Administratoren vorbehalten. Sollen weitere Rollen Datensätze
+        pflegen, geben Sie ihnen die Berechtigung mit einem Plugin zur Rollenverwaltung.
+
+  - id: "10.2"
+    kapitel: "Die Kommandozeile"
+    bild: folie
+    dauer: "0:45"
+    folie: >-
+      Terminal mit der echten Ausgabe der fünf Befehle, nacheinander: wp open-data-wizard samples
+      status · samples remove --yes · samples load · quality recalculate · cache clear.
+    einblendung:
+      - { zeige: "status", bei: "status" }
+      - { zeige: "remove", bei: "remove" }
+      - { zeige: "load", bei: "load" }
+      - { zeige: "quality", bei: "quality" }
+      - { zeige: "cache", bei: "cache" }
+    sprechtext:
+      de: >-
+        Wer Zugang zur Kommandozeile des Servers hat, kann wiederkehrende Aufgaben auch ohne Klicken
+        erledigen, etwa in Skripten. Das Plugin bringt dafür Befehle für WP-CLI mit. samples status
+        zeigt, ob Beispieldaten geladen sind; samples remove entfernt sie, samples load lädt sie
+        wieder. quality recalculate berechnet die Qualität aller Datensätze neu. Und cache clear leert
+        den Zwischenspeicher der Schnittstelle; das ist selten nötig, weil das Plugin ihn beim
+        Speichern selbst erneuert.
+
+  - id: "10.3"
+    kapitel: "Daten behalten oder löschen"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Was beim Deinstallieren mit Ihren Daten geschieht, legen Sie in den Einstellungen fest, im
+        Abschnitt Deinstallation. Ohne Häkchen bei „Daten löschen" bleiben alle Datensätze in der
+        Datenbank erhalten; installieren Sie das Plugin später wieder, sind sie sofort zurück. Mit
+        Häkchen entfernt das Plugin beim Löschen alle Datensätze, ihre Angaben und seine Einstellungen,
+        unwiderruflich. Die Dateien in der Mediathek bleiben in beiden Fällen erhalten.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-settings
+      - scrolle_zu: { text: "Deinstallation", bei: "Abschnitt" }
+    einblendung:
+      - { markiere: "Alle Datensätze, Metadaten und Plugin-Optionen beim Deinstallieren unwiderruflich löschen.", bei: "Häkchen" }
+      - { text: "Ohne Häkchen: Daten bleiben erhalten", bei: "erhalten" }
+
+  - id: "10.4"
+    kapitel: "Deaktivieren und löschen"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Deinstalliert wird unter „Plugins". Zuerst deaktivieren Sie den Open Data Wizard; dann erscheint
+        „Löschen". Nach einer Rückfrage entfernt WordPress das Plugin. Weil das Häkchen nicht gesetzt
+        war, liegen unsere Datensätze weiter in der Datenbank. Bedenken Sie: Solange das Plugin
+        deaktiviert ist, sind auch Katalog und Harvest-Adresse nicht erreichbar.
+    schritte:
+      - oeffne: /wp-admin/plugins.php
+      - klick: { text: "Deaktivieren", quelle: core, bei: "deaktivieren" }
+      - klick: { text: "Löschen", quelle: core, bei: "erscheint" }
+      - bestaetige: { quelle: core, bei: "Rückfrage" }
+      - warte_auf: { text: "erfolgreich gelöscht", quelle: core, bei: "entfernt" }
+    einblendung:
+      - { text: "Datensätze bleiben in der Datenbank", bei: "Datensätze" }
+
+  - id: "10.5"
+    kapitel: "Zum Schluss"
+    bild: folie
+    dauer: "0:12"
+    folie: >-
+      Abspann der Reihe: „Ende der Reihe"; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        Damit ist die Reihe vollständig. Den Quellcode, die Dokumentation und Hinweise zu neuen
+        Versionen finden Sie im Repository des Open Data Wizard. Vielen Dank fürs Zuschauen.
