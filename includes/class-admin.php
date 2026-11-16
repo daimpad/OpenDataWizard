@@ -1070,6 +1070,9 @@ class ODW_Admin {
 								previewData = response.data.records;
 								displayPreview(response.data);
 								$('#odw-preview-content').show();
+								// Nach einem vorangegangenen Import wieder bei den Knöpfen beginnen.
+								$('#odw-import-ready').show();
+								$('#odw-import-progress, #odw-import-result').hide();
 								$('#odw-import-section').show();
 							} else {
 								$('#odw-preview-error').text(response.data.error).show();
@@ -1124,7 +1127,10 @@ class ODW_Admin {
 						return;
 					}
 
-					$('#odw-import-section').hide();
+					// Nur die Knöpfe ausblenden: Fortschritt und Ergebnis liegen im selben
+					// Abschnitt. Bis v2.47.7 verschwand hier der ganze Abschnitt, und nach
+					// dem Import erschien weder „Import abgeschlossen!" noch der Link zur Liste.
+					$('#odw-import-ready').hide();
 					$('#odw-import-progress').show();
 
 					var records = selected.map(function(idx) {
