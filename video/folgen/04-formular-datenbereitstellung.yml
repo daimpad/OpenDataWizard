@@ -4,7 +4,7 @@
 
 folge: 4
 titel: "Das Formular II: Datenbereitstellung"
-plugin_version: "2.47.6"   # 4.3: Dateigröße beim Upload erst ab 2.47.6
+plugin_version: "2.47.9"   # mindestens 2.47.6: Dateigröße beim Upload (4.3)
 # Ausgangszustand: wie am Ende von Folge 3. Einstellungen aus Folge 2, dazu der Übungsdatensatz als
 # Entwurf mit Titel, Herausgeber, Beschreibung, Thema und Schlagworten. Reiter 3 ist noch leer, die
 # Lizenz steht auf dem Standardwert aus den Einstellungen (CC BY 4.0).

@@ -4,7 +4,7 @@
 
 folge: 5
 titel: "Das Formular III: Erweiterte Angaben"
-plugin_version: "2.47.7"   # deutscher Kalender erst ab 2.47.7
+plugin_version: "2.47.9"   # mindestens 2.47.7: deutscher Kalender
 # Ausgangszustand: wie am Ende von Folge 4. Der Übungsdatensatz ist ein Entwurf mit Reiter 1 und
 # Reiter 3 (CSV-Datei aus der Mediathek, CC BY 4.0 mit Namensnennungstext, „Stabil", zweite
 # Distribution als JSON). Reiter 4 ist leer.

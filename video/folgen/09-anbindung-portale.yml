@@ -5,7 +5,7 @@
 
 folge: 9
 titel: "Anbindung an Open-Data-Portale"
-plugin_version: "2.47.8"
+plugin_version: "2.47.9"
 # Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht, dazu die zwei
 # knapp beschriebenen Vereinsdatensätze (drei öffentliche Datensätze) und die Beispieldaten, die der
 # Endpunkt nicht ausliefert. „Endpunkt prüfen" braucht den Aufnahme-Server mit mehreren Workern

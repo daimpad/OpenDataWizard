@@ -4,7 +4,7 @@
 
 folge: 6
 titel: "Prüfen, Veröffentlichen, Qualität"
-plugin_version: "2.47.7"
+plugin_version: "2.47.9"
 # Ausgangszustand: wie am Ende von Folge 5 — der Übungsdatensatz ist ein vollständiger Entwurf
 # (Qualität 88 %). Dazu die 42 Beispieldatensätze aus Folge 2, damit die Liste in 6.7 etwas zu
 # sortieren hat.

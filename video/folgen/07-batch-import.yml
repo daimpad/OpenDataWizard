@@ -4,7 +4,7 @@
 
 folge: 7
 titel: "Viele Datensätze auf einmal: Batch-Import"
-plugin_version: "2.47.8"   # Rückmeldung nach dem Import erst ab 2.47.8
+plugin_version: "2.47.9"   # mindestens 2.47.8: Rückmeldung nach dem Import
 # Ausgangszustand: Plugin eingerichtet wie am Ende von Folge 2, noch ohne Datensätze — so sind die
 # importierten Einträge in 7.6 die einzigen in der Liste.
 umgebung: plugin-eingerichtet
