@@ -4,7 +4,7 @@
 
 folge: 2
 titel: "Installation, Updates, Einstellungen, Beispieldaten"
-plugin_version: "2.47.5"
+plugin_version: "2.47.9"
 # Ausgangszustand: WordPress, in dem das Quellcode-Archiv (ohne vendor/) als Plugin installiert und
 # aktiviert ist. Es liegt in einem anderen Ordner als das Release-ZIP (wie beim Download über den
 # „Code"-Button) und muss deshalb vor der Installation des Release-ZIPs gelöscht werden.
