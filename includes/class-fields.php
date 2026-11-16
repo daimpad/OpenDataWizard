@@ -1005,17 +1005,50 @@ class ODW_Fields {
 	 * Optionen für den Kalender (flatpickr) der Datumsfelder.
 	 *
 	 * Die Sprache folgt der Oberfläche: Deutsch nur bei deutscher Locale, sonst
-	 * das englische Original („default"). Fest auf „de" gestellt zeigte der
-	 * Kalender auch auf en_US deutsche Monate; ohne die Sprachdatei aus
-	 * assets/js/odw-datepicker-de.js, die nur für deutsche Locales geladen
-	 * wird, würde flatpickr bei „de" zudem „invalid locale" melden.
+	 * das englische Original („default").
 	 *
-	 * @return array{dateFormat: string, locale: string}
+	 * Die deutsche Sprache geht als vollständiges Sprachobjekt mit, nicht als
+	 * Kürzel „de". Bis v2.47.6 meldete ein eigenes Skript „de" erst an, sobald
+	 * `window.flatpickr` bereitstand (Abfrage alle 50 ms) — oft erst, nachdem
+	 * Carbon Fields die Kalender schon angelegt hatte. Die fielen dann mit
+	 * „invalid locale de" auf Englisch zurück, und die nachträgliche Umstellung
+	 * suchte die Kalender an `<input>`-Elementen, während Carbon Fields sie an
+	 * `div.cf-datetime__inner` hängt. Mit dem Sprachobjekt in den Optionen gibt
+	 * es keine Reihenfolge mehr, die schiefgehen kann.
+	 *
+	 * Angezeigt wird das Datum als TT.MM.JJJJ; Carbon Fields' Vorgabe „j M Y"
+	 * ergäbe „15 Jan 2016", und ein getipptes Datum liest flatpickr im
+	 * Anzeigeformat. Gespeichert wird weiter JJJJ-MM-TT.
+	 *
+	 * @return array<string, mixed>
 	 */
 	public static function date_picker_options(): array {
+		if ( ! ODW_Carbon_Fields_L10n::is_german_locale() ) {
+			return array(
+				'dateFormat' => 'Y-m-d',
+				'locale'     => 'default',
+			);
+		}
+
 		return array(
 			'dateFormat' => 'Y-m-d',
-			'locale'     => ODW_Carbon_Fields_L10n::is_german_locale() ? 'de' : 'default',
+			'altFormat'  => 'd.m.Y',
+			'locale'     => array(
+				'weekdays'         => array(
+					'shorthand' => array( 'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa' ),
+					'longhand'  => array( 'Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag' ),
+				),
+				'months'           => array(
+					'shorthand' => array( 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez' ),
+					'longhand'  => array( 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember' ),
+				),
+				'firstDayOfWeek'   => 1,
+				'weekAbbreviation' => 'KW',
+				'rangeSeparator'   => ' bis ',
+				'scrollTitle'      => 'Zum Ändern scrollen',
+				'toggleTitle'      => 'Zum Umschalten klicken',
+				'time_24hr'        => true,
+			),
 		);
 	}
 
