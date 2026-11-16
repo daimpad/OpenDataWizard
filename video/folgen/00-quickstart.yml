@@ -1,0 +1,277 @@
+# Drehbuch · Folge 0 · Quick-Start
+#
+# Einzige Quelle für Ton, Aufnahme, Schnitt, Untertitel und YouTube-Beschreibung
+# (siehe docs/VIDEO-KONZEPT.md, Abschnitt 6).
+#
+# Aufbau einer Szene
+#   id            Szenennummer aus dem Konzept
+#   kapitel       Kapitelname für YouTube
+#   bild          folie | screencast
+#   dauer         geplante Dauer; die tatsächliche ergibt sich aus der Länge des Tons
+#   sprechtext    je Sprache; gesprochen von „Damian" (ElevenLabs)
+#   folie         Inhalt einer Folie (nur bei bild: folie)
+#   schritte      Klickstrecke (nur bei bild: screencast), der Reihe nach
+#   einblendung   Markierung, Zoom oder Hinweistext über dem Bild
+#
+# Schritte
+#   oeffne        Pfad im WordPress-Backend
+#   klick         sichtbare Beschriftung
+#   tippe         { feld, text } — feld ist die sichtbare Feldbeschriftung
+#   waehle        { feld, option }
+#   lade_hoch     { feld, datei } — Datei aus video/material/
+#   warte_auf     sichtbarer Text
+#   scrolle_zu    sichtbarer Text
+#   bei           Wort im Sprechtext, zu dem der Schritt ausgeführt wird (Zeitmarke von ElevenLabs)
+#
+# Sprechtext
+#   Er ist zugleich der Untertitel. Aussprache (DCAT-AP, CC BY 4.0, .zip, GovData …) regelt das
+#   Aussprachewörterbuch, nicht eine Lautschrift im Text.
+#
+# Beschriftungen
+#   Ohne Angabe stammt eine Beschriftung aus dem Plugin; für die englische Fassung wird sie in
+#   languages/open-data-wizard-en_US.po nachgeschlagen. `quelle: core` kennzeichnet Beschriftungen
+#   von WordPress selbst. `pruefen: true` heißt: bei der ersten Aufnahme gegen die laufende
+#   WordPress-Version prüfen.
+
+folge: 0
+titel: "Quick-Start: In fünf Minuten zum ersten offenen Datensatz"
+plugin_version: "2.47.5"
+umgebung: wordpress-ohne-plugin   # das Plugin wird in Szene Q4 installiert
+
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  herausgeber: "Förderverein Musterstadt e. V."
+  beschreibung: >-
+    Mitgliederzahlen des Fördervereins Musterstadt e. V. von 2015 bis 2025: Mitglieder zum
+    Jahresende, Eintritte und Austritte je Jahr. Die Zahlen stammen aus der Mitgliederverwaltung
+    des Vereins und werden jedes Jahr im Januar ergänzt.
+  thema: "Bevölkerung & Gesellschaft"
+  schlagworte: ["Mitglieder", "Ehrenamt", "Verein"]
+  datei: foerderverein-mitglieder.csv
+  lizenz: "CC BY 4.0 — Namensnennung"
+  namensnennung: "Förderverein Musterstadt e. V., 2025"
+
+szenen:
+
+  - id: Q1
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:20"
+    folie: Titel der Folge, Logo des Open Data Wizard
+    sprechtext:
+      de: >-
+        Sie haben Daten, die auch für andere nützlich sein könnten? Mit dem Open Data Wizard
+        beschreiben Sie diese Daten direkt in WordPress und machen sie für Open-Data-Portale
+        auffindbar. In den nächsten fünf Minuten gehen wir gemeinsam den ganzen Weg: von der
+        Installation bis zum ersten veröffentlichten Datensatz.
+
+  - id: Q2
+    kapitel: "Das Prinzip"
+    bild: folie
+    dauer: "0:25"
+    folie: >-
+      Ablauf in drei Schritten (nach assets/images/ODW-Ablauf.svg), nacheinander eingeblendet:
+      Formular ausfüllen → DCAT-AP-Beschreibung → Portale holen ab. Danach: Datei bleibt auf der
+      Website, nur die Beschreibung wandert.
+    sprechtext:
+      de: >-
+        Das Prinzip ist einfach. Sie füllen ein Formular aus, in Alltagssprache und ohne
+        Fachbegriffe. Das Plugin erzeugt daraus eine maschinenlesbare Beschreibung nach dem
+        europäischen Standard DCAT-AP. Portale wie GovData holen diese Beschreibung regelmäßig bei
+        Ihnen ab. Wichtig dabei: Ihre Daten bleiben auf Ihrer Website. Es wandert nur die
+        Beschreibung.
+
+  - id: Q3
+    kapitel: "Das richtige Paket"
+    bild: folie
+    dauer: "0:20"
+    folie: >-
+      Releases-Seite nachgebildet (keine Aufnahme von GitHub): Datei open-data-wizard-<version>.zip
+      hervorgehoben; grüner Button „Code" durchgestrichen.
+    sprechtext:
+      de: >-
+        Zuerst brauchen Sie das Plugin. Sie finden es auf GitHub unter „Releases". Laden Sie dort die
+        Datei herunter, deren Name mit „open-data-wizard" beginnt und auf „.zip" endet. Achtung: Der
+        grüne Button „Code" liefert ein unvollständiges Archiv. Damit meldet das Plugin nur
+        „Installation unvollständig".
+
+  - id: Q4
+    kapitel: "Installieren"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Im WordPress-Backend öffnen Sie „Plugins" und dann „Neues Plugin hinzufügen". Oben finden Sie
+        die Schaltfläche „Plugin hochladen". Wählen Sie die heruntergeladene ZIP-Datei aus, klicken
+        Sie auf „Jetzt installieren" und anschließend auf „Plugin aktivieren". Links im Menü
+        erscheint nun ein neuer Eintrag: „Datenkatalog". Hier findet alles Weitere statt.
+    schritte:
+      - oeffne: /wp-admin/plugins.php
+      - klick: { text: "Neues Plugin hinzufügen", quelle: core, pruefen: true, bei: "hinzufügen" }
+      - klick: { text: "Plugin hochladen", quelle: core, bei: "Schaltfläche" }
+      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, pruefen: true, datei: "<release-zip>", bei: "ZIP-Datei" }
+      - klick: { text: "Jetzt installieren", quelle: core, bei: "installieren" }
+      - klick: { text: "Plugin aktivieren", quelle: core, bei: "aktivieren" }
+    einblendung:
+      - { markiere: "Datenkatalog", bei: "Eintrag" }
+    hinweis: Das ZIP baut bin/build-release.sh vor der Aufnahme.
+
+  - id: Q5
+    kapitel: "Beispieldaten"
+    bild: screencast
+    dauer: "0:15"
+    sprechtext:
+      de: >-
+        Unter „Einstieg" können Sie Beispieldaten laden. Ein Klick legt 42 erfundene
+        Datensätze an, an denen Sie alles ausprobieren können. Sie sind deutlich gekennzeichnet und
+        werden nie an ein Portal ausgeliefert.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-einstieg
+      - scrolle_zu: "Beispieldaten zum Ausprobieren"
+      - klick: { text: "Beispieldaten laden", bei: "Klick" }
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+    einblendung:
+      - { markiere: "— Beispieldaten", bei: "gekennzeichnet" }
+
+  - id: Q6
+    kapitel: "Ein eigener Datensatz"
+    bild: screencast
+    dauer: "0:15"
+    sprechtext:
+      de: >-
+        Jetzt legen wir einen eigenen Datensatz an. Das Formular hat fünf Reiter. Zu jedem Feld gibt
+        es zwei Hilfen: Das kleine i zeigt den Fachbegriff aus dem Standard, „Mehr erfahren" erklärt
+        das Feld mit einem Beispiel.
+    schritte:
+      - klick: { text: "Neuen Datensatz anlegen", bei: "eigenen" }
+      - klick: { text: "Mehr erfahren", bei: "erfahren" }
+    einblendung:
+      - { markiere: "Reiterleiste", bei: "fünf" }
+      - { markiere: "ⓘ", bei: "i" }
+
+  - id: Q7
+    kapitel: "Wer und was"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Als Beispiel nehmen wir die Mitgliederentwicklung eines Fördervereins. Der Titel kommt oben
+        hinein. Im ersten Reiter fragt das Formular: Wer gibt diese Daten heraus? Und: Worum geht es
+        in diesem Datensatz? Beide Felder tragen ein rotes Sternchen. Sie sind nötig, um zu
+        veröffentlichen. Thema und Schlagworte sind freiwillig, helfen aber, die Daten zu finden.
+        Speichern können Sie jederzeit, auch unvollständig, als Entwurf.
+    schritte:
+      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
+      - tippe: { feld: "Wer gibt diese Daten heraus?", text: "{uebungsdatensatz.herausgeber}", bei: "heraus" }
+      - tippe: { feld: "Worum geht es in diesem Datensatz?", text: "{uebungsdatensatz.beschreibung}", bei: "Worum" }
+      - waehle: { feld: "Welchen Themen ist dieser Datensatz zugeordnet?", option: "{uebungsdatensatz.thema}", bei: "Thema" }
+      - tippe: { feld: "Mit welchen Schlagworten finde ich diese Daten?", text: "{uebungsdatensatz.schlagworte}", bei: "Schlagworte" }
+    einblendung:
+      - { markiere: "*", text: "* = nötig zum Veröffentlichen", bei: "Sternchen" }
+
+  - id: Q8
+    kapitel: "Wenn etwas fehlt"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Was passiert, wenn noch etwas fehlt? Klicken wir einmal auf „Veröffentlichen". Das Plugin
+        speichert den Datensatz als Entwurf und sagt genau, was fehlt: den Link zur Datei oder einen
+        Datei-Upload, und die Lizenz. Beides steht im Reiter Datenbereitstellung. Ein Klick auf „Zum
+        Feld springen" führt direkt dorthin.
+    schritte:
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "Veröffentlichen" }
+      - warte_auf: "Open Data Wizard: Veröffentlichung blockiert"
+      - klick: { text: "Zum Feld springen", bei: "springen" }
+    einblendung:
+      - { markiere: "Folgende Pflichtangaben fehlen oder sind leer:", zoom: true, bei: "genau" }
+
+  - id: Q9
+    kapitel: "Datei und Lizenz"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Im dritten Reiter geben Sie an, wo die Daten liegen. Entweder tragen Sie einen Link ein, oder
+        Sie laden die Datei in die Mediathek hoch, so wie hier unsere CSV-Datei. Format und
+        Dateigröße ermittelt das Plugin beim Speichern selbst. Dann die Lizenz: Wir wählen „CC BY 4.0 —
+        Namensnennung". Darunter steht, wie andere Sie bei einer Weiternutzung
+        nennen sollen.
+    schritte:
+      - klick: { text: "Datei auswählen / hochladen", bei: "Mediathek" }
+      - lade_hoch: { feld: "Dateien hochladen", quelle: core, pruefen: true, datei: "{uebungsdatensatz.datei}" }
+      - klick: { text: "Auswählen", bei: "CSV-Datei" }
+      - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "{uebungsdatensatz.lizenz}", bei: "wählen" }
+      - tippe: { feld: "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?", text: "{uebungsdatensatz.namensnennung}", bei: "Darunter" }
+    einblendung:
+      - { markiere: "Datei auswählen / hochladen", bei: "Mediathek" }
+
+  - id: Q10
+    kapitel: "Veröffentlichen"
+    bild: screencast
+    dauer: "0:20"
+    sprechtext:
+      de: >-
+        Der Reiter „Vorschau" zeigt, ob alle Pflichtangaben vorhanden sind. Jetzt lässt sich der
+        Datensatz veröffentlichen. Unter dem Formular sehen Sie die Qualitätsprüfung. Sie zeigt in
+        Prozent, wie vollständig die Beschreibung ist. Jede weitere Angabe verbessert diesen Wert.
+        Mehr dazu in Folge sechs.
+    schritte:
+      - klick: { text: "5 — Vorschau", bei: "Vorschau" }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "veröffentlichen" }
+      - scrolle_zu: "Qualitätsprüfung (MQA)"
+    einblendung:
+      - { markiere: "Qualitätsprüfung (MQA)", zoom: true, bei: "Prozent" }
+
+  - id: Q11
+    kapitel: "Auf der Website zeigen"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Nun soll der Datensatz auch auf Ihrer Website erscheinen. Legen Sie eine neue Seite an,
+        klicken Sie auf das Plus und suchen Sie den Block „Datensatz-Karte". Rechts in der
+        Seitenleiste wählen Sie Ihren Datensatz aus der Liste. Nach dem Veröffentlichen sehen
+        Besucherinnen und Besucher alles Wichtige an einer Stelle: Titel, Thema, Lizenz und den
+        Download.
+    schritte:
+      - oeffne: /wp-admin/post-new.php?post_type=page
+      - tippe: { feld: "Titel hinzufügen", quelle: core, pruefen: true, text: "Unsere Daten" }
+      - klick: { text: "Block-Inserter umschalten", quelle: core, pruefen: true, bei: "Plus" }
+      - tippe: { feld: "Suche", quelle: core, pruefen: true, text: "Datensatz-Karte", bei: "suchen" }
+      - klick: { text: "Datensatz-Karte", bei: "Datensatz-Karte" }
+      - waehle: { feld: "Welcher Datensatz soll angezeigt werden?", option: "{uebungsdatensatz.titel}", bei: "Liste" }
+      - klick: { text: "Veröffentlichen", quelle: core, pruefen: true, bei: "Veröffentlichen" }
+      - klick: { text: "Seite anzeigen", quelle: core, pruefen: true }
+    hinweis: Den Willkommens-Dialog des Block-Editors in der Aufnahme-Umgebung abschalten.
+
+  - id: Q12
+    kapitel: "An Portale anbinden"
+    bild: screencast
+    dauer: "0:20"
+    sprechtext:
+      de: >-
+        Bleibt der Schritt zu den Portalen. Unter „Datenkatalog", „Einstellungen" finden Sie im
+        Abschnitt Harvesting die Adresse Ihres Katalogs. Diese Adresse teilen Sie einmal einem Portal
+        mit, etwa GovData oder dem Portal Ihres Landes. Von da an holt das Portal Ihre Beschreibungen
+        regelmäßig selbst ab. Die Beispieldaten sind dort nicht enthalten, nur Ihr eigener Datensatz.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-settings
+      - scrolle_zu: "Harvesting"
+    einblendung:
+      - { markiere: "DCAT-AP.de · Turtle (empfohlen)", zoom: true, bei: "Adresse" }
+    folie_danach: >-
+      Kurz eingeblendet: Katalog-Adresse → Portal (GovData, Landesportal), Pfeil zurück
+      „holt regelmäßig ab".
+
+  - id: Q13
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:15"
+    folie: >-
+      Abspann: Übersicht der Folgen 1–10; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        Das war der schnelle Weg. In den weiteren Folgen sehen wir uns jeden Schritt genauer an, vom
+        Formular bis zur Anbindung an die Portale. Danke fürs Zuschauen.

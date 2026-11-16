@@ -1,6 +1,6 @@
 # Videotutorials — Konzept
 
-> **Entwurf 0.5 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
+> **Entwurf 0.6 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
 > aus dem Code übernommen; ändern sie sich, ändert sich das Drehbuch mit.
 
 ## 1 · Ziel, Zielgruppe, Entscheidungen
@@ -88,18 +88,22 @@ die Harvest-URL bekannt.
 | Q1 | 0:20 | Folie | Titel, Logo | Worum es geht und für wen. |
 | Q2 | 0:25 | Folie (animiert) | Formular ausfüllen → DCAT-AP.de erzeugen → Portale holen ab | Die Daten bleiben bei Ihnen; nur ihre Beschreibung wandert. |
 | Q3 | 0:20 | Folie (Releases-Seite nachgebildet) | `open-data-wizard-<version>.zip` hervorgehoben, „Code"-Button durchgestrichen | Nicht der grüne „Code"-Button — dort fehlen Bibliotheken. |
-| Q4 | 0:30 | Screencast WP | Plugins → Installieren → Plugin hochladen → Datei auswählen → Jetzt installieren → Plugin aktivieren | Danach erscheint links der Menüpunkt „Datenkatalog". |
+| Q4 | 0:30 | Screencast WP | Plugins → Neues Plugin hinzufügen → Plugin hochladen → Datei auswählen → Jetzt installieren → Plugin aktivieren | Danach erscheint links der Menüpunkt „Datenkatalog". |
 | Q5 | 0:15 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze | 42 erfundene Beispiele zum Ausprobieren — gekennzeichnet, nie an Portale ausgeliefert. |
 | Q6 | 0:15 | Screencast | Datenkatalog → Neuen Datensatz anlegen → Titel | Fünf Reiter; ⓘ zeigt den Fachbegriff, „Mehr erfahren" die Erklärung. |
 | Q7 | 0:30 | Screencast | Reiter 1: „Wer gibt diese Daten heraus?"\* (Förderverein Musterstadt e. V.), „Worum geht es in diesem Datensatz?"\*, Themen, Schlagworte | Sternchen = nötig zum Veröffentlichen. Als Entwurf speichern geht immer. |
 | Q8 | 0:25 | Screencast | „Veröffentlichen" → Meldung nennt Reiter und fehlende Felder → „Zum Feld springen" | Unvollständiges wird nicht veröffentlicht — das Plugin zeigt, wo etwas fehlt. |
-| Q9 | 0:30 | Screencast | Reiter 3: „Datei auswählen / hochladen" → Mediathek → CSV; Lizenz „CC-BY 4.0 (Namensnennung)"; Namensnennungstext | Format und Dateigröße ermittelt das Plugin beim Speichern. |
+| Q9 | 0:30 | Screencast | Reiter 3: „Datei auswählen / hochladen" → Mediathek → CSV; Lizenz „CC BY 4.0 — Namensnennung"; Namensnennungstext | Format und Dateigröße ermittelt das Plugin beim Speichern. |
 | Q10 | 0:20 | Screencast | Reiter „5 — Vorschau" → Veröffentlichen → Box „Qualitätsprüfung (MQA)" | Prozent und Stufe zeigen, wie vollständig die Beschreibung ist (→ Folge 6). |
-| Q11 | 0:30 | Screencast | Seiten → Neue Seite → „+" → Block „Datensatz-Karte" → eigenen Datensatz in der Seitenleiste wählen → Veröffentlichen → Seite ansehen | Besucher finden Download, Lizenz und Metadaten an einer Stelle. |
+| Q11 | 0:30 | Screencast | Seiten → Neue Seite hinzufügen → „+" → Block „Datensatz-Karte" → eigenen Datensatz in der Seitenleiste wählen → Veröffentlichen → Seite ansehen | Besucher finden Download, Lizenz und Metadaten an einer Stelle. |
 | Q12 | 0:20 | Screencast + Folie | Datenkatalog → Einstellungen → Harvesting → URL kopieren; Folie: Portal trägt die URL ein | Einmal beim Portal melden — es holt Änderungen von selbst ab. Die Beispieldaten sind dort nicht enthalten, nur Ihr eigener Datensatz. |
 | Q13 | 0:15 | Folie | Abspann: Hinweis auf die Folgen 1–10, Version | — |
 
-Sprechtext bei rund 130 Wörtern pro Minute: etwa 650 Wörter.
+Vollständiger Sprechtext und Klickschritte: [`video/folgen/00-quickstart.yml`](../video/folgen/00-quickstart.yml)
+(rund 600 Wörter, bei 130 Wörtern pro Minute etwa 4:40 Sprechzeit). Die Dauern oben sind
+Schätzungen; maßgeblich ist die Länge des erzeugten Tons. Beschriftungen von WordPress selbst
+(etwa „Neues Plugin hinzufügen") sind dort als `pruefen: true` markiert und werden bei der ersten
+Aufnahme gegen die laufende WordPress-Version geprüft.
 
 ## 5 · Folgen 1–10 — Szenen
 
@@ -119,7 +123,7 @@ Sprechtext bei rund 130 Wörtern pro Minute: etwa 650 Wörter.
 |---|---|---|---|---|
 | 2.1 | 0:25 | Folie | Release-ZIP und Quellcode-Archiv nebeneinander | Nur das ZIP unter *Releases* enthält die nötigen Bibliotheken. |
 | 2.2 | 0:20 | Screencast | Hinweis „Open Data Wizard: Installation unvollständig" | So sieht es aus, wenn das falsche Archiv installiert wurde. Abhilfe: das Release-ZIP hochladen. |
-| 2.3 | 0:25 | Screencast | Plugins → Installieren → Plugin hochladen → Release-ZIP → Plugin aktivieren | Der Normalfall in vier Klicks. |
+| 2.3 | 0:25 | Screencast | Plugins → Neues Plugin hinzufügen → Plugin hochladen → Release-ZIP → Plugin aktivieren | Der Normalfall in vier Klicks. |
 | 2.4 | 0:20 | Folie | Automatische Updates | Neue Versionen erscheinen im Backend. Ihre Datensätze liegen in der Datenbank und bleiben bei Updates erhalten. |
 | 2.5 | 0:50 | Screencast | Datenkatalog → Einstellungen: *Katalog* (Katalog-Titel, Katalog-Beschreibung) · *Standardwerte für neue Datensätze* (Herausgebende Organisation, Standard-Lizenz, Standard-Sprache) · *REST API* (Cache-Laufzeit) · *Qualitätsprüfung (MQA)* (URL-Erreichbarkeit prüfen) · *Deinstallation* (Daten löschen) → Änderungen speichern | Standardwerte sparen Tipparbeit bei jedem neuen Datensatz. Der Abschnitt *Harvesting* folgt in Folge 9. |
 | 2.6 | 0:40 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze („— Beispieldaten" hinter dem Titel) | Beispiele zum Ausprobieren aller Funktionen, deutlich gekennzeichnet. |
@@ -145,7 +149,7 @@ Sprechtext bei rund 130 Wörtern pro Minute: etwa 650 Wörter.
 | 4.1 | 0:30 | Folie | Datensatz und Distribution | Ein Datensatz, mehrere Wege zu den Daten: Dateien, Formate, Zugänge. |
 | 4.2 | 0:35 | Screencast | Reiter 3: Zugriffs-URL\* (Link eintragen) — oder „Datei auswählen / hochladen" → Mediathek | Link, wenn die Datei woanders liegt; Upload, wenn sie in WordPress liegen soll. Beim Upload ermittelt das Plugin Format und Größe. |
 | 4.3 | 0:20 | Screencast | „In welchem Format ist die Datei?", Dateigröße (Bytes) | Beim Link von Hand angeben. |
-| 4.4 | 0:40 | Screencast | Lizenz\* wählen; Lizenzhinweis; „Sonstige" → „Lizenz-URI eingeben oder auswählen"; Namensnennungstext | Die Lizenz entscheidet, ob Daten als Open Data gelten. Bei Namensnennungs-Lizenzen den Text vorgeben, der genannt werden soll. |
+| 4.4 | 0:40 | Screencast | Lizenz\* wählen; Lizenzhinweis; „Sonstige Lizenz…" → „Lizenz-URI eingeben oder auswählen"; Namensnennungstext | Die Lizenz entscheidet, ob Daten als Open Data gelten. Bei Namensnennungs-Lizenzen den Text vorgeben, der genannt werden soll. |
 | 4.5 | 0:25 | Screencast | „Wie verlässlich bleibt diese Datei abrufbar?", „Wer darf auf diese Daten zugreifen?" | Verlässlichkeit und Zugriffsrechte helfen Nutzenden, die Daten einzuschätzen. |
 | 4.6 | 0:45 | Screencast | „Weitere Distributionen" → Eintrag hinzufügen → Zugriffs-URL, Format GeoJSON, Lizenz | Dieselben Daten in einem zweiten Format. Auch hier ist die Lizenz Pflicht. |
 | 4.7 | 0:20 | Blick unter die Haube | JSON-LD: `dcat:distribution` mit zwei Einträgen | Zwei Distributionen, ein Datensatz. |
