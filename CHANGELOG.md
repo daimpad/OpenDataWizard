@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.8] — 2026-11-16
+
+### 🐛 Fixed
+- **Batch-Import meldet sein Ergebnis.** Nach „Jetzt importieren“ verschwand auf der Seite
+  „Batch-Import“ der ganze Import-Abschnitt — und mit ihm die Fortschrittsanzeige, die Meldung
+  „Import abgeschlossen!“ mit der Zahl der angelegten Entwürfe und der Link „Zur Datensatzliste“.
+  Die Datensätze wurden angelegt, die Seite zeigte davon aber nichts. Jetzt werden nur die
+  Knöpfe ausgeblendet; eine neue Vorschau nach einem Import beginnt wieder bei den Knöpfen.
+  Ein End-to-End-Test deckt den Weg von der Vorschau bis zur Meldung ab.
+
+---
+
 ## [2.47.7] — 2026-11-16
 
 ### 🐛 Fixed
