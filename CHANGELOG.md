@@ -7,6 +7,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.9] — 2026-11-16
+
+### 🌍 i18n
+- **WP-CLI meldet sich durchgehend auf Deutsch.** `wp open-data-wizard quality recalculate` und
+  `cache clear` meldeten sich als einzige Befehle auf Englisch („Recalculated quality scores …“,
+  „Cleared … transient cache(s).“), obwohl die Quellsprache des Plugins Deutsch ist. Sie melden
+  jetzt „Datensätze mit neu berechneter Qualität: 45“ und „Zwischengespeicherte Antworten
+  gelöscht: 4“; auch die Fortschrittsanzeige und die Hilfetexte sind deutsch. Auf en_US-
+  Installationen bleibt der englische Wortlaut über die Übersetzung erhalten. Ein Unit-Test prüft
+  die Meldung von `cache clear`.
+
+---
+
 ## [2.47.8] — 2026-11-16
 
 ### 🐛 Fixed

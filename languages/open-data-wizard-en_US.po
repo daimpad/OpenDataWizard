@@ -276,7 +276,7 @@ msgstr "Cache lifetime (seconds)"
 msgid "Catalog-Endpoint (REST API)"
 msgstr "Catalog endpoint (REST API)"
 
-msgid "Cleared %d transient cache(s)."
+msgid "Zwischengespeicherte Antworten gelöscht: %d"
 msgstr "Cleared %d transient cache(s)."
 
 msgid "DATENSATZ-TYP (dct:type)"
@@ -1192,8 +1192,11 @@ msgstr "REST API"
 msgid "REST-Endpoint öffnen"
 msgstr "Open REST endpoint"
 
-msgid "Recalculated quality scores for %d dataset(s)."
+msgid "Datensätze mit neu berechneter Qualität: %d"
 msgstr "Recalculated quality scores for %d dataset(s)."
+
+msgid "Qualität wird neu berechnet"
+msgstr "Recalculating quality scores"
 
 msgid "Rechte (dct:rights)"
 msgstr "Rights (dct:rights)"
