@@ -88,7 +88,7 @@ die Harvest-URL bekannt.
 | Q1 | 0:20 | Folie | Titel, Logo | Worum es geht und für wen. |
 | Q2 | 0:25 | Folie (animiert) | Formular ausfüllen → DCAT-AP.de erzeugen → Portale holen ab | Die Daten bleiben bei Ihnen; nur ihre Beschreibung wandert. |
 | Q3 | 0:20 | Folie (Releases-Seite nachgebildet) | `open-data-wizard-<version>.zip` hervorgehoben, „Code"-Button durchgestrichen | Nicht der grüne „Code"-Button — dort fehlen Bibliotheken. |
-| Q4 | 0:30 | Screencast WP | Plugins → Neues Plugin hinzufügen → Plugin hochladen → Datei auswählen → Jetzt installieren → Plugin aktivieren | Danach erscheint links der Menüpunkt „Datenkatalog". |
+| Q4 | 0:30 | Screencast WP | Plugins → Plugin hinzufügen → Plugin hochladen → Datei auswählen → Jetzt installieren → Plugin aktivieren | Danach erscheint links der Menüpunkt „Datenkatalog". |
 | Q5 | 0:15 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze | 42 erfundene Beispiele zum Ausprobieren — gekennzeichnet, nie an Portale ausgeliefert. |
 | Q6 | 0:15 | Screencast | Datenkatalog → Neuen Datensatz anlegen → Titel | Fünf Reiter; ⓘ zeigt den Fachbegriff, „Mehr erfahren" die Erklärung. |
 | Q7 | 0:30 | Screencast | Reiter 1: „Wer gibt diese Daten heraus?"\* (Förderverein Musterstadt e. V.), „Worum geht es in diesem Datensatz?"\*, Themen, Schlagworte | Sternchen = nötig zum Veröffentlichen. Als Entwurf speichern geht immer. |
@@ -102,7 +102,7 @@ die Harvest-URL bekannt.
 Vollständiger Sprechtext und Klickschritte: [`video/folgen/00-quickstart.yml`](../video/folgen/00-quickstart.yml)
 (rund 600 Wörter, bei 130 Wörtern pro Minute etwa 4:40 Sprechzeit). Die Dauern oben sind
 Schätzungen; maßgeblich ist die Länge des erzeugten Tons. Beschriftungen von WordPress selbst
-(etwa „Neues Plugin hinzufügen") sind dort als `pruefen: true` markiert und werden bei der ersten
+(etwa „Plugin hinzufügen") sind dort als `pruefen: true` markiert und werden bei der ersten
 Aufnahme gegen die laufende WordPress-Version geprüft.
 
 ## 5 · Folgen 1–10 — Szenen
@@ -123,7 +123,7 @@ Aufnahme gegen die laufende WordPress-Version geprüft.
 |---|---|---|---|---|
 | 2.1 | 0:25 | Folie | Release-ZIP und Quellcode-Archiv nebeneinander | Nur das ZIP unter *Releases* enthält die nötigen Bibliotheken. |
 | 2.2 | 0:28 | Screencast | Hinweis „Open Data Wizard: Installation unvollständig" → Deaktivieren → Löschen | So sieht es aus, wenn das falsche Archiv installiert wurde. Abhilfe: das unvollständige Plugin löschen und das Release-ZIP installieren. |
-| 2.3 | 0:25 | Screencast | Plugins → Neues Plugin hinzufügen → Plugin hochladen → Release-ZIP → Plugin aktivieren | Der Normalfall in vier Klicks. |
+| 2.3 | 0:25 | Screencast | Plugins → Plugin hinzufügen → Plugin hochladen → Release-ZIP → Plugin aktivieren | Der Normalfall in vier Klicks. |
 | 2.4 | 0:32 | Folie | Updates mit Update-Plugin (z. B. Git Updater) oder durch erneutes Hochladen | Neue Versionen meldet WordPress, wenn ein Update-Plugin installiert ist; sonst ersetzt man die vorhandene Version durch Hochladen. Die Datensätze bleiben erhalten. |
 | 2.5 | 0:50 | Screencast | Datenkatalog → Einstellungen: *Katalog* (Katalog-Titel, Katalog-Beschreibung) · *Standardwerte für neue Datensätze* (Herausgebende Organisation, Standard-Lizenz, Standard-Sprache) · *REST API* (Cache-Laufzeit) · *Qualitätsprüfung (MQA)* (URL-Erreichbarkeit prüfen) · *Deinstallation* (Daten löschen) → Änderungen speichern | Standardwerte sparen Tipparbeit bei jedem neuen Datensatz. Der Abschnitt *Harvesting* folgt in Folge 9. |
 | 2.6 | 0:40 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze („— Beispieldaten" hinter dem Titel) | Beispiele zum Ausprobieren aller Funktionen, deutlich gekennzeichnet. |

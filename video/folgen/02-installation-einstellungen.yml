@@ -58,7 +58,7 @@ szenen:
       - warte_auf: "Open Data Wizard: Installation unvollständig"
       - klick: { text: "Deaktivieren", quelle: core, bei: "Deaktivieren" }
       - klick: { text: "Löschen", quelle: core, bei: "löschen" }
-      - bestaetige: { quelle: core, pruefen: true }
+      - bestaetige: { quelle: core }
     einblendung:
       - { markiere: "Open Data Wizard: Installation unvollständig", zoom: true, bei: "Hinweis" }
 
@@ -68,13 +68,13 @@ szenen:
     dauer: "0:22"
     sprechtext:
       de: >-
-        Danach der übliche Weg: „Plugins", „Neues Plugin hinzufügen", „Plugin hochladen". Wählen Sie
+        Danach der übliche Weg: „Plugins", „Plugin hinzufügen", „Plugin hochladen". Wählen Sie
         das Release-ZIP, installieren und aktivieren Sie es. Der Hinweis ist verschwunden, und links
         erscheint der Menüpunkt „Datenkatalog".
     schritte:
-      - klick: { text: "Neues Plugin hinzufügen", quelle: core, pruefen: true, bei: "hinzufügen" }
+      - klick: { text: "Plugin hinzufügen", quelle: core, bei: "hinzufügen" }
       - klick: { text: "Plugin hochladen", quelle: core, bei: "hochladen" }
-      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, pruefen: true, datei: "<release-zip>", bei: "Release-ZIP" }
+      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, datei: "<release-zip>", bei: "Release-ZIP" }
       - klick: { text: "Jetzt installieren", quelle: core, bei: "installieren" }
       - klick: { text: "Plugin aktivieren", quelle: core, bei: "aktivieren" }
     einblendung:
@@ -126,7 +126,7 @@ szenen:
       - scrolle_zu: { text: "Cache-Laufzeit (Sekunden)", bei: "Cache-Laufzeit" }
       - scrolle_zu: { text: "URL-Erreichbarkeit prüfen", bei: "URL-Erreichbarkeit" }
       - scrolle_zu: { text: "Daten löschen", bei: "Deinstallation" }
-      - klick: { text: "Änderungen speichern", quelle: core }
+      - klick: { text: "Einstellungen speichern" }
     einblendung:
       - { markiere: "Katalog-Titel", bei: "Titel" }
       - { markiere: "Daten löschen", zoom: true, bei: "Häkchen" }
@@ -157,13 +157,15 @@ szenen:
     dauer: "0:35"
     sprechtext:
       de: >-
-        Ein Beispiel kann auch Vorlage für einen eigenen Datensatz sein. Öffnen Sie es und passen Sie
-        es zuerst an. Solange es ein Beispiel bleibt, sehen Portale es nicht, auch nicht nach dem
+        Ein Beispiel kann auch Vorlage für einen eigenen Datensatz sein. Suchen Sie es in der Liste,
+        öffnen Sie es und passen Sie es zuerst an. Solange es ein Beispiel bleibt, sehen Portale es nicht, auch nicht nach dem
         Speichern. Erst dann klicken Sie oben auf „Als eigenen Datensatz übernehmen". Ab jetzt ist es
         ein regulärer, veröffentlichter Datensatz und erscheint in den Harvest-Endpunkten.
     schritte:
-      - klick: { text: "Eingetragene Vereine in Musterstadt 2010–2024", bei: "Öffnen" }
-      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "Eingetragene Vereine in Musterstadt 2010–2025", bei: "passen" }
+      - tippe: { feld: "Datensätze suchen", quelle: core, text: "Vereine", bei: "Suchen" }
+      - klick: { text: "Datensätze suchen", quelle: core }
+      - klick: { text: "Eingetragene Vereine in Musterstadt 2010–2024", bei: "öffnen" }
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "Eingetragene Vereine in Musterstadt 2010–2025", bei: "passen" }
       - klick: { text: "Aktualisieren", quelle: core, bei: "Speichern" }
       - klick: { text: "Als eigenen Datensatz übernehmen", bei: "übernehmen" }
       - warte_auf: "Der Datensatz ist jetzt ein eigener Datensatz."
