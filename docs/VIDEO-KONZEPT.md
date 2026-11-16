@@ -1,6 +1,6 @@
 # Videotutorials — Konzept
 
-> **Entwurf 0.4 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
+> **Entwurf 0.5 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
 > aus dem Code übernommen; ändern sie sich, ändert sich das Drehbuch mit.
 
 ## 1 · Ziel, Zielgruppe, Entscheidungen
@@ -25,12 +25,14 @@ Einschübe „Blick unter die Haube", die man überspringen kann.
 | Fehlermeldung im Quick-Start | bleibt als Lernmoment (Szene Q8) |
 | Folge 10 | wird als Video produziert |
 | Veröffentlichung | YouTube, auf dem Kanal des Kunden (Abschnitt 7) |
-| Lizenz der Videos | CC BY, Namensnennung: das Projekt („Open Data Wizard") |
+| Lizenz der Videos | CC BY 3.0 (Auswahl in den YouTube-Einstellungen), Namensnennung: das Projekt („Open Data Wizard") |
 | Fremde Oberflächen | werden als Folie nachgebildet (GitHub, EU-Validator) |
 | Gestaltung | Projektdesign; kein Logo und kein Name des Kunden |
 | Produktion | automatisiert, Produktionscode unter `video/` in diesem Repository (Abschnitt 6) |
 | Ton-Dateien | nur lokal erzeugt; geliefert wird das fertige Video |
 | Stimme | Der ElevenLabs-Tarif deckt die Nutzung auf dem Kanal des Kunden und unter CC BY ab |
+| Träger | gemeinnützige Stiftung — Remotion ist damit kostenlos nutzbar (Abschnitt 6) |
+| Englische Fassung | folgt später, mit derselben Stimme (Abschnitt 8) |
 
 ## 2 · Die Reihe im Überblick
 
@@ -237,8 +239,9 @@ Untertitel und YouTube-Beschreibung.
 # video/folgen/00-quickstart.yml (Skizze)
 - id: Q7
   bild: screencast
-  sprechtext: >
-    Im ersten Reiter fragt das Formular, wer die Daten herausgibt …
+  sprechtext:
+    de: >
+      Im ersten Reiter fragt das Formular, wer die Daten herausgibt …
   schritte:
     - klick: "Reiter: 1 — Grundlegende Informationen"
     - tippe: { feld: "Wer gibt diese Daten heraus?", text: "Förderverein Musterstadt e. V." }
@@ -299,16 +302,18 @@ video/
 Organisationen mit bis zu drei Personen und gemeinnützige Organisationen; sonst kostenpflichtig.
 Erhält der Kunde nur die fertigen Videos, zählt er nicht mit — es kommt auf die Personen an, die
 Remotion in diesem Projekt bedienen. Das Remotion-Projekt bleibt deshalb hier im Repository und
-wird nicht an den Kunden übergeben.
+wird nicht an den Kunden übergeben. Der Träger ist eine gemeinnützige Stiftung; die Nutzung ist
+damit unabhängig von der Personenzahl kostenlos, ohne Anfrage bei Remotion. Eine Ausnahme
+nennt die FAQ für Behörden und öffentliche Bildungseinrichtungen, die eine schriftliche Freigabe
+brauchen — das trifft nur zu, falls die Stiftung öffentlich-rechtlich ist.
 
 ## 7 · Veröffentlichung auf YouTube
 
 - **Kanal:** Die Videos erscheinen auf dem Kanal des Kunden. Je Folge entsteht ein Lieferpaket:
   MP4, WebVTT-Untertitel, Vorschaubild, Titel und Beschreibung als Textdatei.
-- **Lizenz: CC BY, Namensnennung „Open Data Wizard"** mit Link auf das Repository. YouTube bietet
-  in den Upload-Einstellungen „Creative Commons – Namensnennung" an (Version 3.0). Soll zusätzlich
-  CC BY 4.0 gelten, steht das ausdrücklich in der Beschreibung. Der Abspann nennt dieselbe Lizenz
-  und Namensnennung.
+- **Lizenz: CC BY 3.0, Namensnennung „Open Data Wizard"** mit Link auf das Repository. In den
+  Upload-Einstellungen „Creative Commons – Namensnennung" wählen; die Beschreibung nennt
+  Lizenz und Namensnennung, ebenso der Abspann.
 - **Playlist** „Open Data Wizard" mit den Folgen 0–10 in dieser Reihenfolge.
 - **Titel-Schema:** „Open Data Wizard · 0 · Quick-Start: In fünf Minuten zum ersten offenen Datensatz".
 - **Beschreibung** wird aus dem Drehbuch erzeugt: Kurztext, Kapitelmarken, Links (Release,
@@ -324,10 +329,26 @@ wird nicht an den Kunden übergeben.
 - **Hochladen** über den Kunden oder mit dessen Zugang, von Hand; das Lieferpaket enthält alles
   Nötige.
 
-## 8 · Offene Punkte
+## 8 · Englische Fassung (später)
 
-1. **Lizenzversion:** Genügt CC BY 3.0 aus den YouTube-Einstellungen, oder soll in der Beschreibung
-   zusätzlich CC BY 4.0 stehen?
-2. **Remotion:** Wie viele Personen bedienen Remotion in diesem Projekt, und ist der Träger
-   gemeinnützig? Bei höchstens drei Personen oder Gemeinnützigkeit ist die Nutzung kostenlos.
-3. **Englische Fassung** später, mit derselben Stimme?
+Die Pipeline wird von Anfang an so angelegt, dass eine englische Fassung ohne Umbau möglich ist:
+
+- **Sprechtext je Sprache** im selben Drehbuch (`sprechtext.de`, `sprechtext.en`). Klickschritte
+  und Einblendungen bleiben gemeinsam.
+- **Beschriftungen über die Übersetzung.** Die Klickschritte verweisen auf die deutschen
+  Beschriftungen des Plugins. Für die englische Aufnahme schlägt das Aufnahmeskript die englische
+  Fassung in `languages/open-data-wizard-en_US.po` nach — dieselbe Quelle, die das Plugin
+  verwendet. Ändert sich eine Übersetzung, folgt das Video ohne Eingriff ins Drehbuch.
+- **Aufnahme** in einer zweiten `wp-env`-Instanz mit englischem WordPress.
+- **Stimme:** dieselbe Stimme „Damian" mit einem mehrsprachigen ElevenLabs-Modell; eigenes
+  Aussprachewörterbuch für Englisch.
+- **Folien** aus denselben Komponenten, Texte je Sprache.
+
+## 9 · Offene Punkte
+
+Für die deutsche Fassung ist nichts mehr offen. Für die englische Fassung später zu klären:
+
+1. **Beispieldaten:** Die mitgelieferten Beispieldaten sind deutsch. Bleiben sie das in der
+   englischen Fassung, oder braucht es englische Beispieldaten?
+2. **YouTube:** eine eigene englische Playlist, oder — falls der Kanal des Kunden das anbietet —
+   zusätzliche Tonspuren in denselben Videos?
