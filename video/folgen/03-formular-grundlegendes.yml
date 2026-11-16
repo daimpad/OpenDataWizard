@@ -1,0 +1,178 @@
+# Drehbuch · Folge 3 · Das Formular I: Grundlegendes und Sprache
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 3
+titel: "Das Formular I: Grundlegendes und Sprache"
+plugin_version: "2.47.5"
+# Ausgangszustand: Plugin aktiv, Einstellungen wie am Ende von Folge 2 (Herausgebende Organisation
+# „Förderverein Musterstadt e. V.", Standard-Lizenz CC BY 4.0, Standard-Sprache Deutsch), keine
+# Beispieldaten.
+umgebung: plugin-eingerichtet
+
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  herausgeber: "Förderverein Musterstadt e. V."   # aus den Einstellungen vorbelegt
+  beschreibung: >-
+    Mitgliederzahlen des Fördervereins Musterstadt e. V. von 2015 bis 2025: Mitglieder zum
+    Jahresende, Eintritte und Austritte je Jahr. Die Zahlen stammen aus der Mitgliederverwaltung
+    des Vereins und werden jedes Jahr im Januar ergänzt.
+  thema: "Bevölkerung & Gesellschaft"
+  schlagworte: ["Mitglieder", "Ehrenamt", "Verein"]
+  cessda: "GESELLSCHAFT UND KULTUR"
+  engagementfeld: "Kultur"
+  uebersetzung_en:
+    titel: "Membership of the Musterstadt Support Association, 2015–2025"
+    beschreibung: >-
+      Annual membership figures of the Musterstadt Support Association from 2015 to 2025:
+      members at year end, new members and departures.
+    schlagworte: ["Members", "Volunteering", "Association"]
+
+szenen:
+
+  - id: "3.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 3: Das Formular, Teil 1. Wir legen einen Datensatz an und füllen die ersten beiden
+        Reiter aus: die grundlegenden Angaben und die Sprache.
+
+  - id: "3.1"
+    kapitel: "Aufbau des Formulars"
+    bild: screencast
+    dauer: "0:40"
+    sprechtext:
+      de: >-
+        Unter „Datenkatalog" klicken Sie auf „Neuen Datensatz anlegen". Das Formular ist in fünf
+        Reiter gegliedert, von den grundlegenden Angaben bis zur Vorschau. Jedes Feld stellt eine
+        Frage in Alltagssprache. Dazu gibt es zwei Hilfen: Das kleine i zeigt, wie das Feld im
+        Standard DCAT-AP heißt. „Mehr erfahren" klappt eine ausführliche Erklärung mit Beispiel auf.
+        Ein rotes Sternchen bedeutet: Diese Angabe ist nötig, um zu veröffentlichen. Als Entwurf
+        speichern können Sie jederzeit.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "Neuen Datensatz anlegen", bei: "anlegen" }
+      - klick: { text: "Hilfe anzeigen", bei: "i" }
+      - klick: { text: "Mehr erfahren", bei: "erfahren" }
+    einblendung:
+      - { markiere: "Reiterleiste", bei: "Reiter" }
+      - { markiere: "*", text: "* = nötig zum Veröffentlichen", bei: "Sternchen" }
+
+  - id: "3.2"
+    kapitel: "Titel und Herausgeber"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Oben steht der Titel. Ein guter Titel nennt, worum es geht, wo und für welchen Zeitraum.
+        Darunter die erste Frage: Wer gibt diese Daten heraus? Gemeint ist die Organisation, die für
+        die Daten verantwortlich ist. Haben Sie in den Einstellungen eine herausgebende Organisation
+        hinterlegt, steht sie hier bereits.
+    schritte:
+      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
+    einblendung:
+      - { markiere: "Wer gibt diese Daten heraus?", bei: "Frage" }
+      - { markiere: "{uebungsdatensatz.herausgeber}", text: "aus den Einstellungen", bei: "bereits" }
+
+  - id: "3.3"
+    kapitel: "Die Beschreibung"
+    bild: screencast
+    dauer: "0:28"
+    sprechtext:
+      de: >-
+        Die zweite Pflichtfrage: Worum geht es in diesem Datensatz? Schreiben Sie für Menschen, die
+        Ihre Daten nicht kennen. Was ist enthalten, woher stammen die Zahlen, welchen Zeitraum decken
+        sie ab, und wie oft werden sie ergänzt? Portale zeigen diesen Text in ihren Suchergebnissen.
+    schritte:
+      - tippe: { feld: "Worum geht es in diesem Datensatz?", text: "{uebungsdatensatz.beschreibung}", bei: "Schreiben" }
+    einblendung:
+      - { markiere: "Worum geht es in diesem Datensatz?", bei: "Pflichtfrage" }
+
+  - id: "3.4"
+    kapitel: "Themen und Schlagworte"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Bei den Themen wählen Sie aus einer festen Liste, die in ganz Europa gleich ist, zum Beispiel
+        „Bevölkerung & Gesellschaft". Mehrere Themen sind möglich. Schlagworte dagegen sind freie
+        Suchbegriffe. Schreiben Sie jedes in eine eigene Zeile. Beides hilft, Ihre Daten zu finden,
+        und fließt in die Qualitätsbewertung ein.
+    schritte:
+      - waehle: { feld: "Welchen Themen ist dieser Datensatz zugeordnet?", option: "{uebungsdatensatz.thema}", bei: "Beispiel" }
+      - tippe: { feld: "Mit welchen Schlagworten finde ich diese Daten?", text: "{uebungsdatensatz.schlagworte}", bei: "Zeile" }
+    einblendung:
+      - { markiere: "Welchen Themen ist dieser Datensatz zugeordnet?", bei: "Themen" }
+
+  - id: "3.5"
+    kapitel: "Weitere Einordnung"
+    bild: screencast
+    dauer: "0:28"
+    sprechtext:
+      de: >-
+        Unter „Weitere Einordnung" finden Sie zwei zusätzliche Ordnungen. Die CESSDA-Themenklassifikation
+        stammt aus der sozialwissenschaftlichen Forschung. Tippen Sie ein Thema ein und wählen Sie
+        einen Vorschlag. Die Engagementfelder von ZiviZ ordnen Daten aus der Zivilgesellschaft ein,
+        etwa „Kultur" oder „Sport". Beides ist freiwillig.
+    schritte:
+      - klick: { text: "Weitere Einordnung (optional)", bei: "Einordnung" }
+      - tippe: { feld: "CESSDA Themenklassifikation", text: "Gesellschaft", bei: "Tippen" }
+      - klick: { text: "{uebungsdatensatz.cessda}", bei: "Vorschlag" }
+      - waehle: { feld: "Welchen Engagementfeldern ist dieser Datensatz zuzuordnen?", option: "{uebungsdatensatz.engagementfeld}", bei: "Kultur" }
+
+  - id: "3.6"
+    kapitel: "Sprache und Übersetzungen"
+    bild: screencast
+    dauer: "0:40"
+    sprechtext:
+      de: >-
+        Im zweiten Reiter geht es um die Sprache. Oben wählen Sie, in welcher Sprache die Daten
+        vorliegen; zur Auswahl stehen alle 24 Amtssprachen der EU. Darunter können Sie Titel,
+        Beschreibung und Schlagworte in weiteren Sprachen ergänzen: „Übersetzung hinzufügen",
+        Sprache wählen, Text eintragen. Mehrsprachige Portale wie data.europa.eu können dann die
+        passende Fassung anzeigen.
+    schritte:
+      - klick: { text: "2 — Sprache & Übersetzungen", bei: "zweiten" }
+      - klick: { text: "Übersetzung hinzufügen", quelle: carbon-fields, bei: "hinzufügen" }
+      - waehle: { feld: "Sprache", option: "Englisch (EN)", bei: "wählen" }
+      - tippe: { feld: "Titel", text: "{uebungsdatensatz.uebersetzung_en.titel}", bei: "eintragen" }
+    einblendung:
+      - { markiere: "In welcher Sprache sind die Daten?", bei: "Oben" }
+      - { markiere: "Übersetzungen (optional)", bei: "Darunter" }
+    hinweis: >-
+      „Übersetzung hinzufügen" entsteht aus „%s hinzufügen" (languages/carbon-fields-ui-de_DE.po)
+      und dem Label „Übersetzung". Beschreibung und Schlagworte auf Englisch werden ohne eigene
+      Erwähnung im Hintergrund ergänzt, damit 3.7 vollständige Metadaten zeigt.
+
+  - id: "3.7"
+    kapitel: "Blick unter die Haube"
+    bild: screencast
+    dauer: "0:22"
+    sprechtext:
+      de: >-
+        Ein Blick unter die Haube. Nach dem Speichern zeigt der Reiter „Vorschau" die
+        maschinenlesbare Beschreibung. Der Titel steht dort jetzt zweimal, jeweils mit einer
+        Sprachkennung: de für Deutsch, en für Englisch. So erkennt jedes Portal, welche Fassung
+        welche ist.
+    schritte:
+      - klick: { text: "Entwurf speichern", quelle: core, bei: "Speichern" }
+      - klick: { text: "5 — Vorschau", bei: "Vorschau" }
+      - scrolle_zu: { text: "dct:title", bei: "Titel" }
+    einblendung:
+      - { text: "Blick unter die Haube", bei: "Blick" }
+      - { markiere: "dct:title", zoom: true, bei: "zweimal" }
+
+  - id: "3.8"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:12"
+    folie: >-
+      Abspann: Hinweis auf Folge 4; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge geht es um den dritten Reiter: wo die Daten liegen, in welchem Format
+        und unter welcher Lizenz.
