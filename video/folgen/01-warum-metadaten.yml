@@ -1,0 +1,146 @@
+# Drehbuch · Folge 1 · Warum Metadaten?
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+# Die Folge besteht nur aus Folien. Durchgehende Bildidee: Die Karteikarte aus 1.1 wird in 1.2 zur
+# DCAT-AP-Beschreibung und wandert in 1.4 zu den Portalen; die Datei bleibt stehen.
+
+folge: 1
+titel: "Warum Metadaten? DCAT-AP und Harvesting"
+plugin_version: "2.47.5"
+umgebung: keine   # keine Aufnahme, nur Folien
+
+szenen:
+
+  - id: "1.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel, Logo des Open Data Wizard
+    sprechtext:
+      de: >-
+        Folge 1: Warum Metadaten? In dieser Folge wird nicht geklickt. Es geht darum, was
+        Metadaten sind, was der Standard DCAT-AP regelt und wie Ihre Beschreibungen zu den
+        Portalen kommen.
+
+  - id: "1.1"
+    kapitel: "Buch und Karteikarte"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Links ein Bücherregal, ein Buch tritt hervor. Rechts eine Karteikarte mit fünf Zeilen:
+      Titel, Herausgeber, Inhalt, Standort, Ausleihe. Darüber die Beschriftung „Metadaten".
+    einblendung:
+      - { zeige: "Buch", bei: "Bücher" }
+      - { zeige: "Karteikarte", bei: "Karteikarte" }
+      - { zeige: "Zeile Titel", bei: "Titel" }
+      - { zeige: "Zeile Herausgeber", bei: "herausgegeben" }
+      - { zeige: "Zeile Inhalt", bei: "worum" }
+      - { zeige: "Zeile Standort", bei: "steht" }
+      - { zeige: "Zeile Ausleihe", bei: "ausleihen" }
+      - { zeige: "Beschriftung Metadaten", bei: "Metadaten" }
+    sprechtext:
+      de: >-
+        Stellen Sie sich eine Bibliothek vor. Die Bücher sind die Daten. Die Karteikarte im Katalog
+        ist ihre Beschreibung: der Titel, von wem das Buch herausgegeben wurde, worum es geht, wo es
+        steht und ob man es ausleihen darf. Diese Beschreibung nennt man Metadaten. Erst durch sie
+        lässt sich ein Buch finden, ohne jedes Regal abzusuchen.
+
+  - id: "1.2"
+    kapitel: "Eine gemeinsame Sprache"
+    bild: folie
+    dauer: "0:32"
+    folie: >-
+      Die Karteikarte aus 1.1 verwandelt sich: Ihre Zeilen erhalten die Namen aus dem Standard —
+      Titel, Beschreibung, Herausgeber, Lizenz, Format. Darunter klein die Fachbegriffe
+      (dct:title, dct:description, dct:publisher, dct:license, dct:format). Am Rand zwei Etiketten:
+      „DCAT-AP · Europa" und „DCAT-AP.de · Deutschland".
+    einblendung:
+      - { zeige: "Zeilen mit Standardnamen", bei: "Angaben" }
+      - { zeige: "Fachbegriffe", bei: "heißen" }
+      - { zeige: "Etikett DCAT-AP", bei: "DCAT-AP" }
+      - { zeige: "Etikett DCAT-AP.de", bei: "ergänzt" }
+    sprechtext:
+      de: >-
+        Damit Kataloge einander verstehen, braucht die Karteikarte gemeinsame Regeln. Für offene
+        Daten in Europa ist das der Standard DCAT-AP. Er legt fest, welche Angaben es gibt und wie
+        sie heißen: Titel, Beschreibung, Herausgeber, Lizenz, Format und weitere. DCAT-AP.de ergänzt
+        ihn um Angaben, die in Deutschland gebraucht werden, etwa amtliche Gebietsschlüssel. Der
+        Open Data Wizard erzeugt Beschreibungen nach beiden.
+
+  - id: "1.3"
+    kapitel: "Katalog, Datensatz, Distribution"
+    bild: folie
+    dauer: "0:32"
+    folie: >-
+      Drei ineinanderliegende Rahmen. Außen: „Katalog — alle Daten Ihrer Organisation". Darin ein
+      Rahmen „Datensatz — Mitgliederzahlen 2015–2025". Darin zwei Dateisymbole: „CSV" und „JSON",
+      gemeinsam beschriftet „Distributionen".
+    einblendung:
+      - { zeige: "Rahmen Katalog", bei: "Katalog" }
+      - { zeige: "Rahmen Datensatz", bei: "Datensätze" }
+      - { zeige: "Distribution CSV", bei: "CSV-Datei" }
+      - { zeige: "Distribution JSON", bei: "JSON-Datei" }
+    sprechtext:
+      de: >-
+        Der Standard unterscheidet drei Ebenen. Der Katalog ist die Sammlung, zum Beispiel alle
+        Daten Ihrer Organisation. Er enthält Datensätze: jeweils ein inhaltlich zusammenhängendes
+        Angebot, etwa die Mitgliederzahlen der letzten zehn Jahre. Und jeder Datensatz hat eine oder
+        mehrere Distributionen. Das sind die konkreten Dateien oder Zugänge, zum Beispiel dieselben
+        Zahlen als CSV-Datei für Tabellenprogramme und als JSON-Datei für Software.
+
+  - id: "1.4"
+    kapitel: "Wie die Portale ernten"
+    bild: folie
+    dauer: "0:42"
+    folie: >-
+      Links Ihre Website mit Dateisymbol und Karteikarte, darüber eine feste Adresse. Rechts zwei
+      Portale: „Landesportal" und „GovData"; weiter rechts „data.europa.eu". Pfeile laufen von den
+      Portalen zur Website (Abruf); auf dem Rückweg wandert nur eine Kopie der Karteikarte. Das
+      Dateisymbol bleibt auf der Website stehen und wird am Ende hervorgehoben.
+    einblendung:
+      - { zeige: "Website mit Adresse", bei: "Adresse" }
+      - { zeige: "Portale mit Abruf-Pfeilen", bei: "rufen" }
+      - { zeige: "Karteikarte wandert", bei: "übernehmen" }
+      - { zeige: "Beschriftung Harvesting", bei: "Harvesting" }
+      - { zeige: "data.europa.eu", bei: "europäischen" }
+      - { zeige: "Dateisymbol hervorgehoben", bei: "bleiben" }
+    sprechtext:
+      de: >-
+        Wie kommen die Beschreibungen in die Portale? Nicht, indem Sie sie dort ein zweites Mal
+        eintippen. Der Open Data Wizard stellt Ihren Katalog unter einer festen Adresse bereit.
+        Portale wie GovData oder das Open-Data-Portal Ihres Landes rufen diese Adresse regelmäßig
+        ab und übernehmen neue und geänderte Beschreibungen. Man nennt das Harvesting, also Ernten.
+        Über GovData gelangen die Metadaten bis zum europäischen Datenportal data.europa.eu. Ihre
+        Daten selbst bleiben, wo sie sind. Und eine einzige Quelle kann viele Portale zugleich
+        versorgen.
+
+  - id: "1.5"
+    kapitel: "Was das Plugin nicht ist"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Drei Zeilen, nacheinander: „Kein Datenportal", „Kein Datenmanagement", „Kein Ersatz für
+      fachliche Sorgfalt". Zu jeder Zeile eine kurze Ergänzung in kleinerer Schrift.
+    einblendung:
+      - { zeige: "Kein Datenportal", bei: "Datenportal" }
+      - { zeige: "Kein Datenmanagement", bei: "Datenmanagement" }
+      - { zeige: "Kein Ersatz für fachliche Sorgfalt", bei: "Sorgfalt" }
+    sprechtext:
+      de: >-
+        Zur Einordnung noch drei Abgrenzungen. Der Open Data Wizard ist kein Datenportal: Er macht
+        Ihre Organisation für Portale auffindbar, ersetzt sie aber nicht. Er ist kein
+        Datenmanagement: Ihre Dateien liegen, wo sie liegen, in der Mediathek, auf einem Server oder
+        in einem Repositorium. Und er ersetzt keine fachliche Sorgfalt: Er prüft, ob eine Lizenz
+        angegeben ist. Welche passt, entscheiden Sie.
+
+  - id: "1.6"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 2; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        So viel zum Prinzip. In der nächsten Folge geht es an die Praxis: Installation,
+        Einstellungen und Beispieldaten.
