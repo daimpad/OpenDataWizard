@@ -94,8 +94,9 @@ function titelFolie(f, g) {
 }
 function abspannFolie(f, g) {
   const n = f.folge + 1;
-  const weiter = f.folge === 0 ? 'Im Detail ab Folge 1: Warum Metadaten?' : `Als Nächstes · Folge ${n}: ${REIHE[n] || ''}`;
-  return `<div class="folie"><div class="f-titel">${marke(g)}<div class="f-eyebrow">Wie es weitergeht</div><h2>${esc(weiter)}</h2></div>
+  const letzte = !REIHE[n];
+  const weiter = f.folge === 0 ? 'Im Detail ab Folge 1: Warum Metadaten?' : letzte ? 'Ende der Reihe. Quellcode und Dokumentation im Repository des Open Data Wizard.' : `Als Nächstes · Folge ${n}: ${REIHE[n]}`;
+  return `<div class="folie"><div class="f-titel">${marke(g)}<div class="f-eyebrow">${letzte ? 'Zum Schluss' : 'Wie es weitergeht'}</div><h2>${esc(weiter)}</h2></div>
     <div class="f-fuss"><span>Plugin-Version ${esc(f.plugin_version)}</span><span>${esc(g.namensnennung)}</span></div></div>`;
 }
 const PFEIL = (id) => `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="c-akzent"/></marker></defs>`;
@@ -261,6 +262,24 @@ dcat:theme
       <div class="f-schritt" data-z="Redaktion anschreiben"><span class="n">2</span><b>Redaktion anschreiben</b><span>die Harvest-Adresse aus den Einstellungen nennen</span></div><div class="f-pfeil" data-z="Abruf läuft">→</div>
       <div class="f-schritt" data-z="Abruf läuft"><span class="n">3</span><b>Abruf läuft</b><span>einmal eingerichtet, dann regelmäßig und ohne Ihr Zutun</span></div>
     </div><div class="f-band" data-z="Nächster Abruf">Änderungen erscheinen nach dem nächsten Abruf.</div></div>`,
+  '10/10.1': () => `<div class="folie"><div class="f-kopf">Für Administrator:innen</div><h3 class="f-h">Wer was darf</h3>
+      <div class="f-wege f-rechte">
+        <div data-z="Datensätze"><b>Datensätze anlegen, bearbeiten, importieren</b><span>Berechtigung <code>manage_open_data</code> — bei der Aktivierung an Administrator:innen und Redakteur:innen vergeben</span></div>
+        <div data-z="Einstellungen"><b>Einstellungen des Plugins</b><span>nur Administrator:innen</span></div>
+        <div data-z="Weitere Rollen"><b>Weitere Rollen</b><span>nur, wenn Sie ihnen die Berechtigung geben</span></div></div>
+      <div class="f-band" data-bei="Rollenverwaltung">Rollen anpassen: mit einem Plugin zur Rollenverwaltung.</div></div>`,
+  '10/10.2': () => {
+    // Echte Ausgabe im Ausgangszustand „uebungsdatensatz-veroeffentlicht“ (siehe Drehbuch).
+    const befehle = [
+      ['status', 'samples status', '42 Beispieldatensätze geladen.', false],
+      ['remove', 'samples remove --yes', '42 Beispieldatensätze gelöscht.', true],
+      ['load', 'samples load', '42 Beispieldatensätze angelegt, 42 veröffentlicht.', true],
+      ['quality', 'quality recalculate', 'Recalculated quality scores for 45 dataset(s).', true],
+      ['cache', 'cache clear', 'Cleared 4 transient cache(s).', true],
+    ];
+    return `<div class="folie"><div class="f-kopf">Für Administrator:innen</div><h3 class="f-h">Befehle für WP-CLI</h3>
+      <div class="f-terminal">${befehle.map(([z, c, o, ok]) => `<div data-z="${z}"><div class="ein"><span class="p">$</span> wp open-data-wizard ${c}</div><div class="aus">${ok ? '<span class="ok">Success:</span> ' : ''}${o}</div></div>`).join('')}</div></div>`;
+  },
   '8/8.9': () => `<div class="folie"><div class="f-kopf">Datenkatalog</div><h3 class="f-h">Zwei Regeln</h3><div class="f-zwei">
       <div class="f-paket" data-z="Ein Katalog pro Seite" style="align-content:start"><b>Ein Katalog pro Seite</b><span>Blättern und Detailansicht gelten für die ganze Seite. Getrennte Kataloge, etwa nach Thema: je eine eigene Seite.</span></div>
       <div class="f-paket" data-z="Beispieldaten"><b>Beispieldaten</b><dl class="f-regeln"><dt>Redaktion, angemeldet</dt><dd>sichtbar</dd><dt>Besucher</dt><dd>nur mit Schalter im Block</dd><dt>Portale</dt><dd>nie</dd></dl></div></div>
@@ -380,6 +399,13 @@ svg .wandert.z-weg { transform: translateX(-330px); }
 .f-anfrage .f-paket { padding: 1.8cqw 2.2cqw; gap: .6cqw; }
 .f-anfrage .f-paket code { font-size: 1.7cqw; }
 .f-liste { margin: 0; padding-left: 2.4cqw; font-size: 1.8cqw; line-height: 1.55; }
+.f-rechte > div { grid-template-columns: 30cqw minmax(0, 1fr); padding: 1.6cqw 1.8cqw; }
+.f-rechte b { font: 700 1.9cqw/1.25 var(--s-anzeige); }
+.f-rechte code { font-size: 1.6cqw; }
+.f-terminal { margin-top: 2.2cqw; background: #1d2327; color: #f0f0f1; border-radius: 1cqw; padding: 2cqw 2.4cqw; font: 500 1.45cqw/1.55 var(--s-mono); display: grid; gap: 1cqw; }
+.f-terminal .p { color: #8c8f94; }
+.f-terminal .aus { color: #c3c4c7; }
+.f-terminal .ok { color: #68de7c; }
 .f-regeln { display: grid; grid-template-columns: auto 1fr; gap: .9cqw 2cqw; margin: 0; font-size: 1.8cqw; }
 .f-regeln dt { color: var(--f-gedimmt); }
 .f-regeln dd { margin: 0; font-weight: 600; }

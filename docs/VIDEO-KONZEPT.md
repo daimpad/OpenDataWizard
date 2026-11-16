@@ -234,9 +234,10 @@ können.
 
 | # | Dauer | Bild | Klickstrecke / Inhalt | Kernaussage Sprechtext |
 |---|---|---|---|---|
-| 10.1 | 0:25 | Folie | Berechtigung `manage_open_data`: bei Aktivierung an Administrator:innen und Redakteur:innen | Wer Datensätze bearbeiten darf. |
-| 10.2 | 0:50 | Terminal | `wp open-data-wizard samples status`, `samples load`, `samples remove --yes`, `quality recalculate`, `cache clear` | Wiederkehrende Aufgaben ohne Klicken, auch für Skripte. |
-| 10.3 | 0:35 | Screencast | Einstellungen → Deinstallation → „Daten löschen" mit und ohne Häkchen; Plugin deaktivieren und löschen | Ohne Häkchen bleiben Ihre Datensätze in der Datenbank erhalten. |
+| 10.1 | 0:30 | Folie | Berechtigung `manage_open_data`: bei Aktivierung an Administrator:innen und Redakteur:innen; Einstellungen nur Administrator:innen; weitere Rollen über ein Plugin zur Rollenverwaltung | Wer Datensätze bearbeiten darf. |
+| 10.2 | 0:45 | Folie (Terminal) | Echte Ausgabe von `wp open-data-wizard samples status`, `samples remove --yes`, `samples load`, `quality recalculate`, `cache clear` | Wiederkehrende Aufgaben ohne Klicken, auch für Skripte. |
+| 10.3 | 0:35 | Screencast | Einstellungen → Deinstallation → „Daten löschen" (ohne Häkchen) | Ohne Häkchen bleiben Ihre Datensätze in der Datenbank erhalten. |
+| 10.4 | 0:30 | Screencast | Plugins → Deaktivieren → Löschen → Rückfrage → „wurde erfolgreich gelöscht" | Deaktiviert sind auch Katalog und Harvest-Adresse nicht erreichbar. |
 
 ## 6 · Automatisierte Produktion
 

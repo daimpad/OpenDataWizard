@@ -16,6 +16,10 @@ ersetzungen:
     gesprochen: "Dikätäypi"   # englisch ausgesprochen
   - text: " & "   # „Bevölkerung & Gesellschaft" (Folge 8): im Untertitel wie im Bild
     gesprochen: " und "
+  - text: "manage_open_data"   # Name der Berechtigung (Folge 10), englisch
+    gesprochen: "manage open data"
+  - text: "WP-CLI"
+    gesprochen: "W P C L I"
   - text: ".zip"
     gesprochen: "Punkt zip"
   - text: "data.europa.eu"
