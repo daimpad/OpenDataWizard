@@ -361,6 +361,35 @@ test.describe('Plugin-Seiten', () => {
     await expect(notice).toContainText('datenatlas/v1/catalog');
   });
 
+  test('Batch-Import: Vorschau benennt die Fehlerzeile, der Import meldet sein Ergebnis', async ({ page }) => {
+    // Zwei Zeilen, die zweite ohne Lizenz. Eindeutige Titel, damit der Lauf
+    // nichts voraussetzt, was andere Tests anlegen.
+    const marke = `E2E-Import ${Date.now()}`;
+    const csv = [
+      '"title","publisher","description","access_url","license"',
+      `"${marke} gültig","E2E","Zeile mit allen Pflichtangaben.","https://example.org/e2e.csv","cc-by"`,
+      `"${marke} ohne Lizenz","E2E","Zeile ohne Lizenz.","https://example.org/e2e-2.csv",""`,
+    ].join('\n');
+
+    await page.goto(`${LIST_URL}&page=odw-batch-import`);
+    await page.setInputFiles('#odw-import-file', { name: 'e2e-import.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+    await page.locator('#odw-preview-btn').click();
+
+    await expect(page.locator('#odw-preview-rows tr')).toHaveCount(1);
+    await expect(page.locator('#odw-errors-list')).toContainText('Pflichtfeld "license" fehlt');
+
+    await page.locator('#odw-import-btn').click();
+
+    // Bis v2.47.7 blendete der Klick den ganzen Abschnitt aus — samt dieser Meldung.
+    const ergebnis = page.locator('#odw-import-result');
+    await expect(ergebnis).toBeVisible();
+    await expect(ergebnis).toContainText('Import abgeschlossen!');
+    await expect(page.locator('#odw-import-result-created')).toHaveText('1');
+    await ergebnis.getByRole('link', { name: 'Zur Datensatzliste' }).click();
+
+    await expect(page.locator('table.wp-list-table tbody')).toContainText(`${marke} gültig`);
+  });
+
   test('Einstellungsseite zeigt die Harvest-URLs', async ({ page }) => {
     await page.goto(`${LIST_URL}&page=odw-settings`);
 

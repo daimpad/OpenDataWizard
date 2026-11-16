@@ -187,6 +187,28 @@ const FOLIEN = {
       ${karte(180, 'CSV', 'primäre Distribution', 'Mediathek', 'Karte CSV')}
       ${karte(860, 'JSON', 'weitere Distribution', 'Link', 'Karte JSON')}</svg></div>`;
   },
+  '7/7.1': () => `<div class="folie"><div class="f-kopf">Batch-Import</div><h3 class="f-h">Wann sich der Import lohnt</h3><div class="f-zwei">
+      <div class="f-paket" data-z="Viele Datensätze"><b>Viele Datensätze</b><span>auf einmal beschreiben, statt jeden einzeln anzulegen</span></div>
+      <div class="f-paket" data-z="Bestand in einer Tabelle"><b>Bestand in einer Tabelle</b><span>die Beschreibungen liegen schon vor, etwa aus einem anderen System</span></div></div>
+      <div class="f-band" data-z="Ergebnis Entwürfe">Ergebnis: Entwürfe, die Sie prüfen und veröffentlichen.</div></div>`,
+  '7/7.2': () => {
+    // Die Importdatei video/material/foerderverein-import.csv, gekürzt auf die sprechenden Spalten.
+    const zeilen = [
+      ['Mitgliedsbeiträge des Fördervereins 2020–2025', 'cc-by', 'ECON', 'Mitglieder<br>Finanzen'],
+      ['Ehrenamtliche Stunden im Förderverein 2024', 'cc-by', 'SOCI', 'Ehrenamt<br>Engagement'],
+      ['Geförderte Projekte des Fördervereins 2018–2025', 'cc0', 'SOCI', 'Projekte<br>Förderung'],
+      ['Mitgliederbefragung des Fördervereins 2025', '', 'SOCI', 'Mitglieder<br>Befragung'],
+    ];
+    return `<div class="folie"><div class="f-kopf">foerderverein-import.csv</div><h3 class="f-h">Eine Zeile, ein Datensatz</h3>
+      <table class="f-tabelle"><thead><tr data-z="Kopfzeile" data-modus="hervor"><th>title</th><th>publisher</th><th>license</th><th>theme</th><th>keywords</th><th>…</th></tr></thead><tbody>
+      ${zeilen.map(([t, l, th, k], i) => `<tr><td>${t}</td><td>Förderverein Musterstadt e.&nbsp;V.</td>
+        <td${l ? '' : ' class="leer" data-z="Fehlende Lizenz" data-modus="hervor"'}>${l || '(leer)'}</td><td>${th}</td>
+        <td${i === 0 ? ' data-z="Schlagworte" data-modus="hervor"' : ''}>${k}</td><td>…</td></tr>`).join('')}</tbody></table></div>`;
+  },
+  '7/7.3': () => `<div class="folie"><div class="f-kopf">Batch-Import</div><h3 class="f-h">Was in die Datei muss</h3><div class="f-zwei" style="margin-top:2.4cqw">
+      <div class="f-paket" data-z="Pflichtspalten"><b>Pflicht</b><div class="f-spalten pflicht">${['title', 'publisher', 'description', 'access_url', 'license'].map((c) => `<code>${c}</code>`).join('')}</div></div>
+      <div class="f-paket" data-z="Weitere Spalten"><b>Möglich</b><div class="f-spalten">${['theme', 'keywords', 'format', 'language', 'temporal_start', 'temporal_end', 'contact_email', '…'].map((c) => `<code>${c}</code>`).join('')}</div></div></div>
+      <div class="f-band" data-z="Lizenz-Kürzel">Lizenz als Kürzel: <code class="t-mono">cc0</code> · <code class="t-mono">cc-by</code> · <code class="t-mono">cc-by-sa</code> · <code class="t-mono">dl-de-by</code> · <code class="t-mono">dl-de-zero</code></div></div>`,
   '6/6.4': () => {
     // Fünf Bereiche links, vier Stufen rechts; die Balkenlänge zeigt den Schwellenwert der Stufe.
     const bereiche = ['Auffindbarkeit', 'Zugänglichkeit', 'Interoperabilität', 'Wiederverwendbarkeit', 'Kontext'];
@@ -289,6 +311,15 @@ svg .wandert.z-weg { transform: translateX(-330px); }
 .f-paket code { font: 500 1.6cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); }
 .f-paket code.gedimmt { color: var(--f-gedimmt); }
 .f-paket span { color: var(--f-gedimmt); font-size: 1.7cqw; }
+.f-tabelle { width: 100%; border-collapse: collapse; margin-top: 2.4cqw; font: 500 1.45cqw/1.3 var(--s-text); color: var(--f-text); }
+.f-tabelle th { font: 600 1.35cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); text-align: left; padding: .9cqw 1cqw; border-bottom: .25cqw solid var(--f-akzent); }
+.f-tabelle td { padding: .9cqw 1cqw; border-bottom: 1px solid var(--f-linie); vertical-align: top; }
+.f-tabelle td.leer { color: var(--f-gedimmt); }
+.f-tabelle .aktiv { box-shadow: inset 0 0 0 .3cqw var(--f-akzent); }
+.f-tabelle .leer.aktiv { box-shadow: inset 0 0 0 .3cqw var(--f-warnung); }
+.f-spalten { display: flex; flex-wrap: wrap; gap: .8cqw; margin-top: 1.2cqw; }
+.f-spalten code { font: 500 1.6cqw/1 var(--s-mono); padding: .7cqw 1cqw; border: 1px solid var(--f-linie); border-radius: .5cqw; }
+.f-spalten.pflicht code { border-color: var(--f-akzent); color: var(--f-akzent_schrift); }
 .f-urteil { position: absolute; right: 2cqw; top: 2cqw; width: 5cqw; height: 5cqw; border-radius: 50%; display: grid; place-items: center; font: 700 3cqw/1 var(--s-anzeige); }
 .f-urteil.ja { background: var(--f-akzent); color: var(--f-akzent_text); }
 .f-urteil.nein { background: var(--f-warnung); color: var(--f-grund); }

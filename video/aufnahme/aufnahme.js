@@ -232,7 +232,9 @@ async function markierungen(page, liste, daten) {
   fs.mkdirSync(AUS, { recursive: true });
   const ergebnisDatei = path.join(AUS, 'ergebnis.json');
   const ergebnis = fs.existsSync(ergebnisDatei) ? JSON.parse(fs.readFileSync(ergebnisDatei, 'utf8')) : {};
-  const browser = await chromium.launch();
+  // Deutsche Browser-Oberfläche, sonst heißt der Knopf eines Datei-Felds „Choose File“. Das gelingt nur
+  // mit dem vollständigen Chromium (neuer Headless-Modus); die Headless-Shell bleibt englisch.
+  const browser = await chromium.launch({ channel: 'chromium', args: ['--lang=de-DE'], env: { ...process.env, LANG: 'de_DE.UTF-8', LANGUAGE: 'de' } });
   for (const db of drehbuecher) {
     if (nurFolgen.length && !nurFolgen.includes(db.folge)) continue;
     if (!db.szenen.some((s) => s.bild === 'screencast')) continue;

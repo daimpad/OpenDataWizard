@@ -1,0 +1,9 @@
+"title","publisher","description","access_url","license","theme","keywords","format"
+"Mitgliedsbeiträge des Fördervereins 2020–2025","Förderverein Musterstadt e. V.","Summe der Mitgliedsbeiträge je Jahr von 2020 bis 2025, getrennt nach Einzel- und Familienmitgliedschaften.","https://foerderverein-musterstadt.example/daten/beitraege-2020-2025.csv","cc-by","ECON","Mitglieder
+Finanzen","CSV"
+"Ehrenamtliche Stunden im Förderverein 2024","Förderverein Musterstadt e. V.","Geleistete ehrenamtliche Stunden je Monat im Jahr 2024, nach Tätigkeitsbereich.","https://foerderverein-musterstadt.example/daten/ehrenamt-2024.csv","cc-by","SOCI","Ehrenamt
+Engagement","CSV"
+"Geförderte Projekte des Fördervereins 2018–2025","Förderverein Musterstadt e. V.","Alle Projekte, die der Förderverein seit 2018 unterstützt hat, mit Fördersumme und Laufzeit.","https://foerderverein-musterstadt.example/daten/projekte-2018-2025.csv","cc0","SOCI","Projekte
+Förderung","CSV"
+"Mitgliederbefragung des Fördervereins 2025","Förderverein Musterstadt e. V.","Ergebnisse der Mitgliederbefragung 2025 zu Zufriedenheit und Wünschen an die Vereinsarbeit.","https://foerderverein-musterstadt.example/daten/befragung-2025.csv","","SOCI","Mitglieder
+Befragung","CSV"

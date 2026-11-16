@@ -1,0 +1,159 @@
+# Drehbuch · Folge 7 · Viele Datensätze auf einmal: Batch-Import
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 7
+titel: "Viele Datensätze auf einmal: Batch-Import"
+plugin_version: "2.47.8"   # Rückmeldung nach dem Import erst ab 2.47.8
+# Ausgangszustand: Plugin eingerichtet wie am Ende von Folge 2, noch ohne Datensätze — so sind die
+# importierten Einträge in 7.6 die einzigen in der Liste.
+umgebung: plugin-eingerichtet
+
+# Importdateien in video/material/: drei gültige Zeilen und eine ohne Lizenz (CSV), zwei Datensätze
+# (JSON). Folie 7.2 zeigt die CSV-Datei; ändert sie sich, ist die Folie mitzuziehen.
+uebungsdatensatz:
+  csv: foerderverein-import.csv
+  json: foerderverein-import.json
+  zum_oeffnen: "Mitgliedsbeiträge des Fördervereins 2020–2025"
+
+szenen:
+
+  - id: "7.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:10"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 7: Viele Datensätze auf einmal. Statt jeden Datensatz einzeln anzulegen, importieren wir
+        mehrere aus einer Tabelle.
+
+  - id: "7.1"
+    kapitel: "Wann sich der Import lohnt"
+    bild: folie
+    dauer: "0:20"
+    folie: >-
+      Zwei Felder nebeneinander: „Viele Datensätze auf einmal" und „Beschreibungen stehen schon in
+      einer Tabelle". Darunter ein Band: „Ergebnis: Entwürfe, die Sie prüfen und veröffentlichen".
+    einblendung:
+      - { zeige: "Viele Datensätze", bei: "viele" }
+      - { zeige: "Bestand in einer Tabelle", bei: "Tabelle" }
+      - { zeige: "Ergebnis Entwürfe", bei: "Entwürfe" }
+    sprechtext:
+      de: >-
+        Der Import lohnt sich in zwei Fällen: wenn Sie viele Datensätze auf einmal beschreiben wollen,
+        und wenn Ihre Beschreibungen schon in einer Tabelle stehen, etwa aus einem anderen System. Das
+        Plugin legt daraus Entwürfe an, die Sie danach in Ruhe prüfen.
+
+  - id: "7.2"
+    kapitel: "Aufbau der Importdatei"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Die Importdatei aus video/material/foerderverein-import.csv als Tabelle: Kopfzeile mit den
+      Spaltennamen, darunter vier Zeilen. Die Zelle mit zwei Schlagworten untereinander ist
+      hervorgehoben, ebenso die leere Lizenz in der letzten Zeile.
+    einblendung:
+      - { zeige: "Kopfzeile", bei: "Spaltennamen" }
+      - { zeige: "Schlagworte", bei: "Schlagworte" }
+      - { zeige: "Fehlende Lizenz", bei: "Fehler" }
+    sprechtext:
+      de: >-
+        So sieht eine Importdatei aus. Jede Zeile ist ein Datensatz. Die erste Zeile enthält die
+        Spaltennamen; sie entsprechen den Feldern des Formulars, in englischer Kurzform. Mehrere
+        Schlagworte stehen in einer Zelle, jedes in einer eigenen Zeile. Die letzte Zeile hat mit
+        Absicht einen Fehler: Ihr fehlt die Lizenz.
+
+  - id: "7.3"
+    kapitel: "Was in die Datei muss"
+    bild: folie
+    dauer: "0:25"
+    folie: >-
+      Links „Pflicht": title, publisher, description, access_url, license. Rechts „Möglich": theme,
+      keywords, format, language, temporal_start, temporal_end, contact_email … Unten die
+      Lizenz-Kürzel: cc0, cc-by, cc-by-sa, dl-de-by, dl-de-zero.
+    einblendung:
+      - { zeige: "Pflichtspalten", bei: "Pflicht" }
+      - { zeige: "Weitere Spalten", bei: "weitere" }
+      - { zeige: "Lizenz-Kürzel", bei: "Kürzel" }
+    sprechtext:
+      de: >-
+        Fünf Spalten sind Pflicht: Titel, Herausgeber, Beschreibung, Zugriffs-URL und Lizenz. Viele
+        weitere Felder sind als zusätzliche Spalten möglich; die Beispieldatei des Plugins zeigt sie
+        alle. Die Lizenz geben Sie als Kürzel an. Die gängigen sehen Sie hier.
+
+  - id: "7.4"
+    kapitel: "Datei hochladen"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Unter „Datenkatalog" finden Sie den Batch-Import. Auf derselben Seite stehen Beispieldateien zum
+        Herunterladen, als Vorlage für den Aufbau. Wir wählen unsere CSV-Datei aus und klicken auf
+        „Vorschau".
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "Batch-Import", bei: "Batch-Import" }
+      - lade_hoch: { feld: "CSV- oder JSON-Datei", datei: "{uebungsdatensatz.csv}", bei: "wählen" }
+      - klick: { text: "Vorschau", bei: "klicken" }
+    einblendung:
+      - { markiere: "CSV-Beispiel herunterladen", bei: "Beispieldateien" }
+
+  - id: "7.5"
+    kapitel: "Vorschau und Import"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Die Vorschau zeigt drei gültige Datensätze und darunter einen Fehler: In Zeile vier fehlt die
+        Lizenz. Diese Zeile wird nicht importiert. Mit den Häkchen wählen Sie aus, welche Datensätze Sie
+        übernehmen. Wir importieren alle drei.
+    schritte:
+      - warte_auf: { text: "Gültige Datensätze:", bei: "Vorschau" }
+      - scrolle_zu: { text: "Fehler gefunden:", bei: "Fehler" }
+      - klick: { text: "Jetzt importieren", bei: "importieren" }
+      - warte_auf: { text: "Import abgeschlossen!" }
+    einblendung:
+      - { text: "Zeile ohne Lizenz wird übersprungen", bei: "nicht" }
+
+  - id: "7.6"
+    kapitel: "Prüfen und veröffentlichen"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        In der Liste stehen die neuen Datensätze als Entwürfe. Importiert wird immer als Entwurf, damit
+        Sie entscheiden, was veröffentlicht wird. Wir öffnen einen, sehen uns die Angaben an und
+        veröffentlichen ihn.
+    schritte:
+      - klick: { text: "Zur Datensatzliste", bei: "Liste" }
+      - klick: { text: "{uebungsdatensatz.zum_oeffnen}", bei: "öffnen" }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "veröffentlichen" }
+    einblendung:
+      - { text: "Import = Entwurf", bei: "Entwurf" }
+
+  - id: "7.7"
+    kapitel: "Mit JSON genauso"
+    bild: screencast
+    dauer: "0:15"
+    sprechtext:
+      de: >-
+        Mit einer JSON-Datei funktioniert es genauso: Datei wählen, Vorschau prüfen, importieren. Beide
+        Beispieldateien zeigen, wie die Felder heißen.
+    schritte:
+      - klick: { text: "Batch-Import", bei: "JSON-Datei" }
+      - lade_hoch: { feld: "CSV- oder JSON-Datei", datei: "{uebungsdatensatz.json}", bei: "wählen" }
+      - klick: { text: "Vorschau", bei: "Vorschau" }
+      - warte_auf: { text: "Gültige Datensätze:", bei: "importieren" }
+
+  - id: "7.8"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 8; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge bringen wir die Datensätze auf die eigene Website: mit der Datensatz-Karte
+        und dem Datenkatalog.
