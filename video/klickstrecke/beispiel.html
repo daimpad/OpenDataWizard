@@ -27,13 +27,17 @@
 <script type="module" src="odw-klickstrecke.js"></script>
 <script type="module">
   const ks = document.getElementById('ks'), f = document.getElementById('folge'), g = document.getElementById('gestaltung');
+  // Nur bekannte Werte übernehmen — die Adresszeile darf keine beliebigen Pfade einschleusen.
+  const FOLGEN = ['0', '1', '2', '3'], GESTALTUNGEN = ['odw', 'datenatlas'];
   const p = new URLSearchParams(location.search);
-  if (p.get('folge')) f.value = p.get('folge');
-  if (p.get('gestaltung')) g.value = p.get('gestaltung');
+  if (FOLGEN.includes(p.get('folge'))) f.value = p.get('folge');
+  if (GESTALTUNGEN.includes(p.get('gestaltung'))) g.value = p.get('gestaltung');
   const setze = () => {
-    ks.setAttribute('src', `folge-${f.value}/daten.json`);
-    ks.setAttribute('gestaltung', g.value);
-    document.getElementById('schnipsel').textContent = `<odw-klickstrecke src="/fileadmin/odw-tutorials/folge-${f.value}/daten.json" gestaltung="${g.value}"></odw-klickstrecke>`;
+    const folge = FOLGEN.includes(f.value) ? f.value : '0';
+    const gestaltung = GESTALTUNGEN.includes(g.value) ? g.value : 'odw';
+    ks.setAttribute('src', `folge-${folge}/daten.json`);
+    ks.setAttribute('gestaltung', gestaltung);
+    document.getElementById('schnipsel').textContent = `<odw-klickstrecke src="/fileadmin/odw-tutorials/folge-${folge}/daten.json" gestaltung="${gestaltung}"></odw-klickstrecke>`;
   };
   f.addEventListener('change', setze); g.addEventListener('change', setze); setze();
 </script>
