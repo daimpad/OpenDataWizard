@@ -7,8 +7,30 @@ Dieses Verzeichnis ist nicht Teil des Plugin-Pakets.
 |---|---|
 | `folgen/` | Drehbücher, je Folge eine YAML-Datei |
 | `material/` | Dateien für die Aufnahmen (erfundene Übungsdaten) |
+| `gestaltung/` | Gestaltungsvarianten `odw` und `datenatlas` (Farben, Schriften, Logo) |
+| `aufnahme/` | WordPress für die Aufnahmen einrichten, Ausgangszustände, Bildschirmfotos aufnehmen |
+| `klickstrecke/` | Web Component `<odw-klickstrecke>`, Paketbau, Einbindung in TYPO3 |
+| `ausgabe/` | alles Erzeugte (nicht im Repository) |
 
-Aufnahme- und Schnittwerkzeuge folgen.
+Schnitt und Ton folgen.
+
+## Ablauf
+
+Voraussetzungen: PHP 8.1+ mit `pdo_sqlite`, Composer, Node mit Playwright, Python 3 mit PyYAML, npm.
+
+```bash
+bash video/aufnahme/einrichten.sh          # deutsches WordPress mit SQLite, einmalig
+bash video/aufnahme/starte-server.sh &     # http://127.0.0.1:8888
+node video/aufnahme/aufnahme.js            # alle Folgen; oder z. B. „… aufnahme.js 0 3"
+python3 video/klickstrecke/baue-paket.py --aufnahme video/ausgabe/aufnahme
+```
+
+Das Paket liegt danach in `video/ausgabe/odw-tutorials/`; `beispiel.html` darin zeigt alle Folgen mit
+Umschalter für die Gestaltung, `EINBINDEN.md` beschreibt die Einbindung in TYPO3 13.
+
+Die Aufnahme meldet jeden Schritt mit ✓ oder ✗. Ein ✗ heißt fast immer: Eine Beschriftung im Drehbuch
+stimmt nicht mehr mit WordPress oder dem Plugin überein — das Bildschirmfoto zum Schritt zeigt, was
+stattdessen zu sehen war.
 
 ## Drehbuch-Format
 

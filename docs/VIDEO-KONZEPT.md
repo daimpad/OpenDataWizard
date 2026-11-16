@@ -1,6 +1,6 @@
 # Videotutorials — Konzept
 
-> **Entwurf 0.6 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
+> **Entwurf 0.7 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
 > aus dem Code übernommen; ändern sie sich, ändert sich das Drehbuch mit.
 
 ## 1 · Ziel, Zielgruppe, Entscheidungen
@@ -18,21 +18,22 @@ Einschübe „Blick unter die Haube", die man überspringen kann.
 
 | Punkt | Entscheidung |
 |---|---|
-| Format | Reihe kurzer Einzelvideos, Folge 0 als eigenständiger Quick-Start |
+| Format | zwei Formate aus einem Drehbuch: Videoreihe (Folge 0 als eigenständiger Quick-Start) und interaktive Klickstrecke (Abschnitt 8) |
 | Stimme | Damian (ElevenLabs) |
 | Anrede | „Sie" — wie in der Plugin-Oberfläche |
 | Beispieldaten | werden im Quick-Start geladen (Szene Q5) |
 | Fehlermeldung im Quick-Start | bleibt als Lernmoment (Szene Q8) |
 | Folge 10 | wird als Video produziert |
-| Veröffentlichung | YouTube, auf dem Kanal des Kunden (Abschnitt 7) |
+| Veröffentlichung | Videos auf YouTube (Kanal des Kunden) und als MP4 auf dem eigenen Server (Abschnitt 7); Klickstrecken in TYPO3 13 aus `fileadmin` (Abschnitt 9) |
 | Lizenz der Videos | CC BY 3.0 (Auswahl in den YouTube-Einstellungen), Namensnennung: das Projekt („Open Data Wizard") |
 | Fremde Oberflächen | werden als Folie nachgebildet (GitHub, EU-Validator) |
-| Gestaltung | Projektdesign; kein Logo und kein Name des Kunden |
+| Gestaltung | umschaltbar: Projekt (`odw`) und Datenatlas Zivilgesellschaft (`datenatlas`) (Abschnitt 10) |
 | Produktion | automatisiert, Produktionscode unter `video/` in diesem Repository (Abschnitt 6) |
-| Ton-Dateien | nur lokal erzeugt; geliefert wird das fertige Video |
+| Ton-Dateien | lokal erzeugt, nicht im Repository; ausgeliefert im Video und je Szene als MP3 in der Klickstrecke |
+| Klickstrecke | mit Stimme (Damian), je Szene abspielbar |
 | Stimme | Der ElevenLabs-Tarif deckt die Nutzung auf dem Kanal des Kunden und unter CC BY ab |
 | Träger | gemeinnützige Stiftung — Remotion ist damit kostenlos nutzbar (Abschnitt 6) |
-| Englische Fassung | folgt später, mit derselben Stimme (Abschnitt 8) |
+| Englische Fassung | folgt später, mit derselben Stimme (Abschnitt 11) |
 
 ## 2 · Die Reihe im Überblick
 
@@ -72,7 +73,7 @@ Gesamt rund 41 Minuten. Folge 0 steht für sich; die Folgen 1–10 vertiefen.
   im Bild.
 - **Barrierefreiheit:** Untertitel (WebVTT) und Transkript zu jeder Folge; Folien mit
   ausreichendem Kontrast, Information nie nur über Farbe. Für öffentliche Stellen relevant (BITV 2.0).
-- **Gestaltung:** Farben und Logo des Projekts (`#03FF9A` auf `#101010`, `assets/images/ODW-Logo.svg`);
+- **Gestaltung:** zwei Varianten (Abschnitt 10). Die Projektvariante nutzt Farben und Logo des Projekts (`#03FF9A` auf `#101010`, `assets/images/ODW-Logo.svg`);
   `assets/images/ODW-Ablauf.svg` als Grundlage der Ablauf-Folie.
 - **Jede Folge** beginnt mit einer Titelfolie (10 s) und endet mit einem Abspann (10 s): Hinweis auf
   die passende nächste Folge, die Plugin-Version, auf der das Video beruht, und die Lizenz (CC BY). In den Tabellen
@@ -329,11 +330,81 @@ brauchen — das trifft nur zu, falls die Stiftung öffentlich-rechtlich ist.
 - **Vorschaubild** je Folge aus Remotion, im selben Layout mit Folgennummer.
 - **Einbindung:** README und Einstieg-Seite verlinken auf die Playlist. Im WordPress-Backend wird
   nicht eingebettet: ein eingebettetes Video lädt Inhalte von YouTube, bevor jemand klickt
-  (Datenschutz).
+  (Datenschutz). Für TYPO3 siehe Abschnitt 9.
+- **MP4 zusätzlich:** Jedes Video liegt auch als MP4 mit WebVTT-Untertiteln vor, zum Abspielen vom
+  eigenen Server ohne Drittanbieter.
 - **Hochladen** über den Kunden oder mit dessen Zugang, von Hand; das Lieferpaket enthält alles
   Nötige.
 
-## 8 · Englische Fassung (später)
+## 8 · Format 2: Interaktive Klickstrecke
+
+Dieselbe Folge zum Selbst-Durchklicken. Quelle ist dasselbe Drehbuch: Bildschirmfotos, Folien,
+Sprechtext und Ton.
+
+- **Aufbau:** Je Szene ein Schritt mit Bühne (Folie oder Bildfolge), Text und Ton. Weiter und
+  Zurück, Kapitelauswahl, Bedienung auch mit den Pfeiltasten.
+- **Ton:** Damians Aufnahme je Szene als MP3, dieselben Dateien wie im Video. Läuft der Ton,
+  wechseln die Bilder zu den Stichworten; ohne Ton blättert man selbst durch die Bilder.
+- **Barrierefreiheit:** Der Text ist immer sichtbar, Bilder haben einen Alternativtext aus der
+  Schrittbeschreibung, alles ist per Tastatur bedienbar.
+- **Technik:** Web Component `<odw-klickstrecke>` in einer einzigen JavaScript-Datei ohne
+  Abhängigkeiten. Shadow DOM verhindert, dass die Stile der einbindenden Seite (TYPO3, WordPress)
+  sie verändern. Keine externen Dienste, keine Cookies, Schriften vom eigenen Server.
+- **Paket je Folge:** `daten.json`, `bilder/`, `ton/`; gemeinsam für alle Folgen
+  `odw-klickstrecke.js`, `schriften/` und `gestaltung/`.
+- **Pflege:** Bilder und Daten entstehen in derselben Aufnahme wie das Video.
+
+## 9 · Einbindung in TYPO3 13
+
+**Ablage:** `fileadmin/odw-tutorials/` mit einem Ordner je Folge und den gemeinsamen Dateien.
+
+**Klickstrecke** über das Inhaltselement „Reines HTML", ohne Inline-Skript:
+
+```html
+<odw-klickstrecke src="/fileadmin/odw-tutorials/folge-0/daten.json" gestaltung="datenatlas"></odw-klickstrecke>
+<script type="module" src="/fileadmin/odw-tutorials/odw-klickstrecke.js"></script>
+```
+
+**Videos** im Inhaltselement „Text & Medien":
+- YouTube über die Video-Adresse; vor dem Laden braucht es die Einwilligung über die
+  Consent-Lösung der Website.
+- MP4 aus `fileadmin`, ohne Drittanbieter. Nach meinem Kenntnisstand bindet das Standard-Element
+  keine Untertitelspur ein; dafür braucht es eine kleine Template-Anpassung, oder die
+  Klickstrecken-Komponente spielt das Video ab. Bei der Umsetzung zu prüfen.
+
+**Auf der Zielseite zu prüfen:** ob `fileadmin` JS-, JSON- und MP3-Dateien ausliefert, und ob im
+Frontend eine Content Security Policy aktiv ist (Skripte vom eigenen Server sind dann erlaubt).
+
+**Später:** ein eigenes Inhaltselement „Klickstrecke" als Extension, damit Redakteur:innen die
+Folge auswählen, statt HTML einzufügen.
+
+## 10 · Gestaltungsvarianten
+
+Dieselben Inhalte in zwei Erscheinungsbildern, umschaltbar ohne Änderung der Drehbücher:
+
+| Variante | Einsatz | Farben | Schriften | Logo |
+|---|---|---|---|---|
+| `odw` | GitHub, README, Plugin | `#101010`, `#03FF9A` | Space Grotesk, Inter | Open Data Wizard |
+| `datenatlas` | Datenatlas Zivilgesellschaft | Weiß, `#053A5D`, `#E5735E`, `#CB4F78` | Bitter, Lato | Wortmarke des Datenatlas (nicht im Repository) |
+
+- **Tokens** je Variante in `video/gestaltung/<name>.json`. Die Klickstrecke wählt die Variante
+  über das Attribut `gestaltung`, das Video über einen Renderparameter; jede Folge wird je
+  Variante einmal gerendert.
+- **Herkunft:** Farben, Schriften und Logo der Datenatlas-Variante stammen von
+  datenatlas-zivilgesellschaft.de (Stylesheet und Seitenkopf) und sind damit ein Entwurf.
+  Verbindlich sind die Vorgaben des Datenatlas.
+- **Folien der Datenatlas-Variante** auf weißem Grund wie die Website: Dunkelblau für Schrift,
+  Koralle für Linien, Pfeile und Hervorhebungen. Kleine Schrift bleibt dunkelblau, weil Koralle auf
+  Weiß dafür zu wenig Kontrast hat.
+- **Logo des Datenatlas** liegt nicht im Repository: Es ist eine Marke des Datenatlas und steht
+  nicht unter der GPL des Plugins. Für den Paketbau wird es lokal abgelegt
+  (`video/gestaltung/logos/LIESMICH.md`); fehlt es, zeigen die Folien den Namen als Schriftzug.
+- **Was sich ändert:** Folien, Einblendungen, Titel- und Abspannfolien, Vorschaubilder und die
+  Bedienelemente der Klickstrecke. Die Bildschirmfotos aus WordPress bleiben gleich.
+- **Schriften** liegen in beiden Varianten als Dateien bei (alle unter SIL Open Font License),
+  statt von Google geladen zu werden.
+
+## 11 · Englische Fassung (später)
 
 Die Pipeline wird von Anfang an so angelegt, dass eine englische Fassung ohne Umbau möglich ist:
 
@@ -348,9 +419,16 @@ Die Pipeline wird von Anfang an so angelegt, dass eine englische Fassung ohne Um
   Aussprachewörterbuch für Englisch.
 - **Folien** aus denselben Komponenten, Texte je Sprache.
 
-## 9 · Offene Punkte
+## 12 · Offene Punkte
 
-Für die deutsche Fassung ist nichts mehr offen. Für die englische Fassung später zu klären:
+Deutsche Fassung:
+
+1. **Datenatlas-Gestaltung:** Bestätigung von Farben, Schriften und Logo durch den Datenatlas, ggf.
+   Gestaltungsrichtlinien, und die Freigabe, das Logo in Videos und Klickstrecken zu verwenden.
+2. **YouTube:** In welcher Variante erscheinen die Videos auf dem Kanal des Kunden?
+3. **Namensnennung** in der Datenatlas-Variante: weiterhin „Open Data Wizard"?
+
+Englische Fassung, später:
 
 1. **Beispieldaten:** Die mitgelieferten Beispieldaten sind deutsch. Bleiben sie das in der
    englischen Fassung, oder braucht es englische Beispieldaten?

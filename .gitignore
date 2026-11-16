@@ -30,3 +30,7 @@ node_modules/
 # Release-Builds (bin/build-release.sh)
 /dist/
 __pycache__/
+
+# Erzeugte Videos, Tonspuren, Bildschirmfotos und Klickstrecken-Pakete (video/README.md)
+/video/ausgabe/
+/video/gestaltung/logos/datenatlas*
