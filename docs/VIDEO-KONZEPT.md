@@ -263,8 +263,10 @@ Untertitel und YouTube-Beschreibung.
 | 1 · Ton | ElevenLabs, Stimme „Damian", mit Zeitmarken | Audio je Szene + Wortzeiten |
 | 2 · Aufnahme | Playwright gegen eine eigene `wp-env`-Instanz | Video je Szene; Szenendauer = Audiolänge |
 | 3 · Folien | Remotion (React), Projektdesign | Folien als Komponenten, animierbar |
-| 4 · Schnitt | Remotion | MP4 (1920 × 1080) mit Zooms und Markierungen; Untertitel als eigene Datei |
+| 4 · Schnitt | `video/schnitt/` (Playwright + ffmpeg) | MP4 (1920 × 1080) aus der Klickstrecke, mit Markierungen, Zooms und Überblendungen; Untertitel als eigene Datei |
 | 5 · Begleitmaterial | aus Drehbuch + Zeitmarken | WebVTT-Untertitel, Transkript, Kapitelmarken, YouTube-Beschreibung, Vorschaubild |
+
+**Stand der Umsetzung:** Folien und Schnitt entstehen nicht in Remotion, sondern aus der Klickstrecke: Sie enthält Folien, Bildschirmfotos, Markierungen und Zeitplan bereits, und Video und Klickstrecke zeigen so dasselbe. Remotion bleibt eine Option für bewegtere Folien.
 
 **Einzelheiten:**
 - **Der Ton gibt das Tempo vor.** Erst entsteht das Audio; die Aufnahme wartet je Schritt, bis der
@@ -296,7 +298,7 @@ video/
 ├── folgen/          Drehbücher, je Folge eine YAML-Datei
 ├── material/        Dateien für die Aufnahmen (Übungs-CSV, Importdatei mit Fehlerzeile)
 ├── aufnahme/        Playwright-Skripte, wp-env-Konfiguration, Zeiger- und Markierungsskript
-├── remotion/        Folien und Schnitt, mit eigenem package.json
+├── schnitt/         Video aus der Klickstrecke: zustaende.js (Bühne Bild für Bild), montiere.py (MP4, Untertitel, Kapitel)
 ├── aussprache/      Aussprachewörterbuch
 └── ausgabe/         erzeugte Videos, Audio, Untertitel — nicht im Repository (.gitignore)
 ```

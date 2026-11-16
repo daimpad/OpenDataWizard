@@ -12,7 +12,7 @@ Dieses Verzeichnis ist nicht Teil des Plugin-Pakets.
 | `klickstrecke/` | Web Component `<odw-klickstrecke>`, Paketbau, Einbindung in TYPO3 |
 | `ausgabe/` | alles Erzeugte (nicht im Repository) |
 
-Schnitt und Ton folgen.
+Aus der fertigen Klickstrecke entstehen auch die Videos (Abschnitt „Videos“ unten).
 
 ## Ablauf
 
@@ -23,6 +23,7 @@ bash video/aufnahme/einrichten.sh          # deutsches WordPress mit SQLite, ein
 bash video/aufnahme/starte-server.sh &     # http://127.0.0.1:8888
 node video/aufnahme/aufnahme.js            # alle Folgen; oder z. B. „… aufnahme.js 0 3"
 python3 video/klickstrecke/baue-paket.py --aufnahme video/ausgabe/aufnahme --ton video/ausgabe/ton
+bash video/schnitt/video.sh 7                # Video einer Folge, Gestaltung odw; „… 7 datenatlas“ für die andere
 ```
 
 Die Tonspuren liegen als `video/ausgabe/ton/<folge>/<szene>.mp3` (z. B. `ton/0/Q1.mp3`); ohne `--ton`
@@ -77,3 +78,19 @@ GovData oder .zip regelt das Aussprachewörterbuch, nicht eine Lautschrift im Te
 WordPress selbst, `quelle: carbon-fields` solche der Formular-Bibliothek Carbon Fields (deutsch über
 `languages/carbon-fields-ui-de_DE.po`); `pruefen: true` heißt, bei der ersten Aufnahme gegen die laufende
 WordPress-Version prüfen.
+
+## Videos
+
+`video/schnitt/video.sh <folge> [gestaltung]` macht aus der Klickstrecke ein Video, ohne neue Aufnahme und
+ohne neuen Ton:
+
+1. `zustaende.js` spielt die Folge in einem 1920 Pixel breiten Fenster Bild für Bild ab (25 je Sekunde)
+   und hält jeden neuen Zustand der Bühne als PNG fest.
+2. `montiere.py` legt die Zustände auf die Zeitachse des Tons, blendet bei jedem Wechsel in 0,28 s über
+   und schreibt mit ffmpeg ein MP4 (1920 × 1080, H.264, AAC).
+
+Zwischen den Szenen liegen 0,8 s Pause; Titel- und Abspannfolie stehen so lange, dass erstes und letztes
+Kapitel die zehn Sekunden erreichen, die YouTube verlangt. Kürzere Kapitel dazwischen werden mit dem
+folgenden zusammengelegt. Neben dem Video entstehen in `video/ausgabe/videos/`: Untertitel (`.vtt`, aus
+den Sprechtexten), Kapitelmarken, Titel und Beschreibung für YouTube und ein Vorschaubild. Voraussetzung
+ist das mit `--ton` gebaute Paket; ein Lauf dauert etwa so lange wie die Folge.
