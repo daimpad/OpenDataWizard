@@ -180,7 +180,7 @@ msgstr ""
 msgid "Catalog-Endpoint (REST API)"
 msgstr ""
 
-msgid "Cleared %d transient cache(s)."
+msgid "Zwischengespeicherte Antworten gelöscht: %d"
 msgstr ""
 
 msgid "DCAT-AP 3.0 Pflichtfelder"
@@ -751,7 +751,10 @@ msgstr ""
 msgid "REST-Endpoint öffnen"
 msgstr ""
 
-msgid "Recalculated quality scores for %d dataset(s)."
+msgid "Datensätze mit neu berechneter Qualität: %d"
+msgstr ""
+
+msgid "Qualität wird neu berechnet"
 msgstr ""
 
 msgid "Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin"

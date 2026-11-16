@@ -269,13 +269,13 @@ dcat:theme
         <div data-z="Weitere Rollen"><b>Weitere Rollen</b><span>nur, wenn Sie ihnen die Berechtigung geben</span></div></div>
       <div class="f-band" data-bei="Rollenverwaltung">Rollen anpassen: mit einem Plugin zur Rollenverwaltung.</div></div>`,
   '10/10.2': () => {
-    // Echte Ausgabe im Ausgangszustand „uebungsdatensatz-veroeffentlicht“ (siehe Drehbuch).
+    // Echte Ausgabe (Plugin 2.47.9) im Ausgangszustand „uebungsdatensatz-veroeffentlicht“ (siehe Drehbuch).
     const befehle = [
       ['status', 'samples status', '42 Beispieldatensätze geladen.', false],
       ['remove', 'samples remove --yes', '42 Beispieldatensätze gelöscht.', true],
       ['load', 'samples load', '42 Beispieldatensätze angelegt, 42 veröffentlicht.', true],
-      ['quality', 'quality recalculate', 'Recalculated quality scores for 45 dataset(s).', true],
-      ['cache', 'cache clear', 'Cleared 4 transient cache(s).', true],
+      ['quality', 'quality recalculate', 'Datensätze mit neu berechneter Qualität: 45', true],
+      ['cache', 'cache clear', 'Zwischengespeicherte Antworten gelöscht: 4', true],
     ];
     return `<div class="folie"><div class="f-kopf">Für Administrator:innen</div><h3 class="f-h">Befehle für WP-CLI</h3>
       <div class="f-terminal">${befehle.map(([z, c, o, ok]) => `<div data-z="${z}"><div class="ein"><span class="p">$</span> wp open-data-wizard ${c}</div><div class="aus">${ok ? '<span class="ok">Success:</span> ' : ''}${o}</div></div>`).join('')}</div></div>`;

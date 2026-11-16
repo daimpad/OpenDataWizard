@@ -69,12 +69,19 @@ if ( ! class_exists( 'WP_CLI' ) ) {
 		}
 
 		/**
+		 * Gemeldete Erfolgsmeldungen, damit Tests den Wortlaut prüfen können.
+		 *
+		 * @var array<int, string>
+		 */
+		public static array $meldungen = array();
+
+		/**
 		 * Print a success message.
 		 *
 		 * @param string $message Success message.
 		 */
 		public static function success( string $message ): void {
-			// Stub implementation.
+			self::$meldungen[] = $message;
 		}
 	}
 }
@@ -169,5 +176,44 @@ class Test_ODW_CLI extends TestCase {
 			method_exists( 'ODW_CLI', 'cache_clear' ),
 			'ODW_CLI should have cache_clear method'
 		);
+	}
+
+	/**
+	 * cache clear meldet auf Deutsch, wie viele zwischengespeicherte Antworten es gelöscht hat
+	 * (Quellsprache des Plugins; die englische Fassung steht in der en_US-Übersetzung).
+	 */
+	public function test_cache_clear_meldet_anzahl_auf_deutsch(): void {
+		$GLOBALS['wpdb'] = new class() {
+			/**
+			 * Tabelle.
+			 *
+			 * @var string
+			 */
+			public $options = 'wp_options';
+
+			/**
+			 * Je ein Eintrag für /catalog und /datasets, keiner für /delta.
+			 *
+			 * @param string $sql Abfrage.
+			 * @return array<int, string>
+			 */
+			public function get_col( string $sql ): array {
+				if ( false !== strpos( $sql, '_transient_odw_catalog_' ) ) {
+					return array( '_transient_odw_catalog_abc' );
+				}
+				if ( false !== strpos( $sql, '_transient_odw_dataset_' ) ) {
+					return array( '_transient_odw_dataset_94' );
+				}
+				return array();
+			}
+		};
+		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
+		\WP_Mock::userFunction( 'delete_transient' )->twice();
+		\WP_CLI::$meldungen = array();
+
+		ODW_CLI::cache_clear( array(), array() );
+		unset( $GLOBALS['wpdb'] );
+
+		$this->assertSame( array( 'Zwischengespeicherte Antworten gelöscht: 2' ), \WP_CLI::$meldungen );
 	}
 }

@@ -5,7 +5,7 @@
 
 folge: 10
 titel: "Für Administrator:innen"
-plugin_version: "2.47.8"
+plugin_version: "2.47.9"   # WP-CLI meldet sich erst ab 2.47.9 durchgehend auf Deutsch (Folie 10.2)
 # Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht, dazu Bestand
 # und Beispieldaten. So gibt es in 10.4 Datensätze, die beim Löschen des Plugins erhalten bleiben.
 umgebung: uebungsdatensatz-veroeffentlicht
