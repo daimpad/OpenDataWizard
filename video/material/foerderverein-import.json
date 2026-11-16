@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Vereinsfeste des Fördervereins 2015–2025",
+    "publisher": "Förderverein Musterstadt e. V.",
+    "description": "Termine, Orte und Besucherzahlen der jährlichen Vereinsfeste von 2015 bis 2025.",
+    "access_url": "https://foerderverein-musterstadt.example/daten/feste-2015-2025.json",
+    "license": "cc-by",
+    "theme": "EDUC",
+    "keywords": "Veranstaltungen\nKultur",
+    "format": "JSON"
+  },
+  {
+    "title": "Spendenprojekte des Fördervereins 2024",
+    "publisher": "Förderverein Musterstadt e. V.",
+    "description": "Spendenaufrufe des Jahres 2024 mit Ziel, Zeitraum und erreichter Summe.",
+    "access_url": "https://foerderverein-musterstadt.example/daten/spendenprojekte-2024.json",
+    "license": "cc-by",
+    "theme": "ECON",
+    "keywords": "Spenden\nFinanzen",
+    "format": "JSON"
+  }
+]
