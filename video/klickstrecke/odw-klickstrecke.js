@@ -201,7 +201,7 @@ const FOLIEN = {
     ];
     return `<div class="folie"><div class="f-kopf">foerderverein-import.csv</div><h3 class="f-h">Eine Zeile, ein Datensatz</h3>
       <table class="f-tabelle"><thead><tr data-z="Kopfzeile" data-modus="hervor"><th>title</th><th>publisher</th><th>license</th><th>theme</th><th>keywords</th><th>…</th></tr></thead><tbody>
-      ${zeilen.map(([t, l, th, k], i) => `<tr><td>${t}</td><td>Förderverein Musterstadt e. V.</td>
+      ${zeilen.map(([t, l, th, k], i) => `<tr><td>${t}</td><td>Förderverein Musterstadt e.&nbsp;V.</td>
         <td${l ? '' : ' class="leer" data-z="Fehlende Lizenz" data-modus="hervor"'}>${l || '(leer)'}</td><td>${th}</td>
         <td${i === 0 ? ' data-z="Schlagworte" data-modus="hervor"' : ''}>${k}</td><td>…</td></tr>`).join('')}</tbody></table></div>`;
   },
