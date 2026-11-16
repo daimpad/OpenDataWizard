@@ -1,0 +1,61 @@
+{
+  "name": "datenatlas",
+  "bezeichnung": "Datenatlas Zivilgesellschaft",
+  "einsatz": "datenatlas-zivilgesellschaft.de (TYPO3)",
+  "herkunft": "Entwurf: Farben und Schriften aus dem Stylesheet von datenatlas-zivilgesellschaft.de abgeleitet, Logo aus dem Seitenkopf derselben Website (Stand 16.11.2026). Verbindlich sind die Vorgaben des Datenatlas. Die Logodatei ist eine Marke des Datenatlas und liegt nicht im Repository (siehe logos/LIESMICH.md).",
+  "marke": "Datenatlas Zivilgesellschaft",
+  "logo": "logos/datenatlas.svg",
+  "namensnennung": "CC BY 3.0 · Open Data Wizard · github.com/daimpad/OpenDataWizard",
+  "folie": {
+    "grund": "#ffffff",
+    "flaeche": "#f3f6f8",
+    "linie": "#d5dee5",
+    "text": "#053a5d",
+    "gedimmt": "#4a6a80",
+    "akzent": "#e5735e",
+    "akzent_schrift": "#053a5d",
+    "akzent_text": "#053a5d",
+    "warnung": "#cb4f78",
+    "papier": "#ffffff",
+    "tinte": "#053a5d",
+    "papierlinie": "#d5dee5",
+    "karte_kopf": "#e5735e"
+  },
+  "bedienung": {
+    "grund": "#ffffff",
+    "text": "#053a5d",
+    "gedimmt": "#4a6a80",
+    "linie": "#d5dee5",
+    "knopf": "#053a5d",
+    "knopf_text": "#ffffff",
+    "markierung": "#a4d8db",
+    "fokus": "#e5735e"
+  },
+  "schriften": {
+    "anzeige": {
+      "familie": "Bitter",
+      "paket": "bitter",
+      "schnitte": [
+        500,
+        700
+      ]
+    },
+    "text": {
+      "familie": "Lato",
+      "paket": "lato",
+      "schnitte": [
+        400,
+        700
+      ]
+    },
+    "mono": {
+      "familie": "JetBrains Mono",
+      "paket": "jetbrains-mono",
+      "schnitte": [
+        400,
+        500
+      ]
+    }
+  },
+  "logo_breit": true
+}

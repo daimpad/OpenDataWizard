@@ -1,0 +1,60 @@
+{
+  "name": "odw",
+  "bezeichnung": "Open Data Wizard",
+  "einsatz": "GitHub, README, Plugin",
+  "marke": "Open Data Wizard",
+  "logo": "logos/odw.svg",
+  "namensnennung": "CC BY 3.0 · Open Data Wizard · github.com/daimpad/OpenDataWizard",
+  "folie": {
+    "grund": "#101010",
+    "flaeche": "#161616",
+    "linie": "#3a3a3a",
+    "text": "#f3f5f4",
+    "gedimmt": "#8f9296",
+    "akzent": "#03ff9a",
+    "akzent_schrift": "#03ff9a",
+    "akzent_text": "#101010",
+    "warnung": "#f97066",
+    "papier": "#f4f5f6",
+    "tinte": "#101010",
+    "papierlinie": "#c9ccd1",
+    "karte_kopf": "#c0392b"
+  },
+  "bedienung": {
+    "grund": "#ffffff",
+    "text": "#16201b",
+    "gedimmt": "#5a6661",
+    "linie": "#d9e0dc",
+    "knopf": "#101010",
+    "knopf_text": "#ffffff",
+    "markierung": "#03ff9a",
+    "fokus": "#00805a"
+  },
+  "schriften": {
+    "anzeige": {
+      "familie": "Space Grotesk",
+      "paket": "space-grotesk",
+      "schnitte": [
+        500,
+        700
+      ]
+    },
+    "text": {
+      "familie": "Inter",
+      "paket": "inter",
+      "schnitte": [
+        400,
+        500,
+        600
+      ]
+    },
+    "mono": {
+      "familie": "JetBrains Mono",
+      "paket": "jetbrains-mono",
+      "schnitte": [
+        400,
+        500
+      ]
+    }
+  }
+}
