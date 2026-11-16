@@ -187,6 +187,20 @@ const FOLIEN = {
       ${karte(180, 'CSV', 'primäre Distribution', 'Mediathek', 'Karte CSV')}
       ${karte(860, 'JSON', 'weitere Distribution', 'Link', 'Karte JSON')}</svg></div>`;
   },
+  '6/6.4': () => {
+    // Fünf Bereiche links, vier Stufen rechts; die Balkenlänge zeigt den Schwellenwert der Stufe.
+    const bereiche = ['Auffindbarkeit', 'Zugänglichkeit', 'Interoperabilität', 'Wiederverwendbarkeit', 'Kontext'];
+    const stufen = [['Ausgezeichnet', 'ab 87 %', 87], ['Gut', 'ab 55 %', 55], ['Ausreichend', 'ab 30 %', 30], ['Mangelhaft', 'darunter', 12]];
+    return `<div class="folie"><svg class="f-svg" viewBox="0 0 1600 900" role="img" aria-label="Fünf Bereiche der Qualitätsbewertung und vier Stufen">
+      <text x="110" y="120" class="c-akzent t-anz" font-size="26" font-weight="700" letter-spacing="3">QUALITÄT</text>
+      <g data-z="Bereiche"><text x="110" y="200" class="c-gedimmt" font-size="26">Punkte in fünf Bereichen</text>
+        ${bereiche.map((b, i) => `<rect x="110" y="${235 + i * 100}" width="560" height="78" rx="12" class="c-flaeche s-linie" stroke-width="2"/>
+        <text x="140" y="${284 + i * 100}" class="c-text t-anz" font-size="30" font-weight="700">${b}</text>`).join('')}</g>
+      <g data-z="Stufen"><text x="800" y="200" class="c-gedimmt" font-size="26">ergeben eine von vier Stufen</text>
+        ${stufen.map(([s, ab, w], i) => `<rect x="800" y="${235 + i * 125}" width="${w * 7}" height="56" rx="10" class="c-akzent" opacity="${1 - i * 0.2}"/>
+        <text x="800" y="${330 + i * 125}" class="c-text t-anz" font-size="28" font-weight="700">${s}</text><text x="1040" y="${330 + i * 125}" class="c-gedimmt" font-size="26">${ab}</text>`).join('')}</g>
+      <text x="110" y="800" class="c-gedimmt" font-size="22">Methode des europäischen Datenportals (Metadata Quality Assessment, MQA)</text></svg></div>`;
+  },
 };
 function folieFuer(f, sz, g) {
   const k = `${f.folge}/${sz.id}`;

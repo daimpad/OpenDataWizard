@@ -178,8 +178,8 @@ Aufnahme gegen die laufende WordPress-Version geprüft.
 | 6.3 | 0:20 | Screencast | Lizenz wählen → Veröffentlichen | — |
 | 6.4 | 0:30 | Folie | Vier Stufen (Ausgezeichnet ≥ 87 %, Gut 55–86 %, Ausreichend 30–54 %, Mangelhaft < 30 %); fünf Dimensionen (Auffindbarkeit, Zugänglichkeit, Interoperabilität, Wiederverwendbarkeit, Kontext) | Gemessen nach der Methode, die auch das europäische Datenportal verwendet. |
 | 6.5 | 0:35 | Screencast | Box „Qualitätsprüfung (MQA)": Prozent, Stufe, Punkte je Kriterium; fehlendes Kriterium ergänzen → Wert steigt | Die Box zeigt, bei welchen Kriterien noch Punkte zu holen sind. |
-| 6.6 | 0:20 | Screencast | Alle Datensätze → Spalte „Qualität" sortieren | Den Bestand nach Nachholbedarf ordnen. |
-| 6.7 | 0:20 | Einblendung | Formale Konformität (SHACL) | Wird extern geprüft — siehe Folge 9. |
+| 6.6 | 0:25 | Screencast | Zeile „DCAT-AP-Konformität (SHACL)" in der Qualitätsbox, mit „–" markiert; Erreichbarkeit nur mit Einstellung | Wird extern geprüft — siehe Folge 9. |
+| 6.7 | 0:25 | Screencast | Alle Datensätze → Spalte „Qualität" sortieren (zwei knapp beschriebene Vereinsdatensätze stehen oben) | Den Bestand nach Nachholbedarf ordnen. |
 
 ### Folge 7 · Viele Datensätze auf einmal: Batch-Import
 

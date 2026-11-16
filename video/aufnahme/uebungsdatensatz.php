@@ -82,6 +82,27 @@ if ( $anhang && is_array( $f4 ) ) {
 		)
 	);
 
+	$f5 = json_decode( (string) ( $args[3] ?? '' ), true );
+	if ( is_array( $f5 ) ) {
+		// Reiter 4 wie am Ende von Folge 5. Daten stehen im Drehbuch so, wie man sie tippt (TT.MM.JJJJ).
+		$datum = static function ( string $tt_mm_jjjj ): string {
+			$d = DateTime::createFromFormat( 'd.m.Y', $tt_mm_jjjj );
+			return $d ? $d->format( 'Y-m-d' ) : '';
+		};
+		update_post_meta( $id, '_odw_landing_page', $f5['projektseite'] );
+		update_post_meta( $id, '_odw_issued', $datum( $f5['erstveroeffentlichung'] ) );
+		update_post_meta( $id, '_odw_accrual_periodicity', $uri( ODW_Fields::get_periodicity_options(), $f5['frequenz'] ) );
+		update_post_meta( $id, '_odw_political_geocoding_level', $uri( ODW_Fields::get_political_geocoding_level_options(), $f5['verwaltungsebene'] ) );
+		update_post_meta( $id, '_odw_geocoding_description', $f5['raum_in_worten'] );
+		update_post_meta( $id, '_odw_spatial', $f5['region'] );
+		update_post_meta( $id, '_odw_temporal_start', $datum( $f5['zeitraum_von'] ) );
+		update_post_meta( $id, '_odw_temporal_end', $datum( $f5['zeitraum_bis'] ) );
+		update_post_meta( $id, '_odw_contact_name', $f5['kontakt_name'] );
+		update_post_meta( $id, '_odw_contact_email', $f5['kontakt_email'] );
+		update_post_meta( $id, '_odw_contact_url', $f5['kontakt_website'] );
+		update_post_meta( $id, '_odw_maintainer_name', $f5['pflegende_stelle'] );
+	}
+
 	ODW_Quality::store( $id, ODW_Quality::calculate( $id ) );
 	ODW_Catalog_Filters::sync_index( $id );
 }
