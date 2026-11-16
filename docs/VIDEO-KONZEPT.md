@@ -161,7 +161,7 @@ Aufnahme gegen die laufende WordPress-Version geprüft.
 |---|---|---|---|---|
 | 5.1 | 0:20 | Screencast | Reiter 4 im Überblick: drei offene Gruppen, Profi-Bereich eingeklappt | Alles hier ist freiwillig. Jede Angabe macht die Daten leichter auffindbar. |
 | 5.2 | 0:35 | Screencast | *Projektseite & Aktualität:* Projektseite, Erstveröffentlichung, Aktualisierungsfrequenz | Das Änderungsdatum setzt das Plugin bei jedem Speichern selbst. |
-| 5.3 | 0:50 | Screencast | *Abdeckung:* Verwaltungsebene, amtliches Gebiet (Vorschläge beim Tippen), räumlicher Bezug in Worten, geografische Region, Zeitraum von–bis | Wo und wann gelten die Daten? |
+| 5.3 | 0:50 | Screencast | *Abdeckung:* Verwaltungsebene, amtliches Gebiet (nur öffentliche Stellen, ohne Vorschläge), räumlicher Bezug in Worten, geografische Region, Zeitraum von–bis | Wo und wann gelten die Daten? |
 | 5.4 | 0:25 | Screencast | *Kontakt:* Ansprechperson, E-Mail, Website | An wen sich Nutzende mit Fragen wenden. |
 | 5.5 | 0:20 | Screencast | „Erweiterte Angaben (optional)" | „Öffnen Sie gezielt nur die Gruppen, die Sie brauchen." |
 | 5.6 | 0:35 | Screencast | *Verantwortlichkeiten & Herkunft:* GovData-Stelle (Vorschläge), Urheber, pflegende Stelle, Rechtsgrundlage, Qualitätssicherung | Vor allem für öffentliche Stellen und den GovData-Verbund. |

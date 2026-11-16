@@ -1,0 +1,197 @@
+# Drehbuch · Folge 5 · Das Formular III: Erweiterte Angaben
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 5
+titel: "Das Formular III: Erweiterte Angaben"
+plugin_version: "2.47.6"
+# Ausgangszustand: wie am Ende von Folge 4. Der Übungsdatensatz ist ein Entwurf mit Reiter 1 und
+# Reiter 3 (CSV-Datei aus der Mediathek, CC BY 4.0 mit Namensnennungstext, „Stabil", zweite
+# Distribution als JSON). Reiter 4 ist leer.
+umgebung: uebungsdatensatz-folge-4
+
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  # Alle Adressen sind erfunden (.example ist für Beispiele reserviert).
+  projektseite: "https://foerderverein-musterstadt.example/verein/mitglieder"
+  erstveroeffentlichung: "2016-01-15"
+  frequenz: "Jährlich"
+  verwaltungsebene: "Gemeinde"
+  raum_in_worten: "Stadtgebiet Musterstadt"
+  region: "Deutschland"
+  zeitraum_von: "2015-01-01"
+  zeitraum_bis: "2025-12-31"
+  kontakt_name: "Geschäftsstelle des Fördervereins Musterstadt"
+  kontakt_email: "kontakt@foerderverein-musterstadt.example"
+  kontakt_website: "https://foerderverein-musterstadt.example/kontakt"
+  pflegende_stelle: "Geschäftsstelle des Fördervereins Musterstadt"
+
+szenen:
+
+  - id: "5.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 5: Das Formular, Teil 3. Im vierten Reiter stehen die erweiterten Angaben: Aktualität,
+        räumliche und zeitliche Abdeckung, Kontakt und Felder für besondere Fälle. Alles hier ist
+        freiwillig.
+
+  - id: "5.1"
+    kapitel: "Der vierte Reiter"
+    bild: screencast
+    dauer: "0:20"
+    sprechtext:
+      de: >-
+        Wir öffnen wieder unseren Übungsdatensatz, diesmal den vierten Reiter. Oben stehen drei
+        Gruppen: Projektseite und Aktualität, Abdeckung und Kontakt. Darunter folgen eingeklappte
+        Gruppen für Profis. Keine dieser Angaben ist Pflicht, aber jede macht Ihre Daten leichter
+        auffindbar.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "{uebungsdatensatz.titel}", bei: "öffnen" }
+      - klick: { text: "4 — Erweiterte Angaben", bei: "vierten" }
+    einblendung:
+      - { markiere: "Projektseite & Aktualität", bei: "Gruppen" }
+      - { text: "Alles freiwillig", bei: "Pflicht" }
+
+  - id: "5.2"
+    kapitel: "Projektseite und Aktualität"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        In der ersten Gruppe geht es um Aktualität. Die Projektseite ist eine Seite für Menschen, auf
+        der Sie die Daten erläutern, etwa auf Ihrer Vereinswebsite. Darunter das Datum der ersten
+        Veröffentlichung. Das Änderungsdatum müssen Sie nicht pflegen: Das Plugin setzt es bei jedem
+        Speichern selbst. Und wie oft kommen neue Daten hinzu? Unsere Zahlen werden einmal im Jahr
+        ergänzt, also wählen wir „Jährlich".
+    schritte:
+      - tippe: { feld: "Wo finde ich die Projektseite zu diesen Daten?", text: "{uebungsdatensatz.projektseite}", bei: "Vereinswebsite" }
+      - tippe: { feld: "Wann wurden diese Daten zum ersten Mal veröffentlicht?", text: "{uebungsdatensatz.erstveroeffentlichung}", bei: "Veröffentlichung" }
+      - waehle: { feld: "Wie oft werden diese Daten aktualisiert?", option: "{uebungsdatensatz.frequenz}", bei: "Jährlich" }
+    einblendung:
+      - { markiere: "Das Änderungsdatum (dct:modified) wird bei jedem Speichern automatisch gesetzt.", bei: "Änderungsdatum" }
+
+  - id: "5.3"
+    kapitel: "Wo und wann die Daten gelten"
+    bild: screencast
+    dauer: "0:50"
+    sprechtext:
+      de: >-
+        Die zweite Gruppe beschreibt, wo und wann die Daten gelten. Die Verwaltungsebene gibt an, auf
+        welche Ebene sich die Daten beziehen, hier eine Gemeinde. Öffentliche Stellen tragen darunter
+        den amtlichen Gebietsschlüssel ein. Für alle anderen gibt es zwei einfachere Wege: eine
+        Beschreibung in Worten und eine Region aus einer Liste. Zum Schluss der Zeitraum, den die Daten
+        abdecken: vom 1. Januar 2015 bis zum 31. Dezember 2025.
+    schritte:
+      - waehle: { feld: "Auf welcher Verwaltungsebene wurden diese Daten erhoben?", option: "{uebungsdatensatz.verwaltungsebene}", bei: "Gemeinde" }
+      - tippe: { feld: "Wie lässt sich der räumliche Bezug in Worten beschreiben?", text: "{uebungsdatensatz.raum_in_worten}", bei: "Worten" }
+      - tippe: { feld: "Welche geografische Region betreffen diese Daten?", text: "{uebungsdatensatz.region}", bei: "Liste" }
+      - tippe: { feld: "Ab wann reicht der Zeitraum, den die Daten abdecken?", text: "{uebungsdatensatz.zeitraum_von}", bei: "Januar" }
+      - tippe: { feld: "Bis wann reicht der Zeitraum, den die Daten abdecken?", text: "{uebungsdatensatz.zeitraum_bis}", bei: "Dezember" }
+    hinweis: >-
+      Der amtliche Gebietsschlüssel bleibt leer: Musterstadt ist erfunden, und das Feld schlägt beim
+      Tippen nichts vor (anders als das Konzept bisher annahm).
+
+  - id: "5.4"
+    kapitel: "Kontakt"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Die dritte Gruppe nennt, an wen sich Nutzende mit Fragen wenden. Das kann eine Person sein, aber
+        auch eine Stelle, etwa die Geschäftsstelle des Vereins, mit E-Mail-Adresse und Website.
+    schritte:
+      - tippe: { feld: "An wen kann ich mich bei Fragen zu diesen Daten wenden?", text: "{uebungsdatensatz.kontakt_name}", bei: "Geschäftsstelle" }
+      - tippe: { feld: "Unter welcher E-Mail-Adresse kann ich Fragen stellen?", text: "{uebungsdatensatz.kontakt_email}", bei: "E-Mail-Adresse" }
+      - tippe: { feld: "Auf welcher Website finde ich weitere Kontaktinformationen?", text: "{uebungsdatensatz.kontakt_website}", bei: "Website" }
+
+  - id: "5.5"
+    kapitel: "Der Bereich für Profis"
+    bild: screencast
+    dauer: "0:18"
+    sprechtext:
+      de: >-
+        Darunter beginnt der Bereich für Profis. Die Gruppen sind eingeklappt, damit das Formular
+        übersichtlich bleibt. Öffnen Sie gezielt nur die, die Sie brauchen.
+    schritte:
+      - scrolle_zu: { text: "Erweiterte Angaben (optional)", bei: "Profis" }
+    einblendung:
+      - { markiere: "Erweiterte Angaben (optional)", bei: "Profis" }
+
+  - id: "5.6"
+    kapitel: "Verantwortlichkeiten und Herkunft"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        „Verantwortlichkeiten und Herkunft" richtet sich vor allem an öffentliche Stellen im
+        GovData-Verbund. Sie wählen ihre Stelle aus einer Liste; ein Verein lässt dieses Feld leer.
+        Die übrigen Angaben sind für alle nützlich: wer die Daten ursprünglich erstellt hat, wer sie
+        laufend pflegt, auf welcher rechtlichen Grundlage sie bereitstehen und wo die
+        Qualitätssicherung beschrieben ist.
+    schritte:
+      - klick: { text: "Verantwortlichkeiten & Herkunft", bei: "Verantwortlichkeiten" }
+      - tippe: { feld: "Wer pflegt diese Daten laufend?", text: "{uebungsdatensatz.pflegende_stelle}", bei: "pflegt" }
+    einblendung:
+      - { markiere: "Welche Stelle stellt diese Daten im GovData-Verbund bereit?", bei: "GovData-Verbund" }
+
+  - id: "5.7"
+    kapitel: "Hochwertige Datensätze"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Die nächste Gruppe gilt nur für öffentliche Stellen: hochwertige Datensätze im Sinne der
+        europäischen Durchführungsverordnung, etwa Geodaten oder Statistiken. Für unseren Verein bleibt
+        es bei „Nein". Wer „Ja" wählt, gibt zusätzlich die Kategorie an.
+    schritte:
+      - klick: { text: "High-Value-Datensatz (HVD) — nur für öffentliche Stellen", bei: "Gruppe" }
+    einblendung:
+      - { markiere: "Nur für öffentliche Stellen: Ist dies ein hochwertiger Datensatz (HVD)?", bei: "Nein" }
+
+  - id: "5.8"
+    kapitel: "Weitere Felder"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Zwei weitere Gruppen zeigen wir nur kurz. „Weitere DCAT-AP-Felder" enthält etwa Kennung,
+        Version, Auflösung und Herkunft der Daten. „Primäre Distribution — weitere Angaben" ergänzt die
+        Datei aus dem dritten Reiter, zum Beispiel um einen direkten Download-Link. Beides ist vor
+        allem für Forschungsdaten nützlich.
+    schritte:
+      - klick: { text: "Weitere DCAT-AP-Felder (optional)", bei: "DCAT-AP-Felder" }
+      - klick: { text: "Primäre Distribution — weitere Angaben", bei: "ergänzt" }
+
+  - id: "5.9"
+    kapitel: "Mehr Angaben, höhere Qualität"
+    bild: screencast
+    dauer: "0:18"
+    sprechtext:
+      de: >-
+        Zum Schluss speichern wir. Unter dem Formular sehen Sie, was die neuen Angaben bewirken: Die
+        Qualitätsbewertung ist deutlich gestiegen. Wie sie entsteht, zeigt die nächste Folge.
+    schritte:
+      - klick: { text: "Entwurf speichern", quelle: core, bei: "speichern" }
+      - scrolle_zu: { text: "Qualitätsprüfung (MQA)", bei: "Formular" }
+    einblendung:
+      - { text: "Qualität: vorher 66 %, jetzt 88 %", bei: "gestiegen" }
+    hinweis: >-
+      Die Prozentwerte stammen aus der Aufnahme (Ausgangszustand uebungsdatensatz-folge-4 und nach
+      dem Speichern); ändert sich die Bewertung, sind sie hier nachzutragen.
+
+  - id: "5.10"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:12"
+    folie: >-
+      Abspann: Hinweis auf Folge 6; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge prüfen wir den Datensatz, veröffentlichen ihn und sehen uns die
+        Qualitätsbewertung genauer an.
