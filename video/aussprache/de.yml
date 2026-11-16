@@ -6,6 +6,8 @@
 # Noch ohne Eintrag, nach dem ersten Anhören zu entscheiden: JSON-LD, CESSDA.
 
 ersetzungen:
+  - text: "de für Deutsch, en für Englisch"   # Sprachkennungen buchstabieren (Folge 3)
+    gesprochen: "D E für Deutsch, E N für Englisch"
   - text: "DCAT-AP.de"
     gesprochen: "Dikätäypi Punkt D E"
   - text: "CC BY 4.0"
