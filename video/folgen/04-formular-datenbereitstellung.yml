@@ -4,7 +4,7 @@
 
 folge: 4
 titel: "Das Formular II: Datenbereitstellung"
-plugin_version: "2.47.5"
+plugin_version: "2.47.6"   # 4.3: Dateigröße beim Upload erst ab 2.47.6
 # Ausgangszustand: wie am Ende von Folge 3. Einstellungen aus Folge 2, dazu der Übungsdatensatz als
 # Entwurf mit Titel, Herausgeber, Beschreibung, Thema und Schlagworten. Reiter 3 ist noch leer, die
 # Lizenz steht auf dem Standardwert aus den Einstellungen (CC BY 4.0).
@@ -83,22 +83,21 @@ szenen:
     dauer: "0:25"
     sprechtext:
       de: >-
-        Beim Speichern übernimmt das Plugin das Format der hochgeladenen Datei selbst. Hier steht jetzt
-        CSV. Haben Sie stattdessen einen Link eingetragen, wählen Sie das Format von Hand. Geben Sie es
-        immer an, denn danach suchen und filtern Portale. Die Dateigröße darunter ist freiwillig. Sie
-        tragen sie mit Einheit ein, in Kilobyte, Megabyte oder Gigabyte.
+        Beim Speichern übernimmt das Plugin Format und Dateigröße der hochgeladenen Datei selbst. Hier
+        steht jetzt CSV, darunter die Größe. Haben Sie stattdessen einen Link eingetragen, geben Sie
+        beides von Hand an: das Format aus der Liste, die Größe mit Einheit, etwa in Kilobyte. Die Größe
+        ist freiwillig. Das Format sollten Sie immer angeben, denn danach suchen und filtern Portale.
     schritte:
       - klick: { text: "Entwurf speichern", quelle: core, bei: "Speichern" }
       - klick: { text: "3 — Datenbereitstellung", bei: "Hier" }
       - scrolle_zu: { text: "In welchem Format ist die Datei?", bei: "CSV" }
     einblendung:
       - { markiere: "In welchem Format ist die Datei?", bei: "CSV" }
-      - { markiere: "Dateigröße", bei: "Dateigröße" }
+      - { markiere: "Dateigröße", bei: "Größe" }
     hinweis: >-
       Nach dem Speichern lädt die Seite neu. Der Klick auf den Reiter stellt sicher, dass Reiter 3
-      offen ist, auch wenn sich das Formular den Reiter nicht gemerkt hat. Stand 2.47.5: Das Plugin
-      setzt beim Upload nur das Format (dct:format); die Größe merkt es sich für den Download-Button
-      der Karte (_odw_file_size), trägt sie aber nicht als dcat:byteSize ein.
+      offen ist, auch wenn sich das Formular den Reiter nicht gemerkt hat. Die Dateigröße
+      (dcat:byteSize) übernimmt das Plugin beim Upload erst seit 2.47.6; bis 2.47.5 nur das Format.
 
   - id: "4.4"
     kapitel: "Die Lizenz"

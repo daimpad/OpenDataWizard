@@ -7,6 +7,18 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.6] — 2026-11-16
+
+### 🐛 Fixed
+- **Dateigröße beim Upload in die Metadaten.** Wird die Datei eines Datensatzes in die
+  Mediathek hochgeladen, übernahm das Plugin beim Speichern Zugriffs-URL und Format, die
+  Dateigröße aber nur für den Download-Button der Datensatz-Karte (`_odw_file_size`), nicht als
+  `dcat:byteSize` in die Metadaten. Jetzt steht sie auch dort und im Feld „Dateigröße“.
+  Eine von Hand eingetragene Größe bleibt unverändert; wird die Datei ersetzt, bringt sie ihre
+  eigene Größe mit, sofern die bisherige ebenfalls aus der Datei stammte.
+
+---
+
 ## [2.47.5] — 2026-11-06
 
 ### 🐛 Fixed
