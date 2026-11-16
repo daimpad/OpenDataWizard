@@ -157,21 +157,25 @@ class Test_ODW_Carbon_Fields_L10n extends TestCase {
 	}
 
 	/**
-	 * Kalendersprache der Datumsfelder folgt der Oberfläche: „de" nur bei
+	 * Kalendersprache der Datumsfelder folgt der Oberfläche: Deutsch nur bei
 	 * deutscher Locale, sonst flatpickrs englisches Original.
+	 *
+	 * Deutsch geht als Sprachobjekt mit, nicht als Kürzel „de": Ein erst zur
+	 * Laufzeit angemeldetes „de" kam oft zu spät (bis v2.47.6: „invalid locale de").
 	 */
 	public function test_date_picker_locale_follows_interface(): void {
 		require_once ODW_PLUGIN_DIR . 'includes/class-fields.php';
 
 		\WP_Mock::userFunction( 'determine_locale' )->andReturn( 'de_AT', 'en_US' );
 
-		$this->assertSame(
-			array(
-				'dateFormat' => 'Y-m-d',
-				'locale'     => 'de',
-			),
-			ODW_Fields::date_picker_options()
-		);
+		$deutsch = ODW_Fields::date_picker_options();
+		$this->assertSame( 'Y-m-d', $deutsch['dateFormat'] );
+		$this->assertSame( 'd.m.Y', $deutsch['altFormat'] );
+		$this->assertIsArray( $deutsch['locale'] );
+		$this->assertSame( 'Januar', $deutsch['locale']['months']['longhand'][0] );
+		$this->assertSame( 'Mo', $deutsch['locale']['weekdays']['shorthand'][1] );
+		$this->assertSame( 1, $deutsch['locale']['firstDayOfWeek'] );
+
 		$this->assertSame(
 			array(
 				'dateFormat' => 'Y-m-d',
