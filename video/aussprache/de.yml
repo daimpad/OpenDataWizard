@@ -14,6 +14,8 @@ ersetzungen:
     gesprochen: "Si si-bei vier Punkt null"
   - text: "DCAT-AP"
     gesprochen: "Dikätäypi"   # englisch ausgesprochen
+  - text: " & "   # „Bevölkerung & Gesellschaft" (Folge 8): im Untertitel wie im Bild
+    gesprochen: " und "
   - text: ".zip"
     gesprochen: "Punkt zip"
   - text: "data.europa.eu"

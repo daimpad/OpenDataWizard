@@ -209,6 +209,10 @@ const FOLIEN = {
       <div class="f-paket" data-z="Pflichtspalten"><b>Pflicht</b><div class="f-spalten pflicht">${['title', 'publisher', 'description', 'access_url', 'license'].map((c) => `<code>${c}</code>`).join('')}</div></div>
       <div class="f-paket" data-z="Weitere Spalten"><b>Möglich</b><div class="f-spalten">${['theme', 'keywords', 'format', 'language', 'temporal_start', 'temporal_end', 'contact_email', '…'].map((c) => `<code>${c}</code>`).join('')}</div></div></div>
       <div class="f-band" data-z="Lizenz-Kürzel">Lizenz als Kürzel: <code class="t-mono">cc0</code> · <code class="t-mono">cc-by</code> · <code class="t-mono">cc-by-sa</code> · <code class="t-mono">dl-de-by</code> · <code class="t-mono">dl-de-zero</code></div></div>`,
+  '8/8.9': () => `<div class="folie"><div class="f-kopf">Datenkatalog</div><h3 class="f-h">Zwei Regeln</h3><div class="f-zwei">
+      <div class="f-paket" data-z="Ein Katalog pro Seite" style="align-content:start"><b>Ein Katalog pro Seite</b><span>Blättern und Detailansicht gelten für die ganze Seite. Getrennte Kataloge, etwa nach Thema: je eine eigene Seite.</span></div>
+      <div class="f-paket" data-z="Beispieldaten"><b>Beispieldaten</b><dl class="f-regeln"><dt>Redaktion, angemeldet</dt><dd>sichtbar</dd><dt>Besucher</dt><dd>nur mit Schalter im Block</dd><dt>Portale</dt><dd>nie</dd></dl></div></div>
+      <div class="f-band" data-z="Vor dem Livegang">Vor dem Livegang: Beispieldaten entfernen, unter „Datenkatalog“ → „Einstieg“.</div></div>`,
   '6/6.4': () => {
     // Fünf Bereiche links, vier Stufen rechts; die Balkenlänge zeigt den Schwellenwert der Stufe.
     const bereiche = ['Auffindbarkeit', 'Zugänglichkeit', 'Interoperabilität', 'Wiederverwendbarkeit', 'Kontext'];
@@ -311,6 +315,9 @@ svg .wandert.z-weg { transform: translateX(-330px); }
 .f-paket code { font: 500 1.6cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); }
 .f-paket code.gedimmt { color: var(--f-gedimmt); }
 .f-paket span { color: var(--f-gedimmt); font-size: 1.7cqw; }
+.f-regeln { display: grid; grid-template-columns: auto 1fr; gap: .9cqw 2cqw; margin: 0; font-size: 1.8cqw; }
+.f-regeln dt { color: var(--f-gedimmt); }
+.f-regeln dd { margin: 0; font-weight: 600; }
 .f-tabelle { width: 100%; border-collapse: collapse; margin-top: 2.4cqw; font: 500 1.45cqw/1.3 var(--s-text); color: var(--f-text); }
 .f-tabelle th { font: 600 1.35cqw/1.2 var(--s-mono); color: var(--f-akzent_schrift); text-align: left; padding: .9cqw 1cqw; border-bottom: .25cqw solid var(--f-akzent); }
 .f-tabelle td { padding: .9cqw 1cqw; border-bottom: 1px solid var(--f-linie); vertical-align: top; }

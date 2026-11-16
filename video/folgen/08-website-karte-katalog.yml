@@ -1,0 +1,205 @@
+# Drehbuch · Folge 8 · Auf der eigenen Website: Karte und Datenkatalog
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 8
+titel: "Auf der eigenen Website: Karte und Datenkatalog"
+plugin_version: "2.47.8"
+# Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht (Qualität 92 %).
+# Dazu die 42 Beispieldatensätze aus Folge 2 und zwei knapp beschriebene Datensätze des Vereins,
+# damit der Katalog in 8.6 etwas zu filtern hat. Noch keine Seite mit Karte oder Katalog.
+umgebung: uebungsdatensatz-veroeffentlicht
+
+# Die Trefferzahl im Themenfilter (8.6) ergibt sich aus diesem Bestand; ändern sich die
+# Beispieldaten, ist sie nachzutragen.
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  seite_karte: "Mitgliederentwicklung"
+  seite_katalog: "Offene Daten"
+  thema_filter: "Bevölkerung & Gesellschaft (11)"
+  thema_chip: "Thema: Bevölkerung & Gesellschaft"
+  suche: "Mitglieder"
+
+szenen:
+
+  - id: "8.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 8: Auf der eigenen Website. Wir zeigen einen Datensatz als Karte auf einer Seite und
+        richten einen Datenkatalog ein, in dem Besucher suchen und filtern können.
+
+  - id: "8.1"
+    kapitel: "Die Datensatz-Karte einfügen"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Für einen einzelnen Datensatz gibt es den Block „Datensatz-Karte". Wir legen eine neue Seite an,
+        klicken auf das Plus und suchen den Block. Rechts in der Seitenleiste wählen Sie den Datensatz
+        aus einer Liste; eine Nummer müssen Sie nicht kennen. Zur Auswahl stehen nur veröffentlichte
+        Datensätze. Dann veröffentlichen wir die Seite.
+    schritte:
+      - oeffne: /wp-admin/post-new.php?post_type=page
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "{uebungsdatensatz.seite_karte}", bei: "Seite" }
+      - klick: { text: "Block-Inserter", quelle: core, bei: "Plus" }
+      - tippe: { feld: "Suchen", quelle: core, text: "Datensatz-Karte", bei: "suchen" }
+      - klick: { text: "Datensatz-Karte", bei: "Rechts" }
+      - waehle: { feld: "Welcher Datensatz soll angezeigt werden?", option: "{uebungsdatensatz.titel}", bei: "Liste" }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "veröffentlichen" }
+      - klick: { text: "Veröffentlichen", quelle: core }   # zweiter Klick: Prüfung vor der Veröffentlichung
+    einblendung:
+      - { text: "Auswahl statt Nummer", bei: "Nummer" }
+
+  - id: "8.2"
+    kapitel: "Was die Karte zeigt"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        So sieht die Karte auf der Website aus. Oben stehen der Titel und der Download, darunter
+        Format, Größe und Lizenz. Die zweite Distribution aus Folge 4 steht unter „Weitere
+        Distributionen". „Alle Metadaten anzeigen" klappt die übrigen Angaben auf, etwa Zeitraum und
+        Kontakt. Über „Metadaten JSON" lässt sich die Beschreibung in maschinenlesbarer Form
+        herunterladen.
+    schritte:
+      - oeffne: /mitgliederentwicklung/   # „Seite anzeigen" öffnet einen neuen Tab; die Aufnahme ruft die Seite direkt auf
+      - klick: { text: "Alle Metadaten anzeigen", bei: "klappt" }
+    einblendung:
+      - { markiere: "Datei herunterladen", bei: "Download" }
+      - { markiere: "Weitere Distributionen", bei: "zweite" }
+      - { markiere: "Metadaten JSON", bei: "maschinenlesbarer" }
+
+  - id: "8.3"
+    kapitel: "Oder als Shortcode"
+    bild: screencast
+    dauer: "0:18"
+    sprechtext:
+      de: >-
+        Arbeiten Sie mit dem klassischen Editor oder soll die Karte in ein Widget, nehmen Sie den
+        Shortcode. Sie finden ihn in der Liste der Datensätze, in der letzten Spalte. Ein Klick in das
+        Feld markiert ihn; dann kopieren Sie ihn an die gewünschte Stelle.
+    schritte:
+      - oeffne: { text: "/wp-admin/edit.php?post_type=odw_dataset", bei: "Liste" }
+    einblendung:
+      - { markiere: "Shortcode", zoom: true, bei: "Spalte" }
+
+  - id: "8.4"
+    kapitel: "Den Datenkatalog einfügen"
+    bild: screencast
+    dauer: "0:30"
+    sprechtext:
+      de: >-
+        Für alle Datensätze auf einer Seite gibt es den Block „Datenkatalog". Wir legen eine zweite
+        Seite an und fügen ihn auf dieselbe Weise ein. In der Seitenleiste legen Sie fest, wie viele
+        Datensätze pro Seite erscheinen, wie sie sortiert sind und wie lang der Auszug aus der
+        Beschreibung ist. Weil unsere Website noch die Beispieldaten enthält, schalten wir „Beispieldaten
+        auch Besuchern zeigen" ein.
+    schritte:
+      - oeffne: /wp-admin/post-new.php?post_type=page
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "{uebungsdatensatz.seite_katalog}", bei: "zweite" }
+      - klick: { text: "Block-Inserter", quelle: core, bei: "fügen" }
+      - tippe: { feld: "Suchen", quelle: core, text: "Datenkatalog", bei: "dieselbe" }
+      - klick: { text: "Datenkatalog", bei: "Weise" }
+      - klick: { text: "Beispieldaten auch Besuchern zeigen", bei: "schalten" }
+    einblendung:
+      - { markiere: "Datensätze pro Seite", bei: "Seitenleiste" }
+
+  - id: "8.5"
+    kapitel: "Filter und Suche für Besucher"
+    bild: screencast
+    dauer: "0:22"
+    sprechtext:
+      de: >-
+        Unter „Filter und Suche für Besucher" wählen Sie, womit Besucher die Liste eingrenzen können.
+        Wir nehmen das Thema, den Zeitraum der Daten und „Nur Open Data" und schalten das Suchfeld ein.
+        Dann veröffentlichen wir die Seite.
+    schritte:
+      - klick: { text: "Filter und Suche für Besucher", bei: "wählen" }
+      - klick: { text: "Thema", bei: "Thema" }
+      - klick: { text: "Zeitraum der Daten", bei: "Zeitraum" }
+      - klick: { text: "Nur Open Data", bei: "Open" }
+      - klick: { text: "Suchfeld anzeigen", bei: "Suchfeld" }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "veröffentlichen" }
+      - klick: { text: "Veröffentlichen", quelle: core }
+
+  - id: "8.6"
+    kapitel: "Suchen und filtern"
+    bild: screencast
+    dauer: "0:40"
+    sprechtext:
+      de: >-
+        So sieht der Katalog für Besucher aus. Über der Liste steht das Formular. Hinter jedem Thema
+        steht in Klammern, wie viele Datensätze es dazu gibt. Wir wählen „Bevölkerung & Gesellschaft"
+        und klicken auf „Anzeigen". Der Filter erscheint als Chip über der Liste; ein Klick darauf nimmt
+        ihn wieder heraus. Die Suche funktioniert genauso: Wir suchen nach „Mitglieder".
+    schritte:
+      - oeffne: { text: "/offene-daten/", besucher: true, bei: "Besucher" }
+      - waehle: { feld: "Thema", option: "{uebungsdatensatz.thema_filter}", bei: "wählen" }
+      - klick: { text: "Anzeigen", bei: "klicken" }
+      - klick: { text: "{uebungsdatensatz.thema_chip}", bei: "nimmt" }
+      - tippe: { feld: "Datensätze durchsuchen", text: "{uebungsdatensatz.suche}", bei: "suchen" }
+      - klick: { text: "Anzeigen", bei: "Mitglieder" }
+    einblendung:
+      - { text: "Trefferzahl in Klammern", bei: "Klammern" }
+
+  - id: "8.7"
+    kapitel: "Die Detailansicht"
+    bild: screencast
+    dauer: "0:20"
+    sprechtext:
+      de: >-
+        Ein Klick auf einen Titel öffnet die Karte des Datensatzes auf derselben Seite, mit Download und
+        allen Angaben. „Zurück zum Katalog" führt wieder zur Liste, an dieselbe Stelle und mit
+        derselben Suche.
+    schritte:
+      - klick: { text: "{uebungsdatensatz.titel}", bei: "Titel" }
+      - klick: { text: "Zurück zum Katalog", bei: "führt" }
+
+  - id: "8.8"
+    kapitel: "Auf dem Handy"
+    bild: screencast
+    dauer: "0:20"
+    sprechtext:
+      de: >-
+        Auf dem Handy klappt der Katalog das Formular ein, damit die Liste gleich zu sehen ist; die
+        Datensätze stehen untereinander. Ein Tipp auf „Filter und Suche" öffnet das Formular.
+    schritte:
+      - handy: { text: "/offene-daten/", bei: "Handy" }
+      - klick: { text: "Filter und Suche", bei: "Tipp" }
+
+  - id: "8.9"
+    kapitel: "Zwei Regeln"
+    bild: folie
+    dauer: "0:25"
+    folie: >-
+      Zwei Felder nebeneinander. Links „Ein Katalog pro Seite" mit dem Zusatz „Getrennte Kataloge,
+      etwa nach Thema: je eine eigene Seite". Rechts „Beispieldaten" mit drei Zeilen: Redaktion
+      (angemeldet): sichtbar · Besucher: nur mit Schalter im Block · Portale: nie. Darunter ein Band:
+      „Vor dem Livegang: Beispieldaten entfernen (Datenkatalog → Einstieg)".
+    einblendung:
+      - { zeige: "Ein Katalog pro Seite", bei: "Seite" }
+      - { zeige: "Beispieldaten", bei: "Beispieldaten" }
+      - { zeige: "Vor dem Livegang", bei: "online" }
+    sprechtext:
+      de: >-
+        Zwei Regeln sollten Sie kennen. Auf jeder Seite ist nur ein Datenkatalog möglich. Wer getrennte
+        Kataloge möchte, etwa nach Thema, legt dafür je eine eigene Seite an. Und Beispieldaten sehen
+        Besucher nur, wenn Sie das im Block einschalten; sonst sehen sie nur angemeldete Personen, die
+        Datensätze bearbeiten dürfen. An Portale gehen Beispieldaten nie. Bevor Ihre Website online
+        geht, entfernen Sie sie am besten unter „Einstieg".
+
+  - id: "8.10"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 9; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge geht es um die Anbindung an Open-Data-Portale: wie Portale Ihre Daten
+        abholen und wie Sie selbst prüfen, ob die Beschreibung dem Standard entspricht.

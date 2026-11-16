@@ -71,7 +71,11 @@ def schritt_text(s, kontext):
     t = ersetze(v.get('text'), kontext)
     feld = ersetze(v.get('feld'), kontext)
     if art == 'oeffne':
-        return f'{ORTE[wert]} öffnen' if wert in ORTE else 'Die veröffentlichte Seite aufrufen'
+        if v.get('besucher'):
+            return 'Die Seite als Besucher aufrufen (abgemeldet)'
+        return f'{ORTE[t]} öffnen' if t in ORTE else 'Die veröffentlichte Seite aufrufen'
+    if art == 'handy':
+        return 'Die Seite auf dem Handy aufrufen'
     if art == 'klick':
         return f'„{t}" anklicken'
     if art == 'tippe':

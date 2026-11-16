@@ -8,6 +8,9 @@
  *   wp eval-file video/aufnahme/uebungsdatensatz.php '<JSON 03>' <Anhang-ID> '<JSON folgen/04, uebungsdatensatz>'
  *       → Ende von Folge 4 („uebungsdatensatz-folge-4"): dazu die CSV-Datei aus der Mediathek,
  *         Lizenz mit Namensnennungstext, Verfügbarkeit und die JSON-Distribution
+ *   … '<JSON 05>'  → Ende von Folge 5 („uebungsdatensatz-folge-5"): dazu Reiter 4
+ *   … '<JSON 05>' '<JSON 06>'  → Ende von Folge 6 („uebungsdatensatz-veroeffentlicht"): dazu der
+ *         Medientyp, und der Datensatz ist veröffentlicht
  *
  * Angelegt wird über den Batch-Import des Plugins, also auf demselben Weg wie ein importierter
  * Entwurf. Ohne Folge-4-Angaben bleibt Reiter 3 leer bis auf die Lizenz, die wie im Formular auf
@@ -101,6 +104,13 @@ if ( $anhang && is_array( $f4 ) ) {
 		update_post_meta( $id, '_odw_contact_email', $f5['kontakt_email'] );
 		update_post_meta( $id, '_odw_contact_url', $f5['kontakt_website'] );
 		update_post_meta( $id, '_odw_maintainer_name', $f5['pflegende_stelle'] );
+	}
+
+	$f6 = json_decode( (string) ( $args[4] ?? '' ), true );
+	if ( is_array( $f6 ) ) {
+		// Wie am Ende von Folge 6: Medientyp nachgetragen, veröffentlicht.
+		update_post_meta( $id, '_odw_media_type', $f6['medientyp'] );
+		wp_publish_post( $id );
 	}
 
 	ODW_Quality::store( $id, ODW_Quality::calculate( $id ) );

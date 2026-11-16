@@ -56,7 +56,8 @@ Ein Drehbuch ist die einzige Quelle für Ton, Aufnahme, Schnitt, Untertitel und 
 | `schritte` | Klickstrecke eines Screencasts, der Reihe nach |
 | `einblendung` | Markierung, Zoom, Hinweistext oder Folienelement über dem Bild |
 
-**Schritte:** `oeffne` (Pfad im Backend), `klick` (sichtbare Beschriftung), `tippe` `{ feld, text }`,
+**Schritte:** `oeffne` (Pfad; `{ text, besucher: true }` ruft ihn abgemeldet auf), `handy` (Pfad in
+Handy-Breite, mittig auf der Bühne), `klick` (sichtbare Beschriftung), `tippe` `{ feld, text }`,
 `waehle` `{ feld, option }`, `lade_hoch` `{ feld, datei }`, `warte_auf` (Text), `scrolle_zu` (Text),
 `bestaetige` (Rückfrage des Browsers mit „OK" bestätigen; `text` nennt die erwartete Frage).
 Ein Schritt mit nur einem Text kann auch als Objekt `{ text, bei }` geschrieben werden.
