@@ -3,11 +3,15 @@
 # Der Sprechtext im Drehbuch bleibt unverändert, denn er ist zugleich der Untertitel. Ersetzt wird nur
 # in dem Text, der an die Stimme geht. Reihenfolge: längere Einträge zuerst.
 #
-# Noch ohne Eintrag, nach dem ersten Anhören zu entscheiden: DCAT-AP, GovData, JSON-LD, CESSDA.
+# Noch ohne Eintrag, nach dem ersten Anhören zu entscheiden: JSON-LD, CESSDA.
 
 ersetzungen:
+  - text: "DCAT-AP.de"
+    gesprochen: "Dikätäypi Punkt D E"
   - text: "CC BY 4.0"
-    gesprochen: "Zeh-Zeh-Bai vier Punkt null"
+    gesprochen: "Si si-bei vier Punkt null"
+  - text: "DCAT-AP"
+    gesprochen: "Dikätäypi"   # englisch ausgesprochen
   - text: ".zip"
     gesprochen: "Punkt zip"
   - text: "data.europa.eu"
