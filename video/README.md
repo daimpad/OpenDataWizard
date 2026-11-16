@@ -46,5 +46,6 @@ GovData oder .zip regelt das Aussprachewörterbuch, nicht eine Lautschrift im Te
 
 **Beschriftungen** stammen ohne weitere Angabe aus dem Plugin; für die englische Fassung werden sie in
 `languages/open-data-wizard-en_US.po` nachgeschlagen. `quelle: core` kennzeichnet Beschriftungen von
-WordPress selbst; `pruefen: true` heißt, bei der ersten Aufnahme gegen die laufende
+WordPress selbst, `quelle: carbon-fields` solche der Formular-Bibliothek Carbon Fields (deutsch über
+`languages/carbon-fields-ui-de_DE.po`); `pruefen: true` heißt, bei der ersten Aufnahme gegen die laufende
 WordPress-Version prüfen.
