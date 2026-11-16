@@ -107,10 +107,10 @@ const FOLIEN = {
       <div class="f-schritt" data-bei="DCAT-AP"><span class="n">2</span><b>DCAT-AP-Beschreibung</b><span>maschinenlesbar, nach europäischem Standard</span></div><div class="f-pfeil" data-bei="GovData">→</div>
       <div class="f-schritt" data-bei="GovData"><span class="n">3</span><b>Portale holen ab</b><span>z. B. GovData, regelmäßig und selbsttätig</span></div>
     </div><div class="f-band" data-bei="Wichtig">Die Datei bleibt auf Ihrer Website. Nur die Beschreibung wandert.</div></div>`,
-  '0/Q3': () => `<div class="folie"><div class="f-kopf">Das richtige Paket</div>
+  '0/Q3': (f) => `<div class="folie"><div class="f-kopf">Das richtige Paket</div>
     <div class="f-zwei" style="grid-template-columns:1.4fr 1fr;margin-top:1cqw">
-      <div class="f-panel"><h3 style="font-size:2.6cqw">Open Data Wizard 2.47.5</h3><div class="f-klein">Releases · Assets</div>
-        <div class="f-asset gut" data-bei="Datei"><span>open-data-wizard-2.47.5.zip</span><span class="f-ja">✓ dieses</span></div>
+      <div class="f-panel"><h3 style="font-size:2.6cqw">Open Data Wizard ${esc(f.plugin_version)}</h3><div class="f-klein">Releases · Assets</div>
+        <div class="f-asset gut" data-bei="Datei"><span>open-data-wizard-${esc(f.plugin_version)}.zip</span><span class="f-ja">✓ dieses</span></div>
         <div class="f-asset schlecht"><span>Source code (zip)</span></div><div class="f-asset schlecht"><span>Source code (tar.gz)</span></div></div>
       <div class="f-stapel" data-bei="Achtung"><span class="f-code">&lt;&gt; Code ▾</span><span class="f-satz">Unvollständig: Damit meldet das Plugin „Installation unvollständig“.</span></div>
     </div></div>`,
@@ -155,8 +155,8 @@ const FOLIEN = {
       <div data-z="Kein Datenportal"><span class="x">≠</span><div><b>Kein Datenportal</b><span>macht Ihre Organisation für Portale auffindbar, ersetzt sie aber nicht</span></div></div>
       <div data-z="Kein Datenmanagement"><span class="x">≠</span><div><b>Kein Datenmanagement</b><span>Ihre Dateien liegen, wo sie liegen</span></div></div>
       <div data-z="Kein Ersatz für fachliche Sorgfalt"><span class="x">≠</span><div><b>Kein Ersatz für fachliche Sorgfalt</b><span>prüft, ob eine Lizenz angegeben ist; welche passt, entscheiden Sie</span></div></div></div></div>`,
-  '2/2.1': () => `<div class="folie"><div class="f-kopf">Das richtige Paket</div><h3 class="f-h">Zwei Downloads, einer zum Installieren</h3><div class="f-zwei">
-      <div class="f-paket" data-z="Release-ZIP"><span class="f-urteil ja" data-z="Häkchen">✓</span><b>Release-ZIP</b><code>open-data-wizard-2.47.5.zip</code><span>fertiges Plugin, mit allen Bibliotheken</span></div>
+  '2/2.1': (f) => `<div class="folie"><div class="f-kopf">Das richtige Paket</div><h3 class="f-h">Zwei Downloads, einer zum Installieren</h3><div class="f-zwei">
+      <div class="f-paket" data-z="Release-ZIP"><span class="f-urteil ja" data-z="Häkchen">✓</span><b>Release-ZIP</b><code>open-data-wizard-${esc(f.plugin_version)}.zip</code><span>fertiges Plugin, mit allen Bibliotheken</span></div>
       <div class="f-paket" data-z="Quellcode"><span class="f-urteil nein" data-z="Kreuz">✕</span><b>Quellcode</b><code class="gedimmt">grüner Button „Code“</code><span>für die Entwicklung, ohne Bibliotheken</span></div></div></div>`,
   '2/2.4': () => `<div class="folie"><svg class="f-svg" viewBox="0 0 1600 900" role="img" aria-label="Zwei Wege zu neuen Versionen; die Datensätze bleiben in der Datenbank">${PFEIL('pf2')}
       <text x="110" y="120" class="c-akzent t-anz" font-size="26" font-weight="700" letter-spacing="3">UPDATES</text>
@@ -301,7 +301,7 @@ dcat:theme
 };
 function folieFuer(f, sz, g) {
   const k = `${f.folge}/${sz.id}`;
-  if (FOLIEN[k]) return FOLIEN[k]();
+  if (FOLIEN[k]) return FOLIEN[k](f, sz, g);
   if (/^(Q1|\d+\.0)$/.test(sz.id)) return titelFolie(f, g);
   return abspannFolie(f, g);
 }

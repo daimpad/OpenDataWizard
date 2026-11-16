@@ -4,7 +4,7 @@
 
 folge: 0
 titel: "Quick-Start: In fünf Minuten zum ersten offenen Datensatz"
-plugin_version: "2.47.5"
+plugin_version: "2.47.9"
 umgebung: wordpress-ohne-plugin   # das Plugin wird in Szene Q4 installiert
 
 uebungsdatensatz:

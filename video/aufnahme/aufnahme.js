@@ -133,10 +133,17 @@ async function waehle(page, name, option) {
   await page.keyboard.press('Escape');
 }
 
-async function ladeHoch(page, name, datei) {
-  const pfad = datei === '<release-zip>'
-    ? fs.readdirSync(path.join(REPO, 'dist')).filter((d) => d.endsWith('.zip')).map((d) => path.join(REPO, 'dist', d))[0]
-    : path.join(REPO, 'video/material', datei);
+// Das Release-ZIP der Version, auf der das Drehbuch beruht (plugin_version); fehlt es, das neueste.
+function releaseZip(version) {
+  const zips = fs.readdirSync(path.join(REPO, 'dist')).filter((d) => /^open-data-wizard-[\d.]+\.zip$/.test(d))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const passend = zips.find((d) => d === `open-data-wizard-${version}.zip`);
+  if (!passend && !zips.length) throw new Error('Kein Release-ZIP in dist/');
+  return path.join(REPO, 'dist', passend || zips[zips.length - 1]);
+}
+
+async function ladeHoch(page, name, datei, version) {
+  const pfad = datei === '<release-zip>' ? releaseZip(version) : path.join(REPO, 'video/material', datei);
   // Erst einen Reiter mit diesem Namen öffnen, falls es ihn gibt (Mediathek: „Dateien hochladen").
   const reiter = await finde(page, [(f) => f.getByRole('tab', { name, exact: true }), (f) => f.getByRole('link', { name, exact: true })], 1000);
   if (reiter) await reiter.click();
@@ -210,7 +217,7 @@ async function schritt(page, s, daten) {
     case 'klick': await klicke(page, t); break;
     case 'tippe': await tippe(page, ersetze(v.feld, daten), t); break;
     case 'waehle': await waehle(page, ersetze(v.feld, daten), ersetze(v.option, daten)); break;
-    case 'lade_hoch': await ladeHoch(page, v.feld, ersetze(v.datei, daten)); break;
+    case 'lade_hoch': await ladeHoch(page, v.feld, ersetze(v.datei, daten), daten.plugin_version); break;
     case 'warte_auf': {
       const el = await finde(page, [(f) => f.getByText(t)], 20000);
       if (!el) throw new Error(`Text „${t}" erschien nicht`);
