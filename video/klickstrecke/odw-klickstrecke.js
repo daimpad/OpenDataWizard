@@ -190,7 +190,7 @@ button, select { font: inherit; color: inherit; }
 .kopf { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
 .kopf .titel { font: 700 1.05rem/1.3 var(--s-anzeige); }
 .kopf select { border: 1px solid var(--b-linie); background: var(--b-grund); border-radius: 6px; padding: 6px 8px; max-width: 100%; }
-.buehne { position: relative; aspect-ratio: 16 / 9; width: 100%; background: var(--f-grund); border-radius: 6px; overflow: hidden; container-type: inline-size; }
+.buehne { position: relative; aspect-ratio: 16 / 9; width: 100%; background: var(--f-grund); border-radius: 6px; overflow: hidden; container-type: inline-size; outline: 1px solid var(--b-linie); outline-offset: -1px; }
 .leiste { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
 .knopf { border: 1px solid var(--b-linie); background: var(--b-grund); border-radius: 6px; padding: 8px 14px; cursor: pointer; min-height: 40px; }
 .knopf:hover:not([disabled]) { border-color: var(--b-text); }
