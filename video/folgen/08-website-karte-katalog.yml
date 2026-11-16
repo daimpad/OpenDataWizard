@@ -4,7 +4,7 @@
 
 folge: 8
 titel: "Auf der eigenen Website: Karte und Datenkatalog"
-plugin_version: "2.47.8"
+plugin_version: "2.47.9"
 # Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht (Qualität 92 %).
 # Dazu die 42 Beispieldatensätze aus Folge 2 und zwei knapp beschriebene Datensätze des Vereins,
 # damit der Katalog in 8.6 etwas zu filtern hat. Noch keine Seite mit Karte oder Katalog.
