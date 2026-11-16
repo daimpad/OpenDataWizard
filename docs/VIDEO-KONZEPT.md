@@ -221,8 +221,8 @@ Smartphone-Umriss auf der 16:9-Bühne.
 |---|---|---|---|---|
 | 9.1 | 0:30 | Screencast | Einstellungen → Harvesting: „DCAT-AP.de · Turtle (empfohlen)", „DCAT-AP.de · JSON-LD" → „Endpunkt prüfen" → „Der Harvest-Endpunkt antwortet." | Diese URL geben Sie dem Portal. |
 | 9.2 | 0:35 | Folie | Endpunkte: `/catalog` (seitenweise), `?full=1` (alles in einem Abruf), `&format=turtle`, `/datasets/<id>`, `/delta?since=` | Für jede Art des Abholens ein passender Endpunkt. |
-| 9.3 | 0:30 | Blick unter die Haube | Katalog als JSON-LD und als Turtle nebeneinander | Derselbe Inhalt, zwei Schreibweisen. |
-| 9.4 | 0:25 | Folie | Content Negotiation: `Accept`-Header, `?format=` hat Vorrang | Harvester können das Format auch über den Header aushandeln. |
+| 9.3 | 0:30 | Blick unter die Haube (Folie) | Ausschnitt des Übungsdatensatzes als JSON-LD und als Turtle nebeneinander | Derselbe Inhalt, zwei Schreibweisen. |
+| 9.4 | 0:25 | Blick unter die Haube (Folie) | Content Negotiation: `Accept`-Header, `?format=` hat Vorrang | Harvester können das Format auch über den Header aushandeln. |
 | 9.5 | 0:25 | Folie | Nicht ausgeliefert: Entwürfe, private, passwortgeschützte Datensätze, Beispieldaten; Löschmeldungen über `/delta` | Portale sehen genau das, was Besucher Ihrer Website sehen. |
 | 9.6 | 0:40 | Folie (Validator nachgebildet) | Datensatz-URL → EU-SHACL-Validator → Ergebnis ohne Verstöße | So belegen Sie die Konformität selbst, bevor Sie sich bei einem Portal melden. |
 | 9.7 | 0:25 | Folie | Beim Portal melden: GovData oder Landesportal kontaktieren, Harvest-URL angeben | Das Portal richtet das Abholen ein; danach läuft es von selbst. |

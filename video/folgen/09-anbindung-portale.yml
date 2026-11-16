@@ -1,0 +1,193 @@
+# Drehbuch · Folge 9 · Anbindung an Open-Data-Portale
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+# Schwerpunkt für Datenaffine; 9.3 und 9.4 sind „Blick unter die Haube" und lassen sich überspringen.
+
+folge: 9
+titel: "Anbindung an Open-Data-Portale"
+plugin_version: "2.47.8"
+# Ausgangszustand: wie am Ende von Folge 6 — der Übungsdatensatz ist veröffentlicht, dazu die zwei
+# knapp beschriebenen Vereinsdatensätze (drei öffentliche Datensätze) und die Beispieldaten, die der
+# Endpunkt nicht ausliefert. „Endpunkt prüfen" braucht den Aufnahme-Server mit mehreren Workern
+# (starte-server.sh), weil WordPress dabei die eigene Seite abruft.
+umgebung: uebungsdatensatz-veroeffentlicht
+
+# Folie 9.3 zeigt einen Ausschnitt aus /datasets/<ID> dieses Datensatzes, als JSON-LD und als Turtle.
+# Ändert sich die Ausgabe des Plugins, ist die Folie mitzuziehen.
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+
+szenen:
+
+  - id: "9.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 9: Anbindung an Open-Data-Portale. Wir zeigen, wo Sie die Adresse Ihres Katalogs finden,
+        wie Portale Ihre Beschreibungen abholen und wie Sie selbst prüfen, ob sie dem Standard
+        entsprechen.
+
+  - id: "9.1"
+    kapitel: "Die Harvest-Adresse"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Portale holen Ihre Beschreibungen selbst ab. Die Adresse dafür steht unter „Datenkatalog",
+        „Einstellungen", im Abschnitt Harvesting. Es gibt sie in zwei Schreibweisen, Turtle und JSON-LD;
+        empfohlen ist Turtle. Mit „Endpunkt prüfen" ruft das Plugin den Katalog von Ihrer Website aus ab,
+        so wie ein Portal es tun würde, und sagt im Klartext, was zurückkommt. Hier antwortet der
+        Endpunkt mit drei veröffentlichten Datensätzen; die Beispieldaten zählen nicht mit.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset&page=odw-settings
+      - scrolle_zu: { text: "Harvesting", bei: "Abschnitt" }
+      - klick: { text: "Endpunkt prüfen", bei: "Endpunkt" }
+      - warte_auf: { text: "Der Harvest-Endpunkt antwortet.", bei: "Klartext" }
+    einblendung:
+      - { text: "Diese Adresse geben Sie dem Portal", bei: "empfohlen" }
+      - { markiere: "Der Harvest-Endpunkt antwortet.", bei: "antwortet" }
+    hinweis: >-
+      Die Zahl der Datensätze stammt aus der Aufnahme („Antwort: dcat:Catalog mit 3 veröffentlichten
+      Datensätzen."); ändert sich der Ausgangszustand, ist der Sprechtext nachzutragen.
+
+  - id: "9.2"
+    kapitel: "Die Endpunkte"
+    bild: folie
+    dauer: "0:35"
+    folie: >-
+      Kopf: /wp-json/datenatlas/v1. Darunter fünf Zeilen, je Pfad und Zweck: /catalog — seitenweise;
+      /catalog?full=1 — der ganze Katalog in einem Abruf; …&format=turtle — als Turtle statt JSON-LD;
+      /datasets/<ID> — ein einzelner Datensatz; /delta?since=<Zeitpunkt> — nur Änderungen seit diesem
+      Zeitpunkt, mit Löschmeldungen. Die Zeile „full=1" trägt den Vermerk „Adresse aus den
+      Einstellungen".
+    einblendung:
+      - { zeige: "catalog", bei: "seitenweise" }
+      - { zeige: "full", bei: "Abruf" }
+      - { zeige: "format", bei: "Schreibweise" }
+      - { zeige: "datasets", bei: "einzelnen" }
+      - { zeige: "delta", bei: "Zeitpunkt" }
+    sprechtext:
+      de: >-
+        Hinter dieser Adresse steht eine kleine Schnittstelle. Der Endpunkt catalog liefert den Katalog
+        seitenweise. Mit full gleich eins kommt alles in einem Abruf; das ist die Adresse aus den
+        Einstellungen, und format gleich turtle wählt die Schreibweise. datasets mit einer Nummer
+        liefert einen einzelnen Datensatz. Und delta liefert nur, was sich seit einem bestimmten
+        Zeitpunkt geändert hat. So können Portale regelmäßig abholen, ohne jedes Mal alles zu laden.
+
+  - id: "9.3"
+    kapitel: "Blick unter die Haube: zwei Schreibweisen"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Kennzeichnung „Blick unter die Haube". Zwei Spalten mit Code: links ein Ausschnitt aus der
+      Beschreibung des Übungsdatensatzes als JSON-LD (Titel mit Sprachkennung, Herausgeber,
+      Schlagworte, Thema), rechts dieselben Aussagen als Turtle. Darunter ein Band: „Dieselben
+      Aussagen, zwei Schreibweisen."
+    einblendung:
+      - { zeige: "JSON-LD", bei: "Links" }
+      - { zeige: "Turtle", bei: "rechts" }
+      - { zeige: "Dieselben Aussagen", bei: "dieselben" }
+    sprechtext:
+      de: >-
+        Ein Blick unter die Haube. Links ein Ausschnitt aus der Beschreibung als JSON-LD, rechts
+        derselbe Ausschnitt als Turtle. Beide enthalten dieselben Aussagen: Titel, Herausgeber,
+        Schlagworte und Thema, mit Sprachkennung oder mit einem Verweis auf ein Vokabular. Turtle ist
+        knapper und wird von den RDF-Harvestern vieler Portale ohne Umweg gelesen; deshalb ist diese
+        Adresse in den Einstellungen als empfohlen markiert.
+
+  - id: "9.4"
+    kapitel: "Blick unter die Haube: Format aushandeln"
+    bild: folie
+    dauer: "0:25"
+    folie: >-
+      Kennzeichnung „Blick unter die Haube". Zwei Abrufe untereinander, jeweils Anfrage → Antwort:
+      „Accept: text/turtle" → Turtle; „Accept: application/ld+json" → JSON-LD. Darunter ein Band:
+      „?format= in der Adresse hat Vorrang vor dem Header."
+    einblendung:
+      - { zeige: "Accept Turtle", bei: "Kopfzeile" }
+      - { zeige: "Accept JSON-LD", bei: "oder" }
+      - { zeige: "Vorrang", bei: "Vorrang" }
+    sprechtext:
+      de: >-
+        Noch ein Detail für Technikerinnen und Techniker. Statt das Format in die Adresse zu schreiben,
+        kann ein Harvester es auch über die Kopfzeile Accept anfordern, also Turtle oder JSON-LD. Steht
+        format in der Adresse, hat das Vorrang. Man nennt das Content Negotiation; alle drei Endpunkte
+        beherrschen sie.
+
+  - id: "9.5"
+    kapitel: "Was Portale nicht sehen"
+    bild: folie
+    dauer: "0:28"
+    folie: >-
+      Zwei Felder. Links „Ausgeliefert": veröffentlichte Datensätze. Rechts „Nicht ausgeliefert":
+      Entwürfe, private Datensätze, passwortgeschützte Datensätze, Beispieldaten. Darunter ein Band:
+      „Papierkorb oder nachträglich geschützt: /delta meldet den Datensatz als entfernt."
+    einblendung:
+      - { zeige: "Ausgeliefert", bei: "Besucher" }
+      - { zeige: "Nicht ausgeliefert", bei: "Entwürfe" }
+      - { zeige: "Löschmeldung", bei: "entfernt" }
+    sprechtext:
+      de: >-
+        Portale sehen genau das, was auch Besucher Ihrer Website sehen. Entwürfe, private und
+        passwortgeschützte Datensätze liefert das Plugin nicht aus, Beispieldaten ebenfalls nicht.
+        Legen Sie einen Datensatz in den Papierkorb oder schützen ihn nachträglich mit einem Passwort,
+        meldet delta ihn als entfernt. So kann ihn auch das Portal herausnehmen.
+
+  - id: "9.6"
+    kapitel: "Selbst prüfen mit dem EU-Validator"
+    bild: folie
+    dauer: "0:40"
+    folie: >-
+      Nachgebildet, keine Bildschirmaufnahme des Validators. Drei Schritte nebeneinander: „Adresse
+      eingeben" (Turtle-Adresse aus den Einstellungen, oder Datei hochladen) → „Prüfprofil wählen"
+      (DCAT-AP) → „Ergebnis lesen" (ohne Verstöße: formal in Ordnung; sonst je Verstoß die betroffene
+      Angabe). Darunter ein Band mit der Adresse des Validators:
+      www.itb.ec.europa.eu/shacl/dcat-ap/upload
+    einblendung:
+      - { zeige: "Adresse eingeben", bei: "Adresse" }
+      - { zeige: "Prüfprofil wählen", bei: "Prüfprofil" }
+      - { zeige: "Ergebnis lesen", bei: "Ergebnis" }
+      - { zeige: "Validator-Adresse", bei: "Einstellungen" }
+    sprechtext:
+      de: >-
+        Bevor Sie sich bei einem Portal melden, können Sie die Beschreibung selbst prüfen. Die EU stellt
+        dafür einen Validator bereit. Sie geben die Adresse Ihres Katalogs ein oder laden die Datei hoch
+        und wählen DCAT-AP als Prüfprofil. Für die Adresse muss Ihre Website öffentlich erreichbar sein.
+        Steht im Ergebnis kein Verstoß, ist die Beschreibung formal in Ordnung; sonst nennt der
+        Validator für jeden Verstoß die betroffene Angabe. Die Adresse des Validators steht auch in den
+        Einstellungen, unter dem Abschnitt Harvesting.
+
+  - id: "9.7"
+    kapitel: "Beim Portal melden"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Drei Schritte: „Portal wählen" (GovData oder das Portal Ihres Landes) → „Redaktion anschreiben"
+      (Harvest-Adresse nennen) → „Abruf läuft" (regelmäßig, ohne Ihr Zutun). Darunter ein Band:
+      „Änderungen erscheinen nach dem nächsten Abruf."
+    einblendung:
+      - { zeige: "Portal wählen", bei: "GovData" }
+      - { zeige: "Redaktion anschreiben", bei: "Redaktion" }
+      - { zeige: "Abruf läuft", bei: "einmal" }
+      - { zeige: "Nächster Abruf", bei: "Änderungen" }
+    sprechtext:
+      de: >-
+        Bleibt die Anmeldung. Wenden Sie sich an GovData oder an das Open-Data-Portal Ihres Landes.
+        Schreiben Sie der Redaktion des Portals und nennen Sie die Harvest-Adresse aus den
+        Einstellungen. Das Portal richtet den Abruf einmal ein; danach läuft er regelmäßig und ohne Ihr
+        Zutun. Änderungen an Ihren Datensätzen erscheinen dort nach dem nächsten Abruf.
+
+  - id: "9.8"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 10; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der letzten Folge geht es um Aufgaben für Administratorinnen und Administratoren:
+        Berechtigungen, Befehle für die Kommandozeile und das Deinstallieren.
