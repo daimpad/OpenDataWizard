@@ -1,0 +1,167 @@
+# Drehbuch · Folge 6 · Prüfen, Veröffentlichen, Qualität
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 6
+titel: "Prüfen, Veröffentlichen, Qualität"
+plugin_version: "2.47.7"
+# Ausgangszustand: wie am Ende von Folge 5 — der Übungsdatensatz ist ein vollständiger Entwurf
+# (Qualität 88 %). Dazu die 42 Beispieldatensätze aus Folge 2, damit die Liste in 6.7 etwas zu
+# sortieren hat.
+umgebung: uebungsdatensatz-folge-5
+
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  lizenz: "CC BY 4.0 — Namensnennung"
+  medientyp: "text/csv"
+
+szenen:
+
+  - id: "6.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 6: Prüfen, Veröffentlichen, Qualität. Wir prüfen den Übungsdatensatz, veröffentlichen
+        ihn und sehen uns an, wie das Plugin die Qualität der Beschreibung bewertet.
+
+  - id: "6.1"
+    kapitel: "Die Pflichtprüfung"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Wir öffnen unseren Übungsdatensatz und wechseln in den letzten Reiter, die Vorschau. Oben steht
+        eine Liste der Pflichtangaben. Sie prüft schon beim Ausfüllen, ohne dass Sie speichern müssen.
+        Zur Probe nehmen wir im dritten Reiter die Lizenz heraus. Zurück in der Vorschau ist die Lizenz
+        jetzt als fehlend markiert.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "{uebungsdatensatz.titel}", bei: "öffnen" }
+      - klick: { text: "5 — Vorschau", bei: "Vorschau" }
+      - klick: { text: "3 — Datenbereitstellung", bei: "Probe" }
+      - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "— Bitte wählen —", bei: "heraus" }
+      - klick: { text: "5 — Vorschau", bei: "Zurück" }
+    einblendung:
+      - { text: "Prüfung ohne Speichern", bei: "Ausfüllen" }
+      - { markiere: "4 von 5 Pflichtangaben ausgefüllt", bei: "fehlend" }
+
+  - id: "6.2"
+    kapitel: "Veröffentlichen mit Lücke"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Was passiert, wenn wir jetzt auf „Veröffentlichen" klicken? Das Plugin speichert den Datensatz,
+        lässt ihn aber ein Entwurf. Oben erscheint ein Hinweis. Er nennt den Reiter und das Feld, das
+        fehlt. Mit „Zum Feld springen" landen Sie direkt dort. Entwürfe lassen sich also jederzeit
+        speichern; veröffentlicht wird nur, was vollständig ist.
+    schritte:
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "klicken" }
+      - warte_auf: { text: "Open Data Wizard: Veröffentlichung blockiert", bei: "Hinweis" }
+      - klick: { text: "Zum Feld springen", bei: "springen" }
+    einblendung:
+      - { text: "Gespeichert als Entwurf", bei: "Entwurf" }
+
+  - id: "6.3"
+    kapitel: "Jetzt veröffentlichen"
+    bild: screencast
+    dauer: "0:18"
+    sprechtext:
+      de: >-
+        Wir wählen wieder CC BY 4.0 und klicken erneut auf „Veröffentlichen". Jetzt ist der Datensatz
+        öffentlich und steht den Portalen zur Verfügung.
+    schritte:
+      - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "{uebungsdatensatz.lizenz}", bei: "wählen" }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "klicken" }
+    einblendung:
+      - { text: "Veröffentlicht", bei: "öffentlich" }
+
+  - id: "6.4"
+    kapitel: "Wie Qualität gemessen wird"
+    bild: folie
+    dauer: "0:35"
+    folie: >-
+      Links fünf Bereiche als Liste: Auffindbarkeit, Zugänglichkeit, Interoperabilität,
+      Wiederverwendbarkeit, Kontext. Rechts vier Stufen als Balken: Ausgezeichnet ab 87 %, Gut ab
+      55 %, Ausreichend ab 30 %, Mangelhaft darunter. Unten klein: „Methode des europäischen
+      Datenportals (MQA)".
+    einblendung:
+      - { zeige: "Bereiche", bei: "Bereiche" }
+      - { zeige: "Stufen", bei: "Stufen" }
+    sprechtext:
+      de: >-
+        Wie gut eine Beschreibung ist, misst das Plugin nach der Methode, die auch das europäische
+        Datenportal verwendet. Sie verteilt Punkte auf fünf Bereiche: Auffindbarkeit, Zugänglichkeit,
+        Interoperabilität, Wiederverwendbarkeit und Kontext. Aus dem Anteil der erreichten Punkte
+        ergibt sich eine von vier Stufen: ausgezeichnet ab 87 Prozent, gut ab 55, ausreichend ab 30,
+        darunter mangelhaft.
+
+  - id: "6.5"
+    kapitel: "Die Qualitätsbox"
+    bild: screencast
+    dauer: "0:40"
+    sprechtext:
+      de: >-
+        Unter dem Formular steht die Qualitätsprüfung. Oben der Prozentwert und die Stufe, darunter
+        jedes Kriterium mit seinen Punkten. Wo noch Punkte zu holen sind, steht ein Plus. Bei unserem
+        Datensatz fehlt zum Beispiel der Medientyp der Datei. Wir tragen ihn im vierten Reiter nach,
+        unter „Primäre Distribution — weitere Angaben". Nach dem Speichern steigt der Wert von 88 auf
+        92 Prozent.
+    schritte:
+      - scrolle_zu: { text: "Qualitätsprüfung (MQA)", bei: "Qualitätsprüfung" }
+      - scrolle_zu: { text: "Media-Type gesetzt (dcat:mediaType)", bei: "Medientyp" }
+      - klick: { text: "4 — Erweiterte Angaben", bei: "vierten" }
+      - klick: { text: "Primäre Distribution — weitere Angaben", bei: "Primäre" }
+      - tippe: { feld: "Welchen Medientyp (MIME) hat die Datei?", text: "{uebungsdatensatz.medientyp}", bei: "nach" }
+      - klick: { text: "Aktualisieren", quelle: core, bei: "Speichern" }
+      - scrolle_zu: { text: "Qualitätsprüfung (MQA)", bei: "steigt" }
+    einblendung:
+      - { text: "88 % → 92 %", bei: "steigt" }
+    hinweis: >-
+      Die Prozentwerte stammen aus der Aufnahme; ändert sich die Bewertung, sind Sprechtext und
+      Einblendung nachzutragen.
+
+  - id: "6.6"
+    kapitel: "Was das Plugin nicht selbst prüft"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Einige Kriterien bewertet das Plugin nicht selbst. Sie sind in der Tabelle mit einem Strich
+        markiert. Ob Ihre Links erreichbar sind, prüft es nur, wenn Sie das in den Einstellungen
+        einschalten. Und die formale Übereinstimmung mit dem Standard testen Sie mit dem Prüfwerkzeug
+        der EU. Wie das geht, zeigt Folge 9.
+    schritte:
+      - scrolle_zu: { text: "DCAT-AP-Konformität (SHACL)", bei: "Strich" }
+    einblendung:
+      - { markiere: "DCAT-AP-Konformität (SHACL)", bei: "Übereinstimmung" }
+      - { text: "Mehr dazu in Folge 9", bei: "zeigt" }
+
+  - id: "6.7"
+    kapitel: "Den Bestand ordnen"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Zum Schluss die Liste aller Datensätze. Die Spalte „Qualität" zeigt für jeden Datensatz Prozent
+        und Stufe. Ein Klick auf die Überschrift sortiert die Liste, zuerst die Datensätze mit dem
+        größten Nachholbedarf. So sehen Sie auf einen Blick, wo sich Nacharbeit lohnt.
+    schritte:
+      - klick: { text: "Alle Datensätze", bei: "Liste" }
+      - klick: { text: "Qualität", bei: "Klick" }
+    einblendung:
+      - { text: "Sortiert nach Qualität", bei: "sortiert" }
+
+  - id: "6.8"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:10"
+    folie: >-
+      Abspann: Hinweis auf Folge 7; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge geht es um viele Datensätze auf einmal: den Import aus einer Tabelle.
