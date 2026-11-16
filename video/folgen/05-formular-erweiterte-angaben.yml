@@ -4,7 +4,7 @@
 
 folge: 5
 titel: "Das Formular III: Erweiterte Angaben"
-plugin_version: "2.47.6"
+plugin_version: "2.47.7"   # deutscher Kalender erst ab 2.47.7
 # Ausgangszustand: wie am Ende von Folge 4. Der Übungsdatensatz ist ein Entwurf mit Reiter 1 und
 # Reiter 3 (CSV-Datei aus der Mediathek, CC BY 4.0 mit Namensnennungstext, „Stabil", zweite
 # Distribution als JSON). Reiter 4 ist leer.
@@ -14,13 +14,13 @@ uebungsdatensatz:
   titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
   # Alle Adressen sind erfunden (.example ist für Beispiele reserviert).
   projektseite: "https://foerderverein-musterstadt.example/verein/mitglieder"
-  erstveroeffentlichung: "2016-01-15"
+  erstveroeffentlichung: "15.01.2016"   # so, wie man es tippt (TT.MM.JJJJ)
   frequenz: "Jährlich"
   verwaltungsebene: "Gemeinde"
   raum_in_worten: "Stadtgebiet Musterstadt"
   region: "Deutschland"
-  zeitraum_von: "2015-01-01"
-  zeitraum_bis: "2025-12-31"
+  zeitraum_von: "01.01.2015"
+  zeitraum_bis: "31.12.2025"
   kontakt_name: "Geschäftsstelle des Fördervereins Musterstadt"
   kontakt_email: "kontakt@foerderverein-musterstadt.example"
   kontakt_website: "https://foerderverein-musterstadt.example/kontakt"

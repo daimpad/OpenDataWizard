@@ -453,18 +453,9 @@ class ODW_Admin {
 				)
 			);
 
-			// Deutsche Monats- und Wochentagsnamen für den Kalender nur bei
-			// deutscher Oberfläche; die Datumsfelder wählen ihre Kalendersprache
-			// passend dazu (ODW_Fields::date_picker_options()).
-			if ( ODW_Carbon_Fields_L10n::is_german_locale() ) {
-				wp_enqueue_script(
-					'odw-datepicker-de',
-					ODW_PLUGIN_URL . 'assets/js/odw-datepicker-de.js',
-					array(),
-					ODW_VERSION,
-					true
-				);
-			}
+			// Deutsche Monats- und Wochentagsnamen bringen die Datumsfelder selbst
+			// mit (ODW_Fields::date_picker_options()). Das frühere Skript dafür kam
+			// je nach Ladereihenfolge zu spät (siehe dort).
 
 			// Platzhalter und Leermeldung der Mehrfachauswahl (react-select).
 			// Die übrigen Carbon-Fields-Texte kommen über ODW_Carbon_Fields_L10n.
