@@ -4,7 +4,8 @@
 #   bash video/aufnahme/zustand.sh <umgebung>
 #
 # wordpress-ohne-plugin · wordpress-mit-quellcode-archiv · plugin-aktiv · plugin-eingerichtet ·
-# uebungsdatensatz-entwurf · uebungsdatensatz-folge-4 · uebungsdatensatz-folge-5
+# uebungsdatensatz-entwurf · uebungsdatensatz-folge-4 · uebungsdatensatz-folge-5 ·
+# uebungsdatensatz-veroeffentlicht
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 BASE="${ODW_VIDEO_WP:-$REPO/video/ausgabe/wordpress}"
@@ -21,7 +22,7 @@ case "${1:?Ausgangszustand fehlt}" in
     # Wie der Download über den grünen „Code"-Button: anderer Ordnername, ohne vendor/.
     ( cd "$REPO" && git archive --format=tar --prefix=OpenDataWizard-main/ HEAD ) | tar -x -C "$PLUG"
     $WP plugin activate OpenDataWizard-main ;;
-  plugin-aktiv|plugin-eingerichtet|uebungsdatensatz-entwurf|uebungsdatensatz-folge-4|uebungsdatensatz-folge-5)
+  plugin-aktiv|plugin-eingerichtet|uebungsdatensatz-entwurf|uebungsdatensatz-folge-4|uebungsdatensatz-folge-5|uebungsdatensatz-veroeffentlicht)
     unzip -q "$(ls "$REPO"/dist/open-data-wizard-*.zip | tail -1)" -d "$PLUG"   # das echte Release-Paket
     $WP plugin activate open-data-wizard
     if [ "$1" != plugin-aktiv ]; then   # Einstellungen wie am Ende von Folge 2
@@ -31,14 +32,15 @@ case "${1:?Ausgangszustand fehlt}" in
     if [ "$1" = uebungsdatensatz-entwurf ]; then   # dazu der Entwurf vom Ende von Folge 3
       $WP eval-file "$REPO/video/aufnahme/uebungsdatensatz.php" "$(uebung 03-formular-grundlegendes.yml)"
     fi
-    if [ "$1" = uebungsdatensatz-folge-5 ]; then   # die Beispieldaten aus Folge 2 (für die Liste in Folge 6),
+    if [ "$1" = uebungsdatensatz-folge-5 ] || [ "$1" = uebungsdatensatz-veroeffentlicht ]; then   # die Beispieldaten aus Folge 2 (für die Liste in Folge 6),
       $WP eval 'ODW_Samples::load();'               # vor dem Übungsdatensatz, damit der oben in der Liste steht
       $WP eval-file "$REPO/video/aufnahme/bestand.php"   # und zwei knapp beschriebene Datensätze des Vereins
     fi
-    if [ "$1" = uebungsdatensatz-folge-4 ] || [ "$1" = uebungsdatensatz-folge-5 ]; then   # Entwurf mit Datei
+    if [ "$1" != plugin-aktiv ] && [ "$1" != plugin-eingerichtet ] && [ "$1" != uebungsdatensatz-entwurf ]; then   # Entwurf mit Datei
       anhang="$(php "$BASE/wp-cli.phar" --path="$BASE/wordpress" --allow-root media import "$REPO/video/material/foerderverein-mitglieder.csv" --porcelain)"
-      f5=""; [ "$1" = uebungsdatensatz-folge-5 ] && f5="$(uebung 05-formular-erweiterte-angaben.yml)"
-      $WP eval-file "$REPO/video/aufnahme/uebungsdatensatz.php" "$(uebung 03-formular-grundlegendes.yml)" "$anhang" "$(uebung 04-formular-datenbereitstellung.yml)" "$f5"
+      f5=""; [ "$1" != uebungsdatensatz-folge-4 ] && f5="$(uebung 05-formular-erweiterte-angaben.yml)"
+      f6=""; [ "$1" = uebungsdatensatz-veroeffentlicht ] && f6="$(uebung 06-pruefen-veroeffentlichen-qualitaet.yml)"   # veröffentlicht wie am Ende von Folge 6
+      $WP eval-file "$REPO/video/aufnahme/uebungsdatensatz.php" "$(uebung 03-formular-grundlegendes.yml)" "$anhang" "$(uebung 04-formular-datenbereitstellung.yml)" "$f5" "$f6"
     fi ;;
   *) echo "Unbekannter Ausgangszustand: $1" >&2; exit 1 ;;
 esac

@@ -199,17 +199,21 @@ Für 7.5 liegt in `video/material/` eine Importdatei mit drei gültigen Zeilen u
 
 | # | Dauer | Bild | Klickstrecke / Inhalt | Kernaussage Sprechtext |
 |---|---|---|---|---|
-| 8.1 | 0:35 | Screencast | Seite → „+" → „Datensatz-Karte" → Datensatz in der Seitenleiste wählen | Kein Abtippen von Nummern: Sie wählen aus einer Liste. |
-| 8.2 | 0:15 | Screencast | Alle Datensätze → Spalte „Shortcode" → `[odw_dataset id="…"]` | Für klassische Editoren und Widgets. |
-| 8.3 | 0:25 | Screencast Frontend | Karte: Titel, Thema, Lizenz, Schlagworte, Download, Metadaten (JSON-LD) | Alles Wichtige auf einen Blick. |
-| 8.4 | 0:40 | Screencast | Neue Seite → Block „Datenkatalog" → Seitenleiste: Überschrift, Einträge pro Seite, Sortierung, Themen, Auszug, Filter für Besucher, Suchfeld, Beispieldaten auch Besuchern zeigen | Ein Block, viele Einstellmöglichkeiten. |
-| 8.5 | 0:50 | Screencast Frontend | Liste; Filter Thema mit Trefferzahlen; Filter-Chip entfernen; Suche; Zeitraum; „Nur Open Data" | Besucher finden, was sie suchen. |
-| 8.6 | 0:25 | Screencast Frontend | Titel → Detailansicht → „Zurück zum Katalog" | Die Detailansicht öffnet sich auf derselben Seite. |
-| 8.7 | 0:20 | Screencast (Handy-Breite) | Filter eingeklappt, Liste untereinander | Funktioniert auch auf dem Handy. |
-| 8.8 | 0:20 | Einblendung | Ein Katalog pro Seite; Beispieldaten sehen sonst nur Angemeldete | Zwei Regeln, die man kennen sollte. |
+| 8.1 | 0:30 | Screencast | Seite → „+" → „Datensatz-Karte" → Datensatz in der Seitenleiste wählen → veröffentlichen | Kein Abtippen von Nummern: Sie wählen aus einer Liste. |
+| 8.2 | 0:30 | Screencast Frontend | Karte: Titel, Download, Format, Größe, Lizenz, weitere Distributionen, „Alle Metadaten anzeigen", „Metadaten JSON" | Alles Wichtige auf einen Blick. |
+| 8.3 | 0:18 | Screencast | Alle Datensätze → Spalte „Shortcode" → `[odw_dataset id="…"]` | Für klassische Editoren und Widgets. |
+| 8.4 | 0:30 | Screencast | Neue Seite → Block „Datenkatalog" → Seitenleiste: Einträge pro Seite, Sortierung, Auszug, „Beispieldaten auch Besuchern zeigen" | Ein Block, viele Einstellmöglichkeiten. |
+| 8.5 | 0:22 | Screencast | „Filter und Suche für Besucher": Thema, Zeitraum der Daten, Nur Open Data, Suchfeld → veröffentlichen | Sie bestimmen, womit Besucher eingrenzen. |
+| 8.6 | 0:40 | Screencast Frontend (abgemeldet) | Filter Thema mit Trefferzahl; Filter-Chip entfernen; Suche | Besucher finden, was sie suchen. |
+| 8.7 | 0:20 | Screencast Frontend | Titel → Detailansicht → „Zurück zum Katalog" | Die Detailansicht öffnet sich auf derselben Seite. |
+| 8.8 | 0:20 | Screencast (Handy-Rahmen) | Formular eingeklappt, Liste untereinander; „Filter und Suche" öffnet es | Funktioniert auch auf dem Handy. |
+| 8.9 | 0:25 | Folie | Ein Katalog pro Seite; Beispieldaten: Redaktion sichtbar, Besucher nur mit Schalter, Portale nie | Zwei Regeln, die man kennen sollte. |
 
+Die Karte kommt vor dem Shortcode, weil der Shortcode-Abschnitt den Editor verlässt; so ist die Seite
+zuvor veröffentlicht. Die Einstellungen des Katalog-Blocks sind auf zwei Szenen verteilt (8.4, 8.5).
 Aufnahme mit der Option „Beispieldaten auch Besuchern zeigen", sonst wäre die Liste für Besucher fast
-leer; 8.8 erklärt das.
+leer; 8.9 erklärt das. Die Besucher-Szenen sind abgemeldet aufgenommen, die Handy-Ansicht als
+Smartphone-Umriss auf der 16:9-Bühne.
 
 ### Folge 9 · Anbindung an Open-Data-Portale *(Schwerpunkt für Datenaffine)*
 

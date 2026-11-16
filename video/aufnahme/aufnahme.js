@@ -176,12 +176,37 @@ function textRahmen(e, t) {
   return null;
 }
 
+// Bühne für den Schritt „handy": ein Smartphone-Umriss (390 × 800 CSS-Pixel) auf ruhigem Grund.
+function handyRahmen(url) {
+  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
+    html, body { margin: 0; height: 100%; background: #eceef1; }
+    body { display: flex; align-items: center; justify-content: center; }
+    .geraet { padding: 14px; border-radius: 44px; background: #1d2327; box-shadow: 0 18px 50px rgba(29, 35, 39, .25); }
+    iframe { display: block; width: 390px; height: 800px; border: 0; border-radius: 30px; background: #fff; }
+  </style></head><body><div class="geraet"><iframe src="${url}" title="Handy-Ansicht"></iframe></div></body></html>`;
+}
+
 async function schritt(page, s, daten) {
   const [art, wert] = Object.entries(s).find(([k]) => k !== 'bei') || [];
   const v = typeof wert === 'object' && wert !== null ? wert : { text: wert };
   const t = ersetze(v.text, daten);
   switch (art) {
-    case 'oeffne': await page.goto(BASE + wert, { waitUntil: 'load' }); break;
+    case 'oeffne':
+      // { text: Pfad, besucher: true }: abgemeldet, so wie Besucherinnen und Besucher die Seite sehen.
+      if (v.besucher) await page.context().clearCookies();
+      await page.goto(BASE + t, { waitUntil: 'load' });
+      break;
+    case 'handy': {
+      // Die Seite in Handy-Breite, mittig auf der 16:9-Bühne. Der Rahmen kommt von derselben Adresse
+      // wie WordPress, damit Anmeldung und Klicks im eingebetteten Fenster wie gewohnt funktionieren.
+      const rahmen = BASE + '/__handy__';
+      await page.unroute(rahmen).catch(() => {});
+      await page.route(rahmen, (r) => r.fulfill({ contentType: 'text/html; charset=utf-8', body: handyRahmen(BASE + t) }));
+      await page.goto(rahmen, { waitUntil: 'load' });
+      const f = page.frames().find((x) => x.url().startsWith(BASE + t));
+      if (f) await f.addStyleTag({ content: 'html{scrollbar-width:none}::-webkit-scrollbar{display:none}' }).catch(() => {});
+      break;
+    }
     case 'klick': await klicke(page, t); break;
     case 'tippe': await tippe(page, ersetze(v.feld, daten), t); break;
     case 'waehle': await waehle(page, ersetze(v.feld, daten), ersetze(v.option, daten)); break;
@@ -208,7 +233,7 @@ async function schritt(page, s, daten) {
 function beschreibe(s, daten) {
   const [art, wert] = Object.entries(s).find(([k]) => k !== 'bei') || [];
   if (typeof wert !== 'object' || wert === null) return `${art}: ${wert}`;
-  const teile = ['feld', 'text', 'option', 'datei'].filter((k) => wert[k]).map((k) => `${k}: ${ersetze(wert[k], daten)}`);
+  const teile = ['feld', 'text', 'option', 'datei', 'besucher'].filter((k) => wert[k]).map((k) => `${k}: ${ersetze(wert[k], daten)}`);
   return `${art} · ${teile.join(' · ')}`;
 }
 

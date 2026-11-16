@@ -18,7 +18,7 @@
 <main>
   <h1 style="margin:0;font-size:22px">Klickstrecken · Testseite</h1>
   <div class="wahl">
-    <label for="folge">Folge <select id="folge"><option value="0">0 · Quick-Start</option><option value="1">1 · Warum Metadaten?</option><option value="2">2 · Installation und Einstellungen</option><option value="3">3 · Das Formular I</option><option value="4">4 · Das Formular II</option><option value="5">5 · Das Formular III</option><option value="6">6 · Prüfen und Veröffentlichen</option><option value="7">7 · Batch-Import</option></select></label>
+    <label for="folge">Folge <select id="folge"><option value="0">0 · Quick-Start</option><option value="1">1 · Warum Metadaten?</option><option value="2">2 · Installation und Einstellungen</option><option value="3">3 · Das Formular I</option><option value="4">4 · Das Formular II</option><option value="5">5 · Das Formular III</option><option value="6">6 · Prüfen und Veröffentlichen</option><option value="7">7 · Batch-Import</option><option value="8">8 · Karte und Datenkatalog</option></select></label>
     <label for="gestaltung">Gestaltung <select id="gestaltung"><option value="odw">Open Data Wizard</option><option value="datenatlas">Datenatlas Zivilgesellschaft</option></select></label>
   </div>
   <odw-klickstrecke id="ks" src="folge-0/daten.json" gestaltung="odw"></odw-klickstrecke>
@@ -28,7 +28,7 @@
 <script type="module">
   const ks = document.getElementById('ks'), f = document.getElementById('folge'), g = document.getElementById('gestaltung');
   // Nur bekannte Werte übernehmen — die Adresszeile darf keine beliebigen Pfade einschleusen.
-  const FOLGEN = ['0', '1', '2', '3', '4', '5', '6', '7'], GESTALTUNGEN = ['odw', 'datenatlas'];
+  const FOLGEN = ['0', '1', '2', '3', '4', '5', '6', '7', '8'], GESTALTUNGEN = ['odw', 'datenatlas'];
   const p = new URLSearchParams(location.search);
   if (FOLGEN.includes(p.get('folge'))) f.value = p.get('folge');
   if (GESTALTUNGEN.includes(p.get('gestaltung'))) g.value = p.get('gestaltung');
