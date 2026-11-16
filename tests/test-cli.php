@@ -179,8 +179,10 @@ class Test_ODW_CLI extends TestCase {
 	}
 
 	/**
-	 * cache clear meldet auf Deutsch, wie viele zwischengespeicherte Antworten es gelöscht hat
-	 * (Quellsprache des Plugins; die englische Fassung steht in der en_US-Übersetzung).
+	 * Der Befehl `cache clear` meldet auf Deutsch, wie viele Antworten er gelöscht hat.
+	 *
+	 * Deutsch ist die Quellsprache des Plugins; die englische Fassung steht in der
+	 * en_US-Übersetzung.
 	 */
 	public function test_cache_clear_meldet_anzahl_auf_deutsch(): void {
 		$GLOBALS['wpdb'] = new class() {
