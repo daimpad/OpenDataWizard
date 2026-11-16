@@ -616,9 +616,12 @@ class ODW_Admin {
 
 		if ( $file_id > 0 ) {
 			$ext       = '';
+			$size      = 0;
+			$old_size  = (string) get_post_meta( $post_id, '_odw_file_size', true );
 			$file_path = get_attached_file( $file_id );
 			if ( $file_path && file_exists( $file_path ) ) {
-				update_post_meta( $post_id, '_odw_file_size', (int) filesize( $file_path ) );
+				$size = (int) filesize( $file_path );
+				update_post_meta( $post_id, '_odw_file_size', $size );
 				$ext = strtoupper( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) );
 				update_post_meta( $post_id, '_odw_file_format', $ext );
 			}
@@ -640,6 +643,17 @@ class ODW_Admin {
 				if ( '' !== $format_key ) {
 					update_post_meta( $post_id, '_odw_format', $format_key );
 				}
+			}
+
+			// Ebenso die Dateigröße (dcat:byteSize). Bis v2.47.5 landete sie nur
+			// in _odw_file_size für den Download-Button der Karte, nicht in den
+			// Metadaten. Überschrieben wird nur ein leeres Feld oder ein Wert, den
+			// das Plugin selbst aus der vorigen Datei übernommen hat — eine von
+			// Hand eingetragene Größe bleibt stehen, eine ersetzte Datei bringt
+			// ihre eigene Größe mit.
+			$byte_size = trim( (string) get_post_meta( $post_id, '_odw_byte_size', true ) );
+			if ( $size > 0 && ( '' === $byte_size || $byte_size === $old_size ) ) {
+				update_post_meta( $post_id, '_odw_byte_size', (string) $size );
 			}
 		} else {
 			delete_post_meta( $post_id, '_odw_file_size' );
