@@ -7,6 +7,23 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.7] — 2026-11-16
+
+### 🐛 Fixed
+- **Kalender der Datumsfelder auf Deutsch.** In einem deutschen WordPress zeigten die
+  Datumsfelder (Erstveröffentlichung, Zeitraum von/bis) englische Monate und Wochentage und das
+  Datum als „15 Jan 2016“. Ein eingetipptes Datum las der Kalender im englischen Anzeigeformat und
+  speicherte dadurch unter Umständen ein falsches Datum. Ursache war die Ladereihenfolge:
+  `odw-datepicker-de.js` meldete „de“ erst an, sobald `window.flatpickr` bereitstand, oft nachdem
+  Carbon Fields die Kalender schon angelegt hatte (Konsole: „invalid locale de“); die nachträgliche
+  Umstellung suchte die Kalender an `<input>`-Elementen, Carbon Fields hängt sie aber an
+  `div.cf-datetime__inner`. Ob es auffiel, hing vom Timing ab — der E2E-Test sah den deutschen
+  Kalender. Die Datumsfelder bekommen die deutschen Namen jetzt direkt als Sprachobjekt in ihren
+  Optionen und zeigen das Datum als TT.MM.JJJJ; gespeichert wird weiter JJJJ-MM-TT.
+  `assets/js/odw-datepicker-de.js` entfällt.
+
+---
+
 ## [2.47.6] — 2026-11-16
 
 ### 🐛 Fixed
