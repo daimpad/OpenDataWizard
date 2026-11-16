@@ -148,11 +148,11 @@ Aufnahme gegen die laufende WordPress-Version geprüft.
 | # | Dauer | Bild | Klickstrecke / Inhalt | Kernaussage Sprechtext |
 |---|---|---|---|---|
 | 4.1 | 0:30 | Folie | Datensatz und Distribution | Ein Datensatz, mehrere Wege zu den Daten: Dateien, Formate, Zugänge. |
-| 4.2 | 0:35 | Screencast | Reiter 3: Zugriffs-URL\* (Link eintragen) — oder „Datei auswählen / hochladen" → Mediathek | Link, wenn die Datei woanders liegt; Upload, wenn sie in WordPress liegen soll. Beim Upload ermittelt das Plugin Format und Größe. |
-| 4.3 | 0:20 | Screencast | „In welchem Format ist die Datei?", Dateigröße (Bytes) | Beim Link von Hand angeben. |
+| 4.2 | 0:35 | Screencast | Reiter 3: Zugriffs-URL\* (Link eintragen) — oder „Datei auswählen / hochladen" → Mediathek | Link, wenn die Datei woanders liegt; Upload, wenn sie in WordPress liegen soll. Beim Upload übernimmt das Plugin das Format. |
+| 4.3 | 0:20 | Screencast | „In welchem Format ist die Datei?", Dateigröße (mit Einheit) | Beim Link das Format von Hand angeben; die Größe ist freiwillig. |
 | 4.4 | 0:40 | Screencast | Lizenz\* wählen; Lizenzhinweis; „Sonstige Lizenz…" → „Lizenz-URI eingeben oder auswählen"; Namensnennungstext | Die Lizenz entscheidet, ob Daten als Open Data gelten. Bei Namensnennungs-Lizenzen den Text vorgeben, der genannt werden soll. |
 | 4.5 | 0:25 | Screencast | „Wie verlässlich bleibt diese Datei abrufbar?", „Wer darf auf diese Daten zugreifen?" | Verlässlichkeit und Zugriffsrechte helfen Nutzenden, die Daten einzuschätzen. |
-| 4.6 | 0:45 | Screencast | „Weitere Distributionen" → Eintrag hinzufügen → Zugriffs-URL, Format GeoJSON, Lizenz | Dieselben Daten in einem zweiten Format. Auch hier ist die Lizenz Pflicht. |
+| 4.6 | 0:45 | Screencast | „Weitere Distributionen" → „Distribution hinzufügen" → Zugriffs-URL, Format JSON, Lizenz | Dieselben Daten in einem zweiten Format. Auch hier ist die Lizenz Pflicht. |
 | 4.7 | 0:20 | Blick unter die Haube | JSON-LD: `dcat:distribution` mit zwei Einträgen | Zwei Distributionen, ein Datensatz. |
 
 ### Folge 5 · Das Formular III: Erweiterte Angaben

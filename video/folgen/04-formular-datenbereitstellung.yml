@@ -1,0 +1,194 @@
+# Drehbuch · Folge 4 · Das Formular II: Datenbereitstellung
+#
+# Format: video/README.md · Konzept: docs/VIDEO-KONZEPT.md, Abschnitt 5
+
+folge: 4
+titel: "Das Formular II: Datenbereitstellung"
+plugin_version: "2.47.5"
+# Ausgangszustand: wie am Ende von Folge 3. Einstellungen aus Folge 2, dazu der Übungsdatensatz als
+# Entwurf mit Titel, Herausgeber, Beschreibung, Thema und Schlagworten. Reiter 3 ist noch leer, die
+# Lizenz steht auf dem Standardwert aus den Einstellungen (CC BY 4.0).
+umgebung: uebungsdatensatz-entwurf
+
+uebungsdatensatz:
+  titel: "Mitgliederentwicklung des Fördervereins Musterstadt 2015–2025"
+  datei: foerderverein-mitglieder.csv
+  lizenz: "CC BY 4.0 — Namensnennung"
+  namensnennung: "Förderverein Musterstadt e. V., 2025"
+  verfuegbarkeit: "Stabil (langfristig verfügbar)"
+  # Dieselben Zahlen als JSON, wie in Folge 1 (Szene 1.3) angekündigt. Die Adresse ist erfunden
+  # (.example ist für Beispiele reserviert); die Prüfung der Erreichbarkeit ist in den Einstellungen aus.
+  zweite_distribution:
+    url: "https://foerderverein-musterstadt.example/daten/mitglieder-2015-2025.json"
+    format: "JSON"
+    lizenz: "CC BY 4.0 — Namensnennung"
+
+szenen:
+
+  - id: "4.0"
+    kapitel: "Worum es geht"
+    bild: folie
+    dauer: "0:12"
+    folie: Titelfolie mit Folgennummer und Titel
+    sprechtext:
+      de: >-
+        Folge 4: Das Formular, Teil 2. Im dritten Reiter geben Sie an, wo Ihre Daten liegen, in
+        welchem Format und unter welcher Lizenz. Außerdem stellen wir dieselben Daten in einem
+        zweiten Format bereit.
+
+  - id: "4.1"
+    kapitel: "Datensatz und Distribution"
+    bild: folie
+    dauer: "0:30"
+    folie: >-
+      Der Rahmen „Datensatz — Mitgliederzahlen 2015–2025" aus Folge 1 (1.3). Darin zwei Karten:
+      „CSV" mit dem Etikett „primäre Distribution" und „JSON" mit dem Etikett „weitere Distribution".
+      Jede Karte hat drei Zeilen: Zugang (Mediathek bzw. Link), Format, Lizenz.
+    einblendung:
+      - { zeige: "Rahmen Datensatz", bei: "Datensatz" }
+      - { zeige: "Karte CSV", bei: "CSV-Datei" }
+      - { zeige: "Karte JSON", bei: "JSON-Datei" }
+      - { zeige: "Zeilen Zugang, Format, Lizenz", bei: "eigenen" }
+    sprechtext:
+      de: >-
+        Zur Erinnerung aus Folge 1: Ein Datensatz beschreibt den Inhalt, eine Distribution den
+        konkreten Zugang zu den Daten. Im dritten Reiter beschreiben Sie die erste Distribution, in
+        unserem Beispiel eine CSV-Datei in der Mediathek. Liegen dieselben Daten auch in einem anderen
+        Format vor, etwa als JSON-Datei, ergänzen Sie sie weiter unten als weitere Distribution. Jede
+        Distribution hat ihren eigenen Zugang, ihr eigenes Format und ihre eigene Lizenz.
+
+  - id: "4.2"
+    kapitel: "Wo die Daten liegen"
+    bild: screencast
+    dauer: "0:35"
+    sprechtext:
+      de: >-
+        Wir öffnen den Übungsdatensatz aus der letzten Folge und wechseln in den dritten Reiter. Die
+        erste Frage lautet: Wo liegen die Daten? Liegt die Datei schon an anderer Stelle, etwa in einem
+        Repositorium, tragen Sie hier den Link ein. Soll sie in WordPress liegen, laden Sie sie in die
+        Mediathek hoch. Wir laden unsere CSV-Datei hoch und wählen sie aus.
+    schritte:
+      - oeffne: /wp-admin/edit.php?post_type=odw_dataset
+      - klick: { text: "{uebungsdatensatz.titel}", bei: "öffnen" }
+      - klick: { text: "3 — Datenbereitstellung", bei: "dritten" }
+      - klick: { text: "Datei auswählen / hochladen", bei: "Mediathek" }
+      - lade_hoch: { feld: "Dateien hochladen", quelle: core, datei: "{uebungsdatensatz.datei}", bei: "CSV-Datei" }
+      - klick: { text: "Auswählen", quelle: core, bei: "wählen" }
+    einblendung:
+      - { markiere: "Ergänzen Sie den Link zu Ihrem Datensatz oder laden Sie die Datei in die Mediathek hoch", bei: "Link" }
+
+  - id: "4.3"
+    kapitel: "Format und Dateigröße"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Beim Speichern übernimmt das Plugin das Format der hochgeladenen Datei selbst. Hier steht jetzt
+        CSV. Haben Sie stattdessen einen Link eingetragen, wählen Sie das Format von Hand. Geben Sie es
+        immer an, denn danach suchen und filtern Portale. Die Dateigröße darunter ist freiwillig. Sie
+        tragen sie mit Einheit ein, in Kilobyte, Megabyte oder Gigabyte.
+    schritte:
+      - klick: { text: "Entwurf speichern", quelle: core, bei: "Speichern" }
+      - klick: { text: "3 — Datenbereitstellung", bei: "Hier" }
+      - scrolle_zu: { text: "In welchem Format ist die Datei?", bei: "CSV" }
+    einblendung:
+      - { markiere: "In welchem Format ist die Datei?", bei: "CSV" }
+      - { markiere: "Dateigröße", bei: "Dateigröße" }
+    hinweis: >-
+      Nach dem Speichern lädt die Seite neu. Der Klick auf den Reiter stellt sicher, dass Reiter 3
+      offen ist, auch wenn sich das Formular den Reiter nicht gemerkt hat. Stand 2.47.5: Das Plugin
+      setzt beim Upload nur das Format (dct:format); die Größe merkt es sich für den Download-Button
+      der Karte (_odw_file_size), trägt sie aber nicht als dcat:byteSize ein.
+
+  - id: "4.4"
+    kapitel: "Die Lizenz"
+    bild: screencast
+    dauer: "0:45"
+    sprechtext:
+      de: >-
+        Dann die Lizenz. Sie ist Pflicht und entscheidet, ob und unter welchen Bedingungen andere Ihre
+        Daten weiterverwenden dürfen. Vorausgewählt ist die Standardlizenz aus den Einstellungen, hier
+        CC BY 4.0. Ein kurzer Hinweis darunter erklärt, was sie erlaubt. Passt keine Lizenz aus der
+        Liste, wählen Sie „Sonstige Lizenz" und tragen die Adresse Ihrer Lizenz ein. Wir bleiben bei
+        CC BY 4.0. Bei Lizenzen mit Namensnennung legen Sie zum Schluss fest, wie andere Sie nennen
+        sollen.
+    schritte:
+      - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "Sonstige Lizenz…", bei: "Sonstige" }
+      - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "{uebungsdatensatz.lizenz}", bei: "bleiben" }
+      - tippe: { feld: "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?", text: "{uebungsdatensatz.namensnennung}", bei: "nennen" }
+    einblendung:
+      - { markiere: "Unter welcher Lizenz sind diese Daten verfügbar?", bei: "Lizenz" }
+      - { markiere: "Die Daten dürfen frei – auch kommerziell – genutzt, verändert und weitergegeben werden, sofern die Quelle (Namensnennung) angegeben wird.", bei: "Hinweis" }
+    hinweis: >-
+      „Sonstige Lizenz…" blendet das Feld „Lizenz-URI eingeben oder auswählen" ein; das Bild zum
+      ersten Schritt zeigt es. Der Namensnennungstext erscheint nur bei CC BY 4.0 und CC BY-SA 4.0.
+
+  - id: "4.5"
+    kapitel: "Verlässlichkeit und Zugriff"
+    bild: screencast
+    dauer: "0:25"
+    sprechtext:
+      de: >-
+        Zwei weitere Fragen helfen Nutzenden, Ihre Daten einzuschätzen. Wie verlässlich bleibt die
+        Datei abrufbar? Für eine Jahresreihe, die dauerhaft unter derselben Adresse liegt, passt
+        „Stabil". Und wer darf auf die Daten zugreifen? Vorausgewählt ist „Öffentlich", der Normalfall
+        bei offenen Daten.
+    schritte:
+      - waehle: { feld: "Wie verlässlich bleibt diese Datei abrufbar?", option: "{uebungsdatensatz.verfuegbarkeit}", bei: "Stabil" }
+    einblendung:
+      - { markiere: "Wie verlässlich bleibt diese Datei abrufbar?", bei: "verlässlich" }
+      - { markiere: "Wer darf auf diese Daten zugreifen?", bei: "zugreifen" }
+
+  - id: "4.6"
+    kapitel: "Weitere Distributionen"
+    bild: screencast
+    dauer: "0:45"
+    sprechtext:
+      de: >-
+        Unsere Mitgliederzahlen gibt es auch als JSON-Datei, zur Weiterverarbeitung in Software. Dafür
+        sind unten die weiteren Distributionen vorgesehen. Klicken Sie auf „Distribution hinzufügen" und
+        tragen Sie die Zugriffs-URL ein. Dann wählen Sie das Format, hier JSON, und die Lizenz. Auch
+        jede weitere Distribution braucht eine Lizenz, sonst lässt sich der Datensatz nicht
+        veröffentlichen. Die Datei im oberen Teil des Reiters bleibt die primäre Distribution.
+    schritte:
+      - scrolle_zu: { text: "Weitere Distributionen", bei: "unten" }
+      - klick: { text: "Distribution hinzufügen", quelle: carbon-fields, bei: "hinzufügen" }
+      - tippe: { feld: "Zugriffs-URL", text: "{uebungsdatensatz.zweite_distribution.url}", bei: "Zugriffs-URL" }
+      - waehle: { feld: "Format", option: "{uebungsdatensatz.zweite_distribution.format}", bei: "Format" }
+      - waehle: { feld: "Lizenz", option: "{uebungsdatensatz.zweite_distribution.lizenz}", bei: "Lizenz" }
+    einblendung:
+      - { text: "Jede Distribution braucht eine Lizenz.", bei: "braucht" }
+      - { text: "Die Datei oben bleibt die primäre Distribution.", bei: "primäre" }
+    hinweis: >-
+      „Distribution hinzufügen" entsteht aus „%s hinzufügen" (languages/carbon-fields-ui-de_DE.po)
+      und dem Singular „Distribution" des Feldes „Weitere Distributionen".
+
+  - id: "4.7"
+    kapitel: "Blick unter die Haube"
+    bild: screencast
+    dauer: "0:22"
+    sprechtext:
+      de: >-
+        Ein Blick unter die Haube. Nach dem Speichern zeigt die Vorschau beide Distributionen in der
+        maschinenlesbaren Beschreibung: die CSV-Datei aus der Mediathek und die JSON-Datei. Jede trägt
+        ihr eigenes Format und ihre eigene Lizenz. Für Portale sind das zwei Wege zu denselben Daten.
+    schritte:
+      - klick: { text: "Entwurf speichern", quelle: core, bei: "Speichern" }
+      - klick: { text: "5 — Vorschau", bei: "Vorschau" }
+      - scrolle_zu: { text: "dcat:distribution", bei: "beide" }
+      - scrolle_zu: { text: "{uebungsdatensatz.zweite_distribution.url}", bei: "JSON-Datei" }
+    einblendung:
+      - { text: "Blick unter die Haube", bei: "Blick" }
+      - { markiere: "{uebungsdatensatz.zweite_distribution.url}", zoom: true, bei: "JSON-Datei" }
+
+  - id: "4.8"
+    kapitel: "Wie es weitergeht"
+    bild: folie
+    dauer: "0:12"
+    folie: >-
+      Abspann: Hinweis auf Folge 5; Plugin-Version; Lizenz CC BY 3.0, Namensnennung
+      „Open Data Wizard" mit Link auf das Repository.
+    sprechtext:
+      de: >-
+        In der nächsten Folge geht es um den vierten Reiter: erweiterte Angaben wie Zeitraum, Region
+        und Kontakt. Sie sind alle freiwillig, und jede macht Ihre Daten leichter auffindbar.

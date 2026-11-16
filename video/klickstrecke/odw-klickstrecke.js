@@ -171,6 +171,22 @@ const FOLIEN = {
         <ellipse cx="1290" cy="330" rx="170" ry="44" class="c-flaeche s-akzent" stroke-width="3"/><text x="1290" y="470" text-anchor="middle" class="c-text t-anz" font-size="30" font-weight="700">Datenbank</text>
         <text x="1290" y="515" text-anchor="middle" class="c-gedimmt" font-size="22">Ihre Datensätze bleiben</text>
         <path d="M1030 295 C 1080 295, 1090 400, 1112 420" fill="none" class="s-linie" stroke-width="3" stroke-dasharray="8 8"/><path d="M1030 525 C 1080 525, 1090 480, 1112 470" fill="none" class="s-linie" stroke-width="3" stroke-dasharray="8 8"/></g></svg></div>`,
+  '4/4.1': () => {
+    // Zwei Distributionen eines Datensatzes; die Etiketten nur als Kontur, damit sie in beiden
+    // Gestaltungen ausreichend Kontrast haben.
+    const karte = (x, fmt, etikett, zugang, z) => `<g data-z="${z}">
+        <rect x="${x}" y="300" width="560" height="430" rx="16" class="c-grund s-linie" stroke-width="3"/>
+        <rect x="${x + 30}" y="325" width="${etikett.length * 13 + 40}" height="44" rx="22" fill="none" class="s-akzent" stroke-width="2.5"/>
+        <text x="${x + 50}" y="355" class="c-text" font-size="22">${etikett}</text>
+        <text x="${x + 280}" y="465" text-anchor="middle" class="c-akzent t-mono" font-size="64" font-weight="700">${fmt}</text></g>
+      <g data-z="Zeilen Zugang, Format, Lizenz">${[['Zugang', zugang], ['Format', fmt], ['Lizenz', 'CC BY 4.0']].map(([a, b], i) => `
+        <text x="${x + 50}" y="${555 + i * 52}" class="c-gedimmt" font-size="24">${a}</text><text x="${x + 220}" y="${555 + i * 52}" class="c-text" font-size="24">${b}</text>`).join('')}</g>`;
+    return `<div class="folie"><svg class="f-svg" viewBox="0 0 1600 900" role="img" aria-label="Ein Datensatz mit zwei Distributionen: CSV in der Mediathek und JSON über einen Link">
+      <g data-z="Rahmen Datensatz"><rect x="110" y="90" width="1380" height="720" rx="22" class="c-flaeche s-akzent" stroke-width="3"/>
+        <text x="160" y="160" class="c-text t-anz" font-size="36" font-weight="700">Datensatz</text><text x="160" y="205" class="c-gedimmt" font-size="26">Mitgliederzahlen 2015–2025</text></g>
+      ${karte(180, 'CSV', 'primäre Distribution', 'Mediathek', 'Karte CSV')}
+      ${karte(860, 'JSON', 'weitere Distribution', 'Link', 'Karte JSON')}</svg></div>`;
+  },
 };
 function folieFuer(f, sz, g) {
   const k = `${f.folge}/${sz.id}`;
@@ -306,19 +322,25 @@ class OdwKlickstrecke extends HTMLElement {
   disconnectedCallback() { this.halte(); }
 
   async lade() {
+    // Ändern sich src und gestaltung kurz nacheinander, laufen mehrere Ladevorgänge gleichzeitig.
+    // Nur der zuletzt gestartete darf die Anzeige aufbauen; sonst gewinnt, wer zuletzt fertig wird.
+    const nr = (this.ladeNr = (this.ladeNr || 0) + 1);
     this.halte();
     this.root.innerHTML = `<style>${CSS}</style><div class="meldung">Klickstrecke wird geladen …</div>`;
+    let g, f, datenBasis;
     try {
       const name = (this.getAttribute('gestaltung') || 'odw').replace(/[^a-z0-9-]/gi, '');
-      this.g = await (await fetch(new URL(`gestaltung/${name}.json`, BASIS))).json();
-      ladeSchriften(this.g);
+      g = await (await fetch(new URL(`gestaltung/${name}.json`, BASIS))).json();
       const src = new URL(this.getAttribute('src') || 'daten.json', document.baseURI);
-      this.datenBasis = new URL('.', src);
-      this.f = await (await fetch(src)).json();
+      datenBasis = new URL('.', src);
+      f = await (await fetch(src)).json();
     } catch (e) {
-      this.root.innerHTML = `<style>${CSS}</style><div class="meldung">Die Klickstrecke konnte nicht geladen werden.</div>`;
+      if (nr === this.ladeNr) this.root.innerHTML = `<style>${CSS}</style><div class="meldung">Die Klickstrecke konnte nicht geladen werden.</div>`;
       return;
     }
+    if (nr !== this.ladeNr) return;
+    this.g = g; this.f = f; this.datenBasis = datenBasis;
+    ladeSchriften(this.g);
     this.baue();
     this.zeige(0);
   }
