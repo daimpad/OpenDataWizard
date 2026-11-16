@@ -95,7 +95,11 @@ async function feld(page, name, art) {
     (f) => f.getByLabel(name, { exact: true }),
     (f) => f.getByRole('textbox', { name, exact: true }),
     (f) => f.getByPlaceholder(name, { exact: true }),
-    (f) => f.locator('.odw-cessda-widget, .cf-field, tr').filter({ has: f.locator('label, th', { hasText: anfang(name) }) }).locator(css),
+    // Nur das innerste Feld: Ein wiederholbarer Block („Weitere Distributionen") ist selbst ein
+    // .cf-field und enthält die Beschriftungen seiner Unterfelder; sonst träfe „Lizenz" das erste
+    // Auswahlfeld des Blocks.
+    (f) => f.locator('.odw-cessda-widget, .cf-field, tr').filter({ has: f.locator('label, th', { hasText: anfang(name) }) })
+      .filter({ hasNot: f.locator('.cf-field') }).locator(css),
     (f) => f.getByLabel(name),
   ]);
 }
@@ -141,6 +145,37 @@ async function ladeHoch(page, name, datei) {
   if (datei !== '<release-zip>') await page.waitForSelector('.attachment.save-ready, .attachment.selected, .media-sidebar .attachment-details', { timeout: 20000 }).catch(() => {});
 }
 
+// Steht der Text in einem größeren Block mit eigenem Scrollbereich (JSON-LD-Vorschau), diesen so
+// verschieben, dass der Text in seiner Mitte steht. Läuft im Browser.
+function zentriereText(e, t) {
+  const w = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    const i = n.data.indexOf(t);
+    if (i < 0) continue;
+    const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + t.length);
+    for (let p = n.parentElement; p; p = p.parentElement) {
+      if (p.scrollHeight > p.clientHeight + 4 && /(auto|scroll)/.test(getComputedStyle(p).overflowY)) {
+        p.scrollTop += r.getBoundingClientRect().top - p.getBoundingClientRect().top - p.clientHeight / 2;
+        break;
+      }
+    }
+    return;
+  }
+}
+
+// Rahmen um genau diesen Text, nicht um den ganzen Block, in dem er steht. Läuft im Browser.
+function textRahmen(e, t) {
+  const w = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+  for (let n = w.nextNode(); n; n = w.nextNode()) {
+    const i = n.data.indexOf(t);
+    if (i < 0) continue;
+    const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + t.length);
+    const b = r.getBoundingClientRect();
+    return { x: b.x, y: b.y, width: b.width, height: b.height };
+  }
+  return null;
+}
+
 async function schritt(page, s, daten) {
   const [art, wert] = Object.entries(s).find(([k]) => k !== 'bei') || [];
   const v = typeof wert === 'object' && wert !== null ? wert : { text: wert };
@@ -160,6 +195,7 @@ async function schritt(page, s, daten) {
       const el = await finde(page, [(f) => f.getByText(exakt(t)), (f) => f.getByText(t)]);
       if (!el) throw new Error(`Text „${t}" nicht gefunden`);
       await el.evaluate((e) => e.scrollIntoView({ block: 'center' }));
+      await el.evaluate(zentriereText, t);
       break;
     }
     case 'bestaetige': break; // Rückfragen werden global mit „OK" beantwortet
@@ -183,7 +219,10 @@ async function markierungen(page, liste, daten) {
     const t = ersetze(m.markiere, daten);
     if (!t) { aus.push({ text: m.markiere, bei: m.bei || null, box: null }); continue; }
     const el = await finde(page, [(f) => f.getByText(exakt(t)), (f) => f.getByLabel(t, { exact: true }), (f) => f.getByText(t)], 800);
-    const box = el ? await el.boundingBox() : null;
+    let box = el ? await el.boundingBox() : null;
+    // Steht der Text nur als Teil eines größeren Blocks da, den Rahmen auf den Text selbst legen.
+    // Nur im Hauptdokument: In einem iframe (Block-Editor) wären die Koordinaten relativ zum iframe.
+    if (el && (await el.evaluate((e, x) => window === window.top && e.textContent.trim() !== x, t))) box = (await el.evaluate(textRahmen, t)) || box;
     aus.push({ text: t, bei: m.bei || null, box: box && box.y >= 0 && box.y < VIEW.height ? box : null });
   }
   return aus;
