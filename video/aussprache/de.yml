@@ -3,7 +3,9 @@
 # Der Sprechtext im Drehbuch bleibt unverändert, denn er ist zugleich der Untertitel. Ersetzt wird nur
 # in dem Text, der an die Stimme geht. Reihenfolge: längere Einträge zuerst.
 #
-# Noch ohne Eintrag, nach dem ersten Anhören zu entscheiden: JSON-LD, CESSDA.
+# Geprüft am 16.11.2026 (34 schwierige Stellen der Folgen 1–10, alle „klingt gut“): Ohne eigenen
+# Eintrag richtig gesprochen werden u. a. JSON, JSON-LD, CSV, URL, ZIP, EU, GovData, GitHub, CESSDA,
+# ZiviZ, Turtle, RDF, Content Negotiation, Accept sowie die Endpunkt- und WP-CLI-Namen.
 
 ersetzungen:
   - text: "de für Deutsch, en für Englisch"   # Sprachkennungen buchstabieren (Folge 3)
