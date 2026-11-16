@@ -1,6 +1,6 @@
 # Videotutorials — Konzept
 
-> **Entwurf 0.2 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
+> **Entwurf 0.3 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
 > aus dem Code übernommen; ändern sie sich, ändert sich das Drehbuch mit.
 
 ## 1 · Ziel, Zielgruppe, Entscheidungen
@@ -22,8 +22,12 @@ Einschübe „Blick unter die Haube", die man überspringen kann.
 | Stimme | Damian (ElevenLabs) |
 | Anrede | „Sie" — wie in der Plugin-Oberfläche |
 | Beispieldaten | werden im Quick-Start geladen (Szene Q5) |
-| Veröffentlichung | YouTube (Abschnitt 7) |
+| Fehlermeldung im Quick-Start | bleibt als Lernmoment (Szene Q8) |
+| Folge 10 | wird als Video produziert |
+| Veröffentlichung | YouTube, auf dem Kanal des Kunden (Abschnitt 7) |
+| Lizenz der Videos | CC BY |
 | Produktion | automatisiert, Produktionscode unter `video/` in diesem Repository (Abschnitt 6) |
+| Ton-Dateien | nur lokal erzeugt; geliefert wird das fertige Video |
 
 ## 2 · Die Reihe im Überblick
 
@@ -63,7 +67,7 @@ Gesamt rund 41 Minuten. Folge 0 steht für sich; die Folgen 1–10 vertiefen.
 - **Gestaltung:** Farben und Logo des Projekts (`#03FF9A` auf `#101010`, `assets/images/ODW-Logo.svg`);
   `assets/images/ODW-Ablauf.svg` als Grundlage der Ablauf-Folie.
 - **Jede Folge** beginnt mit einer Titelfolie (10 s) und endet mit einem Abspann (10 s): Hinweis auf
-  die passende nächste Folge und die Plugin-Version, auf der das Video beruht. In den Tabellen
+  die passende nächste Folge, die Plugin-Version, auf der das Video beruht, und die Lizenz (CC BY). In den Tabellen
   unten sind beide nicht eigens aufgeführt.
 
 ## 4 · Folge 0 — Quick-Start
@@ -261,6 +265,8 @@ Untertitel und YouTube-Beschreibung.
 - **Pflege.** Nach einem Release mit sichtbaren Änderungen genügt ein neuer Lauf; das Drehbuch
   verweist auf dieselben Beschriftungen wie das Plugin.
 - **Schlüssel.** Der ElevenLabs-Schlüssel bleibt lokal und kommt nie ins Repository.
+- **Ton-Dateien** entstehen lokal in `video/ausgabe/` und werden nicht eingecheckt. Auf einem
+  anderen Rechner wird der Ton neu erzeugt; das kostet einmalig Credits.
 
 **Verzeichnis `video/`:**
 
@@ -284,6 +290,11 @@ video/
 
 ## 7 · Veröffentlichung auf YouTube
 
+- **Kanal:** Die Videos erscheinen auf dem Kanal des Kunden. Je Folge entsteht ein Lieferpaket:
+  MP4, WebVTT-Untertitel, Vorschaubild, Titel und Beschreibung als Textdatei.
+- **Lizenz: CC BY.** YouTube bietet in den Upload-Einstellungen „Creative Commons – Namensnennung"
+  an (Version 3.0). Soll CC BY 4.0 gelten, steht das ausdrücklich in der Beschreibung, mit
+  Rechteinhaber und gewünschter Namensnennung. Der Abspann nennt dieselbe Lizenz.
 - **Playlist** „Open Data Wizard" mit den Folgen 0–10 in dieser Reihenfolge.
 - **Titel-Schema:** „Open Data Wizard · 0 · Quick-Start: In fünf Minuten zum ersten offenen Datensatz".
 - **Beschreibung** wird aus dem Drehbuch erzeugt: Kurztext, Kapitelmarken, Links (Release,
@@ -296,16 +307,17 @@ video/
 - **Einbindung:** README und Einstieg-Seite verlinken auf die Playlist. Im WordPress-Backend wird
   nicht eingebettet: ein eingebettetes Video lädt Inhalte von YouTube, bevor jemand klickt
   (Datenschutz).
-- **Hochladen** zunächst von Hand; Beschreibung, Untertitel und Vorschaubild liegen fertig vor.
+- **Hochladen** über den Kunden oder mit dessen Zugang, von Hand; das Lieferpaket enthält alles
+  Nötige.
 
 ## 8 · Offene Punkte
 
-1. **Quick-Start, Szene Q8:** Die Fehlermeldung beim Veröffentlichen als Lernmoment behalten? Folge 6
-   zeigt sie ausführlich; ohne Q8 wäre der Quick-Start etwa 25 Sekunden kürzer.
-2. **Folge 10** als Video oder nur als Textdokumentation?
-3. **Remotion:** Lizenzbedingungen für das Projekt prüfen; Alternative wäre ein Schnitt mit ffmpeg.
-4. **Lizenz der Videos** auf YouTube: Standardlizenz oder CC BY?
-5. **YouTube-Kanal:** ein vorhandener oder ein eigener für das Projekt?
-6. **Ton-Dateien:** nur lokal erzeugen, oder ins Repository (etwa per Git LFS), damit ein anderer
-   Rechner nicht neu erzeugen muss?
-7. **Englische Fassung** später, mit derselben Stimme?
+1. **Rechteinhaber und Namensnennung** für CC BY: Wer wird genannt — der Kunde, das Projekt oder
+   beide? Davon hängen Abspann und Beschreibung ab.
+2. **Fremde Oberflächen unter CC BY:** Die GitHub-Seite (Q3) und der EU-Validator (9.6) erscheinen
+   kurz im Bild. Klären, ob diese Szenen bleiben oder als Folie nachgebildet werden.
+3. **Stimme auf dem Kanal des Kunden:** Prüfen, ob der ElevenLabs-Tarif die Nutzung der erzeugten
+   Tonspuren in fremden Kanälen und unter CC BY abdeckt.
+4. **Gestaltung:** Soll der Kunde in Titelfolie, Abspann oder Vorschaubild erscheinen (Logo, Name)?
+5. **Remotion:** Lizenzbedingungen für das Projekt prüfen; Alternative wäre ein Schnitt mit ffmpeg.
+6. **Englische Fassung** später, mit derselben Stimme?
