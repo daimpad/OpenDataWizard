@@ -72,7 +72,7 @@ szenen:
         die Daten verantwortlich ist. Haben Sie in den Einstellungen eine herausgebende Organisation
         hinterlegt, steht sie hier bereits.
     schritte:
-      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
     einblendung:
       - { markiere: "Wer gibt diese Daten heraus?", bei: "Frage" }
       - { markiere: "{uebungsdatensatz.herausgeber}", text: "aus den Einstellungen", bei: "bereits" }

@@ -70,15 +70,15 @@ szenen:
     dauer: "0:30"
     sprechtext:
       de: >-
-        Im WordPress-Backend öffnen Sie „Plugins" und dann „Neues Plugin hinzufügen". Oben finden Sie
+        Im WordPress-Backend öffnen Sie „Plugins" und dann „Plugin hinzufügen". Oben finden Sie
         die Schaltfläche „Plugin hochladen". Wählen Sie die heruntergeladene ZIP-Datei aus, klicken
         Sie auf „Jetzt installieren" und anschließend auf „Plugin aktivieren". Links im Menü
         erscheint nun ein neuer Eintrag: „Datenkatalog". Hier findet alles Weitere statt.
     schritte:
       - oeffne: /wp-admin/plugins.php
-      - klick: { text: "Neues Plugin hinzufügen", quelle: core, pruefen: true, bei: "hinzufügen" }
+      - klick: { text: "Plugin hinzufügen", quelle: core, bei: "hinzufügen" }
       - klick: { text: "Plugin hochladen", quelle: core, bei: "Schaltfläche" }
-      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, pruefen: true, datei: "<release-zip>", bei: "ZIP-Datei" }
+      - lade_hoch: { feld: "Plugin-ZIP-Datei", quelle: core, datei: "<release-zip>", bei: "ZIP-Datei" }
       - klick: { text: "Jetzt installieren", quelle: core, bei: "installieren" }
       - klick: { text: "Plugin aktivieren", quelle: core, bei: "aktivieren" }
     einblendung:
@@ -130,7 +130,7 @@ szenen:
         veröffentlichen. Thema und Schlagworte sind freiwillig, helfen aber, die Daten zu finden.
         Speichern können Sie jederzeit, auch unvollständig, als Entwurf.
     schritte:
-      - tippe: { feld: "Titel hier eingeben", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "{uebungsdatensatz.titel}", bei: "Titel" }
       - tippe: { feld: "Wer gibt diese Daten heraus?", text: "{uebungsdatensatz.herausgeber}", bei: "heraus" }
       - tippe: { feld: "Worum geht es in diesem Datensatz?", text: "{uebungsdatensatz.beschreibung}", bei: "Worum" }
       - waehle: { feld: "Welchen Themen ist dieser Datensatz zugeordnet?", option: "{uebungsdatensatz.thema}", bei: "Thema" }
@@ -145,9 +145,9 @@ szenen:
     sprechtext:
       de: >-
         Was passiert, wenn noch etwas fehlt? Klicken wir einmal auf „Veröffentlichen". Das Plugin
-        speichert den Datensatz als Entwurf und sagt genau, was fehlt: den Link zur Datei oder einen
-        Datei-Upload, und die Lizenz. Beides steht im Reiter Datenbereitstellung. Ein Klick auf „Zum
-        Feld springen" führt direkt dorthin.
+        speichert den Datensatz als Entwurf und sagt genau, was fehlt: hier den Link zur Datei oder
+        einen Datei-Upload, im Reiter Datenbereitstellung. Ein Klick auf „Zum Feld springen" führt
+        direkt dorthin.
     schritte:
       - klick: { text: "Veröffentlichen", quelle: core, bei: "Veröffentlichen" }
       - warte_auf: "Open Data Wizard: Veröffentlichung blockiert"
@@ -168,7 +168,7 @@ szenen:
         nennen sollen.
     schritte:
       - klick: { text: "Datei auswählen / hochladen", bei: "Mediathek" }
-      - lade_hoch: { feld: "Dateien hochladen", quelle: core, pruefen: true, datei: "{uebungsdatensatz.datei}" }
+      - lade_hoch: { feld: "Dateien hochladen", quelle: core, datei: "{uebungsdatensatz.datei}" }
       - klick: { text: "Auswählen", bei: "CSV-Datei" }
       - waehle: { feld: "Unter welcher Lizenz sind diese Daten verfügbar?", option: "{uebungsdatensatz.lizenz}", bei: "wählen" }
       - tippe: { feld: "Welcher Namensnennungstext soll bei Weiternutzung angegeben werden?", text: "{uebungsdatensatz.namensnennung}", bei: "Darunter" }
@@ -201,17 +201,18 @@ szenen:
         Nun soll der Datensatz auch auf Ihrer Website erscheinen. Legen Sie eine neue Seite an,
         klicken Sie auf das Plus und suchen Sie den Block „Datensatz-Karte". Rechts in der
         Seitenleiste wählen Sie Ihren Datensatz aus der Liste. Nach dem Veröffentlichen sehen
-        Besucherinnen und Besucher alles Wichtige an einer Stelle: Titel, Thema, Lizenz und den
-        Download.
+        Besucherinnen und Besucher alles Wichtige an einer Stelle: Titel, Format, Größe, Lizenz und den
+        Download. Weitere Angaben lassen sich aufklappen.
     schritte:
       - oeffne: /wp-admin/post-new.php?post_type=page
-      - tippe: { feld: "Titel hinzufügen", quelle: core, pruefen: true, text: "Unsere Daten" }
-      - klick: { text: "Block-Inserter umschalten", quelle: core, pruefen: true, bei: "Plus" }
-      - tippe: { feld: "Suche", quelle: core, pruefen: true, text: "Datensatz-Karte", bei: "suchen" }
+      - tippe: { feld: "Titel hinzufügen", quelle: core, text: "Unsere Daten" }
+      - klick: { text: "Block-Inserter", quelle: core, bei: "Plus" }
+      - tippe: { feld: "Suchen", quelle: core, text: "Datensatz-Karte", bei: "suchen" }
       - klick: { text: "Datensatz-Karte", bei: "Datensatz-Karte" }
       - waehle: { feld: "Welcher Datensatz soll angezeigt werden?", option: "{uebungsdatensatz.titel}", bei: "Liste" }
-      - klick: { text: "Veröffentlichen", quelle: core, pruefen: true, bei: "Veröffentlichen" }
-      - klick: { text: "Seite anzeigen", quelle: core, pruefen: true }
+      - klick: { text: "Veröffentlichen", quelle: core, bei: "Veröffentlichen" }
+      - klick: { text: "Veröffentlichen", quelle: core }   # zweiter Klick: Prüfung vor der Veröffentlichung
+      - oeffne: /unsere-daten/   # „Seite anzeigen" öffnet einen neuen Tab; die Aufnahme ruft die Seite direkt auf
     hinweis: Den Willkommens-Dialog des Block-Editors in der Aufnahme-Umgebung abschalten.
 
   - id: Q12
