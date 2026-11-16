@@ -35,6 +35,9 @@ Inhaltselement **„Reines HTML"** anlegen und einfügen (Folge und Gestaltung a
   (`beispiel.html` aufrufen; bleibt die Bühne leer, fehlt meist eine dieser Dateiarten.)
 - Ist im Frontend eine Content Security Policy aktiv, müssen Skripte, Schriften, Bilder und Ton vom
   eigenen Server erlaubt sein (`'self'`). Das ist üblicherweise der Fall.
+- Der Server muss Teilanfragen (HTTP-Range) für `.mp3` beantworten, sonst beginnt der Ton nach einem
+  Sprung im Text wieder am Anfang. Apache und nginx tun das von sich aus. Zum Testen auf dem eigenen
+  Rechner eignet sich `python3 -m http.server` deshalb nicht, `npx http-server` dagegen schon.
 
 ## Videos
 

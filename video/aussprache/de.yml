@@ -1,0 +1,14 @@
+# Aussprache für die Sprachausgabe (ElevenLabs, Stimme „Damian").
+#
+# Der Sprechtext im Drehbuch bleibt unverändert, denn er ist zugleich der Untertitel. Ersetzt wird nur
+# in dem Text, der an die Stimme geht. Reihenfolge: längere Einträge zuerst.
+#
+# Noch ohne Eintrag, nach dem ersten Anhören zu entscheiden: DCAT-AP, GovData, JSON-LD, CESSDA.
+
+ersetzungen:
+  - text: "CC BY 4.0"
+    gesprochen: "Zeh-Zeh-Bai vier Punkt null"
+  - text: ".zip"
+    gesprochen: "Punkt zip"
+  - text: "data.europa.eu"
+    gesprochen: "data Punkt europa Punkt E U"

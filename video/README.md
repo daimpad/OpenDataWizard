@@ -22,8 +22,13 @@ Voraussetzungen: PHP 8.1+ mit `pdo_sqlite`, Composer, Node mit Playwright, Pytho
 bash video/aufnahme/einrichten.sh          # deutsches WordPress mit SQLite, einmalig
 bash video/aufnahme/starte-server.sh &     # http://127.0.0.1:8888
 node video/aufnahme/aufnahme.js            # alle Folgen; oder z. B. „… aufnahme.js 0 3"
-python3 video/klickstrecke/baue-paket.py --aufnahme video/ausgabe/aufnahme
+python3 video/klickstrecke/baue-paket.py --aufnahme video/ausgabe/aufnahme --ton video/ausgabe/ton
 ```
+
+Die Tonspuren liegen als `video/ausgabe/ton/<folge>/<szene>.mp3` (z. B. `ton/0/Q1.mp3`); ohne `--ton`
+entsteht das Paket ohne Stimme. Erzeugt werden sie mit ElevenLabs (Stimme „Damian"). Was die Stimme
+anders sprechen soll als im Sprechtext geschrieben, steht in `video/aussprache/de.yml` — der
+Sprechtext selbst bleibt unverändert, weil er zugleich Untertitel ist.
 
 Das Paket liegt danach in `video/ausgabe/odw-tutorials/`; `beispiel.html` darin zeigt alle Folgen mit
 Umschalter für die Gestaltung, `EINBINDEN.md` beschreibt die Einbindung in TYPO3 13.
