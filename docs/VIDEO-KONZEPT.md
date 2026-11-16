@@ -1,6 +1,6 @@
 # Videotutorials — Konzept
 
-> **Entwurf 0.3 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
+> **Entwurf 0.4 zur Abstimmung.** Bezieht sich auf Plugin-Version 2.47.5. Menü- und Feldnamen sind
 > aus dem Code übernommen; ändern sie sich, ändert sich das Drehbuch mit.
 
 ## 1 · Ziel, Zielgruppe, Entscheidungen
@@ -25,9 +25,12 @@ Einschübe „Blick unter die Haube", die man überspringen kann.
 | Fehlermeldung im Quick-Start | bleibt als Lernmoment (Szene Q8) |
 | Folge 10 | wird als Video produziert |
 | Veröffentlichung | YouTube, auf dem Kanal des Kunden (Abschnitt 7) |
-| Lizenz der Videos | CC BY |
+| Lizenz der Videos | CC BY, Namensnennung: das Projekt („Open Data Wizard") |
+| Fremde Oberflächen | werden als Folie nachgebildet (GitHub, EU-Validator) |
+| Gestaltung | Projektdesign; kein Logo und kein Name des Kunden |
 | Produktion | automatisiert, Produktionscode unter `video/` in diesem Repository (Abschnitt 6) |
 | Ton-Dateien | nur lokal erzeugt; geliefert wird das fertige Video |
+| Stimme | Der ElevenLabs-Tarif deckt die Nutzung auf dem Kanal des Kunden und unter CC BY ab |
 
 ## 2 · Die Reihe im Überblick
 
@@ -58,6 +61,9 @@ Gesamt rund 41 Minuten. Folge 0 steht für sich; die Folgen 1–10 vertiefen.
   vorausgesetzt.
 - **Blick unter die Haube** (10–30 s, sichtbar gekennzeichnet, eigene Kapitelmarke): JSON-LD,
   Turtle, Endpunkte — für Datenaffine.
+- **Nur freie Oberflächen im Bild.** Gezeigt werden WordPress (GPL), das Plugin und die eigene
+  Übungswebsite. Fremde Seiten — GitHub, der EU-Validator, Portale — werden als Folie nachgebildet,
+  damit das ganze Video unter CC BY stehen kann.
 - **Durchgehend erfundene Daten.** Die mitgelieferten Beispieldaten (Musterstadt, Musterkreis) und
   ein eigener Übungsdatensatz: *Förderverein Musterstadt e. V. — Mitgliederentwicklung 2015–2025*,
   mit einer kleinen CSV-Datei aus `video/material/`. Keine echten Personen- oder Organisationsdaten
@@ -79,7 +85,7 @@ die Harvest-URL bekannt.
 |---|---|---|---|---|
 | Q1 | 0:20 | Folie | Titel, Logo | Worum es geht und für wen. |
 | Q2 | 0:25 | Folie (animiert) | Formular ausfüllen → DCAT-AP.de erzeugen → Portale holen ab | Die Daten bleiben bei Ihnen; nur ihre Beschreibung wandert. |
-| Q3 | 0:20 | Screencast GitHub | Releases → `open-data-wizard-<version>.zip` | Einblendung: Nicht der grüne „Code"-Button — dort fehlen Bibliotheken. |
+| Q3 | 0:20 | Folie (Releases-Seite nachgebildet) | `open-data-wizard-<version>.zip` hervorgehoben, „Code"-Button durchgestrichen | Nicht der grüne „Code"-Button — dort fehlen Bibliotheken. |
 | Q4 | 0:30 | Screencast WP | Plugins → Installieren → Plugin hochladen → Datei auswählen → Jetzt installieren → Plugin aktivieren | Danach erscheint links der Menüpunkt „Datenkatalog". |
 | Q5 | 0:15 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze | 42 erfundene Beispiele zum Ausprobieren — gekennzeichnet, nie an Portale ausgeliefert. |
 | Q6 | 0:15 | Screencast | Datenkatalog → Neuen Datensatz anlegen → Titel | Fünf Reiter; ⓘ zeigt den Fachbegriff, „Mehr erfahren" die Erklärung. |
@@ -207,11 +213,11 @@ leer; 8.8 erklärt das.
 | 9.3 | 0:30 | Blick unter die Haube | Katalog als JSON-LD und als Turtle nebeneinander | Derselbe Inhalt, zwei Schreibweisen. |
 | 9.4 | 0:25 | Folie | Content Negotiation: `Accept`-Header, `?format=` hat Vorrang | Harvester können das Format auch über den Header aushandeln. |
 | 9.5 | 0:25 | Folie | Nicht ausgeliefert: Entwürfe, private, passwortgeschützte Datensätze, Beispieldaten; Löschmeldungen über `/delta` | Portale sehen genau das, was Besucher Ihrer Website sehen. |
-| 9.6 | 0:40 | Screencast Browser | EU-SHACL-Validator: Datensatz-URL prüfen → Ergebnis ohne Verstöße | So belegen Sie die Konformität selbst, bevor Sie sich bei einem Portal melden. |
+| 9.6 | 0:40 | Folie (Validator nachgebildet) | Datensatz-URL → EU-SHACL-Validator → Ergebnis ohne Verstöße | So belegen Sie die Konformität selbst, bevor Sie sich bei einem Portal melden. |
 | 9.7 | 0:25 | Folie | Beim Portal melden: GovData oder Landesportal kontaktieren, Harvest-URL angeben | Das Portal richtet das Abholen ein; danach läuft es von selbst. |
 
-Szene 9.6 hängt von einem externen Dienst ab. Fällt er bei der Aufnahme aus, zeigt die Szene
-stattdessen eine lokale Prüfung im Terminal.
+Die Folie in 9.6 nennt die Adresse des Validators im Bild, damit Zuschauende ihn selbst aufrufen
+können.
 
 ### Folge 10 · Für Administrator:innen
 
@@ -253,7 +259,8 @@ Untertitel und YouTube-Beschreibung.
 - **Reproduzierbarer Zustand.** Die bestehende `wp-env`-Umgebung und das Saat-Plugin der E2E-Tests
   liefern den Ausgangspunkt; für die Aufnahmen kommt eine eigene Konfiguration dazu (deutsches
   WordPress, feste Fenstergröße, keine Update-Hinweise, neutraler Benutzername). Für die
-  Installationsszenen eine Instanz ohne vorinstalliertes Plugin.
+  Installationsszenen eine Instanz ohne vorinstalliertes Plugin; das hochgeladene ZIP baut
+  `bin/build-release.sh`. Die Aufnahme braucht keinen externen Dienst.
 - **Mauszeiger.** Playwright nimmt keinen Zeiger auf; er wird per Skript eingeblendet. Die
   Klickkoordinaten gehen an Remotion für Zooms.
 - **Terminal (Folge 10).** Die Befehle laufen echt über `wp-env`; ihre Ausgabe wird aufgezeichnet und
@@ -288,13 +295,20 @@ video/
 - **Nicht in der CI:** Die E2E-Konfiguration liest nur `tests/e2e/`; die Aufnahmeskripte laufen
   nicht versehentlich als Tests mit.
 
+**Remotion-Lizenz** (Stand der Remotion-FAQ, November 2026): kostenlos für Einzelpersonen,
+Organisationen mit bis zu drei Personen und gemeinnützige Organisationen; sonst kostenpflichtig.
+Erhält der Kunde nur die fertigen Videos, zählt er nicht mit — es kommt auf die Personen an, die
+Remotion in diesem Projekt bedienen. Das Remotion-Projekt bleibt deshalb hier im Repository und
+wird nicht an den Kunden übergeben.
+
 ## 7 · Veröffentlichung auf YouTube
 
 - **Kanal:** Die Videos erscheinen auf dem Kanal des Kunden. Je Folge entsteht ein Lieferpaket:
   MP4, WebVTT-Untertitel, Vorschaubild, Titel und Beschreibung als Textdatei.
-- **Lizenz: CC BY.** YouTube bietet in den Upload-Einstellungen „Creative Commons – Namensnennung"
-  an (Version 3.0). Soll CC BY 4.0 gelten, steht das ausdrücklich in der Beschreibung, mit
-  Rechteinhaber und gewünschter Namensnennung. Der Abspann nennt dieselbe Lizenz.
+- **Lizenz: CC BY, Namensnennung „Open Data Wizard"** mit Link auf das Repository. YouTube bietet
+  in den Upload-Einstellungen „Creative Commons – Namensnennung" an (Version 3.0). Soll zusätzlich
+  CC BY 4.0 gelten, steht das ausdrücklich in der Beschreibung. Der Abspann nennt dieselbe Lizenz
+  und Namensnennung.
 - **Playlist** „Open Data Wizard" mit den Folgen 0–10 in dieser Reihenfolge.
 - **Titel-Schema:** „Open Data Wizard · 0 · Quick-Start: In fünf Minuten zum ersten offenen Datensatz".
 - **Beschreibung** wird aus dem Drehbuch erzeugt: Kurztext, Kapitelmarken, Links (Release,
@@ -312,12 +326,8 @@ video/
 
 ## 8 · Offene Punkte
 
-1. **Rechteinhaber und Namensnennung** für CC BY: Wer wird genannt — der Kunde, das Projekt oder
-   beide? Davon hängen Abspann und Beschreibung ab.
-2. **Fremde Oberflächen unter CC BY:** Die GitHub-Seite (Q3) und der EU-Validator (9.6) erscheinen
-   kurz im Bild. Klären, ob diese Szenen bleiben oder als Folie nachgebildet werden.
-3. **Stimme auf dem Kanal des Kunden:** Prüfen, ob der ElevenLabs-Tarif die Nutzung der erzeugten
-   Tonspuren in fremden Kanälen und unter CC BY abdeckt.
-4. **Gestaltung:** Soll der Kunde in Titelfolie, Abspann oder Vorschaubild erscheinen (Logo, Name)?
-5. **Remotion:** Lizenzbedingungen für das Projekt prüfen; Alternative wäre ein Schnitt mit ffmpeg.
-6. **Englische Fassung** später, mit derselben Stimme?
+1. **Lizenzversion:** Genügt CC BY 3.0 aus den YouTube-Einstellungen, oder soll in der Beschreibung
+   zusätzlich CC BY 4.0 stehen?
+2. **Remotion:** Wie viele Personen bedienen Remotion in diesem Projekt, und ist der Träger
+   gemeinnützig? Bei höchstens drei Personen oder Gemeinnützigkeit ist die Nutzung kostenlos.
+3. **Englische Fassung** später, mit derselben Stimme?
