@@ -40,7 +40,7 @@ Einschübe „Blick unter die Haube", die man überspringen kann.
 |---|---|---|---|---|
 | 0 | **Quick-Start:** In fünf Minuten zum ersten offenen Datensatz | ~5:00 | Screencast + Folien | Installieren, einen Datensatz veröffentlichen, Harvest-URL finden |
 | 1 | Warum Metadaten? DCAT-AP und Harvesting | ~3:00 | nur Folien | Das Prinzip verstehen: Daten bleiben, Beschreibung wandert |
-| 2 | Installation, Updates, Einstellungen, Beispieldaten | ~4:00 | Screencast + Folien | Sauber installieren und das Plugin einrichten |
+| 2 | Installation, Updates, Einstellungen, Beispieldaten | ~4:15 | Screencast + Folien | Sauber installieren und das Plugin einrichten |
 | 3 | Das Formular I: Grundlegendes und Sprache (Reiter 1–2) | ~3:45 | Screencast | Einen Datensatz inhaltlich beschreiben |
 | 4 | Das Formular II: Datenbereitstellung (Reiter 3) | ~4:00 | Screencast + Folie | Datei, Format, Lizenz, mehrere Distributionen |
 | 5 | Das Formular III: Erweiterte Angaben (Reiter 4) | ~4:30 | Screencast | Optionale Angaben gezielt nutzen |
@@ -122,12 +122,12 @@ Aufnahme gegen die laufende WordPress-Version geprüft.
 | # | Dauer | Bild | Klickstrecke / Inhalt | Kernaussage Sprechtext |
 |---|---|---|---|---|
 | 2.1 | 0:25 | Folie | Release-ZIP und Quellcode-Archiv nebeneinander | Nur das ZIP unter *Releases* enthält die nötigen Bibliotheken. |
-| 2.2 | 0:20 | Screencast | Hinweis „Open Data Wizard: Installation unvollständig" | So sieht es aus, wenn das falsche Archiv installiert wurde. Abhilfe: das Release-ZIP hochladen. |
+| 2.2 | 0:28 | Screencast | Hinweis „Open Data Wizard: Installation unvollständig" → Deaktivieren → Löschen | So sieht es aus, wenn das falsche Archiv installiert wurde. Abhilfe: das unvollständige Plugin löschen und das Release-ZIP installieren. |
 | 2.3 | 0:25 | Screencast | Plugins → Neues Plugin hinzufügen → Plugin hochladen → Release-ZIP → Plugin aktivieren | Der Normalfall in vier Klicks. |
-| 2.4 | 0:20 | Folie | Automatische Updates | Neue Versionen erscheinen im Backend. Ihre Datensätze liegen in der Datenbank und bleiben bei Updates erhalten. |
+| 2.4 | 0:32 | Folie | Updates mit Update-Plugin (z. B. Git Updater) oder durch erneutes Hochladen | Neue Versionen meldet WordPress, wenn ein Update-Plugin installiert ist; sonst ersetzt man die vorhandene Version durch Hochladen. Die Datensätze bleiben erhalten. |
 | 2.5 | 0:50 | Screencast | Datenkatalog → Einstellungen: *Katalog* (Katalog-Titel, Katalog-Beschreibung) · *Standardwerte für neue Datensätze* (Herausgebende Organisation, Standard-Lizenz, Standard-Sprache) · *REST API* (Cache-Laufzeit) · *Qualitätsprüfung (MQA)* (URL-Erreichbarkeit prüfen) · *Deinstallation* (Daten löschen) → Änderungen speichern | Standardwerte sparen Tipparbeit bei jedem neuen Datensatz. Der Abschnitt *Harvesting* folgt in Folge 9. |
 | 2.6 | 0:40 | Screencast | Datenkatalog → Einstieg → „Beispieldaten laden" → Alle Datensätze („— Beispieldaten" hinter dem Titel) | Beispiele zum Ausprobieren aller Funktionen, deutlich gekennzeichnet. |
-| 2.7 | 0:25 | Screencast | Ein Beispiel öffnen → „Als eigenen Datensatz übernehmen" | Wer ein Beispiel als Vorlage nutzt, macht es damit zu einem regulären Datensatz. |
+| 2.7 | 0:35 | Screencast | Ein Beispiel öffnen → anpassen → Aktualisieren → „Als eigenen Datensatz übernehmen" | Erst anpassen, dann übernehmen: Ein übernommenes Beispiel ist sofort veröffentlicht und erscheint in den Harvest-Endpunkten. |
 | 2.8 | 0:15 | Screencast | „Beispieldaten entfernen" | Ein Klick, und sie sind endgültig weg. |
 
 ### Folge 3 · Das Formular I: Grundlegendes und Sprache
