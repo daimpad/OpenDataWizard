@@ -34,6 +34,12 @@ Sprechtext selbst bleibt unverändert, weil er zugleich Untertitel ist.
 Das Paket liegt danach in `video/ausgabe/odw-tutorials/`; `beispiel.html` darin zeigt alle Folgen mit
 Umschalter für die Gestaltung, `EINBINDEN.md` beschreibt die Einbindung in TYPO3 13.
 
+Mit `--typo3` entsteht zusätzlich `video/ausgabe/datenatlas-typo3/` für Server, die nur HTML, JPG und
+MP3 annehmen: nur die Gestaltung „datenatlas“, je Folge eine HTML-Datei mit Skript, Daten und Logo,
+Bilder und Ton flach daneben. Die Schriften lädt die Klickstrecke von der Datenatlas-Website
+(`website_schriften` in `gestaltung/datenatlas.json`); eingebettet in einem iframe hat sie eine feste
+Höhe, nur der Text scrollt. Anleitung: `klickstrecke/EINBINDEN-TYPO3.md`.
+
 Die Aufnahme meldet jeden Schritt mit ✓ oder ✗. Ein ✗ heißt fast immer: Eine Beschriftung im Drehbuch
 stimmt nicht mehr mit WordPress oder dem Plugin überein — das Bildschirmfoto zum Schritt zeigt, was
 stattdessen zu sehen war.

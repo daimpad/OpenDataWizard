@@ -10,7 +10,7 @@ fileadmin/odw-tutorials/
 ├── odw-klickstrecke.js
 ├── gestaltung/        (odw.json, datenatlas.json, logos/)
 ├── schriften/
-└── folge-0/ … folge-3/   (daten.json, bilder/, ton/)
+└── folge-0/ … folge-10/  (daten.json, bilder/, ton/)
 ```
 
 `beispiel.html` im selben Ordner zeigt alle Folgen mit Umschalter für die Gestaltung — zum Prüfen,
