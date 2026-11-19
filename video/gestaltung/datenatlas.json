@@ -57,5 +57,16 @@
       ]
     }
   },
-  "logo_breit": true
+  "logo_breit": true,
+  "website_schriften": {
+    "quelle": "@font-face-Regeln im Stylesheet von datenatlas-zivilgesellschaft.de (Stand 19.11.2026). Nur für die TYPO3-Fassung (baue-paket.py --typo3): Die Klickstrecke lädt die Schriften, die die Website ohnehin ausliefert. Ändert sich der Pfad nach einem TYPO3-Update, hier anpassen und neu bauen.",
+    "anzeige": {
+      "500": "/_assets/a70e717c7ec6e148b3e6783d8828aed3/Fonts/Bitter/bitter-v36-latin_latin-ext-500.woff2",
+      "700": "/_assets/a70e717c7ec6e148b3e6783d8828aed3/Fonts/Bitter/bitter-v36-latin_latin-ext-700.woff2"
+    },
+    "text": {
+      "400": "/_assets/a70e717c7ec6e148b3e6783d8828aed3/Fonts/Lato/lato-v24-latin_latin-ext-regular.woff2",
+      "700": "/_assets/a70e717c7ec6e148b3e6783d8828aed3/Fonts/Lato/lato-v24-latin_latin-ext-700.woff2"
+    }
+  }
 }

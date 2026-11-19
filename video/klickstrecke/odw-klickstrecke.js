@@ -8,6 +8,12 @@
  *   src          Pfad zur daten.json einer Folge (relativ zur Seite). Bilder und Ton liegen relativ dazu.
  *   gestaltung   Name einer Gestaltungsvariante (Datei gestaltung/<name>.json neben diesem Skript),
  *                Standard: „odw".
+ *   basis        Nur bei eingebetteten Daten: Ordner mit bilder/ und ton/ (relativ zur Seite).
+ *   fuellen      Füllt die Höhe des Elternelements; nur der Text unter der Bühne scrollt.
+ *
+ * Statt über src und gestaltung können Daten und Gestaltung als
+ * <script type="application/json" data-odw="daten|gestaltung"> im Element stehen (TYPO3-Fassung:
+ * eine HTML-Datei je Folge, siehe baue-paket.py --typo3).
  *
  * Keine Abhängigkeiten, keine externen Dienste, keine Cookies. Schriften werden aus schriften/ neben
  * diesem Skript geladen. Shadow DOM hält die Stile der einbindenden Seite (TYPO3, WordPress) fern.
@@ -24,10 +30,14 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart
 function ladeSchriften(g) {
   for (const rolle of Object.values(g.schriften || {})) {
     for (const w of rolle.schnitte) {
-      const schluessel = `${rolle.paket}-${w}`;
+      // „dateien" nennt je Schnitt eine Adresse (z. B. die Schriftdateien der einbindenden Website);
+      // ohne sie kommen die Dateien aus schriften/ neben diesem Skript, ohne beides greift die Ersatzschrift.
+      const eigene = rolle.dateien && rolle.dateien[w];
+      if (!eigene && !rolle.paket) continue;
+      const schluessel = `${rolle.familie}-${w}`;
       if (geladeneSchriften.has(schluessel)) continue;
       geladeneSchriften.add(schluessel);
-      const url = new URL(`schriften/${rolle.paket}-latin-${w}-normal.woff2`, BASIS).href;
+      const url = eigene ? new URL(eigene, document.baseURI).href : new URL(`schriften/${rolle.paket}-latin-${w}-normal.woff2`, BASIS).href;
       // @font-face wirkt nur im Dokument, nicht im Shadow DOM — daher hier am Dokument anmelden.
       const f = new FontFace(rolle.familie, `url(${url}) format("woff2")`, { weight: String(w), style: 'normal', display: 'swap' });
       document.fonts.add(f);
@@ -40,7 +50,7 @@ function gestaltungsCss(g) {
   const v = [];
   for (const [k, x] of Object.entries(g.folie)) v.push(`--f-${k}:${x}`);
   for (const [k, x] of Object.entries(g.bedienung)) v.push(`--b-${k}:${x}`);
-  const fam = (r, ersatz) => `"${g.schriften[r].familie}", ${ersatz}`;
+  const fam = (r, ersatz) => (g.schriften[r] ? `"${g.schriften[r].familie}", ${ersatz}` : ersatz);
   v.push(`--s-anzeige:${fam('anzeige', 'system-ui, sans-serif')}`, `--s-text:${fam('text', 'system-ui, -apple-system, "Segoe UI", sans-serif')}`, `--s-mono:${fam('mono', 'ui-monospace, Menlo, Consolas, monospace')}`);
   return `:host{${v.join(';')}}`;
 }
@@ -86,7 +96,9 @@ const REIHE = ['Quick-Start: In fünf Minuten zum ersten offenen Datensatz', 'Wa
 
 function marke(g) {
   // Breite Wortmarken (Seitenverhältnis über 2:1) bekommen mehr Platz als ein Bildzeichen.
-  return g.logo ? `<img class="f-logo${g.logo_breit ? ' breit' : ''}" src="${esc(new URL('gestaltung/' + g.logo, BASIS).href)}" alt="${esc(g.marke)}">` : `<span class="f-wortmarke">${esc(g.marke)}</span>`;
+  // Eine eingebettete Gestaltung bringt das Logo als data:-Adresse mit.
+  const src = g.logo && (g.logo.startsWith('data:') ? g.logo : new URL('gestaltung/' + g.logo, BASIS).href);
+  return g.logo ? `<img class="f-logo${g.logo_breit ? ' breit' : ''}" src="${esc(src)}" alt="${esc(g.marke)}">` : `<span class="f-wortmarke">${esc(g.marke)}</span>`;
 }
 function titelFolie(f, g) {
   const [a, b] = f.folge === 0 ? ['Quick-Start', f.titel.replace(/^Quick-Start:\s*/, '')] : [`Folge ${f.folge}`, f.titel];
@@ -314,6 +326,12 @@ const CSS = `
 button, select { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--b-fokus); outline-offset: 2px; }
 .ks { display: grid; gap: 12px; }
+/* Attribut „fuellen": füllt die Höhe des Elternelements (z. B. eines iframe); Bühne und Knöpfe stehen
+   fest, nur der Text darunter scrollt. So bleibt die Höhe beim Szenenwechsel gleich. */
+:host([fuellen]) { height: 100%; }
+:host([fuellen]) .ks { height: 100%; display: flex; flex-direction: column; }
+:host([fuellen]) .ks > * { flex: none; }
+:host([fuellen]) .text { flex: 1 1 0; min-height: 0; overflow-y: auto; }
 .kopf { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
 .kopf .titel { font: 700 1.05rem/1.3 var(--s-anzeige); }
 .kopf select { border: 1px solid var(--b-linie); background: var(--b-grund); border-radius: 6px; padding: 6px 8px; max-width: 100%; }
@@ -471,12 +489,23 @@ class OdwKlickstrecke extends HTMLElement {
     this.halte();
     this.root.innerHTML = `<style>${CSS}</style><div class="meldung">Klickstrecke wird geladen …</div>`;
     let g, f, datenBasis;
+    // Gestaltung und Daten können als <script type="application/json" data-odw="…"> im Element
+    // stehen (eine HTML-Datei je Folge, ohne .json auf dem Server); Bilder und Ton liegen dann
+    // relativ zum Attribut „basis".
+    const eingebettet = (art) => {
+      const el = this.querySelector(`script[type="application/json"][data-odw="${art}"]`);
+      return el ? JSON.parse(el.textContent) : null;
+    };
     try {
       const name = (this.getAttribute('gestaltung') || 'odw').replace(/[^a-z0-9-]/gi, '');
-      g = await (await fetch(new URL(`gestaltung/${name}.json`, BASIS))).json();
-      const src = new URL(this.getAttribute('src') || 'daten.json', document.baseURI);
-      datenBasis = new URL('.', src);
-      f = await (await fetch(src)).json();
+      g = eingebettet('gestaltung') || await (await fetch(new URL(`gestaltung/${name}.json`, BASIS))).json();
+      f = eingebettet('daten');
+      if (f) datenBasis = new URL(this.getAttribute('basis') || '.', document.baseURI);
+      else {
+        const src = new URL(this.getAttribute('src') || 'daten.json', document.baseURI);
+        datenBasis = new URL('.', src);
+        f = await (await fetch(src)).json();
+      }
     } catch (e) {
       if (nr === this.ladeNr) this.root.innerHTML = `<style>${CSS}</style><div class="meldung">Die Klickstrecke konnte nicht geladen werden.</div>`;
       return;

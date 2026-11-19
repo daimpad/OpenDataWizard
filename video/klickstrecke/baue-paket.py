@@ -15,8 +15,14 @@ video/ausgabe/odw-tutorials/:
     beispiel.html               Testseite mit Umschalter für Folge und Gestaltung
     EINBINDEN.md                Anleitung für TYPO3 13
 
+Mit --typo3 entsteht zusätzlich video/ausgabe/datenatlas-typo3/: nur die Gestaltung „datenatlas",
+je Folge eine HTML-Datei mit Skript, Daten und Logo, daneben alle Bilder (.jpg) und Tonspuren (.mp3)
+in einem einzigen Ordner. Schriften kommen von der Datenatlas-Website (website_schriften in
+video/gestaltung/datenatlas.json). Für Server, die nur HTML, JPG und MP3 annehmen.
+
 Braucht Python 3 mit PyYAML und npm (lädt die Schriften als @fontsource-Pakete mit fester Version).
 """
+import base64
 import argparse
 import glob
 import json
@@ -175,11 +181,102 @@ def folge_paket(drehbuch, aufnahme, ton_quelle, ziel):
     return nr, drehbuch['titel'], sum(len(x['bilder']) for x in szenen), sum(1 for x in szenen if x['ton']), fehlende_bilder
 
 
+TYPO3_SEITE = """<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{titel}</title>
+<style>
+  html, body {{ margin: 0; background: #fff; }}
+  body {{ padding: 8px; }}
+  odw-klickstrecke {{ display: block; max-width: 1100px; margin: 0 auto; }}
+  /* Im iframe: das Fenster ganz füllen, nur der Text scrollt (Höhe bleibt beim Szenenwechsel gleich). */
+  .eingebettet, .eingebettet body {{ height: 100%; }}
+  .eingebettet body {{ padding: 0; }}
+  .eingebettet odw-klickstrecke {{ height: 100%; max-width: none; }}
+</style>
+</head>
+<body>
+<odw-klickstrecke>
+<script type="application/json" data-odw="gestaltung">{gestaltung}</script>
+<script type="application/json" data-odw="daten">{daten}</script>
+</odw-klickstrecke>
+<script type="module">
+if (window.top !== window.self) {{
+  document.documentElement.classList.add('eingebettet');
+  document.querySelector('odw-klickstrecke').setAttribute('fuellen', '');
+}}
+{skript}
+</script>
+</body>
+</html>
+"""
+
+
+def im_skript(text):
+    """Text für ein <script>-Element: </script darf darin nicht vorkommen (auch nicht in Kommentaren)."""
+    return re.sub(r'</(script)', r'<\\/\1', text, flags=re.I)
+
+
+def flacher_name(pfad):
+    """bilder/3.2-1.jpg → 3_2-1.jpg: ein Ordner für alles, Dateinamen ohne zusätzliche Punkte."""
+    stamm, endung = os.path.splitext(os.path.basename(pfad))
+    return stamm.replace('.', '_') + endung
+
+
+def typo3_paket(quelle, ziel):
+    """Fassung für TYPO3 (fileadmin): nur Datenatlas, je Folge eine HTML-Datei, Bilder und Ton flach."""
+    g = json.load(open(os.path.join(VIDEO, 'gestaltung', 'datenatlas.json'), encoding='utf-8'))
+    web = g.get('website_schriften', {})
+    schriften = {}
+    for rolle, s in g['schriften'].items():
+        s = {'familie': s['familie'], 'schnitte': s['schnitte']}
+        if rolle in web:
+            s['dateien'] = {str(w): web[rolle][str(w)] for w in s['schnitte'] if str(w) in web[rolle]}
+        schriften[rolle] = s   # ohne Datei (Mono): Ersatzschrift des Systems
+    logo = os.path.join(VIDEO, 'gestaltung', g['logo']) if g.get('logo') else None
+    if logo and os.path.exists(logo):
+        logo = 'data:image/svg+xml;base64,' + base64.b64encode(open(logo, 'rb').read()).decode('ascii')
+    else:
+        print('Hinweis: Logo des Datenatlas fehlt — die Folien zeigen den Namen als Schriftzug.')
+        logo = None
+    gestaltung = {k: g[k] for k in ('name', 'marke', 'namensnennung', 'folie', 'bedienung', 'logo_breit') if k in g}
+    gestaltung.update({'logo': logo, 'schriften': schriften})
+    skript = im_skript(open(os.path.join(quelle, 'odw-klickstrecke.js'), encoding='utf-8').read())
+
+    shutil.rmtree(ziel, ignore_errors=True)
+    os.makedirs(ziel)
+    gesehen = {}
+    for ordner in sorted(glob.glob(os.path.join(quelle, 'folge-*')), key=lambda p: int(p.rsplit('-', 1)[1])):
+        f = json.load(open(os.path.join(ordner, 'daten.json'), encoding='utf-8'))
+        for sz in f['szenen']:
+            for b in sz['bilder']:
+                b['datei'] = flacher_name(b['datei'])
+            if sz.get('ton'):
+                sz['ton'] = flacher_name(sz['ton'])
+            for pfad in [b['datei'] for b in sz['bilder']] + ([sz['ton']] if sz.get('ton') else []):
+                if pfad in gesehen:
+                    raise SystemExit(f'Dateiname doppelt: {pfad} ({gesehen[pfad]} und Folge {f["folge"]})')
+                gesehen[pfad] = f'Folge {f["folge"]}'
+        for unter in ('bilder', 'ton'):
+            for datei in glob.glob(os.path.join(ordner, unter, '*')):
+                shutil.copy(datei, os.path.join(ziel, flacher_name(datei)))
+        kopf = 'Quick-Start' if f['folge'] == 0 else f'Folge {f["folge"]}'
+        json_html = lambda x: im_skript(json.dumps(x, ensure_ascii=False, separators=(',', ':')))
+        seite = TYPO3_SEITE.format(titel=f'{kopf} · {f["titel"].replace("Quick-Start: ", "")} · Open Data Wizard',
+                                   gestaltung=json_html(gestaltung), daten=json_html(f), skript=skript)
+        open(os.path.join(ziel, f'folge-{f["folge"]}.html'), 'w', encoding='utf-8').write(seite)
+    shutil.copy(os.path.join(HIER, 'EINBINDEN-TYPO3.md'), os.path.join(ziel, 'EINBINDEN.md'))
+    print(f'TYPO3-Fassung: {ziel} ({len(glob.glob(os.path.join(ziel, "*.html")))} HTML-Dateien, {len(gesehen)} Bilder und Tonspuren)')
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--aufnahme', help='Ordner mit bilder/ und ergebnis.json der Aufnahme')
     ap.add_argument('--ton', help='Ordner mit ton/<folge>/<szene>.mp3')
     ap.add_argument('--ziel', default=os.path.join(VIDEO, 'ausgabe', 'odw-tutorials'))
+    ap.add_argument('--typo3', action='store_true', help='zusätzlich die TYPO3-Fassung (nur Datenatlas) bauen')
     args = ap.parse_args()
 
     ziel = args.ziel
@@ -198,6 +295,8 @@ def main():
         hinweis = f', {fehlend} Bilder fehlen' if fehlend else ''
         print(f'Folge {nr}: {titel} — {bilder} Bilder, {toene} Tonspuren{hinweis}')
     print(f'Paket: {ziel}')
+    if args.typo3:
+        typo3_paket(ziel, os.path.join(VIDEO, 'ausgabe', 'datenatlas-typo3'))
 
 
 if __name__ == '__main__':
