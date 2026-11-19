@@ -100,3 +100,8 @@ Kapitel die zehn Sekunden erreichen, die YouTube verlangt. Kürzere Kapitel dazw
 folgenden zusammengelegt. Neben dem Video entstehen in `video/ausgabe/videos/`: Untertitel (`.vtt`, aus
 den Sprechtexten), Kapitelmarken, Titel und Beschreibung für YouTube und ein Vorschaubild. Voraussetzung
 ist das mit `--ton` gebaute Paket; ein Lauf dauert etwa so lange wie die Folge.
+
+`python3 video/schnitt/baue-typo3.py` macht aus den Videos der Gestaltung „datenatlas“ die TYPO3-Fassung
+in `video/ausgabe/datenatlas-typo3-videos/`: je Folge eine HTML-Seite mit Video, eingebetteten
+Untertiteln und Kapitelliste, daneben MP4 und Vorschaubild, alles in einem Ordner. Anleitung wie bei den
+Klickstrecken: `klickstrecke/EINBINDEN-TYPO3.md`.
