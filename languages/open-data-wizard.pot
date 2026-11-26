@@ -180,7 +180,7 @@ msgstr ""
 msgid "Catalog-Endpoint (REST API)"
 msgstr ""
 
-msgid "Cleared %d transient cache(s)."
+msgid "Zwischengespeicherte Antworten gelöscht: %d"
 msgstr ""
 
 msgid "DCAT-AP 3.0 Pflichtfelder"
@@ -681,9 +681,6 @@ msgstr ""
 msgid "Offene Daten zu veröffentlichen ist schwieriger als es sein müsste. Komplexe Formulare und unbekannte Fachbegriffe erschweren die Arbeit. Der Open Data Wizard vereinfacht dies, indem er Sie mit verständlichen Fragen durch den Prozess führt."
 msgstr ""
 
-msgid "Open Data Wizard"
-msgstr ""
-
 msgid "Open Data Wizard erfolgreich installiert!"
 msgstr ""
 
@@ -754,7 +751,10 @@ msgstr ""
 msgid "REST-Endpoint öffnen"
 msgstr ""
 
-msgid "Recalculated quality scores for %d dataset(s)."
+msgid "Datensätze mit neu berechneter Qualität: %d"
+msgstr ""
+
+msgid "Qualität wird neu berechnet"
 msgstr ""
 
 msgid "Region aus der Liste wählen (mit GeoNames verknüpft) oder Freitext/URI eingeben. Beispiel: Deutschland, Bayern, Berlin"
@@ -1925,4 +1925,10 @@ msgstr ""
 
 #, php-format
 msgid "Zum Ausprobieren können Sie %d vollständig ausgefüllte, frei erfundene Datensätze laden (Musterstadt, Musterkreis, Musterland). Sie erscheinen in keinem Harvest-Endpunkt, und im Datenkatalog auf der Website sieht sie nur, wer angemeldet ist und Datensätze bearbeiten darf. Mit einem Klick sind sie wieder entfernt."
+msgstr ""
+
+msgid "Auswählen…"
+msgstr ""
+
+msgid "Keine passenden Optionen"
 msgstr ""

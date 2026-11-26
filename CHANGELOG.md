@@ -19,6 +19,144 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.9] — 2026-11-16
+
+### 🌍 i18n
+- **WP-CLI meldet sich durchgehend auf Deutsch.** `wp open-data-wizard quality recalculate` und
+  `cache clear` meldeten sich als einzige Befehle auf Englisch („Recalculated quality scores …“,
+  „Cleared … transient cache(s).“), obwohl die Quellsprache des Plugins Deutsch ist. Sie melden
+  jetzt „Datensätze mit neu berechneter Qualität: 45“ und „Zwischengespeicherte Antworten
+  gelöscht: 4“; auch die Fortschrittsanzeige und die Hilfetexte sind deutsch. Auf en_US-
+  Installationen bleibt der englische Wortlaut über die Übersetzung erhalten. Ein Unit-Test prüft
+  die Meldung von `cache clear`.
+
+---
+
+## [2.47.8] — 2026-11-16
+
+### 🐛 Fixed
+- **Batch-Import meldet sein Ergebnis.** Nach „Jetzt importieren“ verschwand auf der Seite
+  „Batch-Import“ der ganze Import-Abschnitt — und mit ihm die Fortschrittsanzeige, die Meldung
+  „Import abgeschlossen!“ mit der Zahl der angelegten Entwürfe und der Link „Zur Datensatzliste“.
+  Die Datensätze wurden angelegt, die Seite zeigte davon aber nichts. Jetzt werden nur die
+  Knöpfe ausgeblendet; eine neue Vorschau nach einem Import beginnt wieder bei den Knöpfen.
+  Ein End-to-End-Test deckt den Weg von der Vorschau bis zur Meldung ab.
+
+---
+
+## [2.47.7] — 2026-11-16
+
+### 🐛 Fixed
+- **Kalender der Datumsfelder auf Deutsch.** In einem deutschen WordPress zeigten die
+  Datumsfelder (Erstveröffentlichung, Zeitraum von/bis) englische Monate und Wochentage und das
+  Datum als „15 Jan 2016“. Ein eingetipptes Datum las der Kalender im englischen Anzeigeformat und
+  speicherte dadurch unter Umständen ein falsches Datum. Ursache war die Ladereihenfolge:
+  `odw-datepicker-de.js` meldete „de“ erst an, sobald `window.flatpickr` bereitstand, oft nachdem
+  Carbon Fields die Kalender schon angelegt hatte (Konsole: „invalid locale de“); die nachträgliche
+  Umstellung suchte die Kalender an `<input>`-Elementen, Carbon Fields hängt sie aber an
+  `div.cf-datetime__inner`. Ob es auffiel, hing vom Timing ab — der E2E-Test sah den deutschen
+  Kalender. Die Datumsfelder bekommen die deutschen Namen jetzt direkt als Sprachobjekt in ihren
+  Optionen und zeigen das Datum als TT.MM.JJJJ; gespeichert wird weiter JJJJ-MM-TT.
+  `assets/js/odw-datepicker-de.js` entfällt.
+
+---
+
+## [2.47.6] — 2026-11-16
+
+### 🐛 Fixed
+- **Dateigröße beim Upload in die Metadaten.** Wird die Datei eines Datensatzes in die
+  Mediathek hochgeladen, übernahm das Plugin beim Speichern Zugriffs-URL und Format, die
+  Dateigröße aber nur für den Download-Button der Datensatz-Karte (`_odw_file_size`), nicht als
+  `dcat:byteSize` in die Metadaten. Jetzt steht sie auch dort und im Feld „Dateigröße“.
+  Eine von Hand eingetragene Größe bleibt unverändert; wird die Datei ersetzt, bringt sie ihre
+  eigene Größe mit, sofern die bisherige ebenfalls aus der Datei stammte.
+
+---
+
+## [2.47.5] — 2026-11-06
+
+### 🐛 Fixed
+- **Carbon-Fields-Bedienelemente auf Deutsch.** Im Formular standen auch in einem deutschen
+  WordPress englische Texte von Carbon Fields: „There are no entries yet.“ und
+  „Add Distribution“ im Wiederholungsfeld „Weitere Distributionen“ (ebenso bei den
+  Übersetzungs-Wiederholungsfeldern in Tab 2), „Select Date“ am Datumsfeld, „No options.“,
+  „Collapse All“ u. a. Zwei Ursachen:
+  - Carbon Fields 3.6.11 bringt für seine Oberflächen-Domain `carbon-fields-ui` keine deutsche
+    Datei mit. Das Plugin liefert sie jetzt selbst aus
+    (`languages/carbon-fields-ui-de_DE.po`/`.mo`, Anrede „Sie“), nicht in `vendor/`.
+  - Carbon Fields gibt seine UI-Übersetzungen nicht über `wp_set_script_translations()` weiter,
+    sondern über `wp_localize_script()` als `cf.config.locale`, das die Oberfläche an
+    `setLocaleData()` übergibt. Seit WordPress 6.5 liefert
+    `get_translations_for_domain()->entries` dafür eine Liste statt einer nach msgid
+    geschlüsselten Tabelle; Carbon Fields übernimmt die Listenindizes als msgids, und keine
+    Übersetzung erreicht die Oberfläche — auch die mitgelieferten (z. B. fr_FR) nicht. Die neue
+    Klasse `ODW_Carbon_Fields_L10n` baut die Daten im Filter `carbon_fields_config` korrekt
+    geschlüsselt neu auf und lädt für alle deutschen Locales (de_DE, de_DE_formal, de_AT, de_CH …)
+    die gebündelte Datei.
+- **Mehrfachauswahl (Themen, Engagementfelder):** Platzhalter „Select...“ und die Meldung
+  „No options“ im Aufklappmenü sind feste Vorgaben der Bibliothek react-select und laufen durch
+  keine Textdomain. `assets/js/odw-carbon-fields-l10n.js` ersetzt sie durch „Auswählen…“ und
+  „Keine passenden Optionen“ (über die Plugin-Domain; en_US erhält das englische Original).
+- **„Datum wählen“ statt „Select Date“:** Der Button am Datumsfeld kommt jetzt regulär aus der
+  Übersetzung. Der bisherige Tausch in `odw-datepicker-de.js` suchte „Select Date“ als
+  Platzhalter des Eingabefelds — es ist aber die Beschriftung eines Buttons, der Tausch blieb
+  deshalb wirkungslos und ist entfallen.
+- **Kalender auf englischen Installationen englisch.** Die Datumsfelder stellten flatpickr fest
+  auf `locale: 'de'`, und `odw-datepicker-de.js` lud die deutsche Sprachdatei für jede Locale —
+  auf en_US standen deutsche Monats- und Wochentagsnamen neben englischen Beschriftungen. Die
+  Kalendersprache folgt jetzt der Oberfläche (`ODW_Fields::date_picker_options()`: `de` bei
+  deutscher Locale, sonst `default`), und die Sprachdatei wird nur für deutsche Locales geladen.
+
+### 🧪 Tests
+- `tests/test-carbon-fields-l10n.php`: Schlüsselbildung mit WP_Translations (nur `__get()`,
+  Liste) und älteren Übersetzungsobjekten, Laden nur bei deutscher Locale, gebündelte `.mo`
+  passend zur `.po`, Kalendersprache je Locale.
+- E2E (`admin-workflow.spec.js`): Das deutsche Formular zeigt „Noch keine Einträge vorhanden.“,
+  „Distribution hinzufügen“, „Datum wählen“ und deutsche Wochentage im Kalender, aber keinen der
+  englischen Texte.
+
+---
+
+## [2.47.4] — 2026-11-06
+
+### 🔧 Changed
+- **Der Menüpunkt im WordPress-Backend heißt jetzt „Datenkatalog"** statt „Open Data Wizard"
+  (englisch: „Data catalogue"). Die Untermenüs bleiben gleich. README und CLAUDE.md nennen den
+  Pfad entsprechend („Datenkatalog → Einstellungen" usw.); die Doku sprach bisher von
+  „Datensätze → …", einem Menünamen, den es nie gab. Screenshots von Datensatzliste und
+  Formular neu aufgenommen. E2E-Test sichert den Namen ab.
+
+---
+
+## [2.47.3] — 2026-11-06
+
+### 🐛 Fixed
+- **Die JSON-LD-Ansicht in Tab 5 „Vorschau" fehlte bei jedem Datensatz.** Das HTML des Reiters
+  entstand bei der Feldregistrierung, bevor WordPress den bearbeiteten Datensatz kennt:
+  `get_the_ID()` lieferte dort `false`, und unter dem Hinweis „Die JSON-LD-Ansicht unten zeigt
+  das zuletzt gespeicherte Ergebnis" standen weder das JSON-LD noch der Button
+  „REST-Endpoint öffnen". Carbon Fields bekommt jetzt einen Callback, der erst beim Rendern
+  läuft. Neuer E2E-Test in `admin-workflow.spec.js`.
+- **Lange Zeilen sprengen das Formular nicht mehr.** Das `<fieldset>` von Carbon Fields hat ab
+  Werk `min-width: min-content`; die nun sichtbare JSON-LD-Ansicht schob den ganzen Kasten über
+  den rechten Rand, statt im Code-Block zu scrollen (`assets/css/admin.css`, Block
+  `FORMULAR-DESIGN`).
+- **Live-Vorschau mit Klartext:** Die Zusammenfassung zeigte beim Thema die EU-URI
+  (`http://publications.europa.eu/…/data-theme/ENVI`) statt „Umwelt" und die Dateigröße in Bytes.
+  Sie nennt jetzt die Beschriftungen der Mehrfachauswahl und die Größe wie die Download-Card
+  („15 MB") und liest die Werte beim Wechsel des Reiters neu ein — die Mehrfachauswahl meldet
+  Änderungen nicht über `input`/`change`.
+- **Beispieldaten:** Zwei Datensätze („Radverkehrszählstellen", „Ladesäulen") trugen den
+  HVD-Code `c_b79e35eb` als Schlagwort; im Katalog erschien er als Filterwert und Badge. Jetzt
+  „Mobilität". `test-batch-import.php` lässt keine Vokabular-Codes als Schlagworte mehr durch.
+
+### 📝 Docs
+- **Screenshots im README** (`docs/screenshots/`, nicht im Plugin-ZIP): Formular, Datenkatalog mit
+  Filtern und Detailansicht, Datensatzliste, Vorschau, Qualitätsprüfung und Batch-Import —
+  aufgenommen in einem deutschen WordPress mit den mitgelieferten Beispieldaten.
+
+---
+
 ## [2.47.2] — 2026-11-03
 
 ### 🐛 Fixed

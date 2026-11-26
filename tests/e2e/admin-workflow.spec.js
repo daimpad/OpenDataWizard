@@ -46,6 +46,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Datensatzliste', () => {
+  test('der Menüpunkt heißt „Datenkatalog"', async ({ page }) => {
+    await page.goto(LIST_URL);
+
+    await expect(page.locator('#menu-posts-odw_dataset .wp-menu-name')).toHaveText('Datenkatalog');
+  });
+
   test('zeigt die Datensätze mit allen Zusatzspalten', async ({ page }) => {
     await page.goto(LIST_URL);
 
@@ -235,6 +241,27 @@ test.describe('Formular', () => {
     );
   });
 
+  // Bis 2.47.2 entstand das HTML dieses Reiters schon bei der Feldregistrierung,
+  // bevor WordPress den Datensatz kannte: JSON-LD und REST-Link fehlten immer,
+  // nur der Hinweis „Die JSON-LD-Ansicht unten …" stand da.
+  test('die Vorschau zeigt das gespeicherte JSON-LD und den REST-Link', async ({ page }) => {
+    await page.goto(LIST_URL);
+    await page.locator('#the-list a.row-title', { hasText: 'E2E: Schulstandorte' }).click();
+
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Vorschau' }).click();
+
+    const code = page.locator('#odw-jsonld-preview pre.odw-jsonld-code');
+    await expect(code).toBeVisible();
+    await expect(code).toContainText('"@type": "dcat:Dataset"');
+    await expect(code).toContainText('E2E: Schulstandorte');
+    await expect(page.getByRole('link', { name: 'REST-Endpoint öffnen' })).toHaveAttribute('href', /datenatlas\/v1\/datasets\/\d+/);
+
+    // Die Zusammenfassung nennt das Thema beim Namen, nicht als EU-URI.
+    const card = page.locator('[data-odw-live-card]');
+    await expect(card).toContainText('Bildung');
+    await expect(card).not.toContainText('publications.europa.eu');
+  });
+
   test('wechselt auf den zweiten Reiter', async ({ page }) => {
     await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
 
@@ -242,6 +269,43 @@ test.describe('Formular', () => {
 
     await expect(page.locator('.cf-container__tabs-item--current')).toContainText('Sprache');
     await expect(page.locator(cfField('odw_language'))).toBeVisible();
+  });
+
+  test('Bedienelemente von Carbon Fields sprechen Deutsch', async ({ page }) => {
+    await page.goto('/wp-admin/post-new.php?post_type=odw_dataset');
+
+    // Die Texte stammen aus der Oberfläche von Carbon Fields (Domain
+    // carbon-fields-ui), nicht aus dem Plugin. Sie kommen über
+    // ODW_Carbon_Fields_L10n und languages/carbon-fields-ui-de_DE.mo an; ohne
+    // beides stand hier „There are no entries yet." und „Add Distribution".
+
+    // Mehrfachauswahl in Tab 1 (aktiv): Platzhalter von react-select.
+    const themen = page.locator('.cf-field.cf-multiselect', { hasText: 'Welchen Themen' });
+    await expect(themen.locator('.cf-multiselect__placeholder')).toHaveText('Auswählen…');
+
+    // Wiederholungsfeld in Tab 3: Leerzustand und Hinzufügen-Button.
+    await page.locator('.cf-container__tabs-item button', { hasText: 'Datenbereitstellung' }).click();
+    const weitere = page.locator('.cf-field.cf-complex', { hasText: 'Weitere Distributionen' });
+    await expect(weitere.locator('.cf-complex__placeholder-label')).toHaveText('Noch keine Einträge vorhanden.');
+    await expect(weitere.locator('.cf-complex__inserter-button')).toHaveText('Distribution hinzufügen');
+
+    // Datumsfeld: Beschriftung des Kalender-Buttons. Ohne Sichtbarkeitsprüfung,
+    // weil das Feld in einer aufklappbaren Gruppe stehen kann — es geht um den
+    // Text, und Carbon Fields rendert alle Reiter ins DOM.
+    const zeitraum = page.locator('.cf-field', { has: page.locator(cfField('odw_temporal_start')) });
+    await expect(zeitraum.locator('.cf-datetime__button')).toHaveText('Datum wählen');
+
+    // Kalender (flatpickr, `static: true` — liegt im Feld): deutsche Wochentage,
+    // Woche beginnt am Montag. Die Kalendersprache folgt seit v2.47.5 der
+    // Locale (ODW_Fields::date_picker_options()); auf en_US bleibt sie englisch.
+    await expect(zeitraum.locator('.flatpickr-weekday').first()).toHaveText(/^\s*Mo\s*$/);
+
+    // Erst nach den positiven Zusicherungen: Vorher wäre ein noch nicht
+    // gerendertes Formular ebenfalls „frei von englischen Texten".
+    const formular = page.locator('#poststuff');
+    for (const englisch of ['There are no entries yet', 'Add Distribution', 'Select Date', 'Select...', 'No options']) {
+      await expect(formular).not.toContainText(englisch);
+    }
   });
 
   test('blockt die Veröffentlichung ohne Pflichtangaben und benennt die Felder', async ({ page }) => {
@@ -295,6 +359,35 @@ test.describe('Plugin-Seiten', () => {
     const notice = page.locator('.wrap .notice').filter({ hasText: 'Geprüft wurde' });
     await expect(notice).toBeVisible();
     await expect(notice).toContainText('datenatlas/v1/catalog');
+  });
+
+  test('Batch-Import: Vorschau benennt die Fehlerzeile, der Import meldet sein Ergebnis', async ({ page }) => {
+    // Zwei Zeilen, die zweite ohne Lizenz. Eindeutige Titel, damit der Lauf
+    // nichts voraussetzt, was andere Tests anlegen.
+    const marke = `E2E-Import ${Date.now()}`;
+    const csv = [
+      '"title","publisher","description","access_url","license"',
+      `"${marke} gültig","E2E","Zeile mit allen Pflichtangaben.","https://example.org/e2e.csv","cc-by"`,
+      `"${marke} ohne Lizenz","E2E","Zeile ohne Lizenz.","https://example.org/e2e-2.csv",""`,
+    ].join('\n');
+
+    await page.goto(`${LIST_URL}&page=odw-batch-import`);
+    await page.setInputFiles('#odw-import-file', { name: 'e2e-import.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+    await page.locator('#odw-preview-btn').click();
+
+    await expect(page.locator('#odw-preview-rows tr')).toHaveCount(1);
+    await expect(page.locator('#odw-errors-list')).toContainText('Pflichtfeld "license" fehlt');
+
+    await page.locator('#odw-import-btn').click();
+
+    // Bis v2.47.7 blendete der Klick den ganzen Abschnitt aus — samt dieser Meldung.
+    const ergebnis = page.locator('#odw-import-result');
+    await expect(ergebnis).toBeVisible();
+    await expect(ergebnis).toContainText('Import abgeschlossen!');
+    await expect(page.locator('#odw-import-result-created')).toHaveText('1');
+    await ergebnis.getByRole('link', { name: 'Zur Datensatzliste' }).click();
+
+    await expect(page.locator('table.wp-list-table tbody')).toContainText(`${marke} gültig`);
   });
 
   test('Einstellungsseite zeigt die Harvest-URLs', async ({ page }) => {

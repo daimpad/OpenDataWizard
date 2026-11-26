@@ -1297,7 +1297,7 @@ input.odw-cessda-input,
    Dieser Block hängt an Klassennamen von Carbon Fields und ist damit die
    Stelle, die nach einem CF-Update zu prüfen ist. Betroffen sind:
 
-     .cf-container__tab
+     .cf-container__tab, .cf-container__fields, .carbon-box fieldset
      .cf-field, .cf-field__head, .cf-field__label, .cf-field__body,
      .cf-field__help
      .cf-complex, .cf-complex__group, .cf-complex__group-head,
@@ -1331,6 +1331,17 @@ input.odw-cessda-input,
 
 .cf-container__tab > * {
 	grid-column: 1 / -1;
+	min-width: 0;
+}
+
+/* Breiter Inhalt darf das Formular nicht aufspannen. Das <fieldset> um den
+ * Container hat ab Werk `min-width: min-content`, die Flex-Kinder darunter
+ * `min-width: auto` — die längste Zeile der JSON-LD-Ansicht in Tab 5 schob
+ * so den ganzen Kasten über den Rand hinaus, statt im Code-Block zu
+ * scrollen. */
+.postbox.carbon-box fieldset,
+.cf-container__fields,
+.cf-container__fields > .cf-field {
 	min-width: 0;
 }
 

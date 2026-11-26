@@ -453,12 +453,23 @@ class ODW_Admin {
 				)
 			);
 
+			// Deutsche Monats- und Wochentagsnamen bringen die Datumsfelder selbst
+			// mit (ODW_Fields::date_picker_options()). Das frühere Skript dafür kam
+			// je nach Ladereihenfolge zu spät (siehe dort).
+
+			// Platzhalter und Leermeldung der Mehrfachauswahl (react-select).
+			// Die übrigen Carbon-Fields-Texte kommen über ODW_Carbon_Fields_L10n.
 			wp_enqueue_script(
-				'odw-datepicker-de',
-				ODW_PLUGIN_URL . 'assets/js/odw-datepicker-de.js',
+				'odw-carbon-fields-l10n',
+				ODW_PLUGIN_URL . 'assets/js/odw-carbon-fields-l10n.js',
 				array(),
 				ODW_VERSION,
 				true
+			);
+			wp_localize_script(
+				'odw-carbon-fields-l10n',
+				'odwCarbonFieldsL10n',
+				array( 'reactSelect' => ODW_Carbon_Fields_L10n::react_select_strings() )
 			);
 
 			global $post;
@@ -596,9 +607,12 @@ class ODW_Admin {
 
 		if ( $file_id > 0 ) {
 			$ext       = '';
+			$size      = 0;
+			$old_size  = (string) get_post_meta( $post_id, '_odw_file_size', true );
 			$file_path = get_attached_file( $file_id );
 			if ( $file_path && file_exists( $file_path ) ) {
-				update_post_meta( $post_id, '_odw_file_size', (int) filesize( $file_path ) );
+				$size = (int) filesize( $file_path );
+				update_post_meta( $post_id, '_odw_file_size', $size );
 				$ext = strtoupper( (string) pathinfo( $file_path, PATHINFO_EXTENSION ) );
 				update_post_meta( $post_id, '_odw_file_format', $ext );
 			}
@@ -620,6 +634,17 @@ class ODW_Admin {
 				if ( '' !== $format_key ) {
 					update_post_meta( $post_id, '_odw_format', $format_key );
 				}
+			}
+
+			// Ebenso die Dateigröße (dcat:byteSize). Bis v2.47.5 landete sie nur
+			// in _odw_file_size für den Download-Button der Karte, nicht in den
+			// Metadaten. Überschrieben wird nur ein leeres Feld oder ein Wert, den
+			// das Plugin selbst aus der vorigen Datei übernommen hat — eine von
+			// Hand eingetragene Größe bleibt stehen, eine ersetzte Datei bringt
+			// ihre eigene Größe mit.
+			$byte_size = trim( (string) get_post_meta( $post_id, '_odw_byte_size', true ) );
+			if ( $size > 0 && ( '' === $byte_size || $byte_size === $old_size ) ) {
+				update_post_meta( $post_id, '_odw_byte_size', (string) $size );
 			}
 		} else {
 			delete_post_meta( $post_id, '_odw_file_size' );
@@ -1045,6 +1070,9 @@ class ODW_Admin {
 								previewData = response.data.records;
 								displayPreview(response.data);
 								$('#odw-preview-content').show();
+								// Nach einem vorangegangenen Import wieder bei den Knöpfen beginnen.
+								$('#odw-import-ready').show();
+								$('#odw-import-progress, #odw-import-result').hide();
 								$('#odw-import-section').show();
 							} else {
 								$('#odw-preview-error').text(response.data.error).show();
@@ -1099,7 +1127,10 @@ class ODW_Admin {
 						return;
 					}
 
-					$('#odw-import-section').hide();
+					// Nur die Knöpfe ausblenden: Fortschritt und Ergebnis liegen im selben
+					// Abschnitt. Bis v2.47.7 verschwand hier der ganze Abschnitt, und nach
+					// dem Import erschien weder „Import abgeschlossen!" noch der Link zur Liste.
+					$('#odw-import-ready').hide();
 					$('#odw-import-progress').show();
 
 					var records = selected.map(function(idx) {

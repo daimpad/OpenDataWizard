@@ -390,12 +390,7 @@ class ODW_Fields {
 					// beisammen — unter „Inhaltliche Angaben" war das Datum fehl am Platz.
 					Field::make( 'date', 'odw_issued', __( 'Wann wurden diese Daten zum ersten Mal veröffentlicht?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'VERÖFFENTLICHUNGSDATUM (dct:issued)', 'open-data-wizard' ) ),
 
 					// Das Änderungsdatum (dct:modified) hat kein Eingabefeld mehr:
@@ -439,22 +434,12 @@ class ODW_Fields {
 
 					Field::make( 'date', 'odw_temporal_start', __( 'Ab wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'ZEITLICHER BEZUG — START (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'date', 'odw_temporal_end', __( 'Bis wann reicht der Zeitraum, den die Daten abdecken?', 'open-data-wizard' ) )
 						->set_storage_format( 'Y-m-d' )
-						->set_picker_options(
-							array(
-								'dateFormat' => 'Y-m-d',
-								'locale'     => 'de',
-							)
-						)
+						->set_picker_options( self::date_picker_options() )
 						->set_help_text( __( 'ZEITLICHER BEZUG — ENDE (dct:temporal)', 'open-data-wizard' ) ),
 
 					Field::make( 'html', 'odw_ext_hint_contact' )
@@ -646,8 +631,13 @@ class ODW_Fields {
 			->add_tab(
 				__( '5 — Vorschau', 'open-data-wizard' ),
 				array(
+					// Als Callback, nicht als fertiger String: Die Felder werden
+					// registriert, bevor WordPress den bearbeiteten Datensatz
+					// kennt — get_the_ID() liefert dort false, und die
+					// JSON-LD-Ansicht samt REST-Link fehlte bei jedem Datensatz.
+					// Carbon Fields ruft den Callback erst beim Rendern auf.
 					Field::make( 'html', 'odw_preview_html' )
-					->set_html( self::get_preview_html() ),
+					->set_html( static fn (): string => self::get_preview_html() ),
 
 					Field::make( 'html', 'odw_datenatlas_publish' )
 					->set_html(
@@ -1009,6 +999,57 @@ class ODW_Fields {
 		);
 
 		return (array) apply_filters( 'odw_license_descriptions', $descriptions );
+	}
+
+	/**
+	 * Optionen für den Kalender (flatpickr) der Datumsfelder.
+	 *
+	 * Die Sprache folgt der Oberfläche: Deutsch nur bei deutscher Locale, sonst
+	 * das englische Original („default").
+	 *
+	 * Die deutsche Sprache geht als vollständiges Sprachobjekt mit, nicht als
+	 * Kürzel „de". Bis v2.47.6 meldete ein eigenes Skript „de" erst an, sobald
+	 * `window.flatpickr` bereitstand (Abfrage alle 50 ms) — oft erst, nachdem
+	 * Carbon Fields die Kalender schon angelegt hatte. Die fielen dann mit
+	 * „invalid locale de" auf Englisch zurück, und die nachträgliche Umstellung
+	 * suchte die Kalender an `<input>`-Elementen, während Carbon Fields sie an
+	 * `div.cf-datetime__inner` hängt. Mit dem Sprachobjekt in den Optionen gibt
+	 * es keine Reihenfolge mehr, die schiefgehen kann.
+	 *
+	 * Angezeigt wird das Datum als TT.MM.JJJJ; Carbon Fields' Vorgabe „j M Y"
+	 * ergäbe „15 Jan 2016", und ein getipptes Datum liest flatpickr im
+	 * Anzeigeformat. Gespeichert wird weiter JJJJ-MM-TT.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function date_picker_options(): array {
+		if ( ! ODW_Carbon_Fields_L10n::is_german_locale() ) {
+			return array(
+				'dateFormat' => 'Y-m-d',
+				'locale'     => 'default',
+			);
+		}
+
+		return array(
+			'dateFormat' => 'Y-m-d',
+			'altFormat'  => 'd.m.Y',
+			'locale'     => array(
+				'weekdays'         => array(
+					'shorthand' => array( 'So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa' ),
+					'longhand'  => array( 'Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag' ),
+				),
+				'months'           => array(
+					'shorthand' => array( 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez' ),
+					'longhand'  => array( 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember' ),
+				),
+				'firstDayOfWeek'   => 1,
+				'weekAbbreviation' => 'KW',
+				'rangeSeparator'   => ' bis ',
+				'scrollTitle'      => 'Zum Ändern scrollen',
+				'toggleTitle'      => 'Zum Umschalten klicken',
+				'time_24hr'        => true,
+			),
+		);
 	}
 
 	/**

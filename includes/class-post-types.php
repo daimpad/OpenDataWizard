@@ -39,7 +39,7 @@ class ODW_Post_Types {
 		$labels = array(
 			'name'                  => _x( 'Datensätze', 'Post Type General Name', 'open-data-wizard' ),
 			'singular_name'         => _x( 'Datensatz', 'Post Type Singular Name', 'open-data-wizard' ),
-			'menu_name'             => __( 'Open Data Wizard', 'open-data-wizard' ),
+			'menu_name'             => __( 'Datenkatalog', 'open-data-wizard' ),
 			'name_admin_bar'        => __( 'Datensatz', 'open-data-wizard' ),
 			'add_new'               => __( 'Neuen Datensatz anlegen', 'open-data-wizard' ),
 			'add_new_item'          => __( 'Neuen Datensatz anlegen', 'open-data-wizard' ),
