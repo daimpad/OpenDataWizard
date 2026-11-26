@@ -482,7 +482,7 @@ save_timestamp(now())
 
 ## Support & Issues
 
-- **Bug Report:** [GitHub Issues](https://github.com/daimpad/OpenDataWizard/issues)
+- **Bug Report:** [GitHub Issues](https://github.com/bertelsmannstift/OpenDataWizard/issues)
 - **API Question:** Create a GitHub Discussion
 - **Security Issue:** See [SECURITY.md](./SECURITY.md)
 

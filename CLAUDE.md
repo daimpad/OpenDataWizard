@@ -9,7 +9,7 @@ Umfassende Dokumentation für die Fortentwicklung des Open Data Wizard WordPress
 ### Installation & Setup
 ```bash
 # Clone und Dependencies installieren
-git clone https://github.com/daimpad/OpenDataWizard.git
+git clone https://github.com/bertelsmannstift/OpenDataWizard.git
 cd OpenDataWizard
 composer install   # PFLICHT: erzeugt vendor/ (nicht im Repo)
 
@@ -844,7 +844,7 @@ Update **both** locations:
 - MINOR: New features (backward-compatible)
 - PATCH: Bug fixes only
 
-Current: **v2.47.9**
+Current: **v2.47.10**
 
 ---
 
@@ -999,6 +999,6 @@ Neue technische Festlegungen gehören dorthin, nicht in README oder CLAUDE.md.
 
 ---
 
-**Zuletzt aktualisiert**: Version 2.47.9 (November 2026)
+**Zuletzt aktualisiert**: Version 2.47.10 (November 2026)
 **Autor**: Open Data Wizard Team (nozilla)
 **License**: GPL-2.0-or-later

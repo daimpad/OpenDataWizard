@@ -5,8 +5,8 @@
 <h1 align="center">Open Data Wizard</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/github/license/daimpad/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
-  <img src="https://img.shields.io/badge/Version-2.47.9-03FF9A?style=flat-square&labelColor=101010" alt="Version">
+  <img src="https://img.shields.io/github/license/bertelsmannstift/OpenDataWizard?style=flat-square&color=03FF9A&labelColor=101010&label=Lizenz" alt="Lizenz">
+  <img src="https://img.shields.io/badge/Version-2.47.10-03FF9A?style=flat-square&labelColor=101010" alt="Version">
   <img src="https://img.shields.io/badge/DCAT--AP-3.0-03FF9A?style=flat-square&labelColor=101010" alt="DCAT-AP 3.0">
   <img src="https://img.shields.io/badge/PHP-%3E%3D%208.1-03FF9A?style=flat-square&labelColor=101010&logo=php&logoColor=white" alt="PHP >= 8.1">
   <img src="https://img.shields.io/badge/WordPress-6.4%2B-03FF9A?style=flat-square&labelColor=101010&logo=wordpress&logoColor=white" alt="WordPress 6.4+">
@@ -515,7 +515,7 @@ Eine ehrliche Abgrenzung hilft bei der Einordnung:
 
 ### Für Anwender:innen
 
-1. ZIP-Datei aus den [Releases](https://github.com/daimpad/OpenDataWizard/releases/latest) herunterladen
+1. ZIP-Datei aus den [Releases](https://github.com/bertelsmannstift/OpenDataWizard/releases/latest) herunterladen
 2. Im WordPress-Backend: **Plugins → Installieren → Plugin hochladen**
 3. Plugin aktivieren
 
@@ -550,7 +550,7 @@ Quellarchiv statt über die GitHub-API und braucht deshalb weder Zugriffstoken n
 ### Für Entwickler:innen
 
 ```bash
-git clone https://github.com/daimpad/OpenDataWizard.git
+git clone https://github.com/bertelsmannstift/OpenDataWizard.git
 cd OpenDataWizard
 composer install   # erzeugt vendor/ (Carbon Fields + PHPStan, WPCS, PHPUnit)
 ```
@@ -645,7 +645,7 @@ Neue technische Festlegungen gehören in dieses Dokument (nicht in die anwendero
 
 Beiträge sind willkommen — ob Fehlermeldungen, Verbesserungsvorschläge oder Pull Requests.
 
-Bitte öffne zunächst ein [Issue](https://github.com/daimpad/OpenDataWizard/issues), bevor du größere Änderungen einreichst.
+Bitte öffne zunächst ein [Issue](https://github.com/bertelsmannstift/OpenDataWizard/issues), bevor du größere Änderungen einreichst.
 
 ---
 

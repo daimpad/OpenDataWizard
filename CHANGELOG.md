@@ -7,6 +7,22 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [2.47.10] — 2026-11-26
+
+### 🔧 Changed
+- **Neue Repository-Adresse.** Das Repository liegt jetzt unter
+  `https://github.com/bertelsmannstift/OpenDataWizard` (zuvor `daimpad/OpenDataWizard`; die alte
+  Adresse leitet weiter). Umgestellt sind der Plugin-Kopf (`Plugin URI`, `Author URI` und
+  `GitHub Plugin URI` für Git Updater), der Release-Link im Hinweis auf ein unvollständiges Paket,
+  der Hilfe-Link in der Datensatzliste, `package.json`, der Composer-Paketname
+  (`bertelsmannstift/open-data-wizard`) sowie README, API.md, DOCUMENTATION.md und CLAUDE.md.
+  Git-Updater-Installationen beziehen Updates damit direkt von der neuen Adresse.
+- **Sicherheitsmeldungen über GitHub.** `SECURITY.md` nennt statt einer Beispiel-Mailadresse die
+  private Meldung über „Security → Report a vulnerability“ im Repository.
+- **CODEOWNERS.** `.github/CODEOWNERS` legt fest, wer Pull Requests prüft.
+
+---
+
 ## [2.47.9] — 2026-11-16
 
 ### 🌍 i18n
