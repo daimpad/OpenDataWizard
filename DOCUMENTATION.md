@@ -321,5 +321,5 @@ Installation in WordPress: **Plugins → Installieren → Plugin hochladen**. Da
 **Automatische Releases:** `.github/workflows/release.yml` baut dieses ZIP bei jedem Push auf `main`
 und veröffentlicht es als **GitHub-Release**, sobald die Plugin-Version (`ODW_VERSION`) neu ist — für
 dieselbe Version wird kein doppelter Release erzeugt. Es genügt also, die Version zu bumpen und zu
-mergen; das ZIP erscheint dann unter [Releases](https://github.com/daimpad/OpenDataWizard/releases)
+mergen; das ZIP erscheint dann unter [Releases](https://github.com/bertelsmannstift/OpenDataWizard/releases)
 (auch manuell via „Run workflow" auslösbar).

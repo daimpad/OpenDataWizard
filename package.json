@@ -1,6 +1,6 @@
 {
   "name": "open-data-wizard",
-  "version": "2.47.9",
+  "version": "2.47.10",
   "description": "WordPress plugin for publishing open data as DCAT-AP 3.0 compliant metadata",
   "author": "Open Data Wizard Team",
   "license": "GPL-2.0-or-later",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/daimpad/OpenDataWizard.git"
+    "url": "https://github.com/bertelsmannstift/OpenDataWizard.git"
   },
   "scripts": {
     "env:start": "wp-env start && wp-env run cli wp language core install de_DE --activate && wp-env run tests-cli wp language core install de_DE --activate && wp-env run cli wp rewrite structure '/%postname%/' --hard && wp-env run tests-cli wp rewrite structure '/%postname%/' --hard",

@@ -105,7 +105,9 @@ ALTER TABLE wp_postmeta ADD INDEX ( `post_id`, `meta_key` );
 If you discover a security vulnerability, **please do NOT open a public GitHub issue.**
 
 Instead:
-1. **Email:** security@example.com (or use GitHub Security Advisory feature)
+1. **Report privately via GitHub:** open
+   [Security → Report a vulnerability](https://github.com/bertelsmannstift/OpenDataWizard/security/advisories/new)
+   (GitHub Private Vulnerability Reporting). The report is visible only to the maintainers.
 2. **Include:**
    - Detailed description of the vulnerability
    - Steps to reproduce
