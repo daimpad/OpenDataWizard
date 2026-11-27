@@ -376,6 +376,20 @@ class Test_ODW_Rest_Delta extends TestCase {
 		$this->assertSame( 'http://data.europa.eu/r5r/', $context['dcatap'] );
 	}
 
+	/**
+	 * Der eigene Namensraum odw: zeigt auf das Repository der Organisation.
+	 * Harvester ordnen odw:qualityScore & Co. über diese IRI zu; eine
+	 * Änderung gehört deshalb ins CHANGELOG.
+	 */
+	public function test_jsonld_context_odw_namespace(): void {
+		$this->load_class();
+
+		$reflection = new \ReflectionClass( 'ODW_Rest_API' );
+		$context    = $reflection->getConstant( 'JSONLD_CONTEXT' );
+
+		$this->assertSame( 'https://github.com/bertelsmannstift/OpenDataWizard/ns#', $context['odw'] );
+	}
+
 	// -------------------------------------------------------------------------
 	// validate_since_param()
 	// -------------------------------------------------------------------------

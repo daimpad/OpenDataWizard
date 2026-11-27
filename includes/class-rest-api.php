@@ -42,7 +42,10 @@ class ODW_Rest_API {
 		'odrl'   => 'http://www.w3.org/ns/odrl/2/',
 		'spdx'   => 'http://spdx.org/rdf/terms#',
 		'dcatde' => 'http://dcat-ap.de/def/dcatde/',
-		'odw'    => 'https://github.com/daimpad/OpenDataWizard/ns#',
+		// Eigene Begriffe (odw:qualityScore, odw:removed …). Einzige Quelle des
+		// Namensraums; die Turtle-Ausgabe (ODW_Rdf) übernimmt ihn aus diesem
+		// @context. Der frühere Wert steht im CHANGELOG.
+		'odw'    => 'https://github.com/bertelsmannstift/OpenDataWizard/ns#',
 	);
 
 	/**

@@ -204,7 +204,7 @@ Frontend-Katalog sieht sie nur, wer `manage_open_data` hat (oder ein Katalog mit
     "xsd":   "http://www.w3.org/2001/XMLSchema#",
     "vcard": "http://www.w3.org/2006/vcard/ns#",
     "skos":  "http://www.w3.org/2004/02/skos/core#",
-    "odw":   "https://github.com/daimpad/OpenDataWizard/ns#"
+    "odw":   "https://github.com/bertelsmannstift/OpenDataWizard/ns#"
   },
   "@type": "dcat:Catalog",
   "dct:title": "Mein Datenkatalog",
