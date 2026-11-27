@@ -681,7 +681,7 @@ class ODW_Admin {
 		$screen->set_help_sidebar(
 			'<p><strong>' . esc_html__( 'Weitere Informationen:', 'open-data-wizard' ) . '</strong></p>' .
 			'<p><a href="https://www.w3.org/TR/vocab-dcat-3/" target="_blank">DCAT-AP 3.0 Spezifikation</a></p>' .
-			'<p><a href="https://github.com/daimpad/OpenDataWizard" target="_blank">Plugin-Dokumentation</a></p>'
+			'<p><a href="https://github.com/bertelsmannstift/OpenDataWizard" target="_blank">Plugin-Dokumentation</a></p>'
 		);
 	}
 

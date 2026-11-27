@@ -1,18 +1,18 @@
 <?php
 /**
  * Plugin Name:       Open Data Wizard
- * Plugin URI:        https://github.com/daimpad/OpenDataWizard
+ * Plugin URI:        https://github.com/bertelsmannstift/OpenDataWizard
  * Description:       DCAT-AP 3.0 konforme Open Data Metadatenverwaltung für WordPress. Bereitstellung als maschinenlesbarer JSON-LD-Endpoint für offene Daten.
- * Version:           2.47.9
+ * Version:           2.47.10
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            nozilla
- * Author URI:        https://github.com/daimpad/OpenDataWizard
+ * Author URI:        https://github.com/bertelsmannstift/OpenDataWizard
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       open-data-wizard
  * Domain Path:       /languages
- * GitHub Plugin URI: daimpad/OpenDataWizard
+ * GitHub Plugin URI: bertelsmannstift/OpenDataWizard
  * Primary Branch:    main
  * GitHub Branch:     release
  * Release Asset:     false
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ODW_VERSION', '2.47.9' );
+define( 'ODW_VERSION', '2.47.10' );
 define( 'ODW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ODW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'ODW_PLUGIN_FILE', __FILE__ );
@@ -104,7 +104,7 @@ function odw_bootstrap(): void {
 				printf(
 					/* translators: %s: link to the releases page, already wrapped in an <a> tag. */
 					esc_html__( 'Laden Sie das fertige Plugin-Paket (ZIP) unter %s herunter und spielen Sie es über „Plugins → Installieren → Plugin hochladen" ein. Ihre Datensätze bleiben dabei erhalten.', 'open-data-wizard' ),
-					'<a href="https://github.com/daimpad/OpenDataWizard/releases/latest" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Releases', 'open-data-wizard' ) . ' ↗</a>'
+					'<a href="https://github.com/bertelsmannstift/OpenDataWizard/releases/latest" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Releases', 'open-data-wizard' ) . ' ↗</a>'
 				);
 				echo '</p><p class="description">';
 				esc_html_e(
