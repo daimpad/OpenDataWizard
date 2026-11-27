@@ -13,7 +13,8 @@ assignees: ''
 
 Please see [SECURITY.md](../../SECURITY.md) for **responsible disclosure** instructions.
 
-Send security reports to: **security@example.com**
+Report vulnerabilities privately via **Security → Report a vulnerability**:
+https://github.com/bertelsmannstift/OpenDataWizard/security/advisories/new
 
 This issue template is for non-sensitive security-related discussions only.
 

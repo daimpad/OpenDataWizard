@@ -17,8 +17,9 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
   der Hilfe-Link in der Datensatzliste, `package.json`, der Composer-Paketname
   (`bertelsmannstift/open-data-wizard`) sowie README, API.md, DOCUMENTATION.md und CLAUDE.md.
   Git-Updater-Installationen beziehen Updates damit direkt von der neuen Adresse.
-- **Sicherheitsmeldungen über GitHub.** `SECURITY.md` nennt statt einer Beispiel-Mailadresse die
-  private Meldung über „Security → Report a vulnerability“ im Repository.
+- **Sicherheitsmeldungen über GitHub.** `SECURITY.md` und die Issue-Vorlage für Sicherheitsthemen
+  nennen statt einer Beispiel-Mailadresse die private Meldung über „Security → Report a
+  vulnerability“ im Repository.
 - **CODEOWNERS.** `.github/CODEOWNERS` legt fest, wer Pull Requests prüft.
 
 ---
